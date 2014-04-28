@@ -1,2 +1,6 @@
 *.pui
 *.prj
+*.conf
+*.txt
+*.key
+*.bak
