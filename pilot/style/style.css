@@ -1,0 +1,161 @@
+html { 
+	height: 100%; /* added to support Google map - why? */
+}
+
+body { 
+	color:#333333; 
+	font-family:'Helvetica',sans-serif; 
+	text-align:center; 
+	background-color: #edede1;
+	padding:14px;
+	height: 100%; /* added to support Google map - why? */
+}
+
+div.container {
+	/* top level container for all content, left aligned inside a centered body   */
+	/* optimized, i think, for a tablet -kdf																			*/
+	background-color:#ffffff;
+	margin: 0 auto;
+	height: 800px;
+	width: 900px;
+	text-align:left;
+	border: 1px dotted #da5e00;
+	box-shadow: 8px 8px 10px #c9c9a7;
+	border-top: 4px solid #c9c9a7;
+	border-bottom: 15px solid #57574a;
+}
+
+div.shell {
+	/* holds stuff beneath the header                             */
+	/* point of reference for absolute positioning of body blocks */
+	/* base font stylings                                         */
+	position:relative;
+	top:-15px;
+	left:0px;
+	font-size:14px;
+	color:#111111;
+}
+
+div.projectsContent {
+	position:absolute;
+	top:80px;
+	left:50px;
+}
+
+a {
+	font-size:12px;
+	font-weight:bold;
+	color:#da5e00;
+	text-decoration:none;
+}
+
+/* NAVIGATION */
+
+div.navigation {
+	position:absolute;
+	top:10px;
+	border:thin;
+	text-align:right;
+}
+
+div.navigation ul {
+	list-style: none;
+}
+
+div.navigation li {
+	border-right: 1px solid #999;
+	border-top: 1px solid #999;
+	float: left;
+	margin:5px;
+	padding:5px; 
+}
+
+div.navigation a {
+	color: #c9c9a7;
+	font-weight: bold;
+	font-size: 16px;
+	padding: 10px;
+	text-decoration: none;
+}
+
+div.navigation a:hover {
+	color: #57574a;
+}
+
+div.navigation #currentpage a {
+	color: #da5e00;
+}
+
+/* FORM */
+
+/* Basic Grey */
+.basic-grey {
+    width: 600px;
+    margin-right: auto;
+    margin-left: auto;
+    background: #ffffff;
+    padding: 20px 30px 20px 30px;
+    font: 12px Georgia, "Times New Roman", Times, serif;
+    color: #888;
+    text-shadow: 1px 1px 1px #FFF;
+    border:1px solid #DADADA;
+}
+.basic-grey h1 {
+    font: 25px Georgia, "Times New Roman", Times, serif;
+    padding: 0px 0px 10px 40px;
+    display: block;
+    border-bottom: 1px solid #DADADA;
+    margin: -10px -30px 30px -30px;
+    color: #888;
+}
+.basic-grey h1>span {
+    display: block;
+    font-size: 11px;
+}
+.basic-grey label {
+    display: block;
+    margin: 0px 0px 5px;
+}
+.basic-grey label>span {
+    float: left;
+    width: 160px;
+    text-align: right;
+    padding-right: 10px;
+    margin-top: 10px;
+    color: #888;
+}
+.basic-grey input[type="text"], .basic-grey input[type="email"], .basic-grey textarea, .basic-grey select {
+    border: 1px solid #DADADA;
+    color: #888;
+    height: 15px;
+    margin-bottom: 16px;
+    margin-right: 6px;
+    margin-top: 2px;
+    outline: 0 none;
+    padding: 3px 3px 3px 5px;
+    width: 260px;
+    font: normal 12px/12px Georgia, "Times New Roman", Times, serif;
+}
+.basic-grey select {
+    background: #FFF url('down-arrow.png') no-repeat right;
+    background: #FFF url('down-arrow.png') no-repeat right);
+    appearance:none;
+    -webkit-appearance:none;
+    -moz-appearance: none;
+    text-indent: 0.01px;
+    text-overflow: '';
+    width: 260px;
+    height: 30px;
+}
+.basic-grey textarea{
+    height:100px;
+}
+.basic-grey .button {
+    background: #da5e00;
+    border: none;
+    padding: 10px 25px 10px 25px;
+    color: #FFF;
+}
+.basic-grey .button:hover {
+    background: #CF7A7A
+}

@@ -24,7 +24,8 @@ Db::disconnect();
 	<form action="searchProcessor.php" method="post">
 			<img src="images/mag-glass.jpg" width="25" height="25" /> <input type="text" size="20" name="string" value=""/> <input type="submit" value="Go"/>
 			<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select name="topic" style="width: 230px">    
-				<option value="0" selected>Service Area</option><br/>				
+				<option value="0" selected>Program Area</option><br/>	
+				<option value="1" >------------</option><br/>				
 				<option value="36">Food Services</option><br/>
 				<option value="34">Health Clinic</option><br/>
 				<option value="46">Domestic Counseling</option><br/>
@@ -33,12 +34,14 @@ Db::disconnect();
 				</select></p>
 				
 			<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select name="topic" style="width: 230px">    
-				<option value="0" selected>Geography</option><br/>				
+				<option value="0" selected>Geography</option><br/>	
+				<option value="1" >------------</option><br/>					
 				<option value="36">Probably implemented as a dynamic map selector</option><br/>
 				</select></p>
 				
 			<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select name="topic" style="width: 230px">    
-				<option value="0" selected>Other Filters TBD</option><br/>				
+				<option value="0" selected>Other Filters TBD</option><br/>		
+				<option value="1" >------------</option><br/>				
 				<option value="36">For example, language, accessability, etc.</option><br/>
 				</select></p>
 				

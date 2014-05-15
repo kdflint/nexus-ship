@@ -52,10 +52,8 @@ if(isset($_GET['error'])) {
 				</div>
 							
      		<div class="rightColumn" style="border:0px;background-color:#e6e6d5;padding:10px;top:50px;height:200px;">
-									<p><b>What is this tool?</b></p>
-									<p style="margin:10px;">This is a closed-network collaboration tool designed to help nonprofit organizations work together in an extremely affordable way.</p>
-									<p><b>Who is this tool for?</b></p>
-									<p style="margin:10px;">This tool is for nonprofit organizations who are working collaboratively to improve conditions in their communities.</p>
+									<p><b>Welcome to Nexus!</b></p>
+									<p style="margin:10px;">This is a collaboration tool designed to help nonprofit organizations work together in an extremelely affordable way in order to improve conditions in their communities.</p>
       	</div>
       </div>
       	

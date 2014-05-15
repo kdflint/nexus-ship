@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<html>
+	
+  <head>
+  	<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+    <link rel="stylesheet" href="" type="text/css" />
+    <script src="" language="javascript"></script>
+    <link rel="shortcut icon" href="" />
+    <title>Nexus | Pilot Controls</title>
+  </head>
+  
+  <body>
+
+		<table cellpadding="10">
+			
+			<tr><td colspan="2">
+				<ol>
+					<li> Network hopeful applies to use the tool. Once accepted... </li>
+					<li> New Network admin gives network details using org edit screen and line/comma separated seed list of org admins with optional org name to NB admin </li>
+					<li> NB admin creates new network record using org edit screen</li>
+					<li> NB Admin and inserts org admin invites - manually for pilot</li>
+					<li> NB admin uses form to invoke email to org admins with new user link and instructions to sign up</li>			
+				</ol>
+			</td></tr>
+			
+			<tr><td>Invoke org admin messages</td><td>
+					<form action="http://northbridgetech.org/apps/nexus/pilot/seedAdmins.php" method="post">
+						<input type="submit" value="Generate Emails" />
+					</form></td></tr>
+					
+			<tr><td>Show status of pending users</td><td>
+					<form action="http://northbridgetech.org/apps/nexus/pilot/pendingStatus.php" method="post">
+						<input type="submit" value="Show Pending Status" />
+					</form></td></tr>
+
+			<tr><td>Invitation registration</td><td><a href="http://northbridgetech.org/apps/pilot/registrationViews.php?inviteId=79a067b7-5365-d0c9-7698-5a9b06cafbe7" >Link</a></td></tr>
+				
+			<tr><td>New org record</td><td><a href="http://northbridgetech.org/apps/nexus/pilot/organizationDetail.php" >Link</a></td></tr>
+			
+			<tr><td>New workgroup record</td><td><a href="http://northbridgetech.org/apps/nexus/pilot/workgroupDetail.php" >Link</a></td></tr>
+			
+			<tr><td>Chat</td><td>
+		<a href='#' 
+ 		onclick='window.open("http://widget.mibbit.com/?settings=f56cae76395599d549d3883a9e7cee69&server=ec2-54-204-130-42.compute-1.amazonaws.com&channel=%23nexus s5cr57&nick=test&autoConnect=true", "Chat your network", "width=800,height=500,top=100,left=300,screenX=100,screenY=300,location=no,menubar=no,scrollbars=no,status=no,titlebar=no,toolbar=no")'>
+ 		All</a><br/>
+ 		<a href='#' 
+ 		onclick='window.open("http://widget.mibbit.com/?settings=f56cae76395599d549d3883a9e7cee69&server=ec2-54-204-130-42.compute-1.amazonaws.com&channel=%23aPerson,%23bPerson&nick=grace&autoConnect=true", "Chat your network", "width=800,height=500,top=100,left=300,screenX=100,screenY=300,location=no,menubar=no,scrollbars=no,status=no,titlebar=no,toolbar=no")'>
+ 		Person</a><br/>
+ 		<a href="" >Group</a></td></tr>
+			
+			<tr><td>Message</td><td><a href="http://northbridgetech.org/apps/nexus/pilot/message.php" >Link</a></td></tr>
+			
+			<tr><td valign="top">User Detail</td><td>
+				<form action="" method="post">
+  				First name: <input type="text" /><br/>
+  				Last name: <input type="text" /><br/>
+  				Nickname: <input type="text" /><br/>
+  				Email: <input type="text" /><br/>
+  				Password: <input type="password" /><br/>					
+  				<input type="hidden" name="action" value="activate" />					
+				</form></td></tr>
+
+			<tr><td valign="top">Org Detail</td><td>
+  			<form action="userProcessor.php" method="post"> 		
+  				Name: <input type="text" name="name"/><br/>
+  				EIN: <input type="text" name="ein"/><br/>
+  				Corporate Structure: 
+  				<select name="structure">
+						<option value="Federal 501(c)(3)" >Federally Tax Exempt</option>
+						<option value="State" >State Incorporated - not Tax Exempt</option>
+						<option value="Activist">Individual Activist</option>
+						<option value="Other">Other</option>
+					</select><br/>
+   				Address: <input type="text" name="address"/><br/>
+ 					Phone: <input type="text"  name="email" /><br/>
+  				Mission: <input type="password" name="mission"/><br/>
+   				Program Description: <input type="text" name="sms"/><br/>
+   				Primary Network Contact: <? echo(); ?><br/>
+  				<input type="submit" value="Update my Record" />
+  			</form></td></tr>
+	
+			<tr><td valign="top">Workgroup Detail</td><td>
+				<form action="" method="post">
+  				Name: <input type="text" /><br/>
+  				Purpose: <input type="text" /><br/>
+					Leader: <? echo(); ?><br/>
+  				<input type="hidden" name="action" value="activate" />					
+				</form></td></tr>
+						
+			<tr><td>Search</td><td>
+				<img src="http://northbridgetech.org/apps/nexus/images/mag-glass.jpg" width="25" height="25" /> 
+				<form>
+					<input type="text" size="20" name="string" value=""/>
+					<input type="submit" value="Go"/>
+				</form></td></tr>
+						
+			<tr><td>Map controls</td><td> ??? </td></tr>
+			
+			<tr><td>Sort controls</td><td> ??? </td></tr>
+
+		</table>
+
+	</body>
+</html>
