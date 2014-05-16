@@ -75,6 +75,7 @@ if ($action == "createRegistration") {
 	// TODO: is this the right spot for this logic?
 	pgDb::insertInvitationResponse($orgId, $inviteId);
 
+	// TODO: auto-authenticate, refresh session, focus in the right place || fail message somewhere...
 	header("location:registrationViews.php");
 	exit(0);
 }

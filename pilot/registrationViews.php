@@ -7,22 +7,22 @@ include("util.php");
 
 // Just placeholders - normally requires authentication to get these two values
 $_SESSION['uid'] = "anita";
-$cursor = pgDb::getInvitationsByOrg("1");
+$cursor1 = pgDb::getInvitationsByOrg("1");
 
 $inviteId = "";
 $isInviteValid = false;
+$_SESSION['orgId'] = $_SESSION['grantorId'] = $_SESSION['inviteId'] = "1234";
 
 if (isset($_REQUEST['inviteId'])) {
 	$inviteId = Util::clean($_REQUEST['inviteId']);
 	$isInviteValid = pgDb::checkValidInvitation($inviteId);	
 	if ($isInviteValid) {
-		$cursor = pgDb::getInvitationByUuid($inviteId);
-		
+		$cursor2 = pgDb::getInvitationByUuid($inviteId);
+		$row = pg_fetch_array($cursor2);
+		$_SESSION['orgId'] = $row['orgid'];
+		$_SESSION['grantorId'] = $row['grantorid'];	
+		$_SESSION['inviteId'] = $inviteId;
 	}
-	$row = pg_fetch_array($cursor);
-	$_SESSION['orgId'] = $row['orgId'];
-	$_SESSION['grantorId'] = $row['grantorId'];	
-	$_SESSION['inviteId'] = $inviteId;
 }
 
 ?>
@@ -38,13 +38,12 @@ if (isset($_REQUEST['inviteId'])) {
   <div class="container">  	
   <div class="shell">
   	
-  	<h1>Registration Model</h1>
+  	<h1>Registration Module</h1>
   	
   	<h2>VIEW: Registration Invitation</h2>
 
   	<hr/>
 	  	<h3>Create Registrations</h3>
-	  	<p>Required to initialize: orgId</p>
   		<form action="registrationProcessor.php" method="post">
 	  		Organization ID: <input type="text" name="orgId" value="1" /><br/>
 	  		Password: <input type="password" name="password" /><br/>
@@ -57,7 +56,7 @@ if (isset($_REQUEST['inviteId'])) {
 			
 			<table border="1" cellpadding="10">
 				<?
-					while ($row = pg_fetch_array($cursor)) {
+					while ($row = pg_fetch_array($cursor1)) {
 						echo("<tr><td>***" . substr($row['uuid'], -4) . "</td><td>n accepted</td><td>expires in " . $row['days_remaining'] . " days</td></tr>");
 					}
 				?>
@@ -67,7 +66,7 @@ if (isset($_REQUEST['inviteId'])) {
   	<h2>VIEW: Registration</h2>
   	<hr/>	
 	  	<h3>Update Registration</h3>
-	  	<p>Invitation from network and admin name.</p>
+	  	<p>Invitation from Org Id <? echo($_SESSION['orgId']);  ?> and User Id <? echo($_SESSION['grantorId']);  ?>.</p>
 	  	<? if ($isInviteValid) { ?>
   			<form action="registrationProcessor.php" method="post">
 	  			Your Organization Name*: <input type="text" name="orgName" /><br/>

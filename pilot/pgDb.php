@@ -36,7 +36,8 @@ class pgDb {
 	}
 	
 	public static function getInvitationByUuid($uuid) {
-		$query = "select organization_fk as orgId, issuer_fk as grantorId, type, role where uuid = '$uuid' order by create_dttm desc limit 1";
+		$query = "select organization_fk as orgid, issuer_fk as grantorid, type, role_fk as role from invitation where uuid = '$uuid' order by create_dttm desc limit 1";
+		return pgDb::execute($query);
 	}
 	
 	public static function getInvitationsByOrg($orgId) {
@@ -93,6 +94,37 @@ class pgDb {
 			$query = "insert into user_organization (user_fk, organization_fk, grantor_fk, role_fk, create_dttm) values ((select id from public.user where email = '$email' limit 1), '$orgId', '$grantorId', '1', now()) returning id";
 			return pgDb::execute($query);		
 	}
+	
+	public static function getUserSessionByUsername($uid) {
+		$query = "
+			select u.fname, u.lname, o1.name as affiliation, o2.name as network, uo.role_fk as role
+			from public.user u, user_organization uo, organization o1, organization o2, organization_organization oo
+			where u.username = '$uid'
+			and uo.user_fk = u.id
+			and uo.organization_fk = o1.id
+			and oo.organization_to_fk = o1.id 
+			and oo.organization_from_fk = o2.id
+			and oo.relationship = 'parent'
+			";
+			return pgDb::execute($query);	
+	}
+	
+	public static function getPrivileges($roleId) {
+		$query = "
+			select r.name as role, p.name as privilege
+			from privilege p, role r, role_privilege pr 
+			where pr.role_id_fk = '$roleId' 
+			and pr.role_id_fk = r.id
+			and pr.privilege_id_fk = p.id
+			";
+			return pgDb::execute($query);
+	}	
 
+	/*
+	public static function getOrganizationById($orgId) {
+		$query = "select name from organization where id = $orgId'";
+		return pgDb::execute($query);	
+	}
+  */
 }
 ?>
