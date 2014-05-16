@@ -13,13 +13,6 @@ if (isset($_SESSION['userId'])) {
 	$cursor = pgDb::getUserById($_SESSION['userId']);
 }
 
-$cursor1 = array();
-if (isset($_SESSION['userId'])) {
-	
-	// LEFT OFF - implement this method
-	$cursor1 = pgDb::getUsersByAdminId($_SESSION['userId']);
-}
-
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
@@ -50,7 +43,6 @@ if (isset($_SESSION['userId'])) {
 
 	  	<h3>Update User</h3>
   			<form action="userProcessor.php" method="post">
-  				
 	  			<?
   					$row = pg_fetch_array($cursor, 0, PGSQL_ASSOC);
   					foreach ($row as $key=>$val) {
@@ -61,19 +53,18 @@ if (isset($_SESSION['userId'])) {
   				<input type="submit" value="Update My Profile" />
   			</form>
   			
-	  	<h3>Read Users</h3>
-				<table border="1" cellpadding="5">
-  			<?
-  				while ($row = pg_fetch_array($cursor1)) {
-    				echo "<tr><td>" . $row['fname'] . "</td><td>" . $row['lname'] . "</td><td>" . $row['roleName'] ."</td></tr>";
-    			}
-    		?>
-  			</table>		
-
-	  	<h3>Update Users</h3>
-
-
 		  <h3>Delete User</h3>	 		  	
+  			<form action="userProcessor.php" method="post">
+					<input type="hidden" name="action" value="inactivateProfile" />
+  				<input type="submit" value="Inactivate" />		 
+  			</form>
+  			
+		  <h3>Undelete User</h3>	 		  	
+  			<form action="userProcessor.php" method="post">
+					<input type="hidden" name="action" value="reactivateProfile" />
+  				<input type="submit" value="Reactivate" />		 
+  			</form>  			 
+		  
   </div>
   </div>
   </body>

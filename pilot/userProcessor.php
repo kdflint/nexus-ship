@@ -9,9 +9,21 @@ $action = Util::clean($_POST['action']);
 
 if ($action == "updateProfile") {
 
-	header("location:userViews.php");
-	exit(0);
+
 }
 
+if ($action == "inactivateProfile") {
+
+	pgDb::inactivateUser($_SESSION['userId']);
+
+}
+
+if ($action == "reactivateProfile") {
+
+	pgDb::reactivateUser($_SESSION['userId']);
+
+}
+
+header("location:userViews.php");
 
 ?>

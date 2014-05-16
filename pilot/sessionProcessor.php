@@ -34,7 +34,6 @@ function refreshSession($uid) {
  		$_SESSION['role'] = $row['role'];
   	$_SESSION['network'] = $row['network'];
 		$_SESSION['affiliation'] = $row['affiliation'];
-		$_SESSION['handle'] = "TODO";
 
 }
 

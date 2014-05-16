@@ -5,23 +5,39 @@ include("util.php");
 
 session_start();
 
-$name = Util::clean($_POST['orgName']);
-$handle = "";
-$ein = Util::clean($_POST['ein']);
-$exempt = Util::clean($_POST['exempt']);
-$structure = Util::clean($_POST['structure']);
-$mission = Util::clean($_POST['mission']);
-$program = Util::clean($_POST['program']);
+$action = Util::clean($_POST['action']);
+$orgId = Util::clean($_POST['orgId']);
+$term = Util::clean($_POST['term']);
 
-//$newId = pgDb::insertOrganization($name, $handle, $ein, $exempt, $structure, $mission, $program);
 
-$newId = pgDb::insertOrganization("test", "test", "452813375", false, "test", "test", "test");
+if ($action == "updateOrganization") {
 
-//Util::refreshSessionOrganization($newId);
-
-header("location:organizationDetail.php");
 
 }
+
+if ($action == "inactivateOrganization") {
+
+	pgDb::inactivateOrganization($orgId);
+
+}
+
+if ($action == "reactivateOrganization") {
+
+	pgDb::reactivateOrganization($orgId);
+
+}
+
+if ($action == "searchDirectory") {
+	
+	header("location:organizationViews.php?term=" . $term);
+	exit(0);
+
+}
+
+
+header("location:organizationViews.php");
+
+
 
 
 ?>
