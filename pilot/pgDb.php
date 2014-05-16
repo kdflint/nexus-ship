@@ -97,7 +97,7 @@ class pgDb {
 	
 	public static function getUserSessionByUsername($uid) {
 		$query = "
-			select u.fname, u.lname, o1.name as affiliation, o2.name as network, uo.role_fk as role
+			select u.id, u.fname, u.lname, o1.name as affiliation, o2.name as network, uo.role_fk as role
 			from public.user u, user_organization uo, organization o1, organization o2, organization_organization oo
 			where u.username = '$uid'
 			and uo.user_fk = u.id
@@ -119,6 +119,11 @@ class pgDb {
 			";
 			return pgDb::execute($query);
 	}	
+	
+	public static function getUserById($userId) {
+		$query = "select fname, email, sms from public.user where id = '$userId'";
+		return pgDb::execute($query);
+	}
 
 	/*
 	public static function getOrganizationById($orgId) {

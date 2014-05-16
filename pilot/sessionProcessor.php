@@ -27,7 +27,8 @@ function refreshSession($uid) {
 		session_unset();
 		
 		$cursor = pgDb::getUserSessionByUsername($uid);
-		$row = pg_fetch_array($cursor);			
+		$row = pg_fetch_array($cursor);	
+		$_SESSION['userId'] = $row['id'];		
 		$_SESSION['fname'] = $row['fname'];
 		$_SESSION['lname'] = $row['lname'];
  		$_SESSION['role'] = $row['role'];
