@@ -38,7 +38,7 @@ class Util {
 			'grace' => 'good',
 			'jean' => 'good',
 			'barbara' => 'good',
-			'kathy' => 'good'
+			'admin' => 'good'
 		);
 		
 		if (array_key_exists($uid, $goodUsers)) {

@@ -2,8 +2,8 @@
 
 session_start();
 
-include("pgDb.php");
-include("util.php");
+include("../model/pgDb.php");
+include("../control/util.php");
 
 //temp
 $_SESSION['userId'] = "3";

@@ -108,7 +108,7 @@ class pgDb {
 			and uo.organization_fk = o1.id
 			and oo.organization_to_fk = o1.id 
 			and oo.organization_from_fk = o2.id
-			and oo.relationship = 'parent'
+			and oo.relationship in ('parent', 'god')
 			";
 			return pgDb::execute($query);	
 	}

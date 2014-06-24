@@ -2,8 +2,8 @@
 
 session_start();
 
-include("pgDb.php");
-include("util.php");
+include("../model/pgDb.php");
+include("../control/util.php");
 
 $error = "";
 
@@ -43,7 +43,7 @@ if (isset($_SESSION['role'])) {
   	<hr/>
 	  	<h3>Create Authentication</h3>
 	  	
-	  	<form action="sessionProcessor.php" method="post">
+	  	<form action="control/sessionProcessor.php" method="post">
 			  	<p><? echo $error; ?></p>
 					User Id: <input class="passed" type="text" size="25" name="uid" value="grace"/><br/>
 					Password: <input class="passed" type="text" size="25" name="password" value=""/><br/>
