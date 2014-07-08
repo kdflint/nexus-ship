@@ -116,6 +116,16 @@ function toggle(showHideDiv, switchImgTag) {
    }
 }
 
+function toggleChat(showHideDiv) {
+ 	var ele = document.getElementById(showHideDiv);
+  if(ele.style.display == "block") {
+   	ele.style.display = "none";
+   }
+   else {
+    ele.style.display = "block";
+   }
+}
+
 function initialize() {
 	var myLatlng1 = new google.maps.LatLng(41.779732, -87.64583);
 	var myLatlng2 = new google.maps.LatLng(41.708770, -87.74680);

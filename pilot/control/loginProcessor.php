@@ -1,11 +1,11 @@
 <?php
 require_once dirname(__FILE__).'/forum_sso_functions.php';
-include("util/db.php");
-include("util/util.php");
+include("../model/pgDb.php");
+include("util.php");
 
 session_start();
 
-Db::connect();
+pgDb::connect();
 
 $uid = Util::clean($_POST['uid']);
 $password = Util::clean($_POST['password']);
@@ -37,11 +37,9 @@ if($isAuthenticated){
 	$user['user'] = $uid;
 	$login_status = forumSignin($user);
 	if($login_status == 'Login Successful') {
-		//header("location:test/loginConfirm.php?message=Success: " . $login_status);
-		$cursor1 = Db::getUserProfile($uid);
+		$cursor1 = pgDb::getUserSessionByUsername($uid);
 		while ($row = mysql_fetch_array($cursor1, MYSQL_BOTH)) {
 			// already at SESSION['authtoken'] is the forum SSO token
-			// TODO - why don't named columns work?
 			$_SESSION['fname'] = $row[0];
   		$_SESSION['lname'] = $row[1];
   		$_SESSION['affiliation'] = $row[3];
@@ -49,11 +47,11 @@ if($isAuthenticated){
   		$_SESSION['uidpk'] = $row[4];
   		$_SESSION['handle'] = $row[5];
 		} 
-		$cursor2 = Db::getUserNetwork($uid);
+		$cursor2 = pgDb::getUserNetwork($uid);
 		while ($row = mysql_fetch_array($cursor2, MYSQL_BOTH)) {
   		$_SESSION['network'] = $row[0];
 		} 
-		Db::disconnect();
+		pgDb::disconnect();
 		header("location:nexus.php?showMap=1");
 		exit(0);
 	} else {
@@ -66,7 +64,7 @@ if($isAuthenticated){
 }
 
 function returnToLoginWithError($errorMessage) {
-	Db::disconnect();
+	pgDb::disconnect();
 	//header("location:test/loginConfirm.php?message=Fail NorthBridge: ");
 	header("location:login.php?error=" . $errorMessage);
 }

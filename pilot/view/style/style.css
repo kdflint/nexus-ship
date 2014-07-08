@@ -49,6 +49,23 @@ a {
 	text-decoration:none;
 }
 
+div.leftColumn {
+	position:absolute;
+	width:350px;
+	height:480px;
+}
+
+div.rightColumn {
+	position:absolute;
+	left:360px;
+	width:450px;
+	height:480px;
+	border: 1px solid #da5e00;
+	box-shadow: 4px 4px 5px #c9c9a7;
+	padding:10px;
+	border-radius:15px;
+}
+
 /* NAVIGATION */
 
 div.navigation {
