@@ -38,7 +38,7 @@ class pgDb {
 	}
 	
 	public static function getInvitationByUuid($uuid) {
-		$query = "select organization_fk as orgid, issuer_fk as grantorid, type, role_fk as role from invitation where uuid = '$uuid' order by create_dttm desc limit 1";
+		$query = "select network_fk as networkid, organization_fk as orgid, issuer_fk as grantorid, type, role_fk as role from invitation where uuid = '$uuid' order by create_dttm desc limit 1";
 		return pgDb::execute($query);
 	}
 	
@@ -147,7 +147,7 @@ class pgDb {
 	}
 	
 	public static function getOrganizationById($orgId) {
-		$query = "select name, ein, structure, status_fk as status from organization where id = '$orgId'";
+		$query = "select name, structure, status_fk as status from organization where id = '$orgId'";
 		return pgDb::execute($query);
 	}
 	
