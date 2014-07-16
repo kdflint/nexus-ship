@@ -38,6 +38,7 @@ class pgDb {
 	}
 	
 	public static function getInvitationByUuid($uuid) {
+		// TODO: ensure that input length == 36
 		$query = "select network_fk as networkid, organization_fk as orgid, issuer_fk as grantorid, type, role_fk as role from invitation where uuid = '$uuid' order by create_dttm desc limit 1";
 		return pgDb::execute($query);
 	}
@@ -48,10 +49,12 @@ class pgDb {
 	}
 	
 	public static function checkValidInvitation($uuid) {
-		$query = "select id from invitation where uuid = '$uuid'";
-		$count = pg_num_rows(pgDb::execute($query));
-		if ($count == 1) {
-			return true;
+		if (strlen($uuid) == 36) {
+			$query = "select id from invitation where uuid = '$uuid'";
+			$count = pg_num_rows(pgDb::execute($query));
+			if ($count == 1) {
+				return true;
+			}
 		}
 		return false;
 	}
@@ -87,8 +90,19 @@ class pgDb {
 			pgDb::execute($query);
 	}
 	
-	public static function insertActiveUser($uuid, $email) {
+	public static function insertActiveUserByEmail($uuid, $email) {
 			$query = "insert into public.user (uuid, email, status_fk, create_dttm, activate_dttm) values ('$uuid', '$email', '1', now(), now()) returning id";
+			return pgDb::execute($query);		
+	}
+	
+	public static function insertActiveUserByCredentials($uuid, $username, $password) {
+			$query = "insert into public.user (uuid, username, password, status_fk, create_dttm, activate_dttm) values ('$uuid', '$username', '$password', '1', now(), now()) returning id";
+			return pgDb::execute($query);		
+	}
+	
+	public static function insertUserOrgRelation($userId, $orgId, $grantorId) {
+			// TODO: add active check?
+			$query = "insert into user_organization (user_fk, organization_fk, grantor_fk, role_fk, create_dttm) values ('$userId', '$orgId', '$grantorId', '1', now()) returning id";
 			return pgDb::execute($query);		
 	}
 	
@@ -101,7 +115,7 @@ class pgDb {
 	public static function getUserSessionByUsername($uid) {
 		// TODO: add active check?
 		$query = "
-			select u.id, u.fname, u.lname, o1.name as affiliation, o2.name as network, uo.role_fk as role
+			select u.id as id, u.fname as fname, u.lname as lname, o1.name as affiliation, o2.name as network, uo.role_fk as role
 			from public.user u, user_organization uo, organization o1, organization o2, organization_organization oo
 			where u.username = '$uid'
 			and uo.user_fk = u.id
@@ -110,6 +124,12 @@ class pgDb {
 			and oo.organization_from_fk = o2.id
 			and oo.relationship in ('parent', 'god')
 			";
+			return pgDb::execute($query);	
+	}
+	
+	public static function getUserByUsername($uid) {
+		// TODO: add active check?
+		$query = "select u.id as id, u.fname as fname, u.lname as lname from public.user u where u.username = '$uid' limit 1";
 			return pgDb::execute($query);	
 	}
 	

@@ -1,4 +1,8 @@
 <?
+
+error_reporting(E_ALL);
+ini_set( 'display_errors','1'); 
+
 session_start();
 
 // select content to show based on request variable, which is supplied in navigation.php
@@ -75,8 +79,8 @@ if(curl_exec($ch) === false) 	{
     <table>
     	<tr>
     	<td><img style="float:left;vertical-align:top;margin:20px;" src="image/demo.jpg" height="100" width="100" border="0" alt="Demo Organization Logo"/></a></td>
-    	<td width="30%"><p style="text-align:left;color:#57574a;font-size:24px;margin:20px;"><b><? echo($_SESSION['network']); ?></b></p></td>
-    	<td><p style="text-align:right;color:#c9c9a7;font-size:18px;margin:20px;"><b><? echo($_SESSION['affiliation']); ?></b></p>
+    	<td width="30%"><p style="text-align:left;color:#57574a;font-size:24px;margin:20px;"><b><? echo($_SESSION['networkName']); ?></b></p></td>
+    	<td><p style="text-align:right;color:#c9c9a7;font-size:18px;margin:20px;"><b><? echo($_SESSION['orgName']); ?></b></p>
     <p style="text-align:right;margin:20px;"><b>Hello <? echo($_SESSION['fname']); ?></b><br/>
     <!-- <a id="chatControlLink" href="javascript:toggleChat('chatControl')">Chat</a> |  -->
 		<a href="#">Help</a> | <a href="login.php?logout=true">Logout</a></p></td>
@@ -89,12 +93,7 @@ if(curl_exec($ch) === false) 	{
       		<? include 'navigation.php'; ?>
  		  	</div>
 
-				<div class="projectsContent">		
-				
-				<p>JID: <? echo $_SESSION['jid']; ?></p>
-				<p>SID: <? echo $_SESSION['sid']; ?></p>
-				<p>RID: <? echo $_SESSION['rid']; ?></p>		
-				
+				<div class="projectsContent">						
 			 	<?
 			   $contentFile="forum" . ".php";
 			   include $contentFile; 

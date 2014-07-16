@@ -12,7 +12,7 @@ class Util {
 		return $out;
 	}
 	
-	public static function clean($in) {
+	public static function strip($in) {
 		$out = strtr($in, array('(' => '',
                           	')' => '',
 									        	'"' => '',
@@ -28,6 +28,17 @@ class Util {
 			return true;
 		}
 		return false;
+	}
+	
+	public static function newUuid() { 
+    $s = strtolower(md5(uniqid(rand(),true))); 
+    $guidText = 
+        substr($s,0,8) . '-' . 
+        substr($s,8,4) . '-' . 
+        substr($s,12,4). '-' . 
+        substr($s,16,4). '-' . 
+        substr($s,20); 
+    return $guidText;
 	}
 
 	public static function authenticate($uid, $pass) {

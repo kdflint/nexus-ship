@@ -2,7 +2,7 @@
 session_start();
 $error = "";
 
-include("enrollPreProcessor.php");
+include '../control/enrollPreProcessor.php';
 
 if(isset($_GET['error'])) {
 	$error = $_GET['error'];
@@ -28,11 +28,10 @@ if(isset($_GET['error'])) {
 
 			<div class="projectsContent">      	
       	<div class="leftColumn"> 
-							<p><b>Enroll</b></p>
+							<p><b>Enroll in <? echo $_SESSION['networkName'] ?></b></p>
 							<div class="formLogin" style="border:thin solid #da5e00;padding:10px;border-radius:15px;">
 								<form action="../control/enrollProcessor.php" method="post">
 								  	<p><? echo $error; ?></p>
-								  	<p>Your new network: <? echo $_SESSION['networkName'] ?></p>
 								  	<p>You represent: <? echo $_SESSION['orgName'] ?></p>
 										Choose your user name: <input class="passed" type="text" size="25" name="userid" value=""/><br/>
 										Choose your password: <input class="passed" type="text" size="25" name="password" value=""/><br/>
