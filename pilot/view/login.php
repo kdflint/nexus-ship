@@ -41,7 +41,7 @@ if(isset($_GET['error'])) {
       	<div class="leftColumn"> 
 							<p><b>Login</b></p>
 							<div class="formLogin" style="border:thin solid #da5e00;padding:10px;border-radius:15px;">
-								<form action="../control/sessionProcessor.php" method="post">
+								<form action="../control/loginProcessor.php" method="post">
 								  	<p><? echo $error; ?></p>
 										User Id: <input class="passed" type="text" size="25" name="uid" value=""/><br/>
 										Password: <input class="passed" type="text" size="25" name="password" value=""/><br/>

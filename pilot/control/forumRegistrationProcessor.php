@@ -1,15 +1,11 @@
 <?php
 
-session_start();
+//session_start();
 
 require_once dirname(__FILE__).'/forum_sso_functions.php';
 // Important Note:
 // You also need to update forum username on line 5 in forum_sso_functions.php.
 // You also need to update forum API Key on line 7 in forum_sso_functions.php.
-
-
-// Your code to process the registration for the user on your website goes here.
-
 
 // Fill in the user information in a way that websitetoolbox forum can understand.
 $user = array();
@@ -18,14 +14,13 @@ $user = array();
 // For example: You can assign your register POST/GET values to user array like below:
 // $user['member'] = $_POST['user'].
 
-// Assign username that's displayed on the forum
-$user['member'] = $_POST['user']; // 'ada';
-// Assign password for new registration 
-$user['pw'] = $_POST['password']; // 'password';
-// Assign email id for new registration
-$user['email'] = $_POST['email']; // 'kathy.d.flint@gmail.com';	
+$user['member'] = $uid;
+$user['pw'] = $password;
+$user['email'] = $email;	
+$user['name'] = $fname . " " . $lname;
+
 // You can also assign optional registration fields to '$user' array.
-// For example: $user['name'] = 'John wright';
+// http://www.websitetoolbox.com/support/105?popup=2 - optional fields
 
 // function called for registering a new user on websitetoolbox forum.
 // Return user registeration status as "Registration Complete" / Register Failed Message.

@@ -2,6 +2,8 @@
 
 class pgDb {
 	
+	// TODO: switch this all over to parameterized queries
+	
 	public static function connect() {
 		$host = "localhost"; 
 		$user = "northbr6_web"; 
@@ -65,22 +67,34 @@ class pgDb {
 	}
 	
 	public static function userEmailExists($email) {
-		$query = "select exists (select true from public.user where email = '$email' and status_fk = '1')";
+		$query = "select exists (select true from contact where email = '$email' and status_fk = '1')";
 		return pgDb::execute($query);
 	}
 	
 	public static function countUserEmail($email) {
+		// TODO: broken now with refactor (email)
 		$query = "select id from public.user where email = '$email' and status_fk = '1'";
 		return pg_num_rows(pgDb::execute($query));
 	}
 	
+	public static function countActiveUsers($uid, $password) {
+		$query = "select id from public.user where username = '$uid' and password = '$password' and status_fk = '1'";
+		return pg_num_rows(pgDb::execute($query));
+	}
+	
 	public static function userOrgRelationExists($orgId, $email) {
+		// TODO: broken now with refactor (email)
 		$query = "select exists (select true from user_organization where organization_fk = '$orgId' and user_fk in (select id from public.user where email = '$email' and status_fk = '1'))";
 		return pgDb::execute($query);
 	}
 	
 	public static function insertOrganization($name, $ein) {
-			$query = "insert into organization (name, ein, status_fk) values ('$name', '$ein', '1') returning id";
+			$query = "insert into organization (name, status_fk) values ('$name', '1') returning id";
+			return pgDb::execute($query);		
+	}
+	
+	public static function insertOrgOrgRelation($from, $to, $relation) {
+			$query = "insert into organization_organization (organization_from, organization_to, relationship) values ('$from', '$to', '$relation')";
 			return pgDb::execute($query);		
 	}
 
@@ -89,8 +103,15 @@ class pgDb {
 				(select id from invitation where uuid = '$uuid'), now())";
 			pgDb::execute($query);
 	}
+
+	public static function insertActiveUser($uuid, $username, $password, $fname, $lname, $email) {
+			// TODO: broken now with refactor (email)
+			$query = "insert into public.user (uuid, username, password, fname, lname, email, status_fk, create_dttm, activate_dttm) values ('$uuid', '$username', '$password', '$fname', '$lname', '$email', '1', now(), now()) returning id";
+			return pgDb::execute($query);		
+	}
 	
 	public static function insertActiveUserByEmail($uuid, $email) {
+			// TODO: broken now with refactor (email)
 			$query = "insert into public.user (uuid, email, status_fk, create_dttm, activate_dttm) values ('$uuid', '$email', '1', now(), now()) returning id";
 			return pgDb::execute($query);		
 	}
@@ -108,6 +129,7 @@ class pgDb {
 	
 	public static function insertAdminUserOrgRelation($email, $orgId, $grantorId) {
 			// TODO: add active check?
+			// TODO: broken now with refactor (email)
 			$query = "insert into user_organization (user_fk, organization_fk, grantor_fk, role_fk, create_dttm) values ((select id from public.user where email = '$email' limit 1), '$orgId', '$grantorId', '1', now()) returning id";
 			return pgDb::execute($query);		
 	}
@@ -124,13 +146,13 @@ class pgDb {
 			and oo.organization_from_fk = o2.id
 			and oo.relationship in ('parent', 'god')
 			";
-			return pgDb::execute($query);	
+		return pgDb::execute($query);	
 	}
 	
 	public static function getUserByUsername($uid) {
 		// TODO: add active check?
 		$query = "select u.id as id, u.fname as fname, u.lname as lname from public.user u where u.username = '$uid' limit 1";
-			return pgDb::execute($query);	
+		return pgDb::execute($query);	
 	}
 	
 	public static function getPrivileges($roleId) {
@@ -141,10 +163,11 @@ class pgDb {
 			and pr.role_id_fk = r.id
 			and pr.privilege_id_fk = p.id
 			";
-			return pgDb::execute($query);
+		return pgDb::execute($query);
 	}	
 	
 	public static function getUserById($userId) {
+		// TODO: broken now with refactor (email)
 		$query = "
 		select u.fname as first, u.lname as last, u.email as email, u.sms as cell, s.name as status, r.name as role 
 			from public.user u, user_organization uo, status s, role r 
@@ -195,28 +218,41 @@ class pgDb {
 	}
 
 	public static function freeSearch($term) {
+		// TODO: use citext index in db instead of lower() function here
+		// http://stackoverflow.com/questions/7005302/postgresql-how-to-make-not-case-sensitive-queries
 		$query = "
-			select 'organization' as table, o.id as id
+			select 'Organization' as table, o.id as id, o.name as name
 			from organization o
-			where o.name like '%{$term}%'
-			or o.ein like '%{$term}%'
+			where lower(o.name) like lower('%{$term}%')
 			
 			union
 			
-			select 'public.user' as table, u.id as id
+			select 'Person' as table, u.id as id, u.fname || ' ' || u.lname
 			from public.user u
-			where u.fname like '%{$term}%'
-			or u.lname like '%{$term}%'
-			or u.mname like '%{$term}%'
-			or u.nickname like '%{$term}%'
-			or u.email like '%{$term}%'
-			or u.sms like '%{$term}%'
-			";
+			where lower(u.fname) like lower('%{$term}%')
+			or lower(u.lname) like lower('%{$term}%')
+			or lower(u.mname) like lower('%{$term}%')
+			or lower(u.nickname) like lower('%{$term}%')
+			
+			union
+			
+			select 'Program' as table, p.id as id, p.name as name
+			from program p
+			where lower(p.name) like lower('%{$term}%')
+			or lower(p.description) like lower('%{$term}%')
+			
+			union
+			
+			select 'Language' as table, l.id as id, l.name as name
+			from language l
+			where lower(l.language) like lower('%{$term}%')		
+			"	
+			;
 			
 			return pgDb::execute($query);			
 			
 	}
-
+	
 	/*
 	
 	public static function () {

@@ -14,6 +14,7 @@ if (!$_SESSION) {session_start();}
 #parmeter: Param $user an array containing information about the new user. The array user will contain mandatory values (member, pw and email) which will be used to build URL query string to register a new user on websitetoolbox forum. The array $user can also contain optional value such as name, avatar, profile picture etc.
 # URL with all parameter from $user array passed in doHTTPCall function to create a request using curl or file and getting response from the Website Toolbox forum.
 #return: Parse and return user registration xml response "Registration Complete" or error response  from websitetoolbox forum.
+
 function forumSignup($user) {
 	# Changes the case of all keys in an array
 	$user = array_change_key_case($user);	

@@ -1,20 +1,41 @@
 <?php
 
+session_start();
+
 error_reporting(E_ALL);
 ini_set( 'display_errors','1'); 
 
+require_once ("../model/pgDb.php");
+require_once ("../control/util.php");
 require_once dirname(__FILE__).'/forum_sso_functions.php';
 
-include("../model/pgDb.php");
-include("../control/util.php");
+if (!isset($_POST['userid']) || strlen($_POST['userid']) < 1) {
+	returnToEnrollWithError("Please choose your userid");
+}
 
-session_start();
+if (!isset($_POST['password']) || strlen($_POST['password']) < 1) {
+	returnToEnrollWithError("Please choose your password");
+}
 
-$uid = Util::strip($_POST['userid']);
-$password = Util::strip($_POST['password']);
+if (!Util::validateEmail($_POST['email'])) {
+	// TODO: test this method against email specs - am i open to script injection if i pass this test??
+	returnToEnrollWithError("Please enter a valid email address.");
+}
+
+if (!isset($_POST['fname']) || strlen($_POST['fname']) < 1) {
+	returnToEnrollWithError("Please enter your first name.");
+}
+
+// TODO: strategy for decon on this user input
+$uid = $_POST['userid'];
+$password = $_POST['password'];
+$fname = $_POST['fname'];
+$lname = $_POST['lname'];
+$email = $_POST['email'];
+
 $validInvitation = $isAuthenticated = false;
 
-$_SESSION['fname'] = $_SESSION['lname'] = $_SESSION['uidpk'] = "";
+$_SESSION['fname'] = $_SESSION['lname'] = $_SESSION['uidpk'] = $_SESSION['forumSessionError'] = "";
 
 if(strlen($_SESSION['inviteId']) == 36) {
 	if (pgDb::checkValidInvitation($_SESSION['inviteId'])) {
@@ -22,50 +43,71 @@ if(strlen($_SESSION['inviteId']) == 36) {
 	}
 }
 
+
 if ($validInvitation){
-	// TODO: register them with forum - I think we need to collect the email here <== LEFT OFF HERE
+	
+	// Insert user into db
+	
 	// TODO: make sure username is unique inside network, right, ??
 	// TODO: activate only on confirmed email code
-	$cursor1 = pgDb::insertActiveUserByCredentials(Util::newUuid(), $uid, $password);
+	// TODO: insert other user values into db
+	$cursor1 = pgDb::insertActiveUser(Util::newUuid(), $uid, $password, $fname, $lname, $email);
 	$row1 = pg_fetch_row($cursor1);
 	$_SESSION['uidpk'] = $row1[0];
 	pgDb::insertUserOrgRelation($_SESSION['uidpk'], $_SESSION['orgId'], $_SESSION['grantorId']);
 	$isAuthenticated = true;
-} else {
-	header("location:../view/login.php");
-	exit(0);	
-}
-
-if($isAuthenticated){
-	//include("forumLoginProcessor.php");
+	
+	// Register user with forum
 	$user = array();
-	$user['user'] = "ada";
-	$login_status = forumSignin($user);
-	if($login_status == 'Login Successful') {
-	// TODO: do form login
-	//if (true) {
-		$cursor1 = pgDb::getUserByUsername($uid);
-		while ($row1 = mysql_fetch_array($cursor1, MYSQL_BOTH)) {
-			// already at SESSION['authtoken'] is the forum SSO token
-			// TODO: take these from named columns
-			$_SESSION['fname'] = $row1['fname'];
-  		$_SESSION['lname'] = $row1['lname'];
-		} 
-		// TODO: location to nexus.php focus on user profile (and require name to leave?)
-		header("location:../view/nexus.php");
-		exit(0);
+	$user['member'] = $uid;
+	$user['pw'] = $password;
+	$user['email'] = $email;	
+	$user['name'] = $fname . " " . $lname;
+	$register_status = forumSignup($user);
+	if($register_status == 'Registration Complete') {
+			
 	} else {
-		returnToLoginWithError("Forum login failed: " . $login_status);
-		exit(0);
+		$_SESSION['forumSessionError'] = "true";
 	}
+	
+	if($isAuthenticated){
+		
+		$cursor = pgDb::getUserByUsername($uid);
+		// bizarro php bug: https://bugs.php.net/bug.php?id=31750
+		// can't specify PGSQL_ASSOC as one might like
+		while ($row = pg_fetch_array($cursor)) {
+			$_SESSION['fname'] = $row['fname'];
+  		$_SESSION['lname'] = $row['lname'];
+		}
+			
+		// Login user to forum
+		$user = array();
+		$user['user'] = $uid;
+		$login_status = forumSignin($user);
+		if($login_status == 'Login Successful') {
+
+		} else {
+			$_SESSION['forumSessionError'] = "true";
+		}
+		
+		// TODO: focus on user profile
+		header("location:../view/nexus.php?thisPage=profile");
+		exit(0);
+		
+	} else {
+		header("location:../view/login.php");
+		exit(0);	
+	}
+	
 } else {
 	header("location:../view/login.php");
 	exit(0);	
 }
 
-
-function returnToLoginWithError($errorMessage) {
-	header("location:login.php?error=" . $errorMessage);
+function returnToEnrollWithError($errorMessage) {
+	header("location:../view/enroll.php?error=" . $errorMessage);
+	exit(0);
 }
+
 
 ?>

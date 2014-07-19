@@ -1,28 +1,35 @@
 <?php
 
+error_reporting(E_ALL);
+ini_set( 'display_errors','1');
+
 include("../model/pgDb.php");
 include("../control/util.php");
 
 $inviteId = $networkId = "";
 $validInvitation = false;
 
-$_SESSION['inviteId'] = $_SESSION['networkName'] = $_SESSION['orgName'] = $_SESSION['networkId'] = $_SESSION['orgId'] = "";
+$_SESSION['networkName'] = $_SESSION['orgName'] = $_SESSION['networkId'] = $_SESSION['orgId'] = "";
 
-if(isset($_GET['invitation'])) {
+if(isset($_SESSION['inviteId'])) {
+	// This is possible if we are reloading page on validation error
+	$validInvitation = true;
+	
+} elseif(isset($_GET['invitation'])) {
+	
 	// TODO: check that none of these characters would be valid in a php-generated uuid
 	$inviteId = Util::strip($_GET['invitation']);
 	if(strlen($inviteId) == 36) {
 		if (pgDb::checkValidInvitation($inviteId)) {
 			$validInvitation = true;
+			$_SESSION['inviteId'] = $inviteId;
 		}
 	}
 }
 
 if ($validInvitation) {
 	
-	$_SESSION['inviteId'] = $inviteId;
-	
-	$cursor1 = pgDb::getInvitationByUuid($inviteId);
+	$cursor1 = pgDb::getInvitationByUuid($_SESSION['inviteId']);
 	$row1 = pg_fetch_array($cursor1);
 	$_SESSION['networkId'] = $row1['networkid'];
 	$_SESSION['orgId'] = $row1['orgid'];

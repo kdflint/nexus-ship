@@ -9,11 +9,11 @@ session_start();
 if (isset($_REQUEST['thisPage'])) {
 	$thisPage = $_REQUEST['thisPage'];
 } else {
-	$thisPage = ""; //"userDetail";
+	$thisPage = "directory";
 }
 
 
-require '../control/xmpp-prebind-php/lib/XmppPrebind.php';
+require_once '../control/xmpp-prebind-php/lib/XmppPrebind.php';
 
 /**
  * Comment here for explanation of the options.
@@ -73,41 +73,46 @@ if(curl_exec($ch) === false) 	{
   </head>
   
   <body>
-  	<p><img src='http://northbridge.websitetoolbox.com/register/dologin?authtoken="<? echo($_SESSION['authtoken']); ?>"' border='0' width='1' height='1' alt='' /></p>
     <div class="container">
     	
     <table>
     	<tr>
-    	<td><img style="float:left;vertical-align:top;margin:20px;" src="image/demo.jpg" height="100" width="100" border="0" alt="Demo Organization Logo"/></a></td>
-    	<td width="30%"><p style="text-align:left;color:#57574a;font-size:24px;margin:20px;"><b><? echo($_SESSION['networkName']); ?></b></p></td>
-    	<td><p style="text-align:right;color:#c9c9a7;font-size:18px;margin:20px;"><b><? echo($_SESSION['orgName']); ?></b></p>
-    <p style="text-align:right;margin:20px;"><b>Hello <? echo($_SESSION['fname']); ?></b><br/>
-    <!-- <a id="chatControlLink" href="javascript:toggleChat('chatControl')">Chat</a> |  -->
-		<a href="#">Help</a> | <a href="login.php?logout=true">Logout</a></p></td>
+    	<td>
+    		<img style="float:left;vertical-align:top;margin:20px;" src="http://chicagofaithandhealth.org/imgs/logo.png" height="88" width="365" border="0" alt="Demo Organization Logo"/>
+    	</td>
+    	<!--<td width="30%"><p style="text-align:left;color:#57574a;font-size:24px;margin:20px;"><b><? echo($_SESSION['networkName']); ?></b></p></td>-->
+    	<td>
+    		<p style="text-align:right;color:#c9c9a7;font-size:18px;margin:20px;"><b><? echo($_SESSION['orgName']); ?></b></p>
+    		<p style="text-align:right;margin:20px;"><b>Hello <? echo($_SESSION['fname']); ?></b><br/>
+    		<!-- <a id="chatControlLink" href="javascript:toggleChat('chatControl')">Chat</a> |  -->
+				<a href="#">Help</a> | <a href="login.php?logout=true">Logout</a></p>
+			</td>
     	</tr>
     </table>	
         	
       <div class="shell">
       	
 				<div class="navigation">
-      		<? include 'navigation.php'; ?>
+      		<? include 'include/navigation.php'; ?>
  		  	</div>
 
 				<div class="projectsContent">						
 			 	<?
-			   $contentFile="forum" . ".php";
+			   $contentFile = "include/" . $thisPage . ".php";
 			   include $contentFile; 
 			 	?>
 			 	</div>
 			 				
 					<!--<div id="chatControl" style="display:block;">-->
-			 			<div id="conversejs"></div>
+			 		<!--	<div id="conversejs"></div> -->
 			 		<!--</div>-->
 			 			 		
       </div><!--shell-->
     </div><!-- container -->
     
 	</body>
+	
+<!--
 <script>
 		// Complete list of options published at
 		// https://conversejs.org/docs/html/index.html#configuration-variables
@@ -129,6 +134,7 @@ if(curl_exec($ch) === false) 	{
         });
     });
 </script>
+-->
 
 <script>
 	

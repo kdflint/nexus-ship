@@ -43,6 +43,12 @@ class Util {
 
 	public static function authenticate($uid, $pass) {
 		
+		if (pgDb::countActiveUsers($uid, $pass) == 1) {
+			return true;
+		}
+		return false;
+		
+		/*
 		$goodUsers = array(
 			'anita' => 'good',
 			'ada' => 'good',
@@ -56,6 +62,7 @@ class Util {
 			return true;
 		}
 		return false;
+		*/
 	}
 	
 	/*

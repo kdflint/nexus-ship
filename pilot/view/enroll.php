@@ -33,11 +33,15 @@ if(isset($_GET['error'])) {
 								<form action="../control/enrollProcessor.php" method="post">
 								  	<p><? echo $error; ?></p>
 								  	<p>You represent: <? echo $_SESSION['orgName'] ?></p>
-										Choose your user name: <input class="passed" type="text" size="25" name="userid" value=""/><br/>
-										Choose your password: <input class="passed" type="text" size="25" name="password" value=""/><br/>
-										<input type="hidden" name="invitation" value="<? echo $_SESSION['inviteId']; ?>" />
+										Choose your user name*: <input class="passed" type="text" size="25" name="userid" value=""/><br/>
+										Choose your password*: <input class="passed" type="text" size="25" name="password" value=""/><br/>
+										Your first name*: <input class="passed" type="text" size="25" name="fname" value=""/><br/>
+										Your last name: <input class="passed" type="text" size="25" name="lname" value=""/><br/>
+										<!-- Some or all of above data may be already completed by the invitation. -->
+										<!-- Even if an invitation sets up all the prior data, a new user has to enter an email for confirmation. -->
+										Your email*: <input class="passed" type="text" size="25" name="email" value=""/><br/>
+										<!--<input type="hidden" name="invitation" value="<? echo $_SESSION['inviteId']; ?>" />-->
 										<input type="submit" value="Enroll"/>
-										<p>Trouble getting in? <a href="mailto:contact@northbridgetech.org">contact@northbridgetech.org</a></p>
 								</form>
 							</div>						
 							
