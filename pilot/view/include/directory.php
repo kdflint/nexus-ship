@@ -30,36 +30,66 @@ include '../control/directoryPreProcessor.php';
 					<option value="37">Spiritual Care</option><br/>
 				</select></p>			
 	</form>
-	
-  <table>
-  	<tr><td colspan="2"><p><a href="#"><? echo($title); ?></a></p></td><td><p><a href="#">Online?<a href="#"></p></td></td>
-  
-  <? 
-  	$counter = 0;
-  	if (!empty($cursor)) {
-  		while ($row = pg_fetch_array($cursor)) { 
-  ?>
-		
 
-			<tr><td valign="top">
-			
-			<a id="imageDivLink<? echo $counter; ?>" href="javascript:toggle('contentDivImg<? echo $counter; ?>', 'imageDivLink<? echo $counter; ?>');"><img style="margin:5px;" src="image/plus.png" height="15" width="15" /></a></td><td valign="top"><? echo $row[0]; ?>
-			<div id="contentDivImg<? echo $counter; ?>" style="display:none;">
-				<p class="indented" ><b>Primary contact: </b><? echo $row[1]; ?></p>
-				<p class="indented" ><b><? echo $row[2]; ?></b></p>
-				<p class="indented" ><b>Online now? </b><span style="color:green;">Yes</span></p>
-				<p class="indented" ><a href="#">Detail</a> | <a href="#">Send a message</a> | <a href="#">Invite to chat</a></p>
-			</div>	</td>
-			<td valign="top"><img src="image/light_green.png" /></td>
-			</tr>
-  
-	<? 
-			$counter++;
-			}
+<? 
+		//$counter = 0;
+  	if (!empty($results)) {
+?>	
+		  <table>
+  	<tr><td colspan="2"><p><a href="#"><? echo($title); ?></a></p></td><td><p><a href="#">Send Message<a href="#"></p></td><td>header</td></tr>
+<?	
+		ksort($results);
+		foreach ($results as $org => $orgComponents) {
+			echo "<p>" . $org;
+				ksort($results[$org]["Programs"]);
+				
+				foreach ($results[$org]["Programs"] as $program => $programComponents) {
+					echo "<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" . $program;
+					foreach ($results[$org]["Programs"][$program]["People"] as $key => $value) {
+						echo $value;
+					}
+					foreach ($results[$org]["Programs"][$program]["Language"] as $key => $value) {
+						echo $value;
+					}
+				}
+
+				foreach ($results[$org]["People"] as $key => $value) {
+					echo "<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" . $value;
+				}
+				foreach ($results[$org]["Language"] as $key => $value) {
+					echo "<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" . $value;
+				}
+			echo "</p>";
 		}
-	?>
-		<tr><td colspan="3" style="text-align:right;"><p><form><input type="submit" value="Export" /></form></p></td></tr>
-	</table>
+		
+		echo "counter = " . $jambam;
+
+  		//while ($row = pg_fetch_array($results)) { 
+?>
+			<tr>			
+				<!--
+				<td valign="top">
+					<a id="imageDivLink<? echo $counter; ?>" href="javascript:toggle('contentDivImg<? echo $counter; ?>', 'imageDivLink<? echo $counter; ?>');"><img style="margin:5px;" src="image/plus.png" height="15" width="15" /></a></td>
+				<td valign="top"><? echo $row['table']; ?>
+					<div id="contentDivImg<? echo $counter; ?>" style="display:none;">
+					<p class="indented" ><b>Primary contact: </b><? echo $row['id']; ?></p>
+					<p class="indented" ><b><? echo $row['name']; ?></b></p>
+					<p class="indented" ><a href="#">Detail</a> | <a href="#">Send a message</a></a></p>
+					</div>
+				</td>
+				<td valign="top"><img src="image/light_green.png" />
+				</td>
+				-->
+			</tr>
+<? 
+			//$counter++;
+?>
+			<tr><td colspan="3" style="text-align:right;"><p><form><input type="submit" value="Export" /></form></p></td></tr>
+			</table>
+<?
+		}
+?>
+
 	
 </div>
 

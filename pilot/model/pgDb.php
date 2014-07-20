@@ -127,6 +127,12 @@ class pgDb {
 			return pgDb::execute($query);		
 	}
 	
+	public static function getUserOrgRelationsByUserId($userId) {
+			// TODO: add active check?
+			$query = "select o.name from user_organization uo, organization o where uo.user_fk = '$userId' and uo.organization_fk = o.id";
+			return pgDb::execute($query);
+	}
+	
 	public static function insertAdminUserOrgRelation($email, $orgId, $grantorId) {
 			// TODO: add active check?
 			// TODO: broken now with refactor (email)
@@ -221,13 +227,13 @@ class pgDb {
 		// TODO: use citext index in db instead of lower() function here
 		// http://stackoverflow.com/questions/7005302/postgresql-how-to-make-not-case-sensitive-queries
 		$query = "
-			select 'Organization' as table, o.id as id, o.name as name
+			select 'Organization' as type, o.id as id, o.name as name
 			from organization o
 			where lower(o.name) like lower('%{$term}%')
 			
 			union
 			
-			select 'Person' as table, u.id as id, u.fname || ' ' || u.lname
+			select 'Person' as type, u.id as id, u.fname || ' ' || u.mname || ' ' || u.lname
 			from public.user u
 			where lower(u.fname) like lower('%{$term}%')
 			or lower(u.lname) like lower('%{$term}%')
@@ -236,14 +242,14 @@ class pgDb {
 			
 			union
 			
-			select 'Program' as table, p.id as id, p.name as name
+			select 'Program' as type, p.id as id, p.name as name
 			from program p
 			where lower(p.name) like lower('%{$term}%')
 			or lower(p.description) like lower('%{$term}%')
 			
 			union
 			
-			select 'Language' as table, l.id as id, l.name as name
+			select 'Language' as type, l.id as id, l.name as name
 			from language l
 			where lower(l.language) like lower('%{$term}%')		
 			"	

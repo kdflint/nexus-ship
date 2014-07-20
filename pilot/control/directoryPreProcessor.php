@@ -12,34 +12,74 @@ if (isset($_GET['newSearch'])) {
 	
 	// assign master results to $cursor and throw back to page
 	// that's all :)
-	$cursor = pgDb::freeSearch($_GET['newSearch']);
+	
+	// TODO: Seriously?? Perhaps must return an standard data type from pgDb so I can make copies??
+	$cursor1 = pgDb::freeSearch($_GET['newSearch']);
+	$cursor2 = pgDb::freeSearch($_GET['newSearch']);
+	$cursor3 = pgDb::freeSearch($_GET['newSearch']);
+	$cursor4 = pgDb::freeSearch($_GET['newSearch']);
 	$title = "Search Results";
 } else {
-	$cursor = null;
+	$cursor1 = null;
 	$title = "Your Recent Searches";
 }
 
-Organization		Match On		
+$results = array();
+
+while ($pass1 = pg_fetch_array($cursor1)) { 
+	if (!strcmp($pass1['type'], "Organization")) {
+			$results[$pass1['name']] = array(
+				"Programs" => array(),
+				"People" =>  array(),
+				"Language" => array()
+			);
+	}
+}
+
+while ($pass2 = pg_fetch_array($cursor2)) { 
+	if (!strcmp($pass2['type'], "Person")) {
+		$cursor2 = pgDb::getUserOrgRelationsByUserId($pass2['id']);
+		while ($inner2 = pg_fetch_array($cursor2)) {
+			if (array_key_exists($inner2['name'], $results)) {
+				array_push($results[$inner2['name']]["People"], $pass2['name']);
+			} else {
+				$results[$inner2['name']] = array(
+					"Programs" => array(),
+					"People" => array($pass2['name']),
+					"Language" => array()
+				);
+			}
+		}
+	}
+}
+
+/* LEFT OFF HERE
+while ($pass3 = pg_fetch_array($cursor3)) { 
+	if (!strcmp($pass3['type'], "Language")) {
+		$cursor2 = pgDb::getUserOrgRelationsByUserId($pass3['id']);
+		while ($inner2 = pg_fetch_array($cursor2)) {
+			if (array_key_exists($inner2['name'], $results)) {
+				array_push($results[$inner2['name']]["People"], $pass2['name']);
+			} else {
+				$results[$inner2['name']] = array(
+					"Programs" => array(),
+					"People" => array($pass2['name']),
+					"Language" => array()
+				);
+			}
+		}
+	}
+}
+*/
+
 
 /*
+
+Organization		Match On		
 
 [0] variable table name
 [1] id
 [2] name
-
-organization
-
-
-user
-
-	pull name using id
-	pull org name(s) by using org_user
-	
-	if row['table'] == "Person"
-		select name
-		from organization o, user_organization uo
-		where o.id = uo.organization_fk
-		and uo.user_fk = row['id']
 
 program
 
@@ -63,6 +103,51 @@ language
 		where o.id = ol.organization_fk
 		and ol.language_fk = row['id']
 
+
+
+
+	print org, person, program, language
+	
+	org name
+	for each person, print person name
+	for each program, print program name, language name
+	for each language, print language
+
+$results2 = array (
+
+	"Illinois Masonic" => array(
+			"Programs" => array(
+					"CPE" => array(
+							"People" => array("Kirsten Peachey", "Kathy Flint"),	
+							"Language" => array("English", "Spanish")						
+					),
+					"Another Worthy Program" => array(
+							"People" => array(),	
+							"Language" => array("Urdu")						
+					),
+					
+			),
+			"People" => array("Michelle Obama"),
+			"Language" => array("English", "Spanish")
+		),
+
+	"Aging Gracefully" => array(
+			"Programs" => array(
+					"BAM" => array(
+							"People" => array(),
+							"Language" => array()
+					)
+			),
+			"People" => array("Barack Obama", "Paul Simon"),
+			"Language" => array()
+	),
+	
+	"What Will Happen?" => array(
+			"Programs" => array(),
+			"People" => array(),
+			"Language" => array()
+	)
+);
 
 */
 
