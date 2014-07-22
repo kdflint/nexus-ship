@@ -16,8 +16,9 @@ $user = array();
 $user['user'] = $_SESSION['username'];
 $login_status = forumSignin($user);
 if($login_status == 'Login Successful') {
+	$_SESSION['forumSessionError'] = "noError";
 } else {
-	$_SESSION['forumSessionError'] = "true";
+	$_SESSION['forumSessionError'] = $login_status;
 }
 	
 header("location:../view/nexus.php?thisPage=forum");

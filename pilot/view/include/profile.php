@@ -1,39 +1,53 @@
+<?
+include '../control/profilePreProcessor.php';
 
-<table>
+$error = "";
 
-<tr bgcolor="#edede1"><td><b>You</b></td></tr>
-<tr><td>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b><? echo($_SESSION['fname'] . " " . $_SESSION['lname']); ?></b> (Organizational Administrator, Network Administrator)</p>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;You have been online 3 times in the last 7 days</br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;You have started 1 discussion</br>
+if(isset($_GET['error'])) {
+	$error = $_GET['error'];
+}
 
-<tr><td><b>&nbsp;</b></td></tr>
+?>
 
-<tr bgcolor="#edede1"><td><b>Your Messaging</b></td></tr>
-<tr><td>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;These are your private messaging endpoints. No one can see these but you!</p>
-<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Text:</b> 312.919.5627<br/>
-<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Email:</b> anita@hotmail.com
-</td></tr>
+<form action="../control/profileProcessor.php" method="post">
 
-<tr><td><b>&nbsp;</b></td></tr>
+<p><b>You</b><p>
+<hr/>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<input type="text" size="<? echo(strlen($_SESSION['fname'])); ?>" name="fname" value="<? echo($_SESSION['fname']);?>"/>
+	<input type="text" size="<? echo(strlen($_SESSION['lname'])); ?>" name="lname" value="<? echo($_SESSION['lname']); ?>"/>
+</p>
 
-<tr bgcolor="#edede1"><td><b>Your Organizations</b></td></tr>
-<tr><td>
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Greater-Chicago Communities Unite! | <a href="#">Edit</a></p>
-</td></tr>
-
-<tr><td><b>&nbsp;</b></td></tr>
-
-<tr bgcolor="#edede1"><td ><b>Network Statistics</b></td></tr>
-<tr><td>
-&nbsp;<br/>
-<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Network Name:</b> Greater-Chicago Communities Unite!</br>
-<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Total Number of Affiliates:</b> <a href="#">22</a><br/>
-<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Affiliates Online Past 7 Days:</b> <a href="#">14</a><br/>
-<b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Active Discussions:</b> 4<br/>
-</td></tr>
+<p><b>Your Messaging</b><p>
+<hr/>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Text&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" size="<? echo(strlen($_SESSION['sms'])); ?>" name="sms" value="<? echo($_SESSION['sms']);?>"/> <input type="checkbox" name="sms_status" <? echo($sms_status); ?> /><p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Email&nbsp;&nbsp;<input type="text" size="<? echo(strlen($_SESSION['email'])); ?>" name="email" value="<? echo($_SESSION['email']);?>"/> <input type="checkbox" name="email_status" <? echo($email_status); ?> /><p>
+<p style="text-align:right;">
+	<a href="javascript:post('../control/messageProcessor.php',{phone:'<? echo(Util::stripPhone($_SESSION['sms'])); ?>',email:'<? echo($_SESSION['email']); ?>'})">
+	Send yourself a test message
+	</a>
+</p>
 
 
-</table>
+<!--
+TODO: turn into link
+	<form action="../control/messageProcessor.php" method="post">
+   <input type="hidden" name="phone" value=<? echo $_SESSION['sms']; ?>/>
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" value="Test Message"/>
+	</form>
+-->
 
+<p><b>Your Organizations</b><p>
+<hr/>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<? echo $_SESSION['orgName'];?></p>
+
+<p><b>Your Collaborations</b><p>
+<hr/>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+
+<p><b>Your Network</b><p>
+<hr/>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<? echo $_SESSION['networkName']; ?> (<? echo $count; ?> affiliates)</br><p>
+<p style="text-align:right;"><? echo $error; ?></p>
+<input style="float: right;" type="submit" value="Update Your Profile"/>
+</form>

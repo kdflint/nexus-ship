@@ -88,6 +88,12 @@ class pgDb {
 		return pgDb::execute($query);
 	}
 	
+	public static function countOrgsInNetworkById($networkId) {
+		$query = "select id from organization_organization where organization_from_fk = '$networkId' and relationship = 'parent'";
+		$count = pg_num_rows(pgDb::execute($query));
+		return $count;
+	}
+	
 	public static function insertOrganization($name, $ein) {
 			$query = "insert into organization (name, status_fk) values ('$name', '1') returning id";
 			return pgDb::execute($query);		
@@ -133,6 +139,16 @@ class pgDb {
 			return pgDb::execute($query);
 	}
 	
+	public static function getOrgByLanguageId($langId) {
+			$query = "select o.name from organization_language ol, organization o where ol.language_fk = '$langId' and ol.organization_fk = o.id";
+			return pgDb::execute($query);		
+	}
+	
+	public static function getOrgByProgramId($progId) {
+			$query = "select o.name from organization_program op, organization o where op.program_fk = '$progId' and op.organization_fk = o.id";
+			return pgDb::execute($query);		
+	}
+	
 	public static function insertAdminUserOrgRelation($email, $orgId, $grantorId) {
 			// TODO: add active check?
 			// TODO: broken now with refactor (email)
@@ -143,7 +159,7 @@ class pgDb {
 	public static function getUserSessionByUsername($uid) {
 		// TODO: add active check?
 		$query = "
-			select u.id as id, u.fname as fname, u.lname as lname, o1.name as affiliation, o2.name as network, uo.role_fk as role
+			select u.id as id, u.fname as fname, u.lname as lname, o1.name as affiliation, o2.name as network, o2.id as networkid, uo.role_fk as role
 			from public.user u, user_organization uo, organization o1, organization o2, organization_organization oo
 			where u.username = '$uid'
 			and uo.user_fk = u.id
@@ -175,12 +191,27 @@ class pgDb {
 	public static function getUserById($userId) {
 		// TODO: broken now with refactor (email)
 		$query = "
-		select u.fname as first, u.lname as last, u.email as email, u.sms as cell, s.name as status, r.name as role 
+		select u.fname as first, u.lname as last, u.email as email, u.sms as cell, u.enable_email as emailon, u.enable_sms as smson, s.name as status, r.name as role 
 			from public.user u, user_organization uo, status s, role r 
 			where u.id = '$userId'
 			and s.id = u.status_fk
 			and uo.user_fk = u.id
 			and uo.role_fk = r.id
+			";
+		return pgDb::execute($query);
+	}
+	
+	public static function updateUserById($userId, $fname, $lname, $sms, $email, $smsEnabled, $emailEnabled) {
+		// TODO: broken now with refactor (email)
+		$query = "
+		update public.user set
+			fname = '$fname',
+			lname = '$lname',
+			sms = '$sms',
+			email = '$email',
+			enable_email = '$emailEnabled',
+			enable_sms = '$smsEnabled'
+			where id = '$userId'
 			";
 		return pgDb::execute($query);
 	}
@@ -226,6 +257,8 @@ class pgDb {
 	public static function freeSearch($term) {
 		// TODO: use citext index in db instead of lower() function here
 		// http://stackoverflow.com/questions/7005302/postgresql-how-to-make-not-case-sensitive-queries
+		
+		// TODO: figure out null values in name fields (remember, nothing prints if one name component is NULL. does print if empty string is stored.)
 		$query = "
 			select 'Organization' as type, o.id as id, o.name as name
 			from organization o
@@ -233,7 +266,7 @@ class pgDb {
 			
 			union
 			
-			select 'Person' as type, u.id as id, u.fname || ' ' || u.mname || ' ' || u.lname
+			select 'Person' as type, u.id as id, u.fname || ' ' || u.lname
 			from public.user u
 			where lower(u.fname) like lower('%{$term}%')
 			or lower(u.lname) like lower('%{$term}%')
@@ -249,7 +282,7 @@ class pgDb {
 			
 			union
 			
-			select 'Language' as type, l.id as id, l.name as name
+			select 'Language' as type, l.id as id, l.language as name
 			from language l
 			where lower(l.language) like lower('%{$term}%')		
 			"	

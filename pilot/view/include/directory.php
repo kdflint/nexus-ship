@@ -41,16 +41,20 @@ include '../control/directoryPreProcessor.php';
 		ksort($results);
 		foreach ($results as $org => $orgComponents) {
 			echo "<p>" . $org;
-				ksort($results[$org]["Programs"]);
+				// ksort($results[$org]["Programs"]);
 				
-				foreach ($results[$org]["Programs"] as $program => $programComponents) {
-					echo "<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" . $program;
+				foreach ($results[$org]["Programs"] as $key => $value) {
+					echo "<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" . $value;
+					/*
+					TODO: implement program people and program language. See example data structure in comments of directoryPreProcessor.php
+					
 					foreach ($results[$org]["Programs"][$program]["People"] as $key => $value) {
 						echo $value;
 					}
 					foreach ($results[$org]["Programs"][$program]["Language"] as $key => $value) {
 						echo $value;
 					}
+					*/
 				}
 
 				foreach ($results[$org]["People"] as $key => $value) {
@@ -62,8 +66,6 @@ include '../control/directoryPreProcessor.php';
 			echo "</p>";
 		}
 		
-		echo "counter = " . $jambam;
-
   		//while ($row = pg_fetch_array($results)) { 
 ?>
 			<tr>			

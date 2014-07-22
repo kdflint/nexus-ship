@@ -2,6 +2,50 @@
 
 class Util {
 
+	public static function validateEmail($in) {
+		if (filter_var($in, FILTER_VALIDATE_EMAIL)) {
+			return true;
+		}
+		return false;
+	}
+	
+	public static function validateUserProfile($input) {
+		$result = array('good' => array(), 'error' => array());
+		
+		if (isset($input['email']) && filter_var($input['email'], FILTER_VALIDATE_EMAIL)) {
+			$result['good']['email'] = $input['email'];
+		} else {
+			$result['error']['email'] = "Please enter a valid email address.";
+		}
+		
+		if (!isset($input['fname']) || strlen($input['fname']) < 1) {
+			$result['error']['fname'] = "Please enter your first name.";
+ 		} else {
+			$result['good']['fname'] = $input['fname'];
+		}
+
+		if (isset($input['lname'])) {
+			$result['good']['lname'] = $input['lname'];
+ 		} else {
+ 			$result['good']['lname'] = "";
+ 		}
+
+		if (isset($input['sms']) && strlen($input['sms']) > 6 && filter_var($input['sms'], FILTER_VALIDATE_INT)) {
+			$result['good']['sms'] = $input['sms'];
+		} else if (!isset($input['sms']) || strlen($input['sms']) == 0) {
+			$result['good']['sms'] = "";
+		} else {
+			$result['error']['sms'] = "Please enter a valid text address.";
+		}
+			
+		return $result;
+	}
+	
+	public static function validateUserCredentials($input) {
+		
+	}
+
+
 	public static function sanitize($in) {
 		$out = strtr($in, array('(' => '&#40;',
                           	')' => '&#41;',
@@ -23,11 +67,20 @@ class Util {
 		return $out;
 	}
 	
-	public static function validateEmail($in) {
-		if (filter_var($in, FILTER_VALIDATE_EMAIL)) {
-			return true;
-		}
-		return false;
+	static function stripPhone($num) {
+		return preg_replace('/[^0-9]/', '', $num);
+	}
+	
+	static function prettyPrintPhone($num) {
+		$num = preg_replace('/[^0-9]/', '', $num);
+	 
+		$len = strlen($num);
+		if($len == 7)
+			$num = preg_replace('/([0-9]{3})([0-9]{4})/', '$1-$2', $num);
+		elseif($len == 10)
+			$num = preg_replace('/([0-9]{3})([0-9]{3})([0-9]{4})/', '($1) $2-$3', $num);
+		 
+		return $num;
 	}
 	
 	public static function newUuid() { 

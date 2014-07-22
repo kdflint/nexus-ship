@@ -1,5 +1,5 @@
 <?php
-require_once dirname(__FILE__).'/forum_sso_functions.php';
+//require_once dirname(__FILE__).'/forum_sso_functions.php';
 include("../model/pgDb.php");
 include("util.php");
 
@@ -32,12 +32,12 @@ if($isAuthenticated){
 	
 	$cursor = pgDb::getUserSessionByUsername($_SESSION['username']);
 	while ($row = pg_fetch_array($cursor)) {
-		// already at SESSION['authtoken'] is the forum SSO token
 		$_SESSION['fname'] = $row['fname'];
   	$_SESSION['lname'] = $row['lname'];
   	$_SESSION['orgName'] = $row['affiliation'];
   	$_SESSION['uidpk'] = $row['id'];
   	$_SESSION['networkName'] = $row['network'];
+  	$_SESSION['networkId'] = $row['networkid'];
 	} 
 	
 	// Login user to forum
