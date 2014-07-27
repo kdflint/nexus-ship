@@ -5,7 +5,6 @@ ini_set( 'display_errors','1');
 
 $username = "kdflint";
 $password = "A56L9Q1X";
-$phonenum = "";
 
 if (isset($_POST['phone']) && strlen($_POST['phone']) > 0) {
   $phonenum = $_POST['phone'];

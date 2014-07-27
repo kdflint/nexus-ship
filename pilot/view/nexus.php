@@ -136,22 +136,5 @@ if(curl_exec($ch) === false) 	{
 </script>
 -->
 
-<script>
-	
-	 function keepForumAlive() {
-		 http_request = new XMLHttpRequest();
-     http_request.open('GET', "http://northbridge.websitetoolbox.com/register/dologin?authtoken=<? echo($_SESSION['authtoken']); ?>");
-     http_request.send(null);
-	 };
-
-	 function init() {
-    	window.setInterval("keepForumAlive()", 60000);
-	 }
-
-	 window.onload = init;
-
-</script>
-
-
 </html>
 

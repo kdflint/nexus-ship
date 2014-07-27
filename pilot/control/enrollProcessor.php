@@ -37,7 +37,7 @@ $email = $_POST['email'];
 
 $validInvitation = $isAuthenticated = false;
 
-$_SESSION['fname'] = $_SESSION['lname'] = $_SESSION['uidpk'] = $_SESSION['forumSessionError'] = "";
+$_SESSION['fname'] = $_SESSION['lname'] = $_SESSION['uidpk'] = $_SESSION['forumSessionError'] = $_SESSION['username'] = "";
 
 if(strlen($_SESSION['inviteId']) == 36) {
 	if (pgDb::checkValidInvitation($_SESSION['inviteId'])) {
@@ -57,16 +57,17 @@ if ($validInvitation){
 	pgDb::insertUserOrgRelation($_SESSION['uidpk'], $_SESSION['orgId'], $_SESSION['grantorId']);
 	$isAuthenticated = true;
 	
-	// TODO; take out 14
-	$forumGroupId = array("14" => "710056", "18" => "710056");
+	$row2 = pg_fetch_row(pgDb::insertUserForumRelation($_SESSION['uidpk'], $fname, $password, $fname . " " . $lname, $email));
+	$forumId = $row2[0];
 	
+	// TODO: add EDC
+	$forumGroupId = array("14" => "710056", "18" => "710056");
+
 	// Register user with forum
 	$user = array();
-	$user['member'] = $uid;
+	$user['member'] = $fname.$forumId;
 	$user['pw'] = $password;
-	// TODO: add check that this email address is not already registered with the forum!!
 	$user['email'] = $email;	
-	//$user['name'] = $fname . " " . $lname . " (" . $_SESSION['orgName']  . ")";
 	$user['name'] = $fname . " " . $lname;
 	$user['usergroupid'] = $forumGroupId[$_SESSION['networkId']];
 	//$user['profilefieldid'] = "328241";
@@ -80,6 +81,7 @@ if ($validInvitation){
 	if($isAuthenticated){
 		
 		$cursor = pgDb::getUserByUsername($uid);
+		$_SESSION['username'] = $uid;
 		
 		// bizarro php bug: https://bugs.php.net/bug.php?id=31750
 		// can't specify PGSQL_ASSOC as one might like, but this works
@@ -87,17 +89,7 @@ if ($validInvitation){
 			$_SESSION['fname'] = $row['fname'];
   		$_SESSION['lname'] = $row['lname'];
 		}
-		
-		//$user = array();
-		//$user['user'] = $uid;
-		//$login_status = forumSignin($user);
-		//if($login_status == 'Login Successful') {
-		//	$_SESSION['forumSessionError'] = "noError";
-		//} else {
-		//	$_SESSION['forumSessionError'] = $login_status;
-		//}
-		
-		// TODO: focus on user profile
+
 		header("location:../view/nexus.php?thisPage=profile");
 		exit(0);
 		

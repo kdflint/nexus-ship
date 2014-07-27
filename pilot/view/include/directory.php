@@ -35,12 +35,18 @@ include '../control/directoryPreProcessor.php';
 		//$counter = 0;
   	if (!empty($results)) {
 ?>	
-		  <table>
-  	<tr><td colspan="2"><p><a href="#"><? echo($title); ?></a></p></td><td><p><a href="#">Send Message<a href="#"></p></td><td>header</td></tr>
+		<div style="overflow:auto;width:350px;height:400px;">
+
+		<table>
+  	<tr><td colspan="2"><p><a href="#"><? echo($title); ?></a></p></td><td><p><a href="#">Send Message<a href="#"></p></td>
+  		<td> </td></tr>
 <?	
+		//echo "<td><td>" . var_dump($results) . "</td></tr>";
+		//echo "<td><td>original = " . $_GET['newSearch'] . "</td></tr>";
+		//echo "<td><td>counter = " . $counter . "</td></tr>";
 		ksort($results);
 		foreach ($results as $org => $orgComponents) {
-			echo "<p>" . $org;
+			echo "<tr><td>" . $org;
 				// ksort($results[$org]["Programs"]);
 				
 				foreach ($results[$org]["Programs"] as $key => $value) {
@@ -60,16 +66,16 @@ include '../control/directoryPreProcessor.php';
 				foreach ($results[$org]["People"] as $key => $value) {
 					echo "<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" . $value;
 				}
-				foreach ($results[$org]["Language"] as $key => $value) {
-					echo "<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" . $value;
-				}
-			echo "</p>";
+				//foreach ($results[$org]["Language"] as $key => $value) {
+				//	echo "<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" . $value;
+				//}
+			echo "<tr><td>";
 		}
 		
   		//while ($row = pg_fetch_array($results)) { 
 ?>
-			<tr>			
 				<!--
+				<tr>
 				<td valign="top">
 					<a id="imageDivLink<? echo $counter; ?>" href="javascript:toggle('contentDivImg<? echo $counter; ?>', 'imageDivLink<? echo $counter; ?>');"><img style="margin:5px;" src="image/plus.png" height="15" width="15" /></a></td>
 				<td valign="top"><? echo $row['table']; ?>
@@ -81,13 +87,14 @@ include '../control/directoryPreProcessor.php';
 				</td>
 				<td valign="top"><img src="image/light_green.png" />
 				</td>
+				</tr>
 				-->
-			</tr>
 <? 
 			//$counter++;
 ?>
 			<tr><td colspan="3" style="text-align:right;"><p><form><input type="submit" value="Export" /></form></p></td></tr>
 			</table>
+			</div> 
 <?
 		}
 ?>

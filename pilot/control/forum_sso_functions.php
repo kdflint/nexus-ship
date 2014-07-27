@@ -2,7 +2,8 @@
 # This file contains functions for the websitetoolbox.com forum single sign on.
 
 # Replace USERNAME with your Website Toolbox username. If you are using a managed domain or a subdomain, use that instead of USERNAME.websitetoolbox.com. 
-define("HOST","northbridge.websitetoolbox.com");
+# define("HOST","northbridge.websitetoolbox.com");
+define("HOST","forum.northbridgetech.org");
 # Get The API Key from the Settings -> Single Sign On section of the Website Toolbox admin area.
 define("API_KEY","tZ9a6l3ZEo9");
 

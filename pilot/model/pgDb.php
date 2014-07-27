@@ -2,6 +2,9 @@
 
 class pgDb {
 	
+	// get valid values for org type
+	// select * from pg_enum e where enumtypid = '1569578'
+	
 	// TODO: switch this all over to parameterized queries
 	
 	public static function connect() {
@@ -63,6 +66,11 @@ class pgDb {
 	
 	public static function orgEinExists($ein) {
 		$query = "select exists (select true from organization where ein = '$ein')";
+		return pgDb::execute($query);
+	}
+	
+	public static function orgTopicExists($orgId, $topics) {
+		$query = "select exists (select true from organization_topic where organization_fk = '$orgId' and topic_fk in($topics))";
 		return pgDb::execute($query);
 	}
 	
@@ -135,17 +143,17 @@ class pgDb {
 	
 	public static function getUserOrgRelationsByUserId($userId) {
 			// TODO: add active check?
-			$query = "select o.name from user_organization uo, organization o where uo.user_fk = '$userId' and uo.organization_fk = o.id";
+			$query = "select o.name, o.id from user_organization uo, organization o where uo.user_fk = '$userId' and uo.organization_fk = o.id";
 			return pgDb::execute($query);
 	}
 	
 	public static function getOrgByLanguageId($langId) {
-			$query = "select o.name from organization_language ol, organization o where ol.language_fk = '$langId' and ol.organization_fk = o.id";
+			$query = "select o.name, o.id from organization_language ol, organization o where ol.language_fk = '$langId' and ol.organization_fk = o.id";
 			return pgDb::execute($query);		
 	}
 	
 	public static function getOrgByProgramId($progId) {
-			$query = "select o.name from organization_program op, organization o where op.program_fk = '$progId' and op.organization_fk = o.id";
+			$query = "select o.name, o.id from organization_program op, organization o where op.program_fk = '$progId' and op.organization_fk = o.id";
 			return pgDb::execute($query);		
 	}
 	
@@ -156,10 +164,15 @@ class pgDb {
 			return pgDb::execute($query);		
 	}
 	
+	public static function insertUserForumRelation($userId, $username, $password, $name, $email) {
+			$query = "insert into forum_user (user_fk, username, password, name, email) values ('$userId', '$username', '$password', '$name', '$email') returning id";
+			return pgDb::execute($query);
+	}
+	
 	public static function getUserSessionByUsername($uid) {
 		// TODO: add active check?
 		$query = "
-			select u.id as id, u.fname as fname, u.lname as lname, o1.name as affiliation, o2.name as network, o2.id as networkid, uo.role_fk as role
+			select u.id as id, u.fname as fname, u.lname as lname, u.password as password, o1.name as affiliation, o2.name as network, o2.id as networkid, uo.role_fk as role
 			from public.user u, user_organization uo, organization o1, organization o2, organization_organization oo
 			where u.username = '$uid'
 			and uo.user_fk = u.id
@@ -175,6 +188,11 @@ class pgDb {
 		// TODO: add active check?
 		$query = "select u.id as id, u.fname as fname, u.lname as lname from public.user u where u.username = '$uid' limit 1";
 		return pgDb::execute($query);	
+	}
+	
+	public static function getForumUserByNexusId($uid) {
+		$query = "select id, username from forum_user where user_fk = '$uid'";
+		return pgDb::execute($query);			
 	}
 	
 	public static function getPrivileges($roleId) {
@@ -254,42 +272,87 @@ class pgDb {
 		return pgDb::execute($query);
 	}
 
-	public static function freeSearch($term) {
+	public static function freeSearch($term, $networkId) {
 		// TODO: use citext index in db instead of lower() function here
 		// http://stackoverflow.com/questions/7005302/postgresql-how-to-make-not-case-sensitive-queries
 		
-		// TODO: figure out null values in name fields (remember, nothing prints if one name component is NULL. does print if empty string is stored.)
+		// TODO: figure out null values in name fields (remember, nothing prints if one name component is NULL. Does print if empty string is stored.)
 		$query = "
 			select 'Organization' as type, o.id as id, o.name as name
-			from organization o
-			where lower(o.name) like lower('%{$term}%')
+			from organization o, organization_organization oo
+			where 
+				lower(o.name) like lower('%{$term}%')
+			and o.id = oo.organization_to_fk
+			and oo.organization_from_fk = '$networkId'
+			and oo.relationship ='parent'
 			
 			union
 			
 			select 'Person' as type, u.id as id, u.fname || ' ' || u.lname
-			from public.user u
-			where lower(u.fname) like lower('%{$term}%')
-			or lower(u.lname) like lower('%{$term}%')
-			or lower(u.mname) like lower('%{$term}%')
-			or lower(u.nickname) like lower('%{$term}%')
+			from public.user u, organization_organization oo, user_organization uo
+			where (
+				lower(u.fname) like lower('%{$term}%')
+				or lower(u.lname) like lower('%{$term}%')
+				or lower(u.mname) like lower('%{$term}%')
+				or lower(u.nickname) like lower('%{$term}%')
+			)
+			and u.id = uo.user_fk
+			and uo.organization_fk = oo.organization_to_fk
+			and oo.organization_from_fk = '$networkId'
+			and oo.relationship ='parent'
 			
 			union
 			
 			select 'Program' as type, p.id as id, p.name as name
-			from program p
-			where lower(p.name) like lower('%{$term}%')
-			or lower(p.description) like lower('%{$term}%')
+			from program p, organization_organization oo, organization_program op
+			where (
+				lower(p.name) like lower('%{$term}%')
+				or lower(p.description) like lower('%{$term}%')
+			)
+			and p.id = op.program_fk
+			and op.organization_fk = oo.organization_to_fk
+			and oo.organization_from_fk = '$networkId'
+			and oo.relationship ='parent'
 			
 			union
 			
 			select 'Language' as type, l.id as id, l.language as name
-			from language l
-			where lower(l.language) like lower('%{$term}%')		
+			from language l, organization_organization oo, organization_language ol
+			where 
+				lower(l.language) like lower('%{$term}%')		
+			and l.id = ol.language_fk
+			and ol.organization_fk = oo.organization_to_fk
+			and oo.organization_from_fk = '$networkId'
+			and oo.relationship ='parent'
 			"	
 			;
-			
+
 			return pgDb::execute($query);			
-			
+	}
+
+	public static function getOrgByTopicIds($topicIdList, $networkId) {
+			$query = "
+				select 'Organization' as type, o.id as id, o.name as name
+				from organization o, organization_organization oo
+				where o.id in (
+					select organization_fk
+					from organization_topic
+					where topic_fk in ($topicIdList)
+				)
+				and oo.organization_from_fk = '$networkId'
+				and o.id = oo.organization_to_fk
+				and oo.relationship ='parent'
+				";
+			return pgDb::execute($query);		
+	}
+	
+	public static function xxx($id) {
+			$query = "
+				select 'Organization' as type, o.id as id, o.name as name
+				from organization o, organization_organization oo
+				where o.id = oo.organization_to_fk
+				and oo.relationship ='parent'
+				";
 	}
 	
 	/*

@@ -22,6 +22,7 @@ $_SESSION['grantorId'] =
 $_SESSION['networkId'] = 
 $_SESSION['inviteId'] =
 $_SESSION['username'] =
+$_SESSION['password'] =
 "";
 
 $isAuthenticated = Util::authenticate($uid, $password);
@@ -38,16 +39,8 @@ if($isAuthenticated){
   	$_SESSION['uidpk'] = $row['id'];
   	$_SESSION['networkName'] = $row['network'];
   	$_SESSION['networkId'] = $row['networkid'];
+  	$_SESSION['password'] = $row['password'];
 	} 
-	
-	// Login user to forum
-	//$user = array();
-	//$user['user'] = $_SESSION['username'];
-	//$login_status = forumSignin($user);
-	//if($login_status == 'Login Successful') {
-	//} else {
-	//	$_SESSION['forumSessionError'] = "true";
-	//}
 	
 	header("location:../view/nexus.php");
 	exit(0);	

@@ -21,7 +21,7 @@ if (isset($orgId)) {
 
 $cursor2 = array();
 if (isset($_REQUEST['term'])) {
-	$cursor2 = pgDb::freeSearch($_REQUEST['term']);
+	$cursor2 = pgDb::freeSearch($_REQUEST['term'], $_SESSION['networkId']);
 }
 
 ?>
