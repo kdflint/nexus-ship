@@ -1,10 +1,3 @@
--- clean funny characters
--- spot check
-
--- &acirc;&euro;&trade; => '
--- &acirc;&euro;" => -
--- &amp; => and
-
 
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('30th Ward - St. James Church', now(), now(), '1', '');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('A Just Harvest', now(), now(), '1', 'Community Organization');
@@ -16,11 +9,11 @@ insert into organization (name, create_dttm, activate_dttm, status_fk, type) val
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Advocate Parish Nurse Ministry', now(), now(), '1', '');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Advocate United Church of Christ', now(), now(), '1', 'Faith Community/House of Worship');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('African Community United Methodist Church', now(), now(), '1', 'Faith Community/House of Worship');
-insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('African-American Alzheimer&acirc;&euro;&trade;s Outreach Initiative', now(), now(), '1', '');
+insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('African-American Alzheimer\'s Outreach Initiative', now(), now(), '1', '');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Agape Family Life Center', now(), now(), '1', 'Faith Community/House of Worship');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Age Options', now(), now(), '1', 'Community Organization');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Alexian Brothers Parish Services', now(), now(), '1', 'Community Organization');
-insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Alzheimer's Association &acirc;&euro;" Greater Illinois Chapter', now(), now(), '1', '');
+insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Alzheimer\'s Association - Greater Illinois Chapter', now(), now(), '1', '');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Am I My Brothers Keeper', now(), now(), '1', 'Faith Community/House of Worship');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('American Cancer Society, Chicago Region', now(), now(), '1', '');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('American Heart Association Cultural Health Initiatives', now(), now(), '1', '');
@@ -28,7 +21,7 @@ insert into organization (name, create_dttm, activate_dttm, status_fk, type) val
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Antioch Telegu Church', now(), now(), '1', 'Faith Community/House of Worship');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Apostolic Church of God', now(), now(), '1', 'Faith Community/House of Worship');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Apostolic Faith Church Health Professions Ministry', now(), now(), '1', 'Faith Community/House of Worship');
-insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('B&acirc;&euro;&trade;nai Yehuda Beth Shalom', now(), now(), '1', 'Faith Community/House of Worship');
+insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('B\'nai Yehuda Beth Shalom', now(), now(), '1', 'Faith Community/House of Worship');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Beacon Light', now(), now(), '1', '');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Bethel Reform Church', now(), now(), '1', 'Faith Community/House of Worship');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Bikur Cholim (visiting the sick) training', now(), now(), '1', '');
@@ -57,7 +50,7 @@ insert into organization (name, create_dttm, activate_dttm, status_fk, type) val
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Consortium to Lower Obesity in Chicago Children (CLOCC)', now(), now(), '1', '');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Cornerstone Community Outreach', now(), now(), '1', 'Community Organization');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Council of Islamic Organizations of Greater Chicago', now(), now(), '1', 'Community Organization');
-insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Delegate Church Association of Advocate BroMenn Medical Center', now(), now(), '1', 'Faith Based Network');
+insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Delegate Church Association of Advocate BroMenn Medical Center', now(), now(), '1', 'Collaborative/Network');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('DuPage Department of Public Health', now(), now(), '1', '');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Ebenezer Baptist', now(), now(), '1', 'Faith Community/House of Worship');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Ebenezer Lutheran Church', now(), now(), '1', 'Faith Community/House of Worship');
@@ -105,10 +98,10 @@ insert into organization (name, create_dttm, activate_dttm, status_fk, type) val
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Illinois Faith Based Emergency Preparedness Initiative', now(), now(), '1', 'Government');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Illinois Maternal and Child Health Coalition', now(), now(), '1', '');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Illinois PIRG', now(), now(), '1', '');
-insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Illinois Women's Health Registry', now(), now(), '1', '');
+insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Illinois Women\'s Health Registry', now(), now(), '1', '');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Imagine Chicago', now(), now(), '1', '');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Inner City Muslim Action Network', now(), now(), '1', 'Community Organization');
-insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Institute for Women's Health Research', now(), now(), '1', '');
+insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Institute for Women\'s Health Research', now(), now(), '1', '');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Islamic Community Center', now(), now(), '1', 'Faith Community/House of Worship');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Islamic Foundation of Villa Park', now(), now(), '1', '');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Ismaili Center in Chicago', now(), now(), '1', 'Faith Community/House of Worship');
@@ -133,12 +126,12 @@ insert into organization (name, create_dttm, activate_dttm, status_fk, type) val
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Liberty Baptist', now(), now(), '1', 'Faith Community/House of Worship');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Lilydale Baptist Church', now(), now(), '1', 'Faith Community/House of Worship');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Lincoln United Methodist Church', now(), now(), '1', 'Faith Community/House of Worship');
-insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Little Brothers &acirc;&euro;" Friends of the Elderly, Chicago Chapter', now(), now(), '1', '');
+insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Little Brothers - Friends of the Elderly, Chicago Chapter', now(), now(), '1', '');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Lively Stone Missonary Baptist Church', now(), now(), '1', 'Faith Community/House of Worship');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Living Well Ministries', now(), now(), '1', '');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Lutheran Church of Atonement', now(), now(), '1', 'Faith Community/House of Worship');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Lutheran Church of the Ascension', now(), now(), '1', 'Faith Community/House of Worship');
-insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Lutheran General Hospital &acirc;&euro;" Mission and Spiritual', now(), now(), '1', 'Heath Care Provider');
+insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Lutheran General Hospital - Mission and Spiritual', now(), now(), '1', 'Heath Care Provider');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Lutheran Social Services of Illinois', now(), now(), '1', 'Community Organization');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('M.I.K.E. Minority Intervention and Kidney Education Program', now(), now(), '1', '');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Ministry to New Moms', now(), now(), '1', '');
@@ -169,7 +162,7 @@ insert into organization (name, create_dttm, activate_dttm, status_fk, type) val
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Park Manor Church', now(), now(), '1', '');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Park Ridge Community Church', now(), now(), '1', 'Faith Community/House of Worship');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Peace Lutheran Church', now(), now(), '1', 'Faith Community/House of Worship');
-insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('People&acirc;&euro;&trade;s Church of the Harvest', now(), now(), '1', 'Faith Community/House of Worship');
+insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('People\'s Church of the Harvest', now(), now(), '1', 'Faith Community/House of Worship');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Peoples Church of Chicago', now(), now(), '1', 'Faith Community/House of Worship');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Pilgrim Faith United Church of Christ', now(), now(), '1', 'Faith Community/House of Worship');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Pillar of Love UCC', now(), now(), '1', 'Faith Community/House of Worship');
@@ -179,7 +172,7 @@ insert into organization (name, create_dttm, activate_dttm, status_fk, type) val
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Program of Religion/Spirituality and Mental Health', now(), now(), '1', '');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Progressive Baptist Church', now(), now(), '1', 'Faith Community/House of Worship');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Pui Tak Center', now(), now(), '1', 'Community Organization');
-insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Rahab's House, Inc.', now(), now(), '1', '');
+insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Rahab\'s House, Inc.', now(), now(), '1', '');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Rainbow Hospice and Palliative Care', now(), now(), '1', 'Community Organization');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Redeeming Life Family Worship Center COGIC', now(), now(), '1', 'Faith Community/House of Worship');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Reformation Lutheran Church', now(), now(), '1', 'Faith Community/House of Worship');
@@ -194,19 +187,19 @@ insert into organization (name, create_dttm, activate_dttm, status_fk, type) val
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('St Matthews United Methodist Church', now(), now(), '1', 'Faith Community/House of Worship');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('St. Ailbe Catholic Church', now(), now(), '1', 'Faith Community/House of Worship');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('St. Anne Church', now(), now(), '1', 'Faith Community/House of Worship');
-insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('St. Clement&acirc;&euro;&trade;s Episcopal Church', now(), now(), '1', 'Faith Community/House of Worship');
+insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('St. Clement\'s Episcopal Church', now(), now(), '1', 'Faith Community/House of Worship');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('St. Francis of Assisi Church', now(), now(), '1', '');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('St. Genevieve Church', now(), now(), '1', 'Faith Community/House of Worship');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('St. Ita Catholic Church', now(), now(), '1', 'Faith Community/House of Worship');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('St. James Lutheran Church', now(), now(), '1', 'Faith Community/House of Worship');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('St. John MB Church', now(), now(), '1', 'Faith Community/House of Worship');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('St. John United Church of Christ', now(), now(), '1', 'Faith Community/House of Worship');
-insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('St. Kevins&acirc;&euro;&trade;s Church', now(), now(), '1', '');
-insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('St. Luke's Lutheran of Logan Square', now(), now(), '1', 'Faith Community/House of Worship');
-insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('St. Luke&acirc;&euro;&trade;s Lutheran Church of Logan Square', now(), now(), '1', '');
+insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('St. Kevins\'s Church', now(), now(), '1', '');
+insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('St. Luke\'s Lutheran of Logan Square', now(), now(), '1', 'Faith Community/House of Worship');
+insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('St. Luke\'s Lutheran Church of Logan Square', now(), now(), '1', '');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('St. Mark International Christian Ch.', now(), now(), '1', '');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('St. Paul UCC', now(), now(), '1', 'Faith Community/House of Worship');
-insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('St. Paul&acirc;&euro;&trade;s Church by-the-Lake', now(), now(), '1', 'Faith Community/House of Worship');
+insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('St. Paul\'s Church by-the-Lake', now(), now(), '1', 'Faith Community/House of Worship');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('St. Pius V. Church', now(), now(), '1', 'Faith Community/House of Worship');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('St. Sabina Church', now(), now(), '1', '');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('St. Stephen AME Church', now(), now(), '1', 'Faith Community/House of Worship');
@@ -216,9 +209,9 @@ insert into organization (name, create_dttm, activate_dttm, status_fk, type) val
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Temple of Faith Missionary Baptist Church', now(), now(), '1', 'Faith Community/House of Worship');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('The American Heart Association (AHA)', now(), now(), '1', '');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('The Buddhist Temple of Chicago', now(), now(), '1', 'Faith Community/House of Worship');
-insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('The Christian Aerobics &amp; Fitness Association (CAFA)', now(), now(), '1', '');
+insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('The Christian Aerobics and Fitness Association (CAFA)', now(), now(), '1', '');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('The South Church', now(), now(), '1', 'Faith Community/House of Worship');
-insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('The Unversity of Illinois Medical Center for Women's Health Associates', now(), now(), '1', '');
+insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('The Unversity of Illinois Medical Center for Women\'s Health Associates', now(), now(), '1', '');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Third Baptist Church', now(), now(), '1', 'Faith Community/House of Worship');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Triedstone Full Gospel Church', now(), now(), '1', 'Faith Community/House of Worship');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Trinity AME Church', now(), now(), '1', 'Faith Community/House of Worship');
@@ -232,10 +225,10 @@ insert into organization (name, create_dttm, activate_dttm, status_fk, type) val
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Unity Lutheran Church', now(), now(), '1', 'Faith Community/House of Worship');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Unity Northwest Church', now(), now(), '1', 'Faith Community/House of Worship');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Universal House of Refuge Center', now(), now(), '1', '');
-insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('University of Illinois&acirc;&euro;&trade; Division of Community Health', now(), now(), '1', '');
+insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('University of Illinois\' Division of Community Health', now(), now(), '1', '');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Victory Christian Assembly Church', now(), now(), '1', 'Faith Community/House of Worship');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('VOCMA Faith Community Baptist Church', now(), now(), '1', 'Faith Community/House of Worship');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Wesley United Methodist Church', now(), now(), '1', 'Faith Community/House of Worship');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Westside Health Authority', now(), now(), '1', '');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('Wholistic Medical Clinic', now(), now(), '1', 'Heath Care Provider');
-insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('ZAM&acirc;&euro;&trade;s Hope Community Resource Center', now(), now(), '1', 'Community Organization');
+insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('ZAM\'s Hope Community Resource Center', now(), now(), '1', 'Community Organization');
