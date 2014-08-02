@@ -298,7 +298,7 @@ class pgDb {
 			
 			union
 			
-			select 'Person' as type, u.id as id, u.fname || ' ' || u.lname
+			select 'Person' as type, u.id as id, u.fname || ' ' || u.lname as name
 			from public.user u, organization_organization oo, user_organization uo
 			where (
 				lower(u.fname) like lower('%{$term}%')
@@ -338,6 +338,42 @@ class pgDb {
 			;
 
 			return pgDb::execute($query);			
+			
+			/*
+			
+			ADD - as Person or Contact??
+			
+			select 'Person' as type, c.id as id, c.name as name
+			from contact c, organization_organization oo, organization_contact oc
+			where (
+				lower(c.name) like lower('%{$term}%')
+			)
+			and c.id = oc.contact_fk
+			and oc.organization_fk = oo.organization_to_fk
+			and oo.organization_from_fk = '$networkId'
+			and oo.relationship ='parent'
+			
+			
+			ADD
+			
+			select 'Location' as type, loc.id as id, loc.? as name
+			from location loc, organization_organization oo, organization_location oloc
+			where (
+				lower(loc.address1) like lower('%{$term}%')
+				or lower(loc.address2) like lower('%{$term}%')
+				or lower(loc.municipality) like lower('%{$term}%')
+				or lower(loc.region1) like lower('%{$term}%')
+				or lower(loc.region2) like lower('%{$term}%')
+				or lower(loc.country) like lower('%{$term}%')
+				or lower(loc.postal_code) like lower('%{$term}%')
+			)		
+			and loc.id = oloc.location_fk
+			and oloc.organization_fk = oo.organization_to_fk
+			and oo.organization_from_fk = '$networkId'
+			and oo.relationship ='parent'
+			
+			
+			*/
 	}
 
 	public static function getOrgByTopicIds($topicIdList, $networkId) {
