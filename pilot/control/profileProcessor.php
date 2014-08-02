@@ -27,6 +27,11 @@ if (count($result['error']) > 0) {
 	returnToProfileWithError("Please enter valid data in all required fields.");
 }
 
+if (strcmp($_SESSION['email'], $result['good']['email'])) {
+	// If user is updating an email address, advise them that their forum email change is pending. Handle manually.
+	mail("contact@northbridgetech.org", "Email update has been processed", "User id " . $_SESSION['uidpk'] . " has changed their email address. Please complete forum part.", "From: contact@northbridgetech.org");
+}
+
 $_SESSION['email'] = $_SESSION['sms'] = $_SESSION['fname'] = $_SESSION['lname'] = "";
 
 pgDb::updateUserById($_SESSION['uidpk'], 

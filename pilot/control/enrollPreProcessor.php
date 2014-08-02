@@ -9,13 +9,17 @@ include("../control/util.php");
 $inviteId = $networkId = "";
 $validInvitation = false;
 
+//session_destroy();
+
 $_SESSION['networkName'] = $_SESSION['orgName'] = $_SESSION['networkId'] = $_SESSION['orgId'] = "";
 
+// NOTE: instead, for validation reload, should put the invite back into GET parm so every page load starts in same state
+// destroy session at the top of every page load. 
 if(isset($_SESSION['inviteId'])) {
 	// This is possible if we are reloading page on validation error
 	$validInvitation = true;
 	
-} elseif(isset($_GET['invitation'])) {
+} else if(isset($_GET['invitation'])) {
 	
 	// TODO: check that none of these characters would be valid in a php-generated uuid
 	$inviteId = Util::strip($_GET['invitation']);

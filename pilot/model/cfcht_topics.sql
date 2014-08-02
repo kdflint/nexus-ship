@@ -1,3 +1,4 @@
+-- executed, error on mispelled topic. Fixed.
 
 --30th Ward - St. James Church
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = '30th Ward - St. James Church'), (select id from topic where name='Flu Clinic'));
@@ -21,7 +22,7 @@ insert into organization_topic (organization_fk, topic_fk) values ((select id fr
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Advocate Clinical Pastoral Education'), (select id from topic where name='Chaplaincy/Spiritual Care'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Advocate Clinical Pastoral Education'), (select id from topic where name='End of Life Care'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Advocate Clinical Pastoral Education'), (select id from topic where name='Ethics'));
-insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Advocate Clinical Pastoral Education'), (select id from topic where name='Grief and Breavement'));
+insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Advocate Clinical Pastoral Education'), (select id from topic where name='Grief and Bereavement'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Advocate Clinical Pastoral Education'), (select id from topic where name='Leadership Development'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Advocate Clinical Pastoral Education'), (select id from topic where name='Spiritual Care'));
 --Advocate Health Care'));
@@ -65,7 +66,7 @@ insert into organization_topic (organization_fk, topic_fk) values ((select id fr
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Antioch Telegu Church'), (select id from topic where name='Emergency Preparedness'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Antioch Telegu Church'), (select id from topic where name='End of Life Care'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Antioch Telegu Church'), (select id from topic where name='Ethics'));
-insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Antioch Telegu Church'), (select id from topic where name='Grief and Breavement'));
+insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Antioch Telegu Church'), (select id from topic where name='Grief and Bereavement'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Antioch Telegu Church'), (select id from topic where name='Interfaith Understanding and Collaboration'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Antioch Telegu Church'), (select id from topic where name='Leadership Development'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Antioch Telegu Church'), (select id from topic where name='Mental Health'));
@@ -76,7 +77,7 @@ insert into organization_topic (organization_fk, topic_fk) values ((select id fr
 --Apostolic Faith Church Health Professions Ministry'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Apostolic Faith Church Health Professions Ministry'), (select id from topic where name='Chaplaincy/Spiritual Care'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Apostolic Faith Church Health Professions Ministry'), (select id from topic where name='Diabetes'));
-insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Apostolic Faith Church Health Professions Ministry'), (select id from topic where name='Grief and Breavement'));
+insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Apostolic Faith Church Health Professions Ministry'), (select id from topic where name='Grief and Bereavement'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Apostolic Faith Church Health Professions Ministry'), (select id from topic where name='Health Ministry'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Apostolic Faith Church Health Professions Ministry'), (select id from topic where name='Interfaith Understanding and Collaboration'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Apostolic Faith Church Health Professions Ministry'), (select id from topic where name='Leadership Development'));
@@ -92,7 +93,7 @@ insert into organization_topic (organization_fk, topic_fk) values ((select id fr
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'B\'nai Yehuda Beth Shalom'), (select id from topic where name='End of Life Care'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'B\'nai Yehuda Beth Shalom'), (select id from topic where name='Environmental Issues'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'B\'nai Yehuda Beth Shalom'), (select id from topic where name='Ethics'));
-insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'B\'nai Yehuda Beth Shalom'), (select id from topic where name='Grief and Breavement'));
+insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'B\'nai Yehuda Beth Shalom'), (select id from topic where name='Grief and Bereavement'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'B\'nai Yehuda Beth Shalom'), (select id from topic where name='Interfaith Understanding and Collaboration'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'B\'nai Yehuda Beth Shalom'), (select id from topic where name='Leadership Development'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'B\'nai Yehuda Beth Shalom'), (select id from topic where name='Policy and Advocacy'));
@@ -100,7 +101,7 @@ insert into organization_topic (organization_fk, topic_fk) values ((select id fr
 --Beacon Light'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Beacon Light'), (select id from topic where name='Chaplaincy/Spiritual Care'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Beacon Light'), (select id from topic where name='Environmental Issues'));
-insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Beacon Light'), (select id from topic where name='Grief and Breavement'));
+insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Beacon Light'), (select id from topic where name='Grief and Bereavement'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Beacon Light'), (select id from topic where name='Health Ministry'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Beacon Light'), (select id from topic where name='Interfaith Understanding and Collaboration'));
 --Bethel Reform Church'));
@@ -110,7 +111,7 @@ insert into organization_topic (organization_fk, topic_fk) values ((select id fr
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Bikur Cholim (visiting the sick) training'), (select id from topic where name='Chaplaincy/Spiritual Care'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Bikur Cholim (visiting the sick) training'), (select id from topic where name='End of Life Care'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Bikur Cholim (visiting the sick) training'), (select id from topic where name='Ethics'));
-insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Bikur Cholim (visiting the sick) training'), (select id from topic where name='Grief and Breavement'));
+insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Bikur Cholim (visiting the sick) training'), (select id from topic where name='Grief and Bereavement'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Bikur Cholim (visiting the sick) training'), (select id from topic where name='Mental Health'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Bikur Cholim (visiting the sick) training'), (select id from topic where name='Wholistic Healing'));
 --Breast Cancer Network of Strength'));
@@ -220,9 +221,9 @@ insert into organization_topic (organization_fk, topic_fk) values ((select id fr
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Delegate Church Association of Advocate BroMenn Medical Center'), (select id from topic where name='Dental Health'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Delegate Church Association of Advocate BroMenn Medical Center'), (select id from topic where name='Emergency Preparedness'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Delegate Church Association of Advocate BroMenn Medical Center'), (select id from topic where name='End of Life Care'));
-insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Delegate Church Association of Advocate BroMenn Medical Center'), (select id from topic where name='insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Delegate Church Association of Advocate BroMenn Medical Center'), (select id from topic where name='insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Delegate Church Association of Advocate BroMenn Medical Center'), (select id from topic where name='Flu Clinic'));
+insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Delegate Church Association of Advocate BroMenn Medical Center'), (select id from topic where name='Flu Clinic'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Delegate Church Association of Advocate BroMenn Medical Center'), (select id from topic where name='Food Access'));
-insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Delegate Church Association of Advocate BroMenn Medical Center'), (select id from topic where name='Grief and Breavement'));
+insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Delegate Church Association of Advocate BroMenn Medical Center'), (select id from topic where name='Grief and Bereavement'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Delegate Church Association of Advocate BroMenn Medical Center'), (select id from topic where name='Health Fair'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Delegate Church Association of Advocate BroMenn Medical Center'), (select id from topic where name='Health Ministry'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Delegate Church Association of Advocate BroMenn Medical Center'), (select id from topic where name='Interfaith Understanding and Collaboration'));
@@ -289,7 +290,7 @@ insert into organization_topic (organization_fk, topic_fk) values ((select id fr
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Evergreen Presbyterian Church'), (select id from topic where name='Environmental Issues'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Evergreen Presbyterian Church'), (select id from topic where name='Ethics'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Evergreen Presbyterian Church'), (select id from topic where name='Flu Clinic'));
-insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Evergreen Presbyterian Church'), (select id from topic where name='Grief and Breavement'));
+insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Evergreen Presbyterian Church'), (select id from topic where name='Grief and Bereavement'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Evergreen Presbyterian Church'), (select id from topic where name='Health Fair'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Evergreen Presbyterian Church'), (select id from topic where name='Immunization'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Evergreen Presbyterian Church'), (select id from topic where name='Leadership Development'));
@@ -314,7 +315,7 @@ insert into organization_topic (organization_fk, topic_fk) values ((select id fr
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Exodus Community Church'), (select id from topic where name='Ethics'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Exodus Community Church'), (select id from topic where name='Flu Clinic'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Exodus Community Church'), (select id from topic where name='Food Access'));
-insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Exodus Community Church'), (select id from topic where name='Grief and Breavement'));
+insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Exodus Community Church'), (select id from topic where name='Grief and Bereavement'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Exodus Community Church'), (select id from topic where name='Health Fair'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Exodus Community Church'), (select id from topic where name='Health Ministry'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Exodus Community Church'), (select id from topic where name='HIV/AIDS'));
@@ -360,7 +361,7 @@ insert into organization_topic (organization_fk, topic_fk) values ((select id fr
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'First Baptist Church, Berwyn'), (select id from topic where name='Chaplaincy/Spiritual Care'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'First Baptist Church, Berwyn'), (select id from topic where name='Emergency Preparedness'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'First Baptist Church, Berwyn'), (select id from topic where name='End of Life Care'));
-insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'First Baptist Church, Berwyn'), (select id from topic where name='Grief and Breavement'));
+insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'First Baptist Church, Berwyn'), (select id from topic where name='Grief and Bereavement'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'First Baptist Church, Berwyn'), (select id from topic where name='Spirituality and Healing'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'First Baptist Church, Berwyn'), (select id from topic where name='Violence Prevention and Intervention'));
 --First Baptist Church, LaGrange'));
@@ -371,7 +372,7 @@ insert into organization_topic (organization_fk, topic_fk) values ((select id fr
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'First Baptist Church, LaGrange'), (select id from topic where name='Emergency Preparedness'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'First Baptist Church, LaGrange'), (select id from topic where name='End of Life Care'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'First Baptist Church, LaGrange'), (select id from topic where name='Flu Clinic'));
-insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'First Baptist Church, LaGrange'), (select id from topic where name='Grief and Breavement'));
+insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'First Baptist Church, LaGrange'), (select id from topic where name='Grief and Bereavement'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'First Baptist Church, LaGrange'), (select id from topic where name='Interfaith Understanding and Collaboration'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'First Baptist Church, LaGrange'), (select id from topic where name='Latino Community'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'First Baptist Church, LaGrange'), (select id from topic where name='Maternal and Child Health'));
@@ -382,7 +383,7 @@ insert into organization_topic (organization_fk, topic_fk) values ((select id fr
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'First Baptist Church, Park Forest'), (select id from topic where name='Emergency Preparedness'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'First Baptist Church, Park Forest'), (select id from topic where name='End of Life Care'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'First Baptist Church, Park Forest'), (select id from topic where name='Ethics'));
-insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'First Baptist Church, Park Forest'), (select id from topic where name='Grief and Breavement'));
+insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'First Baptist Church, Park Forest'), (select id from topic where name='Grief and Bereavement'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'First Baptist Church, Park Forest'), (select id from topic where name='Interfaith Understanding and Collaboration'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'First Baptist Church, Park Forest'), (select id from topic where name='Leadership Development'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'First Baptist Church, Park Forest'), (select id from topic where name='Research'));
@@ -401,7 +402,7 @@ insert into organization_topic (organization_fk, topic_fk) values ((select id fr
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'First New Bethlehem Community Development Corporation'), (select id from topic where name='Diabetes'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'First New Bethlehem Community Development Corporation'), (select id from topic where name='Emergency Preparedness'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'First New Bethlehem Community Development Corporation'), (select id from topic where name='Ethics'));
-insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'First New Bethlehem Community Development Corporation'), (select id from topic where name='Grief and Breavement'));
+insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'First New Bethlehem Community Development Corporation'), (select id from topic where name='Grief and Bereavement'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'First New Bethlehem Community Development Corporation'), (select id from topic where name='Health Ministry'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'First New Bethlehem Community Development Corporation'), (select id from topic where name='HIV/AIDS'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'First New Bethlehem Community Development Corporation'), (select id from topic where name='Interfaith Understanding and Collaboration'));
@@ -436,7 +437,7 @@ insert into organization_topic (organization_fk, topic_fk) values ((select id fr
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Grace Calvary United Methodist Church'), (select id from topic where name='Emergency Preparedness'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Grace Calvary United Methodist Church'), (select id from topic where name='End of Life Care'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Grace Calvary United Methodist Church'), (select id from topic where name='Flu Clinic'));
-insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Grace Calvary United Methodist Church'), (select id from topic where name='Grief and Breavement'));
+insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Grace Calvary United Methodist Church'), (select id from topic where name='Grief and Bereavement'));
 --Grace Evangelical Lutheran Church'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Grace Evangelical Lutheran Church'), (select id from topic where name='Leadership Development'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Grace Evangelical Lutheran Church'), (select id from topic where name='Spiritual Care'));
@@ -455,7 +456,7 @@ insert into organization_topic (organization_fk, topic_fk) values ((select id fr
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Grace Lutheran Church'), (select id from topic where name='Ethics'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Grace Lutheran Church'), (select id from topic where name='Flu Clinic'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Grace Lutheran Church'), (select id from topic where name='Food Access'));
-insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Grace Lutheran Church'), (select id from topic where name='Grief and Breavement'));
+insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Grace Lutheran Church'), (select id from topic where name='Grief and Bereavement'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Grace Lutheran Church'), (select id from topic where name='Health Ministry'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Grace Lutheran Church'), (select id from topic where name='Immunization'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Grace Lutheran Church'), (select id from topic where name='Leadership Development'));
@@ -487,7 +488,7 @@ insert into organization_topic (organization_fk, topic_fk) values ((select id fr
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Greater St. Paul A M E C'), (select id from topic where name='Chaplaincy/Spiritual Care'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Greater St. Paul A M E C'), (select id from topic where name='Environmental Issues'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Greater St. Paul A M E C'), (select id from topic where name='Flu Clinic'));
-insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Greater St. Paul A M E C'), (select id from topic where name='Grief and Breavement'));
+insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Greater St. Paul A M E C'), (select id from topic where name='Grief and Bereavement'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Greater St. Paul A M E C'), (select id from topic where name='Health Ministry'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Greater St. Paul A M E C'), (select id from topic where name='Interfaith Understanding and Collaboration'));
 --Greater Walters AME Zion Church'));
@@ -517,7 +518,7 @@ insert into organization_topic (organization_fk, topic_fk) values ((select id fr
 --Health Initiatives, West Cook Area'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Health Initiatives, West Cook Area'), (select id from topic where name='Cancer'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Health Initiatives, West Cook Area'), (select id from topic where name='End of Life Care'));
-insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Health Initiatives, West Cook Area'), (select id from topic where name='Grief and Breavement'));
+insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Health Initiatives, West Cook Area'), (select id from topic where name='Grief and Bereavement'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Health Initiatives, West Cook Area'), (select id from topic where name='Policy and Advocacy'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Health Initiatives, West Cook Area'), (select id from topic where name='Research'));
 --Healthy Dining Chicago Healthy Dining Chicago'));
@@ -623,7 +624,7 @@ insert into organization_topic (organization_fk, topic_fk) values ((select id fr
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Jewish Healing Network of Chicago'), (select id from topic where name='Chaplaincy/Spiritual Care'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Jewish Healing Network of Chicago'), (select id from topic where name='End of Life Care'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Jewish Healing Network of Chicago'), (select id from topic where name='Ethics'));
-insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Jewish Healing Network of Chicago'), (select id from topic where name='Grief and Breavement'));
+insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Jewish Healing Network of Chicago'), (select id from topic where name='Grief and Bereavement'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Jewish Healing Network of Chicago'), (select id from topic where name='Mental Health'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Jewish Healing Network of Chicago'), (select id from topic where name='Wholistic Healing'));
 --Jewish School-Based Wellness Initiative'));
@@ -724,7 +725,7 @@ insert into organization_topic (organization_fk, topic_fk) values ((select id fr
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Mosque Foundation'), (select id from topic where name='Ethics'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Mosque Foundation'), (select id from topic where name='Flu Clinic'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Mosque Foundation'), (select id from topic where name='Food Access'));
-insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Mosque Foundation'), (select id from topic where name='Grief and Breavement'));
+insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Mosque Foundation'), (select id from topic where name='Grief and Bereavement'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Mosque Foundation'), (select id from topic where name='Health Ministry'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Mosque Foundation'), (select id from topic where name='Immigrant Health'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Mosque Foundation'), (select id from topic where name='Immunization'));
@@ -752,7 +753,7 @@ insert into organization_topic (organization_fk, topic_fk) values ((select id fr
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Myanmar Christian Church of Metro Chicago'), (select id from topic where name='Access/Rights'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Myanmar Christian Church of Metro Chicago'), (select id from topic where name='Emergency Preparedness'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Myanmar Christian Church of Metro Chicago'), (select id from topic where name='Ethics'));
-insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Myanmar Christian Church of Metro Chicago'), (select id from topic where name='Grief and Breavement'));
+insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Myanmar Christian Church of Metro Chicago'), (select id from topic where name='Grief and Bereavement'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Myanmar Christian Church of Metro Chicago'), (select id from topic where name='Immigrant Health'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Myanmar Christian Church of Metro Chicago'), (select id from topic where name='Maternal and Child Health'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Myanmar Christian Church of Metro Chicago'), (select id from topic where name='Mental Health'));
@@ -784,7 +785,7 @@ insert into organization_topic (organization_fk, topic_fk) values ((select id fr
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'North Shore Baptist Church'), (select id from topic where name='Aging'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'North Shore Baptist Church'), (select id from topic where name='End of Life Care'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'North Shore Baptist Church'), (select id from topic where name='Environmental Issues'));
-insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'North Shore Baptist Church'), (select id from topic where name='Grief and Breavement'));
+insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'North Shore Baptist Church'), (select id from topic where name='Grief and Bereavement'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'North Shore Baptist Church'), (select id from topic where name='Immigrant Health'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'North Shore Baptist Church'), (select id from topic where name='Interfaith Understanding and Collaboration'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'North Shore Baptist Church'), (select id from topic where name='Mental Health'));
@@ -837,7 +838,7 @@ insert into organization_topic (organization_fk, topic_fk) values ((select id fr
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Pilgrim Faith United Church of Christ'), (select id from topic where name='Aging'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Pilgrim Faith United Church of Christ'), (select id from topic where name='Community Garden/Urban Agriculture'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Pilgrim Faith United Church of Christ'), (select id from topic where name='Food Access'));
-insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Pilgrim Faith United Church of Christ'), (select id from topic where name='Grief and Breavement'));
+insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Pilgrim Faith United Church of Christ'), (select id from topic where name='Grief and Bereavement'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Pilgrim Faith United Church of Christ'), (select id from topic where name='Interfaith Understanding and Collaboration'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Pilgrim Faith United Church of Christ'), (select id from topic where name='Spiritual Care'));
 --Pillar of Love UCC'));
@@ -876,7 +877,7 @@ insert into organization_topic (organization_fk, topic_fk) values ((select id fr
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Rainbow Hospice and Palliative Care'), (select id from topic where name='Chaplaincy/Spiritual Care'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Rainbow Hospice and Palliative Care'), (select id from topic where name='Children\'s Health'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Rainbow Hospice and Palliative Care'), (select id from topic where name='End of Life Care'));
-insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Rainbow Hospice and Palliative Care'), (select id from topic where name='Grief and Breavement'));
+insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Rainbow Hospice and Palliative Care'), (select id from topic where name='Grief and Bereavement'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Rainbow Hospice and Palliative Care'), (select id from topic where name='Research'));
 --Redeeming Life Family Worship Center COGIC'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Redeeming Life Family Worship Center COGIC'), (select id from topic where name='Spiritual Care'));
@@ -929,7 +930,7 @@ insert into organization_topic (organization_fk, topic_fk) values ((select id fr
 --St. John United Church of Christ'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'St. John United Church of Christ'), (select id from topic where name='Access/Rights'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'St. John United Church of Christ'), (select id from topic where name='End of Life Care'));
-insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'St. John United Church of Christ'), (select id from topic where name='Grief and Breavement'));
+insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'St. John United Church of Christ'), (select id from topic where name='Grief and Bereavement'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'St. John United Church of Christ'), (select id from topic where name='Policy and Advocacy'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'St. John United Church of Christ'), (select id from topic where name='Spiritual Care'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'St. John United Church of Christ'), (select id from topic where name='Spirituality and Healing'));
@@ -951,7 +952,7 @@ insert into organization_topic (organization_fk, topic_fk) values ((select id fr
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'St. Paul\'s Church by-the-Lake'), (select id from topic where name='Aging'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'St. Paul\'s Church by-the-Lake'), (select id from topic where name='Children\'s Health'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'St. Paul\'s Church by-the-Lake'), (select id from topic where name='End of Life Care'));
-insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'St. Paul\'s Church by-the-Lake'), (select id from topic where name='Grief and Breavement'));
+insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'St. Paul\'s Church by-the-Lake'), (select id from topic where name='Grief and Bereavement'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'St. Paul\'s Church by-the-Lake'), (select id from topic where name='Immigrant Health'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'St. Paul\'s Church by-the-Lake'), (select id from topic where name='Maternal and Child Health'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'St. Paul\'s Church by-the-Lake'), (select id from topic where name='Mental Health'));
@@ -985,7 +986,7 @@ insert into organization_topic (organization_fk, topic_fk) values ((select id fr
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Suburban Chicago Interfaith Mental Health Coalition'), (select id from topic where name='Chaplaincy/Spiritual Care'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Suburban Chicago Interfaith Mental Health Coalition'), (select id from topic where name='Children\'s Health'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Suburban Chicago Interfaith Mental Health Coalition'), (select id from topic where name='Emergency Preparedness'));
-insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Suburban Chicago Interfaith Mental Health Coalition'), (select id from topic where name='Grief and Breavement'));
+insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Suburban Chicago Interfaith Mental Health Coalition'), (select id from topic where name='Grief and Bereavement'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Suburban Chicago Interfaith Mental Health Coalition'), (select id from topic where name='Health Fair'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Suburban Chicago Interfaith Mental Health Coalition'), (select id from topic where name='Health Ministry'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Suburban Chicago Interfaith Mental Health Coalition'), (select id from topic where name='Interfaith Understanding and Collaboration'));
@@ -1018,7 +1019,7 @@ insert into organization_topic (organization_fk, topic_fk) values ((select id fr
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'The South Church'), (select id from topic where name='End of Life Care'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'The South Church'), (select id from topic where name='Environmental Issues'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'The South Church'), (select id from topic where name='Food Access'));
-insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'The South Church'), (select id from topic where name='Grief and Breavement'));
+insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'The South Church'), (select id from topic where name='Grief and Bereavement'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'The South Church'), (select id from topic where name='Health Ministry'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'The South Church'), (select id from topic where name='Nutrition'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'The South Church'), (select id from topic where name='Spirituality and Healing'));
@@ -1055,7 +1056,7 @@ insert into organization_topic (organization_fk, topic_fk) values ((select id fr
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Turning Point'), (select id from topic where name='Ethics'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Turning Point'), (select id from topic where name='Flu Clinic'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Turning Point'), (select id from topic where name='Food Access'));
-insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Turning Point'), (select id from topic where name='Grief and Breavement'));
+insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Turning Point'), (select id from topic where name='Grief and Bereavement'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Turning Point'), (select id from topic where name='Health Ministry'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Turning Point'), (select id from topic where name='Immigrant Health'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Turning Point'), (select id from topic where name='Interfaith Understanding and Collaboration'));
@@ -1092,7 +1093,7 @@ insert into organization_topic (organization_fk, topic_fk) values ((select id fr
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Unity Northwest Church'), (select id from topic where name='Community Garden/Urban Agriculture'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Unity Northwest Church'), (select id from topic where name='Emergency Preparedness'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Unity Northwest Church'), (select id from topic where name='End of Life Care'));
-insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Unity Northwest Church'), (select id from topic where name='Grief and Breavement'));
+insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Unity Northwest Church'), (select id from topic where name='Grief and Bereavement'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Unity Northwest Church'), (select id from topic where name='Interfaith Understanding and Collaboration'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Unity Northwest Church'), (select id from topic where name='Mental Health'));
 insert into organization_topic (organization_fk, topic_fk) values ((select id from organization where name = 'Unity Northwest Church'), (select id from topic where name='Spirituality and Healing'));

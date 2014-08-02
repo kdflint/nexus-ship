@@ -55,9 +55,30 @@ if ($validInvitation){
 	$row1 = pg_fetch_row($cursor1);
 	$_SESSION['uidpk'] = $row1[0];
 	pgDb::insertUserOrgRelation($_SESSION['uidpk'], $_SESSION['orgId'], $_SESSION['grantorId']);
+	$row3 = pg_fetch_array(pgDb::getOrganizationById($_SESSION['orgId']));
+	$orgName = $row3['name'];
 	$isAuthenticated = true;
+		
+	$row4 = pg_fetch_row(pgDb::forumEmailExists($email));
+	$emailMatch = $row4[0];
+	if (!strcmp($emailMatch, "t")) {
+		// This user is enrolling with a duplicate email address, which is legal for Nexus but not for Website Toolbox Forum.
+		// Take evasive action so they do not feel an error and follow up by email.
+		$email = $_SESSION['uidpk'] . "." . $email;
+		mail("contact@northbridgetech.org", "Duplicate attempt for forum email", "User id " . $_SESSION['uidpk'] . " has attempted to enroll with a duplicate forum email address. Please advise.", "From: contact@northbridgetech.org");
+	}
 	
-	$row2 = pg_fetch_row(pgDb::insertUserForumRelation($_SESSION['uidpk'], $fname, $password, $fname . " " . $lname, $email));
+	$forumUsername = $fname . " " . $lname;
+	
+	$row5 = pg_fetch_row(pgDb::forumUsernameExists($forumUsername));
+	$nameMatch = $row5[0];
+	if (!strcmp($nameMatch, "t")) {
+		// This user is enrolling with a duplicate forum username.
+		// Take evasive action so they do not feel an error.
+		$forumUsername = $forumUsername . " " . $_SESSION['uidpk'];
+	}	
+	
+	$row2 = pg_fetch_row(pgDb::insertUserForumRelation($_SESSION['uidpk'], $fname, $password, $forumUsername, $email));
 	$forumId = $row2[0];
 	
 	// TODO: add EDC
@@ -65,12 +86,14 @@ if ($validInvitation){
 
 	// Register user with forum
 	$user = array();
-	$user['member'] = $fname.$forumId;
+	//$user['member'] = $fname.$forumId;
+	$user['member'] = $forumUsername;
 	$user['pw'] = $password;
 	$user['email'] = $email;	
-	$user['name'] = $fname . " " . $lname;
+	//$user['name'] = $fname . " " . $lname;
+	// TOD: This will only work if we know organization from invitation. Else we have to put off enrollment until we get the org identified.
+	$user['name'] = $orgName;
 	$user['usergroupid'] = $forumGroupId[$_SESSION['networkId']];
-	//$user['profilefieldid'] = "328241";
 	$register_status = forumSignup($user);
 	if($register_status == 'Registration Complete') {
 		$_SESSION['forumSessionError'] = "noError";
@@ -108,6 +131,7 @@ if ($validInvitation){
 	
 function returnToEnrollWithError($errorMessage) {
 	header("location:../view/enroll.php?error=" . $errorMessage);
+	// TODO: Call session_destroy() here??
 	exit(0);
 }
 

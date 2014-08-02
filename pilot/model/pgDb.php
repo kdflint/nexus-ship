@@ -69,6 +69,16 @@ class pgDb {
 		return pgDb::execute($query);
 	}
 	
+	public static function forumEmailExists($email) {
+		$query = "select exists (select true from forum_user where email = '$email')";
+		return pgDb::execute($query);
+	}
+	
+	public static function forumUsernameExists($username) {
+		$query = "select exists (select true from forum_user where name = '$username')";
+		return pgDb::execute($query);
+	}
+	
 	public static function orgTopicExists($orgId, $topics) {
 		$query = "select exists (select true from organization_topic where organization_fk = '$orgId' and topic_fk in($topics))";
 		return pgDb::execute($query);
@@ -108,7 +118,7 @@ class pgDb {
 	}
 	
 	public static function insertOrgOrgRelation($from, $to, $relation) {
-			$query = "insert into organization_organization (organization_from, organization_to, relationship) values ('$from', '$to', '$relation')";
+			$query = "insert into organization_organization (organization_from_fk, organization_to_fk, relationship) values ('$from', '$to', '$relation')";
 			return pgDb::execute($query);		
 	}
 
@@ -191,7 +201,7 @@ class pgDb {
 	}
 	
 	public static function getForumUserByNexusId($uid) {
-		$query = "select id, username from forum_user where user_fk = '$uid'";
+		$query = "select id, username, name from forum_user where user_fk = '$uid'";
 		return pgDb::execute($query);			
 	}
 	

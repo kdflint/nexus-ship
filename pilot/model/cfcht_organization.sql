@@ -1,3 +1,4 @@
+-- executed no error
 
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('30th Ward - St. James Church', now(), now(), '1', '');
 insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ('A Just Harvest', now(), now(), '1', 'Community Organization');

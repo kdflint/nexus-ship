@@ -14,7 +14,8 @@ forumSignout();
 
 $cursor = pgDb::getForumUserByNexusId($_SESSION['uidpk']);
 while ($row = pg_fetch_array($cursor)) {
-	$forumUsername = $row['username'] . $row['id'];
+	//$forumUsername = $row['username'] . $row['id'];
+	$forumUsername = $row['name'];
 }
 	
 // Login user to forum
@@ -25,6 +26,7 @@ if($login_status == 'Login Successful') {
 	$_SESSION['forumSessionError'] = "noError";
 } else {
 	$_SESSION['forumSessionError'] = $login_status;
+	// TODO: Why is error message not showing up on page when authtoken is not existing?
 }
 	
 header("location:../view/nexus.php?thisPage=forum");
