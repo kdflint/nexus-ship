@@ -167,6 +167,16 @@ class pgDb {
 			return pgDb::execute($query);		
 	}
 	
+	public static function getOrgByContactId($contactId) {
+			$query = "select o.name, o.id from organization_contact oc, organization o where oc.contact_fk = '$contactId' and oc.organization_fk = o.id";
+			return pgDb::execute($query);		
+	}
+	
+	public static function getOrgByLocationId($locId) {
+			$query = "select o.name, o.id from organization_location ol, organization o where ol.location_fk = '$locId' and ol.organization_fk = o.id";
+			return pgDb::execute($query);		
+	}
+	
 	public static function insertAdminUserOrgRelation($email, $orgId, $grantorId) {
 			// TODO: add active check?
 			// TODO: broken now with refactor (email)
@@ -181,6 +191,7 @@ class pgDb {
 	
 	public static function getUserSessionByUsername($uid) {
 		// TODO: add active check?
+		// TODO: fix up network id determination (parent, god, etc)
 		$query = "
 			select u.id as id, u.fname as fname, u.lname as lname, u.password as password, o1.name as affiliation, o2.name as network, o2.id as networkid, uo.role_fk as role
 			from public.user u, user_organization uo, organization o1, organization o2, organization_organization oo
@@ -286,7 +297,6 @@ class pgDb {
 		// TODO: use citext index in db instead of lower() function here
 		// http://stackoverflow.com/questions/7005302/postgresql-how-to-make-not-case-sensitive-queries
 		
-		// TODO: figure out null values in name fields (remember, nothing prints if one name component is NULL. Does print if empty string is stored.)
 		$query = "
 			select 'Organization' as type, o.id as id, o.name as name
 			from organization o, organization_organization oo
@@ -298,7 +308,7 @@ class pgDb {
 			
 			union
 			
-			select 'Person' as type, u.id as id, u.fname || ' ' || u.lname as name
+			select 'Person' as type, u.id as id, (u.fname || ' ' || u.mname || ' ' || u.lname) as name
 			from public.user u, organization_organization oo, user_organization uo
 			where (
 				lower(u.fname) like lower('%{$term}%')
@@ -308,6 +318,19 @@ class pgDb {
 			)
 			and u.id = uo.user_fk
 			and uo.organization_fk = oo.organization_to_fk
+			and oo.organization_from_fk = '$networkId'
+			and oo.relationship ='parent'
+			
+			union
+			
+			select 'Contact' as type, c.id as id, c.name as name
+			from contact c, organization_organization oo, organization_contact oc
+			where (
+				lower(c.name) like lower('%{$term}%')
+				or lower(c.title) like lower('%{$term}%')
+			)
+			and c.id = oc.contact_fk
+			and oc.organization_fk = oo.organization_to_fk
 			and oo.organization_from_fk = '$networkId'
 			and oo.relationship ='parent'
 			
@@ -334,29 +357,10 @@ class pgDb {
 			and ol.organization_fk = oo.organization_to_fk
 			and oo.organization_from_fk = '$networkId'
 			and oo.relationship ='parent'
-			"	
-			;
-
-			return pgDb::execute($query);			
 			
-			/*
+			union
 			
-			ADD - as Person or Contact??
-			
-			select 'Person' as type, c.id as id, c.name as name
-			from contact c, organization_organization oo, organization_contact oc
-			where (
-				lower(c.name) like lower('%{$term}%')
-			)
-			and c.id = oc.contact_fk
-			and oc.organization_fk = oo.organization_to_fk
-			and oo.organization_from_fk = '$networkId'
-			and oo.relationship ='parent'
-			
-			
-			ADD
-			
-			select 'Location' as type, loc.id as id, loc.? as name
+			select 'Location' as type, loc.id as id, loc.municipality || ', ' || loc.region2 as name
 			from location loc, organization_organization oo, organization_location oloc
 			where (
 				lower(loc.address1) like lower('%{$term}%')
@@ -371,9 +375,11 @@ class pgDb {
 			and oloc.organization_fk = oo.organization_to_fk
 			and oo.organization_from_fk = '$networkId'
 			and oo.relationship ='parent'
+			"	
+			;
+
+			return pgDb::execute($query);			
 			
-			
-			*/
 	}
 
 	public static function getOrgByTopicIds($topicIdList, $networkId) {

@@ -3,25 +3,16 @@ function toggleDisplay(elementId) {
   showSelected(elementId);
 } 
 
-function toggleDisplay2(elementId) {
-  hideAll2();
-  showSelected(elementId);
-} 
-
 function showSelected(elementId) {
 	var textElement = document.getElementById(elementId);
   textElement.style.display = 'block';
 }
 
 function hideAll() {
-  document.getElementById('detail').style.display = 'none';
-  document.getElementById('browse').style.display = 'none';
   document.getElementById('default').style.display = 'none';
-  document.getElementById('reply').style.display = 'none';
-}
-
-function hideAll2() {
-  document.getElementById('reply').style.display = 'none';
+  document.getElementById('detail').style.display = 'none';
+  //document.getElementById('default').style.display = 'none';
+  //document.getElementById('reply').style.display = 'none';
 }
 
 function popup(mylink, windowname) {

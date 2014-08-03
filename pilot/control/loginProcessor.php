@@ -38,7 +38,8 @@ if($isAuthenticated){
   	$_SESSION['orgName'] = $row['affiliation'];
   	$_SESSION['uidpk'] = $row['id'];
   	$_SESSION['networkName'] = $row['network'];
-  	$_SESSION['networkId'] = $row['networkid'];
+  	// TODO: Make this dynamic once method decisions network id correctly (see pgDb.php)
+  	$_SESSION['networkId'] = '18'; // $row['networkid'];
   	$_SESSION['password'] = $row['password'];
 	} 
 	

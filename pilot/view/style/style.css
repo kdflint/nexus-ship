@@ -49,6 +49,34 @@ a {
 	text-decoration:none;
 }
 
+div.topLeftQuad {
+	position:absolute;
+	width:350px;
+	height:180px;
+}
+
+div.topRightQuad {
+	position:absolute;
+	left:350px;
+	width:450px;
+	height:180px;
+	border: 1px solid #da5e00;
+	box-shadow: 4px 4px 5px #c9c9a7;
+	padding:10px;
+	border-radius:15px;
+}
+
+div.lowerHalf {
+	position:absolute;
+	top:220px;
+	height:320px;
+	width:800px;
+	border: 1px solid #da5e00;
+	box-shadow: 4px 4px 5px #c9c9a7;
+	padding:10px;
+	border-radius:15px;
+}
+
 div.leftColumn {
 	position:absolute;
 	width:350px;
