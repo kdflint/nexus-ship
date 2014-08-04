@@ -266,7 +266,7 @@ class pgDb {
 	}
 	
 	public static function getOrganizationById($orgId) {
-		$query = "select name, structure, status_fk as status from organization where id = '$orgId'";
+		$query = "select name, type, structure, status_fk as status from organization where id = '$orgId'";
 		return pgDb::execute($query);
 	}
 	
@@ -398,22 +398,59 @@ class pgDb {
 			return pgDb::execute($query);		
 	}
 	
-	public static function xxx($id) {
-			$query = "
-				select 'Organization' as type, o.id as id, o.name as name
-				from organization o, organization_organization oo
-				where o.id = oo.organization_to_fk
-				and oo.relationship ='parent'
-				";
+	public function getOrgDetailById($orgId) {
+		
+		$result0 = pgDb::execute("select name, type, structure, status_fk as status from organization where id = '$orgId'");
+		
+		$result1 = pgDb::execute("select l.address1 || ', ' || l.address2 as line1, l.municipality || ', ' || l.region2 || '  ' || l.postal_code as line2 
+															from location l, organization_location ol
+															where ol.organization_fk = '$orgId'
+															and ol.location_fk = l.id");
+															
+		$result2 = pgDb::execute("select c.phone as phone, c.email as email, c.url as url, c.name as name 
+															from contact c, organization_contact oc
+															where oc.organization_fk = '$orgId'
+															and oc.contact_fk = c.id");
+															
+		$result3 = pgDb::execute("select l.language as language
+															from language l, organization_language ol
+															where ol.organization_fk = '$orgId'
+															and ol.language_fk = l.id");
+															
+  	$result4 = pgDb::execute("select t.name as topic
+															from topic t, organization_topic ot
+															where ot.organization_fk = '$orgId'
+															and ot.topic_fk = t.id");
+															
+  	$result5 = pgDb::execute("select p.name as name, p.description as descr
+															from program p, organization_program op
+															where op.organization_fk = '$orgId'
+															and op.program_fk = p.id");
+															
+  	$result5 = pgDb::execute("select (u.fname || ' ' || u.mname || ' ' || u.lname) as name, u.enable_email as emailon, u.enable_sms as smson
+															from public.user u, user_organization uo
+															where uo.organization_fk = '$orgId'
+															and uo.user_fk = u.id");
+		
+		$resultArray = array();
+		  
+	  $row0 = pg_fetch_array($result0);
+	  $resultArray["orgId"] = $orgId;
+	  $resultArray["orgName"] = $row0['name'];
+	  $resultArray["orgType"] = $row0['type'];
+	  
+	  $counter = 0;
+	  while ($row1 = pg_fetch_array($result1)) {
+	  	$resultArray["orgLocation"][$counter][0] = $row1['line1'];
+	  	$resultArray["orgLocation"][$counter][1] = $row1['line2'];
+	  	$counter++;
+	  }
+	  
+	  // etc.
+	  
+	 // LEFT OFF - test this much.
+		
+		return $resultArray;
 	}
-	
-	/*
-	
-	public static function () {
-		$query = "";
-		return pgDb::execute($query);
-	}
-
-  */
 }
 ?>

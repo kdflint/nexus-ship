@@ -1,13 +1,7 @@
-
-<? 
-
-include '../control/directoryPreProcessor.php';
-
-?>
-
 <div class="topLeftQuad">
 	<p><a href="#">Search Your Network</a></p>
 	<form action="../control/searchProcessor.php" method="post">
+			<input type="hidden" name="action" value="search" />
 			<img src="image/mag-glass.jpg" width="25" height="25" /> <input type="text" size="20" name="string" value=""/> <input type="submit" value="Go"/>
 
 			<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select name="topic" style="width: 230px">    
@@ -75,60 +69,44 @@ include '../control/directoryPreProcessor.php';
 	</form>
 </div>
 
-<form>
+<div class="rightColumn" style="overflow:auto;">
 
-<div class="topRightQuad">
-	<p><a href="#">Send a Message</a></p>
-</div>
-
-<div class="lowerHalf" style="overflow:auto;">
-
-  Results | Detail | <a href="nexus.php?showMap=1" >Map</a>
+  Results | Detail | Map
   
-		<div id="default" style="display:block;font-size:11px;">
-			<? include("include/tmpResults/" . $fileId . ".php"); ?>
+  <? if (isset($_GET['searchId']) && strlen($_GET['searchId']) == 36) { ?>
+  
+		<div style="font-size:11px;">
+			<? include("include/tmpResults/" . $_GET['searchId'] . ".php"); ?>
 		</div>
+		
+	<? } else if (isset($_GET['detailId']) && strlen($_GET['detailId']) == 36) { ?>
 
-		<div id="detail" style="display:none;font-size:11px;">
-			<a href="nexus.php?thisPage=directory" onClick="toggleDisplay('default')">Some text</a>
+		<div style="font-size:11px;">
+			<? //include("include/tmpDetail/" . $_GET['detailId'] . ".php"); ?>
+			<div style="font-size:10px;position: relative; float: left; width:220px;border: 1px solid #da5e00;overflow:auto;">
+				<p>Organization Name</p>
+				<p>all kinds of stuff about the org...</p>
+			</div>
+			<div style="font-size:10px;position:relative; float: right; width:220px;border: 1px solid #da5e00;overflow:auto;">
+				<p>Collaborators</p>
+				<p>all kinds of stuff about the org...</p>
+			</div>
 		</div>
+		
+	<? } else { ?> 
+	
+		<p>Nothing to see here... move along...</p>
+		
+	<? } ?>
 
 </div> 
 
-</form>
-
-<!--
-
-<div class="lowerHalf">
-		<a href="nexus.php?showMap=0" onClick="toggleDisplay('browse')">Results</a> | <a href="nexus.php?showMap=0&showDetail=1" onClick="toggleDisplay('detail')">Detail</a> | <a href="nexus.php?showMap=1" >Map</a>
-		<hr/>
-		<? 
-		if (isset($_GET['showMap']) && $_GET['showMap'] === "1") {
-				include("map.php");
-		} else if (isset($_GET['showDetail']) && $_GET['showDetail'] === "1") {
-		?>
-			<div id="detail" style="display:block;font-size:12px;"><? include("detail.php"); ?></div>
-		<? } else { ?>
-			<div id="default" style="display:block;font-size:12px;"><? include("browse.php"); ?></div>
-			<div id="browse" style="display:none;font-size:12px;"><? include("browse.php"); ?></div>
-			<div id="detail" style="display:none;font-size:12px;"><? include("detail.php"); ?></div>
-		<? } ?>
+<div class="lowerLeftQuad">
+	<p><a href="#">Send a Message</a></p>
+	<form>
+	</form>
 </div>
--->
 
-					<!--
-					<tr>
-					<td valign="top">
-						<a id="imageDivLink<? echo $counter; ?>" href="javascript:toggle('contentDivImg<? echo $counter; ?>', 'imageDivLink<? echo $counter; ?>');"><img style="margin:5px;" src="image/plus.png" height="15" 	width="15" /></a></td>
-					<td valign="top"><? echo $row['table']; ?>
-						<div id="contentDivImg<? echo $counter; ?>" style="display:none;">
-						<p class="indented" ><b>Primary contact: </b><? echo $row['id']; ?></p>
-						<p class="indented" ><b><? echo $row['name']; ?></b></p>
-						<p class="indented" ><a href="#">Detail</a> | <a href="#">Send a message</a></a></p>
-						</div>
-					</td>
-					<td valign="top"><img src="image/light_green.png" />
-					</td>
-					</tr>
-					-->
+
+
 
