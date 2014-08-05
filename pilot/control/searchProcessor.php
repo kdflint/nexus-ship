@@ -95,6 +95,16 @@ function doNewSearch($inputString, $filter, $networkId) {
 					
 				}
 			}
+			
+			// This is what is happening below, as pattern for the rest
+			// $pass2 holds all matching data records from the original search, each typed. Here we are pulling out the "Person" record types
+			// For each "Person" record type, we go get the orgs associated with this Person (user_organization table)
+			// For each org, loop
+			// If the organization name is already indexed in the master $results array
+			// BUT
+			// This particular Person is NOT already indexed therein
+			// 		Set a Person associative index inside the $results record, where User Id is key, Person name is value
+			// Otherwise create a new index for this organization inside $results and include this Person
 		
 			while ($pass2 = pg_fetch_array($cursor2)) { 
 				if (!strcmp($pass2['type'], "Person")) {
@@ -102,12 +112,12 @@ function doNewSearch($inputString, $filter, $networkId) {
 					while ($inner2 = pg_fetch_array($innerCursor2)) {
 						if (array_key_exists($inner2['name'], $results)) {
 							if (!in_array($pass2['name'], $results[$inner2['name']]["People"])) {
-								array_push($results[$inner2['name']]["People"], $pass2['name']);
+								$results[$inner2['name']]['People'][$pass2['id']] = $pass2['name'];
 							}
-						} else {
+						} else {					
 							$results[$inner2['name']] = array(
 								"Programs" => array(),
-								"People" => array($pass2['name']),
+								"People" => array($pass2['id'] => $pass2['name']),
 						   	"Contact" => array(),
 								"Language" => array(),
 								"Location" => array(),
@@ -274,7 +284,12 @@ function formatNewSearchResults(array $results) {
 		
 				foreach ($results[$org]["People"] as $key => $value) {
 					// TODO: disable checkbox if messaging not enabled
-					fwrite($file, "<tr><td><input type=\"checkbox\" name=\"\" value=\"\"></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" . $value . "</td></tr>\n");
+					$disabled = "disabled";
+					if (pgDb::isUserMessageEnabled($key)) {
+						$disabled = "";
+					}
+					// TODO: A list of names[] with only one node does not register as a node in the javascript -- why??? what to do???
+					fwrite($file, "<tr><td><input type=\"checkbox\" name=\"names[]\" value=\"" . $key . "::" . $value . "\" onchange=\"messageToFill()\" " . $disabled . " \></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" . $value . "</td></tr>\n");
 				}
 				//foreach ($results[$org]["Language"] as $key => $value) {
 				//	echo "<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" . $value;
@@ -351,7 +366,7 @@ function formatDetailSearchResults(array $results) {
 			if (!strcmp($value[1], "t") || !strcmp($value[2], "t")) {
 				$disabled = "";
 			}
-			fwrite($file, "<input type=\"checkbox\" name=\"names[]\" value=\"" . $value[3] . "::" . $value[0] . "\"  onchange=\"messageToFill()\" " . $disabled . " \>");
+			fwrite($file, "<input type=\"checkbox\" name=\"names[]\" value=\"" . $value[3] . "::" . $value[0] . "\" onchange=\"messageToFill()\" " . $disabled . " \>");
 			fwrite($file, $value[0]);
 			fwrite($file, "</p>");
 		}

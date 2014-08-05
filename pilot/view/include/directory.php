@@ -73,6 +73,7 @@
 <!--<div class="rightColumn" style="overflow:auto;">-->
 <div class="rightColumn">
 
+	<!-- TODO: Make Results link active when visiting detail -->
   Results | Detail | Map
   
   <? if (isset($_GET['searchId']) && strlen($_GET['searchId']) == 36) { ?>

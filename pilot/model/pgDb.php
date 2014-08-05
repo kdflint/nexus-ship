@@ -240,6 +240,15 @@ class pgDb {
 		return pgDb::execute($query);
 	}
 	
+	public static function isUserMessageEnabled($userId) {
+		$query = "select u.enable_email, u.enable_sms from public.user u where u.id = '$userId'";
+		$result = pg_fetch_array(pgDb::execute($query));
+		if (!strcmp($result[0], "t") || !strcmp($result[1], "t")) {
+				return true;
+		}
+		return false;
+	}
+	
 	public static function updateUserById($userId, $fname, $lname, $sms, $email, $smsEnabled, $emailEnabled) {
 		// TODO: broken now with refactor (email)
 		$query = "

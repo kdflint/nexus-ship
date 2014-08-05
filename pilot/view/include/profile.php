@@ -1,7 +1,7 @@
 <?
 include '../control/profilePreProcessor.php';
 
-$error = $testPhone = $testSms = "";
+$error = $testEmail = $testSms = "";
 
 if(isset($_GET['error'])) {
 	$error = $_GET['error'];
@@ -12,7 +12,7 @@ if (!strcmp($sms_status, "checked")) {
 }
 
 if (!strcmp($email_status, "checked")) {
-		$testPhone = $_SESSION['email'];
+		$testEmail = $_SESSION['email'];
 }
 
 ?>
@@ -33,7 +33,7 @@ if (!strcmp($email_status, "checked")) {
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Text&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" size="<? echo(strlen($_SESSION['sms'])); ?>" name="sms" value="<? echo($_SESSION['sms']);?>"/> <input type="checkbox" name="sms_status" <? echo($sms_status); ?> /><p>
 <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Email&nbsp;&nbsp;<input type="text" size="<? echo(strlen($_SESSION['email'])); ?>" name="email" value="<? echo($_SESSION['email']);?>"/> <input type="checkbox" name="email_status" <? echo($email_status); ?> /><p>
 <p style="text-align:right;">
-	<a href="javascript:post('../control/messageProcessor.php',{phone:'<? echo($testSms); ?>',email:'<? echo($testEmail); ?>'})">
+	<a href="javascript:post('../control/messageProcessor.php',{testMessage:'true',phone:'<? echo($testSms); ?>',email:'<? echo($testEmail); ?>'})">
 	Send yourself a test message
 	</a>
 </p>
