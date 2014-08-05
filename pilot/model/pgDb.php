@@ -398,7 +398,7 @@ class pgDb {
 			return pgDb::execute($query);		
 	}
 	
-	public function getOrgDetailById($orgId) {
+	public static function getOrgDetailById($orgId) {
 		
 		$result0 = pgDb::execute("select name, type, structure, status_fk as status from organization where id = '$orgId'");
 		
@@ -427,30 +427,73 @@ class pgDb {
 															where op.organization_fk = '$orgId'
 															and op.program_fk = p.id");
 															
-  	$result5 = pgDb::execute("select (u.fname || ' ' || u.mname || ' ' || u.lname) as name, u.enable_email as emailon, u.enable_sms as smson
+  	$result6 = pgDb::execute("select (u.fname || ' ' || u.mname || ' ' || u.lname) as name, u.enable_email as emailon, u.enable_sms as smson, u.id as id
 															from public.user u, user_organization uo
 															where uo.organization_fk = '$orgId'
 															and uo.user_fk = u.id");
 		
-		$resultArray = array();
+		$resultArray = array("orgId" => "",
+												 "orgName" => "",
+												 "orgType" => "",
+												 "orgLocation" => array(array()),
+												 "orgContact" => array(array()),
+												 "orgLanguage" => array(),
+												 "orgTopic" => array(),
+												 "orgProgram" => array(array()),
+												 "orgUser" => array(array())
+												 );							
 		  
 	  $row0 = pg_fetch_array($result0);
-	  $resultArray["orgId"] = $orgId;
-	  $resultArray["orgName"] = $row0['name'];
-	  $resultArray["orgType"] = $row0['type'];
+	  $resultArray['orgId'] = $orgId;
+	  $resultArray['orgName'] = $row0['name'];
+	  $resultArray['orgType'] = $row0['type'];
 	  
 	  $counter = 0;
 	  while ($row1 = pg_fetch_array($result1)) {
-	  	$resultArray["orgLocation"][$counter][0] = $row1['line1'];
-	  	$resultArray["orgLocation"][$counter][1] = $row1['line2'];
+	  	$resultArray['orgLocation'][$counter][0] = $row1['line1'];
+	  	$resultArray['orgLocation'][$counter][1] = $row1['line2'];
 	  	$counter++;
 	  }
 	  
-	  // etc.
+	  $counter = 0;
+	  while ($row2 = pg_fetch_array($result2)) {
+	  	$resultArray['orgContact'][$counter][0] = $row2['phone'];
+	  	$resultArray['orgContact'][$counter][1] = $row2['email'];
+	  	$resultArray['orgContact'][$counter][2] = $row2['url'];
+	  	$resultArray['orgContact'][$counter][3] = $row2['name'];
+	  	$counter++;
+	  }
 	  
-	 // LEFT OFF - test this much.
-		
-		return $resultArray;
+	  $counter = 0;
+	  while ($row3 = pg_fetch_array($result3)) {
+	  	$resultArray['orgLanguage'][$counter] = $row3['language'];
+	  	$counter++;
+	  }
+	  
+	  $counter = 0;
+	  while ($row4 = pg_fetch_array($result4)) {
+	  	$resultArray['orgTopic'][$counter] = $row4['topic'];
+	  	$counter++;
+	  }
+	  
+	  $counter = 0;
+	  while ($row5 = pg_fetch_array($result5)) {
+	  	$resultArray['orgProgram'][$counter][0] = $row5['name'];
+	  	$resultArray['orgProgram'][$counter][1] = $row5['descr'];
+	  	$counter++;
+	  }
+	  
+	  $counter = 0;
+	  while ($row6 = pg_fetch_array($result6)) {
+	  	$resultArray['orgUser'][$counter][0] = $row6['name'];
+	  	$resultArray['orgUser'][$counter][1] = $row6['emailon'];
+	  	$resultArray['orgUser'][$counter][2] = $row6['smson'];
+	  	$resultArray['orgUser'][$counter][3] = $row6['id'];
+	  	$counter++;
+	  }
+	  
+		return $resultArray; 	
+
 	}
 }
 ?>

@@ -69,7 +69,9 @@
 	</form>
 </div>
 
-<div class="rightColumn" style="overflow:auto;">
+<form action="../control/messageProcessor.php" method="post" id="messageForm">
+<!--<div class="rightColumn" style="overflow:auto;">-->
+<div class="rightColumn">
 
   Results | Detail | Map
   
@@ -82,15 +84,7 @@
 	<? } else if (isset($_GET['detailId']) && strlen($_GET['detailId']) == 36) { ?>
 
 		<div style="font-size:11px;">
-			<? //include("include/tmpDetail/" . $_GET['detailId'] . ".php"); ?>
-			<div style="font-size:10px;position: relative; float: left; width:220px;border: 1px solid #da5e00;overflow:auto;">
-				<p>Organization Name</p>
-				<p>all kinds of stuff about the org...</p>
-			</div>
-			<div style="font-size:10px;position:relative; float: right; width:220px;border: 1px solid #da5e00;overflow:auto;">
-				<p>Collaborators</p>
-				<p>all kinds of stuff about the org...</p>
-			</div>
+			<? include("include/tmpDetail/" . $_GET['detailId'] . ".php"); ?>
 		</div>
 		
 	<? } else { ?> 
@@ -102,10 +96,14 @@
 </div> 
 
 <div class="lowerLeftQuad">
-	<p><a href="#">Send a Message</a></p>
-	<form>
-	</form>
+	<p>To: <input type="text" id="messageToNames" /></p>
+	<p>Your Message:</p>
+	<!-- TODO: Figure out max length after subtracting NorthBridge text. -->
+	<textarea name="message" maxlength="160" rows="4" cols="40"></textarea>
+	<p style="float:right;"><input type="submit" id="messageSendSubmit" value="Send your Message" disabled ></p>
 </div>
+
+</form>
 
 
 

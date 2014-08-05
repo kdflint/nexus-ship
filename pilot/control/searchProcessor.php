@@ -8,16 +8,18 @@ session_start();
 include("../model/pgDb.php");
 include("util.php");
 
-// TODO: Handle these posts more thoroughly
+$string = $orgId = $action = "";
+$filter = 0;
 
-$string = $_POST['string'];
-$filter = "";
-$orgId = $_POST['id'];
-$action = "none";
+if (isset($_POST['string'])) {
+	$string = $_POST['string'];
+}
 
-// TODO: Handle these posts more thoroughly
+if (isset($_POST['id']) && strlen($_POST['id']) > 0) {
+	$orgId = $_POST['id'];
+}
 
-if ($_POST['topic'] > 0) {
+if (isset($_POST['topic']) && $_POST['topic'] > 0) {
 	$filter = $_POST['topic'];
 }
 
@@ -33,32 +35,19 @@ if (!strcmp($action, "search")) {
 
 } else if (!strcmp($action, "detail")) {
 	$results = doDetailSearch($orgId);
-	//$detailId = formatDetailSearchResults($results);
-	//header("location:../view/nexus.php?thisPage=directory&detailId=" . $detailId);
+	$detailId = formatDetailSearchResults($results);
+	header("location:../view/nexus.php?thisPage=directory&detailId=" . $detailId);
 	exit(0);	
 	
+} else if (!strcmp($action, "message")) {
+	header("location:../view/nexus.php?thisPage=directory");
+	exit(0);
 	
 } else {
-	echo("no action specified");
-	//header("location:../view/nexus.php?thisPage=directory");
+	// No action recognized
+	header("location:../view/nexus.php?thisPage=directory");
 	exit(0);	
 	
-}
-
-function doDetailSearch($id) {
-		$result = pgDb::getOrgDetailById($id);
-		// LEFT OFF
-		// test by echoing the data structure
-		// exit(0);
-		return $result;
-}
-
-function formatDetailSearchResults(array $results) {
-		$fileId = Util::newUuid();
-		$file = fopen("../view/include/tmpDetail/" . $fileId . ".php","w") or die("Unable to open file!");
-		fwrite($file, $results[0]);	
-		fclose($file);
-		return $fileId;
 }
 
 function doNewSearch($inputString, $filter, $networkId) {
@@ -67,6 +56,7 @@ function doNewSearch($inputString, $filter, $networkId) {
 	$terms = trim($inputString);
 	
 	// TODO: This seems to leave intact leading spaces, resulting in a bad search term which is matching the entire directory
+	// TODO: Apostrophe in search string fails - brings up bad index error
 	
 	
 	// If we have free search terms, process the first three.
@@ -265,9 +255,7 @@ function formatNewSearchResults(array $results) {
 		ksort($results);
 		foreach ($results as $org => $orgComponents) {
 				
-				// LEFT OFF - does this capture the org id??
 				fwrite($file, "<tr><td colspan=\"2\"><a href=\"javascript:post('../control/searchProcessor.php',{action:'detail',id:'" . $orgComponents['OrgId'] . "'})\">" . $org . "</a></td></tr>\n");
-				//fwrite($file, "<tr><td colspan=\"2\"><a href=\"javascript:post('../control/searchProcessor.php',{action:'detail',id:'56'})\">" . $org . "</a></td></tr>\n");
 				// ksort($results[$org]["Programs"]);
 				
 				foreach ($results[$org]["Programs"] as $key => $value) {
@@ -285,6 +273,7 @@ function formatNewSearchResults(array $results) {
 				}
 		
 				foreach ($results[$org]["People"] as $key => $value) {
+					// TODO: disable checkbox if messaging not enabled
 					fwrite($file, "<tr><td><input type=\"checkbox\" name=\"\" value=\"\"></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" . $value . "</td></tr>\n");
 				}
 				//foreach ($results[$org]["Language"] as $key => $value) {
@@ -307,6 +296,70 @@ function formatNewSearchResults(array $results) {
 	}
 	
 	return $fileId;
+}
+
+function doDetailSearch($id) {
+		$result = pgDb::getOrgDetailById($id);
+		return $result;
+}
+
+function formatDetailSearchResults(array $results) {
+		$fileId = Util::newUuid();
+		$file = fopen("../view/include/tmpDetail/" . $fileId . ".php","w") or die("Unable to open file!");
+
+		fwrite($file, "<div style=\"font-size:10px;position:relative;float:left;width:220px;border:1px solid #da5e00;overflow:auto;\">");	
+		fwrite($file, "<p>" . $results['orgName'] . "</p>\n");
+		fwrite($file, "<p>" . $results['orgType'] . "</p>\n");
+		
+		foreach ($results["orgLocation"] as $key => $value) {
+			fwrite($file, "<p>");
+			fwrite($file, $value[0] . "<br/>" .  $value[1]);
+			fwrite($file, "</p>");
+		}
+		
+		foreach ($results["orgContact"] as $key => $value) {
+			fwrite($file, "<p>");
+			fwrite($file, $value[0] . "<br/>" .  $value[1]. "<br/>" .  $value[2]. "<br/>" .  $value[3]);
+			fwrite($file, "</p>");
+		}
+		
+		foreach ($results["orgLanguage"] as $key => $value) {
+			fwrite($file, "<p>");
+			fwrite($file,  $value . "<br/>");
+			fwrite($file, "</p>");
+		}
+		
+		foreach ($results["orgTopic"] as $key => $value) {
+			fwrite($file, "<p>");
+			fwrite($file,  $value . "<br/>");
+			fwrite($file, "</p>");
+		}
+		
+		foreach ($results["orgProgram"] as $key => $value) {
+			fwrite($file, "<p>");
+			fwrite($file, $value[0] . "<br/>" .  $value[1]);
+			fwrite($file, "</p>");
+		}
+		
+		fwrite($file, "</div>\n");
+		fwrite($file, "<div style=\"font-size:10px;position:relative;float:right;width:220px;border:1px solid #da5e00;overflow:auto;\">");	
+		fwrite($file, "<p>Collaborators</p>\n");
+		
+		foreach ($results["orgUser"] as $key => $value) {
+			fwrite($file, "<p>");
+			$disabled = "disabled";
+			if (!strcmp($value[1], "t") || !strcmp($value[2], "t")) {
+				$disabled = "";
+			}
+			fwrite($file, "<input type=\"checkbox\" name=\"names[]\" value=\"" . $value[3] . "::" . $value[0] . "\"  onchange=\"messageToFill()\" " . $disabled . " \>");
+			fwrite($file, $value[0]);
+			fwrite($file, "</p>");
+		}
+		
+		fwrite($file, "</div>\n");
+		
+		fclose($file);
+		return $fileId;
 }
 
 

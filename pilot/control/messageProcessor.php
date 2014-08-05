@@ -6,6 +6,19 @@ ini_set( 'display_errors','1');
 $username = "kdflint";
 $password = "A56L9Q1X";
 
+// Take in checkbox array
+// For each one set
+
+//   Parse the value to get the user id
+//   Look up the user's email, sms (the ones that are activated)
+//   Send the messages as below
+
+// return to directory.php with "Sent" message
+
+
+// LEFT OFF - start here
+// turn below into two functions: sendSms() and sendEmail()
+
 if (isset($_POST['phone']) && strlen($_POST['phone']) > 0) {
   $phonenum = $_POST['phone'];
   

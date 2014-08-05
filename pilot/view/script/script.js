@@ -117,64 +117,20 @@ function toggleChat(showHideDiv) {
    }
 }
 
-function initialize() {
-	var myLatlng1 = new google.maps.LatLng(41.779732, -87.64583);
-	var myLatlng2 = new google.maps.LatLng(41.708770, -87.74680);
-  var mapOptions = {
-    center: myLatlng1,
-    zoom: 11
-  };
-  var map = new google.maps.Map(document.getElementById("map-canvas"),
-      mapOptions);
-  
-  var marker1 = new google.maps.Marker({
-    position: myLatlng1,
-    map: map,
-    title: 'Englewood Community Health Services'
-  });
-  
-  var marker2 = new google.maps.Marker({
-    position: myLatlng2,
-    map: map,
-    title: 'Oak Lawn Neighborhoods for Peace'
-  });
-}
-
-function initialize1() {
-	var myLatlng1 = new google.maps.LatLng(41.779732, -87.64583);
-	var myLatlng2 = new google.maps.LatLng(41.708770, -87.74680);
-  var mapOptions = {
-    center: myLatlng1,
-    zoom: 11
-  };
-  var map = new google.maps.Map(document.getElementById("map-canvas1"),
-      mapOptions);
-  
-  var marker1 = new google.maps.Marker({
-    position: myLatlng1,
-    map: map,
-    title: 'Englewood Community Health Services'
-  });
-  
-  var marker2 = new google.maps.Marker({
-    position: myLatlng2,
-    map: map,
-    title: 'Oak Lawn Neighborhoods for Peace'
-  });
-}
-
-function initialize2() {
-	var myLatlng1 = new google.maps.LatLng(42.0194, -87.6715);
-  var mapOptions = {
-    center: myLatlng1,
-    zoom: 12
-  };
-  var map = new google.maps.Map(document.getElementById("map-canvas2"),
-      mapOptions);
-  
-  var marker1 = new google.maps.Marker({
-    position: myLatlng1,
-    map: map,
-    title: 'Howard Street Connections'
-  });  
+function messageToFill() {
+	var x=document.getElementById("messageToNames");
+	var names = document.forms['messageForm'].elements['names[]'];
+	var toNames = "";
+	for (var i=0, len=names.length; i<len; i++) {
+    toNames = toNames + (names[i].checked ? (names[i].value + ", ") : ""); 
+	}
+	var trim = toNames.replace(/(, $)/g, "")
+	var trim2 = trim.replace(/(^[0-9]*::)/g, "")
+	x.value=trim2;
+	
+	if (trim2.length < 1) {
+		document.getElementById("messageSendSubmit").disabled = true;
+	} else {
+		document.getElementById("messageSendSubmit").disabled = false;
+	}
 }
