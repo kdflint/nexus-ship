@@ -230,7 +230,7 @@ class pgDb {
 	public static function getUserById($userId) {
 		// TODO: broken now with refactor (email)
 		$query = "
-		select u.fname as first, u.lname as last, u.email as email, u.sms as cell, u.enable_email as emailon, u.enable_sms as smson, s.name as status, r.name as role 
+		select u.fname as first, u.lname as last, u.password, u.email as email, u.sms as cell, u.enable_email as emailon, u.enable_sms as smson, s.name as status, r.name as role 
 			from public.user u, user_organization uo, status s, role r 
 			where u.id = '$userId'
 			and s.id = u.status_fk
@@ -249,12 +249,13 @@ class pgDb {
 		return false;
 	}
 	
-	public static function updateUserById($userId, $fname, $lname, $sms, $email, $smsEnabled, $emailEnabled) {
+	public static function updateUserById($userId, $fname, $lname, $password, $sms, $email, $smsEnabled, $emailEnabled) {
 		// TODO: broken now with refactor (email)
 		$query = "
 		update public.user set
 			fname = '$fname',
 			lname = '$lname',
+			password = '$password',
 			sms = '$sms',
 			email = '$email',
 			enable_email = '$emailEnabled',

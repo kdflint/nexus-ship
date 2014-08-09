@@ -1,11 +1,12 @@
 <div class="topLeftQuad">
 	<p><a href="#">Search Your Network</a></p>
 	<form action="../control/searchProcessor.php" method="post">
-			<input type="hidden" name="action" value="search" />
-			<img src="image/mag-glass.jpg" width="25" height="25" /> <input type="text" size="20" name="string" value=""/> <input type="submit" value="Go"/>
-
-			<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select name="topic" style="width: 230px">    
-					<option value="0" selected>Health Topics</option>	
+		<input type="hidden" name="action" value="search" />
+		<table cellpadding="5">
+			<tr><td><img src="image/mag-glass.jpg" width="25" height="25" /></td><td><input type="text" size="20" name="string" value=""/></td></tr>
+			<tr><td><i>and</i></td><td>
+				<select name="topic" style="width: 230px">    
+					<option value="0" selected>Health Topic is</option>	
 					<!-- TODO: make this list dynamic by network -->
 					<option value="0" >------------</option>										
 					<option value="1">Access/Rights</option>
@@ -49,10 +50,11 @@
 					<option value="39">Violence Prevention and Intervention</option>
 					<option value="40">Wholistic Healing</option>
 					<option value="41">Women's Health</option>
-				</select></p>			
+				</select></td></tr>	
 							
-				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select name="type" style="width: 230px">    
-					<option value="0" selected>Organization Type</option>
+				<tr><td><i>and</i></td><td>
+				<select name="type" style="width: 230px" disabled>    
+					<option value="0" selected>Organization Type is</option>
 					<option value="0" >------------</option>
 					<option value="">Academic</option>
 					<option value="">Collaborative/Network</option>
@@ -60,50 +62,88 @@
 					<option value="">Faith Community/House of Worship</option>
 					<option value="">Government</option>
 					<option value="">Health Care Provider</option>
-				</select></p>	
+				</select>
+			</td></tr>
 				
-				<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<select name="type" style="width: 230px">    
-					<option value="0" selected>Room for One More Filter</option>
-					<option value="0" >------------</option>
-				</select></p>	
+			<tr><td>&nbsp;</td><td><input type="submit" value="Search" style="float:right;"/></td></tr>
+		</table>
+
 	</form>
 </div>
 
 <form action="../control/messageProcessor.php" method="post" id="messageForm">
-<!--<div class="rightColumn" style="overflow:auto;">-->
 <div class="rightColumn">
 
-	<!-- TODO: Make Results link active when visiting detail -->
-  Results | Detail | Map
+	<?
+		$searchResultId = $detailResultId = $pageMode = "";
+		
+  	if (isset($_GET['searchId']) && strlen($_GET['searchId']) == 36) {
+	  	$_SESSION['searchId'] =  $_GET['searchId'];
+	  	$pageMode = "results";
+		}
+		
+		if (isset($_GET['detailId']) && strlen($_GET['detailId']) == 36) {
+	  	$_SESSION['detailId'] =  $_GET['detailId'];
+			$pageMode = "detail";
+		}
+		
+		if (isset($_GET['mapId'])) {
+			$pageMode = "map";
+		}
+		
+		if (isset($_SESSION['searchId']) && strlen($_SESSION['searchId']) == 36) {
+			$searchResultId = "&searchId=" . $_SESSION['searchId'];
+		}
+		
+		if (isset($_SESSION['detailId']) && strlen($_SESSION['detailId']) == 36) {
+			$detailResultId = "&detailId=" . $_SESSION['detailId'];
+		}
+		  
+	?>
+
+	<div class="navigation2">
+  	<ul>
+			<li<? if ($pageMode=="map") echo " id=\"currentpage\""; ?>><a href="nexus.php?thisPage=directory&mapId=0">Map</a></li>
+			<li<? if ($pageMode=="detail") echo " id=\"currentpage\""; ?>><a href="nexus.php?thisPage=directory<? echo $detailResultId; ?>">Detail</a></li>
+			<li<? if ($pageMode=="results") echo " id=\"currentpage\""; ?>><a href="nexus.php?thisPage=directory<? echo $searchResultId; ?>">Results</a></li>
+		</ul>
+	</div>
   
-  <? if (isset($_GET['searchId']) && strlen($_GET['searchId']) == 36) { ?>
-  
-		<div style="font-size:11px;">
-			<? include("include/tmpResults/" . $_GET['searchId'] . ".php"); ?>
+  <? if (!strcmp($pageMode, "results")) {
+
+   ?>
+		<div style="font-size:12px;height:460px;overflow:auto;">
+			<? include("include/tmpResults/" . $_SESSION['searchId'] . ".php"); ?>
 		</div>
 		
-	<? } else if (isset($_GET['detailId']) && strlen($_GET['detailId']) == 36) { ?>
+	<? } else if (!strcmp($pageMode, "detail")) { ?>
 
-		<div style="font-size:11px;">
-			<? include("include/tmpDetail/" . $_GET['detailId'] . ".php"); ?>
+		<div style="font-size:12px;">
+			<? include("include/tmpDetail/" . $_SESSION['detailId'] . ".php"); ?>
+		</div>
+
+	<? } else if (!strcmp($pageMode, "map")) { ?>
+
+		<div style="font-size:12px;">
+			<? include("include/mapPlaceholder.php"); ?>
 		</div>
 		
 	<? } else { ?> 
 	
-		<p>Nothing to see here... move along...</p>
-		
+	
 	<? } ?>
 
 </div> 
 
 <div class="lowerLeftQuad">
-	<p>To: <input type="text" id="messageToNames" /></p>
-	<p>Your Message:</p>
-	<!-- TODO: Figure out max length after subtracting NorthBridge text. -->
-	<textarea name="message" maxlength="160" rows="4" cols="40"></textarea>
-	<p style="float:right;"><input type="submit" id="messageSendSubmit" value="Send your Message" disabled ></p>
+	<table cellpadding="2">
+		<tr><td valign="top">To:</td><td><span id="toDisplay" /></tr>
+		<tr><td colspan="2">Your Message:</td></tr>
+	  <!-- TODO: Figure out max length after subtracting NorthBridge text. -->
+		<tr><td colspan="2"><textarea name="message" maxlength="160" rows="5" cols="33"></textarea></td></tr>
+	<tr><td colspan="2"><input type="submit" id="messageSendSubmit" value="Send your Message" style="float:right;" disabled ></td></tr>
+</table>
 </div>
-
 </form>
 
 

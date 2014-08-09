@@ -118,19 +118,31 @@ function toggleChat(showHideDiv) {
 }
 
 function messageToFill() {
-	var x=document.getElementById("messageToNames");
-	var names = document.forms['messageForm'].elements['names[]'];
+	var y=document.getElementById("toDisplay");
+	var names = document.forms['messageForm'].elements['names'];
 	var toNames = "";
 	for (var i=0, len=names.length; i<len; i++) {
     toNames = toNames + (names[i].checked ? (names[i].value + ", ") : ""); 
 	}
-	var trim = toNames.replace(/(, $)/g, "")
-	var trim2 = trim.replace(/(^[0-9]*::)/g, "")
-	x.value=trim2;
+	if (i == 0) {
+		// We have only one input, not a list so above loop will return nothing
+		toNames = names.checked ? (names.value + ", ") : "";
+	}
+	var trim1 = toNames.replace(/(, $)/g, "") // remove trailing comma
+	var trim2 = trim1.replace(/([0-9]*::)/g, "") // remove embedded user id
+	y.innerHTML=trim2;
 	
 	if (trim2.length < 1) {
 		document.getElementById("messageSendSubmit").disabled = true;
 	} else {
 		document.getElementById("messageSendSubmit").disabled = false;
 	}
+
+}
+
+function disableTestMessageLink() {
+   var link=document.getElementById("testMessageLink");
+   link.style.color="#c9c9a7";
+   link.setAttribute("href", "#");
+   link.innerHTML = 'To test, save your changes';
 }

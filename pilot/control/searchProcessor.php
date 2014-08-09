@@ -57,6 +57,9 @@ function doNewSearch($inputString, $filter, $networkId) {
 	
 	// TODO: This seems to leave intact leading spaces, resulting in a bad search term which is matching the entire directory
 	// TODO: Apostrophe in search string fails - brings up bad index error
+	// TODO: weed out search terms < 2 chars
+	// TODO: allow quote marks
+	// TODO: solve for 2 orgs with same name
 	
 	
 	// If we have free search terms, process the first three.
@@ -65,8 +68,7 @@ function doNewSearch($inputString, $filter, $networkId) {
 		$searchTerms = preg_split("/[\s,]+/", $terms);
 		$counter = 0;
 	
-		// TODO: weed out search terms < 2 chars
-		// TODO: solve for 2 orgs with same name
+
 	
 		while ($counter < 3 && isset($searchTerms[$counter])) {
 		
@@ -260,16 +262,16 @@ function formatNewSearchResults(array $results) {
 	
 		$fileId = Util::newUuid();
 		$file = fopen("../view/include/tmpResults/" . $fileId . ".php","w") or die("Unable to open file!");
-		fwrite($file, "<table>\n");
+		fwrite($file, "<div>\n");
 	
 		ksort($results);
 		foreach ($results as $org => $orgComponents) {
 				
-				fwrite($file, "<tr><td colspan=\"2\"><a href=\"javascript:post('../control/searchProcessor.php',{action:'detail',id:'" . $orgComponents['OrgId'] . "'})\">" . $org . "</a></td></tr>\n");
+				fwrite($file, "<p style=\"margin-top:15px;\"><a href=\"javascript:post('../control/searchProcessor.php',{action:'detail',id:'" . $orgComponents['OrgId'] . "'})\">" . $org . "</a></p>\n");
 				// ksort($results[$org]["Programs"]);
 				
 				foreach ($results[$org]["Programs"] as $key => $value) {
-					fwrite($file, "<tr><td>&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" . $value . "</td></tr>\n");
+					fwrite($file, "<p style=\"margin-left:20px;\">" . $value . "</p>\n");
 					/*
 					TODO: implement program people and program language. See example data structure in comments of directoryPreProcessor.php
 					
@@ -283,27 +285,25 @@ function formatNewSearchResults(array $results) {
 				}
 		
 				foreach ($results[$org]["People"] as $key => $value) {
-					// TODO: disable checkbox if messaging not enabled
 					$disabled = "disabled";
 					if (pgDb::isUserMessageEnabled($key)) {
 						$disabled = "";
 					}
-					// TODO: A list of names[] with only one node does not register as a node in the javascript -- why??? what to do???
-					fwrite($file, "<tr><td><input type=\"checkbox\" name=\"names[]\" value=\"" . $key . "::" . $value . "\" onchange=\"messageToFill()\" " . $disabled . " \></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" . $value . "</td></tr>\n");
+					fwrite($file, "<p style=\"margin-left:20px;\"><input type=\"checkbox\" name=\"names\" value=\"" . $key . "::" . $value . "\" onchange=\"messageToFill()\" " . $disabled . " \></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" . $value . "</p>\n");
 				}
 				//foreach ($results[$org]["Language"] as $key => $value) {
 				//	echo "<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" . $value;
 				//}
 				foreach ($results[$org]["Contact"] as $key => $value) {
-					fwrite($file, "<tr><td>&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" . $value . "</td></tr>\n");
+					fwrite($file, "<p style=\"margin-left:20px;\">" . $value . "</p>\n");
 				}
 				foreach ($results[$org]["Location"] as $key => $value) {
-					fwrite($file, "<tr><td>&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" . $value . "</td></tr>\n");
+					fwrite($file, "<p style=\"margin-left:20px;\">" . $value . "</p>\n");
 				}
 				
 		}
 	
-		fwrite($file, "</table>\n");
+		fwrite($file, "</div>\n");
 		fclose($file);	
 	
 	} else {	
@@ -322,42 +322,73 @@ function formatDetailSearchResults(array $results) {
 		$fileId = Util::newUuid();
 		$file = fopen("../view/include/tmpDetail/" . $fileId . ".php","w") or die("Unable to open file!");
 
-		fwrite($file, "<div style=\"font-size:10px;position:relative;float:left;width:220px;border:1px solid #da5e00;overflow:auto;\">");	
-		fwrite($file, "<p>" . $results['orgName'] . "</p>\n");
-		fwrite($file, "<p>" . $results['orgType'] . "</p>\n");
+		fwrite($file, "<div style=\"position:relative;overflow:auto;height:460px;\">\n");	
+		fwrite($file, "<p class=\"detailHeader1\">" . $results['orgName'] . "</p>\n");
 		
-		foreach ($results["orgLocation"] as $key => $value) {
-			fwrite($file, "<p>");
-			fwrite($file, $value[0] . "<br/>" .  $value[1]);
-			fwrite($file, "</p>");
+		fwrite($file, "<table cellpadding=\"5\" width=\"95%\">\n<tr valign=\"top\">\n<td width=\"50%\">");
+
+		fwrite($file, "<div class=\"collaboratorsList\">");
+		fwrite($file, "<p class=\"detailHeader2\">Collaborators</p>\n");
+		foreach ($results['orgUser'] as $key => $value) {
+			if (count($value) > 0) {
+				fwrite($file, "<p>");
+				$disabled = "disabled";
+				if (!strcmp($value[1], "t") || !strcmp($value[2], "t")) {
+					$disabled = "";
+				}
+				fwrite($file, "<input type=\"checkbox\" name=\"names\" value=\"" . $value[3] . "::" . $value[0] . "\" onchange=\"messageToFill()\" " . $disabled . " \>");
+				fwrite($file, $value[0]);
+				fwrite($file, "</p>\n");
+			} else {
+				fwrite($file, "<p>No active collaborators</p>");
+			}
 		}
+		fwrite($file, "</div>");
 		
-		foreach ($results["orgContact"] as $key => $value) {
-			fwrite($file, "<p>");
-			fwrite($file, $value[0] . "<br/>" .  $value[1]. "<br/>" .  $value[2]. "<br/>" .  $value[3]);
-			fwrite($file, "</p>");
-		}
-		
-		foreach ($results["orgLanguage"] as $key => $value) {
-			fwrite($file, "<p>");
-			fwrite($file,  $value . "<br/>");
-			fwrite($file, "</p>");
-		}
-		
-		foreach ($results["orgTopic"] as $key => $value) {
-			fwrite($file, "<p>");
-			fwrite($file,  $value . "<br/>");
-			fwrite($file, "</p>");
-		}
-		
+		fwrite($file, "<p class=\"detailHeader2\">Programs</p>");
 		foreach ($results["orgProgram"] as $key => $value) {
-			fwrite($file, "<p>");
-			fwrite($file, $value[0] . "<br/>" .  $value[1]);
-			fwrite($file, "</p>");
+			fwrite($file, "<p class=\"detailText\">");
+			fwrite($file, $value[0]); // drop off description for now . "<br/>" .  $value[1]);
+			fwrite($file, "</p>\n");
 		}
 		
+	
+		fwrite($file, "</td><td width=\"50%\">");
+		
+		fwrite($file, "<p class=\"detailHeader2\">Directory Information</p>\n");
+
+		fwrite($file, "<p class=\"detailText\">" . $results['orgType'] . "</p>\n");
+		
+		fwrite($file, "<p class=\"detailText\">");		
+		foreach ($results["orgLocation"] as $key => $value) {
+			fwrite($file, $value[0] . "<br/>" .  $value[1]);
+		}
+		fwrite($file, "</p>\n");
+		
+		fwrite($file, "<p class=\"detailText\">");
+		foreach ($results["orgContact"] as $key => $value) {
+			fwrite($file, $value[0] . "<br/>" .  $value[1]. "<br/>" .  $value[2]. "<br/>" .  $value[3]);
+		}
+		fwrite($file, "</p>\n");
+
+		fwrite($file, "<p class=\"detailHeader2\">Languages</p><p class=\"detailText\">");
+		foreach ($results["orgLanguage"] as $key => $value) {
+			fwrite($file,  $value . "<br/>");
+		}
+		fwrite($file, "</p>\n");
+		
+		fwrite($file, "<p class=\"detailHeader2\">Health Topics</p><p class=\"detailText\">");
+		foreach ($results["orgTopic"] as $key => $value) {
+			fwrite($file,  $value . "<br/>");
+		}
+		fwrite($file, "</p>\n");
+		
+		
+		fwrite($file, "</td>\n</tr>\n</table>");
 		fwrite($file, "</div>\n");
-		fwrite($file, "<div style=\"font-size:10px;position:relative;float:right;width:220px;border:1px solid #da5e00;overflow:auto;\">");	
+		
+		/*
+		fwrite($file, "<div style=\"font-size:10px;position:relative;float:right;width:220px;border:1px solid #da5e00;overflow:auto;height:460px;\">");	
 		fwrite($file, "<p>Collaborators</p>\n");
 		
 		foreach ($results["orgUser"] as $key => $value) {
@@ -368,10 +399,11 @@ function formatDetailSearchResults(array $results) {
 			}
 			fwrite($file, "<input type=\"checkbox\" name=\"names[]\" value=\"" . $value[3] . "::" . $value[0] . "\" onchange=\"messageToFill()\" " . $disabled . " \>");
 			fwrite($file, $value[0]);
-			fwrite($file, "</p>");
+			fwrite($file, "</p>\n");
 		}
 		
 		fwrite($file, "</div>\n");
+		*/
 		
 		fclose($file);
 		return $fileId;

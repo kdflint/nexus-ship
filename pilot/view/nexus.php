@@ -65,9 +65,9 @@ if(curl_exec($ch) === false) 	{
   	
   	<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
 	  <link rel="stylesheet" type="text/css" href="style/style.css" />
-	  <link rel="stylesheet" type="text/css" media="screen" href="style/converse.min.css">
+	  <!--<link rel="stylesheet" type="text/css" media="screen" href="style/converse.min.css">-->
  		<script src="script/script.js" language="javascript"></script>
-		<script src="script/converse.min.js"></script>
+		<!--<script src="script/converse.min.js"></script>-->
     <link rel="shortcut icon" href="image/northbridge-ico.png" />
     <title>Nexus Home</title>
   </head>
@@ -78,12 +78,11 @@ if(curl_exec($ch) === false) 	{
     <table>
     	<tr>
     	<td>
-    		<img style="float:left;vertical-align:top;margin:20px;" src="http://chicagofaithandhealth.org/imgs/logo.png" height="88" width="365" border="0" alt="Demo Organization Logo"/>
+    		<img style="float:left;vertical-align:top;margin:20px;" src="http://chicagofaithandhealth.org/imgs/logo.png" height="88" width="365" border="0" alt=""/>
     	</td>
-    	<!--<td width="30%"><p style="text-align:left;color:#57574a;font-size:24px;margin:20px;"><b><? echo($_SESSION['networkName']); ?></b></p></td>-->
     	<td>
     		<p style="text-align:right;color:#c9c9a7;font-size:18px;margin:20px;"><b><? echo($_SESSION['orgName']); ?></b></p>
-    		<p style="text-align:right;margin:20px;"><b>Hello <? echo($_SESSION['fname']); ?></b><br/>
+    		<p style="text-align:right;margin:20px;color:#4b5b6e"><b>Hello <? echo($_SESSION['fname']); ?></b><br/>
     		<!-- <a id="chatControlLink" href="javascript:toggleChat('chatControl')">Chat</a> |  -->
 				<a href="#">Help</a> | <a href="login.php?logout=true">Logout</a></p>
 			</td>

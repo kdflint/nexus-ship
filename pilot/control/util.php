@@ -27,8 +27,15 @@ class Util {
 		if (isset($input['lname'])) {
 			$result['good']['lname'] = $input['lname'];
  		} else {
+ 			// ok - lname is not required
  			$result['good']['lname'] = "";
  		}
+ 		
+		if (!isset($input['password']) || strlen($input['password']) < 1  || strlen($input['password']) > 12) {
+			$result['error']['password'] = "Please enter your password.";
+ 		} else {
+			$result['good']['password'] = $input['password'];
+		}
 
 		if (isset($input['sms']) && strlen($input['sms']) > 6 && filter_var($input['sms'], FILTER_VALIDATE_INT)) {
 			$result['good']['sms'] = $input['sms'];

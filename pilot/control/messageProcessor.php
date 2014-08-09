@@ -6,6 +6,8 @@ ini_set( 'display_errors','1');
 include("../model/pgDb.php");
 
 $message = "";
+$greeting = "Hello";
+$salutation = "From your colleague, \n\n";
 
 if (isset($_POST['testMessage'])) {
 		$message = "Woo hoo! This is the test message you requested from your Nexus user profile.";
@@ -45,7 +47,7 @@ if (strlen($message) > 0) {
 		}	  
 
 		if (isset($_POST['email']) && strlen($_POST['email']) > 0) {
-		  sendEmail($_POST['email'], $message);
+		  sendEmail($_POST['email'], $greeting . $message . $salutation);
 		}
 		
 		header("location:../view/nexus.php?thisPage=profile");
@@ -78,19 +80,15 @@ function sendSms($phonenum, $message) {
 		$email     = $xml->results->result[0]->sms_address;
 		
 		if (!strcmp($status, "OK")) {
-			// TODO: supply a real from address: nexus@northbridgetech.org
-			// TODO: supply salutation
-			mail($email, "", $message, "From: contact@northbridgetech.org");		
+			// TODO: Lock down service to ip address
+			mail($email, "[Nexus] Personal Message", $message, "From: noreply@northbridgetech.org");		
 		} else {
   	}	
 }
 
 function sendEmail($email, $message) {
 	
-	// TODO: supply a real from address: nexus@northbridgetech.org
-	// TODO: supply a subject line
-	// TODO: supply salutation, signature
-	mail($email, "", $message, "From: contact@northbridgetech.org");		
+	mail($email, "[Nexus] Personal Message", $message, "From: noreply@northbridgetech.org");		
 	
 }
 

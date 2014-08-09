@@ -33,32 +33,41 @@ if(isset($_GET['error'])) {
   
   <body>
     <div class="container">
-    	<a href="http://northbridgetech.org/index.php"><img style="float:left;vertical-align:top;margin:10px;" src="http://northbridgetech.org/images/northbridge-logo.png" height="86" width="215" border="0" alt="NorthBridge Technology Alliance"/></a>
-   		<p style="text-align:right;color:#57574a;font-size:22px;margin:20px;"><b>Nexus</b>, v 0.01</b><br/>
+    	<img style="float:left;vertical-align:top;margin:20px;" src="http://chicagofaithandhealth.org/imgs/logo.png" height="88" width="365" border="0" alt="Logo: The Center for Faith and Community Health Transformations"/>
+   		<p style="text-align:right;color:#4b5b6e;font-size:34px;margin-right:20px;"><b>Nexus</b><br/>
+   		<i><span style="text-align:right;color:#4b5b6e;font-size:16px;margin-right:20px;">Building communities that build communities</span></i></p>
+
       <div class="shell">
 
 			<div class="projectsContent">      	
       	<div class="leftColumn"> 
 							<p><b>Login</b></p>
-							<div class="formLogin" style="border:thin solid #da5e00;padding:10px;border-radius:15px;">
+							<div class="formLogin" style="border:thin solid #4b5b6e;padding:10px;border-radius:15px;">
 								<form action="../control/loginProcessor.php" method="post">
-								  	<p><? echo $error; ?></p>
-										User Id: <input class="passed" type="text" size="25" name="uid" value=""/><br/>
-										Password: <input class="passed" type="text" size="25" name="password" value=""/><br/>
-										<input type="hidden" name="action" value="authenticate" />
-										<input type="submit" value="Login"/>
+									<table cellpadding="5">
+								  <tr><td colspan="2"><? echo $error; ?></td></tr>
+										<tr><td>User Id:</td><td><input class="passed" type="text" size="15" name="uid" value=""/></td></tr>
+										<tr><td>Password:</td><td><input class="passed" type="password" size="15" name="password" value=""/></td></tr>
+										<tr><td colspan="2"><input type="submit" style="float:right;" value="Login"/></td></tr>
+									</table>
 										<p>Trouble getting in? <a href="mailto:contact@northbridgetech.org">contact@northbridgetech.org</a></p>
+										<input type="hidden" name="action" value="authenticate" />
 								</form>
 							</div>						
 							
 				</div>
 							
-     		<div class="rightColumn" style="border:0px;background-color:#e6e6d5;padding:10px;top:50px;height:200px;">
+     		<div class="rightColumn" style="border:0px;background-color:#e6ebf0;padding:10px;top:50px;height:200px;width:350px;">
 									<p><b>Welcome to Nexus!</b></p>
-									<p style="margin:10px;">This is a collaboration tool designed to help nonprofit organizations work together in an extremelely affordable way in order to improve conditions in their communities.</p>
+									<p style="margin:10px;">This is your collaboration space, secure to your community of practice: The Center for Faith and Community Healthy Transformations.<br/>&nbsp;<br/>This space supports the work you do every day to strengthen communities.</p>
       	</div>
       </div>
-      	
+      
+      <div class="footer" style="position:absolute;top:400px;left:600px;right;color:#4b5b6e;font-size:18px;margin:20px;">
+        <i>powered by</i>
+    		<a href="http://northbridgetech.org/index.php"><img style="vertical-align:bottom;" src="http://northbridgetech.org/images/northbridge-logo.png" height="57" width="143" border="0" alt="NorthBridge Technology Alliance"/></a>
+		</div>
+	
       </div><!--shell-->
     </div><!-- container -->         	
 	</body>

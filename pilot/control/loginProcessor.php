@@ -43,7 +43,7 @@ if($isAuthenticated){
   	$_SESSION['password'] = $row['password'];
 	} 
 	
-	header("location:../view/nexus.php");
+	header("location:../view/nexus.php?thisPage=profile");
 	exit(0);	
 	
 		

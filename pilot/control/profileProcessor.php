@@ -8,7 +8,7 @@ ini_set( 'display_errors','1');
 include("../model/pgDb.php");
 include("util.php");
 
-$fname = $lname = $sms = $email = "";
+$fname = $lname = $sms = $email = $password = "";
 $smsEnabled = $emailEnabled = "false";
 
 if (isset($_POST['sms_status'])) {$smsEnabled = "true";}
@@ -17,6 +17,7 @@ if (isset($_POST['email_status'])) {$emailEnabled = "true";}
 $input = array('email' => $_POST['email'],
 							'fname' => $_POST['fname'],
 							'lname' => $_POST['lname'],
+							'password' => $_POST['password'],
 							'sms' => Util::stripPhone($_POST['sms'])
 							);
 
@@ -32,11 +33,12 @@ if (strcmp($_SESSION['email'], $result['good']['email'])) {
 	mail("contact@northbridgetech.org", "Email update has been processed", "User id " . $_SESSION['uidpk'] . " has changed their email address. Please complete forum part.", "From: contact@northbridgetech.org");
 }
 
-$_SESSION['email'] = $_SESSION['sms'] = $_SESSION['fname'] = $_SESSION['lname'] = "";
+$_SESSION['email'] = $_SESSION['sms'] = $_SESSION['fname'] = $_SESSION['lname'] = $_SESSION['password'] ="";
 
 pgDb::updateUserById($_SESSION['uidpk'], 
 											$result['good']['fname'], 
 											$result['good']['lname'], 
+											$result['good']['password'], 
 											$result['good']['sms'], 
 											$result['good']['email'], 
 											$smsEnabled, 
@@ -49,6 +51,7 @@ while ($row = pg_fetch_array($cursor)) {
   $_SESSION['sms'] = Util::prettyPrintPhone($row['cell']);
   $_SESSION['fname'] = $row['first']; 
   $_SESSION['lname'] = $row['last'];
+  $_SESSION['password'] = $row['password'];
 }
 
 //header("location:../view/sessionViews.php");
