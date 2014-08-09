@@ -1,9 +1,9 @@
 <?php
 
 if (isset($_SESSION['forumSessionError']) && strcmp($_SESSION['forumSessionError'], "noError")) {
-	echo "<p>Very sorry! Something has gone wrong connecting you to your community forum</p>";
-	echo "<p>Please contact the support desk using the link in the upper right corner so we can set things right. </p>";
-	echo "<p>" . $_SESSION['forumSessionError'] . "</p>";
+	echo "<p><b>Oops!</b> Something has gone wrong connecting you to your community forum.</p>";
+	echo "<p>Would you please try closing and re-opening your browser window?</p>";
+	echo "<p>If that does not work, please contact the support desk using the \"Report a Problem\" link so we can set things right.</p>";
 	
 } else {
 

@@ -53,14 +53,12 @@ if (!strcmp($action, "search")) {
 function doNewSearch($inputString, $filter, $networkId) {
 	
 	$results = array();
-	$terms = trim($inputString);
-	
-	// TODO: This seems to leave intact leading spaces, resulting in a bad search term which is matching the entire directory
-	// TODO: Apostrophe in search string fails - brings up bad index error
-	// TODO: weed out search terms < 2 chars
+	//$terms = trim($inputString);
+	$terms = trim(Util::strip($inputString));
+		
+	// TODO: Escape apostrophes instead of stripping
 	// TODO: allow quote marks
 	// TODO: solve for 2 orgs with same name
-	
 	
 	// If we have free search terms, process the first three.
 	if (strlen($terms) > 0) {
@@ -68,10 +66,17 @@ function doNewSearch($inputString, $filter, $networkId) {
 		$searchTerms = preg_split("/[\s,]+/", $terms);
 		$counter = 0;
 	
-
-	
 		while ($counter < 3 && isset($searchTerms[$counter])) {
-		
+						
+			if (preg_match("/^[Tt][Hh][Ee]$/", $searchTerms[$counter]) ||
+					preg_match("/^[Aa][Nn]$/", $searchTerms[$counter]) ||
+					preg_match("/^[Aa]$/", $searchTerms[$counter]) ||
+					strlen($searchTerms[$counter]) < 2
+					) {
+				$counter++;
+				continue;
+			}
+			
 			// TODO: Seriously?? Seems that iterating a cursor dismantles a cursor... Perhaps must return a standard data type from pgDb so I can make copies?? 
 			$cursor1 = pgDb::freeSearch($searchTerms[$counter], $networkId);
 			$cursor2 = pgDb::freeSearch($searchTerms[$counter], $networkId);
@@ -220,7 +225,7 @@ function doNewSearch($inputString, $filter, $networkId) {
 			
 			$counter++;
 		}
-
+			
 		// On top of the free search term results, layer the filter if we have one
 		if (isset($filter) && $filter > 1) {
 			foreach ($results as $key=>$val) {
@@ -289,7 +294,7 @@ function formatNewSearchResults(array $results) {
 					if (pgDb::isUserMessageEnabled($key)) {
 						$disabled = "";
 					}
-					fwrite($file, "<p style=\"margin-left:20px;\"><input type=\"checkbox\" name=\"names\" value=\"" . $key . "::" . $value . "\" onchange=\"messageToFill()\" " . $disabled . " \></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" . $value . "</p>\n");
+					fwrite($file, "<p style=\"margin-left:20px;\"><input type=\"checkbox\" name=\"names[]\" value=\"" . $key . "::" . $value . "\" onchange=\"messageToFill()\" " . $disabled . " \></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" . $value . "</p>\n");
 				}
 				//foreach ($results[$org]["Language"] as $key => $value) {
 				//	echo "<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" . $value;
@@ -336,7 +341,7 @@ function formatDetailSearchResults(array $results) {
 				if (!strcmp($value[1], "t") || !strcmp($value[2], "t")) {
 					$disabled = "";
 				}
-				fwrite($file, "<input type=\"checkbox\" name=\"names\" value=\"" . $value[3] . "::" . $value[0] . "\" onchange=\"messageToFill()\" " . $disabled . " \>");
+				fwrite($file, "<input type=\"checkbox\" name=\"names[]\" value=\"" . $value[3] . "::" . $value[0] . "\" onchange=\"messageToFill()\" " . $disabled . " \>");
 				fwrite($file, $value[0]);
 				fwrite($file, "</p>\n");
 			} else {
@@ -350,24 +355,29 @@ function formatDetailSearchResults(array $results) {
 			fwrite($file, "<p class=\"detailText\">");
 			fwrite($file, $value[0]); // drop off description for now . "<br/>" .  $value[1]);
 			fwrite($file, "</p>\n");
-		}
-		
+		}	
 	
 		fwrite($file, "</td><td width=\"50%\">");
 		
 		fwrite($file, "<p class=\"detailHeader2\">Directory Information</p>\n");
 
-		fwrite($file, "<p class=\"detailText\">" . $results['orgType'] . "</p>\n");
+		if (strlen($results['orgType']) > 0) {
+			fwrite($file, "<p class=\"detailText\">" . $results['orgType'] . "</p>\n");
+		}
 		
 		fwrite($file, "<p class=\"detailText\">");		
 		foreach ($results["orgLocation"] as $key => $value) {
-			fwrite($file, $value[0] . "<br/>" .  $value[1]);
+			if (strlen($value[0]) > 0) { fwrite($file, $value[0]); }
+			if (strlen($value[1]) > 0) { fwrite($file, "<br/>" . $value[1]); }
 		}
 		fwrite($file, "</p>\n");
 		
 		fwrite($file, "<p class=\"detailText\">");
 		foreach ($results["orgContact"] as $key => $value) {
-			fwrite($file, $value[0] . "<br/>" .  $value[1]. "<br/>" .  $value[2]. "<br/>" .  $value[3]);
+			if (strlen($value[0]) > 0) { fwrite($file, Util::prettyPrintPhone($value[0])); }
+			if (strlen($value[1]) > 0) { fwrite($file, "<br/>" . $value[1]); }
+			if (strlen($value[2]) > 0) { fwrite($file, "<br/><a style=\"font-size:12px;\" href=\"" . $value[2] . "\" target=\"_blank\" >" . $value[2] . "</a>"); }
+			if (strlen($value[3]) > 0) { fwrite($file, "<br/>" . $value[3]); }
 		}
 		fwrite($file, "</p>\n");
 

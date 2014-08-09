@@ -119,7 +119,7 @@ function toggleChat(showHideDiv) {
 
 function messageToFill() {
 	var y=document.getElementById("toDisplay");
-	var names = document.forms['messageForm'].elements['names'];
+	var names = document.forms['messageForm'].elements['names[]'];
 	var toNames = "";
 	for (var i=0, len=names.length; i<len; i++) {
     toNames = toNames + (names[i].checked ? (names[i].value + ", ") : ""); 

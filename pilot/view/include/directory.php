@@ -140,12 +140,10 @@
 		<tr><td valign="top">To:</td><td><span id="toDisplay" /></tr>
 		<tr><td colspan="2">Your Message:</td></tr>
 	  <!-- TODO: Figure out max length after subtracting NorthBridge text. -->
-		<tr><td colspan="2"><textarea name="message" maxlength="160" rows="5" cols="33"></textarea></td></tr>
+		<tr><td colspan="2"><textarea name="message" maxlength="105" rows="5" cols="34"></textarea></td></tr>
 	<tr><td colspan="2"><input type="submit" id="messageSendSubmit" value="Send your Message" style="float:right;" disabled ></td></tr>
 </table>
 </div>
+<input type="hidden" name="pageRestore" value="<? echo(!strcmp($pageMode, "results") ? $searchResultId : $detailResultId); ?>" />
 </form>
-
-
-
 
