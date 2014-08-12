@@ -1,0 +1,8 @@
+*.pui
+*.prj
+*.conf
+*.txt
+*.key
+*.bak
+*.cfg
+pilot/view/include/scrapToggleCode.php
