@@ -5,3 +5,4 @@
 *.key
 *.bak
 *.cfg
+pilot/view/include/scrapToggleCode.php
