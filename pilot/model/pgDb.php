@@ -11,8 +11,6 @@ class pgDb {
 		$host = "localhost"; 
 		$user = "northbr6_web"; 
 		$pass = "bdTEzR?MRs[C"; 
-		//$user = "northbr6"; 
-		//$pass = "A56L9Q1X"; 
 		$db = "northbr6_nbnexus";		
 		
 		$con = pg_connect("host=$host dbname=$db user=$user password=$pass")
