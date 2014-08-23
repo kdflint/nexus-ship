@@ -374,7 +374,8 @@ function formatDetailSearchResults(array $results) {
 		
 		fwrite($file, "<p class=\"detailText\">");
 		foreach ($results["orgContact"] as $key => $value) {
-			if (strlen($value[0]) > 0) { fwrite($file, Util::prettyPrintPhone($value[0])); }
+			if (strlen($value[0]) > 0) { fwrite($file, "Phone: " . Util::prettyPrintPhone($value[0])); }
+			if (strlen($value[4]) > 0) { fwrite($file, "<br/>Fax: " . Util::prettyPrintPhone($value[4])); }
 			if (strlen($value[1]) > 0) { fwrite($file, "<br/>" . $value[1]); }
 			if (strlen($value[2]) > 0) { fwrite($file, "<br/><a style=\"font-size:12px;\" href=\"" . $value[2] . "\" target=\"_blank\" >" . $value[2] . "</a>"); }
 			if (strlen($value[3]) > 0) { fwrite($file, "<br/>" . $value[3]); }

@@ -11,8 +11,6 @@ class pgDb {
 		$host = "localhost"; 
 		$user = "northbr6_web"; 
 		$pass = "bdTEzR?MRs[C"; 
-		//$user = "northbr6"; 
-		//$pass = "A56L9Q1X"; 
 		$db = "northbr6_nbnexus";		
 		
 		$con = pg_connect("host=$host dbname=$db user=$user password=$pass")
@@ -417,7 +415,7 @@ class pgDb {
 															where ol.organization_fk = '$orgId'
 															and ol.location_fk = l.id");
 															
-		$result2 = pgDb::execute("select c.phone as phone, c.email as email, c.url as url, c.name as name 
+		$result2 = pgDb::execute("select c.phone as phone, c.email as email, c.url as url, c.name as name, c.fax as fax 
 															from contact c, organization_contact oc
 															where oc.organization_fk = '$orgId'
 															and oc.contact_fk = c.id");
@@ -471,6 +469,7 @@ class pgDb {
 	  	$resultArray['orgContact'][$counter][1] = $row2['email'];
 	  	$resultArray['orgContact'][$counter][2] = $row2['url'];
 	  	$resultArray['orgContact'][$counter][3] = $row2['name'];
+	  	$resultArray['orgContact'][$counter][4] = $row2['fax'];
 	  	$counter++;
 	  }
 	  
