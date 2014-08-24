@@ -205,7 +205,7 @@ class pgDb {
 	
 	public static function getUserByUsername($uid) {
 		// TODO: add active check?
-		$query = "select u.id as id, u.fname as fname, u.lname as lname from public.user u where u.username = '$uid' limit 1";
+		$query = "select u.id as id, u.fname as fname, u.lname as lname, u.password as password from public.user u where u.username = '$uid' limit 1";
 		return pgDb::execute($query);	
 	}
 	

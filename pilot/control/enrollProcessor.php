@@ -111,6 +111,7 @@ if ($validInvitation){
 		while ($row = pg_fetch_array($cursor)) {
 			$_SESSION['fname'] = $row['fname'];
   		$_SESSION['lname'] = $row['lname'];
+  		$_SESSION['password'] = $row['password'];
 		}
 
 		header("location:../view/nexus.php?thisPage=profile");
