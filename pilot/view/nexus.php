@@ -5,6 +5,14 @@ ini_set( 'display_errors','1');
 
 session_start();
 
+require_once '../control/xmpp-prebind-php/lib/XmppPrebind.php';
+require_once '../control/util.php';
+
+if (!Util::isSessionValid()) {
+	header("location:login.php?logout=true");
+	exit(0);	
+}
+
 // select content to show based on request variable, which is supplied in navigation.php
 if (isset($_REQUEST['thisPage'])) {
 	$thisPage = $_REQUEST['thisPage'];
@@ -13,7 +21,7 @@ if (isset($_REQUEST['thisPage'])) {
 }
 
 
-require_once '../control/xmpp-prebind-php/lib/XmppPrebind.php';
+
 
 /**
  * Comment here for explanation of the options.

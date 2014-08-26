@@ -4,7 +4,7 @@ error_reporting(E_ALL);
 ini_set( 'display_errors','1');
 
 include("../model/pgDb.php");
-include("util.php");
+require_once("util.php");
 
 $_SESSION['email'] = $_SESSION['sms'] = $count = "";
 
