@@ -6,16 +6,11 @@ class pgDb {
 	// select * from pg_enum e where enumtypid = '1569578'
 	
 	// TODO: switch this all over to parameterized queries
-	
-	public static function connect() {
-		$host = "localhost"; 
-		$user = "northbr6_web"; 
-		$pass = "bdTEzR?MRs[C"; 
-		$db = "northbr6_nbnexus";		
-		
-		$con = pg_connect("host=$host dbname=$db user=$user password=$pass")
-    or die ("Could not connect to server\n"); 
-    
+
+	public static function connect() {	
+		include("../config/env_config.php");	
+		$con = pg_connect("host=$db_host dbname=$db user=$db_user password=$db_pass")
+    or die ("Could not connect to server\n");    
     return $con;
 	}
 	
