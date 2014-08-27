@@ -30,8 +30,10 @@ $isAuthenticated = Util::authenticate($uid, $password);
 if($isAuthenticated){
 	
 	$_SESSION['username'] = $uid;
+
 	
 	$cursor = pgDb::getUserSessionByUsername($_SESSION['username']);
+
 	while ($row = pg_fetch_array($cursor)) {
 		$_SESSION['fname'] = $row['fname'];
   	$_SESSION['lname'] = $row['lname'];

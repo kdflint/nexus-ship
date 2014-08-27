@@ -85,7 +85,6 @@ class pgDb {
 	}
 
 	public static function insertActiveUser($uuid, $username, $password, $fname, $lname, $email) {
-			// TODO: broken now with refactor (email)
 			$query = "insert into public.user (uuid, username, password, fname, lname, email, status_fk, create_dttm, activate_dttm) values ($1, $2, $3, $4, $5, $6, '1', now(), now()) returning id";
 			return pgDb::psExecute($query, array($uuid, $username, $password, $fname, $lname, $email));		
 	}
@@ -209,7 +208,7 @@ class pgDb {
 			select 'Organization' as type, o.id as id, o.name as name
 			from organization o, organization_organization oo
 			where 
-				lower(o.name) like lower(%{$1}%)
+				lower(o.name) like lower('%' || $1 || '%')
 			and o.id = oo.organization_to_fk
 			and oo.organization_from_fk = $2
 			and oo.relationship ='parent'
@@ -219,10 +218,10 @@ class pgDb {
 			select 'Person' as type, u.id as id, (u.fname || ' ' || u.mname || ' ' || u.lname) as name
 			from public.user u, organization_organization oo, user_organization uo
 			where (
-				lower(u.fname) like lower(%{$1}%)
-				or lower(u.lname) like lower(%{$1}%)
-				or lower(u.mname) like lower(%{$1}%)
-				or lower(u.nickname) like lower(%{$1}%)
+				lower(u.fname) like lower('%' || $1 || '%')
+				or lower(u.lname) like lower('%' || $1 || '%')
+				or lower(u.mname) like lower('%' || $1 || '%')
+				or lower(u.nickname) like lower('%' || $1 || '%')
 			)
 			and u.id = uo.user_fk
 			and uo.organization_fk = oo.organization_to_fk
@@ -234,8 +233,8 @@ class pgDb {
 			select 'Contact' as type, c.id as id, c.name as name
 			from contact c, organization_organization oo, organization_contact oc
 			where (
-				lower(c.name) like lower(%{$1}%)
-				or lower(c.title) like lower(%{$1}%)
+				lower(c.name) like lower('%' || $1 || '%')
+				or lower(c.title) like lower('%' || $1 || '%')
 			)
 			and c.id = oc.contact_fk
 			and oc.organization_fk = oo.organization_to_fk
@@ -247,8 +246,8 @@ class pgDb {
 			select 'Program' as type, p.id as id, p.name as name
 			from program p, organization_organization oo, organization_program op
 			where (
-				lower(p.name) like lower(%{$1}%)
-				or lower(p.description) like lower(%{$1}%)
+				lower(p.name) like lower('%' || $1 || '%')
+				or lower(p.description) like lower('%' || $1 || '%')
 			)
 			and p.id = op.program_fk
 			and op.organization_fk = oo.organization_to_fk
@@ -260,7 +259,7 @@ class pgDb {
 			select 'Language' as type, l.id as id, l.language as name
 			from language l, organization_organization oo, organization_language ol
 			where 
-				lower(l.language) like lower(%{$1}%)		
+				lower(l.language) like lower('%' || $1 || '%')		
 			and l.id = ol.language_fk
 			and ol.organization_fk = oo.organization_to_fk
 			and oo.organization_from_fk = $2
@@ -271,13 +270,13 @@ class pgDb {
 			select 'Location' as type, loc.id as id, loc.municipality || ', ' || loc.region2 as name
 			from location loc, organization_organization oo, organization_location oloc
 			where (
-				lower(loc.address1) like lower(%{$1}%)
-				or lower(loc.address2) like lower(%{$1}%)
-				or lower(loc.municipality) like lower(%{$1}%)
-				or lower(loc.region1) like lower(%{$1}%)
-				or lower(loc.region2) like lower(%{$1}%)
-				or lower(loc.country) like lower(%{$1}%)
-				or lower(loc.postal_code) like lower(%{$1}%)
+				lower(loc.address1) like lower('%' || $1 || '%')
+				or lower(loc.address2) like lower('%' || $1 || '%')
+				or lower(loc.municipality) like lower('%' || $1 || '%')
+				or lower(loc.region1) like lower('%' || $1 || '%')
+				or lower(loc.region2) like lower('%' || $1 || '%')
+				or lower(loc.country) like lower('%' || $1 || '%')
+				or lower(loc.postal_code) like lower('%' || $1 || '%')
 			)		
 			and loc.id = oloc.location_fk
 			and oloc.organization_fk = oo.organization_to_fk
@@ -404,8 +403,6 @@ class pgDb {
 		return $resultArray; 	
 
 	}
-
-//++++++++++++++++++++++++++++++++
 
 
 	public static function freeSearchDepr($term, $networkId) {
