@@ -78,15 +78,34 @@ class pgDb {
 		return $count;
 	}
 
-
 	public static function insertOrgOrgRelation($from, $to, $relation) {
 			$query = "insert into organization_organization (organization_from_fk, organization_to_fk, relationship) values ($1, $2, $3)";
 			return pgDb::psExecute($query, array($from, $to, $relation));		
 	}
 
-	public static function insertActiveUser($uuid, $username, $password, $fname, $lname, $email) {
-			$query = "insert into public.user (uuid, username, password, fname, lname, email, status_fk, create_dttm, activate_dttm) values ($1, $2, $3, $4, $5, $6, '1', now(), now()) returning id";
-			return pgDb::psExecute($query, array($uuid, $username, $password, $fname, $lname, $email));		
+	public static function insertActiveUser($uuid, $username, $fname, $lname, $email, $password) {
+			$query = "insert into public.user (uuid, username, fname, lname, email, status_fk, create_dttm, activate_dttm) values ($1, $2, $3, $4, $5, '1', now(), now()) returning id";
+			$result = pgDb::psExecute($query, array($uuid, $username, $fname, $lname, $email));		
+			$row = pg_fetch_row($result);
+			Util::storeSecurePasswordImplA($password, $row[0]);
+			return $row[0];
+	}
+	
+	public static function setSecurePasswordImplA($userId, $securePassword, $salt) {
+		$query = "update public.user set 
+			password = $2, 
+			salt = $3, 
+			cryptimpl = 'ImplA', 
+			crypt_dttm = now() 
+			where id = $1
+			";
+		return pgDb::psExecute($query, array($userId, $securePassword, $salt));
+	}
+	
+	public static function getUserPasswordByUser($userId) {
+		// TODO - make usernames in db not required to be unique (or, only unique within network). Pair with network id to do authentication.
+		$query = "select password, salt, cryptimpl from public.user where username = $1";
+		return pgDb::psExecute($query, array($userId));
 	}
 
 	public static function insertUserOrgRelation($userId, $orgId, $grantorId) {
@@ -179,20 +198,19 @@ class pgDb {
 		return false;
 	}
 
-	public static function updateUserById($userId, $fname, $lname, $password, $sms, $email, $smsEnabled, $emailEnabled) {
+	public static function updateUserById($userId, $fname, $lname, $sms, $email, $smsEnabled, $emailEnabled) {
 		// TODO: broken now with refactor (email)
 		$query = "
 		update public.user set
 			fname = $1,
 			lname = $2,
-			password = $3,
-			sms = $4,
-			email = $5,
-			enable_email = $6,
-			enable_sms = $7
-			where id = $8
+			sms = $3,
+			email = $4,
+			enable_email = $5,
+			enable_sms = $6
+			where id = $7
 			";
-		return pgDb::psExecute($query, array($fname, $lname, $password, $sms, $email, $emailEnabled, $smsEnabled, $userId));
+		return pgDb::psExecute($query, array($fname, $lname, $sms, $email, $emailEnabled, $smsEnabled, $userId));
 	}
 	
 	public static function getOrganizationById($orgId) {

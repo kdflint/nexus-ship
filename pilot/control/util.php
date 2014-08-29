@@ -32,7 +32,8 @@ class Util {
  		}
  		
 		if (!isset($input['password']) || strlen($input['password']) < 1  || strlen($input['password']) > 12) {
-			$result['error']['password'] = "Please enter your password.";
+			// ok - password is not required (at the moment)
+			$result['good']['password'] = "";
  		} else {
 			$result['good']['password'] = $input['password'];
 		}
@@ -100,19 +101,55 @@ class Util {
         substr($s,20); 
     return $guidText;
 	}
-
-	public static function authenticate($uid, $pass) {	
-		if (pgDb::countActiveUsers($uid, $pass) == 1) {
-			return true;
-		}
-		return false;
-	}
 	
 	public static function isSessionValid() {
 		if (isset($_SESSION['username']) && strlen($_SESSION['username']) > 0) {
 			return true;
 		}
 		return false;
+	}
+
+	public static function authenticate($uid, $pass) {	
+		$hash = self::getPasswordHashByUser($uid, $pass);
+		if (pgDb::countActiveUsers($uid, $hash) == 1) {
+			return true;
+		}
+		return false;
+	}
+
+	public static function storeSecurePasswordImplA($plaintextPassword, $userId) {
+		$salt = self::generateRandomString(32);
+		$securePassword = self::systemHashImplA($salt . $plaintextPassword);
+		pgDb::setSecurePasswordImplA($userId, '[[ENC]]' . $securePassword, $salt);
+		return;
+	}
+	
+	public static function getPasswordHashByUser($userId, $plaintextPassword) {
+		$cursor = pgDb::getUserPasswordByUser($userId);
+		$row = pg_fetch_array($cursor, 0);
+		$encrypted = $row['password'];
+		// TODO - handle case where no rows are returned for this username		
+		if (substr($encrypted, 0, 7) === "[[ENC]]") {
+			// Return the salted hash for the plaintext password (using user's unique salt)
+			$hash = "[[ENC]]" . self::systemHashImplA($row['salt'] . $plaintextPassword);
+		} else {
+			// If what is stored for this user has not been hashed OR there is no password at all for this user, return plaintext.
+			$hash = $plaintextPassword;
+		}
+		return $hash;
+	}
+	
+	public static function systemHashImplA($input) {
+		return hash('sha256', $input);
+	}
+		
+	public static function generateRandomString($length) {
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()';
+    $randomString = '';
+    for ($i = 0; $i < $length; $i++) {
+        $randomString .= $characters[rand(0, strlen($characters) - 1)];
+    }
+    return $randomString;
 	}
 	
 }

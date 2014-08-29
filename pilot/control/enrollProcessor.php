@@ -48,12 +48,11 @@ if(strlen($_SESSION['inviteId']) == 36) {
 if ($validInvitation){
 	// Insert user into db
 	
-	// TODO: make sure username is unique inside network, right, ??
+	// TODO: make sure username is unique inside network
 	// TODO: activate only on confirmed email code
 	// TODO: insert other user values into db
-	$cursor1 = pgDb::insertActiveUser(Util::newUuid(), $uid, $password, $fname, $lname, $email);
-	$row1 = pg_fetch_row($cursor1);
-	$_SESSION['uidpk'] = $row1[0];
+		
+	$_SESSION['uidpk'] = pgDb::insertActiveUser(Util::newUuid(), $uid, $fname, $lname, $email, $password);
 	pgDb::insertUserOrgRelation($_SESSION['uidpk'], $_SESSION['orgId'], $_SESSION['grantorId']);
 	$row3 = pg_fetch_array(pgDb::getOrganizationById($_SESSION['orgId']));
 	$orgName = $row3['name'];

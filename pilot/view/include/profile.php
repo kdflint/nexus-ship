@@ -25,12 +25,12 @@ if (!strcmp($email_status, "checked")) {
 			<table cellpadding="5">
 				<tr><td>Username:</td><td><? echo($_SESSION['username']); ?></td></tr>
  			<tr><td>First:</td><td>
-	 			<input type="text" size="<? echo(strlen($_SESSION['fname'])); ?>" name="fname" value="<? echo($_SESSION['fname']);?>"/>
+	 			<input type="text" size="22" name="fname" value="<? echo($_SESSION['fname']);?>"/>
 	 		</td></tr>
  			<tr><td>Last:</td><td>	 		
- 				<input type="text" size="<? echo(strlen($_SESSION['lname'])); ?>" name="lname" value="<? echo($_SESSION['lname']); ?>"/>
+ 				<input type="text" size="22" name="lname" value="<? echo($_SESSION['lname']); ?>"/>
  			</td></tr>
- 			<tr><td>Password:</td><td><input type="text" size="" name="password" value="<? echo($_SESSION['password']); ?>"/></td></tr>
+ 			<tr><td>Change Password:</td><td><input type="password" size="22" name="password" value="**********" disabled/></td></tr>
 		</table>
 	</div>
 
