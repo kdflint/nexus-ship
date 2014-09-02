@@ -30,7 +30,6 @@ $isAuthenticated = Util::authenticate($uid, $password);
 if($isAuthenticated){
 	
 	$_SESSION['username'] = $uid;
-
 	
 	$cursor = pgDb::getUserSessionByUsername($_SESSION['username']);
 
@@ -44,6 +43,8 @@ if($isAuthenticated){
   	$_SESSION['networkId'] = '18'; // $row['networkid'];
   	$_SESSION['password'] = $row['password'];
 	} 
+	
+	Util::setLogin($_SESSION['uidpk']);
 	
 	header("location:../view/nexus.php?thisPage=profile");
 	exit(0);	

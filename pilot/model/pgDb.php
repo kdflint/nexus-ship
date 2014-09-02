@@ -218,6 +218,11 @@ class pgDb {
 		return pgDb::psExecute($query, array($orgId));
 	}
 	
+	public static function setLoginByIp($ip, $userId) {
+		$query = "insert into user_session (ip, user_fk, create_dttm) values ($1, $2, now())";
+		return pgDb::psExecute($query, array($ip, $userId));
+	}		
+	
 	public static function freeSearch($term, $networkId) {
 		// TODO: use citext index in db instead of lower() function here
 		// http://stackoverflow.com/questions/7005302/postgresql-how-to-make-not-case-sensitive-queries

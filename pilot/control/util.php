@@ -108,6 +108,13 @@ class Util {
 		}
 		return false;
 	}
+	
+	public static function setLogin($uid) {
+		if (isset($_SERVER['REMOTE_ADDR'])) {
+			pgDb::setLoginByIp($_SERVER['REMOTE_ADDR'], $uid);
+		}
+		return;
+	}
 
 	public static function authenticate($uid, $pass) {	
 		$hash = self::getPasswordHashByUser($uid, $pass);
