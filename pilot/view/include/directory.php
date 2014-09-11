@@ -6,7 +6,7 @@
 			<tr><td><img src="image/mag-glass.jpg" width="25" height="25" /></td><td><input type="text" size="20" name="string" value=""/></td></tr>
 			<tr><td><i>and</i></td><td>
 				<select name="topic" style="width: 230px">    
-					<option value="0" selected>Health Topic is</option>	
+					<option value="0" selected>Specialty is</option>	
 					<!-- TODO: make this list dynamic by network -->
 					<option value="0" >------------</option>										
 					<option value="1">Access/Rights</option>
@@ -57,11 +57,19 @@
 					<option value="0" selected>Organization Type is</option>
 					<option value="0" >------------</option>
 					<option value="">Academic</option>
-					<option value="">Collaborative/Network</option>
+					<option value="">Collaboration/Network</option>
 					<option value="">Community Organization</option>
 					<option value="">Faith Community/House of Worship</option>
 					<option value="">Government</option>
 					<option value="">Health Care Provider</option>
+				</select>
+			</td></tr>
+			
+				<tr><td><i>and</i></td><td>
+				<select name="type" style="width: 230px" disabled>    
+					<option value="0" selected>Group is</option>
+					<option value="0" >------------</option>
+					<option value="">Faith Based Research</option>
 				</select>
 			</td></tr>
 				

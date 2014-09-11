@@ -53,7 +53,6 @@ if (!strcmp($action, "search")) {
 function doNewSearch($inputString, $filter, $networkId) {
 	
 	$results = array();
-	//$terms = trim($inputString);
 	$terms = trim(Util::strip($inputString));
 		
 	// TODO: Escape apostrophes instead of stripping
@@ -226,7 +225,7 @@ function doNewSearch($inputString, $filter, $networkId) {
 			$counter++;
 		}
 			
-		// On top of the free search term results, layer the filter if we have one
+		// On top of the free search term results, layer the filters if we have them
 		if (isset($filter) && $filter > 1) {
 			foreach ($results as $key=>$val) {
 				$row = pg_fetch_row(pgDb::orgTopicExists($val['OrgId'], $filter));
@@ -236,6 +235,20 @@ function doNewSearch($inputString, $filter, $networkId) {
 				}
 			}	
 		}
+		
+		/*
+		if (isset($filter2) && $filter2 > 1) {
+			foreach ($results as $key=>$val) {
+				$row = pg_fetch_row(pgDb::orgTypeExists($val['OrgId'], $filter));
+				$topicMatch = $row[0];
+				if (strcmp($topicMatch, "t")) {
+					unset($results[$key]);
+				}
+			}	
+		}
+		
+		etc.
+		*/
 	
 	// We get here if there are no free search terms. So, run a simple filter search if one exists
 	} else if (isset($filter) && $filter > 0) {

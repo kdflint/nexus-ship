@@ -223,6 +223,17 @@ class pgDb {
 		return pgDb::psExecute($query, array($ip, $userId));
 	}		
 	
+	public static function setMessageId($uuid, $uidpk) {
+		$query = "insert into message (uuid,user_fk) values ($1, $2)";
+		return pgDb::psExecute($query, array($uuid, $uidpk));
+	}
+	
+	// LEFT OFF - this is new
+	public static function getSendingUserByMessageId($uuid) {
+		$query = "select u.id, u.email from public.user u, message m where m.uuid = $1 and message.user_fk = u.id";
+		return pgDb::psExecute($query, array($uuid));
+	}
+	
 	public static function freeSearch($term, $networkId) {
 		// TODO: use citext index in db instead of lower() function here
 		// http://stackoverflow.com/questions/7005302/postgresql-how-to-make-not-case-sensitive-queries

@@ -6,6 +6,7 @@ session_start();
 //ini_set( 'display_errors','1'); 
 
 include("../model/pgDb.php");
+include("util.php");
 
 $message = $subject = $greeting = $salutation = "";
 
@@ -39,7 +40,9 @@ if (strlen($message) > 0) {
 					$subject = "[Nexus] Personal Message";
 					$greeting = $row['first'] . ", \n\n";
 					$salutation = "\n\nYour colleague,\n\n" . $_SESSION['fname'] . " " . $_SESSION['lname'] . "\n" . $_SESSION['orgName'];
-					sendEmail($row['email'], $subject, $greeting . $message . $salutation);
+					$uuid = Util::newUuid();
+					// TODO - store the message id
+					sendEmail($row['email'], $subject, $greeting . $message . $salutation, $uuid);
 				}
 		}
 		
@@ -57,7 +60,9 @@ if (strlen($message) > 0) {
 
 		if (isset($_POST['email']) && strlen($_POST['email']) > 0) {
 			$subject = "[Nexus] Test Message";
-		  sendEmail($_POST['email'], $subject, "Hello " . $_SESSION['fname'] . ",\n\n" . $message . "\n\nNexus Support Team");
+			$uuid = Util::newUuid();
+			//pgDb::setMessageId($uuid, $_SESSION['uidpk']);
+		  sendEmail($_POST['email'], $subject, "Hello " . $_SESSION['fname'] . ",\n\n" . $message . "\n\nNexus Support Team", $uuid);
 		}
 		
 		header("location:../view/nexus.php?thisPage=profile");
@@ -96,12 +101,14 @@ function sendSms($phonenum, $subject, $message) {
   	}	
 }
 
-function sendEmail($email, $subject, $message) {
+function sendEmail($email, $subject, $message, $uuid) {
 	
-	mail($email, $subject, $message, "From: noreply@northbridgetech.org");		
-	
+	$headers = "From: " . $_SESSION['fname'] . " " . $_SESSION['lname'] . "<hit-reply@nexus.northbridgetech.org>" . "\r\n" .
+    "Reply-To: " . $_SESSION['fname'] . " " . $_SESSION['lname'] . ' \(via Nexus\) ' . "<reply-nexus-" . $uuid . "@triple-grove-698.appspotmail.com>" . "\r\n" .
+    "Bcc: support@nexus.northbridgetech.org";
+     	
+	mail($email, $subject, $message, $headers);		
+		
 }
-
-
 
 ?>
