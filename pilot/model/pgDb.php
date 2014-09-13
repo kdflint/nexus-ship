@@ -236,7 +236,7 @@ class pgDb {
 	}		
 	
 	public static function getSenderByMessageId($uuid) {
-		$query = "select u.id as userId, u.email as email, m.id as messageId, mr.recipient_fk as recipientId from public.user u, message m, message_recipient mr where mr.uuid = $1 and mr.message_fk = m.id and m.sender_fk = u.id";
+		$query = "select u.id as userId, u.email as email, u.fname as fname, u.lname as lname, m.id as messageId, mr.recipient_fk as recipientId from public.user u, message m, message_recipient mr where mr.uuid = $1 and mr.message_fk = m.id and m.sender_fk = u.id";
 		return pgDb::psExecute($query, array($uuid));
 	}
 	
