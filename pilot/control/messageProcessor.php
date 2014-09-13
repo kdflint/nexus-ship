@@ -20,28 +20,28 @@ if (isset($_POST['testMessage'])) {
 
 if (strlen($message) > 0) {
 
+	// TODO - can this be set but 0 length?
 	if (isset($_POST['names'])) {	
 		// This is a real message
+		
+    $subject = "[Nexus] Personal Message";	
+    $messageId = pgDb::insertMessage($_SESSION['uidpk'], $subject, $message, null);	
+		
 		foreach ($_POST['names'] as $value) {
-	
     		$userId = preg_split("/::/", $value);
     		$row = pg_fetch_array(pgDb::getUserById($userId[0]));
-	    	
-    		// TODO: somehow make sure a field is populated if it is enabled
+				$uuid = Util::newUuid();
+				pgDb::insertMessageRecipient($messageId, $userId[0], $uuid);
 	    	
 				if (!strcmp($row['smson'], "t")) {
-					$subject = "Nexus Personal Message";
 					$greeting = $row['first'] . ", ";
 					$salutation = " -" . $_SESSION['fname'] . " " . $_SESSION['lname'][0] . ".";
 					sendSms($row['cell'], $subject, $greeting . $message . $salutation);
 				}
 				
-				if (!strcmp($row['emailon'], "t")) {
-					$subject = "[Nexus] Personal Message";
+				if (!strcmp($row['emailon'], "t")) {				
 					$greeting = $row['first'] . ", \n\n";
 					$salutation = "\n\nYour colleague,\n\n" . $_SESSION['fname'] . " " . $_SESSION['lname'] . "\n" . $_SESSION['orgName'];
-					$uuid = Util::newUuid();
-					// TODO - store the message id
 					sendEmail($row['email'], $subject, $greeting . $message . $salutation, $uuid);
 				}
 		}
@@ -53,6 +53,7 @@ if (strlen($message) > 0) {
 	} else {
 		// This is a test message
 		// TODO: This decisioning should be much more betters
+			
 		if (isset($_POST['phone']) && strlen($_POST['phone']) > 0) {
 			$subject = "Nexus Test Message";
 		  sendSms($_POST['phone'], $subject, $message);
@@ -61,7 +62,6 @@ if (strlen($message) > 0) {
 		if (isset($_POST['email']) && strlen($_POST['email']) > 0) {
 			$subject = "[Nexus] Test Message";
 			$uuid = Util::newUuid();
-			//pgDb::setMessageId($uuid, $_SESSION['uidpk']);
 		  sendEmail($_POST['email'], $subject, "Hello " . $_SESSION['fname'] . ",\n\n" . $message . "\n\nNexus Support Team", $uuid);
 		}
 		
@@ -96,6 +96,7 @@ function sendSms($phonenum, $subject, $message) {
 		
 		if (!strcmp($status, "OK")) {
 			// TODO: Lock down service to ip address
+			// TODO - why is this coming through with From: justhost?
 			mail($email, $subject, $message, "From: noreply@northbridgetech.org");		
 		} else {
   	}	
@@ -103,7 +104,7 @@ function sendSms($phonenum, $subject, $message) {
 
 function sendEmail($email, $subject, $message, $uuid) {
 	
-	$headers = "From: " . $_SESSION['fname'] . " " . $_SESSION['lname'] . "<hit-reply@nexus.northbridgetech.org>" . "\r\n" .
+	$headers = "From: " . $_SESSION['fname'] . " " . $_SESSION['lname'] . ' \(via Nexus\) ' . "<hit-reply@nexus.northbridgetech.org>" . "\r\n" .
     "Reply-To: " . $_SESSION['fname'] . " " . $_SESSION['lname'] . ' \(via Nexus\) ' . "<reply-nexus-" . $uuid . "@triple-grove-698.appspotmail.com>" . "\r\n" .
     "Bcc: support@nexus.northbridgetech.org";
      	

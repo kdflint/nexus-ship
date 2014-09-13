@@ -223,14 +223,20 @@ class pgDb {
 		return pgDb::psExecute($query, array($ip, $userId));
 	}		
 	
-	public static function setMessageId($uuid, $uidpk) {
-		$query = "insert into message (uuid,user_fk) values ($1, $2)";
-		return pgDb::psExecute($query, array($uuid, $uidpk));
+	public static function insertMessage($uidpk, $subject, $message, $replyTo) {
+		$query = "insert into message (sender_fk, subject, message, reply_to_fk, create_dttm) values ($1, $2, $3, $4, now()) returning id";
+		$result = pgDb::psExecute($query, array($uidpk, $subject, $message, $replyTo));
+		$row = pg_fetch_row($result);
+		return $row[0];
 	}
 	
-	// LEFT OFF - this is new
-	public static function getSendingUserByMessageId($uuid) {
-		$query = "select u.id, u.email from public.user u, message m where m.uuid = $1 and message.user_fk = u.id";
+	public static function insertMessageRecipient($messageId, $recipientId, $uuid) {
+		$query = "insert into message_recipient (message_fk, recipient_fk, uuid) values ($1, $2, $3)";
+		return pgDb::psExecute($query, array($messageId, $recipientId, $uuid));
+	}		
+	
+	public static function getSenderByMessageId($uuid) {
+		$query = "select u.id as userId, u.email as email, m.id as messageId, mr.recipient_fk as recipientId from public.user u, message m, message_recipient mr where mr.uuid = $1 and mr.message_fk = m.id and m.sender_fk = u.id";
 		return pgDb::psExecute($query, array($uuid));
 	}
 	
