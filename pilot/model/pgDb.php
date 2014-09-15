@@ -5,8 +5,6 @@ class pgDb {
 	// get valid values for org type
 	// select * from pg_enum e where enumtypid = '1569578'
 	
-	// TODO: switch this all over to parameterized queries
-
 	public static function connect() {	
 		include("../config/env_config.php");	
 		$con = pg_connect("host=$db_host dbname=$db user=$db_user password=$db_pass")
@@ -193,7 +191,6 @@ class pgDb {
 
 
 	public static function getUserById($userId) {
-		// TODO: broken now with refactor (email)
 		$query = "
 		select u.fname as first, u.lname as last, u.password, u.email as email, u.sms as cell, u.enable_email as emailon, u.enable_sms as smson, s.name as status, r.name as role 
 			from public.user u, user_organization uo, status s, role r 
@@ -215,7 +212,6 @@ class pgDb {
 	}
 
 	public static function updateUserById($userId, $fname, $lname, $sms, $email, $smsEnabled, $emailEnabled) {
-		// TODO: broken now with refactor (email)
 		$query = "
 		update public.user set
 			fname = $1,

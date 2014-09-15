@@ -69,10 +69,9 @@ if (!strcmp($action, "search")) {
 function doNewSearch($inputString, $filters, $networkId) {
 	
 	$results = array();
-	$terms = trim(Util::strip($inputString));
+	$terms = trim(Util::strip2($inputString));
 		
 	// TODO: Escape apostrophes instead of stripping
-	// TODO: allow quote marks
 	// TODO: solve for 2 orgs with same name
 	
 	// If we have free search terms, process the first three.
@@ -91,7 +90,7 @@ function doNewSearch($inputString, $filters, $networkId) {
 				$counter++;
 				continue;
 			}
-			
+						
 			// TODO: Seriously?? Seems that iterating a cursor dismantles a cursor... Perhaps must return a standard data type from pgDb so I can make copies?? 
 			$cursor1 = pgDb::freeSearch($searchTerms[$counter], $networkId);
 			$cursor2 = pgDb::freeSearch($searchTerms[$counter], $networkId);

@@ -53,6 +53,16 @@ class Util {
 		
 	}
 
+	public static function escapeforRegex($in) {
+		$out = strtr($in, array('.' => "\.",
+									        	'/' => "\/",
+									        	'(' => "\(",
+									        	')' => "\)",
+									        	'+' => "\+",
+									        	'?' => "\?"));
+		return $out;
+	}
+
 	public static function sanitize($in) {
 		$out = strtr($in, array('(' => '&#40;',
                           	')' => '&#41;',
@@ -71,6 +81,17 @@ class Util {
 									        	'>' => '',
 									        	'&' => '',
 									        	'\'' => ''));
+		$out = trim($out);
+		return $out;
+	}
+	
+	// TODO - this special character situation is chaotic!
+	public static function strip2($in) {
+		$out = strtr($in, array('(' => '',
+                          	')' => '',
+									        	'<' => '',
+									        	'>' => '',
+									        	"'" => '&apos;'));
 		$out = trim($out);
 		return $out;
 	}
