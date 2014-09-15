@@ -72,6 +72,11 @@ class pgDb {
 		return pgDb::psExecute($query, array($orgId, $topics));
 	}
 
+	public static function orgTypeExists($orgId, $types) {
+		$query = "select exists (select true from organization where id = $1 and type in ($2))";
+		return pgDb::psExecute($query, array($orgId, $types));
+	}
+
 	public static function countOrgsInNetworkById($networkId) {
 		$query = "select id from organization_organization where organization_from_fk=$1 and relationship='parent'";
 		$count = pg_num_rows(pgDb::psExecute($query, array($networkId)));
@@ -151,6 +156,7 @@ class pgDb {
 	public static function getUserSessionByUsername($uid) {
 		// TODO: add active check?
 		// TODO: fix up network id determination (parent, god, etc)
+		// TODO - this will fail if user in in > 1 group
 		$query = "
 			select u.id as id, u.fname as fname, u.lname as lname, u.password as password, o1.name as affiliation, o2.name as network, o2.id as networkid, uo.role_fk as role
 			from public.user u, user_organization uo, organization o1, organization o2, organization_organization oo
@@ -162,6 +168,16 @@ class pgDb {
 			and oo.relationship in ('parent', 'god')
 			";
 		return pgDb::psExecute($query, array($uid));	
+	}
+	
+	public static function getUserGroupsByUsername($uid) {
+		$query = "select g.id as id, g.name as name from public.group g, public.user u, user_group ug where u.username = $1 and ug.user_fk = u.id and ug.group_fk = g.id";
+		$cursor = pgDb::psExecute($query, array($uid));
+	  $resultArray = array();
+	  while ($row = pg_fetch_array($cursor)) {
+	  	$resultArray[$row['id']] = $row['name'];
+	  }		
+	  return $resultArray;
 	}
 	
 	public static function getUserByUsername($uid) {
@@ -238,6 +254,30 @@ class pgDb {
 	public static function getSenderByMessageId($uuid) {
 		$query = "select u.id as userId, u.email as email, u.fname as fname, u.lname as lname, m.id as messageId, mr.recipient_fk as recipientId from public.user u, message m, message_recipient mr where mr.uuid = $1 and mr.message_fk = m.id and m.sender_fk = u.id";
 		return pgDb::psExecute($query, array($uuid));
+	}
+
+	public static function getGroupMembersByUserId($uid) {
+		$query = "select u.id, u.fname, u.lname, o.name as oname
+			from public.user u, user_group ug, organization o, user_organization uo
+			where u.id = ug.user_fk
+			and uo.user_fk = u.id
+			and o.id = uo.organization_fk
+			and ug.group_fk in 
+				(select ug.group_fk from user_group ug where ug.user_fk = $1)
+			order by u.lname, o.name
+			";	
+			return pgDb::psExecute($query, array($uid));
+	}
+	
+	public static function getOrgsByNetwork($networkId) {
+			$query = "
+				select 'Organization' as type, o.id as id, o.name as name
+				from organization o, organization_organization oo
+				where o.id = oo.organization_to_fk
+				and oo.organization_from_fk = $1
+				and oo.relationship ='parent'
+				";
+				return pgDb::psExecute($query, array($networkId));	
 	}
 	
 	public static function freeSearch($term, $networkId) {
@@ -322,8 +362,7 @@ class pgDb {
 			and oloc.organization_fk = oo.organization_to_fk
 			and oo.organization_from_fk = $2
 			and oo.relationship ='parent'
-			"	
-			;
+			";
 
 			return pgDb::psExecute($query, array($term, $networkId));			
 			
@@ -344,7 +383,12 @@ class pgDb {
 				";
 			return pgDb::psExecute($query, array($topicIdList, $networkId));		
 	}
-
+	
+	public static function getOrgsByGroupId($groupIdList) {
+			$query = "select uo.organization_fk as oid from user_organization uo, user_group ug where ug.group_fk in ($1) and ug.user_fk = uo.user_fk";
+			return pgDb::psExecute($query, array($groupIdList));
+	}
+	
 	public static function getOrgDetailById($orgId) {
 		
 		$result0 = pgDb::psExecute("select name, type, structure, status_fk as status from organization where id = $1", array($orgId));
@@ -444,194 +488,6 @@ class pgDb {
 
 	}
 
-
-	public static function freeSearchDepr($term, $networkId) {
-		// TODO: use citext index in db instead of lower() function here
-		// http://stackoverflow.com/questions/7005302/postgresql-how-to-make-not-case-sensitive-queries
-		
-		$query = "
-			select 'Organization' as type, o.id as id, o.name as name
-			from organization o, organization_organization oo
-			where 
-				lower(o.name) like lower('%{$term}%')
-			and o.id = oo.organization_to_fk
-			and oo.organization_from_fk = '$networkId'
-			and oo.relationship ='parent'
-			
-			union
-			
-			select 'Person' as type, u.id as id, (u.fname || ' ' || u.mname || ' ' || u.lname) as name
-			from public.user u, organization_organization oo, user_organization uo
-			where (
-				lower(u.fname) like lower('%{$term}%')
-				or lower(u.lname) like lower('%{$term}%')
-				or lower(u.mname) like lower('%{$term}%')
-				or lower(u.nickname) like lower('%{$term}%')
-			)
-			and u.id = uo.user_fk
-			and uo.organization_fk = oo.organization_to_fk
-			and oo.organization_from_fk = '$networkId'
-			and oo.relationship ='parent'
-			
-			union
-			
-			select 'Contact' as type, c.id as id, c.name as name
-			from contact c, organization_organization oo, organization_contact oc
-			where (
-				lower(c.name) like lower('%{$term}%')
-				or lower(c.title) like lower('%{$term}%')
-			)
-			and c.id = oc.contact_fk
-			and oc.organization_fk = oo.organization_to_fk
-			and oo.organization_from_fk = '$networkId'
-			and oo.relationship ='parent'
-			
-			union
-			
-			select 'Program' as type, p.id as id, p.name as name
-			from program p, organization_organization oo, organization_program op
-			where (
-				lower(p.name) like lower('%{$term}%')
-				or lower(p.description) like lower('%{$term}%')
-			)
-			and p.id = op.program_fk
-			and op.organization_fk = oo.organization_to_fk
-			and oo.organization_from_fk = '$networkId'
-			and oo.relationship ='parent'
-			
-			union
-			
-			select 'Language' as type, l.id as id, l.language as name
-			from language l, organization_organization oo, organization_language ol
-			where 
-				lower(l.language) like lower('%{$term}%')		
-			and l.id = ol.language_fk
-			and ol.organization_fk = oo.organization_to_fk
-			and oo.organization_from_fk = '$networkId'
-			and oo.relationship ='parent'
-			
-			union
-			
-			select 'Location' as type, loc.id as id, loc.municipality || ', ' || loc.region2 as name
-			from location loc, organization_organization oo, organization_location oloc
-			where (
-				lower(loc.address1) like lower('%{$term}%')
-				or lower(loc.address2) like lower('%{$term}%')
-				or lower(loc.municipality) like lower('%{$term}%')
-				or lower(loc.region1) like lower('%{$term}%')
-				or lower(loc.region2) like lower('%{$term}%')
-				or lower(loc.country) like lower('%{$term}%')
-				or lower(loc.postal_code) like lower('%{$term}%')
-			)		
-			and loc.id = oloc.location_fk
-			and oloc.organization_fk = oo.organization_to_fk
-			and oo.organization_from_fk = '$networkId'
-			and oo.relationship ='parent'
-			"	
-			;
-
-			return pgDb::execute($query);			
-			
-	}
-
-	public static function getOrgDetailByIdDepr($orgId) {
-		
-		$result0 = pgDb::execute("select name, type, structure, status_fk as status from organization where id = '$orgId'");
-		
-		$result1 = pgDb::execute("select l.address1 || ', ' || l.address2 as line1, l.municipality || ', ' || l.region2 || '  ' || l.postal_code as line2 
-															from location l, organization_location ol
-															where ol.organization_fk = '$orgId'
-															and ol.location_fk = l.id");
-															
-		$result2 = pgDb::execute("select c.phone as phone, c.email as email, c.url as url, c.name as name, c.fax as fax 
-															from contact c, organization_contact oc
-															where oc.organization_fk = '$orgId'
-															and oc.contact_fk = c.id");
-															
-		$result3 = pgDb::execute("select l.language as language
-															from language l, organization_language ol
-															where ol.organization_fk = '$orgId'
-															and ol.language_fk = l.id");
-															
-  	$result4 = pgDb::execute("select t.name as topic
-															from topic t, organization_topic ot
-															where ot.organization_fk = '$orgId'
-															and ot.topic_fk = t.id");
-															
-  	$result5 = pgDb::execute("select p.name as name, p.description as descr
-															from program p, organization_program op
-															where op.organization_fk = '$orgId'
-															and op.program_fk = p.id");
-															
-  	$result6 = pgDb::execute("select (u.fname || ' ' || u.mname || ' ' || u.lname) as name, u.enable_email as emailon, u.enable_sms as smson, u.id as id
-															from public.user u, user_organization uo
-															where uo.organization_fk = '$orgId'
-															and uo.user_fk = u.id");
-		
-		$resultArray = array("orgId" => "",
-												 "orgName" => "",
-												 "orgType" => "",
-												 "orgLocation" => array(array()),
-												 "orgContact" => array(array()),
-												 "orgLanguage" => array(),
-												 "orgTopic" => array(),
-												 "orgProgram" => array(array()),
-												 "orgUser" => array(array())
-												 );							
-		  
-	  $row0 = pg_fetch_array($result0);
-	  $resultArray['orgId'] = $orgId;
-	  $resultArray['orgName'] = $row0['name'];
-	  $resultArray['orgType'] = $row0['type'];
-	  
-	  $counter = 0;
-	  while ($row1 = pg_fetch_array($result1)) {
-	  	$resultArray['orgLocation'][$counter][0] = $row1['line1'];
-	  	$resultArray['orgLocation'][$counter][1] = $row1['line2'];
-	  	$counter++;
-	  }
-	  
-	  $counter = 0;
-	  while ($row2 = pg_fetch_array($result2)) {
-	  	$resultArray['orgContact'][$counter][0] = $row2['phone'];
-	  	$resultArray['orgContact'][$counter][1] = $row2['email'];
-	  	$resultArray['orgContact'][$counter][2] = $row2['url'];
-	  	$resultArray['orgContact'][$counter][3] = $row2['name'];
-	  	$resultArray['orgContact'][$counter][4] = $row2['fax'];
-	  	$counter++;
-	  }
-	  
-	  $counter = 0;
-	  while ($row3 = pg_fetch_array($result3)) {
-	  	$resultArray['orgLanguage'][$counter] = $row3['language'];
-	  	$counter++;
-	  }
-	  
-	  $counter = 0;
-	  while ($row4 = pg_fetch_array($result4)) {
-	  	$resultArray['orgTopic'][$counter] = $row4['topic'];
-	  	$counter++;
-	  }
-	  
-	  $counter = 0;
-	  while ($row5 = pg_fetch_array($result5)) {
-	  	$resultArray['orgProgram'][$counter][0] = $row5['name'];
-	  	$resultArray['orgProgram'][$counter][1] = $row5['descr'];
-	  	$counter++;
-	  }
-	  
-	  $counter = 0;
-	  while ($row6 = pg_fetch_array($result6)) {
-	  	$resultArray['orgUser'][$counter][0] = $row6['name'];
-	  	$resultArray['orgUser'][$counter][1] = $row6['emailon'];
-	  	$resultArray['orgUser'][$counter][2] = $row6['smson'];
-	  	$resultArray['orgUser'][$counter][3] = $row6['id'];
-	  	$counter++;
-	  }
-	  
-		return $resultArray; 	
-
-	}
 }
 
 ?>
