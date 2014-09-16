@@ -42,7 +42,9 @@ if (strlen($message) > 0) {
 				if (!strcmp($row['emailon'], "t")) {				
 					$greeting = $row['first'] . ", \n\n";
 					$salutation = "\n\nYour colleague,\n\n" . $_SESSION['fname'] . " " . $_SESSION['lname'] . "\n" . $_SESSION['orgName'];
-					sendEmail($row['email'], $subject, $greeting . $message . $salutation, $uuid);
+					$from = $_SESSION['fname'] . " " . $_SESSION['lname'] . " via Nexus " . "<hit-reply@nexus.northbridgetech.org>";
+    			$reply = $_SESSION['fname'] . " " . $_SESSION['lname'] . " via Nexus " . "<reply-nexus-" . $uuid . "@triple-grove-698.appspotmail.com>";
+					sendEmail($row['email'], $subject, $greeting . $message . $salutation, $uuid, $from, $reply);
 				}
 		}
 		
@@ -62,7 +64,9 @@ if (strlen($message) > 0) {
 		if (isset($_POST['email']) && strlen($_POST['email']) > 0) {
 			$subject = "[Nexus] Test Message";
 			$uuid = Util::newUuid();
-		  sendEmail($_POST['email'], $subject, "Hello " . $_SESSION['fname'] . ",\n\n" . $message . "\n\nNexus Support Team", $uuid);
+			$from = "<noreply@nexus.northbridgetech.org>";
+			$reply = "";
+		  sendEmail($_POST['email'], $subject, "Hello " . $_SESSION['fname'] . ",\n\n" . $message . "\n\nNexus Support Team", $uuid, $from, $reply);
 		}
 		
 		header("location:../view/nexus.php?thisPage=profile");
@@ -102,12 +106,15 @@ function sendSms($phonenum, $subject, $message) {
   	}	
 }
 
-function sendEmail($email, $subject, $message, $uuid) {
+function sendEmail($email, $subject, $message, $uuid, $from, $reply) {
 	
+	/*
 	$headers = "From: " . $_SESSION['fname'] . " " . $_SESSION['lname'] . ' \(via Nexus\) ' . "<hit-reply@nexus.northbridgetech.org>" . "\r\n" .
     "Reply-To: " . $_SESSION['fname'] . " " . $_SESSION['lname'] . ' \(via Nexus\) ' . "<reply-nexus-" . $uuid . "@triple-grove-698.appspotmail.com>" . "\r\n" .
     "Bcc: support@nexus.northbridgetech.org";
-     	
+ 	*/
+ 	
+ 	$headers = "From: " . $from  . "\r\n" . "Reply-To: " . $reply . "\r\n" . "Bcc: support@nexus.northbridgetech.org"; 	
 	mail($email, $subject, $message, $headers);		
 		
 }

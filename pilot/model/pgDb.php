@@ -123,10 +123,14 @@ class pgDb {
 			return pgDb::psExecute($query, array($userId));
 	}
 
-	
 	public static function getOrgByLanguageId($langId) {
 			$query = "select o.name, o.id from organization_language ol, organization o where ol.language_fk = $1 and ol.organization_fk = o.id";
 			return pgDb::psExecute($query, array($langId));		
+	}
+	
+	public static function getOrgByTopicId($topicId) {
+			$query = "select o.name, o.id from organization_topic ot, organization o where ot.topic_fk = $1 and ot.organization_fk = o.id";
+			return pgDb::psExecute($query, array($topicId));		
 	}
 
 	public static function getOrgByProgramId($progId) {
@@ -251,6 +255,11 @@ class pgDb {
 		$query = "select u.id as userId, u.email as email, u.fname as fname, u.lname as lname, m.id as messageId, mr.recipient_fk as recipientId from public.user u, message m, message_recipient mr where mr.uuid = $1 and mr.message_fk = m.id and m.sender_fk = u.id";
 		return pgDb::psExecute($query, array($uuid));
 	}
+	
+	public static function getRecipientByMessageId($uuid) {
+		$query = "select u.id as userid, u.fname as fname, u.lname as lname, u.email as email from public.user u, message_recipient mr where mr.uuid = $1 and mr.recipient_fk = u.id";
+		return pgDb::psExecute($query, array($uuid));
+	}
 
 	public static function getGroupMembersByUserId($uid) {
 		$query = "select u.id, u.fname, u.lname, o.name as oname
@@ -343,6 +352,17 @@ class pgDb {
 			
 			union
 			
+			select 'Topic' as type, t.id as id, t.name as name
+			from topic t, organization_organization oo, organization_topic ot
+			where 
+				lower(t.name) like lower('%' || $1 || '%')		
+			and t.id = ot.topic_fk
+			and ot.organization_fk = oo.organization_to_fk
+			and oo.organization_from_fk = $2
+			and oo.relationship ='parent'	
+					
+			union
+			
 			select 'Location' as type, loc.id as id, loc.municipality || ', ' || loc.region2 as name
 			from location loc, organization_organization oo, organization_location oloc
 			where (
@@ -359,7 +379,7 @@ class pgDb {
 			and oo.organization_from_fk = $2
 			and oo.relationship ='parent'
 			";
-
+			
 			return pgDb::psExecute($query, array($term, $networkId));			
 			
 	}
