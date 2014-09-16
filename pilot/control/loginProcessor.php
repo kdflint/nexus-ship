@@ -25,6 +25,8 @@ $_SESSION['username'] =
 $_SESSION['password'] =
 "";
 
+$_SESSION['groups'] = array();
+
 $isAuthenticated = Util::authenticate($uid, $password);
 
 if($isAuthenticated){
@@ -43,6 +45,8 @@ if($isAuthenticated){
   	$_SESSION['networkId'] = '18'; // $row['networkid'];
   	$_SESSION['password'] = $row['password'];
 	} 
+	
+	$_SESSION['groups'] = pgDb::getUserGroupsByUsername($_SESSION['username']);
 	
 	Util::setLogin($_SESSION['uidpk']);
 	

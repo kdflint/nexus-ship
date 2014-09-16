@@ -112,6 +112,8 @@ if ($validInvitation){
   		$_SESSION['lname'] = $row['lname'];
   		$_SESSION['password'] = $row['password'];
 		}
+		
+		$_SESSION['groups'] = pgDb::getUserGroupsByUsername($_SESSION['username']);
 
 		header("location:../view/nexus.php?thisPage=profile");
 		exit(0);
