@@ -98,6 +98,7 @@ function doNewSearch($inputString, $filters, $networkId) {
 			$cursor4 = pgDb::freeSearch($searchTerms[$counter], $networkId);
 			$cursor5 = pgDb::freeSearch($searchTerms[$counter], $networkId);
 			$cursor6 = pgDb::freeSearch($searchTerms[$counter], $networkId);
+			$cursor7 = pgDb::freeSearch($searchTerms[$counter], $networkId);
 			
 			while ($pass1 = pg_fetch_array($cursor1)) { 
 				if (!strcmp($pass1['type'], "Organization")) {
@@ -109,6 +110,7 @@ function doNewSearch($inputString, $filters, $networkId) {
 							"People" =>  array(),
 							"Contact" => array(),
 							"Language" => array(),
+							"Topic" => array(),
 							"Location" => array(),
 							"OrgId" => $pass1['id']
 						);
@@ -141,6 +143,7 @@ function doNewSearch($inputString, $filters, $networkId) {
 								"People" => array($pass2['id'] => $pass2['name']),
 						   	"Contact" => array(),
 								"Language" => array(),
+								"Topic" => array(),
 								"Location" => array(),
 								"OrgId" => $inner2['id']
 							);
@@ -163,6 +166,7 @@ function doNewSearch($inputString, $filters, $networkId) {
 								"People" => array(),
 						  	"Contact" => array($pass5['name']),
 								"Language" => array(),
+								"Topic" => array(),
 								"Location" => array(),
 								"OrgId" => $inner5['id']
 							);
@@ -185,6 +189,7 @@ function doNewSearch($inputString, $filters, $networkId) {
 								"People" => array(),
 								"Contact" => array(),
 								"Language" => array($pass3['name']),
+								"Topic" => array(),
 						  	"Location" => array(),
 								"OrgId" => $inner3['id']
 							);
@@ -207,6 +212,7 @@ function doNewSearch($inputString, $filters, $networkId) {
 								"People" => array(),
 								"Contact" => array(),
 								"Language" => array(),
+								"Topic" => array(),
 								"Location" => array(),
 								"OrgId" => $inner4['id']
 							);
@@ -214,7 +220,30 @@ function doNewSearch($inputString, $filters, $networkId) {
 					}
 				}
 			}
-		
+			
+			while ($pass7 = pg_fetch_array($cursor7)) { 
+				if (!strcmp($pass7['type'], "Topic")) {
+					$innerCursor7 = pgDb::getOrgByTopicId($pass7['id']);
+					while ($inner7 = pg_fetch_array($innerCursor7)) {
+						if (array_key_exists($inner7['name'], $results)) {
+							if (!in_array($pass7['name'], $results[$inner7['name']]["Topic"])) {
+								array_push($results[$inner7['name']]["Topic"], $pass7['name']);
+							}
+						} else {
+							$results[$inner7['name']] = array(
+								"Programs" => array(),
+								"People" => array(),
+						  	"Contact" => array(),
+								"Language" => array(),
+								"Topic" => array($pass7['name']),
+								"Location" => array(),
+								"OrgId" => $inner7['id']
+							);
+						}
+					}
+				}
+			}		
+			
 			while ($pass6 = pg_fetch_array($cursor6)) { 
 				if (!strcmp($pass6['type'], "Location")) {
 					$innerCursor6 = pgDb::getOrgByLocationId($pass6['id']);
@@ -229,6 +258,7 @@ function doNewSearch($inputString, $filters, $networkId) {
 								"People" => array(),
 						  	"Contact" => array(),
 								"Language" => array(),
+								"Topic" => array(),
 								"Location" => array($pass6['name']),
 								"OrgId" => $inner6['id']
 							);
@@ -269,10 +299,6 @@ function doNewSearch($inputString, $filters, $networkId) {
 			}	
 		}
 			
-		/*
-		etc.
-		*/
-	
 	// We get here if there are no free search terms. So, run filters against the entire network
 	} else if (isset($filters) && count($filters) > 0) {
 		
@@ -288,6 +314,7 @@ function doNewSearch($inputString, $filters, $networkId) {
 						"People" =>  array(),
 						"Contact" => array(),
 						"Language" => array(),
+						"Topic" => array(),
 						"Location" => array(),
 						"OrgId" => $pass['id']
 					);
