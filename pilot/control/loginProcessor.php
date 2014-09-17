@@ -18,7 +18,6 @@ $_SESSION['forumSessionError'] =
 $_SESSION['orgName'] = 
 $_SESSION['networkName'] = 
 $_SESSION['orgId'] = 
-$_SESSION['grantorId'] = 
 $_SESSION['networkId'] = 
 $_SESSION['inviteId'] =
 $_SESSION['username'] =

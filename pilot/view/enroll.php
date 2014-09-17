@@ -28,19 +28,19 @@ if(isset($_GET['error'])) {
 
 			<div class="projectsContent">      	
       	<div class="leftColumn"> 
-							<p><b>Enroll in <? echo $_SESSION['networkName'] ?></b></p>
+							<p><b>Congratulations! You have been invited to enroll in the <? echo $_SESSION['groupName'] ?> hosted by <? echo $_SESSION['networkName'] ?></b></p>
 							<div class="formLogin" style="border:thin solid #da5e00;padding:10px;border-radius:15px;">
 								<form action="../control/enrollProcessor.php" method="post">
 								  	<p><? echo $error; ?></p>
-								  	<p>You represent: <? echo $_SESSION['orgName'] ?></p>
+								  	<!--<p>You represent: <? echo $_SESSION['orgName'] ?></p>-->
 										Choose your user name*: <input class="passed" type="text" size="25" name="userid" value=""/><br/>
 										Choose your password*: <input class="passed" type="text" size="25" name="password" value=""/><br/>
 										Your first name*: <input class="passed" type="text" size="25" name="fname" value=""/><br/>
 										Your last name: <input class="passed" type="text" size="25" name="lname" value=""/><br/>
+										Your organization: <input class="passed" type="text" size="50" name="orgname" value=""/><br/>
 										<!-- Some or all of above data may be already completed by the invitation. -->
 										<!-- Even if an invitation sets up all the prior data, a new user has to enter an email for confirmation. -->
 										Your email*: <input class="passed" type="text" size="25" name="email" value=""/><br/>
-										<!--<input type="hidden" name="invitation" value="<? echo $_SESSION['inviteId']; ?>" />-->
 										<input type="submit" value="Enroll"/>
 								</form>
 							</div>						

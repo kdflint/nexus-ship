@@ -28,12 +28,17 @@ if (!isset($_POST['fname']) || strlen($_POST['fname']) < 1) {
 	returnToEnrollWithError("Please enter your first name.");
 }
 
+if (!isset($_POST['orgname']) || strlen($_POST['orgname']) < 1) {
+	returnToEnrollWithError("Please enter the name of the organization you represent.");
+}
+
 // TODO: strategy for decon on this user input
 $uid = $_POST['userid'];
 $password = $_POST['password'];
 $fname = $_POST['fname'];
 $lname = $_POST['lname'];
 $email = $_POST['email'];
+$orgName = $_POST['orgname'];
 
 $validInvitation = $isAuthenticated = false;
 
@@ -53,9 +58,24 @@ if ($validInvitation){
 	// TODO: insert other user values into db
 		
 	$_SESSION['uidpk'] = pgDb::insertActiveUser(Util::newUuid(), $uid, $fname, $lname, $email, $password);
+	
+	// TODO - will break with dupe org name
+	$row3 = pg_fetch_row(pgDb::orgNameExists($orgName));
+	$nameMatch = $row3[0];
+	if (!strcmp($nameMatch, "t")) {
+		$row = pg_fetch_row(pgDb::getOrganizationByName($orgName));
+		$_SESSION['orgId'] = $row['id'];
+	} else {
+		$row = pg_fetch_row(pgDb::insertPendingOrganization($orgName, $_SESSION['grantorId'], 3));
+		$_SESSION['orgId'] = $row[0];
+	}
+	
+	$_SESSION['orgName'] = $orgName;
+	
 	pgDb::insertUserOrgRelation($_SESSION['uidpk'], $_SESSION['orgId'], $_SESSION['grantorId']);
-	$row3 = pg_fetch_array(pgDb::getOrganizationById($_SESSION['orgId']));
-	$orgName = $row3['name'];
+	
+	pgDb::insertUserGroupRelation($_SESSION['uidpk'], $_SESSION['groupId']);
+	
 	$isAuthenticated = true;
 		
 	$row4 = pg_fetch_row(pgDb::forumEmailExists($email));
@@ -114,6 +134,9 @@ if ($validInvitation){
 		}
 		
 		$_SESSION['groups'] = pgDb::getUserGroupsByUsername($_SESSION['username']);
+		unset($_SESSION['groupId']);
+		unset($_SESSION['groupName']);
+		unset($_SESSION['grantorId']);
 
 		header("location:../view/nexus.php?thisPage=profile");
 		exit(0);

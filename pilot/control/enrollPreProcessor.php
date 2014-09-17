@@ -21,7 +21,6 @@ if(isset($_SESSION['inviteId'])) {
 	
 } else if(isset($_GET['invitation'])) {
 	
-	// TODO: check that none of these characters would be valid in a php-generated uuid
 	$inviteId = Util::strip($_GET['invitation']);
 	if(strlen($inviteId) == 36) {
 		if (pgDb::checkValidInvitation($inviteId)) {
@@ -36,17 +35,17 @@ if ($validInvitation) {
 	$cursor1 = pgDb::getInvitationByUuid($_SESSION['inviteId']);
 	$row1 = pg_fetch_array($cursor1);
 	$_SESSION['networkId'] = $row1['networkid'];
-	$_SESSION['orgId'] = $row1['orgid'];
+	//$_SESSION['orgId'] = $row1['orgid'];
 	$_SESSION['grantorId'] = $row1['grantorid'];
+	$_SESSION['groupId'] = $row1['groupid'];
 
 	$cursor2 = pgDb::getOrganizationById($_SESSION['networkId']);
 	$row2 = pg_fetch_array($cursor2);
 	$_SESSION['networkName'] = $row2['name'];
 	
-	$cursor3 = pgDb::getOrganizationById($_SESSION['orgId']);
-	$row3 = pg_fetch_array($cursor3);
-	$_SESSION['orgName'] = $row3['name'];
-
+	$cursor4 = pgDb::getGroupById($_SESSION['groupId']);
+	$row4 = pg_fetch_array($cursor4);
+	$_SESSION['groupName'] = $row4['name'];
 	
 } else {
 	header("location:login.php");

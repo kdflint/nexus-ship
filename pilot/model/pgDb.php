@@ -40,7 +40,7 @@ class pgDb {
 	}
 
 	public static function getInvitationByUuid($uuid) {
-		$query = "select network_fk as networkid, organization_fk as orgid, issuer_fk as grantorid, type, role_fk as role from invitation where uuid=$1 order by create_dttm desc limit 1";
+		$query = "select network_fk as networkid, organization_fk as orgid, issuer_fk as grantorid, type, role_fk as role, group_fk as groupid from invitation where uuid=$1 order by create_dttm desc limit 1";
 		return pgDb::psExecute($query, array($uuid));
 	}
 
@@ -64,6 +64,11 @@ class pgDb {
 		$query = "select exists (select true from forum_user where name=$1)";
 		return pgDb::psExecute($query, array($username));
 	}
+	
+	public static function orgNameExists($orgName) {
+		$query = "select exists (select true from organization where name = $1)";
+		return pgDb::psExecute($query, array($orgName));
+	}
 
 	public static function orgTopicExists($orgId, $topics) {
 		$query = "select exists (select true from organization_topic where organization_fk=$1 and topic_fk in ($2))";
@@ -85,6 +90,12 @@ class pgDb {
 			$query = "insert into organization_organization (organization_from_fk, organization_to_fk, relationship) values ($1, $2, $3)";
 			return pgDb::psExecute($query, array($from, $to, $relation));		
 	}
+	
+	public static function insertPendingOrganization($orgName) {
+		$query = "insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ($1, now(), null, '3', '') returning id";
+		return pgDb::psExecute($query, array($orgName));	
+	}
+		
 
 	public static function insertActiveUser($uuid, $username, $fname, $lname, $email, $password) {
 			$query = "insert into public.user (uuid, username, fname, lname, email, status_fk, create_dttm, activate_dttm) values ($1, $2, $3, $4, $5, '1', now(), now()) returning id";
@@ -115,6 +126,11 @@ class pgDb {
 			// TODO: add active check?
 			$query = "insert into user_organization (user_fk, organization_fk, grantor_fk, role_fk, create_dttm) values ($1, $2, $3, '1', now()) returning id";
 			return pgDb::psExecute($query, array($userId, $orgId, $grantorId));		
+	}
+	
+	public static function insertUserGroupRelation($userId, $groupId) {
+			$query = "insert into user_group (user_fk, group_fk, create_dttm) values ($1, $2, now())";
+			return pgDb::psExecute($query, array($userId, $groupId));		
 	}
 
 	public static function getUserOrgRelationsByUserId($userId) {
@@ -232,6 +248,16 @@ class pgDb {
 	public static function getOrganizationById($orgId) {
 		$query = "select name, type, structure, status_fk as status from organization where id = $1";
 		return pgDb::psExecute($query, array($orgId));
+	}
+	
+	public static function getOrganizationByName($orgName) {
+		$query = "select id, type, structure, status_fk as status from organization where name = $1";
+		return pgDb::psExecute($query, array($orgName));
+	}
+
+	public static function getGroupById($groupId) {
+		$query = "select id, name from group where id = $1";
+		return pgDb::psExecute($query, array($groupId));
 	}
 	
 	public static function setLoginByIp($ip, $userId) {
