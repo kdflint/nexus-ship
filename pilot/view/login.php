@@ -1,5 +1,8 @@
 <? 
 session_start();
+
+include("../model/pgDb.php");
+
 $error = "";
 
 if(isset($_GET['logout'])) {
@@ -19,7 +22,12 @@ if(isset($_GET['error'])) {
 	$error = "You have signed out succesfully.";
 }
 
+$cursor = pgDb::getOrganizationById('18');
+$row = pg_fetch_array($cursor);
+$logo = $row['logo'];
+
 ?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <html>
 	
@@ -33,7 +41,8 @@ if(isset($_GET['error'])) {
   
   <body>
     <div class="container">
-    	<img style="float:left;vertical-align:top;margin:20px;" src="http://chicagofaithandhealth.org/imgs/logo.png" height="88" width="365" border="0" alt="Logo: The Center for Faith and Community Health Transformations"/>
+    	<!--<img style="float:left;vertical-align:top;margin:20px;" src="http://chicagofaithandhealth.org/imgs/logo.png" height="88" width="365" border="0" alt="Logo: The Center for Faith and Community Health Transformations"/>-->
+   		<img style="float:left;vertical-align:top;margin:20px;" <? echo $logo; ?>  border="0" alt=""/>
    		<p style="text-align:right;color:#4b5b6e;font-size:34px;margin-right:20px;"><b>Nexus</b><br/>
    		<i><span style="text-align:right;color:#4b5b6e;font-size:16px;margin-right:20px;">Building communities that build communities</span></i></p>
 

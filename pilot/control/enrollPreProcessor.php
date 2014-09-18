@@ -9,18 +9,9 @@ include("../control/util.php");
 $inviteId = $networkId = "";
 $validInvitation = false;
 
-//session_destroy();
-
 $_SESSION['networkName'] = $_SESSION['orgName'] = $_SESSION['networkId'] = $_SESSION['orgId'] = "";
 
-// NOTE: instead, for validation reload, should put the invite back into GET parm so every page load starts in same state
-// destroy session at the top of every page load. 
-if(isset($_SESSION['inviteId'])) {
-	// This is possible if we are reloading page on validation error
-	$validInvitation = true;
-	
-} else if(isset($_GET['invitation'])) {
-	
+if(isset($_GET['invitation'])) {
 	$inviteId = Util::strip($_GET['invitation']);
 	if(strlen($inviteId) == 36) {
 		if (pgDb::checkValidInvitation($inviteId)) {
@@ -42,7 +33,8 @@ if ($validInvitation) {
 	$cursor2 = pgDb::getOrganizationById($_SESSION['networkId']);
 	$row2 = pg_fetch_array($cursor2);
 	$_SESSION['networkName'] = $row2['name'];
-	
+	$_SESSION['logo'] = $row2['logo'];
+		
 	$cursor4 = pgDb::getGroupById($_SESSION['groupId']);
 	$row4 = pg_fetch_array($cursor4);
 	$_SESSION['groupName'] = $row4['name'];

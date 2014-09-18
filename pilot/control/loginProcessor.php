@@ -22,6 +22,8 @@ $_SESSION['networkId'] =
 $_SESSION['inviteId'] =
 $_SESSION['username'] =
 $_SESSION['password'] =
+$_SESSION['roomLink'] = 
+$_SESSION['logo'] = 
 "";
 
 $_SESSION['groups'] = array();
@@ -43,10 +45,12 @@ if($isAuthenticated){
   	// TODO: Make this dynamic once method decisions network id correctly (see pgDb.php)
   	$_SESSION['networkId'] = '18'; // $row['networkid'];
   	$_SESSION['password'] = $row['password'];
+  	$_SESSION['roomLink'] = $row['link'];
+  	$_SESSION['logo'] = $row['logo'];
 	} 
 	
 	$_SESSION['groups'] = pgDb::getUserGroupsByUsername($_SESSION['username']);
-	
+
 	Util::setLogin($_SESSION['uidpk']);
 	
 	header("location:../view/nexus.php?thisPage=profile");

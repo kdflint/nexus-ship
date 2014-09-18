@@ -6,9 +6,20 @@
  		<tr><td>Meeting ID:</td><td>600 66 9366#</td></tr>
  		<tr><td>Host PIN:</td><td>2615#</td></tr>
 	</table>
-	<p><a class="bigbutton" href="http://ec2-54-235-156-5.compute-1.amazonaws.com/openmeetings/swf?invitationHash=fb3c6acd0e5c8655cd55eda4b74b4fe1" target="_blank" >
+	<p>Busy signal? Try (559) 546-1400</p>
+	<p><i>Toll charges will apply in accordance with your phone plan.</i></p>
+		<!--<p><a class="bigbutton" href="http://conference.northbridgetech.org/openmeetings/swf?invitationHash=fb3c6acd0e5c8655cd55eda4b74b4fe1" target="_blank" >-->
+		<? if (isset($_SESSION['roomLink']) && strlen($_SESSION['roomLink']) > 1) {
+				$formattedLink = "http://conference.northbridgetech.org" . $_SESSION['roomLink'];
+				$displayText = "Your Virtual Room Pass";
+			} else {
+				$formattedLink = "#";
+				$displayText = "Web Room Not Available";
+			}
+		?>
+		<p><a class="bigbutton" href="<? echo $formattedLink; ?>" target="_blank" >
  		&nbsp;<br/>
- 		Your Virtual Room Pass
+ 		<? echo $displayText; ?>
  	</a></p>
 	</div>
 </div>

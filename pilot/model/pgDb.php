@@ -40,7 +40,7 @@ class pgDb {
 	}
 
 	public static function getInvitationByUuid($uuid) {
-		$query = "select network_fk as networkid, organization_fk as orgid, issuer_fk as grantorid, type, role_fk as role, group_fk as groupid from invitation where uuid=$1 order by create_dttm desc limit 1";
+		$query = "select network_fk as networkid, organization_fk as orgid, issuer_fk as grantorid, type as type, role_fk as role, group_fk as groupid from invitation where uuid=$1 order by create_dttm desc limit 1";
 		return pgDb::psExecute($query, array($uuid));
 	}
 
@@ -66,7 +66,7 @@ class pgDb {
 	}
 	
 	public static function orgNameExists($orgName) {
-		$query = "select exists (select true from organization where name = $1)";
+		$query = "select exists (select true from organization where lower(name) = lower($1))";
 		return pgDb::psExecute($query, array($orgName));
 	}
 
@@ -95,14 +95,18 @@ class pgDb {
 		$query = "insert into organization (name, create_dttm, activate_dttm, status_fk, type) values ($1, now(), null, '3', '') returning id";
 		return pgDb::psExecute($query, array($orgName));	
 	}
-		
 
 	public static function insertActiveUser($uuid, $username, $fname, $lname, $email, $password) {
-			$query = "insert into public.user (uuid, username, fname, lname, email, status_fk, create_dttm, activate_dttm) values ($1, $2, $3, $4, $5, '1', now(), now()) returning id";
-			$result = pgDb::psExecute($query, array($uuid, $username, $fname, $lname, $email));		
+			$query = "insert into public.user (uuid, username, fname, lname, email, status_fk, create_dttm, activate_dttm, enable_email) values ($1, $2, $3, $4, $5, '1', now(), now(), $6) returning id";
+			$result = pgDb::psExecute($query, array($uuid, $username, $fname, $lname, $email, "true"));		
 			$row = pg_fetch_row($result);
 			Util::storeSecurePasswordImplA($password, $row[0]);
 			return $row[0];
+	}
+	
+	public static function insertRoomLink($userId, $link) {
+		$query = "update public.user set conference_link = $2 where id = $1";
+		return pgDb::psExecute($query, array($userId, $link));
 	}
 	
 	public static function setSecurePasswordImplA($userId, $securePassword, $salt) {
@@ -176,7 +180,7 @@ class pgDb {
 		// TODO: fix up network id determination (parent, god, etc)
 		// TODO - this will fail if user in in > 1 group
 		$query = "
-			select u.id as id, u.fname as fname, u.lname as lname, u.password as password, o1.name as affiliation, o2.name as network, o2.id as networkid, uo.role_fk as role
+			select u.id as id, u.fname as fname, u.lname as lname, u.password as password, u.conference_link as link, o1.name as affiliation, o2.name as network, o2.id as networkid, o2.logo as logo, uo.role_fk as role
 			from public.user u, user_organization uo, organization o1, organization o2, organization_organization oo
 			where u.username = $1
 			and uo.user_fk = u.id
@@ -187,7 +191,7 @@ class pgDb {
 			";
 		return pgDb::psExecute($query, array($uid));	
 	}
-	
+		
 	public static function getUserGroupsByUsername($uid) {
 		$query = "select g.id as id, g.name as name from public.group g, public.user u, user_group ug where u.username = $1 and ug.user_fk = u.id and ug.group_fk = g.id";
 		$cursor = pgDb::psExecute($query, array($uid));
@@ -246,17 +250,17 @@ class pgDb {
 	}
 	
 	public static function getOrganizationById($orgId) {
-		$query = "select name, type, structure, status_fk as status from organization where id = $1";
+		$query = "select name, type, structure, logo, status_fk as status from organization where id = $1";
 		return pgDb::psExecute($query, array($orgId));
 	}
 	
 	public static function getOrganizationByName($orgName) {
-		$query = "select id, type, structure, status_fk as status from organization where name = $1";
+		$query = "select id, type, structure, status_fk as status from organization where lower(name) = lower($1)";
 		return pgDb::psExecute($query, array($orgName));
 	}
 
 	public static function getGroupById($groupId) {
-		$query = "select id, name from group where id = $1";
+		$query = "select id, name from public.group where id = $1";
 		return pgDb::psExecute($query, array($groupId));
 	}
 	
