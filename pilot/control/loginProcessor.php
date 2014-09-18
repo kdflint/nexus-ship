@@ -5,8 +5,8 @@ include("util.php");
 
 session_start();
 
-error_reporting(E_ALL);
-ini_set( 'display_errors','1'); 
+//error_reporting(E_ALL);
+//ini_set( 'display_errors','1'); 
 
 $uid = $_POST['uid'];
 $password = $_POST['password'];
@@ -18,12 +18,15 @@ $_SESSION['forumSessionError'] =
 $_SESSION['orgName'] = 
 $_SESSION['networkName'] = 
 $_SESSION['orgId'] = 
-$_SESSION['grantorId'] = 
 $_SESSION['networkId'] = 
 $_SESSION['inviteId'] =
 $_SESSION['username'] =
 $_SESSION['password'] =
+$_SESSION['roomLink'] = 
+$_SESSION['logo'] = 
 "";
+
+$_SESSION['groups'] = array();
 
 $isAuthenticated = Util::authenticate($uid, $password);
 
@@ -32,6 +35,7 @@ if($isAuthenticated){
 	$_SESSION['username'] = $uid;
 	
 	$cursor = pgDb::getUserSessionByUsername($_SESSION['username']);
+
 	while ($row = pg_fetch_array($cursor)) {
 		$_SESSION['fname'] = $row['fname'];
   	$_SESSION['lname'] = $row['lname'];
@@ -41,7 +45,13 @@ if($isAuthenticated){
   	// TODO: Make this dynamic once method decisions network id correctly (see pgDb.php)
   	$_SESSION['networkId'] = '18'; // $row['networkid'];
   	$_SESSION['password'] = $row['password'];
+  	$_SESSION['roomLink'] = $row['link'];
+  	$_SESSION['logo'] = $row['logo'];
 	} 
+	
+	$_SESSION['groups'] = pgDb::getUserGroupsByUsername($_SESSION['username']);
+
+	Util::setLogin($_SESSION['uidpk']);
 	
 	header("location:../view/nexus.php?thisPage=profile");
 	exit(0);	

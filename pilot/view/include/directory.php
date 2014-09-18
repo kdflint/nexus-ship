@@ -1,12 +1,21 @@
+<?php
+
+include '../control/searchPreProcessor.php';
+
+?>
+
 <div class="topLeftQuad">
-	<p><a href="#">Search Your Network</a></p>
+
 	<form action="../control/searchProcessor.php" method="post">
 		<input type="hidden" name="action" value="search" />
+		<p><a href="#">Search</a>	</p>
 		<table cellpadding="5">
+			<tr><td>&nbsp;</td><td><input type="radio" name="scope" value="group" checked />Your groups
+		<input type="radio" name="scope" value="network" />Entire network </td></tr>
 			<tr><td><img src="image/mag-glass.jpg" width="25" height="25" /></td><td><input type="text" size="20" name="string" value=""/></td></tr>
 			<tr><td><i>and</i></td><td>
 				<select name="topic" style="width: 230px">    
-					<option value="0" selected>Health Topic is</option>	
+					<option value="0" selected>Specialty is</option>	
 					<!-- TODO: make this list dynamic by network -->
 					<option value="0" >------------</option>										
 					<option value="1">Access/Rights</option>
@@ -53,17 +62,27 @@
 				</select></td></tr>	
 							
 				<tr><td><i>and</i></td><td>
-				<select name="type" style="width: 230px" disabled>    
+				<select name="type" style="width: 230px">    
 					<option value="0" selected>Organization Type is</option>
 					<option value="0" >------------</option>
-					<option value="">Academic</option>
-					<option value="">Collaborative/Network</option>
-					<option value="">Community Organization</option>
-					<option value="">Faith Community/House of Worship</option>
-					<option value="">Government</option>
-					<option value="">Health Care Provider</option>
+					<option value="Academic">Academic</option>
+					<option value="Collaboration/Network">Collaboration/Network</option>
+					<option value="Community Organization">Community Organization</option>
+					<option value="Faith Community/House of Worship">Faith Community/House of Worship</option>
+					<option value="Government">Government</option>
+					<option value="Health Care Provider">Health Care Provider</option>
 				</select>
 			</td></tr>
+			
+			<!--
+				<tr><td><i>and</i></td><td>
+				<select name="type" style="width: 230px" disabled>    
+					<option value="0" selected>Group is</option>
+					<option value="0" >------------</option>
+					<option value="">Faith Based Research</option>
+				</select>
+			</td></tr>
+			-->
 				
 			<tr><td>&nbsp;</td><td><input type="submit" value="Search" style="float:right;"/></td></tr>
 		</table>
@@ -76,6 +95,7 @@
 
 	<?
 		$searchResultId = $detailResultId = $pageMode = "";
+		$pageMode = "default";
 		
   	if (isset($_GET['searchId']) && strlen($_GET['searchId']) == 36) {
 	  	$_SESSION['searchId'] =  $_GET['searchId'];
@@ -105,7 +125,7 @@
   	<ul>
 			<li<? if ($pageMode=="map") echo " id=\"currentpage\""; ?>><a href="nexus.php?thisPage=directory&mapId=0">Map</a></li>
 			<li<? if ($pageMode=="detail") echo " id=\"currentpage\""; ?>><a href="nexus.php?thisPage=directory<? echo $detailResultId; ?>">Detail</a></li>
-			<li<? if ($pageMode=="results") echo " id=\"currentpage\""; ?>><a href="nexus.php?thisPage=directory<? echo $searchResultId; ?>">Results</a></li>
+			<li<? if ($pageMode=="results" || $pageMode =="default") echo " id=\"currentpage\""; ?>><a href="nexus.php?thisPage=directory<? echo $searchResultId; ?>">Results</a></li>
 		</ul>
 	</div>
   
@@ -128,8 +148,11 @@
 			<? include("include/mapPlaceholder.php"); ?>
 		</div>
 		
-	<? } else { ?> 
+	<? } else { // show default search results, at this time equal to group directory for this user ?> 
 	
+		<div style="font-size:12px;">
+			<? include("include/tmpResults/" . $_SESSION['defaultSearchId'] . ".php"); ?>
+		</div>	
 	
 	<? } ?>
 

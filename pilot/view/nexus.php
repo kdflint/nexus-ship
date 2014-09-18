@@ -1,9 +1,17 @@
 <?
 
-error_reporting(E_ALL);
-ini_set( 'display_errors','1'); 
+//error_reporting(E_ALL);
+//ini_set( 'display_errors','1'); 
 
 session_start();
+
+require_once '../control/xmpp-prebind-php/lib/XmppPrebind.php';
+require_once '../control/util.php';
+
+if (!Util::isSessionValid()) {
+	header("location:login.php?logout=true");
+	exit(0);	
+}
 
 // select content to show based on request variable, which is supplied in navigation.php
 if (isset($_REQUEST['thisPage'])) {
@@ -13,7 +21,7 @@ if (isset($_REQUEST['thisPage'])) {
 }
 
 
-require_once '../control/xmpp-prebind-php/lib/XmppPrebind.php';
+
 
 /**
  * Comment here for explanation of the options.
@@ -72,19 +80,42 @@ if(curl_exec($ch) === false) 	{
     <title>Nexus Home</title>
   </head>
   
+  <!-- For Formilla feedback form -->
+  <script type="text/javascript">
+    (function () {
+        var head = document.getElementsByTagName("head").item(0);
+        var script = document.createElement("script");
+        var src = (document.location.protocol == 'https:' ? 'https://www.formilla.com/scripts/feedback.js' : 'http://www.formilla.com/scripts/feedback.js');
+        script.setAttribute("type", "text/javascript"); script.setAttribute("src", src); script.setAttribute("async", true);
+        var complete = false;
+
+        script.onload = script.onreadystatechange = function () {
+            if (!complete && (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete')) {
+                complete = true;
+                Formilla.guid = 'd94fe060-648d-45c5-9698-2e43d5817798';
+                Formilla.loadFormillaChatButton();
+            }
+        };
+
+        head.appendChild(script);
+    })();
+  </script>
+                
+  
   <body>
     <div class="container">
     	
     <table width="100%">
     	<tr>
     	<td>
-    		<img style="float:left;vertical-align:top;margin:20px;" src="http://chicagofaithandhealth.org/imgs/logo.png" height="88" width="365" border="0" alt=""/>
+    		<!--<img style="float:left;vertical-align:top;margin:20px;" src="http://chicagofaithandhealth.org/imgs/logo.png" height="88" width="365" border="0" alt=""/>-->
+    		<img style="float:left;vertical-align:top;margin:20px;" <? echo $_SESSION['logo']; ?> border="0" alt=""/>
     	</td>
     	<td>
     		<p style="text-align:right;color:#c9c9a7;font-size:18px;margin:20px;"><b><? echo($_SESSION['orgName']); ?></b></p>
     		<p style="text-align:right;margin:20px;color:#4b5b6e"><b>Hello <? echo($_SESSION['fname']); ?></b><br/>
     		<!-- <a id="chatControlLink" href="javascript:toggleChat('chatControl')">Chat</a> |  -->
-				<!--<a href="#">Help</a> | --><a href="login.php?logout=true">Logout</a></p>
+				<a href="javascript:void(0)" onclick="if(typeof Formilla != 'undefined'){Formilla.initFormillaChat();}">Problem?</a> | <a href="../control/resetForumSession.php">Support Forum</a> | <a href="login.php?logout=true">Logout</a></p>
 			</td>
     	</tr>
     </table>	

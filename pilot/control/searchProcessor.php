@@ -1,7 +1,7 @@
 <?php
 
-error_reporting(E_ALL);
-ini_set( 'display_errors','1'); 
+//error_reporting(E_ALL);
+//ini_set( 'display_errors','1'); 
 
 session_start();
 
@@ -9,18 +9,34 @@ include("../model/pgDb.php");
 include("util.php");
 
 $string = $orgId = $action = "";
-$filter = 0;
+$filters = array();
 
 if (isset($_POST['string'])) {
 	$string = $_POST['string'];
 }
 
+// What is this POST index coming from??
 if (isset($_POST['id']) && strlen($_POST['id']) > 0) {
 	$orgId = $_POST['id'];
 }
 
 if (isset($_POST['topic']) && $_POST['topic'] > 0) {
-	$filter = $_POST['topic'];
+	$filters['topic'] = $_POST['topic'];
+}
+
+if (isset($_POST['scope']) && !strcmp($_POST['scope'], "group")) {
+	// TODO - make this a dynamic lookup of all the group ids (already in session just loop)
+	$cursor = pgDb::getOrgsByGroupId("1");
+	$counter = 0;
+	while ($row = pg_fetch_array($cursor)) {		
+		$filters['org'][$counter] = $row['oid'];
+		$counter++;
+	}
+}
+
+// TODO - allow for multiples on these dropdowns
+if (isset($_POST['type']) && strcmp($_POST['type'], "0")) {
+	$filters['type'] = $_POST['type'];
 }
 
 if (isset($_POST['action']) && strlen($_POST['action']) > 0) {
@@ -28,7 +44,7 @@ if (isset($_POST['action']) && strlen($_POST['action']) > 0) {
 }
 
 if (!strcmp($action, "search")) {
-	$results = doNewSearch($string, $filter, $_SESSION['networkId']);
+	$results = doNewSearch($string, $filters, $_SESSION['networkId']);
 	$searchId = formatNewSearchResults($results);
 	header("location:../view/nexus.php?thisPage=directory&searchId=" . $searchId);
 	exit(0);
@@ -50,14 +66,12 @@ if (!strcmp($action, "search")) {
 	
 }
 
-function doNewSearch($inputString, $filter, $networkId) {
+function doNewSearch($inputString, $filters, $networkId) {
 	
 	$results = array();
-	//$terms = trim($inputString);
-	$terms = trim(Util::strip($inputString));
+	$terms = trim(Util::strip2($inputString));
 		
 	// TODO: Escape apostrophes instead of stripping
-	// TODO: allow quote marks
 	// TODO: solve for 2 orgs with same name
 	
 	// If we have free search terms, process the first three.
@@ -76,7 +90,7 @@ function doNewSearch($inputString, $filter, $networkId) {
 				$counter++;
 				continue;
 			}
-			
+						
 			// TODO: Seriously?? Seems that iterating a cursor dismantles a cursor... Perhaps must return a standard data type from pgDb so I can make copies?? 
 			$cursor1 = pgDb::freeSearch($searchTerms[$counter], $networkId);
 			$cursor2 = pgDb::freeSearch($searchTerms[$counter], $networkId);
@@ -84,6 +98,7 @@ function doNewSearch($inputString, $filter, $networkId) {
 			$cursor4 = pgDb::freeSearch($searchTerms[$counter], $networkId);
 			$cursor5 = pgDb::freeSearch($searchTerms[$counter], $networkId);
 			$cursor6 = pgDb::freeSearch($searchTerms[$counter], $networkId);
+			$cursor7 = pgDb::freeSearch($searchTerms[$counter], $networkId);
 			
 			while ($pass1 = pg_fetch_array($cursor1)) { 
 				if (!strcmp($pass1['type'], "Organization")) {
@@ -95,9 +110,10 @@ function doNewSearch($inputString, $filter, $networkId) {
 							"People" =>  array(),
 							"Contact" => array(),
 							"Language" => array(),
+							"Topic" => array(),
 							"Location" => array(),
 							"OrgId" => $pass1['id']
-					);
+						);
 					}
 					
 				}
@@ -127,6 +143,7 @@ function doNewSearch($inputString, $filter, $networkId) {
 								"People" => array($pass2['id'] => $pass2['name']),
 						   	"Contact" => array(),
 								"Language" => array(),
+								"Topic" => array(),
 								"Location" => array(),
 								"OrgId" => $inner2['id']
 							);
@@ -149,6 +166,7 @@ function doNewSearch($inputString, $filter, $networkId) {
 								"People" => array(),
 						  	"Contact" => array($pass5['name']),
 								"Language" => array(),
+								"Topic" => array(),
 								"Location" => array(),
 								"OrgId" => $inner5['id']
 							);
@@ -171,6 +189,7 @@ function doNewSearch($inputString, $filter, $networkId) {
 								"People" => array(),
 								"Contact" => array(),
 								"Language" => array($pass3['name']),
+								"Topic" => array(),
 						  	"Location" => array(),
 								"OrgId" => $inner3['id']
 							);
@@ -193,6 +212,7 @@ function doNewSearch($inputString, $filter, $networkId) {
 								"People" => array(),
 								"Contact" => array(),
 								"Language" => array(),
+								"Topic" => array(),
 								"Location" => array(),
 								"OrgId" => $inner4['id']
 							);
@@ -200,7 +220,30 @@ function doNewSearch($inputString, $filter, $networkId) {
 					}
 				}
 			}
-		
+			
+			while ($pass7 = pg_fetch_array($cursor7)) { 
+				if (!strcmp($pass7['type'], "Topic")) {
+					$innerCursor7 = pgDb::getOrgByTopicId($pass7['id']);
+					while ($inner7 = pg_fetch_array($innerCursor7)) {
+						if (array_key_exists($inner7['name'], $results)) {
+							if (!in_array($pass7['name'], $results[$inner7['name']]["Topic"])) {
+								array_push($results[$inner7['name']]["Topic"], $pass7['name']);
+							}
+						} else {
+							$results[$inner7['name']] = array(
+								"Programs" => array(),
+								"People" => array(),
+						  	"Contact" => array(),
+								"Language" => array(),
+								"Topic" => array($pass7['name']),
+								"Location" => array(),
+								"OrgId" => $inner7['id']
+							);
+						}
+					}
+				}
+			}		
+			
 			while ($pass6 = pg_fetch_array($cursor6)) { 
 				if (!strcmp($pass6['type'], "Location")) {
 					$innerCursor6 = pgDb::getOrgByLocationId($pass6['id']);
@@ -215,6 +258,7 @@ function doNewSearch($inputString, $filter, $networkId) {
 								"People" => array(),
 						  	"Contact" => array(),
 								"Language" => array(),
+								"Topic" => array(),
 								"Location" => array($pass6['name']),
 								"OrgId" => $inner6['id']
 							);
@@ -226,31 +270,88 @@ function doNewSearch($inputString, $filter, $networkId) {
 			$counter++;
 		}
 			
-		// On top of the free search term results, layer the filter if we have one
-		if (isset($filter) && $filter > 1) {
+		// On top of the free search term results, layer the filters if we have them
+		if (isset($filters['org']) && count($filters['org']) > 0) {
 			foreach ($results as $key=>$val) {
-				$row = pg_fetch_row(pgDb::orgTopicExists($val['OrgId'], $filter));
+				if (!in_array($val['OrgId'], $filters['org'])) {
+					unset($results[$key]);
+				}
+			}
+		}
+		
+		if (isset($filters['topic']) && $filters['topic'] > 0) {
+			foreach ($results as $key=>$val) {
+				$row = pg_fetch_row(pgDb::orgTopicExists($val['OrgId'], $filters['topic']));
 				$topicMatch = $row[0];
 				if (strcmp($topicMatch, "t")) {
 					unset($results[$key]);
 				}
 			}	
 		}
-	
-	// We get here if there are no free search terms. So, run a simple filter search if one exists
-	} else if (isset($filter) && $filter > 0) {
-		$cursor = pgDb::getOrgByTopicIds($filter, $networkId);
-		while ($row = pg_fetch_array($cursor)) {
-			$results[$row['name']] = array(
-				"Programs" => array(),
-				"People" =>  array(),
-				"Contact" => array(),
-				"Language" => array(),
-				"Location" => array(),
-				"OrgId" => $row['id']
-			);
+
+		if (isset($filters['type']) && strcmp($filters['type'], "0")) {
+			foreach ($results as $key=>$val) {
+				$row = pg_fetch_row(pgDb::orgTypeExists($val['OrgId'], $filters['type']));
+				$typeMatch = $row[0];
+				if (strcmp($typeMatch, "t")) {
+					unset($results[$key]);
+				}
+			}	
 		}
-	
+			
+	// We get here if there are no free search terms. So, run filters against the entire network
+	} else if (isset($filters) && count($filters) > 0) {
+		
+		$cursor = pgDb::getOrgsByNetwork($networkId);
+		
+		while ($pass = pg_fetch_array($cursor)) { 
+			if (!strcmp($pass['type'], "Organization")) {
+				if (array_key_exists($pass['name'], $results)) {
+					// do nothing - we already have an index for this org in the data set
+				} else {
+					$results[$pass['name']] = array(
+						"Programs" => array(),
+						"People" =>  array(),
+						"Contact" => array(),
+						"Language" => array(),
+						"Topic" => array(),
+						"Location" => array(),
+						"OrgId" => $pass['id']
+					);
+				}
+			}
+		}
+		
+		// TODO - extract all this into a function - it is copied code
+		if (isset($filters['org']) && count($filters['org']) > 0) {
+			foreach ($results as $key=>$val) {
+				if (!in_array($val['OrgId'], $filters['org'])) {
+					unset($results[$key]);
+				}
+			}
+		}
+			
+		if (isset($filters['topic']) && $filters['topic'] > 0) {
+			foreach ($results as $key=>$val) {
+				$row = pg_fetch_row(pgDb::orgTopicExists($val['OrgId'], $filters['topic']));
+				$topicMatch = $row[0];
+				if (strcmp($topicMatch, "t")) {
+					unset($results[$key]);
+				}
+			}	
+		}
+
+		if (isset($filters['type']) && strcmp($filters['type'], "0")) {
+			foreach ($results as $key=>$val) {
+				$row = pg_fetch_row(pgDb::orgTypeExists($val['OrgId'], $filters['type']));
+				$typeMatch = $row[0];
+				if (strcmp($typeMatch, "t")) {
+					unset($results[$key]);
+				}
+			}	
+		}
+		
+
 	} else {
 		// We get here if we had no free search terms or filter. 
 	}

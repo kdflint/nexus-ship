@@ -25,12 +25,12 @@ if (!strcmp($email_status, "checked")) {
 			<table cellpadding="5">
 				<tr><td>Username:</td><td><? echo($_SESSION['username']); ?></td></tr>
  			<tr><td>First:</td><td>
-	 			<input type="text" size="<? echo(strlen($_SESSION['fname'])); ?>" name="fname" value="<? echo($_SESSION['fname']);?>"/>
+	 			<input type="text" size="22" name="fname" value="<? echo($_SESSION['fname']);?>"/>
 	 		</td></tr>
  			<tr><td>Last:</td><td>	 		
- 				<input type="text" size="<? echo(strlen($_SESSION['lname'])); ?>" name="lname" value="<? echo($_SESSION['lname']); ?>"/>
+ 				<input type="text" size="22" name="lname" value="<? echo($_SESSION['lname']); ?>"/>
  			</td></tr>
- 			<tr><td>Password:</td><td><input type="text" size="" name="password" value="<? echo($_SESSION['password']); ?>"/></td></tr>
+ 			<tr><td>Change Password:</td><td><input type="password" size="22" name="password" value="**********" disabled/></td></tr>
 		</table>
 	</div>
 
@@ -68,13 +68,23 @@ if (!strcmp($email_status, "checked")) {
 	
 
 	<p style="margin-top:20px;"><b>Your Network</b><p>
+	<!-- TODO - $count-1 is there because of a bug -->
 	<p style="margin-left:20px;margin-top:5px;"><? echo $_SESSION['networkName']; ?> (<? echo $count-1; ?> affiliates)</br><p>
-
+		
+	<p style="margin-top:20px;"><b>Your Groups</b><p>
+	<p style="margin-left:20px;margin-top:5px;">
+	<? 
+		// TODO - won't work well with > 1 groups
+		foreach ($_SESSION['groups'] as $key=>$val) {
+    			echo $val . "</br>";
+    }
+  ?> 
+  </br><p>
 	
 	<p style="margin-top:20px;"><b>Your Collaborations</b><p>
 	<div style="margin-left:20px;margin-top:5px;font-size:12px;border: 1px solid #4b5b6e;border-radius:15px;padding:10px;">
 		<img src="image/comingSoon.jpg" width="57" height="57" style="float:right;"/>
 		<p><b>For authorized Nexus pilot users</b></p>
-		<p>Collaboration tracking and workgroups will be available <b>October 2014</b></p>
+		<p>Collaboration tracking will be available <b>November 2014</b></p>
 	</div>
 </div> <!-- rightColumn -->
