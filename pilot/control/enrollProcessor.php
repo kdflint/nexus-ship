@@ -119,7 +119,7 @@ if ($validInvitation){
 	}
 	
 	// Register user with conference room
-	$_SESSION['roomLink'] = "/openmeetings/swf?invitationHash=" . conferenceRegistration($fname);
+	$_SESSION['roomLink'] = "/openmeetings/swf?invitationHash=" . conferenceRegistration($fname, $wc_roomNumber);
 	pgDb::insertRoomLink($_SESSION['uidpk'], $_SESSION['roomLink']);
 		
 	if($isAuthenticated){
@@ -153,15 +153,13 @@ if ($validInvitation){
 	header("location:../view/login.php");
 	exit(0);	
 }
-
-
 	
 function returnToEnrollWithError($errorMessage) {
 	header("location:../view/enroll.php?invitation=" . $_SESSION['inviteId'] . "&error=" . $errorMessage);
 	exit(0);
 }
 
-function conferenceRegistration($name) {
+function conferenceRegistration($name, $room) {
 	$serviceDomain = "http://ec2-54-235-156-5.compute-1.amazonaws.com/openmeetings/services";
 	$adminUserName = "kdflint";
 	$adminUserPass = "0cnbctc!";
@@ -170,26 +168,21 @@ function conferenceRegistration($name) {
 	
 	$sessionCall = $serviceDomain . "/UserService/getSession";
 	$sessionResult = file_get_contents($sessionCall);       
-	//echo $sessionResult . ":";
 	preg_match('/:session_id>(.*?)</', $sessionResult, $matches);
 	$sessionId = $matches[1];
 	
 	$loginCall = $serviceDomain . "/UserService/loginUser?SID=" . $sessionId . "&username=" . $adminUserName . "&userpass=" . $adminUserPass;
-	//echo $loginCall . ":";
 	$loginResult = file_get_contents($loginCall);
 	preg_match('/:return>(.*?)</', $loginResult, $matches);
 	$loginResult = $matches[1];
-	//echo $loginResult . ":";
 	
 	if (!strcmp($loginResult, "1")) {
 		// Must make this call using a session id that is tied to an authenticated user
-		$inviteCall = $serviceDomain . "/RoomService/getInvitationHash?SID=" . $sessionId . "&username=" . $name . "&room_id=2&isPasswordProtected=0&invitationpass=&valid=1&validFromDate=&validFromTime=&validToDate=&validToTime=";
-		//echo $inviteCall . ":";
+		$inviteCall = $serviceDomain . "/RoomService/getInvitationHash?SID=" . $sessionId . "&username=" . $name . "&room_id=" . $room . "&isPasswordProtected=0&invitationpass=&valid=1&validFromDate=&validFromTime=&validToDate=&validToTime=";
 		$xmlInvite = file_get_contents($inviteCall);
 		preg_match('/:return>(.*?)</', $xmlInvite, $matches);
 		$invitationHash = $matches[1];
-	} 
-	//echo $invitationHash; exit(0);
+}
 	
 	if ((strcmp($loginResult, "1") != 0) || strlen($invitationHash) != 32) {
 		// We think something went wrong generating the invitation link. Handle this manually.

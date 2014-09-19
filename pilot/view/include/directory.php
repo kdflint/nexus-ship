@@ -150,7 +150,7 @@ include '../control/searchPreProcessor.php';
 		
 	<? } else { // show default search results, at this time equal to group directory for this user ?> 
 	
-		<div style="font-size:12px;">
+		<div style="font-size:12px;height:460px;overflow:auto;">
 			<? include("include/tmpResults/" . $_SESSION['defaultSearchId'] . ".php"); ?>
 		</div>	
 	
