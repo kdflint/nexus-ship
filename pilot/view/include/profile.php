@@ -63,9 +63,10 @@ if (!strcmp($email_status, "checked")) {
 
 <div class="rightColumnPlain">
 
+	<!--
 	<p><b>Your Organizations</b><p>
 	<p style="margin-left:20px;margin-top:5px;"><? echo $_SESSION['orgName'];?></p>
-	
+	-->
 
 	<p style="margin-top:20px;"><b>Your Network</b><p>
 	<!-- TODO - $count-1 is there because of a bug -->
