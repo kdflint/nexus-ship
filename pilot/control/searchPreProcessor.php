@@ -14,13 +14,13 @@ if (!$filemtime or (time() - $filemtime >= $cache_life)){
 	$file = fopen("../view/include/tmpResults/" . $fileId . ".php","w") or die("Unable to open file!");
 	
 	fwrite($file, "<table cellpadding=\"2\">");	
-	fwrite($file, "<tr><td colspan=\"3\"><a href=#>Workgroup: " . $_SESSION['groups']['1'] . "</a></td></tr>");	
+	fwrite($file, "<tr><td colspan=\"3\" valign=\"top\"><a href=#>Workgroup: " . $_SESSION['groups']['1'] . "</a></td></tr>");	
 	while ($row = pg_fetch_array($cursor)) {
 		$disabled = "disabled";
 		if (pgDb::isUserMessageEnabled($row['id'])) {
 			$disabled = "";
 		}
-		fwrite($file, "<tr><td><input type=\"checkbox\" name=\"names[]\" value=\"" . $row['id'] . "::" . $row['fname'] . " " . $row['lname'] . "\" onchange=\"messageToFill()\" " . $disabled . " \></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" . $row['lname'] . ",&nbsp;" . $row['fname'] . "</td><td>" . $row['oname'] . "</td></tr>\n");
+		fwrite($file, "<tr><td valign=\"top\"><input type=\"checkbox\" name=\"names[]\" value=\"" . $row['id'] . "::" . $row['fname'] . " " . $row['lname'] . "\" onchange=\"messageToFill()\" " . $disabled . " \></td><td valign=\"top\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" . $row['lname'] . ",&nbsp;" . $row['fname'] . "</td><td>" . $row['oname'] . "</td></tr>\n");
 	
 	}	
 	fwrite($file, "</table>");
