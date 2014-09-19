@@ -69,6 +69,11 @@ class pgDb {
 		$query = "select exists (select true from organization where lower(name) = lower($1))";
 		return pgDb::psExecute($query, array($orgName));
 	}
+	
+	public static function userNameExists($name) {
+		$query = "select exists (select true from public.user where lower(username) = lower($1))";
+		return pgDb::psExecute($query, array($name));
+	}
 
 	public static function orgTopicExists($orgId, $topics) {
 		$query = "select exists (select true from organization_topic where organization_fk=$1 and topic_fk in ($2))";

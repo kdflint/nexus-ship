@@ -35,6 +35,12 @@ if (!isset($_POST['orgname']) || strlen($_POST['orgname']) < 1) {
 	returnToEnrollWithError("Please enter the name of the organization you represent.");
 }
 
+$row1 = pg_fetch_row(pgDb::userNameExists($_POST['userid']));
+$exists = $row1[0];
+if (!strcmp($exists, "t")) {
+	returnToEnrollWithError("This username already exists. Please select a different username.");
+}
+
 // TODO: strategy for decon on this user input
 $uid = $_POST['userid'];
 $password = $_POST['password'];
