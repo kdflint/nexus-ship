@@ -41,7 +41,7 @@ $password = $_POST['password'];
 $fname = $_POST['fname'];
 $lname = $_POST['lname'];
 $email = $_POST['email'];
-$orgName = $_POST['orgname'];
+$orgName = strtr($_POST['orgname'], array("'" => '&apos;'));
 
 $validInvitation = $isAuthenticated = false;
 
