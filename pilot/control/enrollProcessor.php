@@ -86,6 +86,8 @@ if ($validInvitation){
 	pgDb::insertUserGroupRelation($_SESSION['uidpk'], $_SESSION['groupId']);
 	
 	$isAuthenticated = true;
+	
+	sendConfirmationEmail($email, $env_appRoot);
 		
 	$row4 = pg_fetch_row(pgDb::forumEmailExists($email));
 	$emailMatch = $row4[0];
@@ -202,6 +204,13 @@ function conferenceRegistration($name, $room) {
 	}
 
 	return $roomLink;
+}
+
+function sendConfirmationEmail($email, $path) {
+	
+		$message = "Welcome! Your enrollment is complete for the Nexus collaboration portal.\n\nYou are now enabled to collaborate with " . $_SESSION['groupName'] . " hosted by " . $_SESSION['networkName'] . "\n\nPlease access the login screen at http://northbridgetech.org/" . $path . "/nexus/view/login.php\n\nEnjoy!\n\nNexus Support Team";
+	
+		mail($email, "[Nexus] Enrollment Confirmation", $message, "From: noreply@nexus.northbridgetech.org\r\n");		
 }
 
 ?>
