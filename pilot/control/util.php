@@ -1,52 +1,126 @@
 <?php
 
-class Util {
+require_once("/home1/northbr6/php/Validate.php");
 
+class Util {
+	
+	const VALIDATION_FNAME_ERROR = "Please enter a valid first name."; 
+	const VALIDATION_LNAME_ERROR = "Please enter a valid last name (or none)."; 
+	const VALIDATION_SMS_ERROR = "Please enter a valid text address (or none).";
+	const VALIDATION_PASSWORD_ERROR = "Please enter valid matching passwords.";
+	const VALIDATION_USERNAME_ERROR = "Please enter a valid username.";
+	
+	const NAME_MAX = 25;
+	const NAME_MIN = 1;
+	// http://en.wikipedia.org/wiki/E.164
+	const PHONE_MAX = 20;
+	const PHONE_MIN = 6;
+	const PASSWORD_MAX = 25;
+	const PASSWORD_MIN = 8;
+	const USERNAME_MIN = 7;
+	const USERNAME_MAX = 25;
+	
 	public static function validateEmail($in) {
 		if (filter_var($in, FILTER_VALIDATE_EMAIL)) {
 			return true;
 		}
 		return false;
 	}
-	
-	public static function validateUserProfile($input) {
+
+	public static function validateUserProfile($input, $pwRequired) {
 		$result = array('good' => array(), 'error' => array());
 		
-		if (isset($input['email']) && filter_var($input['email'], FILTER_VALIDATE_EMAIL)) {
+		// EMAIL ADDRESS
+		if (isset($input['email']) && self::validateEmail($input['email'])) {
 			$result['good']['email'] = $input['email'];
 		} else {
 			$result['error']['email'] = "Please enter a valid email address.";
 		}
 		
-		if (!isset($input['fname']) || strlen($input['fname']) < 1) {
-			$result['error']['fname'] = "Please enter your first name.";
+		// FIRST NAME
+		if (isset($input['fname'])) {
+			if (Validate::string($input['fname'], array(
+    				'format' => VALIDATE_EALPHA . VALIDATE_NUM . "'" . "_",
+    				'min_length' => self::NAME_MIN,
+    				'max_length' => self::NAME_MAX))) {
+				$result['good']['fname'] = $input['fname'];			
+			} else {
+				$result['error']['fname'] = self::VALIDATION_FNAME_ERROR;
+			}
  		} else {
-			$result['good']['fname'] = $input['fname'];
-		}
-
-		if (isset($input['lname'])) {
-			$result['good']['lname'] = $input['lname'];
+			$result['error']['fname'] = self::VALIDATION_FNAME_ERROR;
+		}	
+		
+		// LAST NAME
+		if (isset($input['lname']) && strlen($input['lname']) > 0) {
+			if (Validate::string($input['lname'], array(
+    				'format' => VALIDATE_EALPHA . VALIDATE_NUM . "'" . "_",
+    				'min_length' => self::NAME_MIN,
+    				'max_length' => self::NAME_MAX))) {
+				$result['good']['lname'] = $input['lname'];			
+			} else {
+				$result['error']['lname'] = self::VALIDATION_LNAME_ERROR;
+			}
  		} else {
- 			// ok - lname is not required
- 			$result['good']['lname'] = "";
- 		}
- 		
-		if (!isset($input['password']) || strlen($input['password']) < 1  || strlen($input['password']) > 12) {
-			// ok - password is not required (at the moment)
-			$result['good']['password'] = "";
- 		} else {
-			$result['good']['password'] = $input['password'];
-		}
-
-		if (isset($input['sms']) && strlen($input['sms']) > 6 && filter_var($input['sms'], FILTER_VALIDATE_INT)) {
-			$result['good']['sms'] = $input['sms'];
-		} else if (!isset($input['sms']) || strlen($input['sms']) == 0) {
-			$result['good']['sms'] = "";
+			$result['good']['lname'] = "";
+		}	
+		
+		// SMS
+		if (isset($input['sms']) && strlen($input['sms']) > 0) {
+			if (Validate::string($input['lname'], array(
+    				'format' => VALIDATE_NUM,
+    				'min_length' => self::PHONE_MIN,
+    				'max_length' => self::PHONE_MAX))) {
+				$result['good']['sms'] = $input['sms'];
+			} else {
+				$result['error']['sms'] = self::VALIDATION_SMS_ERROR;
+			}
 		} else {
-			$result['error']['sms'] = "Please enter a valid text address.";
+			$result['good']['sms'] = "";
 		}
-			
+		
+		// PASSWORD
+		if (isset($input['password1']) && isset($input['password2']) && strlen($input['password1']) > 0) {
+			if (strlen($input['password1']) >= self::PASSWORD_MIN
+				&& strlen($input['password1']) <= self::PASSWORD_MAX
+    		&& preg_match("/[A-Z]+/", $input['password1'])
+    		&& preg_match("/[a-z]+/", $input['password1'])
+    		&& preg_match("/[0-9]+/", $input['password1'])
+    		&& preg_match("/[~!@#$%^&*_+=`|?:;.,*\'\"\/\-]+/", $input['password1'])
+    		&& !preg_match("/[ ]+/", $input['password1'])
+    		&& !strcmp($input['password1'], $input['password2'])) { 
+				$result['good']['password'] = $input['password1'];			
+			} else {
+				$result['error']['password'] = self::VALIDATION_PASSWORD_ERROR;
+			}
+ 		} else {
+	 		if ($pwRequired) {
+				$result['error']['password'] = self::VALIDATION_PASSWORD_ERROR;
+			}
+		}
+		
+		// USERNAME
+		if (isset($input['username'])) {
+			if (Validate::string($input['username'], array(
+    				'format' => VALIDATE_ALPHA . VALIDATE_NUM . "_",
+    				'min_length' => self::USERNAME_MIN,
+    				'max_length' => self::USERNAME_MAX))) {
+				$result['good']['username'] = $input['username'];			
+			} else {
+				$result['error']['username'] = self::VALIDATION_USERNAME_ERROR;
+			}
+ 		} else {
+			$result['good']['username'] = "";
+		}	
+		
+		// PREVENT MATCHING USERNAME, PASSWORD
+		// Since the allowed char lists for these fields aren't compatible, theoretically this can never happen
+		if (isset($result['good']['password']) && isset($result['good']['username']) && !strcmp($result['good']['password'], $result['good']['username'])) {
+			$result['error']['password'] =  self::VALIDATION_PASSWORD_ERROR;
+		}
+
 		return $result;
+		
 	}
 	
 	public static function validateUserCredentials($input) {

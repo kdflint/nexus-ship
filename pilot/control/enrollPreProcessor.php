@@ -9,6 +9,17 @@ include("../control/util.php");
 $inviteId = $networkId = "";
 $validInvitation = false;
 
+// TODO - what if these session vars are not set yet? like, on first load.
+
+$stickyUserId = $_SESSION['stickyForm']['userid'];
+$stickyPassword1 = $_SESSION['stickyForm']['password1'];
+$stickyPassword2 = $_SESSION['stickyForm']['password2'];
+$stickyFname = $_SESSION['stickyForm']['fname'];
+$stickyLname = $_SESSION['stickyForm']['lname'];
+$stickyEmail = $_SESSION['stickyForm']['email'];
+$stickyOrgName = $_SESSION['stickyForm']['orgName'];
+
+unset($_SESSION['stickyForm']);
 $_SESSION['networkName'] = $_SESSION['orgName'] = $_SESSION['networkId'] = $_SESSION['orgId'] = "";
 
 if(isset($_GET['invitation'])) {

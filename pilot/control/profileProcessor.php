@@ -17,15 +17,18 @@ if (isset($_POST['email_status'])) {$emailEnabled = "true";}
 $input = array('email' => $_POST['email'],
 							'fname' => $_POST['fname'],
 							'lname' => $_POST['lname'],
-							'password' => $_POST['password'],
+							'password1' => $_POST['password1'],
+							'password2' => $_POST['password2'],
 							'sms' => Util::stripPhone($_POST['sms'])
 							);
-
-$result = Util::validateUserProfile($input);
+							
+$result = Util::validateUserProfile($input, FALSE);
 
 if (count($result['error']) > 0) {
-	// TODO: give array of error strings to page for display
-	returnToProfileWithError("Please enter valid data in all required fields.");
+	foreach ($result['error'] as $value) {
+		returnToProfileWithError($value);
+		break;
+	}
 }
 
 if (strcmp($_SESSION['email'], $result['good']['email'])) {
@@ -42,6 +45,10 @@ pgDb::updateUserById($_SESSION['uidpk'],
 											$result['good']['email'], 
 											$smsEnabled, 
 											$emailEnabled);
+
+if (isset($result['good']['password']) && strlen($result['good']['password']) > 0) {
+	Util::storeSecurePasswordImplA($result['good']['password'], $_SESSION['uidpk']);
+}
 
 $cursor = pgDb::getUserById($_SESSION['uidpk']);
 

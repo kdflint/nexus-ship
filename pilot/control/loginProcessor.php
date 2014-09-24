@@ -53,7 +53,7 @@ if($isAuthenticated){
 
 	Util::setLogin($_SESSION['uidpk']);
 	
-	header("location:../view/nexus.php?thisPage=profile");
+	header("location:../view/nexus.php?thisPage=directory");
 	exit(0);	
 	
 		

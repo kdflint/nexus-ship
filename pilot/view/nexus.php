@@ -78,6 +78,13 @@ if(curl_exec($ch) === false) 	{
 		<!--<script src="script/converse.min.js"></script>-->
     <link rel="shortcut icon" href="image/northbridge-ico.png" />
     <title>Nexus Home</title>
+    
+    <link rel="stylesheet" href="script/jquery-ui-1.11.1.custom/jquery-ui.css">
+    <script src="script/jquery-ui-1.11.1.custom/external/jquery/jquery.js"></script>
+		<script src="script/jquery-ui-1.11.1.custom/jquery-ui.js"></script>
+		<script>$(function() {$( document ).tooltip();});</script>
+		<style>label {display: inline-block;width: 5em;}</style>
+		
   </head>
   
   <!-- For Formilla feedback form -->

@@ -15,22 +15,21 @@ class pgDb {
 	public static function disconnect($con) {
 		pg_close($con);
 	}
-	
-	private static function execute($query) {
-		$con = pgDb::connect();
-		$result = pg_query($con, $query) or die("Cannot execute query: $query\n");
-		pgDb::disconnect($con);
-		return $result;
-	}
-	
+		
 	private static function psExecute($query, $input) {
+		$result = $prepare = FALSE;
 		$con = pgDb::connect();
-		$result = NULL;
-		$success = pg_prepare($con, "ps", $query);
-		if ($success) {
-			$result = pg_execute($con, "ps", $input) or die("Cannot execute query: $query\n");
+		$prepare = pg_prepare($con, "ps", $query);
+		if (!$prepare) {
+				error_log("Cannot prepare statement: $query\n", 0);
+				die;			
 		}
+		$result = pg_execute($con, "ps", $input);
 		pgDb::disconnect($con);
+		if (!$result) {
+			error_log("Cannot execute query: $query\n", 0);
+			die;
+		}
 		return $result;
 	}
 	

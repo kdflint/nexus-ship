@@ -8,45 +8,58 @@ session_start();
 require_once ("../model/pgDb.php");
 require_once ("../control/util.php");
 require_once ("../config/env_config.php");
+require_once("/home1/northbr6/php/Validate.php");
 require_once dirname(__FILE__).'/forum_sso_functions.php';
-
-// TODO: leverage util method (see profileProcessor.php line 17)
 
 $_SESSION['inviteId'] = $_POST['invitation'];
 
-if (!isset($_POST['userid']) || strlen($_POST['userid']) < 1) {
-	returnToEnrollWithError("Please choose your username");
-}
+$_SESSION['stickyForm']['userid'] = $_POST['userid'];
+$_SESSION['stickyForm']['password1'] = $_POST['password1'];
+$_SESSION['stickyForm']['password2'] = $_POST['password2'];
+$_SESSION['stickyForm']['fname'] = $_POST['fname'];
+$_SESSION['stickyForm']['lname'] = $_POST['lname'];
+$_SESSION['stickyForm']['email'] = $_POST['email'];
+$_SESSION['stickyForm']['orgName'] = $_POST['orgname'];
 
-if (!isset($_POST['password']) || strlen($_POST['password']) < 1) {
-	returnToEnrollWithError("Please choose your password");
-}
+$input = array('username' => $_POST['userid'],
+							'email' => $_POST['email'],
+							'fname' => $_POST['fname'],
+							'lname' => $_POST['lname'],
+							'password1' => $_POST['password1'],
+							'password2' => $_POST['password2']
+							);
+							
+$result = Util::validateUserProfile($input, TRUE);
 
-if (!isset($_POST['fname']) || strlen($_POST['fname']) < 1) {
-	returnToEnrollWithError("Please enter your first name.");
-}
-
-if (!Util::validateEmail($_POST['email'])) {
-	// TODO: test this method against email specs - am i open to script injection if i pass this test??
-	returnToEnrollWithError("Please enter a valid email address.");
-}
-
-if (!isset($_POST['orgname']) || strlen($_POST['orgname']) < 1) {
-	returnToEnrollWithError("Please enter the name of the organization you represent.");
-}
-
+// TODO - move to validate method
 $row1 = pg_fetch_row(pgDb::userNameExists($_POST['userid']));
 $exists = $row1[0];
 if (!strcmp($exists, "t")) {
 	returnToEnrollWithError("This username already exists. Please select a different username.");
 }
 
+if (!isset($_POST['orgname']) || 
+		!Validate::string($input['orgname'], array(
+    				'format' => VALIDATE_EALPHA . VALIDATE_NUM . "'" . "_",
+    				'min_length' => 2,
+    				'max_length' => 100))) {
+		returnToEnrollWithError("Please enter the valid organization name that you represent.");
+	}
+}
+
+if (count($result['error']) > 0) {
+	foreach ($result['error'] as $value) {
+		returnToEnrollWithError($value);
+		break;
+	}
+}
+
 // TODO: strategy for decon on this user input
-$uid = $_POST['userid'];
-$password = $_POST['password'];
-$fname = $_POST['fname'];
-$lname = $_POST['lname'];
-$email = $_POST['email'];
+$uid = $result['good']['username'];
+$password = $result['good']['password'];
+$fname = $result['good']['fname'];
+$lname = $result['good']['lname'];
+$email = $result['good']['email'];
 $orgName = strtr($_POST['orgname'], array("'" => '&apos;'));
 
 $validInvitation = $isAuthenticated = false;
