@@ -21,14 +21,12 @@ class pgDb {
 		$con = pgDb::connect();
 		$prepare = pg_prepare($con, "ps", $query);
 		if (!$prepare) {
-				error_log("Cannot prepare statement: $query\n", 0);
-				die;			
+				trigger_error("Cannot prepare statement: $query\n", E_USER_ERROR);	
 		}
 		$result = pg_execute($con, "ps", $input);
 		pgDb::disconnect($con);
 		if (!$result) {
-			error_log("Cannot execute query: $query\n", 0);
-			die;
+			trigger_error("Cannot execute query: $query\n", E_USER_ERROR);
 		}
 		return $result;
 	}
@@ -184,7 +182,7 @@ class pgDb {
 		// TODO: fix up network id determination (parent, god, etc)
 		// TODO - this will fail if user in in > 1 group
 		$query = "
-			select u.id as id, u.fname as fname, u.lname as lname, u.password as password, u.conference_link as link, o1.name as affiliation, o2.name as network, o2.id as networkid, o2.logo as logo, uo.role_fk as role
+			select u.id as id, u.fname as fname, u.lname as lname, u.password as password, u.conference_link as link, u.email as email, o1.name as affiliation, o2.name as network, o2.id as networkid, o2.logo as logo, uo.role_fk as role
 			from public.user u, user_organization uo, organization o1, organization o2, organization_organization oo
 			where u.username = $1
 			and uo.user_fk = u.id

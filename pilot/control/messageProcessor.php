@@ -7,6 +7,7 @@ session_start();
 
 include("../model/pgDb.php");
 include("util.php");
+require_once 'error/handlers.php';
 
 $message = $subject = $greeting = $salutation = "";
 

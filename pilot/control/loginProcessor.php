@@ -1,9 +1,11 @@
 <?php
+
+session_start();
+
 //require_once dirname(__FILE__).'/forum_sso_functions.php';
 include("../model/pgDb.php");
 include("util.php");
-
-session_start();
+require_once 'error/handlers.php';
 
 //error_reporting(E_ALL);
 //ini_set( 'display_errors','1'); 
@@ -14,6 +16,7 @@ $password = $_POST['password'];
 $_SESSION['fname'] = 
 $_SESSION['lname'] = 
 $_SESSION['uidpk'] = 
+$_SESSION['email'] = 
 $_SESSION['forumSessionError'] = 
 $_SESSION['orgName'] = 
 $_SESSION['networkName'] = 
@@ -35,7 +38,7 @@ if($isAuthenticated){
 	$_SESSION['username'] = $uid;
 	
 	$cursor = pgDb::getUserSessionByUsername($_SESSION['username']);
-
+	
 	while ($row = pg_fetch_array($cursor)) {
 		$_SESSION['fname'] = $row['fname'];
   	$_SESSION['lname'] = $row['lname'];
@@ -47,6 +50,7 @@ if($isAuthenticated){
   	$_SESSION['password'] = $row['password'];
   	$_SESSION['roomLink'] = $row['link'];
   	$_SESSION['logo'] = $row['logo'];
+  	$_SESSION['email'] = $row['email'];
 	} 
 	
 	$_SESSION['groups'] = pgDb::getUserGroupsByUsername($_SESSION['username']);

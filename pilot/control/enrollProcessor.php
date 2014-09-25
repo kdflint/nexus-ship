@@ -5,10 +5,10 @@ session_start();
 //error_reporting(E_ALL);
 //ini_set( 'display_errors','1'); 
 
-require_once ("../model/pgDb.php");
-require_once ("../control/util.php");
-require_once ("../config/env_config.php");
-require_once("/home1/northbr6/php/Validate.php");
+require_once '../model/pgDb.php';
+require_once 'util.php';
+require_once '../config/env_config.php';
+require_once '/home1/northbr6/php/Validate.php';
 require_once dirname(__FILE__).'/forum_sso_functions.php';
 
 $_SESSION['inviteId'] = $_POST['invitation'];
@@ -38,13 +38,9 @@ if (!strcmp($exists, "t")) {
 	returnToEnrollWithError("This username already exists. Please select a different username.");
 }
 
-if (!isset($_POST['orgname']) || 
-		!Validate::string($input['orgname'], array(
-    				'format' => VALIDATE_EALPHA . VALIDATE_NUM . "'" . "_",
-    				'min_length' => 2,
-    				'max_length' => 100))) {
+if (!isset($_POST['orgname']) ||
+		!Validate::string($_POST['orgname'], array('format' => VALIDATE_EALPHA . VALIDATE_NUM . "'" . "_" . " ", 'min_length' => 2, 'max_length' => 100))) {
 		returnToEnrollWithError("Please enter the valid organization name that you represent.");
-	}
 }
 
 if (count($result['error']) > 0) {

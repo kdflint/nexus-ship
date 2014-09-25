@@ -67,7 +67,7 @@ if(isset($_GET['error'])) {
 										<tr><td>Confirm your password*</td><td><input class="passed" type=text" size="25" name="password2" value="<? echo $stickyPassword2; ?>"/></td></tr>
 										<tr><td><a href="#" class="tooltip" title="1-25 characters.  May contain letters, numbers, accents, &apos; or _">Your first name*</td><td><input class="passed" type="text" size="25" name="fname" value="<? echo $stickyFname; ?>"/></td></tr>
 										<tr><td><a href="#" class="tooltip" title="Optional. 1-25 characters.  May contain letters, numbers, accents, &apos; or _">Your last name</td><td><input class="passed" type="text" size="25" name="lname" value="<? echo $stickyLname; ?>"/></td></tr>
-										<tr><td valign="top"><a href="#" class="tooltip" title="2-100 characters. May contain letters, numbers, accents, &apos; or _">Your organization*</td><td><textarea class="passed"  maxlength="100" rows="4" cols="30" name="orgname" ><? echo $stickyOrgName; ?></textarea></td></tr>
+										<tr><td valign="top"><a href="#" class="tooltip" title="2-100 characters. May contain letters, numbers, accents, spaces, &apos; or _">Your organization*</td><td><textarea class="passed"  maxlength="100" rows="4" cols="30" name="orgname" ><? echo $stickyOrgName; ?></textarea></td></tr>
 										<!-- Some or all of above data may be already completed by the invitation. -->
 										<!-- Even if an invitation sets up all the prior data, a new user has to enter an email for confirmation. -->
 										<tr><td>Your email*</td><td><input class="passed" type="text" size="25" name="email" value="<? echo $stickyEmail; ?>"/></td></tr>
