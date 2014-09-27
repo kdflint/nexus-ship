@@ -11,8 +11,7 @@ require_once '../config/env_config.php';
 require_once '/home1/northbr6/php/Validate.php';
 require_once dirname(__FILE__).'/forum_sso_functions.php';
 
-$_SESSION['inviteId'] = $_POST['invitation'];
-
+// TODO - do I have to put these in session?? Better option?
 $_SESSION['stickyForm']['userid'] = $_POST['userid'];
 $_SESSION['stickyForm']['password1'] = $_POST['password1'];
 $_SESSION['stickyForm']['password2'] = $_POST['password2'];
@@ -21,7 +20,20 @@ $_SESSION['stickyForm']['lname'] = $_POST['lname'];
 $_SESSION['stickyForm']['email'] = $_POST['email'];
 $_SESSION['stickyForm']['orgName'] = $_POST['orgname'];
 
-$input = array('username' => $_POST['userid'],
+// Cleanse all user input
+
+$cleanInvite = "bogus";
+
+if(Validate::string($_POST['invitation'], array(
+		'format' => VALIDATE_ALPHA_LOWER . VALIDATE_NUM . "-", 
+		'min_length' => 36, 
+		'max_length' => 36))) {
+	if (pgDb::checkValidInvitation($_POST['invitation'])) {
+		$cleanInvite = $_POST['invitation'];
+	}
+}
+
+$dirty = array('username' => $_POST['userid'],
 							'email' => $_POST['email'],
 							'fname' => $_POST['fname'],
 							'lname' => $_POST['lname'],
@@ -29,43 +41,38 @@ $input = array('username' => $_POST['userid'],
 							'password2' => $_POST['password2']
 							);
 							
-$result = Util::validateUserProfile($input, TRUE);
+$clean = Util::validateUserProfile($dirty, TRUE);
 
-// TODO - move to validate method
-$row1 = pg_fetch_row(pgDb::userNameExists($_POST['userid']));
-$exists = $row1[0];
-if (!strcmp($exists, "t")) {
-	returnToEnrollWithError("This username already exists. Please select a different username.");
-}
-
+// TODO - when we build org screen, move this logic to validateOrgProfile method.
 if (!isset($_POST['orgname']) ||
-		!Validate::string($_POST['orgname'], array('format' => VALIDATE_EALPHA . VALIDATE_NUM . "'" . "_" . " ", 'min_length' => 2, 'max_length' => 100))) {
-		returnToEnrollWithError("Please enter the valid organization name that you represent.");
+		!Validate::string($_POST['orgname'], array('format' => VALIDATE_EALPHA . VALIDATE_NUM . VALIDATE_SPACE . "'" . "_", 'min_length' => 2, 'max_length' => 100))) {
+		$clean['error']['orgname'] = Util::VALIDATION_ORGNAME_ERROR;
+} else {
+	$clean['good']['orgname'] = strtr($_POST['orgname'], array("'" => '&apos;'));
 }
 
-if (count($result['error']) > 0) {
-	foreach ($result['error'] as $value) {
+// From this point, anything in $_SESSION or $clean* can be trusted.
+
+if (count($clean['error']) > 0) {
+	foreach ($clean['error'] as $value) {
 		returnToEnrollWithError($value);
 		break;
 	}
 }
 
-// TODO: strategy for decon on this user input
-$uid = $result['good']['username'];
-$password = $result['good']['password'];
-$fname = $result['good']['fname'];
-$lname = $result['good']['lname'];
-$email = $result['good']['email'];
-$orgName = strtr($_POST['orgname'], array("'" => '&apos;'));
+$uid = $clean['good']['username'];
+$password = $clean['good']['password'];
+$fname = $clean['good']['fname'];
+$lname = $clean['good']['lname'];
+$email = $clean['good']['email'];
+$orgName = $clean['good']['orgname'];
 
-$validInvitation = $isAuthenticated = false;
+$validInvitation = $isAuthenticated = FALSE;
 
-$_SESSION['fname'] = $_SESSION['lname'] = $_SESSION['uidpk'] = $_SESSION['forumSessionError'] = $_SESSION['username'] = $_SESSION['roomLink'] = "";
+$_SESSION['fname'] = $_SESSION['lname'] = $_SESSION['uidpk'] = $_SESSION['forumSessionError'] = $_SESSION['username'] = "";
 
-if(strlen($_SESSION['inviteId']) == 36) {
-	if (pgDb::checkValidInvitation($_SESSION['inviteId'])) {
-		$validInvitation = true;
-	}
+if (strcmp($cleanInvite, "bogus") && pgDb::checkValidInvitation($cleanInvite)) {
+	$validInvitation = TRUE;
 }
 
 if ($validInvitation){
@@ -76,9 +83,10 @@ if ($validInvitation){
 	
 	$_SESSION['uidpk'] = pgDb::insertActiveUser(Util::newUuid(), $uid, $fname, $lname, $email, $password);
 	
-	// TODO - will break with dupe org name
-	$row3 = pg_fetch_row(pgDb::orgNameExists($orgName));
-	$nameMatch = $row3[0];
+	// TODO - need policy on dupe org names
+	// At this time, user will get enrolled with first org name match if there is > 1 org name match
+	$row = pg_fetch_row(pgDb::orgNameExists($orgName));
+	$nameMatch = $row[0];
 	if (!strcmp($nameMatch, "t")) {
 		$row = pg_fetch_array(pgDb::getOrganizationByName($orgName));
 		$_SESSION['orgId'] = $row['id'];
@@ -136,20 +144,16 @@ if ($validInvitation){
 	}
 	
 	// Register user with conference room
-	$_SESSION['roomLink'] = "/openmeetings/swf?invitationHash=" . conferenceRegistration($fname, $wc_roomNumber);
-	pgDb::insertRoomLink($_SESSION['uidpk'], $_SESSION['roomLink']);
+	$roomLink = "/openmeetings/swf?invitationHash=" . conferenceRegistration($fname, $wc_roomNumber);
+	pgDb::insertRoomLink($_SESSION['uidpk'], $roomLink);
 		
 	if($isAuthenticated){
-		
 		$cursor = pgDb::getUserByUsername($uid);
 		$_SESSION['username'] = $uid;
 		
-		// bizarro php bug: https://bugs.php.net/bug.php?id=31750
-		// can't specify PGSQL_ASSOC as one might like, but this works
 		while ($row = pg_fetch_array($cursor)) {
 			$_SESSION['fname'] = $row['fname'];
   		$_SESSION['lname'] = $row['lname'];
-  		$_SESSION['password'] = $row['password'];
 		}
 		
 		$_SESSION['groups'] = pgDb::getUserGroupsByUsername($_SESSION['username']);
@@ -159,20 +163,22 @@ if ($validInvitation){
 
 		header("location:../view/nexus.php?thisPage=profile");
 		exit(0);
-		
 	
 	} else {
+		// Basic user setup failed
 		header("location:../view/login.php");
 		exit(0);	
 	}
 	
 } else {
+	// Invitation was invalid
 	header("location:../view/login.php");
 	exit(0);	
 }
 	
 function returnToEnrollWithError($errorMessage) {
-	header("location:../view/enroll.php?invitation=" . $_SESSION['inviteId'] . "&error=" . $errorMessage);
+	global $cleanInvite;
+	header("location:../view/enroll.php?invitation=" . $cleanInvite . "&error=" . $errorMessage);
 	exit(0);
 }
 

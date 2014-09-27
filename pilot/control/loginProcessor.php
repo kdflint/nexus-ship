@@ -13,27 +13,13 @@ require_once 'error/handlers.php';
 $uid = $_POST['uid'];
 $password = $_POST['password'];
 
-$_SESSION['fname'] = 
-$_SESSION['lname'] = 
-$_SESSION['uidpk'] = 
-$_SESSION['email'] = 
-$_SESSION['forumSessionError'] = 
-$_SESSION['orgName'] = 
-$_SESSION['networkName'] = 
-$_SESSION['orgId'] = 
-$_SESSION['networkId'] = 
-$_SESSION['inviteId'] =
-$_SESSION['username'] =
-$_SESSION['password'] =
-$_SESSION['roomLink'] = 
-$_SESSION['logo'] = 
-"";
-
-$_SESSION['groups'] = array();
-
 $isAuthenticated = Util::authenticate($uid, $password);
 
 if($isAuthenticated){
+	
+	session_regenerate_id(TRUE);
+	
+	$_SESSION['groups'] = array();
 	
 	$_SESSION['username'] = $uid;
 	
@@ -47,8 +33,6 @@ if($isAuthenticated){
   	$_SESSION['networkName'] = $row['network'];
   	// TODO: Make this dynamic once method decisions network id correctly (see pgDb.php)
   	$_SESSION['networkId'] = '18'; // $row['networkid'];
-  	$_SESSION['password'] = $row['password'];
-  	$_SESSION['roomLink'] = $row['link'];
   	$_SESSION['logo'] = $row['logo'];
   	$_SESSION['email'] = $row['email'];
 	} 

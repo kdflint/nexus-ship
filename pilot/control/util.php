@@ -8,7 +8,9 @@ class Util {
 	const VALIDATION_LNAME_ERROR = "Please enter a valid last name (or none)."; 
 	const VALIDATION_SMS_ERROR = "Please enter a valid text address (or none).";
 	const VALIDATION_PASSWORD_ERROR = "Please enter valid matching passwords.";
-	const VALIDATION_USERNAME_ERROR = "Please enter a valid username.";
+	const VALIDATION_USERNAME_FORMAT_ERROR = "Please enter a valid username.";
+	const VALIDATION_USERNAME_DUPE_ERROR = "This username already exists. Please select a different username.";
+	const VALIDATION_ORGNAME_ERROR = "Please enter the valid organization name that you represent.";
 	
 	const NAME_MAX = 25;
 	const NAME_MIN = 1;
@@ -105,16 +107,20 @@ class Util {
     				'format' => VALIDATE_ALPHA . VALIDATE_NUM . "_",
     				'min_length' => self::USERNAME_MIN,
     				'max_length' => self::USERNAME_MAX))) {
-				$result['good']['username'] = $input['username'];			
+    		$row = pg_fetch_row(pgDb::userNameExists($input['username']));
+    		$exists = $row[0];	
+    		if (!strcmp($exists, "t")) {
+					$result['error']['username'] = self::VALIDATION_USERNAME_DUPE_ERROR;
+				}	else {	 					
+					$result['good']['username'] = $input['username'];
+				}
 			} else {
-				$result['error']['username'] = self::VALIDATION_USERNAME_ERROR;
+				$result['error']['username'] = self::VALIDATION_USERNAME_FORMAT_ERROR;
 			}
- 		} else {
-			$result['good']['username'] = "";
-		}	
+ 		}
 		
 		// PREVENT MATCHING USERNAME, PASSWORD
-		// Since the allowed char lists for these fields aren't compatible, theoretically this can never happen
+		// Since the allowed char lists for these fields aren't compatible, theoretically these conditions can never be true
 		if (isset($result['good']['password']) && isset($result['good']['username']) && !strcmp($result['good']['password'], $result['good']['username'])) {
 			$result['error']['password'] =  self::VALIDATION_PASSWORD_ERROR;
 		}

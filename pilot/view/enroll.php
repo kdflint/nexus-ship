@@ -58,7 +58,7 @@ if(isset($_GET['error'])) {
       	<div class="rightColumn" style="border:0px;box-shadow: 0px 0px 0px #cccccc;border-radius:0px;top:-80px;"> 
 							<p><b>&nbsp;</b></p>
 							<div class="formLogin" style="border:thin solid #4b5b6e;padding:10px;border-radius:15px;">
-								<form action="../control/enrollProcessor.php" method="post">
+								<form action="../control/enrollProcessor.php" method="post" id="enrollForm">
 									<table cellpadding="5">
 								  <tr><td>&nbsp;</td><td style="color:#bf6030;"><? echo $error; ?></td></tr>
 								  	<!--<p>You represent: <? echo $_SESSION['orgName'] ?></p>-->
@@ -73,7 +73,7 @@ if(isset($_GET['error'])) {
 										<tr><td>Your email*</td><td><input class="passed" type="text" size="25" name="email" value="<? echo $stickyEmail; ?>"/></td></tr>
 										<tr><td colspan="2"><input type="submit" style="float:right;" value="Enroll"/></td></tr>
 									</table>
-									<input type="hidden" name="invitation" value="<? echo $_GET['invitation']; ?>" />
+									<input type="hidden" name="invitation" value="<? echo $inviteId; ?>" />
 								</form>
 							</div>									
 				</div>
