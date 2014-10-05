@@ -6,7 +6,7 @@ class Util {
 	
 	const VALIDATION_FNAME_ERROR = "Please enter a valid first name."; 
 	const VALIDATION_LNAME_ERROR = "Please enter a valid last name (or none)."; 
-	const VALIDATION_SMS_ERROR = "Please enter a valid text address (or none).";
+	const VALIDATION_SMS_ERROR = "Please enter a valid text number (or none).";
 	const VALIDATION_PASSWORD_ERROR = "Please enter valid matching passwords.";
 	const VALIDATION_USERNAME_FORMAT_ERROR = "Please enter a valid username.";
 	const VALIDATION_USERNAME_DUPE_ERROR = "This username already exists. Please select a different username.";
@@ -69,11 +69,11 @@ class Util {
 		
 		// SMS
 		if (isset($input['sms']) && strlen($input['sms']) > 0) {
-			if (Validate::string($input['lname'], array(
-    				'format' => VALIDATE_NUM,
+			if (Validate::string($input['sms'], array(
+    				'format' => VALIDATE_NUM . VALIDATE_SPACE . "." . "(" . ")" . "-",
     				'min_length' => self::PHONE_MIN,
     				'max_length' => self::PHONE_MAX))) {
-				$result['good']['sms'] = $input['sms'];
+				$result['good']['sms'] = self::stripPhone($input['sms']);
 			} else {
 				$result['error']['sms'] = self::VALIDATION_SMS_ERROR;
 			}
@@ -180,8 +180,8 @@ class Util {
 		return preg_replace('/[^0-9]/', '', $num);
 	}
 	
-	static function prettyPrintPhone($num) {
-		$num = preg_replace('/[^0-9]/', '', $num);
+	static function prettyPrintPhone($numIn) {
+		$num = self::stripPhone($numIn);
 	 
 		$len = strlen($num);
 		if($len == 7)

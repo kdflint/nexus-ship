@@ -20,7 +20,7 @@ $input = array('email' => $_POST['email'],
 							'lname' => $_POST['lname'],
 							'password1' => $_POST['password1'],
 							'password2' => $_POST['password2'],
-							'sms' => Util::stripPhone($_POST['sms'])
+							'sms' => $_POST['sms']
 							);
 							
 $result = Util::validateUserProfile($input, FALSE);

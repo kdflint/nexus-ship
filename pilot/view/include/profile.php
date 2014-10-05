@@ -8,7 +8,7 @@ if(isset($_GET['error'])) {
 }
 
 if (!strcmp($sms_status, "checked")) {
-		$testSms = Util::stripPhone($_SESSION['sms']);
+		$testSms = $_SESSION['sms'];
 }
 
 if (!strcmp($email_status, "checked")) {
@@ -17,10 +17,10 @@ if (!strcmp($email_status, "checked")) {
 
 ?>
 
-<form action="../control/profileProcessor.php" method="post">
+<form action="../control/profileProcessor.php" method="post" id="profileForm">
 
 <div class="leftColumn">
-	<p><b>You</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<? echo $error; ?><p>
+	<p><b>You</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#bf6030;"><? echo $error; ?></span><p>
 	<div style="margin-left:20px;margin-top:5px;">
 			<table cellpadding="5">
 				<tr><td>Username:</td><td><? echo($_SESSION['username']); ?></td></tr>

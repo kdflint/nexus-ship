@@ -8,7 +8,6 @@ if(isset($_GET['error'])) {
 	$error = $_GET['error'];
 }
 // Must start evey page load clean
-// TODO - how to handle sticky form values?
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
@@ -31,7 +30,6 @@ if(isset($_GET['error'])) {
   
   <body>
     <div class="container">
-    	<!--<img style="float:left;vertical-align:top;margin:20px;" src="http://chicagofaithandhealth.org/imgs/logo.png" height="88" width="365" border="0" alt="Logo: The Center for Faith and Community Health Transformations"/>-->
    		<img style="float:left;vertical-align:top;margin:20px;" <? echo $_SESSION['logo']; ?>  border="0" alt=""/>
    		
    		<p style="text-align:right;color:#4b5b6e;font-size:34px;margin-right:20px;"><b>Nexus</b><br/>

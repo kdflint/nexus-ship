@@ -104,7 +104,7 @@ if ($validInvitation){
 	
 	$isAuthenticated = true;
 	
-	sendConfirmationEmail($email, $env_appRoot);
+	sendConfirmationEmail($email, $env_appRoot, $fname);
 		
 	$row4 = pg_fetch_row(pgDb::forumEmailExists($email));
 	$emailMatch = $row4[0];
@@ -160,7 +160,7 @@ if ($validInvitation){
 		unset($_SESSION['groupId']);
 		unset($_SESSION['groupName']);
 		unset($_SESSION['grantorId']);
-
+	
 		header("location:../view/nexus.php?thisPage=profile");
 		exit(0);
 	
@@ -221,11 +221,40 @@ function conferenceRegistration($name, $room) {
 	return $roomLink;
 }
 
-function sendConfirmationEmail($email, $path) {
+function sendConfirmationEmail($email, $path, $fname) {
 	
-		$message = "Welcome! Your enrollment is complete for the Nexus collaboration portal.\n\nYou are now enabled to collaborate with " . $_SESSION['groupName'] . " hosted by " . $_SESSION['networkName'] . "\n\nPlease access the login screen at http://northbridgetech.org/" . $path . "/nexus/view/login.php\n\nEnjoy!\n\nNexus Support Team";
+	$message = "Welcome " . $fname . "! Your enrollment is complete for the NorthBridge Nexus collaboration portal.
 	
+You are now enabled to collaborate with " . $_SESSION['groupName'] . " hosted by " . $_SESSION['networkName'] . "
+
+This tool is built by committed volunteers working hard to build web resources for organizations that make a positive difference in our communities.
+
+Nexus is constantly being tweaked and new features added. If you have a suggestion for a feature or find a bug please let us know using the feedback tools on the site. We strive to make Nexus as helpful as possible for you.
+
+Some of our current features:
+
+- Discussion Forum and Calendar
+- Directory of People and Organizations
+- Private Messaging
+- Virtual Conference Room
+
+We are working hard on adding:
+
+- Collaboration Tracking
+- Advanced Mapping functions
+
+You can login to Nexus using this link.
+
+http://northbridgetech.org/" . $path . "/nexus/view/login.php
+
+Enjoy,
+
+The NorthBridge Team
+
+P.S. May we recommend that you visit the Profile tab first to set your messaging settings? Then, you may wish to subscribe to one or more discussions on the Forum tab.";
+
 		mail($email, "[Nexus] Enrollment Confirmation", $message, "From: noreply@nexus.northbridgetech.org\r\n");		
+		
 }
 
 ?>

@@ -2,6 +2,17 @@
 
 include("../model/pgDb.php");
 
+$stickyString = $_SESSION['stickyForm']['string'];
+$stickyTopic = $_SESSION['stickyForm']['topic'];
+$stickyScope = $_SESSION['stickyForm']['scope'];
+$stickyType = $_SESSION['stickyForm']['type'];
+$stickyCount = $_SESSION['stickyForm']['resultCount'];
+
+$groupChecked = !strcmp($stickyScope, "group") || !strcmp($stickyScope, "") ? "checked" : "";
+$networkChecked = !strcmp($groupChecked, "checked") ? "" : "checked";
+
+unset($_SESSION['stickyForm']);
+
 $cache_life = '600'; //caching time, in seconds
 $filemtime = @filemtime("../view/include/tmpResults/" . $_SESSION['defaultSearchId'] . ".php");  // returns FALSE if file does not exist
 

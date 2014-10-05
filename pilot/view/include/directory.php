@@ -6,13 +6,13 @@ include '../control/searchPreProcessor.php';
 
 <div class="topLeftQuad">
 
-	<form action="../control/searchProcessor.php" method="post">
+	<form action="../control/searchProcessor.php" method="post" id="searchForm">
 		<input type="hidden" name="action" value="search" />
-		<p><a href="#">Search</a>	</p>
+		<p><a href="#">Search</a><? echo $stickyCount; ?></p>
 		<table cellpadding="5">
-			<tr><td>&nbsp;</td><td><input type="radio" name="scope" value="group" checked />Your groups
-		<input type="radio" name="scope" value="network" />Entire network </td></tr>
-			<tr><td><img src="image/mag-glass.jpg" width="25" height="25" /></td><td><input type="text" size="20" name="string" value=""/></td></tr>
+			<tr><td>&nbsp;</td><td><input type="radio" name="scope" value="group" <? echo $groupChecked; ?> />Your groups
+		<input type="radio" name="scope" value="network" <? echo $networkChecked; ?> />Entire network </td></tr>
+			<tr><td><img src="image/mag-glass.jpg" width="25" height="25" /></td><td><input type="text" size="20" name="string" value="<? echo $stickyString; ?>"/></td></tr>
 			<tr><td><i>and</i></td><td>
 				<select name="topic" style="width: 230px">    
 					<option value="0" selected>Specialty is</option>	
@@ -98,8 +98,8 @@ include '../control/searchPreProcessor.php';
 		$pageMode = "default";
 		
   	if (isset($_GET['searchId']) && strlen($_GET['searchId']) == 36) {
-	  	$_SESSION['searchId'] =  $_GET['searchId'];
-	  	$pageMode = "results";
+  		$_SESSION['searchId'] =  $_GET['searchId'];
+	 		$pageMode = "results";
 		}
 		
 		if (isset($_GET['detailId']) && strlen($_GET['detailId']) == 36) {

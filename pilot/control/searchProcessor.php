@@ -9,20 +9,23 @@ include("../model/pgDb.php");
 include("util.php");
 require_once 'error/handlers.php';
 
+$_SESSION['stickyForm']['string'] = $_POST['string'];
+$_SESSION['stickyForm']['topic'] = $_POST['topic'];
+$_SESSION['stickyForm']['scope'] = $_POST['scope'];
+$_SESSION['stickyForm']['type'] = $_POST['type'];
+
 $string = $orgId = $action = "";
+$defaultView = TRUE;
 $filters = array();
 
-if (isset($_POST['string'])) {
+if (isset($_POST['string']) && strlen($_POST['string']) > 0) {
 	$string = $_POST['string'];
-}
-
-// What is this POST index coming from??
-if (isset($_POST['id']) && strlen($_POST['id']) > 0) {
-	$orgId = $_POST['id'];
+	$defaultView = FALSE;
 }
 
 if (isset($_POST['topic']) && $_POST['topic'] > 0) {
 	$filters['topic'] = $_POST['topic'];
+	$defaultView = FALSE;
 }
 
 if (isset($_POST['scope']) && !strcmp($_POST['scope'], "group")) {
@@ -35,9 +38,14 @@ if (isset($_POST['scope']) && !strcmp($_POST['scope'], "group")) {
 	}
 }
 
+if (isset($_POST['scope']) && !strcmp($_POST['scope'], "network")) {
+	$defaultView = FALSE;
+}
+
 // TODO - allow for multiples on these dropdowns
 if (isset($_POST['type']) && strcmp($_POST['type'], "0")) {
 	$filters['type'] = $_POST['type'];
+	$defaultView = FALSE;
 }
 
 if (isset($_POST['action']) && strlen($_POST['action']) > 0) {
@@ -47,8 +55,19 @@ if (isset($_POST['action']) && strlen($_POST['action']) > 0) {
 if (!strcmp($action, "search")) {
 	$results = doNewSearch($string, $filters, $_SESSION['networkId']);
 	$searchId = formatNewSearchResults($results);
-	header("location:../view/nexus.php?thisPage=directory&searchId=" . $searchId);
-	exit(0);
+	if ($defaultView) {
+		$_SESSION['stickyForm']['resultCount'] = " | Results: " . 0 . " (showing your group directory)";
+		header("location:../view/nexus.php?thisPage=directory");
+		exit(0);		
+	} else {
+		if (!strcmp($searchId, "noResults")) {
+			$_SESSION['stickyForm']['resultCount'] =  " | Results: " . 0 . " (showing your group directory)";
+		} else {
+			$_SESSION['stickyForm']['resultCount'] =  " | Results: " . count($results);
+		}
+		header("location:../view/nexus.php?thisPage=directory&searchId=" . $searchId);
+		exit(0);
+	}
 
 } else if (!strcmp($action, "detail")) {
 	$results = doDetailSearch($orgId);
