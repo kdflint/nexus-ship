@@ -50,6 +50,13 @@ a {
 	text-decoration:none;
 }
 
+a.tooltip {
+	font-weight:normal;
+	border-bottom: 1px dashed #4b5b6e;
+	color:#bf6030;
+	text-decoration:none;
+}
+
 div.topLeftQuad {
 	position:absolute;
 	width:350px;

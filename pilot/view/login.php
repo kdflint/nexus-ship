@@ -25,6 +25,7 @@ if(isset($_GET['error'])) {
 $cursor = pgDb::getOrganizationById('18');
 $row = pg_fetch_array($cursor);
 $logo = $row['logo'];
+$networkName = $row['name'];
 
 ?>
 
@@ -52,7 +53,7 @@ $logo = $row['logo'];
       	<div class="leftColumn"> 
 							<p><b>Login</b></p>
 							<div class="formLogin" style="border:thin solid #4b5b6e;padding:10px;border-radius:15px;">
-								<form action="../control/loginProcessor.php" method="post">
+								<form action="../control/loginProcessor.php" method="post" id="loginForm">
 									<table cellpadding="5">
 								  <tr><td colspan="2"><? echo $error; ?></td></tr>
 										<tr><td>User Id:</td><td><input class="passed" type="text" size="15" name="uid" value=""/></td></tr>
@@ -68,7 +69,7 @@ $logo = $row['logo'];
 							
      		<div class="rightColumn" style="border:0px;background-color:#e6ebf0;padding:10px;top:50px;height:200px;width:350px;">
 									<p><b>Welcome to Nexus!</b></p>
-									<p style="margin:10px;">This is your collaboration space, secure to your community of practice: The Center for Faith and Community Healthy Transformations.<br/>&nbsp;<br/>This space supports the work you do every day to strengthen communities.</p>
+									<p style="margin:10px;">This is your collaboration space, secure to your community of practice: <b><? echo $networkName; ?></b>.<br/>&nbsp;<br/>This space supports the work you do every day to strengthen communities.</p>
       	</div>
       </div>
       

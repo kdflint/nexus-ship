@@ -1,3 +1,16 @@
+<?
+
+include("../model/pgDb.php");
+
+$roomLink = "";
+
+$cursor = pgDb::getUserSessionByUsername($_SESSION['username']);
+while ($row = pg_fetch_array($cursor)) {
+ 	$roomLink = $row['link'];
+}
+
+?>
+
 <div class="topLeftQuad">
  	<a href="#">Community Conference</a>
  	<div style="margin-left:50px;margin-top:10px;">
@@ -8,9 +21,8 @@
 	</table>
 	<p>Busy signal? Try (559) 546-1400</p>
 	<p><i>Toll charges will apply in accordance with your phone plan.</i></p>
-		<!--<p><a class="bigbutton" href="http://conference.northbridgetech.org/openmeetings/swf?invitationHash=fb3c6acd0e5c8655cd55eda4b74b4fe1" target="_blank" >-->
-		<? if (isset($_SESSION['roomLink']) && strlen($_SESSION['roomLink']) > 1) {
-				$formattedLink = "http://conference.northbridgetech.org" . $_SESSION['roomLink'];
+		<? if (isset($roomLink) && strlen($roomLink) > 1) {
+				$formattedLink = "http://conference.northbridgetech.org" . $roomLink;
 				$displayText = "Your Virtual Room Pass";
 			} else {
 				$formattedLink = "#";

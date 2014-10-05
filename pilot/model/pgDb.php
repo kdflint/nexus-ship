@@ -15,22 +15,19 @@ class pgDb {
 	public static function disconnect($con) {
 		pg_close($con);
 	}
-	
-	private static function execute($query) {
-		$con = pgDb::connect();
-		$result = pg_query($con, $query) or die("Cannot execute query: $query\n");
-		pgDb::disconnect($con);
-		return $result;
-	}
-	
+		
 	private static function psExecute($query, $input) {
+		$result = $prepare = FALSE;
 		$con = pgDb::connect();
-		$result = NULL;
-		$success = pg_prepare($con, "ps", $query);
-		if ($success) {
-			$result = pg_execute($con, "ps", $input) or die("Cannot execute query: $query\n");
+		$prepare = pg_prepare($con, "ps", $query);
+		if (!$prepare) {
+				trigger_error("Cannot prepare statement: $query\n", E_USER_ERROR);	
 		}
+		$result = pg_execute($con, "ps", $input);
 		pgDb::disconnect($con);
+		if (!$result) {
+			trigger_error("Cannot execute query: $query\n", E_USER_ERROR);
+		}
 		return $result;
 	}
 	
@@ -68,6 +65,11 @@ class pgDb {
 	public static function orgNameExists($orgName) {
 		$query = "select exists (select true from organization where lower(name) = lower($1))";
 		return pgDb::psExecute($query, array($orgName));
+	}
+	
+	public static function userNameExists($name) {
+		$query = "select exists (select true from public.user where lower(username) = lower($1))";
+		return pgDb::psExecute($query, array($name));
 	}
 
 	public static function orgTopicExists($orgId, $topics) {
@@ -180,7 +182,7 @@ class pgDb {
 		// TODO: fix up network id determination (parent, god, etc)
 		// TODO - this will fail if user in in > 1 group
 		$query = "
-			select u.id as id, u.fname as fname, u.lname as lname, u.password as password, u.conference_link as link, o1.name as affiliation, o2.name as network, o2.id as networkid, o2.logo as logo, uo.role_fk as role
+			select u.id as id, u.fname as fname, u.lname as lname, u.password as password, u.conference_link as link, u.email as email, o1.name as affiliation, o2.name as network, o2.id as networkid, o2.logo as logo, uo.role_fk as role
 			from public.user u, user_organization uo, organization o1, organization o2, organization_organization oo
 			where u.username = $1
 			and uo.user_fk = u.id

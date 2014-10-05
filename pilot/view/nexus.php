@@ -7,11 +7,14 @@ session_start();
 
 require_once '../control/xmpp-prebind-php/lib/XmppPrebind.php';
 require_once '../control/util.php';
+require '../control/error/handlers.php';
 
 if (!Util::isSessionValid()) {
 	header("location:login.php?logout=true");
 	exit(0);	
 }
+
+// LEFT OFF - put in session timeout code - or not?
 
 // select content to show based on request variable, which is supplied in navigation.php
 if (isset($_REQUEST['thisPage'])) {
@@ -57,7 +60,30 @@ if(curl_exec($ch) === false) 	{
 //$sid = "'" . $sessionInfo['sid'] . "'";
 //$rid = "'" . $sessionInfo['rid'] . "'";
 
-
+//This script would go at the end of the page.
+/*
+<script>
+		// Complete list of options published at
+		// https://conversejs.org/docs/html/index.html#configuration-variables
+		// The below are all the non-default values - rest we take defaults as specified in above doc
+    require(['converse'], function (converse) {
+        converse.initialize({
+        		auto_list_rooms: true,
+            bosh_service_url: 'http://ec2-54-204-130-42.compute-1.amazonaws.com:3306/http-bind', // felis connection manager
+            debug: true,
+            hide_muc_server: true,
+            i18n: locales['en'],
+            prebind: true,
+            jid: <? echo $_SESSION['jid']; ?>,
+            sid: <? echo $_SESSION['sid']; ?>,
+        		rid: <? echo $_SESSION['rid']; ?>,
+            show_controlbox_by_default: true,
+            use_vcards: true
+            // TODO: look further into show_call_button, otr, show_only_online_users, user_search, vcards
+        });
+    });
+</script>
+*/
 
 ?>
 
@@ -78,6 +104,13 @@ if(curl_exec($ch) === false) 	{
 		<!--<script src="script/converse.min.js"></script>-->
     <link rel="shortcut icon" href="image/northbridge-ico.png" />
     <title>Nexus Home</title>
+    
+    <link rel="stylesheet" href="script/jquery-ui-1.11.1.custom/jquery-ui.css">
+    <script src="script/jquery-ui-1.11.1.custom/external/jquery/jquery.js"></script>
+		<script src="script/jquery-ui-1.11.1.custom/jquery-ui.js"></script>
+		<script>$(function() {$( document ).tooltip();});</script>
+		<style>label {display: inline-block;width: 5em;}</style>
+		
   </head>
   
   <!-- For Formilla feedback form -->
@@ -142,29 +175,9 @@ if(curl_exec($ch) === false) 	{
     
 	</body>
 	
-<!--
-<script>
-		// Complete list of options published at
-		// https://conversejs.org/docs/html/index.html#configuration-variables
-		// The below are all the non-default values - rest we take defaults as specified in above doc
-    require(['converse'], function (converse) {
-        converse.initialize({
-        		auto_list_rooms: true,
-            bosh_service_url: 'http://ec2-54-204-130-42.compute-1.amazonaws.com:3306/http-bind', // felis connection manager
-            debug: true,
-            hide_muc_server: true,
-            i18n: locales['en'],
-            prebind: true,
-            jid: <? echo $_SESSION['jid']; ?>,
-            sid: <? echo $_SESSION['sid']; ?>,
-        		rid: <? echo $_SESSION['rid']; ?>,
-            show_controlbox_by_default: true,
-            use_vcards: true
-            // TODO: look further into show_call_button, otr, show_only_online_users, user_search, vcards
-        });
-    });
-</script>
--->
+
+
+
 
 </html>
 
