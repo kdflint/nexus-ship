@@ -45,7 +45,7 @@ while ($row = pg_fetch_array($cursor)) {
 	<div id="default" style="display:block;font-size:12px;margin-top:5px;">
 		<img src="image/comingSoon.jpg" width="85" height="85" />
 		<p><b>For authorized Nexus pilot users</b></p>
-		<p>Your private, in-network messaging and collaboration dashboard<br/>will be available <b>September 2014</b></p>
+		<p>Your private, in-network messaging and collaboration dashboard<br/>will be available <b>October 2014</b></p>
 		<? // include("inbox.php"); ?>
 	</div>
 </div>

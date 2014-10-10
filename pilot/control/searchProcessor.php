@@ -23,6 +23,10 @@ if (isset($_POST['string']) && strlen($_POST['string']) > 0) {
 	$defaultView = FALSE;
 }
 
+if (isset($_POST['id']) && strlen($_POST['id']) > 0) {
+  $orgId = $_POST['id'];
+}
+
 if (isset($_POST['topic']) && $_POST['topic'] > 0) {
 	$filters['topic'] = $_POST['topic'];
 	$defaultView = FALSE;
@@ -112,6 +116,7 @@ function doNewSearch($inputString, $filters, $networkId) {
 			}
 						
 			// TODO: Seriously?? Seems that iterating a cursor dismantles a cursor... Perhaps must return a standard data type from pgDb so I can make copies?? 
+			// http://stackoverflow.com/questions/8735192/how-to-rewind-the-pg-fetch-assocresult-null-iterator
 			$cursor1 = pgDb::freeSearch($searchTerms[$counter], $networkId);
 			$cursor2 = pgDb::freeSearch($searchTerms[$counter], $networkId);
 			$cursor3 = pgDb::freeSearch($searchTerms[$counter], $networkId);
