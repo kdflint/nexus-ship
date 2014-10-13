@@ -245,7 +245,7 @@ We are working hard on adding:
 - Collaboration Tracking
 - Advanced Mapping functions
 
-You can login to Nexus using this link. Check the Help document for some information about how to use this site.
+You can login to Nexus using this link. filezCheck the Help document for some information about how to use this site.
 
 http://northbridgetech.org/" . $path . "/nexus/view/login.php
 
