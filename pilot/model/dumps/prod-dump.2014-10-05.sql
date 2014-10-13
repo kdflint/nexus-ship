@@ -11,161 +11,6 @@ SET escape_string_warning = off;
 
 SET search_path = public, pg_catalog;
 
-ALTER TABLE ONLY public."user" DROP CONSTRAINT user_status_fk_fkey;
-ALTER TABLE ONLY public.user_session DROP CONSTRAINT user_session_user_fk_fkey;
-ALTER TABLE ONLY public.user_group DROP CONSTRAINT user_group_user_fk_fkey;
-ALTER TABLE ONLY public.user_group DROP CONSTRAINT user_group_group_fk_fkey;
-ALTER TABLE ONLY public.user_organization DROP CONSTRAINT user_fk;
-ALTER TABLE ONLY public."user" DROP CONSTRAINT user_contact_fk_fkey;
-ALTER TABLE ONLY public.role_privilege DROP CONSTRAINT role_privilege_role_id_fk_fkey;
-ALTER TABLE ONLY public.role_privilege DROP CONSTRAINT role_privilege_privilege_id_fk_fkey;
-ALTER TABLE ONLY public.invitation DROP CONSTRAINT role_fk;
-ALTER TABLE ONLY public.user_organization DROP CONSTRAINT role_fk;
-ALTER TABLE ONLY public.organization_topic DROP CONSTRAINT organization_topic_topic_fkey;
-ALTER TABLE ONLY public.organization_topic DROP CONSTRAINT organization_topic_program_fk_fkey;
-ALTER TABLE ONLY public.organization_topic DROP CONSTRAINT organization_topic_organization_fk_fkey;
-ALTER TABLE ONLY public.organization_program DROP CONSTRAINT organization_program_program_fk_fkey;
-ALTER TABLE ONLY public.organization_program DROP CONSTRAINT organization_program_organization_fk_fkey;
-ALTER TABLE ONLY public.organization_organization DROP CONSTRAINT organization_organization_organization_to_fk_fkey;
-ALTER TABLE ONLY public.organization_organization DROP CONSTRAINT organization_organization_organization_from_fk_fkey;
-ALTER TABLE ONLY public.organization_language DROP CONSTRAINT organization_language_organization_fk_fkey;
-ALTER TABLE ONLY public.organization_language DROP CONSTRAINT organization_language_language_fk_fkey;
-ALTER TABLE ONLY public.user_organization DROP CONSTRAINT organization_fk;
-ALTER TABLE ONLY public.organization_contact DROP CONSTRAINT organization_contact_organization_fk_fkey;
-ALTER TABLE ONLY public.organization_contact DROP CONSTRAINT organization_contact_contact_fk_fkey;
-ALTER TABLE ONLY public.message DROP CONSTRAINT message_user_fk_fkey;
-ALTER TABLE ONLY public.message DROP CONSTRAINT message_reply_to_fk_fkey;
-ALTER TABLE ONLY public.message_recipient DROP CONSTRAINT message_recipient_recipient_fk_fkey;
-ALTER TABLE ONLY public.message_recipient DROP CONSTRAINT message_recipient_message_fk_fkey;
-ALTER TABLE ONLY public.invitation DROP CONSTRAINT invitation_organization_fk_fkey;
-ALTER TABLE ONLY public.invitation DROP CONSTRAINT invitation_network_fk_fkey;
-ALTER TABLE ONLY public.invitation DROP CONSTRAINT invitation_issuer_fkey;
-ALTER TABLE ONLY public.invitation DROP CONSTRAINT invitation_group_fk_fkey;
-ALTER TABLE ONLY public.user_organization DROP CONSTRAINT grantor_fk;
-ALTER TABLE ONLY public.forum_user DROP CONSTRAINT forum_user_user_fk_fkey;
-ALTER TABLE ONLY public.category_topic DROP CONSTRAINT category_topic_topic_fk_fkey;
-ALTER TABLE ONLY public.category_topic DROP CONSTRAINT category_topic_category_fk_fkey;
-ALTER TABLE ONLY public."user" DROP CONSTRAINT user_uuid_key;
-ALTER TABLE ONLY public."user" DROP CONSTRAINT user_username_key;
-ALTER TABLE ONLY public.user_session DROP CONSTRAINT user_session_pkey;
-ALTER TABLE ONLY public."user" DROP CONSTRAINT user_pkey;
-ALTER TABLE ONLY public.user_organization DROP CONSTRAINT user_organization_user_fk_key;
-ALTER TABLE ONLY public.user_organization DROP CONSTRAINT user_organization_pkey;
-ALTER TABLE ONLY public.user_group DROP CONSTRAINT user_group_pkey;
-ALTER TABLE ONLY public.topic DROP CONSTRAINT topic_pkey;
-ALTER TABLE ONLY public.status DROP CONSTRAINT status_pkey;
-ALTER TABLE ONLY public.status DROP CONSTRAINT status_name_key;
-ALTER TABLE ONLY public.role_privilege DROP CONSTRAINT role_privilege_pkey;
-ALTER TABLE ONLY public.role DROP CONSTRAINT role_pkey;
-ALTER TABLE ONLY public.role DROP CONSTRAINT role_name_key;
-ALTER TABLE ONLY public.program DROP CONSTRAINT program_pkey;
-ALTER TABLE ONLY public.program_language DROP CONSTRAINT program_language_pkey;
-ALTER TABLE ONLY public.privilege DROP CONSTRAINT privilege_pkey;
-ALTER TABLE ONLY public.organization_topic DROP CONSTRAINT organization_topic_pkey;
-ALTER TABLE ONLY public.organization_program DROP CONSTRAINT organization_program_pkey;
-ALTER TABLE ONLY public.organization DROP CONSTRAINT organization_pkey;
-ALTER TABLE ONLY public.organization_organization DROP CONSTRAINT organization_organization_pkey;
-ALTER TABLE ONLY public.organization_location DROP CONSTRAINT organization_location_pkey;
-ALTER TABLE ONLY public.organization_language DROP CONSTRAINT organization_language_pkey;
-ALTER TABLE ONLY public.organization_contact DROP CONSTRAINT organization_contact_pkey;
-ALTER TABLE ONLY public.message_recipient DROP CONSTRAINT message_recipient_pkey;
-ALTER TABLE ONLY public.message DROP CONSTRAINT message_pkey;
-ALTER TABLE ONLY public.location DROP CONSTRAINT location_pkey;
-ALTER TABLE ONLY public.language DROP CONSTRAINT language_pkey;
-ALTER TABLE ONLY public.invitation DROP CONSTRAINT invitation_uuid_key;
-ALTER TABLE ONLY public.invitation DROP CONSTRAINT invitation_pkey;
-ALTER TABLE ONLY public."group" DROP CONSTRAINT group_pkey;
-ALTER TABLE ONLY public.forum_user DROP CONSTRAINT forum_user_pkey;
-ALTER TABLE ONLY public.contact DROP CONSTRAINT contact_pkey;
-ALTER TABLE ONLY public.category_topic DROP CONSTRAINT category_topic_pkey;
-ALTER TABLE ONLY public.category DROP CONSTRAINT category_pkey;
-ALTER TABLE public.user_organization ALTER COLUMN id DROP DEFAULT;
-ALTER TABLE public."user" ALTER COLUMN id DROP DEFAULT;
-ALTER TABLE public.status ALTER COLUMN id DROP DEFAULT;
-ALTER TABLE public.role ALTER COLUMN id DROP DEFAULT;
-ALTER TABLE public.privilege ALTER COLUMN id DROP DEFAULT;
-ALTER TABLE public.organization_organization ALTER COLUMN id DROP DEFAULT;
-ALTER TABLE public.organization ALTER COLUMN id DROP DEFAULT;
-ALTER TABLE public.invitation_organization ALTER COLUMN id DROP DEFAULT;
-ALTER TABLE public.invitation ALTER COLUMN id DROP DEFAULT;
-DROP TABLE public.user_session;
-DROP SEQUENCE public.user_session_id_seq;
-DROP SEQUENCE public.user_organization_id_seq;
-DROP TABLE public.user_organization;
-DROP SEQUENCE public.user_id_seq;
-DROP TABLE public.user_group;
-DROP SEQUENCE public.user_group_id_seq;
-DROP TABLE public."user";
-DROP TABLE public.topic;
-DROP SEQUENCE public.topic_id_seq;
-DROP SEQUENCE public.status_id_seq;
-DROP TABLE public.status;
-DROP TABLE public.role_privilege;
-DROP SEQUENCE public.role_id_seq;
-DROP TABLE public.role;
-DROP TABLE public.program_language;
-DROP SEQUENCE public.program_language_id_seq;
-DROP TABLE public.program;
-DROP SEQUENCE public.program_id_seq;
-DROP SEQUENCE public.privilege_id_seq;
-DROP TABLE public.privilege;
-DROP SEQUENCE public.person_id_seq;
-DROP TABLE public.organization_topic;
-DROP SEQUENCE public.organization_topic_id_seq;
-DROP TABLE public.organization_program;
-DROP SEQUENCE public.organization_program_id_seq;
-DROP SEQUENCE public.organization_organization_id_seq;
-DROP TABLE public.organization_organization;
-DROP TABLE public.organization_location;
-DROP SEQUENCE public.organization_location_id_seq;
-DROP TABLE public.organization_language;
-DROP SEQUENCE public.organization_language_id_seq;
-DROP SEQUENCE public.organization_id_seq;
-DROP TABLE public.organization_contact;
-DROP SEQUENCE public.organization_contact_id_seq;
-DROP TABLE public.organization;
-DROP SEQUENCE public.message_recipient_recipient_fk_seq;
-DROP TABLE public.message_recipient;
-DROP TABLE public.message;
-DROP SEQUENCE public.message_id_seq;
-DROP TABLE public.location;
-DROP SEQUENCE public.location_id_seq;
-DROP TABLE public.language;
-DROP SEQUENCE public.language_id_seq;
-DROP SEQUENCE public.invitation_organization_id_seq;
-DROP TABLE public.invitation_organization;
-DROP SEQUENCE public.invitation_id_seq;
-DROP TABLE public.invitation;
-DROP TABLE public."group";
-DROP SEQUENCE public.group_id_seq;
-DROP TABLE public.forum_user;
-DROP SEQUENCE public.forum_user_id_seq;
-DROP TABLE public.contact;
-DROP SEQUENCE public.contact_id_seq;
-DROP TABLE public.category_topic;
-DROP SEQUENCE public.category_topic_id_seq;
-DROP TABLE public.category;
-DROP SEQUENCE public.category_id_seq;
-DROP TYPE public.organization_type;
-DROP SCHEMA public;
---
--- Name: public; Type: SCHEMA; Schema: -; Owner: postgres
---
-
-CREATE SCHEMA public;
-
-
-ALTER SCHEMA public OWNER TO postgres;
-
---
--- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: postgres
---
-
-COMMENT ON SCHEMA public IS 'standard public schema';
-
-
-SET search_path = public, pg_catalog;
-
 --
 -- Name: organization_type; Type: TYPE; Schema: public; Owner: northbr6
 --
@@ -319,7 +164,7 @@ ALTER TABLE public.forum_user_id_seq OWNER TO northbr6;
 -- Name: forum_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: northbr6
 --
 
-SELECT pg_catalog.setval('forum_user_id_seq', 59, true);
+SELECT pg_catalog.setval('forum_user_id_seq', 26, true);
 
 
 --
@@ -685,7 +530,7 @@ ALTER TABLE public.message_id_seq OWNER TO northbr6;
 -- Name: message_id_seq; Type: SEQUENCE SET; Schema: public; Owner: northbr6
 --
 
-SELECT pg_catalog.setval('message_id_seq', 83, true);
+SELECT pg_catalog.setval('message_id_seq', 3, true);
 
 
 --
@@ -730,34 +575,6 @@ CREATE TABLE message_recipient (
 
 
 ALTER TABLE public.message_recipient OWNER TO northbr6;
-
---
--- Name: message_recipient_recipient_fk_seq; Type: SEQUENCE; Schema: public; Owner: northbr6
---
-
-CREATE SEQUENCE message_recipient_recipient_fk_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MAXVALUE
-    NO MINVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.message_recipient_recipient_fk_seq OWNER TO northbr6;
-
---
--- Name: message_recipient_recipient_fk_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: northbr6
---
-
-ALTER SEQUENCE message_recipient_recipient_fk_seq OWNED BY message_recipient.recipient_fk;
-
-
---
--- Name: message_recipient_recipient_fk_seq; Type: SEQUENCE SET; Schema: public; Owner: northbr6
---
-
-SELECT pg_catalog.setval('message_recipient_recipient_fk_seq', 1, false);
-
 
 --
 -- Name: organization; Type: TABLE; Schema: public; Owner: northbr6; Tablespace: 
@@ -840,7 +657,7 @@ ALTER SEQUENCE organization_id_seq OWNED BY organization.id;
 -- Name: organization_id_seq; Type: SEQUENCE SET; Schema: public; Owner: northbr6
 --
 
-SELECT pg_catalog.setval('organization_id_seq', 302, true);
+SELECT pg_catalog.setval('organization_id_seq', 281, true);
 
 
 --
@@ -952,7 +769,7 @@ ALTER SEQUENCE organization_organization_id_seq OWNED BY organization_organizati
 -- Name: organization_organization_id_seq; Type: SEQUENCE SET; Schema: public; Owner: northbr6
 --
 
-SELECT pg_catalog.setval('organization_organization_id_seq', 288, true);
+SELECT pg_catalog.setval('organization_organization_id_seq', 276, true);
 
 
 --
@@ -1252,7 +1069,7 @@ ALTER SEQUENCE status_id_seq OWNED BY status.id;
 -- Name: status_id_seq; Type: SEQUENCE SET; Schema: public; Owner: northbr6
 --
 
-SELECT pg_catalog.setval('status_id_seq', 3, true);
+SELECT pg_catalog.setval('status_id_seq', 2, true);
 
 
 --
@@ -1295,7 +1112,7 @@ ALTER TABLE public.topic OWNER TO northbr6;
 CREATE TABLE "user" (
     id integer NOT NULL,
     uuid uuid NOT NULL,
-    username character varying(12) DEFAULT ''::character varying NOT NULL,
+    username character varying(50) DEFAULT ''::character varying NOT NULL,
     password character varying(72) DEFAULT ''::character varying,
     fname character varying(50) DEFAULT ''::character varying NOT NULL,
     mname character varying(50) DEFAULT ''::character varying NOT NULL,
@@ -1366,7 +1183,7 @@ ALTER TABLE public.user_group_id_seq OWNER TO northbr6;
 -- Name: user_group_id_seq; Type: SEQUENCE SET; Schema: public; Owner: northbr6
 --
 
-SELECT pg_catalog.setval('user_group_id_seq', 37, true);
+SELECT pg_catalog.setval('user_group_id_seq', 7, true);
 
 
 --
@@ -1409,7 +1226,7 @@ ALTER SEQUENCE user_id_seq OWNED BY "user".id;
 -- Name: user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: northbr6
 --
 
-SELECT pg_catalog.setval('user_id_seq', 153, true);
+SELECT pg_catalog.setval('user_id_seq', 107, true);
 
 
 --
@@ -1454,7 +1271,7 @@ ALTER SEQUENCE user_organization_id_seq OWNED BY user_organization.id;
 -- Name: user_organization_id_seq; Type: SEQUENCE SET; Schema: public; Owner: northbr6
 --
 
-SELECT pg_catalog.setval('user_organization_id_seq', 142, true);
+SELECT pg_catalog.setval('user_organization_id_seq', 106, true);
 
 
 --
@@ -1475,7 +1292,7 @@ ALTER TABLE public.user_session_id_seq OWNER TO northbr6;
 -- Name: user_session_id_seq; Type: SEQUENCE SET; Schema: public; Owner: northbr6
 --
 
-SELECT pg_catalog.setval('user_session_id_seq', 67, true);
+SELECT pg_catalog.setval('user_session_id_seq', 28, true);
 
 
 --
@@ -1859,47 +1676,24 @@ INSERT INTO contact VALUES (59, '', '', '', '', NULL, '', '', '');
 -- Data for Name: forum_user; Type: TABLE DATA; Schema: public; Owner: northbr6
 --
 
-INSERT INTO forum_user VALUES (12, 88, 'Kathy', 'admin', 'Kathy Flint', 'contact@northbridgetech.org');
-INSERT INTO forum_user VALUES (22, 102, 'Testy The', 'test4', 'Testy The Tester', 'nexus@northbridgetech.org');
-INSERT INTO forum_user VALUES (23, 103, 'Test', 'test5', 'Test Me', '103.nexus@northbridgetech.org');
-INSERT INTO forum_user VALUES (24, 104, 'Rock This', 'test6', 'Rock This Test', '104.nexus@northbridgetech.org');
-INSERT INTO forum_user VALUES (27, 116, 'Test User', 'test9', 'Test User Nine', 'kathy.flint@northbridgetech.org');
-INSERT INTO forum_user VALUES (38, 132, 'Enroll', 'enrolltest3', 'Enroll Test3', 'enrolltest3@test.com');
-INSERT INTO forum_user VALUES (39, 133, 'Enroll', 'enrollTest4', 'Enroll Test4', 'enrollTest4@test.com');
-INSERT INTO forum_user VALUES (40, 134, 'Enroll', 'enrollTest5', 'Enroll Test5', 'enrollTest5@test.com');
-INSERT INTO forum_user VALUES (41, 135, 'Enroll', 'enrollTest6', 'Enroll Test6', 'enrollTest6@test.com');
-INSERT INTO forum_user VALUES (42, 136, 'Enroll', 'enrollTest7', 'Enroll Test7', 'enrolltest7@test.com');
-INSERT INTO forum_user VALUES (43, 137, 'Enroll', 'enrollTest8', 'Enroll Test8', 'kathy.d.flint@gmail.com');
-INSERT INTO forum_user VALUES (44, 138, 'Enroll', 'enrollTest10', 'Enroll Test10', 'ksflint@comcast.net');
-INSERT INTO forum_user VALUES (45, 139, 'Enroll', 'enrollTest13', 'Enroll Test13', 'enrolltest13@test.com');
-INSERT INTO forum_user VALUES (46, 140, 'Enroll', 'enrollTest14', 'Enroll Test14', 'enrolltest14@test.com');
-INSERT INTO forum_user VALUES (47, 141, 'qwe', 'qwe', 'qwe qwe', 'qwe@test.com');
-INSERT INTO forum_user VALUES (48, 142, 'wert', 'wert', 'wert ert', 'wert@test.com');
-INSERT INTO forum_user VALUES (49, 143, 'erty', 'erty', 'erty erty', 'erty@test.com');
-INSERT INTO forum_user VALUES (50, 144, 'asd', 'asd', 'asd ad', 'asd@test.com');
-INSERT INTO forum_user VALUES (51, 145, 'zxc', 'zxc', 'zxc zxc', 'zxc@test.com');
-INSERT INTO forum_user VALUES (52, 146, 'poi', 'poi', 'poi poi', 'poi@test.com');
-INSERT INTO forum_user VALUES (53, 147, 'kjh', 'kjh', 'kjh kjh', 'kjh@test.com');
-INSERT INTO forum_user VALUES (54, 148, 'xcv', 'xcv', 'xcv xcv', 'xcv@test.com');
-INSERT INTO forum_user VALUES (55, 149, 'dfg', 'dfg', 'dfg dfg', 'dfg@test.com');
-INSERT INTO forum_user VALUES (56, 150, 'wdc', 'wdc', 'wdc wdc', 'wdc@test.com');
-INSERT INTO forum_user VALUES (57, 151, 'uyt', 'uyt', 'uyt uyt', 'uyt@test.com');
-INSERT INTO forum_user VALUES (58, 152, 'okn', 'okn', 'okn okn', 'okn@test.com');
-INSERT INTO forum_user VALUES (59, 153, 'dvb', 'dvb', 'dvb dvb', 'dvb@test.com');
+INSERT INTO forum_user VALUES (13, 89, 'Kirsten', 'change-me', 'Kirsten Peachey', 'kirsten.peachey@advocatehealth.com');
+INSERT INTO forum_user VALUES (12, 88, 'Administrator', 'admin', 'Administrator', 'kathy.flint@northbridgetech.org');
+INSERT INTO forum_user VALUES (25, 105, 'Jen', 'moksha606', 'Jen Brown', 'jenbrown@northwestern.edu');
+INSERT INTO forum_user VALUES (26, 107, 'Test', 'jenbrown', 'Test Test', '107.kathy.flint@northbridgetech.org');
 
 
 --
 -- Data for Name: group; Type: TABLE DATA; Schema: public; Owner: northbr6
 --
 
-INSERT INTO "group" VALUES (1, 'Demo Workgroup', 'This group seeks to deepen collaborative research relationships between communities and academic institutions.');
+INSERT INTO "group" VALUES (1, 'Faith-based Research', 'This group seeks to deepen collaborative research between faith-based communities and academic institutions.');
 
 
 --
 -- Data for Name: invitation; Type: TABLE DATA; Schema: public; Owner: northbr6
 --
 
-INSERT INTO invitation VALUES (40, '0037adaf-de43-af5e-95e2-b2dea2d05f49', NULL, '2014-08-01 09:42:24.015911-06', NULL, 18, NULL, 1, NULL, 85, 'global', 18, 1);
+INSERT INTO invitation VALUES (40, '1137adaf-de43-af5e-95e2-b2dea2d05f49', NULL, '2014-09-18 13:00:42.873582-06', NULL, 18, NULL, 1, NULL, 85, 'global', 18, 1);
 
 
 --
@@ -2154,66 +1948,18 @@ INSERT INTO location VALUES (465, '6401 N. Artesian Ave.', '', 'Chicago', '', 'I
 -- Data for Name: message; Type: TABLE DATA; Schema: public; Owner: northbr6
 --
 
-INSERT INTO message VALUES (66, 116, 'Re: [Nexus] Personal Message', '(response through email not captured)', 65, '2014-09-16 11:26:28.986772-06');
-INSERT INTO message VALUES (67, 88, 'Let''s change the subject', '(response through email not captured)', 66, '2014-09-16 11:27:34.518497-06');
-INSERT INTO message VALUES (68, 116, '[Nexus] Personal Message', 'Test out 8', NULL, '2014-09-16 11:29:14.511284-06');
-INSERT INTO message VALUES (56, 116, '[Nexus] Personal Message', 'Test out 1', NULL, '2014-09-16 10:45:05.786232-06');
-INSERT INTO message VALUES (57, 88, 'Nexus Message Queue', 'Unknown - responded through email.', 56, '2014-09-16 10:49:00.724184-06');
-INSERT INTO message VALUES (58, 116, '[Nexus] Personal Message', 'Test out 2', NULL, '2014-09-16 11:07:27.716499-06');
-INSERT INTO message VALUES (59, 88, 'Nexus Message Queue', 'Unknown - responded through email.', 58, '2014-09-16 11:08:10.359289-06');
-INSERT INTO message VALUES (60, 116, '[Nexus] Personal Message', 'Test back 3', NULL, '2014-09-16 11:15:14.076179-06');
-INSERT INTO message VALUES (61, 88, 'Re: [Nexus] Personal Message', '(response through email not captured)', 60, '2014-09-16 11:16:13.10312-06');
-INSERT INTO message VALUES (62, 116, '[Nexus] Personal Message', 'Test out 5', NULL, '2014-09-16 11:22:21.795942-06');
-INSERT INTO message VALUES (63, 88, 'Re: [Nexus] Personal Message', '(response through email not captured)', 62, '2014-09-16 11:22:56.17661-06');
-INSERT INTO message VALUES (64, 116, '[Nexus] Personal Message', 'Test out 6', NULL, '2014-09-16 11:25:10.363477-06');
-INSERT INTO message VALUES (65, 88, 'Re: [Nexus] Personal Message', '(response through email not captured)', 64, '2014-09-16 11:25:47.590737-06');
-INSERT INTO message VALUES (69, 88, 'Re: [Nexus] Personal Message', '(response through email not captured)', 68, '2014-09-16 11:32:23.805855-06');
-INSERT INTO message VALUES (70, 116, '[Nexus] Personal Message', 'Test out 11', NULL, '2014-09-16 12:00:16.684736-06');
-INSERT INTO message VALUES (71, 88, 'Re: [Nexus] Personal Message', '(response through email not captured)', 70, '2014-09-16 12:00:57.066348-06');
-INSERT INTO message VALUES (72, 116, '[Nexus] Personal Message', 'Test out 33', NULL, '2014-09-16 12:18:37.154261-06');
-INSERT INTO message VALUES (73, 88, 'Re: [Nexus] Personal Message', '(response through email not captured)', 72, '2014-09-16 12:19:29.700099-06');
-INSERT INTO message VALUES (74, 88, 'Re: [Nexus] Personal Message', '(response through email not captured)', 72, '2014-09-16 12:21:21.265599-06');
-INSERT INTO message VALUES (75, 116, '[Nexus] Personal Message', 'Test out 44', NULL, '2014-09-16 12:24:26.010857-06');
-INSERT INTO message VALUES (76, 88, 'Re: [Nexus] Personal Message', '(response through email not captured)', 75, '2014-09-16 12:24:54.587848-06');
-INSERT INTO message VALUES (77, 116, 'Re: [Nexus] Personal Message', '(response through email not captured)', 76, '2014-09-16 12:26:05.63738-06');
-INSERT INTO message VALUES (78, 116, '[Nexus] Personal Message', 'Test out 55', NULL, '2014-09-16 12:35:50.549812-06');
-INSERT INTO message VALUES (79, 116, '[Nexus] Personal Message', 'Test out 66', NULL, '2014-09-16 12:38:46.605372-06');
-INSERT INTO message VALUES (80, 88, 'Re: [Nexus] Personal Message', '(response through email not captured)', 79, '2014-09-16 12:39:24.699859-06');
-INSERT INTO message VALUES (81, 116, 'Re: [Nexus] Personal Message', '(response through email not captured)', 80, '2014-09-16 12:40:33.037032-06');
-INSERT INTO message VALUES (82, 88, 'Re: [Nexus] Personal Message', '(response through email not captured)', 81, '2014-09-16 12:41:05.697871-06');
+INSERT INTO message VALUES (1, 88, '[Nexus] Personal Message', 'test out 1', NULL, '2014-09-19 16:00:05.237832-06');
+INSERT INTO message VALUES (2, 88, 'Re: [Nexus] Personal Message', '(response through email not captured)', 1, '2014-09-19 16:00:56.834106-06');
+INSERT INTO message VALUES (3, 88, 'Re: [Nexus] Personal Message', '(response through email not captured)', 1, '2014-09-19 16:02:41.289832-06');
 
 
 --
 -- Data for Name: message_recipient; Type: TABLE DATA; Schema: public; Owner: northbr6
 --
 
-INSERT INTO message_recipient VALUES (56, 88, '02050755-ffa9-5376-814f-0058ec7fd2ec');
-INSERT INTO message_recipient VALUES (57, 116, 'cc458603-393a-3e63-f653-00175dc5ddeb');
-INSERT INTO message_recipient VALUES (58, 88, '9ac8eee5-f177-ee65-46ce-e42257346b18');
-INSERT INTO message_recipient VALUES (59, 116, '66c77301-9049-8d07-6515-99b3291d1f71');
-INSERT INTO message_recipient VALUES (60, 88, '49dc7fb9-3d98-4418-367c-8c26abe80252');
-INSERT INTO message_recipient VALUES (61, 116, '34a10553-09b5-a2ce-c54f-f29cc50d6d43');
-INSERT INTO message_recipient VALUES (62, 88, 'cf00d8e3-26ed-1756-2b5e-c6a2fb387754');
-INSERT INTO message_recipient VALUES (63, 116, '3dc7655f-c025-6443-ec14-7fbf65cb53fe');
-INSERT INTO message_recipient VALUES (64, 88, 'e30505a0-f843-7333-e062-edffdf0c611c');
-INSERT INTO message_recipient VALUES (65, 116, 'a191f87d-f054-f89c-cacd-f22d5b1c1cd3');
-INSERT INTO message_recipient VALUES (66, 88, '081c2187-255a-82ef-719b-fc0832f3a4ad');
-INSERT INTO message_recipient VALUES (67, 116, 'f71cc1b0-50d7-8bd9-e444-426dd9c440ca');
-INSERT INTO message_recipient VALUES (68, 88, '25e2859f-6ded-412b-cea4-9a28c713310d');
-INSERT INTO message_recipient VALUES (69, 116, '43390b25-c82b-8c2e-f284-1c4d79e13ae9');
-INSERT INTO message_recipient VALUES (70, 88, '21ca9550-a745-d941-6d34-5a13622e6b71');
-INSERT INTO message_recipient VALUES (71, 116, '364a5616-ae9e-83bd-109e-3fcec5ebaeba');
-INSERT INTO message_recipient VALUES (72, 88, '58197416-5db4-2e53-2cb2-5bee64ae0c4b');
-INSERT INTO message_recipient VALUES (73, 116, 'be12abc5-a669-0304-0b34-77ecda65a027');
-INSERT INTO message_recipient VALUES (74, 116, 'fb739589-bba2-eb20-d283-64ed2f588c7b');
-INSERT INTO message_recipient VALUES (75, 88, '63576506-59f1-e50e-6145-579ad8edbdde');
-INSERT INTO message_recipient VALUES (76, 116, '35ac17ec-de6e-43b5-f6d0-b69741c1de7c');
-INSERT INTO message_recipient VALUES (77, 88, '0fe27984-9bc4-6c14-c6f8-ccf0164313a1');
-INSERT INTO message_recipient VALUES (78, 88, '47afb286-3dae-abe4-42b2-3f6f25909bd5');
-INSERT INTO message_recipient VALUES (79, 88, 'e384d68d-7971-3461-0ac6-5365e13dc81c');
-INSERT INTO message_recipient VALUES (80, 116, '7cd711f6-52f7-ecb5-a105-8ab363149a1e');
-INSERT INTO message_recipient VALUES (81, 88, 'c590a23d-aceb-9dc0-4eec-467b68f07b4c');
-INSERT INTO message_recipient VALUES (82, 116, 'cddec709-e45b-97a8-36e7-f4b19b194814');
+INSERT INTO message_recipient VALUES (1, 88, 'e932eeae-040a-7ad4-7510-ff0dd5386660');
+INSERT INTO message_recipient VALUES (2, 88, '4dc541bd-8544-c881-d91e-ad4d2d9fc268');
+INSERT INTO message_recipient VALUES (3, 88, '77f62022-a589-c772-1b68-a36d5a9e1371');
 
 
 --
@@ -2230,7 +1976,11 @@ INSERT INTO organization VALUES (45, '30th Ward - St. James Church', NULL, NULL,
 INSERT INTO organization VALUES (46, 'A Just Harvest', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization', '');
 INSERT INTO organization VALUES (47, 'Access Living', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization', '');
 INSERT INTO organization VALUES (48, 'Adalberto Memorial United Methodist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (49, 'Advocate Christ Medical Center', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Heath Care Provider', '');
+INSERT INTO organization VALUES (50, 'Advocate Clinical Pastoral Education', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Heath Care Provider', '');
+INSERT INTO organization VALUES (51, 'Advocate Health Care', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Heath Care Provider', '');
 INSERT INTO organization VALUES (52, 'Advocate Parish Nurse Ministry', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (53, 'Advocate United Church of Christ', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
 INSERT INTO organization VALUES (54, 'African Community United Methodist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
 INSERT INTO organization VALUES (56, 'Agape Family Life Center', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
 INSERT INTO organization VALUES (57, 'Age Options', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization', '');
@@ -2250,6 +2000,7 @@ INSERT INTO organization VALUES (72, 'Buddhist International Tzu Chi Relief Foun
 INSERT INTO organization VALUES (73, 'Campaign for Better Health Care', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
 INSERT INTO organization VALUES (74, 'Caring for Health', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
 INSERT INTO organization VALUES (75, 'CARRI (Chicago Area Regional Recovery Initiative)', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization', '');
+INSERT INTO organization VALUES (76, 'Center for Faith and Health', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'University', '');
 INSERT INTO organization VALUES (77, 'Central Spanish Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
 INSERT INTO organization VALUES (78, 'Chicago Chin Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
 INSERT INTO organization VALUES (79, 'Chicago Theological Seminary', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
@@ -2263,11 +2014,13 @@ INSERT INTO organization VALUES (86, 'Church of Jesus Christ Latter Day Saints',
 INSERT INTO organization VALUES (87, 'Coalition for Quality and Patient Safety of Chicagoland', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
 INSERT INTO organization VALUES (88, 'Community Health Services and Health Promotion', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
 INSERT INTO organization VALUES (89, 'Community-Outreach Project', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (90, 'Congregational Health Partnerships', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Heath Care Provider', '');
 INSERT INTO organization VALUES (91, 'Congregational Outreach', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
 INSERT INTO organization VALUES (92, 'Congregational United Church of Christ of Arlington Heights', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
 INSERT INTO organization VALUES (93, 'Consortium to Lower Obesity in Chicago Children (CLOCC)', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
 INSERT INTO organization VALUES (94, 'Cornerstone Community Outreach', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization', '');
 INSERT INTO organization VALUES (95, 'Council of Islamic Organizations of Greater Chicago', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization', '');
+INSERT INTO organization VALUES (96, 'Delegate Church Association of Advocate BroMenn Medical Center', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Collaborative/Network', '');
 INSERT INTO organization VALUES (97, 'DuPage Department of Public Health', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
 INSERT INTO organization VALUES (98, 'Ebenezer Baptist', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
 INSERT INTO organization VALUES (99, 'Ebenezer Lutheran Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
@@ -2279,14 +2032,9 @@ INSERT INTO organization VALUES (104, 'Exodus Community Church', NULL, NULL, '20
 INSERT INTO organization VALUES (105, 'Faith Caucus', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
 INSERT INTO organization VALUES (106, 'Faith in Place', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization', '');
 INSERT INTO organization VALUES (107, 'Faith Temple COGIC', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
-INSERT INTO organization VALUES (49, 'Advocate Christ Medical Center', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Health Care Provider', '');
-INSERT INTO organization VALUES (96, 'Delegate Church Association of Advocate BroMenn Medical Center', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Collaboration/Network', '');
-INSERT INTO organization VALUES (76, 'Center for Faith and Health', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Academic', '');
-INSERT INTO organization VALUES (53, 'Advocate United Church of Christ', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
-INSERT INTO organization VALUES (55, 'African-American Alzheimer&apos;s Outreach Initiative', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
-INSERT INTO organization VALUES (59, 'Alzheimer&apos;s Association - Greater Illinois Chapter', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
-INSERT INTO organization VALUES (67, 'B&apos;nai Yehuda Beth Shalom', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (18, 'The Center for Faith and Community Health Transformations', NULL, NULL, '2014-07-14 16:09:45.885491-06', NULL, '2014-07-14 16:09:45.885491-06', NULL, NULL, 1, NULL, 'src="http://chicagofaithandhealth.org/imgs/logo.png" height="88" width="365"');
 INSERT INTO organization VALUES (108, 'Faith United Methodist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (109, 'Figure Facts LLC', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Heath Care Provider', '');
 INSERT INTO organization VALUES (110, 'First Baptist Church, Berwyn', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
 INSERT INTO organization VALUES (111, 'First Baptist Church, LaGrange', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
 INSERT INTO organization VALUES (112, 'First Baptist Church, Park Forest', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
@@ -2340,6 +2088,7 @@ INSERT INTO organization VALUES (161, 'Kimball Ave. Church', NULL, NULL, '2014-0
 INSERT INTO organization VALUES (162, 'La Academia', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
 INSERT INTO organization VALUES (163, 'Lakeview Presbyterian Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
 INSERT INTO organization VALUES (164, 'Latino Community Program', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (165, 'LaVerne Barnes', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Heath Care Provider', '');
 INSERT INTO organization VALUES (166, 'Lead Safe Housing Initiatives', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
 INSERT INTO organization VALUES (167, 'lead safe illinois', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
 INSERT INTO organization VALUES (168, 'Leadership and Church Development', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
@@ -2351,8 +2100,7 @@ INSERT INTO organization VALUES (173, 'Lively Stone Missonary Baptist Church', N
 INSERT INTO organization VALUES (174, 'Living Well Ministries', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
 INSERT INTO organization VALUES (175, 'Lutheran Church of Atonement', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
 INSERT INTO organization VALUES (176, 'Lutheran Church of the Ascension', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
-INSERT INTO organization VALUES (144, 'Illinois Women&apos;s Health Registry', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
-INSERT INTO organization VALUES (147, 'Institute for Women&apos;s Health Research', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (177, 'Lutheran General Hospital - Mission and Spiritual', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Heath Care Provider', '');
 INSERT INTO organization VALUES (178, 'Lutheran Social Services of Illinois', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization', '');
 INSERT INTO organization VALUES (179, 'M.I.K.E. Minority Intervention and Kidney Education Program', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
 INSERT INTO organization VALUES (180, 'Ministry to New Moms', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
@@ -2414,7 +2162,7 @@ INSERT INTO organization VALUES (238, 'St. John MB Church', NULL, NULL, '2014-07
 INSERT INTO organization VALUES (239, 'St. John United Church of Christ', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
 INSERT INTO organization VALUES (243, 'St. Mark International Christian Ch.', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
 INSERT INTO organization VALUES (244, 'St. Paul UCC', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
-INSERT INTO organization VALUES (208, 'People&apos;s Church of the Harvest', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (218, 'Rahab&apos;s House, Inc.', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
 INSERT INTO organization VALUES (246, 'St. Pius V. Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
 INSERT INTO organization VALUES (247, 'St. Sabina Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
 INSERT INTO organization VALUES (248, 'St. Stephen AME Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
@@ -2443,14 +2191,14 @@ INSERT INTO organization VALUES (272, 'Victory Christian Assembly Church', NULL,
 INSERT INTO organization VALUES (273, 'VOCMA Faith Community Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
 INSERT INTO organization VALUES (274, 'Wesley United Methodist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
 INSERT INTO organization VALUES (275, 'Westside Health Authority', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
-INSERT INTO organization VALUES (50, 'Advocate Clinical Pastoral Education', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Health Care Provider', '');
-INSERT INTO organization VALUES (51, 'Advocate Health Care', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Health Care Provider', '');
-INSERT INTO organization VALUES (90, 'Congregational Health Partnerships', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Health Care Provider', '');
-INSERT INTO organization VALUES (109, 'Figure Facts LLC', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Health Care Provider', '');
-INSERT INTO organization VALUES (165, 'LaVerne Barnes', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Health Care Provider', '');
-INSERT INTO organization VALUES (177, 'Lutheran General Hospital - Mission and Spiritual', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Health Care Provider', '');
-INSERT INTO organization VALUES (276, 'Wholistic Medical Clinic', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Health Care Provider', '');
-INSERT INTO organization VALUES (218, 'Rahab&apos;s House, Inc.', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (276, 'Wholistic Medical Clinic', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Heath Care Provider', '');
+INSERT INTO organization VALUES (277, 'ZAM&apos;s Hope Community Resource Center', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization', '');
+INSERT INTO organization VALUES (55, 'African-American Alzheimer&apos;s Outreach Initiative', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (59, 'Alzheimer&apos;s Association - Greater Illinois Chapter', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (67, 'B&apos;nai Yehuda Beth Shalom', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (144, 'Illinois Women&apos;s Health Registry', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (147, 'Institute for Women&apos;s Health Research', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (208, 'People&apos;s Church of the Harvest', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
 INSERT INTO organization VALUES (233, 'St. Clement&apos;s Episcopal Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
 INSERT INTO organization VALUES (240, 'St. Kevins&apos;s Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
 INSERT INTO organization VALUES (241, 'St. Luke&apos;s Lutheran of Logan Square', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
@@ -2458,25 +2206,8 @@ INSERT INTO organization VALUES (242, 'St. Luke&apos;s Lutheran Church of Logan 
 INSERT INTO organization VALUES (245, 'St. Paul&apos;s Church by-the-Lake', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
 INSERT INTO organization VALUES (257, 'The Unversity of Illinois Medical Center for Women&apos;s Health Associates', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
 INSERT INTO organization VALUES (271, 'University of Illinois&apos; Division of Community Health', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
-INSERT INTO organization VALUES (277, 'ZAM&apos;s Hope Community Resource Center', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization', '');
-INSERT INTO organization VALUES (286, 'A new organization', NULL, NULL, '2014-09-18 07:39:49.602352-06', NULL, NULL, NULL, NULL, 3, '', '');
-INSERT INTO organization VALUES (287, 'asdf', NULL, NULL, '2014-09-18 07:52:36.351035-06', NULL, NULL, NULL, NULL, 3, '', '');
-INSERT INTO organization VALUES (288, 'new one', NULL, NULL, '2014-09-18 08:55:55.602041-06', NULL, NULL, NULL, NULL, 3, '', '');
-INSERT INTO organization VALUES (289, 'a new one', NULL, NULL, '2014-09-18 08:58:05.331817-06', NULL, NULL, NULL, NULL, 3, '', '');
-INSERT INTO organization VALUES (290, 'qwe', NULL, NULL, '2014-09-18 09:08:57.670782-06', NULL, NULL, NULL, NULL, 3, '', '');
-INSERT INTO organization VALUES (291, 'wert', NULL, NULL, '2014-09-18 09:09:54.752686-06', NULL, NULL, NULL, NULL, 3, '', '');
-INSERT INTO organization VALUES (292, 'erty', NULL, NULL, '2014-09-18 09:11:10.977374-06', NULL, NULL, NULL, NULL, 3, '', '');
-INSERT INTO organization VALUES (293, 'asd', NULL, NULL, '2014-09-18 09:12:45.401135-06', NULL, NULL, NULL, NULL, 3, '', '');
-INSERT INTO organization VALUES (294, 'zxc', NULL, NULL, '2014-09-18 09:14:56.671519-06', NULL, NULL, NULL, NULL, 3, '', '');
-INSERT INTO organization VALUES (295, 'poi', NULL, NULL, '2014-09-18 09:26:15.821377-06', NULL, NULL, NULL, NULL, 3, '', '');
-INSERT INTO organization VALUES (296, 'kjh', NULL, NULL, '2014-09-18 09:27:40.994665-06', NULL, NULL, NULL, NULL, 3, '', '');
-INSERT INTO organization VALUES (18, 'The Demo Network', NULL, NULL, '2014-07-14 16:09:45.885491-06', NULL, '2014-07-14 16:09:45.885491-06', NULL, NULL, 1, NULL, 'src="image/demo.jpg" height="120" width="120"');
-INSERT INTO organization VALUES (297, 'xcv', NULL, NULL, '2014-09-18 10:15:17.212574-06', NULL, NULL, NULL, NULL, 3, '', '');
-INSERT INTO organization VALUES (298, 'dfg', NULL, NULL, '2014-09-18 10:16:12.95343-06', NULL, NULL, NULL, NULL, 3, '', '');
-INSERT INTO organization VALUES (299, 'wdc', NULL, NULL, '2014-09-18 10:19:40.039574-06', NULL, NULL, NULL, NULL, 3, '', '');
-INSERT INTO organization VALUES (300, 'uyt', NULL, NULL, '2014-09-18 10:20:34.299125-06', NULL, NULL, NULL, NULL, 3, '', '');
-INSERT INTO organization VALUES (301, 'okn', NULL, NULL, '2014-09-18 10:25:12.420283-06', NULL, NULL, NULL, NULL, 3, '', '');
-INSERT INTO organization VALUES (302, 'dvb', NULL, NULL, '2014-09-18 10:40:39.584479-06', NULL, NULL, NULL, NULL, 3, '', '');
+INSERT INTO organization VALUES (280, 'Alliance for Research in Chicagoland Communities, Northwestern University', NULL, NULL, '2014-09-24 05:09:47.571413-06', NULL, NULL, NULL, NULL, 3, '', '');
+INSERT INTO organization VALUES (281, 'REMOVE', NULL, NULL, '2014-10-05 12:15:04.526386-06', NULL, NULL, NULL, NULL, 3, '', '');
 
 
 --
@@ -3298,22 +3029,8 @@ INSERT INTO organization_organization VALUES (268, 18, 275, 'parent', '2014-07-3
 INSERT INTO organization_organization VALUES (269, 18, 276, 'parent', '2014-07-31 15:12:33.045508-06', NULL);
 INSERT INTO organization_organization VALUES (270, 18, 277, 'parent', '2014-07-31 15:12:33.069455-06', NULL);
 INSERT INTO organization_organization VALUES (272, 18, 18, 'parent', '2014-08-02 17:36:36.800969-06', NULL);
-INSERT INTO organization_organization VALUES (273, 18, 287, 'parent', '2014-09-18 07:52:36.372668-06', NULL);
-INSERT INTO organization_organization VALUES (274, 18, 288, 'parent', '2014-09-18 08:55:55.673435-06', NULL);
-INSERT INTO organization_organization VALUES (275, 18, 289, 'parent', '2014-09-18 08:58:05.367089-06', NULL);
-INSERT INTO organization_organization VALUES (276, 18, 290, 'parent', '2014-09-18 09:08:57.694393-06', NULL);
-INSERT INTO organization_organization VALUES (277, 18, 291, 'parent', '2014-09-18 09:09:54.811818-06', NULL);
-INSERT INTO organization_organization VALUES (278, 18, 292, 'parent', '2014-09-18 09:11:11.084595-06', NULL);
-INSERT INTO organization_organization VALUES (279, 18, 293, 'parent', '2014-09-18 09:12:45.46764-06', NULL);
-INSERT INTO organization_organization VALUES (280, 18, 294, 'parent', '2014-09-18 09:14:56.736331-06', NULL);
-INSERT INTO organization_organization VALUES (281, 18, 295, 'parent', '2014-09-18 09:26:15.842624-06', NULL);
-INSERT INTO organization_organization VALUES (282, 18, 296, 'parent', '2014-09-18 09:27:41.152552-06', NULL);
-INSERT INTO organization_organization VALUES (283, 18, 297, 'parent', '2014-09-18 10:15:17.254973-06', NULL);
-INSERT INTO organization_organization VALUES (284, 18, 298, 'parent', '2014-09-18 10:16:12.973868-06', NULL);
-INSERT INTO organization_organization VALUES (285, 18, 299, 'parent', '2014-09-18 10:19:40.065041-06', NULL);
-INSERT INTO organization_organization VALUES (286, 18, 300, 'parent', '2014-09-18 10:20:34.745805-06', NULL);
-INSERT INTO organization_organization VALUES (287, 18, 301, 'parent', '2014-09-18 10:25:12.479169-06', NULL);
-INSERT INTO organization_organization VALUES (288, 18, 302, 'parent', '2014-09-18 10:40:39.643637-06', NULL);
+INSERT INTO organization_organization VALUES (275, 18, 280, 'parent', '2014-09-24 05:09:47.634395-06', NULL);
+INSERT INTO organization_organization VALUES (276, 18, 281, 'parent', '2014-10-05 12:15:04.548879-06', NULL);
 
 
 --
@@ -4258,14 +3975,14 @@ INSERT INTO privilege VALUES (1, 'create_invitation', 'Generate new invitations 
 -- Data for Name: program; Type: TABLE DATA; Schema: public; Owner: northbr6
 --
 
-INSERT INTO program VALUES (1, 'Northside P.O.W.E.R. (People Organized to Work, Educate and Restore) is an institution-based people‚Äôs power organization whose members are located in the North Side of the City of Chicago and North Shore Communities. Northside P.O.W.E.R. works on issues that address the causes of hunger and poverty. Currently Northside P.O.W.E.R. is working in the areas of affordable housing and food justice.', 'Northside P.O.W.E.R.');
-INSERT INTO program VALUES (2, 'Our Community Kitchen is the largest and only self-standing community soup kitchen in the Chicago metro area. We serve hot, nutritious meals 365 days per year to anyone in need. Last year, the Community Kitchen served more than 54,000 meals. The Community Kitchen also distributes several thousand pounds of food each month by hosting the Greater Chicago Food Depository‚Äôs Producemobile which distributes fruit and vegetables to more than 200 families each month.
+INSERT INTO program VALUES (1, 'Northside P.O.W.E.R. (People Organized to Work, Educate and Restore) is an institution-based people’s power organization whose members are located in the North Side of the City of Chicago and North Shore Communities. Northside P.O.W.E.R. works on issues that address the causes of hunger and poverty. Currently Northside P.O.W.E.R. is working in the areas of affordable housing and food justice.', 'Northside P.O.W.E.R.');
+INSERT INTO program VALUES (2, 'Our Community Kitchen is the largest and only self-standing community soup kitchen in the Chicago metro area. We serve hot, nutritious meals 365 days per year to anyone in need. Last year, the Community Kitchen served more than 54,000 meals. The Community Kitchen also distributes several thousand pounds of food each month by hosting the Greater Chicago Food Depository’s Producemobile which distributes fruit and vegetables to more than 200 families each month.
 ', 'The Community Kitchen');
-INSERT INTO program VALUES (3, 'Supports the Howard Area Community Center‚Äôs Greensleeves After-School Project and the Good News Reading Program;
+INSERT INTO program VALUES (3, 'Supports the Howard Area Community Center’s Greensleeves After-School Project and the Good News Reading Program;
 
-Hosts the City of Chicago‚Äôs Summer Nutrition Program;
+Hosts the City of Chicago’s Summer Nutrition Program;
 
-Operates a free hot lunch program for school age children during the school‚Äôs winter and spring breaks.', 'The Childrens‚Äô Anti-Hunger Collaborative');
+Operates a free hot lunch program for school age children during the school’s winter and spring breaks.', 'The Childrens’ Anti-Hunger Collaborative');
 INSERT INTO program VALUES (4, 'Clinical Pastoral Education (CPE) is an intensive experiential educational program for pastors and religious leaders interested in developing their clinical skills. Students engage in pastoral work and reflect on their experience with a trained supervisor and a peer group. Key areas for learning include integrating theology into pastoral practice, formation as a religious leader, and self-reflection and knowledge. CPE can be an excellent tool for discernment, self-care and renewal.', 'Clinical Pastoral Education');
 INSERT INTO program VALUES (5, 'Pastoral Internship is an introduction to supervised clinical pastoral practice with people in crisis. Chaplain interns function as integral members of treatment teams, assisting patients and family members to draw on the meaning and benefits of their faith and spiritual values in the midst of health crises. Skills in pastoral care are developed and approaches to understanding human relationships and spiritual needs are explored. At most sites, intensive 11-12 week programs are offered in the summer. At Advocate Lutheran General Hospital, intensive programs are offered quarterly, year-round.', 'Pastoral Internship');
 INSERT INTO program VALUES (6, 'Pastoral Residency is a year-long program. This training provides opportunity for a more in-depth and specialized pastoral education experience. In addition to the basic format, this program includes:
@@ -4293,7 +4010,7 @@ Practicing supervision under an ACPE supervisor
 Forming their identity as educators by a focus on integrating theory and practice with their distinct and personal attributes
 
 Peer group seminars where the emerging supervisor''s understanding and practice are tested.', 'Supervisory CPE');
-INSERT INTO program VALUES (8, 'As part of Advocate Health Care‚Äôs continuum of care, the Parish Nurse Ministry is working in 29 diverse congregations. These faith communities are widely scattered throughout the Chicagoland area from West Garfield Park and Uptown Chicago neighborhoods to the suburban settings of Arlington Heights and Naperville.
+INSERT INTO program VALUES (8, 'As part of Advocate Health Care’s continuum of care, the Parish Nurse Ministry is working in 29 diverse congregations. These faith communities are widely scattered throughout the Chicagoland area from West Garfield Park and Uptown Chicago neighborhoods to the suburban settings of Arlington Heights and Naperville.
 
 Advocate Parish Nurse Ministry continues to seek health ministry partnerships. Both partners, the health care institution and the congregation must espouse the belief that physical, emotional, intellectual, and social well-being are very much dependent on a healthy spiritual core of being.
 
@@ -4330,7 +4047,6 @@ INSERT INTO role_privilege VALUES (1, 1);
 
 INSERT INTO status VALUES (1, 'active', '');
 INSERT INTO status VALUES (2, 'suspended', '');
-INSERT INTO status VALUES (3, 'pending', '');
 
 
 --
@@ -4384,69 +4100,21 @@ INSERT INTO topic VALUES (41, 'Women''s Health');
 -- Data for Name: user; Type: TABLE DATA; Schema: public; Owner: northbr6
 --
 
-INSERT INTO "user" VALUES (85, '8ad02b5a-3ef4-7cfd-aec3-ec528bfa73ac', 'kdflint', 'kdflint', 'Kathy', 'D', 'Flint', '2014-08-01 09:40:24.775305-06', NULL, '2014-08-01 09:40:24.775305-06', NULL, 1, '', 'kathy.flint@northbridgetech.org', '3129195627', false, false, NULL, 'none', NULL, NULL, '');
-INSERT INTO "user" VALUES (102, 'b10ad0e8-fe04-b8c4-0ce4-0bad28ca4d48', 'test1', 'test1', 'Testy The', '', 'Tester', '2014-08-23 18:06:18.770998-06', NULL, '2014-08-23 18:06:18.770998-06', NULL, 1, '', 'nexus@northbridgetech.org', '', false, false, NULL, 'none', NULL, NULL, '');
-INSERT INTO "user" VALUES (103, '1359a9e0-da69-5749-0794-eaf340bd5746', 'test2', 'test2', 'Test', '', 'Me', '2014-08-23 18:21:00.212652-06', NULL, '2014-08-23 18:21:00.212652-06', NULL, 1, '', 'nexus@northbridgetech.org', '', false, false, NULL, 'none', NULL, NULL, '');
-INSERT INTO "user" VALUES (104, '34d0deb3-a921-ac92-3561-e0567fff83e0', 'test3', 'test3', 'Rock This', '', 'Test', '2014-08-23 18:22:27.061096-06', NULL, '2014-08-23 18:22:27.061096-06', NULL, 1, '', 'nexus@northbridgetech.org', '', false, false, NULL, 'none', NULL, NULL, '');
-INSERT INTO "user" VALUES (136, '7ecf3d6b-b815-f31b-8867-8badc5e54a8b', 'enrollTest7', '[[ENC]]ea3bb318018bf0d14695e10a9bef1e770e0e03e7cea3951a11af5c6c2b99d573', 'Enroll', '', 'Test7', '2014-09-18 07:56:20.758381-06', NULL, '2014-09-18 07:56:20.758381-06', NULL, 1, '', 'enrolltest7@test.com', '', true, false, NULL, 'ImplA', ')xp3JShGtNL^716Cb3693UD7RlGuE9iD', '2014-09-18 07:56:20.820386-06', '');
-INSERT INTO "user" VALUES (137, '28f85bcb-2f7d-dbb3-ce5a-318fe531abac', 'enrollTest8', '[[ENC]]a9e5928cc1f6d55e18667646a0d72dcf62305c23e6f4d1c3dd7cca83ab63b82a', 'Enroll', '', 'Test8', '2014-09-18 08:14:55.842673-06', NULL, '2014-09-18 08:14:55.842673-06', NULL, 1, '', 'kathy.d.flint@gmail.com', '', true, false, NULL, 'ImplA', '5nj*qNFyf&Kmu&&eUmLPu!o&p*7F76gc', '2014-09-18 08:14:55.889269-06', '');
-INSERT INTO "user" VALUES (116, 'f2fbe803-1349-55ed-5cce-cbbb588a3c3e', 'test9', '[[ENC]]8027303ce044c26666352045660c298c4b5034bca7ac8eb22247eb365f5d43b0', 'Test User', '', 'Nine', '2014-08-28 15:53:11.59844-06', NULL, '2014-08-28 15:53:11.59844-06', NULL, 1, '', 'bryce.m.flint@gmail.com', '3129195627', true, false, NULL, 'ImplA', 'dor1WcsWRmpBAMok&n3PyMs3iP$YXOp1', '2014-08-28 15:53:11.624767-06', '');
-INSERT INTO "user" VALUES (88, 'e8db0a62-67dd-3d0c-13fd-d2372f4b5d0c', 'admin', 'admin', 'Kathy', '', 'Flint', '2014-08-01 15:09:53.514038-06', NULL, '2014-08-01 15:09:53.514038-06', NULL, 1, '', 'ksflint@comcast.net', '3129195627', true, false, NULL, 'none', NULL, NULL, '');
-INSERT INTO "user" VALUES (138, '385954ca-66f0-df40-6117-96aa28f199aa', 'enrollTest10', '[[ENC]]5b65091f57a8c8f5f2d541f3f7314ad3a43b5c1c5bbcd8dc2c7f539248c4e8e5', 'Enroll', '', 'Test10', '2014-09-18 08:29:56.506721-06', NULL, '2014-09-18 08:29:56.506721-06', NULL, 1, '', 'ksflint@comcast.net', '', true, false, NULL, 'ImplA', 'W9(a#Z%t0$vKvgVZuO%N7yDSToG(CFYp', '2014-09-18 08:29:56.727083-06', '');
-INSERT INTO "user" VALUES (130, 'b56e8b75-cbae-fd59-b125-30060983b2a2', 'enrolltest1', '[[ENC]]a99851226f3ade0878e03e98007f4dd73c72debeb3fdf7e1e480152b224d264d', 'Enroll', '', 'Test1', '2014-09-17 19:40:14.35254-06', NULL, '2014-09-17 19:40:14.35254-06', NULL, 1, '', 'enrolltest1@test.com', '', true, false, NULL, 'ImplA', '5C!YmN@ye)Vs9afmrWYsdPhNBkbce&qk', '2014-09-17 19:40:14.397127-06', '');
-INSERT INTO "user" VALUES (131, 'caff9ab4-83c3-7303-f721-df5511338cb3', 'enrolltest2', '[[ENC]]b7ddd719998f1abc008c31118bd27f1f872d145d7ea0cfcb72de8ff4d58d7286', 'Enroll', '', 'Test2', '2014-09-17 19:42:22.685589-06', NULL, '2014-09-17 19:42:22.685589-06', NULL, 1, '', 'enrolltest2@test.com', '', true, false, NULL, 'ImplA', '$rsaGvIix@&$qLjIuTk)5TnZpjwN2ys&', '2014-09-17 19:42:22.821943-06', '');
-INSERT INTO "user" VALUES (132, 'fbe23e15-7ff7-d3f8-dd4f-f68666c87b4f', 'enrolltest3', '[[ENC]]f0bb983459055bac3dc56338d2553b3d1a59474b61e1a6afb1d63a43318a71e6', 'Enroll', '', 'Test3', '2014-09-17 19:45:25.419835-06', NULL, '2014-09-17 19:45:25.419835-06', NULL, 1, '', 'enrolltest3@test.com', '', true, false, NULL, 'ImplA', '@yOkZcRqBL%&@YQFALv6t5huWh1Sv#am', '2014-09-17 19:45:25.49834-06', '');
-INSERT INTO "user" VALUES (133, '50604819-5298-5ca9-d43d-c08dc98fc769', 'enrollTest4', '[[ENC]]02d36f162b6bff96523a279eb6ec03980b0d5fe738299a650c77ee891e03ca32', 'Enroll', '', 'Test4', '2014-09-18 07:38:51.940464-06', NULL, '2014-09-18 07:38:51.940464-06', NULL, 1, '', 'enrollTest4@test.com', '', true, false, NULL, 'ImplA', 'XYn#hErJHMLI@k@!g%$8LVTRN%2om@fa', '2014-09-18 07:38:51.973137-06', '');
-INSERT INTO "user" VALUES (134, '330dc2b7-bb42-a85b-2c09-63684f271427', 'enrollTest5', '[[ENC]]41622935b26496239e4d5fe6de88dc8f2f17a9f1b670bc8580d5c458c887ddd6', 'Enroll', '', 'Test5', '2014-09-18 07:39:49.536746-06', NULL, '2014-09-18 07:39:49.536746-06', NULL, 1, '', 'enrollTest5@test.com', '', true, false, NULL, 'ImplA', 'UXr#hxxprQ2JH&aIyjXr4ZsoM1@99*U$', '2014-09-18 07:39:49.559707-06', '');
-INSERT INTO "user" VALUES (135, 'bfe22283-ab26-fe7c-a775-1efa749b7d37', 'enrollTest6', '[[ENC]]168c64aa21835ce53fa46b8dc36798773edd7819e808b17ca1a3a786f8896422', 'Enroll', '', 'Test6', '2014-09-18 07:52:36.275154-06', NULL, '2014-09-18 07:52:36.275154-06', NULL, 1, '', 'enrollTest6@test.com', '', true, false, NULL, 'ImplA', 'G2m4HLKhV&fXj6sv)(yQ)vXhE^GBa5MR', '2014-09-18 07:52:36.301567-06', '');
-INSERT INTO "user" VALUES (139, 'c0e4e89e-0360-b2b1-bbf2-9712a354104a', 'enrollTest13', '[[ENC]]6e128bef129b9bb70155de68dafa0867c302740b4b04c23b69a9528885049f80', 'Enroll', '', 'Test13', '2014-09-18 08:55:55.393758-06', NULL, '2014-09-18 08:55:55.393758-06', NULL, 1, '', 'enrolltest13@test.com', '', true, false, NULL, 'ImplA', '$Zdlc7pRL!ZFptZEiwihu0jaemDF)ER$', '2014-09-18 08:55:55.513659-06', '');
-INSERT INTO "user" VALUES (150, '6b4c845e-6f98-349b-5fff-a2205fffcb69', 'wdc', '[[ENC]]d018c3d77bde39798b32e77035653b4640a21c11ba38181e230d2c612ca258df', 'wdc', '', 'wdc', '2014-09-18 10:19:39.84007-06', NULL, '2014-09-18 10:19:39.84007-06', NULL, 1, '', 'wdc@test.com', '', true, false, NULL, 'ImplA', 'i*I3xBYdI(37ZWb8bFbBly%jk7eLdCCv', '2014-09-18 10:19:39.91635-06', '/openmeetings/swf?invitationHash=cb9e8d3e10d49e5c2324346d6e78a492');
-INSERT INTO "user" VALUES (140, '0bb6c7d3-ed17-d2aa-567e-0ef6a266546b', 'enrollTest14', '[[ENC]]88ceefd65bfd3ff06461dc7b6db1e1413492ab44fdf2135814a26f783784d32b', 'Enroll', '', 'Test14', '2014-09-18 08:58:05.224188-06', NULL, '2014-09-18 08:58:05.224188-06', NULL, 1, '', 'enrolltest14@test.com', '', true, false, NULL, 'ImplA', '**Tw2krAd!OO(wmd2VmTmEHZ0q&BWjqU', '2014-09-18 08:58:05.255394-06', '');
-INSERT INTO "user" VALUES (141, '5d22721f-aa61-3b1f-444c-62d818d1b052', 'qwe', '[[ENC]]fcab8b52c738fd5a71629903f4576a930ae2869b2bb79babc3f2ec45fbd3bcf8', 'qwe', '', 'qwe', '2014-09-18 09:08:57.58248-06', NULL, '2014-09-18 09:08:57.58248-06', NULL, 1, '', 'qwe@test.com', '', true, false, NULL, 'ImplA', 'Ci(nPxKVlswu4PSA%5F8B$CfjuEUY*oq', '2014-09-18 09:08:57.622337-06', '');
-INSERT INTO "user" VALUES (142, 'acebcbc9-a731-eaf5-6a30-bd725c06958a', 'wert', '[[ENC]]824fdd2689f4f7a0126bbf6ffa8d78ffc46c0c17bf2d5bdc1bc4748b5a3e5191', 'wert', '', 'ert', '2014-09-18 09:09:54.589632-06', NULL, '2014-09-18 09:09:54.589632-06', NULL, 1, '', 'wert@test.com', '', true, false, NULL, 'ImplA', 'E*rKvd29Jse%04!Udwx^Q(M$lT^S36RI', '2014-09-18 09:09:54.674549-06', '');
-INSERT INTO "user" VALUES (143, '3f2127d1-a084-e6a7-d16b-934b59e42aa6', 'erty', '[[ENC]]946fe87d5698a0d363bf677a6d5bcdc0ccc2f960bebbe4934ab52e5250cf635f', 'erty', '', 'erty', '2014-09-18 09:11:10.861268-06', NULL, '2014-09-18 09:11:10.861268-06', NULL, 1, '', 'erty@test.com', '', true, false, NULL, 'ImplA', '%N4PcBo6!%NY1%dvU#SrDHOu9u^DFlyA', '2014-09-18 09:11:10.910841-06', '');
-INSERT INTO "user" VALUES (144, '9c8cfa10-f131-cfbc-81e9-3e8dd6d2cead', 'adf', '[[ENC]]593be58c0c626c6da6d63f738bbbd143feff66f12b87dda72269cd5af29852cc', 'asd', '', 'ad', '2014-09-18 09:12:45.010495-06', NULL, '2014-09-18 09:12:45.010495-06', NULL, 1, '', 'asd@test.com', '', true, false, NULL, 'ImplA', 'QL%A3b&vzi#E&lX7TenSFZpY0Kuof&p&', '2014-09-18 09:12:45.075349-06', '');
-INSERT INTO "user" VALUES (145, '870acbf6-d5a1-8018-315b-f8431cbee9b0', 'zxc', '[[ENC]]b3ba7d7e8802e230e45f7ca4919447a390f9c074a5c41ae7856053e22b2af9f1', 'zxc', '', 'zxc', '2014-09-18 09:14:56.418015-06', NULL, '2014-09-18 09:14:56.418015-06', NULL, 1, '', 'zxc@test.com', '', true, false, NULL, 'ImplA', '69bBeUqzZAzv4y)QvISFwkhzKjjZq#yw', '2014-09-18 09:14:56.519699-06', '');
-INSERT INTO "user" VALUES (146, '00182bf6-010a-4324-f29e-4c701be51875', 'poi', '[[ENC]]570ac35aef2e53fc52eacda749f9f3ac7d604b1f87f1844981f8446170552a59', 'poi', '', 'poi', '2014-09-18 09:26:15.71961-06', NULL, '2014-09-18 09:26:15.71961-06', NULL, 1, '', 'poi@test.com', '', true, false, NULL, 'ImplA', 'tAJNfUVyswi$wDL%dPs%b2ImalUpE9s(', '2014-09-18 09:26:15.761674-06', '');
-INSERT INTO "user" VALUES (148, '1dcb85c0-db97-c89e-058b-a49486ced792', 'xcv', '[[ENC]]475ce88caa36485e9c82b5d81c1625f472343d3a3f8f5158bf33f9cc6e31b00a', 'xcv', '', 'xcv', '2014-09-18 10:15:17.083113-06', NULL, '2014-09-18 10:15:17.083113-06', NULL, 1, '', 'xcv@test.com', '', true, false, NULL, 'ImplA', 'G3II!LmfQ*i%Aa1G*0cy*QrQb$PEcG$S', '2014-09-18 10:15:17.126872-06', '/openmeetings/swf?invitationHash=894b52fd4351e5f811cf95d590c9122b');
-INSERT INTO "user" VALUES (147, '19bfbf59-4399-60bd-9f43-a4823977495d', 'kjh', '[[ENC]]4b6a47c0f31e1691727b74b1d7c2311c0a451a9d7b9f84587e636995818f814b', 'kjh', '', 'kjh', '2014-09-18 09:27:40.425453-06', NULL, '2014-09-18 09:27:40.425453-06', NULL, 1, '', 'kjh@test.com', '', true, false, NULL, 'ImplA', 'WDXkbKoq%fKrU@sXwmeM)JM!lezHO7UA', '2014-09-18 09:27:40.633779-06', '/openmeetings/swf?invitationHash=a595b7fda5c92ecfb4892cabf1f741fa');
-INSERT INTO "user" VALUES (149, '1639430c-d2b6-4fa5-1ef0-ef95feeb12a8', 'dfg', '[[ENC]]78380eb5a5e7be824e0c53fbcfb5df4b3307ba014c6722025fdeb6f6446c9ffc', 'dfg', '', 'dfg', '2014-09-18 10:16:12.880563-06', NULL, '2014-09-18 10:16:12.880563-06', NULL, 1, '', 'dfg@test.com', '', true, false, NULL, 'ImplA', '*vbNhR551wJ#s0OWOf@wDU6#y$olzHmx', '2014-09-18 10:16:12.90603-06', '/openmeetings/swf?invitationHash=abd8b68d83d48ad1b1c2dc3c12533d19');
-INSERT INTO "user" VALUES (151, '9882342c-996c-ef68-674e-b0e555bb5568', 'uyt', '[[ENC]]4721ceb776265be1d4dc4a3d2982a6fd1ad576b405ffae94a821eef529abf9de', 'uyt', '', 'uyt', '2014-09-18 10:20:34.006826-06', NULL, '2014-09-18 10:20:34.006826-06', NULL, 1, '', 'uyt@test.com', '', true, false, NULL, 'ImplA', 'jmNygfLlrqWTA$23%9)9v&W9eDSCoRaH', '2014-09-18 10:20:34.124429-06', '/openmeetings/swf?invitationHash=3f2b6e195e5e885e9191bcf4126b5ebc');
-INSERT INTO "user" VALUES (152, '5c18231b-4192-d6cb-7e00-092eac210e2c', 'okn', '[[ENC]]eef418380c8710f9df8b22eb1d2baf1b8dc1b15265906b9de44b05426c44c1bb', 'okn', '', 'okn', '2014-09-18 10:25:12.236904-06', NULL, '2014-09-18 10:25:12.236904-06', NULL, 1, '', 'okn@test.com', '', true, false, NULL, 'ImplA', ')CB4CnkoMHK)R(7aboMtVhKIsaZS*RX*', '2014-09-18 10:25:12.310957-06', '/openmeetings/swf?invitationHash=3fb4db91aaa5957d0e7e29a15359efb7');
-INSERT INTO "user" VALUES (153, '7c5057a4-1ab8-4908-0864-e06cb28bb91e', 'dvb', '[[ENC]]a89a049e8ba94a22feeef09a932455d32bf4146750954025b6721f04a789f681', 'dvb', '', 'dvb', '2014-09-18 10:40:39.370506-06', NULL, '2014-09-18 10:40:39.370506-06', NULL, 1, '', 'dvb@test.com', '', true, false, NULL, 'ImplA', '%edXoVnvnhWdvwvl3Ds4ajkWHCdY5V6)', '2014-09-18 10:40:39.473733-06', '/openmeetings/swf?invitationHash=d0c3837c6d99e7b9713630577cce5381');
+INSERT INTO "user" VALUES (89, 'fe58eefe-f487-11be-d5b0-267d8a36dfd7', 'kpeachey', 'change-me', 'Kirsten', '', 'Peachey', '2014-08-01 15:13:12.742905-06', NULL, '2014-08-01 15:13:12.742905-06', NULL, 1, '', 'kirsten.peachey@advocatehealth.com', '7087855078', true, true, NULL, 'None', NULL, NULL, '/openmeetings/swf?invitationHash=fb3c6acd0e5c8655cd55eda4b74b4fe1');
+INSERT INTO "user" VALUES (88, 'e8db0a62-67dd-3d0c-13fd-d2372f4b5d0c', 'admin', 'admin', 'Nexus', '', 'Administrator', '2014-08-01 15:09:53.514038-06', NULL, '2014-08-01 15:09:53.514038-06', NULL, 1, '', 'kathy.flint@northbridgetech.org', '3129195627', true, true, NULL, 'None', NULL, NULL, '');
+INSERT INTO "user" VALUES (105, 'dc510b81-2543-d548-0df8-733fc5855085', 'JenBrown', '[[ENC]]1474860b1721f1dd6b807acc5fc76960d8750b98700cff16ae62c620e5bd04ff', 'Jen', '', 'Brown', '2014-09-24 05:09:47.349174-06', NULL, '2014-09-24 05:09:47.349174-06', NULL, 1, '', 'jenbrown@northwestern.edu', '', true, true, NULL, 'ImplA', '6&hCiwt8NSHbKdcw^*Wp5&NmQeSecdhj', '2014-09-24 05:09:47.470691-06', '/openmeetings/swf?invitationHash=812e55bac3f382d446ad0392d25a86fc');
+INSERT INTO "user" VALUES (85, '8ad02b5a-3ef4-7cfd-aec3-ec528bfa73ac', 'kdflint', 'kdflint', 'Kathy', 'D', 'Flint', '2014-08-01 09:40:24.775305-06', NULL, '2014-08-01 09:40:24.775305-06', NULL, 1, '', 'kathy.flint@northbridgetech.org', '3129195627', false, false, NULL, 'None', NULL, NULL, '/openmeetings/swf?invitationHash=812e55bac3f382d446ad0392d25a86fc');
+INSERT INTO "user" VALUES (107, '0103aa38-b617-31e5-a4fe-1ab3ed20e69f', 'JenBlack', '[[ENC]]f7abd25ecb56d057693c753dcb68d1371f90937dc196bdff9dd0edcaebd2de46', 'Test', '', 'Test', '2014-10-05 12:15:04.45591-06', NULL, '2014-10-05 12:15:04.45591-06', NULL, 1, '', 'kathy.flint@northbridgetech.org', '', true, false, NULL, 'ImplA', 'j6OKQOy$FYe8A)TYS6Kw7#Rl8pypaFXu', '2014-10-05 12:15:04.482036-06', '/openmeetings/swf?invitationHash=1304c7df8e96a1f75e4b97365f808513');
 
 
 --
 -- Data for Name: user_group; Type: TABLE DATA; Schema: public; Owner: northbr6
 --
 
-INSERT INTO user_group VALUES (1, 88, '2014-09-13 14:19:15.825895-06', NULL, 1);
-INSERT INTO user_group VALUES (2, 116, '2014-09-13 14:19:27.204209-06', NULL, 1);
-INSERT INTO user_group VALUES (3, 102, '2014-09-13 19:09:22.095708-06', NULL, 1);
-INSERT INTO user_group VALUES (4, 103, '2014-09-13 19:09:31.794436-06', NULL, 1);
-INSERT INTO user_group VALUES (5, 104, '2014-09-13 19:09:55.981083-06', NULL, 1);
-INSERT INTO user_group VALUES (16, 132, '2014-09-17 19:45:25.603216-06', NULL, 1);
-INSERT INTO user_group VALUES (17, 133, '2014-09-18 07:38:52.091587-06', NULL, 1);
-INSERT INTO user_group VALUES (18, 134, '2014-09-18 07:39:49.66147-06', NULL, 1);
-INSERT INTO user_group VALUES (19, 135, '2014-09-18 07:52:36.454187-06', NULL, 1);
-INSERT INTO user_group VALUES (20, 136, '2014-09-18 07:56:20.925284-06', NULL, 1);
-INSERT INTO user_group VALUES (21, 137, '2014-09-18 08:14:56.042616-06', NULL, 1);
-INSERT INTO user_group VALUES (22, 138, '2014-09-18 08:29:56.936502-06', NULL, 1);
-INSERT INTO user_group VALUES (23, 139, '2014-09-18 08:55:55.790474-06', NULL, 1);
-INSERT INTO user_group VALUES (24, 140, '2014-09-18 08:58:05.437269-06', NULL, 1);
-INSERT INTO user_group VALUES (25, 141, '2014-09-18 09:08:57.740504-06', NULL, 1);
-INSERT INTO user_group VALUES (26, 142, '2014-09-18 09:09:54.930759-06', NULL, 1);
-INSERT INTO user_group VALUES (27, 143, '2014-09-18 09:11:11.222519-06', NULL, 1);
-INSERT INTO user_group VALUES (28, 144, '2014-09-18 09:12:45.565363-06', NULL, 1);
-INSERT INTO user_group VALUES (29, 145, '2014-09-18 09:14:58.018782-06', NULL, 1);
-INSERT INTO user_group VALUES (30, 146, '2014-09-18 09:26:15.890703-06', NULL, 1);
-INSERT INTO user_group VALUES (31, 147, '2014-09-18 09:27:41.519896-06', NULL, 1);
-INSERT INTO user_group VALUES (32, 148, '2014-09-18 10:15:17.378655-06', NULL, 1);
-INSERT INTO user_group VALUES (33, 149, '2014-09-18 10:16:13.01958-06', NULL, 1);
-INSERT INTO user_group VALUES (34, 150, '2014-09-18 10:19:40.122375-06', NULL, 1);
-INSERT INTO user_group VALUES (35, 151, '2014-09-18 10:20:34.915136-06', NULL, 1);
-INSERT INTO user_group VALUES (36, 152, '2014-09-18 10:25:12.606101-06', NULL, 1);
-INSERT INTO user_group VALUES (37, 153, '2014-09-18 10:40:39.950317-06', NULL, 1);
+INSERT INTO user_group VALUES (1, 89, '2014-09-18 19:57:14.732319-06', NULL, 1);
+INSERT INTO user_group VALUES (2, 88, '2014-09-18 20:07:36.686126-06', NULL, 1);
+INSERT INTO user_group VALUES (6, 105, '2014-09-24 05:09:47.898697-06', NULL, 1);
+INSERT INTO user_group VALUES (7, 107, '2014-10-05 12:15:04.598948-06', NULL, 1);
 
 
 --
@@ -4454,105 +4122,42 @@ INSERT INTO user_group VALUES (37, 153, '2014-09-18 10:40:39.950317-06', NULL, 1
 --
 
 INSERT INTO user_organization VALUES (89, 88, 18, 85, '2014-08-01 15:09:53.544925-06', NULL, 1);
+INSERT INTO user_organization VALUES (90, 89, 18, 85, '2014-08-01 15:13:12.763613-06', NULL, 1);
 INSERT INTO user_organization VALUES (86, 85, 13, 85, '2014-08-01 09:43:43.165403-06', NULL, 1);
-INSERT INTO user_organization VALUES (109, 116, 18, 85, '2014-08-28 15:53:11.652381-06', NULL, 1);
-INSERT INTO user_organization VALUES (104, 102, 46, 85, '2014-08-23 18:06:18.815215-06', NULL, 1);
-INSERT INTO user_organization VALUES (105, 103, 49, 85, '2014-08-23 18:21:00.237573-06', NULL, 1);
-INSERT INTO user_organization VALUES (106, 104, 47, 85, '2014-08-23 18:22:27.102984-06', NULL, 1);
-INSERT INTO user_organization VALUES (121, 132, 46, 85, '2014-09-17 19:45:25.57877-06', NULL, 1);
-INSERT INTO user_organization VALUES (122, 133, 46, 85, '2014-09-18 07:38:52.057895-06', NULL, 1);
-INSERT INTO user_organization VALUES (123, 134, 286, 85, '2014-09-18 07:39:49.637398-06', NULL, 1);
-INSERT INTO user_organization VALUES (124, 135, 287, 85, '2014-09-18 07:52:36.405506-06', NULL, 1);
-INSERT INTO user_organization VALUES (125, 136, 287, 85, '2014-09-18 07:56:20.89087-06', NULL, 1);
-INSERT INTO user_organization VALUES (126, 137, 47, 85, '2014-09-18 08:14:56.009117-06', NULL, 1);
-INSERT INTO user_organization VALUES (127, 138, 46, 85, '2014-09-18 08:29:56.875436-06', NULL, 1);
-INSERT INTO user_organization VALUES (128, 139, 288, 85, '2014-09-18 08:55:55.728667-06', NULL, 1);
-INSERT INTO user_organization VALUES (129, 140, 289, 85, '2014-09-18 08:58:05.409662-06', NULL, 1);
-INSERT INTO user_organization VALUES (130, 141, 290, 85, '2014-09-18 09:08:57.717473-06', NULL, 1);
-INSERT INTO user_organization VALUES (131, 142, 291, 85, '2014-09-18 09:09:54.863239-06', NULL, 1);
-INSERT INTO user_organization VALUES (132, 143, 292, 85, '2014-09-18 09:11:11.164942-06', NULL, 1);
-INSERT INTO user_organization VALUES (133, 144, 293, 85, '2014-09-18 09:12:45.500602-06', NULL, 1);
-INSERT INTO user_organization VALUES (134, 145, 294, 85, '2014-09-18 09:14:56.830688-06', NULL, 1);
-INSERT INTO user_organization VALUES (135, 146, 295, 85, '2014-09-18 09:26:15.865615-06', NULL, 1);
-INSERT INTO user_organization VALUES (136, 147, 296, 85, '2014-09-18 09:27:41.372848-06', NULL, 1);
-INSERT INTO user_organization VALUES (137, 148, 297, 85, '2014-09-18 10:15:17.335029-06', NULL, 1);
-INSERT INTO user_organization VALUES (138, 149, 298, 85, '2014-09-18 10:16:12.996579-06', NULL, 1);
-INSERT INTO user_organization VALUES (139, 150, 299, 85, '2014-09-18 10:19:40.089679-06', NULL, 1);
-INSERT INTO user_organization VALUES (140, 151, 300, 85, '2014-09-18 10:20:34.844618-06', NULL, 1);
-INSERT INTO user_organization VALUES (141, 152, 301, 85, '2014-09-18 10:25:12.545975-06', NULL, 1);
-INSERT INTO user_organization VALUES (142, 153, 302, 85, '2014-09-18 10:40:39.884408-06', NULL, 1);
+INSERT INTO user_organization VALUES (105, 105, 280, 85, '2014-09-24 05:09:47.679142-06', NULL, 1);
+INSERT INTO user_organization VALUES (106, 107, 281, 85, '2014-10-05 12:15:04.573907-06', NULL, 1);
 
 
 --
 -- Data for Name: user_session; Type: TABLE DATA; Schema: public; Owner: northbr6
 --
 
-INSERT INTO user_session VALUES (1, 116, '24.13.84.178', '2014-09-02 10:37:00.444702-06');
-INSERT INTO user_session VALUES (2, 116, '24.13.84.178', '2014-09-02 14:11:24.423777-06');
-INSERT INTO user_session VALUES (3, 102, '24.13.84.178', '2014-09-02 15:36:47.575941-06');
-INSERT INTO user_session VALUES (4, 103, '24.13.84.178', '2014-09-02 15:37:04.559961-06');
-INSERT INTO user_session VALUES (5, 104, '24.13.84.178', '2014-09-02 15:37:20.402381-06');
-INSERT INTO user_session VALUES (6, 88, '24.13.84.178', '2014-09-02 15:37:41.61445-06');
-INSERT INTO user_session VALUES (7, 116, '24.13.84.178', '2014-09-02 15:51:04.452819-06');
-INSERT INTO user_session VALUES (8, 102, '50.9.22.175', '2014-09-02 18:19:32.806088-06');
-INSERT INTO user_session VALUES (9, 102, '50.140.185.114', '2014-09-02 20:09:47.269121-06');
-INSERT INTO user_session VALUES (10, 88, '24.13.84.178', '2014-09-03 11:27:36.03215-06');
-INSERT INTO user_session VALUES (11, 102, '24.13.84.178', '2014-09-03 12:31:10.575111-06');
-INSERT INTO user_session VALUES (12, 88, '24.13.84.178', '2014-09-03 12:32:16.87019-06');
-INSERT INTO user_session VALUES (13, 102, '24.13.84.178', '2014-09-03 12:33:28.104028-06');
-INSERT INTO user_session VALUES (14, 88, '24.13.84.178', '2014-09-03 12:33:45.421893-06');
-INSERT INTO user_session VALUES (15, 116, '24.13.84.178', '2014-09-03 16:44:45.338232-06');
-INSERT INTO user_session VALUES (16, 102, '50.140.185.114', '2014-09-04 20:14:24.741733-06');
-INSERT INTO user_session VALUES (17, 116, '24.13.84.178', '2014-09-10 13:27:39.040836-06');
-INSERT INTO user_session VALUES (18, 116, '24.13.84.178', '2014-09-10 15:40:30.041162-06');
-INSERT INTO user_session VALUES (19, 116, '24.13.84.178', '2014-09-10 16:23:04.961015-06');
-INSERT INTO user_session VALUES (20, 116, '24.13.84.178', '2014-09-10 21:00:46.77566-06');
-INSERT INTO user_session VALUES (21, 116, '24.13.84.178', '2014-09-10 21:04:20.686785-06');
-INSERT INTO user_session VALUES (22, 116, '24.13.84.178', '2014-09-12 11:10:50.573398-06');
-INSERT INTO user_session VALUES (23, 116, '24.13.84.178', '2014-09-12 11:12:47.405595-06');
-INSERT INTO user_session VALUES (24, 116, '24.13.84.178', '2014-09-12 16:29:06.782002-06');
-INSERT INTO user_session VALUES (25, 116, '24.13.84.178', '2014-09-12 17:41:00.471677-06');
-INSERT INTO user_session VALUES (26, 88, '24.13.84.178', '2014-09-13 09:00:38.253152-06');
-INSERT INTO user_session VALUES (27, 88, '24.13.84.178', '2014-09-13 09:30:19.50917-06');
-INSERT INTO user_session VALUES (28, 116, '24.13.84.178', '2014-09-13 09:32:53.250079-06');
-INSERT INTO user_session VALUES (29, 116, '24.13.84.178', '2014-09-13 15:04:33.591309-06');
-INSERT INTO user_session VALUES (30, 88, '24.13.84.178', '2014-09-13 15:06:41.278427-06');
-INSERT INTO user_session VALUES (31, 116, '24.13.84.178', '2014-09-13 15:08:08.201517-06');
-INSERT INTO user_session VALUES (32, 116, '24.13.84.178', '2014-09-13 15:08:09.329308-06');
-INSERT INTO user_session VALUES (33, 116, '24.13.84.178', '2014-09-13 18:12:10.272668-06');
-INSERT INTO user_session VALUES (34, 116, '24.13.84.178', '2014-09-13 19:07:11.200817-06');
-INSERT INTO user_session VALUES (35, 116, '24.13.84.178', '2014-09-13 19:10:12.393221-06');
-INSERT INTO user_session VALUES (36, 116, '24.13.84.178', '2014-09-13 20:54:46.412174-06');
-INSERT INTO user_session VALUES (37, 116, '24.13.84.178', '2014-09-13 22:05:14.845749-06');
-INSERT INTO user_session VALUES (38, 102, '24.13.84.178', '2014-09-13 22:05:31.64993-06');
-INSERT INTO user_session VALUES (39, 116, '24.13.84.178', '2014-09-15 12:35:34.564698-06');
-INSERT INTO user_session VALUES (40, 116, '24.13.84.178', '2014-09-15 14:19:25.766931-06');
-INSERT INTO user_session VALUES (41, 116, '24.13.84.178', '2014-09-16 20:29:17.32686-06');
-INSERT INTO user_session VALUES (42, 88, '24.13.84.178', '2014-09-17 09:37:55.256539-06');
-INSERT INTO user_session VALUES (43, 116, '24.13.84.178', '2014-09-17 09:51:01.178719-06');
-INSERT INTO user_session VALUES (44, 116, '24.13.84.178', '2014-09-17 09:51:36.431589-06');
-INSERT INTO user_session VALUES (46, 88, '184.78.90.22', '2014-09-17 17:21:40.457485-06');
-INSERT INTO user_session VALUES (47, 132, '24.13.84.178', '2014-09-17 19:47:14.755939-06');
-INSERT INTO user_session VALUES (48, 116, '24.13.84.178', '2014-09-17 19:55:50.947043-06');
-INSERT INTO user_session VALUES (49, 132, '24.13.84.178', '2014-09-17 19:56:28.969801-06');
-INSERT INTO user_session VALUES (50, 88, '24.13.84.178', '2014-09-17 19:57:02.486815-06');
-INSERT INTO user_session VALUES (51, 133, '24.13.84.178', '2014-09-18 07:41:51.706134-06');
-INSERT INTO user_session VALUES (52, 135, '24.13.84.178', '2014-09-18 07:52:54.030309-06');
-INSERT INTO user_session VALUES (53, 136, '24.13.84.178', '2014-09-18 07:57:43.4318-06');
-INSERT INTO user_session VALUES (54, 88, '24.13.84.178', '2014-09-18 08:16:31.096343-06');
-INSERT INTO user_session VALUES (55, 88, '24.13.84.178', '2014-09-18 08:20:46.00066-06');
-INSERT INTO user_session VALUES (56, 137, '24.13.84.178', '2014-09-18 08:24:19.736281-06');
-INSERT INTO user_session VALUES (57, 147, '24.13.84.178', '2014-09-18 09:31:46.675555-06');
-INSERT INTO user_session VALUES (58, 147, '24.13.84.178', '2014-09-18 09:34:42.556626-06');
-INSERT INTO user_session VALUES (59, 147, '24.13.84.178', '2014-09-18 09:35:18.4483-06');
-INSERT INTO user_session VALUES (60, 116, '24.13.84.178', '2014-09-18 09:39:00.793465-06');
-INSERT INTO user_session VALUES (61, 147, '24.13.84.178', '2014-09-18 09:40:37.873714-06');
-INSERT INTO user_session VALUES (62, 116, '24.13.84.178', '2014-09-18 10:03:25.338735-06');
-INSERT INTO user_session VALUES (63, 116, '24.13.84.178', '2014-09-18 10:06:11.212731-06');
-INSERT INTO user_session VALUES (64, 102, '24.13.84.178', '2014-09-18 10:06:26.487948-06');
-INSERT INTO user_session VALUES (65, 148, '24.13.84.178', '2014-09-18 10:15:54.884883-06');
-INSERT INTO user_session VALUES (66, 152, '24.13.84.178', '2014-09-18 10:25:26.644271-06');
-INSERT INTO user_session VALUES (67, 141, '24.13.84.178', '2014-09-18 10:31:04.192831-06');
+INSERT INTO user_session VALUES (1, 88, '24.13.84.178', '2014-09-18 15:03:50.509248-06');
+INSERT INTO user_session VALUES (2, 88, '24.13.84.178', '2014-09-18 15:05:54.653868-06');
+INSERT INTO user_session VALUES (3, 89, '24.13.84.178', '2014-09-18 15:07:15.382364-06');
+INSERT INTO user_session VALUES (4, 88, '24.13.84.178', '2014-09-18 15:07:35.182078-06');
+INSERT INTO user_session VALUES (5, 88, '24.13.84.178', '2014-09-18 19:58:43.029817-06');
+INSERT INTO user_session VALUES (6, 89, '24.13.84.178', '2014-09-18 20:02:51.31321-06');
+INSERT INTO user_session VALUES (7, 88, '24.13.84.178', '2014-09-18 20:08:39.865251-06');
+INSERT INTO user_session VALUES (10, 89, '24.13.84.178', '2014-09-19 07:22:22.910634-06');
+INSERT INTO user_session VALUES (11, 89, '24.13.84.178', '2014-09-19 07:23:35.41167-06');
+INSERT INTO user_session VALUES (12, 89, '24.13.84.178', '2014-09-19 09:13:35.194017-06');
+INSERT INTO user_session VALUES (13, 89, '24.13.84.178', '2014-09-19 09:26:30.563345-06');
+INSERT INTO user_session VALUES (14, 88, '24.13.84.178', '2014-09-19 09:53:29.033332-06');
+INSERT INTO user_session VALUES (15, 89, '24.13.84.178', '2014-09-19 14:07:45.360459-06');
+INSERT INTO user_session VALUES (16, 89, '24.13.84.178', '2014-09-19 14:10:31.114625-06');
+INSERT INTO user_session VALUES (17, 89, '168.235.1.4', '2014-09-19 15:10:10.187511-06');
+INSERT INTO user_session VALUES (18, 88, '24.13.84.178', '2014-09-19 15:57:49.07458-06');
+INSERT INTO user_session VALUES (19, 88, '24.13.84.178', '2014-09-30 08:43:56.812034-06');
+INSERT INTO user_session VALUES (20, 89, '24.13.84.178', '2014-09-30 08:45:28.978402-06');
+INSERT INTO user_session VALUES (21, 88, '24.13.84.178', '2014-09-30 09:16:27.629956-06');
+INSERT INTO user_session VALUES (22, 88, '24.13.84.178', '2014-10-02 19:34:18.700972-06');
+INSERT INTO user_session VALUES (23, 88, '24.13.84.178', '2014-10-02 19:34:36.87224-06');
+INSERT INTO user_session VALUES (24, 88, '24.13.84.178', '2014-10-02 19:34:59.501758-06');
+INSERT INTO user_session VALUES (25, 85, '24.13.84.178', '2014-10-05 12:09:02.235991-06');
+INSERT INTO user_session VALUES (26, 85, '24.13.84.178', '2014-10-05 12:10:45.954132-06');
+INSERT INTO user_session VALUES (27, 89, '24.13.84.178', '2014-10-05 12:11:28.292908-06');
+INSERT INTO user_session VALUES (28, 107, '24.13.84.178', '2014-10-05 12:16:30.466455-06');
 
 
 --
@@ -4916,11 +4521,11 @@ ALTER TABLE ONLY message
 
 
 --
--- Name: message_user_fk_fkey; Type: FK CONSTRAINT; Schema: public; Owner: northbr6
+-- Name: message_sender_fk_fkey; Type: FK CONSTRAINT; Schema: public; Owner: northbr6
 --
 
 ALTER TABLE ONLY message
-    ADD CONSTRAINT message_user_fk_fkey FOREIGN KEY (sender_fk) REFERENCES "user"(id);
+    ADD CONSTRAINT message_sender_fk_fkey FOREIGN KEY (sender_fk) REFERENCES "user"(id);
 
 
 --
@@ -5117,7 +4722,6 @@ REVOKE ALL ON TABLE category FROM PUBLIC;
 REVOKE ALL ON TABLE category FROM northbr6;
 GRANT ALL ON TABLE category TO northbr6;
 GRANT ALL ON TABLE category TO northbr6_nbnexus;
-GRANT ALL ON TABLE category TO northbr6_devnexus;
 
 
 --
@@ -5128,7 +4732,6 @@ REVOKE ALL ON TABLE category_topic FROM PUBLIC;
 REVOKE ALL ON TABLE category_topic FROM northbr6;
 GRANT ALL ON TABLE category_topic TO northbr6;
 GRANT ALL ON TABLE category_topic TO northbr6_nbnexus;
-GRANT ALL ON TABLE category_topic TO northbr6_devnexus;
 
 
 --
@@ -5139,7 +4742,6 @@ REVOKE ALL ON TABLE contact FROM PUBLIC;
 REVOKE ALL ON TABLE contact FROM northbr6;
 GRANT ALL ON TABLE contact TO northbr6;
 GRANT ALL ON TABLE contact TO northbr6_nbnexus;
-GRANT ALL ON TABLE contact TO northbr6_devnexus;
 
 
 --
@@ -5162,7 +4764,6 @@ REVOKE ALL ON TABLE forum_user FROM northbr6;
 GRANT ALL ON TABLE forum_user TO northbr6;
 GRANT SELECT,INSERT,REFERENCES,UPDATE ON TABLE forum_user TO northbr6_web WITH GRANT OPTION;
 GRANT ALL ON TABLE forum_user TO northbr6_nbnexus;
-GRANT ALL ON TABLE forum_user TO northbr6_devnexus;
 
 
 --
@@ -5183,6 +4784,7 @@ REVOKE ALL ON TABLE "group" FROM PUBLIC;
 REVOKE ALL ON TABLE "group" FROM northbr6;
 GRANT ALL ON TABLE "group" TO northbr6;
 GRANT SELECT,INSERT,UPDATE ON TABLE "group" TO northbr6_web;
+GRANT ALL ON TABLE "group" TO northbr6_nbnexus;
 
 
 --
@@ -5194,7 +4796,6 @@ REVOKE ALL ON TABLE invitation FROM northbr6;
 GRANT ALL ON TABLE invitation TO northbr6;
 GRANT ALL ON TABLE invitation TO northbr6_nbnexus;
 GRANT SELECT,INSERT,REFERENCES,UPDATE ON TABLE invitation TO northbr6_web;
-GRANT ALL ON TABLE invitation TO northbr6_devnexus;
 
 
 --
@@ -5216,7 +4817,6 @@ REVOKE ALL ON TABLE invitation_organization FROM northbr6;
 GRANT ALL ON TABLE invitation_organization TO northbr6;
 GRANT SELECT,INSERT,REFERENCES,UPDATE ON TABLE invitation_organization TO northbr6_web;
 GRANT ALL ON TABLE invitation_organization TO northbr6_nbnexus;
-GRANT ALL ON TABLE invitation_organization TO northbr6_devnexus;
 
 
 --
@@ -5238,7 +4838,6 @@ REVOKE ALL ON TABLE language FROM northbr6;
 GRANT ALL ON TABLE language TO northbr6;
 GRANT SELECT,INSERT,REFERENCES,UPDATE ON TABLE language TO northbr6_web WITH GRANT OPTION;
 GRANT ALL ON TABLE language TO northbr6_nbnexus;
-GRANT ALL ON TABLE language TO northbr6_devnexus;
 
 
 --
@@ -5249,7 +4848,6 @@ REVOKE ALL ON TABLE location FROM PUBLIC;
 REVOKE ALL ON TABLE location FROM northbr6;
 GRANT ALL ON TABLE location TO northbr6;
 GRANT ALL ON TABLE location TO northbr6_nbnexus;
-GRANT ALL ON TABLE location TO northbr6_devnexus;
 
 
 --
@@ -5270,6 +4868,7 @@ REVOKE ALL ON TABLE message FROM PUBLIC;
 REVOKE ALL ON TABLE message FROM northbr6;
 GRANT ALL ON TABLE message TO northbr6;
 GRANT SELECT,INSERT,UPDATE ON TABLE message TO northbr6_web;
+GRANT ALL ON TABLE message TO northbr6_nbnexus;
 
 
 --
@@ -5280,6 +4879,7 @@ REVOKE ALL ON TABLE message_recipient FROM PUBLIC;
 REVOKE ALL ON TABLE message_recipient FROM northbr6;
 GRANT ALL ON TABLE message_recipient TO northbr6;
 GRANT SELECT,INSERT ON TABLE message_recipient TO northbr6_web;
+GRANT ALL ON TABLE message_recipient TO northbr6_nbnexus;
 
 
 --
@@ -5291,7 +4891,6 @@ REVOKE ALL ON TABLE organization FROM northbr6;
 GRANT ALL ON TABLE organization TO northbr6;
 GRANT ALL ON TABLE organization TO northbr6_nbnexus;
 GRANT SELECT,INSERT,REFERENCES,UPDATE ON TABLE organization TO northbr6_web WITH GRANT OPTION;
-GRANT ALL ON TABLE organization TO northbr6_devnexus;
 
 
 --
@@ -5302,7 +4901,6 @@ REVOKE ALL ON TABLE organization_contact FROM PUBLIC;
 REVOKE ALL ON TABLE organization_contact FROM northbr6;
 GRANT ALL ON TABLE organization_contact TO northbr6;
 GRANT ALL ON TABLE organization_contact TO northbr6_nbnexus;
-GRANT ALL ON TABLE organization_contact TO northbr6_devnexus;
 
 
 --
@@ -5324,7 +4922,6 @@ REVOKE ALL ON TABLE organization_language FROM northbr6;
 GRANT ALL ON TABLE organization_language TO northbr6;
 GRANT SELECT,INSERT,REFERENCES,UPDATE ON TABLE organization_language TO northbr6_web WITH GRANT OPTION;
 GRANT ALL ON TABLE organization_language TO northbr6_nbnexus;
-GRANT ALL ON TABLE organization_language TO northbr6_devnexus;
 
 
 --
@@ -5335,7 +4932,6 @@ REVOKE ALL ON TABLE organization_location FROM PUBLIC;
 REVOKE ALL ON TABLE organization_location FROM northbr6;
 GRANT ALL ON TABLE organization_location TO northbr6;
 GRANT ALL ON TABLE organization_location TO northbr6_nbnexus;
-GRANT ALL ON TABLE organization_location TO northbr6_devnexus;
 
 
 --
@@ -5346,7 +4942,6 @@ REVOKE ALL ON TABLE organization_organization FROM PUBLIC;
 REVOKE ALL ON TABLE organization_organization FROM northbr6;
 GRANT ALL ON TABLE organization_organization TO northbr6;
 GRANT ALL ON TABLE organization_organization TO northbr6_nbnexus;
-GRANT ALL ON TABLE organization_organization TO northbr6_devnexus;
 
 
 --
@@ -5368,7 +4963,6 @@ REVOKE ALL ON TABLE organization_program FROM northbr6;
 GRANT ALL ON TABLE organization_program TO northbr6;
 GRANT SELECT,INSERT,REFERENCES,UPDATE ON TABLE organization_program TO northbr6_web WITH GRANT OPTION;
 GRANT ALL ON TABLE organization_program TO northbr6_nbnexus;
-GRANT ALL ON TABLE organization_program TO northbr6_devnexus;
 
 
 --
@@ -5380,7 +4974,6 @@ REVOKE ALL ON TABLE organization_topic FROM northbr6;
 GRANT ALL ON TABLE organization_topic TO northbr6;
 GRANT SELECT,INSERT,REFERENCES,UPDATE ON TABLE organization_topic TO northbr6_web WITH GRANT OPTION;
 GRANT ALL ON TABLE organization_topic TO northbr6_nbnexus;
-GRANT ALL ON TABLE organization_topic TO northbr6_devnexus;
 
 
 --
@@ -5392,7 +4985,6 @@ REVOKE ALL ON TABLE privilege FROM northbr6;
 GRANT ALL ON TABLE privilege TO northbr6;
 GRANT SELECT,INSERT ON TABLE privilege TO northbr6_web;
 GRANT ALL ON TABLE privilege TO northbr6_nbnexus;
-GRANT ALL ON TABLE privilege TO northbr6_devnexus;
 
 
 --
@@ -5404,7 +4996,6 @@ REVOKE ALL ON TABLE program FROM northbr6;
 GRANT ALL ON TABLE program TO northbr6;
 GRANT SELECT,INSERT,REFERENCES,UPDATE ON TABLE program TO northbr6_web WITH GRANT OPTION;
 GRANT ALL ON TABLE program TO northbr6_nbnexus;
-GRANT ALL ON TABLE program TO northbr6_devnexus;
 
 
 --
@@ -5415,7 +5006,6 @@ REVOKE ALL ON TABLE program_language FROM PUBLIC;
 REVOKE ALL ON TABLE program_language FROM northbr6;
 GRANT ALL ON TABLE program_language TO northbr6;
 GRANT ALL ON TABLE program_language TO northbr6_nbnexus;
-GRANT ALL ON TABLE program_language TO northbr6_devnexus;
 
 
 --
@@ -5427,7 +5017,6 @@ REVOKE ALL ON TABLE role FROM northbr6;
 GRANT ALL ON TABLE role TO northbr6;
 GRANT ALL ON TABLE role TO northbr6_nbnexus;
 GRANT SELECT ON TABLE role TO northbr6_web;
-GRANT ALL ON TABLE role TO northbr6_devnexus;
 
 
 --
@@ -5439,7 +5028,6 @@ REVOKE ALL ON TABLE role_privilege FROM northbr6;
 GRANT ALL ON TABLE role_privilege TO northbr6;
 GRANT SELECT ON TABLE role_privilege TO northbr6_web;
 GRANT ALL ON TABLE role_privilege TO northbr6_nbnexus;
-GRANT ALL ON TABLE role_privilege TO northbr6_devnexus;
 
 
 --
@@ -5451,7 +5039,6 @@ REVOKE ALL ON TABLE status FROM northbr6;
 GRANT ALL ON TABLE status TO northbr6;
 GRANT SELECT,INSERT,UPDATE ON TABLE status TO northbr6_web;
 GRANT ALL ON TABLE status TO northbr6_nbnexus;
-GRANT ALL ON TABLE status TO northbr6_devnexus;
 
 
 --
@@ -5462,7 +5049,6 @@ REVOKE ALL ON TABLE topic FROM PUBLIC;
 REVOKE ALL ON TABLE topic FROM northbr6;
 GRANT ALL ON TABLE topic TO northbr6;
 GRANT ALL ON TABLE topic TO northbr6_nbnexus;
-GRANT ALL ON TABLE topic TO northbr6_devnexus;
 
 
 --
@@ -5473,7 +5059,6 @@ REVOKE ALL ON TABLE "user" FROM PUBLIC;
 REVOKE ALL ON TABLE "user" FROM northbr6;
 GRANT ALL ON TABLE "user" TO northbr6;
 GRANT ALL ON TABLE "user" TO northbr6_nbnexus;
-GRANT ALL ON TABLE "user" TO northbr6_devnexus;
 
 
 --
@@ -5494,6 +5079,7 @@ REVOKE ALL ON TABLE user_group FROM PUBLIC;
 REVOKE ALL ON TABLE user_group FROM northbr6;
 GRANT ALL ON TABLE user_group TO northbr6;
 GRANT SELECT,INSERT,UPDATE ON TABLE user_group TO northbr6_web;
+GRANT ALL ON TABLE user_group TO northbr6_nbnexus;
 
 
 --
@@ -5514,7 +5100,6 @@ REVOKE ALL ON TABLE user_organization FROM PUBLIC;
 REVOKE ALL ON TABLE user_organization FROM northbr6;
 GRANT ALL ON TABLE user_organization TO northbr6;
 GRANT ALL ON TABLE user_organization TO northbr6_nbnexus;
-GRANT ALL ON TABLE user_organization TO northbr6_devnexus;
 
 
 --
@@ -5545,6 +5130,7 @@ REVOKE ALL ON TABLE user_session FROM PUBLIC;
 REVOKE ALL ON TABLE user_session FROM northbr6;
 GRANT ALL ON TABLE user_session TO northbr6;
 GRANT SELECT,INSERT ON TABLE user_session TO northbr6_web;
+GRANT ALL ON TABLE user_session TO northbr6_nbnexus;
 
 
 --

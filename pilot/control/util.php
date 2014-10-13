@@ -18,9 +18,9 @@ class Util {
 	const PHONE_MAX = 20;
 	const PHONE_MIN = 6;
 	const PASSWORD_MAX = 25;
-	const PASSWORD_MIN = 8;
-	const USERNAME_MIN = 7;
+	const PASSWORD_MIN = 7;
 	const USERNAME_MAX = 25;
+	const USERNAME_MIN = 7;
 	
 	public static function validateEmail($in) {
 		if (filter_var($in, FILTER_VALIDATE_EMAIL)) {
@@ -85,10 +85,10 @@ class Util {
 		if (isset($input['password1']) && isset($input['password2']) && strlen($input['password1']) > 0) {
 			if (strlen($input['password1']) >= self::PASSWORD_MIN
 				&& strlen($input['password1']) <= self::PASSWORD_MAX
-    		&& preg_match("/[A-Z]+/", $input['password1'])
-    		&& preg_match("/[a-z]+/", $input['password1'])
+    		//&& preg_match("/[A-Z]+/", $input['password1'])
+    		&& preg_match("/[a-zA-Z]+/", $input['password1'])
     		&& preg_match("/[0-9]+/", $input['password1'])
-    		&& preg_match("/[~!@#$%^&*_+=`|?:;.,*\'\"\/\-]+/", $input['password1'])
+    		//&& preg_match("/[~!@#$%^&*_+=`|?:;.,*\'\"\/\-]+/", $input['password1'])
     		&& !preg_match("/[ ]+/", $input['password1'])
     		&& !strcmp($input['password1'], $input['password2'])) { 
 				$result['good']['password'] = $input['password1'];			
@@ -120,7 +120,7 @@ class Util {
  		}
 		
 		// PREVENT MATCHING USERNAME, PASSWORD
-		// Since the allowed char lists for these fields aren't compatible, theoretically these conditions can never be true
+		// Since the allowed char lists for these fields aren't compatible, theoretically these conditions can never both be true
 		if (isset($result['good']['password']) && isset($result['good']['username']) && !strcmp($result['good']['password'], $result['good']['username'])) {
 			$result['error']['password'] =  self::VALIDATION_PASSWORD_ERROR;
 		}

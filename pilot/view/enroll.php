@@ -60,9 +60,9 @@ if(isset($_GET['error'])) {
 									<table cellpadding="5">
 								  <tr><td>&nbsp;</td><td style="color:#bf6030;"><? echo $error; ?></td></tr>
 								  	<!--<p>You represent: <? echo $_SESSION['orgName'] ?></p>-->
-										<tr><td><a href="#" class="tooltip" title="7-25 characters.  May contain letters, numbers, _">Choose your user name*</td><td><input class="passed" type="text" size="25" name="userid" value="<? echo $stickyUserId; ?>"/></td></tr>
-										<tr><td><a href="#" class="tooltip" title="8-25 characters. Must contain 1 upper, 1 lower, 1 number, 1 special character">Choose your password*</td><td><input class="passed" type="text" size="25" name="password1" value="<? echo $stickyPassword1; ?>"/></td></tr>
-										<tr><td>Confirm your password*</td><td><input class="passed" type=text" size="25" name="password2" value="<? echo $stickyPassword2; ?>"/></td></tr>
+										<tr><td><a href="#" class="tooltip" title="7-25 characters. May contain letters, numbers, _">Choose your user name*</td><td><input class="passed" type="text" size="25" name="userid" value="<? echo $stickyUserId; ?>"/></td></tr>
+										<tr><td><a href="#" class="tooltip" title="7-25 characters. Must contain at least 1 digit.">Choose your password*</td><td><input class="passed" type="password" size="25" name="password1" value="<? echo $stickyPassword1; ?>"/></td></tr>
+										<tr><td>Confirm your password*</td><td><input class="passed" type="password" size="25" name="password2" value="<? echo $stickyPassword2; ?>"/></td></tr>
 										<tr><td><a href="#" class="tooltip" title="1-25 characters.  May contain letters, numbers, accents, &apos; or _">Your first name*</td><td><input class="passed" type="text" size="25" name="fname" value="<? echo $stickyFname; ?>"/></td></tr>
 										<tr><td><a href="#" class="tooltip" title="Optional. 1-25 characters.  May contain letters, numbers, accents, &apos; or _">Your last name</td><td><input class="passed" type="text" size="25" name="lname" value="<? echo $stickyLname; ?>"/></td></tr>
 										<tr><td valign="top"><a href="#" class="tooltip" title="2-100 characters. May contain letters, numbers, accents, spaces, &apos; or _">Your organization*</td><td><textarea class="passed"  maxlength="100" rows="4" cols="30" name="orgname" ><? echo $stickyOrgName; ?></textarea></td></tr>
