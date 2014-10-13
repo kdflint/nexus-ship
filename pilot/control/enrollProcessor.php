@@ -223,9 +223,11 @@ function conferenceRegistration($name, $room) {
 
 function sendConfirmationEmail($email, $path, $fname) {
 	
-	$message = "Welcome " . $fname . "! Your enrollment is complete for the NorthBridge Nexus collaboration portal.
+	$message = "Welcome " . $fname . "!
 	
-You are now enabled to collaborate with " . $_SESSION['groupName'] . " hosted by " . $_SESSION['networkName'] . "
+Your enrollment is complete. 
+	
+You are now enabled to collaborate with " . $_SESSION['groupName'] . " hosted by " . $_SESSION['networkName'] . ".
 
 This tool is built by committed volunteers working hard to build web resources for organizations that make a positive difference in our communities.
 
@@ -243,13 +245,14 @@ We are working hard on adding:
 - Collaboration Tracking
 - Advanced Mapping functions
 
-You can login to Nexus using this link.
+You can login to Nexus using this link. Check the Help document for some information about how to use this site.
 
 http://northbridgetech.org/" . $path . "/nexus/view/login.php
 
 Enjoy,
 
-The NorthBridge Team
+The Development Team at
+NorthBridge Technology Alliance
 
 P.S. May we recommend that you visit the Profile tab first to set your messaging settings? Then, you may wish to subscribe to one or more discussions on the Forum tab.";
 
