@@ -164,7 +164,7 @@ ALTER TABLE public.forum_user_id_seq OWNER TO northbr6;
 -- Name: forum_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: northbr6
 --
 
-SELECT pg_catalog.setval('forum_user_id_seq', 21, true);
+SELECT pg_catalog.setval('forum_user_id_seq', 104, true);
 
 
 --
@@ -219,6 +219,40 @@ COMMENT ON COLUMN forum_user.email IS 'Email as registered in forum';
 
 
 --
+-- Name: group_id_seq; Type: SEQUENCE; Schema: public; Owner: northbr6
+--
+
+CREATE SEQUENCE group_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.group_id_seq OWNER TO northbr6;
+
+--
+-- Name: group_id_seq; Type: SEQUENCE SET; Schema: public; Owner: northbr6
+--
+
+SELECT pg_catalog.setval('group_id_seq', 1, true);
+
+
+--
+-- Name: group; Type: TABLE; Schema: public; Owner: northbr6; Tablespace: 
+--
+
+CREATE TABLE "group" (
+    id integer DEFAULT nextval('group_id_seq'::regclass) NOT NULL,
+    name character varying(50) NOT NULL,
+    descr character varying(200)
+);
+
+
+ALTER TABLE public."group" OWNER TO northbr6;
+
+--
 -- Name: invitation; Type: TABLE; Schema: public; Owner: northbr6; Tablespace: 
 --
 
@@ -234,7 +268,8 @@ CREATE TABLE invitation (
     expire_dt date,
     issuer_fk integer NOT NULL,
     type character varying(10) NOT NULL,
-    organization_fk integer
+    organization_fk integer,
+    group_fk integer
 );
 
 
@@ -308,6 +343,13 @@ COMMENT ON COLUMN invitation.type IS 'This identifies whether an invitation is s
 --
 
 COMMENT ON COLUMN invitation.organization_fk IS 'This identifies the organization that issued the invitation.';
+
+
+--
+-- Name: COLUMN invitation.group_fk; Type: COMMENT; Schema: public; Owner: northbr6
+--
+
+COMMENT ON COLUMN invitation.group_fk IS 'This identifies the group that issued the invitation.';
 
 
 --
@@ -471,6 +513,70 @@ COMMENT ON COLUMN location.region2 IS 'In the US, put state here';
 
 
 --
+-- Name: message_id_seq; Type: SEQUENCE; Schema: public; Owner: northbr6
+--
+
+CREATE SEQUENCE message_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.message_id_seq OWNER TO northbr6;
+
+--
+-- Name: message_id_seq; Type: SEQUENCE SET; Schema: public; Owner: northbr6
+--
+
+SELECT pg_catalog.setval('message_id_seq', 86, true);
+
+
+--
+-- Name: message; Type: TABLE; Schema: public; Owner: northbr6; Tablespace: 
+--
+
+CREATE TABLE message (
+    id integer DEFAULT nextval('message_id_seq'::regclass) NOT NULL,
+    sender_fk integer NOT NULL,
+    subject character varying(30),
+    message character varying(500),
+    reply_to_fk integer,
+    create_dttm timestamp with time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.message OWNER TO northbr6;
+
+--
+-- Name: COLUMN message.sender_fk; Type: COMMENT; Schema: public; Owner: northbr6
+--
+
+COMMENT ON COLUMN message.sender_fk IS 'Indicates the sender of the message.';
+
+
+--
+-- Name: COLUMN message.reply_to_fk; Type: COMMENT; Schema: public; Owner: northbr6
+--
+
+COMMENT ON COLUMN message.reply_to_fk IS 'Indicates which message this message is in reply to, if any.';
+
+
+--
+-- Name: message_recipient; Type: TABLE; Schema: public; Owner: northbr6; Tablespace: 
+--
+
+CREATE TABLE message_recipient (
+    message_fk integer NOT NULL,
+    recipient_fk integer NOT NULL,
+    uuid uuid NOT NULL
+);
+
+
+ALTER TABLE public.message_recipient OWNER TO northbr6;
+
+--
 -- Name: organization; Type: TABLE; Schema: public; Owner: northbr6; Tablespace: 
 --
 
@@ -485,7 +591,8 @@ CREATE TABLE organization (
     suspend_dttm timestamp with time zone,
     tax_exempt boolean,
     status_fk integer NOT NULL,
-    type character varying(50)
+    type character varying(50),
+    logo character varying(100) DEFAULT ''::character varying
 );
 
 
@@ -550,7 +657,7 @@ ALTER SEQUENCE organization_id_seq OWNED BY organization.id;
 -- Name: organization_id_seq; Type: SEQUENCE SET; Schema: public; Owner: northbr6
 --
 
-SELECT pg_catalog.setval('organization_id_seq', 277, true);
+SELECT pg_catalog.setval('organization_id_seq', 322, true);
 
 
 --
@@ -662,7 +769,7 @@ ALTER SEQUENCE organization_organization_id_seq OWNED BY organization_organizati
 -- Name: organization_organization_id_seq; Type: SEQUENCE SET; Schema: public; Owner: northbr6
 --
 
-SELECT pg_catalog.setval('organization_organization_id_seq', 272, true);
+SELECT pg_catalog.setval('organization_organization_id_seq', 308, true);
 
 
 --
@@ -962,7 +1069,7 @@ ALTER SEQUENCE status_id_seq OWNED BY status.id;
 -- Name: status_id_seq; Type: SEQUENCE SET; Schema: public; Owner: northbr6
 --
 
-SELECT pg_catalog.setval('status_id_seq', 2, true);
+SELECT pg_catalog.setval('status_id_seq', 3, true);
 
 
 --
@@ -1005,8 +1112,8 @@ ALTER TABLE public.topic OWNER TO northbr6;
 CREATE TABLE "user" (
     id integer NOT NULL,
     uuid uuid NOT NULL,
-    username character varying(12) DEFAULT ''::character varying NOT NULL,
-    password character varying(12) DEFAULT ''::character varying NOT NULL,
+    username character varying(50) DEFAULT ''::character varying NOT NULL,
+    password character varying(72) DEFAULT ''::character varying,
     fname character varying(50) DEFAULT ''::character varying NOT NULL,
     mname character varying(50) DEFAULT ''::character varying NOT NULL,
     lname character varying(50) DEFAULT ''::character varying NOT NULL,
@@ -1020,7 +1127,11 @@ CREATE TABLE "user" (
     sms character varying(10) DEFAULT ''::character varying NOT NULL,
     enable_email boolean DEFAULT false NOT NULL,
     enable_sms boolean DEFAULT false NOT NULL,
-    contact_fk integer
+    contact_fk integer,
+    cryptimpl character varying(5) DEFAULT 'None'::character varying NOT NULL,
+    salt character varying(32),
+    crypt_dttm timestamp with time zone,
+    conference_link character varying(100) DEFAULT ''::character varying
 );
 
 
@@ -1039,6 +1150,56 @@ COMMENT ON COLUMN "user".email IS 'Drop this in favor of user_contact';
 
 COMMENT ON COLUMN "user".sms IS 'Drop this in favor of user_contact';
 
+
+--
+-- Name: COLUMN "user".cryptimpl; Type: COMMENT; Schema: public; Owner: northbr6
+--
+
+COMMENT ON COLUMN "user".cryptimpl IS 'Identify the system-specific implementation of the hash algorithm';
+
+
+--
+-- Name: COLUMN "user".crypt_dttm; Type: COMMENT; Schema: public; Owner: northbr6
+--
+
+COMMENT ON COLUMN "user".crypt_dttm IS 'Date the password was last encrypted.';
+
+
+--
+-- Name: user_group_id_seq; Type: SEQUENCE; Schema: public; Owner: northbr6
+--
+
+CREATE SEQUENCE user_group_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.user_group_id_seq OWNER TO northbr6;
+
+--
+-- Name: user_group_id_seq; Type: SEQUENCE SET; Schema: public; Owner: northbr6
+--
+
+SELECT pg_catalog.setval('user_group_id_seq', 82, true);
+
+
+--
+-- Name: user_group; Type: TABLE; Schema: public; Owner: northbr6; Tablespace: 
+--
+
+CREATE TABLE user_group (
+    id integer DEFAULT nextval('user_group_id_seq'::regclass) NOT NULL,
+    user_fk integer NOT NULL,
+    create_dttm timestamp with time zone DEFAULT now() NOT NULL,
+    update_dttm timestamp with time zone,
+    group_fk integer NOT NULL
+);
+
+
+ALTER TABLE public.user_group OWNER TO northbr6;
 
 --
 -- Name: user_id_seq; Type: SEQUENCE; Schema: public; Owner: northbr6
@@ -1065,7 +1226,7 @@ ALTER SEQUENCE user_id_seq OWNED BY "user".id;
 -- Name: user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: northbr6
 --
 
-SELECT pg_catalog.setval('user_id_seq', 99, true);
+SELECT pg_catalog.setval('user_id_seq', 209, true);
 
 
 --
@@ -1110,7 +1271,49 @@ ALTER SEQUENCE user_organization_id_seq OWNED BY user_organization.id;
 -- Name: user_organization_id_seq; Type: SEQUENCE SET; Schema: public; Owner: northbr6
 --
 
-SELECT pg_catalog.setval('user_organization_id_seq', 100, true);
+SELECT pg_catalog.setval('user_organization_id_seq', 187, true);
+
+
+--
+-- Name: user_session_id_seq; Type: SEQUENCE; Schema: public; Owner: northbr6
+--
+
+CREATE SEQUENCE user_session_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.user_session_id_seq OWNER TO northbr6;
+
+--
+-- Name: user_session_id_seq; Type: SEQUENCE SET; Schema: public; Owner: northbr6
+--
+
+SELECT pg_catalog.setval('user_session_id_seq', 200, true);
+
+
+--
+-- Name: user_session; Type: TABLE; Schema: public; Owner: northbr6; Tablespace: 
+--
+
+CREATE TABLE user_session (
+    id integer DEFAULT nextval('user_session_id_seq'::regclass) NOT NULL,
+    user_fk integer,
+    ip inet,
+    create_dttm timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.user_session OWNER TO northbr6;
+
+--
+-- Name: COLUMN user_session.create_dttm; Type: COMMENT; Schema: public; Owner: northbr6
+--
+
+COMMENT ON COLUMN user_session.create_dttm IS 'Indicates when the login activity occurred.';
 
 
 --
@@ -1473,15 +1676,57 @@ INSERT INTO contact VALUES (59, '', '', '', '', NULL, '', '', '');
 -- Data for Name: forum_user; Type: TABLE DATA; Schema: public; Owner: northbr6
 --
 
-INSERT INTO forum_user VALUES (12, 88, 'Kathy', 'admin', 'Kathy Flint', 'contact@northbridgetech.org');
-INSERT INTO forum_user VALUES (13, 89, 'Kirsten', 'change-me', 'Kirsten Peachey', 'fake@northbridgetech.org');
+INSERT INTO forum_user VALUES (72, 176, 'lou', 'lou1', 'lou lou', 'coach.lou@northbridgetech.org');
+INSERT INTO forum_user VALUES (73, 177, 'Gretchen', 'abcDEF123$%^', 'Gretchen Saylor 177', '177.gretchen.saylor@gmail.com');
+INSERT INTO forum_user VALUES (74, 178, 'Enroll', 'enrollTest2', 'Enroll Test2', '178.kathy.flint@northbridgetech.org');
+INSERT INTO forum_user VALUES (75, 179, 'Enroll', 'enrollTest4', 'Enroll Test4', 'kathy.d.flint@gmail.com');
+INSERT INTO forum_user VALUES (76, 180, 'Enroll', 'enrollTest5', 'Enroll Test5', '180.kathy.d.flint@gmail.com');
+INSERT INTO forum_user VALUES (77, 181, 'Stephen', 'h~nry2526', 'Stephen Henry', 'rstephenhenry@gmail.com');
+INSERT INTO forum_user VALUES (78, 183, 'j', 'abc123', 'j h', 'jafar.ahmad.71@gmail.com');
+INSERT INTO forum_user VALUES (79, 184, 'jj', 'abc123', 'jj jj', '184.jafar.ahmad.71@gmail.com');
+INSERT INTO forum_user VALUES (80, 185, 'jj', 'abc123', 'jj jj 185', '185.jafar.ahmad.71@gmail.com');
+INSERT INTO forum_user VALUES (81, 186, 'jj', 'abc123', 'jj jj 186', '186.jafar.ahmad.71@gmail.com');
+INSERT INTO forum_user VALUES (82, 187, 'Enroll', 'enrollTest41%', 'Enroll Test41', 'kdflint@test.com');
+INSERT INTO forum_user VALUES (83, 188, 'Enroll', 'LjPPk995%', 'Enroll Test57', 'ksflint@comcast.net');
+INSERT INTO forum_user VALUES (84, 189, 'Enroll', 'LjPPk995%', 'Enroll Test78', '189.kathy.d.flint@gmail.com');
+INSERT INTO forum_user VALUES (85, 190, 'Lou', 'lou1234D567%8', 'Lou One', '190.coach.lou@northbridgetech.org');
+INSERT INTO forum_user VALUES (86, 191, 'Enroll', 'LjPPk995%', 'Enroll Test69', '191.kdflint@test.com');
+INSERT INTO forum_user VALUES (87, 192, 'Enroll', 'LjPPk995%', 'Enroll Test96', '192.kdflint@test.com');
+INSERT INTO forum_user VALUES (88, 193, 'Enroll', 'LjPPk995%', 'Enroll Test92', 'aaa@test.com');
+INSERT INTO forum_user VALUES (89, 194, 'Enroll', 'LjPPk995%', 'Enroll ', '194.kdflint@test.com');
+INSERT INTO forum_user VALUES (90, 195, 'Enroll', 'LjPPk995%', 'Enroll  195', '195.kdflint@test.com');
+INSERT INTO forum_user VALUES (91, 196, 'Enroll', 'LjPPk995%', 'Enroll  196', '196.kdflint@test.com');
+INSERT INTO forum_user VALUES (92, 197, 'Enroll', 'LjPPk995%', 'Enroll Test101', '197.ksflint@comcast.net');
+INSERT INTO forum_user VALUES (93, 198, 'Steve', 'Lolz2525!', 'Steve Test', '198.rstephenhenry@gmail.com');
+INSERT INTO forum_user VALUES (94, 199, 'Enroll', 'LjPPk995%', 'Enroll Test25', '199.kathy.d.flint@gmail.com');
+INSERT INTO forum_user VALUES (95, 200, 'Enroll', 'LjPPk995%', 'Enroll Test27', '200.kathy.d.flint@gmail.com');
+INSERT INTO forum_user VALUES (96, 201, 'Enroll', 'LjPPk995%', 'Enroll Test75', '201.kathy.flint@northbridgetech.org');
+INSERT INTO forum_user VALUES (97, 202, 'Gretchen', 'Hell0World!', 'Gretchen Saylor 202', '202.gretchen.saylor@gmail.com');
+INSERT INTO forum_user VALUES (98, 203, 'Enroll', 'LjPPk995%', 'Enroll Test81', '203.kathy.d.flint@gmail.com');
+INSERT INTO forum_user VALUES (99, 204, 'Enroll', 'LjPPk995%', 'Enroll Test20', '204.kathy.d.flint@gmail.com');
+INSERT INTO forum_user VALUES (100, 205, 'Kathy', 'LjPPk995%', 'Kathy Flint', '205.kathy.d.flint@gmail.com');
+INSERT INTO forum_user VALUES (101, 206, 'Enroll', 'beloved1', 'Enroll Test102', '206.ksflint@comcast.net');
+INSERT INTO forum_user VALUES (102, 207, 'Thor', 'Noms123!@#', 'Thor Saylor', '207.gretchen.saylor@gmail.com');
+INSERT INTO forum_user VALUES (103, 208, 'Lou', '%abc123', 'Lou Patel', '208.coach.lou@northbridgetech.org');
+INSERT INTO forum_user VALUES (104, 209, 'Steve', 'lolz2525', 'Steve henry', '209.rstephenhenry@gmail.com');
+INSERT INTO forum_user VALUES (69, 168, 'enrollTest1', 'enrollTest1', 'enrollTest1 enrollTest1', 'enrolltest1@test.com');
+INSERT INTO forum_user VALUES (12, 88, 'Administrator', 'admin', 'Administrator', 'kathy.flint@northbridgetech.org');
+INSERT INTO forum_user VALUES (70, 174, 'Gretchen', 'helloworld', 'Gretchen Saylor', 'gretchen.saylor@gmail.com');
+INSERT INTO forum_user VALUES (71, 175, 'Gretchen', 'abcDEF123$%^', 'Gretchen Saylor 175', '175.gretchen.saylor@gmail.com');
+
+
+--
+-- Data for Name: group; Type: TABLE DATA; Schema: public; Owner: northbr6
+--
+
+INSERT INTO "group" VALUES (1, 'Demo Workgroup', 'This group seeks to deepen collaborative research relationships between communities and academic institutions.');
 
 
 --
 -- Data for Name: invitation; Type: TABLE DATA; Schema: public; Owner: northbr6
 --
 
-INSERT INTO invitation VALUES (40, '0037adaf-de43-af5e-95e2-b2dea2d05f49', NULL, '2014-08-01 09:42:24.015911-06', NULL, 18, NULL, 1, NULL, 85, 'global', 18);
+INSERT INTO invitation VALUES (40, '0037adaf-de43-af5e-95e2-b2dea2d05f49', NULL, '2014-08-01 09:42:24.015911-06', NULL, 18, NULL, 1, NULL, 85, 'global', 18, 1);
 
 
 --
@@ -1733,249 +1978,280 @@ INSERT INTO location VALUES (465, '6401 N. Artesian Ave.', '', 'Chicago', '', 'I
 
 
 --
+-- Data for Name: message; Type: TABLE DATA; Schema: public; Owner: northbr6
+--
+
+INSERT INTO message VALUES (84, 176, '[Nexus] Personal Message', 'test', NULL, '2014-09-21 20:18:23.272732-06');
+INSERT INTO message VALUES (85, 176, '[Nexus] Personal Message', 'Test', NULL, '2014-09-21 20:18:34.723901-06');
+INSERT INTO message VALUES (86, 197, '[Nexus] Personal Message', 'hey', NULL, '2014-09-28 14:24:21.218087-06');
+
+
+--
+-- Data for Name: message_recipient; Type: TABLE DATA; Schema: public; Owner: northbr6
+--
+
+INSERT INTO message_recipient VALUES (84, 176, '60f4ea06-55cb-2f3b-044a-5db676db5f84');
+INSERT INTO message_recipient VALUES (85, 88, '7788df5a-8750-b4a2-25a3-653bc55affd8');
+INSERT INTO message_recipient VALUES (86, 88, 'f73eafc8-b4e8-847b-eb1c-da89d0fa1f37');
+INSERT INTO message_recipient VALUES (86, 176, '8fb3bd5f-f856-b082-0f05-074f94fbf0d9');
+
+
+--
 -- Data for Name: organization; Type: TABLE DATA; Schema: public; Owner: northbr6
 --
 
-INSERT INTO organization VALUES (9, 'Oak Lawn Neighborhoods for Peace', NULL, NULL, '2014-05-26 18:36:55.837463-06', NULL, NULL, NULL, NULL, 1, NULL);
-INSERT INTO organization VALUES (1, 'Greater-Chicago Communities Unite!', 'nta', 'nfp', '2014-05-13 15:31:28.774771-06', NULL, '2014-05-16 09:38:22.871587-06', '2014-05-16 09:37:13.939099-06', true, 1, NULL);
-INSERT INTO organization VALUES (18, 'The Center for Faith and Community Health Transformations', NULL, NULL, '2014-07-14 16:09:45.885491-06', NULL, '2014-07-14 16:09:45.885491-06', NULL, NULL, 1, NULL);
-INSERT INTO organization VALUES (19, 'Episcopal Diocese of Chicago', NULL, NULL, '2014-07-14 16:13:00.448838-06', NULL, '2014-07-14 16:13:00.448838-06', NULL, true, 1, NULL);
-INSERT INTO organization VALUES (13, 'NorthBridge Technology Alliance', NULL, '', '2014-05-26 18:43:41.30068-06', NULL, '2014-05-26 18:43:41.30068-06', NULL, true, 1, NULL);
-INSERT INTO organization VALUES (12, 'Howard Street Spanish Connections', NULL, NULL, '2014-05-26 18:36:28.32138-06', NULL, NULL, NULL, NULL, 1, NULL);
-INSERT INTO organization VALUES (10, 'Englewood Community Health Services', NULL, NULL, '2014-05-26 18:35:52.322688-06', NULL, NULL, NULL, NULL, 1, 'Health Care Provider');
-INSERT INTO organization VALUES (45, '30th Ward - St. James Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (46, 'A Just Harvest', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization');
-INSERT INTO organization VALUES (47, 'Access Living', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization');
-INSERT INTO organization VALUES (48, 'Adalberto Memorial United Methodist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (49, 'Advocate Christ Medical Center', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Heath Care Provider');
-INSERT INTO organization VALUES (50, 'Advocate Clinical Pastoral Education', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Heath Care Provider');
-INSERT INTO organization VALUES (51, 'Advocate Health Care', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Heath Care Provider');
-INSERT INTO organization VALUES (52, 'Advocate Parish Nurse Ministry', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (53, 'Advocate United Church of Christ', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (54, 'African Community United Methodist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (55, 'African-American Alzheimer''s Outreach Initiative', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (56, 'Agape Family Life Center', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (57, 'Age Options', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization');
-INSERT INTO organization VALUES (58, 'Alexian Brothers Parish Services', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization');
-INSERT INTO organization VALUES (59, 'Alzheimer''s Association - Greater Illinois Chapter', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (60, 'Am I My Brothers Keeper', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (61, 'American Cancer Society, Chicago Region', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (62, 'American Heart Association Cultural Health Initiatives', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (63, 'American Kidney Fund', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (64, 'Antioch Telegu Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (65, 'Apostolic Church of God', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (66, 'Apostolic Faith Church Health Professions Ministry', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (67, 'B''nai Yehuda Beth Shalom', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (68, 'Beacon Light', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (69, 'Bethel Reform Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (70, 'Bikur Cholim (visiting the sick) training', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (71, 'Breast Cancer Network of Strength', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (72, 'Buddhist International Tzu Chi Relief Foundation (Midwest)', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization');
-INSERT INTO organization VALUES (73, 'Campaign for Better Health Care', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (74, 'Caring for Health', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (75, 'CARRI (Chicago Area Regional Recovery Initiative)', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization');
-INSERT INTO organization VALUES (76, 'Center for Faith and Health', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'University');
-INSERT INTO organization VALUES (77, 'Central Spanish Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (78, 'Chicago Chin Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (79, 'Chicago Theological Seminary', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (80, 'Chicago Uptown Ministry', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (81, 'Chinmaya Mission Chicago-Badri', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (82, 'Christ Temple Apostolic Faith Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (83, 'Christ the King Lutheran Church ELCA', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (84, 'Christian Churches Caring', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (85, 'Christian Fellowship Flock', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (86, 'Church of Jesus Christ Latter Day Saints', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (87, 'Coalition for Quality and Patient Safety of Chicagoland', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (88, 'Community Health Services and Health Promotion', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (89, 'Community-Outreach Project', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (90, 'Congregational Health Partnerships', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Heath Care Provider');
-INSERT INTO organization VALUES (91, 'Congregational Outreach', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (92, 'Congregational United Church of Christ of Arlington Heights', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (93, 'Consortium to Lower Obesity in Chicago Children (CLOCC)', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (94, 'Cornerstone Community Outreach', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization');
-INSERT INTO organization VALUES (95, 'Council of Islamic Organizations of Greater Chicago', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization');
-INSERT INTO organization VALUES (96, 'Delegate Church Association of Advocate BroMenn Medical Center', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Collaborative/Network');
-INSERT INTO organization VALUES (97, 'DuPage Department of Public Health', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (98, 'Ebenezer Baptist', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (99, 'Ebenezer Lutheran Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (100, 'Edgewater Presbyterian Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (101, 'Education and Life Coaching', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (102, 'Epworth United Methodist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (103, 'Evergreen Presbyterian Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (104, 'Exodus Community Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (105, 'Faith Caucus', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (106, 'Faith in Place', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization');
-INSERT INTO organization VALUES (107, 'Faith Temple COGIC', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (108, 'Faith United Methodist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (109, 'Figure Facts LLC', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Heath Care Provider');
-INSERT INTO organization VALUES (110, 'First Baptist Church, Berwyn', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (111, 'First Baptist Church, LaGrange', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (112, 'First Baptist Church, Park Forest', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (113, 'First Congregational Church of Western Springs', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (114, 'First Evangelical Free Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (115, 'First Grace Missionary Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (116, 'First New Bethlehem Community Development Corporation', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (117, 'Flossmoor Community Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (118, 'Fourth Presbyterian Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (119, 'Friendly Visits', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (120, 'Friendship Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (121, 'Gloria Dei Lutheran Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (122, 'God Can Ministries', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (123, 'Grace Calvary United Methodist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (124, 'Grace Calvary United Methodist Church- Gospel Cafe', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (125, 'Grace Evangelical Lutheran Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (126, 'Grace Lutheran Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (127, 'Greater Galilee MB Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (128, 'Greater Galilee Missionary Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (129, 'Greater Open Door Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (130, 'Greater Progressive Missionary Baptist Church Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (131, 'Greater St. John Bible Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (132, 'Greater St. Paul A M E C', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (133, 'Greater Walters AME Zion Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (134, 'Hamdard Center for Health and Human Services', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization');
-INSERT INTO organization VALUES (135, 'Health Initiatives, West Cook Area', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (136, 'Healthcare Consortium of Illinois', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (137, 'Healthy Dining Chicago Healthy Dining Chicago', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization');
-INSERT INTO organization VALUES (138, 'Healthy Spirit Healthy Soul', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (139, 'Hispanocare - Chicago', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (140, 'Hyde Park Christian Reformed Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (141, 'Illinois Faith Based Emergency Preparedness Initiative', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Government');
-INSERT INTO organization VALUES (142, 'Illinois Maternal and Child Health Coalition', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (143, 'Illinois PIRG', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (144, 'Illinois Women''s Health Registry', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (145, 'Imagine Chicago', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (146, 'Inner City Muslim Action Network', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization');
-INSERT INTO organization VALUES (147, 'Institute for Women''s Health Research', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (148, 'Islamic Community Center', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (149, 'Islamic Foundation of Villa Park', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (150, 'Ismaili Center in Chicago', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (151, 'Ismaili Center in Glenview', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (152, 'Jesus Name Apostolic Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (153, 'Jewish Child and Family Services', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization');
-INSERT INTO organization VALUES (154, 'Jewish Community Emergency Resiliency Team', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization');
-INSERT INTO organization VALUES (155, 'Jewish Healing Network of Chicago', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (156, 'Jewish School-Based Wellness Initiative', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (157, 'Joshua Missionary Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (158, 'Journey Community Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (159, 'Joy To Be Fit Gospel Aerobics Ministry', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (160, 'Kenwood UCC', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (161, 'Kimball Ave. Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (162, 'La Academia', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (163, 'Lakeview Presbyterian Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (164, 'Latino Community Program', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (165, 'LaVerne Barnes', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Heath Care Provider');
-INSERT INTO organization VALUES (166, 'Lead Safe Housing Initiatives', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (167, 'lead safe illinois', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (168, 'Leadership and Church Development', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (169, 'Liberty Baptist', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (170, 'Lilydale Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (171, 'Lincoln United Methodist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (172, 'Little Brothers - Friends of the Elderly, Chicago Chapter', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (173, 'Lively Stone Missonary Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (174, 'Living Well Ministries', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (175, 'Lutheran Church of Atonement', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (176, 'Lutheran Church of the Ascension', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (177, 'Lutheran General Hospital - Mission and Spiritual', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Heath Care Provider');
-INSERT INTO organization VALUES (178, 'Lutheran Social Services of Illinois', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization');
-INSERT INTO organization VALUES (179, 'M.I.K.E. Minority Intervention and Kidney Education Program', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (180, 'Ministry to New Moms', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (181, 'Montrose Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (182, 'Monument of Faith Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (183, 'Mosque Foundation', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (184, 'Mosque of Umar Inc.', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (185, 'Most Blessed Trinity Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (186, 'Mount Calvary Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (187, 'Mount Pisgah Ministries', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (188, 'Myanmar Christian Church of Metro Chicago', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (189, 'New Hope Bible Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (190, 'New Life Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (191, 'New Life Community Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (192, 'New Life Covenant Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (193, 'New Life Worship Center', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (194, 'New Mt.Pilgrim MB Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (195, 'New Pasadena MB Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (196, 'North Park Theological Seminary', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (197, 'North Shore Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (198, 'North Shore Church of Christ', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (199, 'Northfield Presbyterian Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (200, 'Northside P.O.W.E.R.', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (201, 'Nuestra Senora de Gaudalupe', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (202, 'Older Adult Programs', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (203, 'Our Lady of Fatima Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (204, 'Our Lady of Good Counsel', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (205, 'Park Manor Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (206, 'Park Ridge Community Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (207, 'Peace Lutheran Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (208, 'People''s Church of the Harvest', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (209, 'Peoples Church of Chicago', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (210, 'Pilgrim Faith United Church of Christ', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (211, 'Pillar of Love UCC', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (212, 'Pleasant Ridge Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (213, 'Polish Community', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (214, 'Primera Iglesia Congregacional', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (215, 'Program of Religion/Spirituality and Mental Health', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (216, 'Progressive Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (217, 'Pui Tak Center', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization');
-INSERT INTO organization VALUES (218, 'Rahab''s House, Inc.', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (219, 'Rainbow Hospice and Palliative Care', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization');
-INSERT INTO organization VALUES (220, 'Redeeming Life Family Worship Center COGIC', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (221, 'Reformation Lutheran Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (222, 'Revelation International Outreach Ministries', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (223, 'Rush University Medical Center', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (224, 'Salem Baptist', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (225, 'Shiloh Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (226, 'Shiloh Missionary Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (227, 'Sinai Urban Health Institute', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (228, 'South Suburban Interfaith Ministerial Association', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization');
-INSERT INTO organization VALUES (229, 'Spanish Christian Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (230, 'St Matthews United Methodist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (231, 'St. Ailbe Catholic Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (232, 'St. Anne Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (233, 'St. Clement''s Episcopal Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (234, 'St. Francis of Assisi Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (235, 'St. Genevieve Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (236, 'St. Ita Catholic Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (237, 'St. James Lutheran Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (238, 'St. John MB Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (239, 'St. John United Church of Christ', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (240, 'St. Kevins''s Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (241, 'St. Luke''s Lutheran of Logan Square', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (242, 'St. Luke''s Lutheran Church of Logan Square', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (243, 'St. Mark International Christian Ch.', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (244, 'St. Paul UCC', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (245, 'St. Paul''s Church by-the-Lake', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (246, 'St. Pius V. Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (247, 'St. Sabina Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (248, 'St. Stephen AME Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (249, 'St. Sylvester Catholic Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (250, 'Suburban Chicago Interfaith Mental Health Coalition', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization');
-INSERT INTO organization VALUES (251, 'Sunrise Missionary Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (252, 'Temple of Faith Missionary Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (253, 'The American Heart Association (AHA)', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (254, 'The Buddhist Temple of Chicago', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (255, 'The Christian Aerobics and Fitness Association (CAFA)', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (256, 'The South Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (257, 'The Unversity of Illinois Medical Center for Women''s Health Associates', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (258, 'Third Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (259, 'Triedstone Full Gospel Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (260, 'Trinity AME Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (261, 'Trinity United Church of Christ', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (262, 'True Worship Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (263, 'Turning Point', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization');
-INSERT INTO organization VALUES (264, 'Ubumama - Chicago', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (265, 'United Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (266, 'United Faith Missionary Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (267, 'United in Faith Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (268, 'Unity Lutheran Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (269, 'Unity Northwest Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (270, 'Universal House of Refuge Center', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (271, 'University of Illinois'' Division of Community Health', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (272, 'Victory Christian Assembly Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (273, 'VOCMA Faith Community Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (274, 'Wesley United Methodist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship');
-INSERT INTO organization VALUES (275, 'Westside Health Authority', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '');
-INSERT INTO organization VALUES (276, 'Wholistic Medical Clinic', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Heath Care Provider');
-INSERT INTO organization VALUES (277, 'ZAM''s Hope Community Resource Center', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization');
+INSERT INTO organization VALUES (9, 'Oak Lawn Neighborhoods for Peace', NULL, NULL, '2014-05-26 18:36:55.837463-06', NULL, NULL, NULL, NULL, 1, NULL, '');
+INSERT INTO organization VALUES (1, 'Greater-Chicago Communities Unite!', 'nta', 'nfp', '2014-05-13 15:31:28.774771-06', NULL, '2014-05-16 09:38:22.871587-06', '2014-05-16 09:37:13.939099-06', true, 1, NULL, '');
+INSERT INTO organization VALUES (19, 'Episcopal Diocese of Chicago', NULL, NULL, '2014-07-14 16:13:00.448838-06', NULL, '2014-07-14 16:13:00.448838-06', NULL, true, 1, NULL, '');
+INSERT INTO organization VALUES (13, 'NorthBridge Technology Alliance', NULL, '', '2014-05-26 18:43:41.30068-06', NULL, '2014-05-26 18:43:41.30068-06', NULL, true, 1, NULL, '');
+INSERT INTO organization VALUES (12, 'Howard Street Spanish Connections', NULL, NULL, '2014-05-26 18:36:28.32138-06', NULL, NULL, NULL, NULL, 1, NULL, '');
+INSERT INTO organization VALUES (10, 'Englewood Community Health Services', NULL, NULL, '2014-05-26 18:35:52.322688-06', NULL, NULL, NULL, NULL, 1, 'Health Care Provider', '');
+INSERT INTO organization VALUES (45, '30th Ward - St. James Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (46, 'A Just Harvest', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization', '');
+INSERT INTO organization VALUES (47, 'Access Living', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization', '');
+INSERT INTO organization VALUES (48, 'Adalberto Memorial United Methodist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (52, 'Advocate Parish Nurse Ministry', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (54, 'African Community United Methodist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (56, 'Agape Family Life Center', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (57, 'Age Options', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization', '');
+INSERT INTO organization VALUES (58, 'Alexian Brothers Parish Services', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization', '');
+INSERT INTO organization VALUES (60, 'Am I My Brothers Keeper', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (61, 'American Cancer Society, Chicago Region', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (62, 'American Heart Association Cultural Health Initiatives', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (63, 'American Kidney Fund', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (64, 'Antioch Telegu Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (65, 'Apostolic Church of God', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (66, 'Apostolic Faith Church Health Professions Ministry', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (68, 'Beacon Light', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (69, 'Bethel Reform Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (70, 'Bikur Cholim (visiting the sick) training', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (71, 'Breast Cancer Network of Strength', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (72, 'Buddhist International Tzu Chi Relief Foundation (Midwest)', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization', '');
+INSERT INTO organization VALUES (73, 'Campaign for Better Health Care', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (74, 'Caring for Health', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (75, 'CARRI (Chicago Area Regional Recovery Initiative)', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization', '');
+INSERT INTO organization VALUES (77, 'Central Spanish Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (78, 'Chicago Chin Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (79, 'Chicago Theological Seminary', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (80, 'Chicago Uptown Ministry', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (81, 'Chinmaya Mission Chicago-Badri', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (82, 'Christ Temple Apostolic Faith Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (83, 'Christ the King Lutheran Church ELCA', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (84, 'Christian Churches Caring', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (85, 'Christian Fellowship Flock', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (86, 'Church of Jesus Christ Latter Day Saints', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (87, 'Coalition for Quality and Patient Safety of Chicagoland', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (88, 'Community Health Services and Health Promotion', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (89, 'Community-Outreach Project', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (91, 'Congregational Outreach', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (92, 'Congregational United Church of Christ of Arlington Heights', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (93, 'Consortium to Lower Obesity in Chicago Children (CLOCC)', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (94, 'Cornerstone Community Outreach', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization', '');
+INSERT INTO organization VALUES (95, 'Council of Islamic Organizations of Greater Chicago', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization', '');
+INSERT INTO organization VALUES (97, 'DuPage Department of Public Health', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (98, 'Ebenezer Baptist', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (99, 'Ebenezer Lutheran Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (100, 'Edgewater Presbyterian Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (101, 'Education and Life Coaching', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (102, 'Epworth United Methodist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (103, 'Evergreen Presbyterian Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (104, 'Exodus Community Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (105, 'Faith Caucus', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (106, 'Faith in Place', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization', '');
+INSERT INTO organization VALUES (107, 'Faith Temple COGIC', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (49, 'Advocate Christ Medical Center', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Health Care Provider', '');
+INSERT INTO organization VALUES (96, 'Delegate Church Association of Advocate BroMenn Medical Center', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Collaboration/Network', '');
+INSERT INTO organization VALUES (76, 'Center for Faith and Health', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Academic', '');
+INSERT INTO organization VALUES (53, 'Advocate United Church of Christ', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (55, 'African-American Alzheimer&apos;s Outreach Initiative', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (59, 'Alzheimer&apos;s Association - Greater Illinois Chapter', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (67, 'B&apos;nai Yehuda Beth Shalom', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (108, 'Faith United Methodist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (110, 'First Baptist Church, Berwyn', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (111, 'First Baptist Church, LaGrange', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (112, 'First Baptist Church, Park Forest', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (113, 'First Congregational Church of Western Springs', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (114, 'First Evangelical Free Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (115, 'First Grace Missionary Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (116, 'First New Bethlehem Community Development Corporation', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (117, 'Flossmoor Community Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (118, 'Fourth Presbyterian Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (119, 'Friendly Visits', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (120, 'Friendship Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (121, 'Gloria Dei Lutheran Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (122, 'God Can Ministries', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (123, 'Grace Calvary United Methodist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (124, 'Grace Calvary United Methodist Church- Gospel Cafe', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (125, 'Grace Evangelical Lutheran Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (126, 'Grace Lutheran Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (127, 'Greater Galilee MB Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (128, 'Greater Galilee Missionary Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (129, 'Greater Open Door Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (130, 'Greater Progressive Missionary Baptist Church Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (131, 'Greater St. John Bible Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (132, 'Greater St. Paul A M E C', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (133, 'Greater Walters AME Zion Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (134, 'Hamdard Center for Health and Human Services', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization', '');
+INSERT INTO organization VALUES (135, 'Health Initiatives, West Cook Area', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (136, 'Healthcare Consortium of Illinois', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (137, 'Healthy Dining Chicago Healthy Dining Chicago', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization', '');
+INSERT INTO organization VALUES (138, 'Healthy Spirit Healthy Soul', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (139, 'Hispanocare - Chicago', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (140, 'Hyde Park Christian Reformed Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (141, 'Illinois Faith Based Emergency Preparedness Initiative', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Government', '');
+INSERT INTO organization VALUES (142, 'Illinois Maternal and Child Health Coalition', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (143, 'Illinois PIRG', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (145, 'Imagine Chicago', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (146, 'Inner City Muslim Action Network', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization', '');
+INSERT INTO organization VALUES (148, 'Islamic Community Center', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (149, 'Islamic Foundation of Villa Park', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (150, 'Ismaili Center in Chicago', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (151, 'Ismaili Center in Glenview', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (152, 'Jesus Name Apostolic Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (153, 'Jewish Child and Family Services', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization', '');
+INSERT INTO organization VALUES (154, 'Jewish Community Emergency Resiliency Team', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization', '');
+INSERT INTO organization VALUES (155, 'Jewish Healing Network of Chicago', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (156, 'Jewish School-Based Wellness Initiative', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (157, 'Joshua Missionary Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (158, 'Journey Community Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (159, 'Joy To Be Fit Gospel Aerobics Ministry', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (160, 'Kenwood UCC', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (161, 'Kimball Ave. Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (162, 'La Academia', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (163, 'Lakeview Presbyterian Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (164, 'Latino Community Program', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (166, 'Lead Safe Housing Initiatives', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (167, 'lead safe illinois', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (168, 'Leadership and Church Development', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (169, 'Liberty Baptist', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (170, 'Lilydale Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (171, 'Lincoln United Methodist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (172, 'Little Brothers - Friends of the Elderly, Chicago Chapter', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (173, 'Lively Stone Missonary Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (174, 'Living Well Ministries', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (175, 'Lutheran Church of Atonement', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (176, 'Lutheran Church of the Ascension', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (144, 'Illinois Women&apos;s Health Registry', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (147, 'Institute for Women&apos;s Health Research', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (178, 'Lutheran Social Services of Illinois', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization', '');
+INSERT INTO organization VALUES (179, 'M.I.K.E. Minority Intervention and Kidney Education Program', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (180, 'Ministry to New Moms', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (181, 'Montrose Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (182, 'Monument of Faith Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (183, 'Mosque Foundation', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (184, 'Mosque of Umar Inc.', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (185, 'Most Blessed Trinity Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (186, 'Mount Calvary Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (187, 'Mount Pisgah Ministries', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (188, 'Myanmar Christian Church of Metro Chicago', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (189, 'New Hope Bible Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (190, 'New Life Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (191, 'New Life Community Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (192, 'New Life Covenant Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (193, 'New Life Worship Center', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (194, 'New Mt.Pilgrim MB Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (195, 'New Pasadena MB Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (196, 'North Park Theological Seminary', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (197, 'North Shore Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (198, 'North Shore Church of Christ', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (199, 'Northfield Presbyterian Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (200, 'Northside P.O.W.E.R.', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (201, 'Nuestra Senora de Gaudalupe', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (202, 'Older Adult Programs', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (203, 'Our Lady of Fatima Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (204, 'Our Lady of Good Counsel', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (205, 'Park Manor Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (206, 'Park Ridge Community Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (207, 'Peace Lutheran Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (209, 'Peoples Church of Chicago', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (210, 'Pilgrim Faith United Church of Christ', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (211, 'Pillar of Love UCC', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (212, 'Pleasant Ridge Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (213, 'Polish Community', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (214, 'Primera Iglesia Congregacional', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (215, 'Program of Religion/Spirituality and Mental Health', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (216, 'Progressive Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (217, 'Pui Tak Center', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization', '');
+INSERT INTO organization VALUES (219, 'Rainbow Hospice and Palliative Care', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization', '');
+INSERT INTO organization VALUES (220, 'Redeeming Life Family Worship Center COGIC', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (221, 'Reformation Lutheran Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (222, 'Revelation International Outreach Ministries', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (223, 'Rush University Medical Center', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (224, 'Salem Baptist', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (225, 'Shiloh Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (226, 'Shiloh Missionary Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (227, 'Sinai Urban Health Institute', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (228, 'South Suburban Interfaith Ministerial Association', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization', '');
+INSERT INTO organization VALUES (229, 'Spanish Christian Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (230, 'St Matthews United Methodist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (231, 'St. Ailbe Catholic Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (232, 'St. Anne Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (234, 'St. Francis of Assisi Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (235, 'St. Genevieve Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (236, 'St. Ita Catholic Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (237, 'St. James Lutheran Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (238, 'St. John MB Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (239, 'St. John United Church of Christ', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (243, 'St. Mark International Christian Ch.', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (244, 'St. Paul UCC', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (208, 'People&apos;s Church of the Harvest', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (246, 'St. Pius V. Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (247, 'St. Sabina Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (248, 'St. Stephen AME Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (249, 'St. Sylvester Catholic Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (250, 'Suburban Chicago Interfaith Mental Health Coalition', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization', '');
+INSERT INTO organization VALUES (251, 'Sunrise Missionary Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (252, 'Temple of Faith Missionary Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (253, 'The American Heart Association (AHA)', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (254, 'The Buddhist Temple of Chicago', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (255, 'The Christian Aerobics and Fitness Association (CAFA)', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (256, 'The South Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (258, 'Third Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (259, 'Triedstone Full Gospel Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (260, 'Trinity AME Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (261, 'Trinity United Church of Christ', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (262, 'True Worship Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (263, 'Turning Point', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization', '');
+INSERT INTO organization VALUES (264, 'Ubumama - Chicago', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (265, 'United Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (266, 'United Faith Missionary Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (267, 'United in Faith Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (268, 'Unity Lutheran Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (269, 'Unity Northwest Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (270, 'Universal House of Refuge Center', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (272, 'Victory Christian Assembly Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (273, 'VOCMA Faith Community Baptist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (274, 'Wesley United Methodist Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (275, 'Westside Health Authority', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (50, 'Advocate Clinical Pastoral Education', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Health Care Provider', '');
+INSERT INTO organization VALUES (51, 'Advocate Health Care', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Health Care Provider', '');
+INSERT INTO organization VALUES (90, 'Congregational Health Partnerships', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Health Care Provider', '');
+INSERT INTO organization VALUES (109, 'Figure Facts LLC', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Health Care Provider', '');
+INSERT INTO organization VALUES (165, 'LaVerne Barnes', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Health Care Provider', '');
+INSERT INTO organization VALUES (177, 'Lutheran General Hospital - Mission and Spiritual', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Health Care Provider', '');
+INSERT INTO organization VALUES (276, 'Wholistic Medical Clinic', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Health Care Provider', '');
+INSERT INTO organization VALUES (218, 'Rahab&apos;s House, Inc.', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (233, 'St. Clement&apos;s Episcopal Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (240, 'St. Kevins&apos;s Church', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (241, 'St. Luke&apos;s Lutheran of Logan Square', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (242, 'St. Luke&apos;s Lutheran Church of Logan Square', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (245, 'St. Paul&apos;s Church by-the-Lake', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Faith Community/House of Worship', '');
+INSERT INTO organization VALUES (257, 'The Unversity of Illinois Medical Center for Women&apos;s Health Associates', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (271, 'University of Illinois&apos; Division of Community Health', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, '', '');
+INSERT INTO organization VALUES (277, 'ZAM&apos;s Hope Community Resource Center', NULL, NULL, '2014-07-31 15:02:26.883384-06', NULL, '2014-07-31 15:02:26.883384-06', NULL, NULL, 1, 'Community Organization', '');
+INSERT INTO organization VALUES (18, 'The Demo Network', NULL, NULL, '2014-07-14 16:09:45.885491-06', NULL, '2014-07-14 16:09:45.885491-06', NULL, NULL, 1, NULL, 'src="image/demo.jpg" height="120" width="120"');
+INSERT INTO organization VALUES (311, 'enrollTest1', NULL, NULL, '2014-09-19 14:40:43.631133-06', NULL, NULL, NULL, NULL, 3, '', '');
+INSERT INTO organization VALUES (312, 'NorthBridge', NULL, NULL, '2014-09-21 17:26:27.48849-06', NULL, NULL, NULL, NULL, 3, '', '');
+INSERT INTO organization VALUES (313, 'hello', NULL, NULL, '2014-09-21 20:11:58.01089-06', NULL, NULL, NULL, NULL, 3, '', '');
+INSERT INTO organization VALUES (314, 'Test', NULL, NULL, '2014-09-22 10:21:35.069164-06', NULL, NULL, NULL, NULL, 3, '', '');
+INSERT INTO organization VALUES (315, 'jj', NULL, NULL, '2014-09-22 22:47:00.585879-06', NULL, NULL, NULL, NULL, 3, '', '');
+INSERT INTO organization VALUES (316, 'TEst One', NULL, NULL, '2014-09-25 20:12:48.067588-06', NULL, NULL, NULL, NULL, 3, '', '');
+INSERT INTO organization VALUES (317, 'enrollTest1', NULL, NULL, '2014-09-26 16:44:02.798361-06', NULL, NULL, NULL, NULL, 3, '', '');
+INSERT INTO organization VALUES (318, 'whatever', NULL, NULL, '2014-09-27 10:01:54.182716-06', NULL, NULL, NULL, NULL, 3, '', '');
+INSERT INTO organization VALUES (319, 'alzheimer&apos;s', NULL, NULL, '2014-09-30 17:16:51.637938-06', NULL, NULL, NULL, NULL, 3, '', '');
+INSERT INTO organization VALUES (320, 'hoo ha', NULL, NULL, '2014-09-30 17:25:32.63213-06', NULL, NULL, NULL, NULL, 3, '', '');
+INSERT INTO organization VALUES (321, 'Doges', NULL, NULL, '2014-10-12 20:10:43.651878-06', NULL, NULL, NULL, NULL, 3, '', '');
+INSERT INTO organization VALUES (322, 'Lou&apos;s Org', NULL, NULL, '2014-10-12 20:14:10.905038-06', NULL, NULL, NULL, NULL, 3, '', '');
 
 
 --
@@ -2797,6 +3073,18 @@ INSERT INTO organization_organization VALUES (268, 18, 275, 'parent', '2014-07-3
 INSERT INTO organization_organization VALUES (269, 18, 276, 'parent', '2014-07-31 15:12:33.045508-06', NULL);
 INSERT INTO organization_organization VALUES (270, 18, 277, 'parent', '2014-07-31 15:12:33.069455-06', NULL);
 INSERT INTO organization_organization VALUES (272, 18, 18, 'parent', '2014-08-02 17:36:36.800969-06', NULL);
+INSERT INTO organization_organization VALUES (297, 18, 311, 'parent', '2014-09-19 14:40:43.717088-06', NULL);
+INSERT INTO organization_organization VALUES (298, 18, 312, 'parent', '2014-09-21 17:26:27.511864-06', NULL);
+INSERT INTO organization_organization VALUES (299, 18, 313, 'parent', '2014-09-21 20:11:58.054493-06', NULL);
+INSERT INTO organization_organization VALUES (300, 18, 314, 'parent', '2014-09-22 10:21:35.120579-06', NULL);
+INSERT INTO organization_organization VALUES (301, 18, 315, 'parent', '2014-09-22 22:47:00.686396-06', NULL);
+INSERT INTO organization_organization VALUES (302, 18, 316, 'parent', '2014-09-25 20:12:48.09935-06', NULL);
+INSERT INTO organization_organization VALUES (303, 18, 317, 'parent', '2014-09-26 16:44:02.824461-06', NULL);
+INSERT INTO organization_organization VALUES (304, 18, 318, 'parent', '2014-09-27 10:01:54.207736-06', NULL);
+INSERT INTO organization_organization VALUES (305, 18, 319, 'parent', '2014-09-30 17:16:51.662624-06', NULL);
+INSERT INTO organization_organization VALUES (306, 18, 320, 'parent', '2014-09-30 17:25:32.866599-06', NULL);
+INSERT INTO organization_organization VALUES (307, 18, 321, 'parent', '2014-10-12 20:10:43.682416-06', NULL);
+INSERT INTO organization_organization VALUES (308, 18, 322, 'parent', '2014-10-12 20:14:10.970534-06', NULL);
 
 
 --
@@ -3741,14 +4029,14 @@ INSERT INTO privilege VALUES (1, 'create_invitation', 'Generate new invitations 
 -- Data for Name: program; Type: TABLE DATA; Schema: public; Owner: northbr6
 --
 
-INSERT INTO program VALUES (1, 'Northside P.O.W.E.R. (People Organized to Work, Educate and Restore) is an institution-based people’s power organization whose members are located in the North Side of the City of Chicago and North Shore Communities. Northside P.O.W.E.R. works on issues that address the causes of hunger and poverty. Currently Northside P.O.W.E.R. is working in the areas of affordable housing and food justice.', 'Northside P.O.W.E.R.');
-INSERT INTO program VALUES (2, 'Our Community Kitchen is the largest and only self-standing community soup kitchen in the Chicago metro area. We serve hot, nutritious meals 365 days per year to anyone in need. Last year, the Community Kitchen served more than 54,000 meals. The Community Kitchen also distributes several thousand pounds of food each month by hosting the Greater Chicago Food Depository’s Producemobile which distributes fruit and vegetables to more than 200 families each month.
+INSERT INTO program VALUES (1, 'Northside P.O.W.E.R. (People Organized to Work, Educate and Restore) is an institution-based people‚Äôs power organization whose members are located in the North Side of the City of Chicago and North Shore Communities. Northside P.O.W.E.R. works on issues that address the causes of hunger and poverty. Currently Northside P.O.W.E.R. is working in the areas of affordable housing and food justice.', 'Northside P.O.W.E.R.');
+INSERT INTO program VALUES (2, 'Our Community Kitchen is the largest and only self-standing community soup kitchen in the Chicago metro area. We serve hot, nutritious meals 365 days per year to anyone in need. Last year, the Community Kitchen served more than 54,000 meals. The Community Kitchen also distributes several thousand pounds of food each month by hosting the Greater Chicago Food Depository‚Äôs Producemobile which distributes fruit and vegetables to more than 200 families each month.
 ', 'The Community Kitchen');
-INSERT INTO program VALUES (3, 'Supports the Howard Area Community Center’s Greensleeves After-School Project and the Good News Reading Program;
+INSERT INTO program VALUES (3, 'Supports the Howard Area Community Center‚Äôs Greensleeves After-School Project and the Good News Reading Program;
 
-Hosts the City of Chicago’s Summer Nutrition Program;
+Hosts the City of Chicago‚Äôs Summer Nutrition Program;
 
-Operates a free hot lunch program for school age children during the school’s winter and spring breaks.', 'The Childrens’ Anti-Hunger Collaborative');
+Operates a free hot lunch program for school age children during the school‚Äôs winter and spring breaks.', 'The Childrens‚Äô Anti-Hunger Collaborative');
 INSERT INTO program VALUES (4, 'Clinical Pastoral Education (CPE) is an intensive experiential educational program for pastors and religious leaders interested in developing their clinical skills. Students engage in pastoral work and reflect on their experience with a trained supervisor and a peer group. Key areas for learning include integrating theology into pastoral practice, formation as a religious leader, and self-reflection and knowledge. CPE can be an excellent tool for discernment, self-care and renewal.', 'Clinical Pastoral Education');
 INSERT INTO program VALUES (5, 'Pastoral Internship is an introduction to supervised clinical pastoral practice with people in crisis. Chaplain interns function as integral members of treatment teams, assisting patients and family members to draw on the meaning and benefits of their faith and spiritual values in the midst of health crises. Skills in pastoral care are developed and approaches to understanding human relationships and spiritual needs are explored. At most sites, intensive 11-12 week programs are offered in the summer. At Advocate Lutheran General Hospital, intensive programs are offered quarterly, year-round.', 'Pastoral Internship');
 INSERT INTO program VALUES (6, 'Pastoral Residency is a year-long program. This training provides opportunity for a more in-depth and specialized pastoral education experience. In addition to the basic format, this program includes:
@@ -3776,7 +4064,7 @@ Practicing supervision under an ACPE supervisor
 Forming their identity as educators by a focus on integrating theory and practice with their distinct and personal attributes
 
 Peer group seminars where the emerging supervisor''s understanding and practice are tested.', 'Supervisory CPE');
-INSERT INTO program VALUES (8, 'As part of Advocate Health Care’s continuum of care, the Parish Nurse Ministry is working in 29 diverse congregations. These faith communities are widely scattered throughout the Chicagoland area from West Garfield Park and Uptown Chicago neighborhoods to the suburban settings of Arlington Heights and Naperville.
+INSERT INTO program VALUES (8, 'As part of Advocate Health Care‚Äôs continuum of care, the Parish Nurse Ministry is working in 29 diverse congregations. These faith communities are widely scattered throughout the Chicagoland area from West Garfield Park and Uptown Chicago neighborhoods to the suburban settings of Arlington Heights and Naperville.
 
 Advocate Parish Nurse Ministry continues to seek health ministry partnerships. Both partners, the health care institution and the congregation must espouse the belief that physical, emotional, intellectual, and social well-being are very much dependent on a healthy spiritual core of being.
 
@@ -3813,6 +4101,7 @@ INSERT INTO role_privilege VALUES (1, 1);
 
 INSERT INTO status VALUES (1, 'active', '');
 INSERT INTO status VALUES (2, 'suspended', '');
+INSERT INTO status VALUES (3, 'pending', '');
 
 
 --
@@ -3866,9 +4155,87 @@ INSERT INTO topic VALUES (41, 'Women''s Health');
 -- Data for Name: user; Type: TABLE DATA; Schema: public; Owner: northbr6
 --
 
-INSERT INTO "user" VALUES (85, '8ad02b5a-3ef4-7cfd-aec3-ec528bfa73ac', 'kdflint', 'kdflint', 'Kathy', 'D', 'Flint', '2014-08-01 09:40:24.775305-06', NULL, '2014-08-01 09:40:24.775305-06', NULL, 1, '', 'kathy.flint@northbridgetech.org', '3129195627', false, false, NULL);
-INSERT INTO "user" VALUES (89, 'fe58eefe-f487-11be-d5b0-267d8a36dfd7', 'kpeachey', 'change-me', 'Kirsten', '', 'Peachey', '2014-08-01 15:13:12.742905-06', NULL, '2014-08-01 15:13:12.742905-06', NULL, 1, '', 'fake@northbridgetech.org', '', false, false, NULL);
-INSERT INTO "user" VALUES (88, 'e8db0a62-67dd-3d0c-13fd-d2372f4b5d0c', 'admin', 'admin', 'Kathy', '', 'Flint', '2014-08-01 15:09:53.514038-06', NULL, '2014-08-01 15:09:53.514038-06', NULL, 1, '', 'contact@northbridgetech.org', '3129195627', false, true, NULL);
+INSERT INTO "user" VALUES (85, '8ad02b5a-3ef4-7cfd-aec3-ec528bfa73ac', 'kdflint', 'kdflint', 'Kathy', 'D', 'Flint', '2014-08-01 09:40:24.775305-06', NULL, '2014-08-01 09:40:24.775305-06', NULL, 1, '', 'kathy.flint@northbridgetech.org', '3129195627', false, false, NULL, 'none', NULL, NULL, '');
+INSERT INTO "user" VALUES (174, 'a3859b3e-1131-f81c-7e15-5b83e72c248d', 'gsaylor', '[[ENC]]87d4e44d5deacd0f4e7015beb599644d45da090fe2a622570d81254f848a7f2f', 'Gretchen', '', 'Saylor', '2014-09-21 17:26:27.396926-06', NULL, '2014-09-21 17:26:27.396926-06', NULL, 1, '', 'gretchen.saylor@gmail.com', '', true, false, NULL, 'ImplA', 'EEqdHEp2Hjv^*IG3&QnG04AH$g6r51kK', '2014-09-21 17:26:27.447709-06', '/openmeetings/swf?invitationHash=81021121b7bf104cb149e255ae0921a4');
+INSERT INTO "user" VALUES (88, 'e8db0a62-67dd-3d0c-13fd-d2372f4b5d0c', 'admin', 'admin', 'Kathy', '', 'Flint', '2014-08-01 15:09:53.514038-06', NULL, '2014-08-01 15:09:53.514038-06', NULL, 1, '', 'kathy.flint@northbridgetech.org', '3129195627', true, false, NULL, 'none', NULL, NULL, '');
+INSERT INTO "user" VALUES (175, '1db8b1e5-4ad4-7b43-bb06-c6a64c5948da', 'gsaylor2', '[[ENC]]deebc40da04bebd87a16ecbabe29571cd4c5c3f5473eba34a704c3c7903a4386', 'Gretchen', '', 'Saylor', '2014-09-21 17:28:12.857565-06', NULL, '2014-09-21 17:28:12.857565-06', NULL, 1, '', 'gretchen.saylor@gmail.com', '2246286371', true, true, NULL, 'ImplA', 'q&#&1%M!yNP6k81AwM0LvQ0DJnNnDM@%', '2014-09-21 17:28:12.911914-06', '/openmeetings/swf?invitationHash=4f01a965ee2f9fc362ec366516319797');
+INSERT INTO "user" VALUES (168, '700464db-ff11-2a1e-bd1a-2619b70f42da', 'enrollTest1', '[[ENC]]367940ef915bc5a688e914dd93d590c3b961ad810755da934b1edde900374442', 'enrollTest1', '', 'enrollTest1', '2014-09-19 14:40:43.472436-06', NULL, '2014-09-19 14:40:43.472436-06', NULL, 1, '', 'enrolltest1@test.com', '', true, false, NULL, 'ImplA', 'Q9GnIQjMhsQHGl^Lk#x5AC$o&@H@U&sA', '2014-09-19 14:40:43.530343-06', '/openmeetings/swf?invitationHash=82d0e87976b27229811b58b4956b1ba7');
+INSERT INTO "user" VALUES (184, '603c8b8c-1723-9f28-8940-cfb06d926269', 'jafar123', '[[ENC]]09d712bd842051432b8f4533e5786d78602613cff782f33a6297162f1677a6bb', 'jj', '', 'jj', '2014-09-22 23:36:28.496209-06', NULL, '2014-09-22 23:36:28.496209-06', NULL, 1, '', 'jafar.ahmad.71@gmail.com', '', true, false, NULL, 'ImplA', 'Lmw0)UkAX4VinPwAMg09B(Y5RrAj36yO', '2014-09-22 23:36:28.527764-06', '/openmeetings/swf?invitationHash=e3df0f2f82f4ca621aee5479299816dc');
+INSERT INTO "user" VALUES (176, '174eaaa7-d501-7c2b-5a11-63709d403b0b', 'lou1', '[[ENC]]42a2c40c6391bf168a2882b2d30eecf45d2e997c9d21f8ab7ac3148e4f1b7e19', 'lou', '', 'lou', '2014-09-21 20:11:57.916885-06', NULL, '2014-09-21 20:11:57.916885-06', NULL, 1, '', 'coach.lou@northbridgetech.org', '', true, false, NULL, 'ImplA', 'JpyAyZOECwT0N&Ii$y8Idq(1cFoveCBX', '2014-09-21 20:11:57.961704-06', '/openmeetings/swf?invitationHash=83f41a436e497c1e84bf010a9a2137ec');
+INSERT INTO "user" VALUES (177, '2165748d-0db8-cb1c-ebfc-1a9efa9f1fc8', 'gretchensaylor', '[[ENC]]379aa73f27103b77d13a6180c90db06090813440b035b3d96d939f71ac54cb62', 'Gretchen', '', 'Saylor', '2014-09-21 21:07:33.232854-06', NULL, '2014-09-21 21:07:33.232854-06', NULL, 1, '', 'gretchen.saylor@gmail.com', '', true, false, NULL, 'ImplA', '6*s9yt4uB!VxYS&7M#U%mmMCWiiJ43Ra', '2014-09-21 21:07:33.382691-06', '/openmeetings/swf?invitationHash=1cf58e6c56d6bceb9ad7675622103eb5');
+INSERT INTO "user" VALUES (178, 'ee60e2b1-fe17-ae03-5763-9713c099504e', 'enrollTest2', '[[ENC]]91b03cce4c3b73d7b40f07c052a243e15c6120ed5ac0765ac4bccde26949d892', 'Enroll', '', 'Test2', '2014-09-22 09:38:50.91194-06', NULL, '2014-09-22 09:38:50.91194-06', NULL, 1, '', 'kathy.flint@northbridgetech.org', '', true, false, NULL, 'ImplA', 'Qri4FhfiXSIqi(db*p7JU#iMUA#p^7tM', '2014-09-22 09:38:50.97917-06', '/openmeetings/swf?invitationHash=d100fba0cd3fe89ccc681a934a683154');
+INSERT INTO "user" VALUES (185, '5e50cd2e-b323-eeca-89eb-3aae488a6b22', '090909', '[[ENC]]3f559ab7122aedf62754517d296c8a6018346efad4cd96106d7909f7cf6df9ce', 'jj', '', 'jj', '2014-09-22 23:37:51.425742-06', NULL, '2014-09-22 23:37:51.425742-06', NULL, 1, '', 'jafar.ahmad.71@gmail.com', '', true, false, NULL, 'ImplA', 'rWO!@&uyqe0^if!doWfSm&s1rglmoOpQ', '2014-09-22 23:37:51.491896-06', '/openmeetings/swf?invitationHash=5f3542da60b25e08805db0f691a73fec');
+INSERT INTO "user" VALUES (179, 'd4105208-6dc6-f8b0-77b0-58b11c5091ea', 'enrollTest4', '[[ENC]]b8ebbb7f7946937171dc83e3e6d4757a1f4e6113d400de2fb6ec55c124aa7194', 'Enroll', '', 'Test4', '2014-09-22 09:47:10.504641-06', NULL, '2014-09-22 09:47:10.504641-06', NULL, 1, '', 'kathy.d.flint@gmail.com', '', true, false, NULL, 'ImplA', 'Cc))F@*P#Q0gBhN7zaQRffUuYMmE!fyt', '2014-09-22 09:47:10.528503-06', '/openmeetings/swf?invitationHash=fc3631d38ca3867964a84c5b4bb26415');
+INSERT INTO "user" VALUES (186, '8b55c2bc-79a5-7ddb-2212-18bf0f41f578', '080808', '[[ENC]]44875f9600d113ed1b9ece1f19e508638513debf797fca603c916333bd4ba9bc', 'jj', '', 'jj', '2014-09-22 23:39:21.657782-06', NULL, '2014-09-22 23:39:21.657782-06', NULL, 1, '', 'jafar.ahmad.71@gmail.com', '', true, false, NULL, 'ImplA', 'B$3Psn488oMrsfaCp2AkWt^VO9#!67QH', '2014-09-22 23:39:21.707689-06', '/openmeetings/swf?invitationHash=c2c371d8e3e3030d69be1f226d0ae51b');
+INSERT INTO "user" VALUES (187, 'c79b33bb-0fec-7132-c05a-5bb6258f16dd', 'enrollTest41', '[[ENC]]7e3a7dfd28bb5c951a8e0f28af80fe036e38fc716646a0e5b9ec8ef8294b5a0d', 'Enroll', '', 'Test41', '2014-09-24 11:56:11.21336-06', NULL, '2014-09-24 11:56:11.21336-06', NULL, 1, '', 'kdflint@test.com', '', true, false, NULL, 'ImplA', ')vOO(jwVU%RvxiTXeGviaWTv1%I1Q!uP', '2014-09-24 11:56:11.336652-06', '/openmeetings/swf?invitationHash=9966577e0996e8b7e0fc21d31056cd4a');
+INSERT INTO "user" VALUES (181, 'c404574e-eff4-4324-bf63-d9f0e27405d0', 'shenry', '[[ENC]]8dcbda4b2e3ec39915ed5928c149af3a31b0ba0bf31ebd142b3fd239cce17242', 'Stephen', '', 'Henry', '2014-09-22 10:21:34.982564-06', NULL, '2014-09-22 10:21:34.982564-06', NULL, 1, '', 'rstephenhenry@gmail.com', '', false, false, NULL, 'ImplA', '4nSge7YX5$7l&)vvQHvin@M3$QyA*Q!2', '2014-09-22 10:21:35.016674-06', '/openmeetings/swf?invitationHash=922d5b3102cff48935b77723bfb6b7ec');
+INSERT INTO "user" VALUES (188, 'bfbf3c7c-a9f0-b3e0-80a9-f309dc070e16', 'enrollTest57', '[[ENC]]8bd6833c1a00189cc60ee683d515171b2a14309e8ab6bc0450f7753d26fe9a4f', 'Enroll', '', 'Test57', '2014-09-25 14:32:37.806986-06', NULL, '2014-09-25 14:32:37.806986-06', NULL, 1, '', 'ksflint@comcast.net', '', true, false, NULL, 'ImplA', 'Z1Zu4SM6nEa6YFAKP&V#&kV)1cdNyjVn', '2014-09-25 14:32:37.847507-06', '/openmeetings/swf?invitationHash=fce7fc0019dfbcc2d2e5964947947c24');
+INSERT INTO "user" VALUES (183, '3e9ff3ff-d9f9-ce97-61f4-8e465920d838', 'select * from public.user;', '[[ENC]]03a5f06b356d7819e382817d5d009be3a3f91e486c67c24bdd9ed112ae7f8f8f', 'j', '', 'h', '2014-09-22 22:47:00.184116-06', NULL, '2014-09-22 22:47:00.184116-06', NULL, 1, '', 'jafar.ahmad.71@gmail.com', '', true, false, NULL, 'ImplA', 'eKfd1iLoxmrSVbwf%66P3IOtRc9jMn4!', '2014-09-22 22:47:00.405148-06', '/openmeetings/swf?invitationHash=0c29c8450db321b35849f3b179a4af41');
+INSERT INTO "user" VALUES (191, '2094686e-c500-9b79-e143-9cebd61b4b5c', 'enrollTest69', '[[ENC]]42e7c524440c5cbe95d0ef0cb3de1da511d2d60e9f042a3c7f525f6ba3d80b93', 'Enroll', '', 'Test69', '2014-09-26 16:39:57.759662-06', NULL, '2014-09-26 16:39:57.759662-06', NULL, 1, '', 'kdflint@test.com', '', true, false, NULL, 'ImplA', 'Ohh9DGakEOSrNZd9E5u$wcS5Zmt2j$I(', '2014-09-26 16:39:57.797603-06', '/openmeetings/swf?invitationHash=d41219b37f0af4aaff87a2011a903940');
+INSERT INTO "user" VALUES (189, '8b9e417c-5f31-60f3-fbca-93998e49c20d', 'enrollTest78', '[[ENC]]910cbb725498e7fd1bebb64e2d0b7f457475ccb73bb4e53ed7ec58789353f73f', 'Enroll', '', 'Test78', '2014-09-25 14:39:49.591051-06', NULL, '2014-09-25 14:39:49.591051-06', NULL, 1, '', 'kathy.d.flint@gmail.com', '', true, false, NULL, 'ImplA', 'Ao33o4PHq4gBHKK7onmCg4)fe$7e^smv', '2014-09-25 14:39:49.615826-06', '/openmeetings/swf?invitationHash=7def7930b7cbda7e46a1322b3334ca17');
+INSERT INTO "user" VALUES (180, '3aa288a9-0eb6-72cf-7b6e-b57ce99f7f65', 'enrollTest5', '[[ENC]]dee4c76a8beab94be8d4f9dadf4435abbac24c02442bdf251df554378c88392c', 'Enroll', '', 'Test5', '2014-09-22 09:50:01.474336-06', NULL, '2014-09-22 09:50:01.474336-06', NULL, 1, '', 'kathy.d.flint@gmail.com', '', true, false, NULL, 'ImplA', 'TG5Wd%sT%@mzDuRf2TF4Z7EfY4as5)4Y', '2014-09-23 16:59:41.508667-06', '/openmeetings/swf?invitationHash=5af8b545af2a4073fb1e30a84c0a4be0');
+INSERT INTO "user" VALUES (190, 'f3f7da32-66e2-442f-ea80-9464c81c2b86', 'lou12345678', '[[ENC]]23fdcceb8a2f77f4811f61b738ec78911503b03179994f0c8ec23a55e58491f9', 'Lou', '', 'One', '2014-09-25 20:12:47.971655-06', NULL, '2014-09-25 20:12:47.971655-06', NULL, 1, '', 'coach.lou@northbridgetech.org', '', true, false, NULL, 'ImplA', '7zdVyTZiJSmVP)93kwJFY4(rgT0hsnBA', '2014-09-25 20:12:48.015723-06', '/openmeetings/swf?invitationHash=86db1f6a1e7261bdf4c0b5f8abf1d040');
+INSERT INTO "user" VALUES (192, 'cfab7ef9-6266-9da5-6f55-137149099cae', 'enrollTest96', '[[ENC]]1785cf7bc07ab45ec658a4f1f2c3e222927cb6147c4d721778f8f49836134a55', 'Enroll', '', 'Test96', '2014-09-26 16:44:02.724224-06', NULL, '2014-09-26 16:44:02.724224-06', NULL, 1, '', 'kdflint@test.com', '', true, false, NULL, 'ImplA', 'p((@NSSfn5WmeWR78zXCl2ZR&LPfGhJ&', '2014-09-26 16:44:02.753602-06', '/openmeetings/swf?invitationHash=9026d60bb09b689ae8cbaecea4d7c404');
+INSERT INTO "user" VALUES (193, 'a292321b-70fd-58b9-dc9b-59eaea000e05', 'enrollTest92', '[[ENC]]4bd1cf2ceb7a5a36996302ee63eeec76cfbb556d0e5f7218ee7a2d59acf92a16', 'Enroll', '', 'Test92', '2014-09-26 16:47:13.893429-06', NULL, '2014-09-26 16:47:13.893429-06', NULL, 1, '', 'aaa@test.com', '', true, false, NULL, 'ImplA', 'vOFMGeRsRAzJVqS6XbrTsBh6tD1KAhK&', '2014-09-26 16:47:13.918683-06', '/openmeetings/swf?invitationHash=13d6d32dc77a1637f4ce88c7d5f81799');
+INSERT INTO "user" VALUES (194, '6ea563e1-a375-641f-d155-2b7aef7a2016', 'enrollTest72', '[[ENC]]80bcab6d14a4cb97ee4daa71a2bd203819c9cf3e4079892e336cccfab09fce2e', 'Enroll', '', 'Test72', '2014-09-27 09:07:55.814751-06', NULL, '2014-09-27 09:07:55.814751-06', NULL, 1, '', 'kdflint@test.com', '', true, false, NULL, 'ImplA', 'HkmJT(6VaK9mKns2u8zo%n$Dc&B4yQ26', '2014-09-27 09:07:55.857767-06', '/openmeetings/swf?invitationHash=52f09148ad7dd1ee7c290d4c6adaf31d');
+INSERT INTO "user" VALUES (195, '35eb7398-1e84-2671-b23e-aaa795674d33', 'enrollTest82', '[[ENC]]7efae84b9e5c75530a8ae28f9903d2b394c34ead1f347b1e8492cc6af126909c', 'Enroll', '', '', '2014-09-27 09:49:19.97777-06', NULL, '2014-09-27 09:49:19.97777-06', NULL, 1, '', 'kdflint@test.com', '', true, false, NULL, 'ImplA', 'OGmVjQN(MZn5wSv$l#Tg%D)qnLeV*crL', '2014-09-27 09:49:20.00967-06', '/openmeetings/swf?invitationHash=179ef63d3e0b1c5544d0f571251b6fc8');
+INSERT INTO "user" VALUES (196, '3f6de153-d1d3-7b4a-c4d6-3bc30e8e18a7', 'enrollTest27', '[[ENC]]996f812701b0b5eb5e09652011899c352ff5cfbd76e825a8ffa798acd3d74d50', 'Enroll', '', '', '2014-09-27 10:01:54.083681-06', NULL, '2014-09-27 10:01:54.083681-06', NULL, 1, '', 'kdflint@test.com', '', true, false, NULL, 'ImplA', 'sqQ69@WBVn%9M36#@jKZ$yfdY!Xi8uoA', '2014-09-27 10:01:54.118678-06', '/openmeetings/swf?invitationHash=ea9f17c29ed0f3bcc6e09591612e025f');
+INSERT INTO "user" VALUES (199, 'e3b58535-7a49-378e-5a8c-977cefb07b36', 'enrollTest25', '[[ENC]]ea8fb1589f6de83c7da14b3d41103186847acdcda52e8b8b54cb8bde3bd2e4e1', 'Enroll', '', 'Test25', '2014-09-30 17:16:51.561756-06', NULL, '2014-09-30 17:16:51.561756-06', NULL, 1, '', 'kathy.d.flint@gmail.com', '', true, false, NULL, 'ImplA', '8&paxI76gxz1Glm#)66q7$QQUTnI47xd', '2014-09-30 17:16:51.594992-06', '/openmeetings/swf?invitationHash=4da3c327d2e756d5e3e46b182e882d2c');
+INSERT INTO "user" VALUES (198, 'b73a5a81-2b1a-bdbf-d6e2-b21529e648d7', 'shenry1', '[[ENC]]4ad5929d29c85f49cb450d6fd323b5e9fa6b6feed790eed2e538d972820bb128', 'Steve', '', 'Test', '2014-09-28 16:17:35.15728-06', NULL, '2014-09-28 16:17:35.15728-06', NULL, 1, '', 'rstephenhenry@gmail.com', '', true, false, NULL, 'ImplA', 'RbmOEod3)zzVKnwWFQVyU6sI7qw(Fv$m', '2014-09-28 16:17:35.193773-06', '/openmeetings/swf?invitationHash=43110449684937a955929f7022e7ef9c');
+INSERT INTO "user" VALUES (197, '8f254588-4f35-085e-42db-abb9f9d216b9', 'EnrollTest101', '[[ENC]]63b0079da717e631befc4c366b728743391911b2b1b2cb7fa13013a6a67a9df3', 'Enroll', '', 'Test101', '2014-09-28 14:21:52.678325-06', NULL, '2014-09-28 14:21:52.678325-06', NULL, 1, '', 'ksflint@comcast.net', '3129195627', true, false, NULL, 'ImplA', 'vIDLAva0%kvYPSzA!jM*SHHnkQgrUM@f', '2014-10-09 19:02:53.728952-06', '/openmeetings/swf?invitationHash=815df145e1fee7b5340ac5b9b9083bdc');
+INSERT INTO "user" VALUES (200, '8fa27d85-c93d-930f-0ff5-375c3d575161', 'enrollTest29', '[[ENC]]f8d48de9e5535c2e3f380023b9064b446290a649ae2f0e6d9df2e327372b6323', 'Enroll', '', 'Test27', '2014-09-30 17:22:33.814214-06', NULL, '2014-09-30 17:22:33.814214-06', NULL, 1, '', 'kathy.d.flint@gmail.com', '', true, false, NULL, 'ImplA', 'O(fxkhswVBMcSK)0v@yE*xTFJ#2jpHb3', '2014-09-30 17:22:33.836561-06', '/openmeetings/swf?invitationHash=cc56a8d0e14f577f1b47e66b28931fdf');
+INSERT INTO "user" VALUES (201, 'bcbc6124-74f7-80f1-1f67-618588cbb9f2', 'enrollTest75', '[[ENC]]76d63f20c95a949a123ae9fea898681cd7cb444cf183441b204af8671000bce4', 'Enroll', '', 'Test75', '2014-09-30 17:25:32.200025-06', NULL, '2014-09-30 17:25:32.200025-06', NULL, 1, '', 'kathy.flint@northbridgetech.org', '', true, false, NULL, 'ImplA', '$$(k327p4LbTtO$v38q*OgBktRZdxo*r', '2014-09-30 17:25:32.268756-06', '/openmeetings/swf?invitationHash=8b45a65b3cc27cce80025e8bb60b3894');
+INSERT INTO "user" VALUES (206, 'fb3e2a4a-3193-1600-5529-124986812746', 'enrollTest102', '[[ENC]]004254e75abe5d4ccb1d0f8c6ee8a67fc863aaadb7ab485c7dabe2397dad6987', 'Enroll', '', 'Test102', '2014-10-09 19:06:44.284488-06', NULL, '2014-10-09 19:06:44.284488-06', NULL, 1, '', 'ksflint@comcast.net', '', true, false, NULL, 'ImplA', 'i!1^qnLvM8Mh#5vBfkhQusRLRCGSU5S3', '2014-10-09 19:06:44.418305-06', '/openmeetings/swf?invitationHash=97e6794c5ad2d029c7ef6c2ada178ee2');
+INSERT INTO "user" VALUES (202, 'da5a2048-54e4-41c8-d8ff-2131b8ff8273', 'gretchensaylor1', '[[ENC]]913c40477480dcaeb24df001c8320257160f910e8be3c54eae0f02943e1c653c', 'Gretchen', '', 'Saylor', '2014-09-30 17:42:22.553191-06', NULL, '2014-09-30 17:42:22.553191-06', NULL, 1, '', 'gretchen.saylor@gmail.com', '', true, false, NULL, 'ImplA', 'P(s6pqXZNLP7HPY)xvfNxpf#6lCRXp(D', '2014-09-30 17:42:22.578496-06', '/openmeetings/swf?invitationHash=246e3e480cee5152a64cea09729126a5');
+INSERT INTO "user" VALUES (203, '58c5f015-7d0c-d93d-7903-705037dc4b40', 'enrollTest81', '[[ENC]]fc6ef9b4eb32dfe7cfa9be0c66abeddf8c29fe9267a6e6eae809d3e98dd9a7ec', 'Enroll', '', 'Test81', '2014-09-30 17:57:10.110328-06', NULL, '2014-09-30 17:57:10.110328-06', NULL, 1, '', 'kathy.d.flint@gmail.com', '', true, false, NULL, 'ImplA', 'KqBA!0sN3PhEiqif*n(la*glYb5&(I7I', '2014-09-30 17:57:10.137684-06', '/openmeetings/swf?invitationHash=075def2835fe9b43fe547e36cdeaa337');
+INSERT INTO "user" VALUES (204, '9b6ae618-6677-c5cc-d707-34b07f70076f', 'enrollTest20', '[[ENC]]f58d85c44425849997ccdb200bca2414ba1d2f90e5c32cba8075824f03eb67ba', 'Enroll', '', 'Test20', '2014-09-30 17:59:16.718124-06', NULL, '2014-09-30 17:59:16.718124-06', NULL, 1, '', 'kathy.d.flint@gmail.com', '', true, false, NULL, 'ImplA', 'lBqU4o3oAI76$KQQOFf9PxrHY44g!Bnb', '2014-09-30 17:59:16.749608-06', '/openmeetings/swf?invitationHash=cf5b3d8f1fcc6170de96f70fd646b2cb');
+INSERT INTO "user" VALUES (207, '91f5052f-ffe5-37a6-d018-d4b7f4255047', 'thor_doge', '[[ENC]]b5852dbadf35b7fb042b9b4ac731f44578090332ccb8f8f692a04223a8777146', 'Thor', '', 'Saylor', '2014-10-12 20:10:43.554584-06', NULL, '2014-10-12 20:10:43.554584-06', NULL, 1, '', 'gretchen.saylor@gmail.com', '', true, false, NULL, 'ImplA', '8zp)r6U5@0v%9O$kYYlU5W7(8^Gt3%jb', '2014-10-12 20:10:43.601378-06', '/openmeetings/swf?invitationHash=5e919d837be3b6d6c607c04a77468864');
+INSERT INTO "user" VALUES (205, '45ec8138-dadb-a9e3-24d2-00480205a151', 'enrollTest584', '[[ENC]]b60203a7cbbbc8d08d14410b0e978a66c7fb8dbd52d7ec0f3540a14ae08fa5e9', 'Kathy', '', 'Flint', '2014-09-30 18:01:42.65291-06', NULL, '2014-09-30 18:01:42.65291-06', NULL, 1, '', 'kathy.d.flint@gmail.com', '', true, false, NULL, 'ImplA', 'fj3%zzeHu9FlvIo@nBYbX*u1gb7Ec^2s', '2014-09-30 18:01:42.677319-06', '/openmeetings/swf?invitationHash=d5680d425790389270fa42fb7c5b0095');
+INSERT INTO "user" VALUES (208, '2c44a5de-1301-64ea-ea3e-677c7f012e68', 'abc123456', '[[ENC]]022b849299e9c9092dad4684a3e6e42fa64ad821d461365c8eeab54340460ab0', 'Lou', '', 'Patel', '2014-10-12 20:14:10.732278-06', NULL, '2014-10-12 20:14:10.732278-06', NULL, 1, '', 'coach.lou@northbridgetech.org', '', true, false, NULL, 'ImplA', 'WU11sV#NvdHnYb((K$h(vnqGTOkkMA@z', '2014-10-12 20:14:10.789778-06', '/openmeetings/swf?invitationHash=5256b4ced87cce4157fabf19a2b6d45a');
+INSERT INTO "user" VALUES (209, '3070057a-c251-58bc-6450-27fc599a7280', 'shenry25', '[[ENC]]3867f29886d0728a8305c507ef2600e9b189c8e8d02e4d2784a9705fdee24491', 'Steve', '', 'henry', '2014-10-12 20:14:41.543574-06', NULL, '2014-10-12 20:14:41.543574-06', NULL, 1, '', 'rstephenhenry@gmail.com', '', true, false, NULL, 'ImplA', 'PwYx0KFAz6Yd@Zpm&yjKZjO6U89L1$^Q', '2014-10-12 20:14:41.573741-06', '/openmeetings/swf?invitationHash=3a7f0de655790c8ecadd015e08139bfd');
+
+
+--
+-- Data for Name: user_group; Type: TABLE DATA; Schema: public; Owner: northbr6
+--
+
+INSERT INTO user_group VALUES (1, 88, '2014-09-13 14:19:15.825895-06', NULL, 1);
+INSERT INTO user_group VALUES (47, 168, '2014-09-19 14:40:43.809782-06', NULL, 1);
+INSERT INTO user_group VALUES (48, 174, '2014-09-21 17:26:27.565222-06', NULL, 1);
+INSERT INTO user_group VALUES (49, 175, '2014-09-21 17:28:13.055144-06', NULL, 1);
+INSERT INTO user_group VALUES (50, 176, '2014-09-21 20:11:58.19277-06', NULL, 1);
+INSERT INTO user_group VALUES (51, 177, '2014-09-21 21:07:33.595144-06', NULL, 1);
+INSERT INTO user_group VALUES (52, 178, '2014-09-22 09:38:51.138997-06', NULL, 1);
+INSERT INTO user_group VALUES (53, 179, '2014-09-22 09:47:10.622678-06', NULL, 1);
+INSERT INTO user_group VALUES (54, 180, '2014-09-22 09:50:01.910226-06', NULL, 1);
+INSERT INTO user_group VALUES (55, 181, '2014-09-22 10:21:35.178225-06', NULL, 1);
+INSERT INTO user_group VALUES (56, 183, '2014-09-22 22:47:00.790129-06', NULL, 1);
+INSERT INTO user_group VALUES (57, 184, '2014-09-22 23:36:28.816368-06', NULL, 1);
+INSERT INTO user_group VALUES (58, 185, '2014-09-22 23:37:51.606957-06', NULL, 1);
+INSERT INTO user_group VALUES (59, 186, '2014-09-22 23:39:21.830066-06', NULL, 1);
+INSERT INTO user_group VALUES (60, 187, '2014-09-24 11:56:11.513249-06', NULL, 1);
+INSERT INTO user_group VALUES (61, 188, '2014-09-25 14:32:37.951885-06', NULL, 1);
+INSERT INTO user_group VALUES (62, 189, '2014-09-25 14:39:49.704174-06', NULL, 1);
+INSERT INTO user_group VALUES (63, 190, '2014-09-25 20:12:48.158593-06', NULL, 1);
+INSERT INTO user_group VALUES (64, 191, '2014-09-26 16:39:57.895276-06', NULL, 1);
+INSERT INTO user_group VALUES (65, 192, '2014-09-26 16:44:02.881721-06', NULL, 1);
+INSERT INTO user_group VALUES (66, 193, '2014-09-26 16:47:14.024823-06', NULL, 1);
+INSERT INTO user_group VALUES (67, 194, '2014-09-27 09:07:55.95711-06', NULL, 1);
+INSERT INTO user_group VALUES (68, 195, '2014-09-27 09:49:20.113499-06', NULL, 1);
+INSERT INTO user_group VALUES (69, 196, '2014-09-27 10:01:54.267376-06', NULL, 1);
+INSERT INTO user_group VALUES (70, 197, '2014-09-28 14:21:52.859616-06', NULL, 1);
+INSERT INTO user_group VALUES (71, 198, '2014-09-28 16:17:35.284162-06', NULL, 1);
+INSERT INTO user_group VALUES (72, 199, '2014-09-30 17:16:51.723757-06', NULL, 1);
+INSERT INTO user_group VALUES (73, 200, '2014-09-30 17:22:33.923546-06', NULL, 1);
+INSERT INTO user_group VALUES (74, 201, '2014-09-30 17:25:33.048761-06', NULL, 1);
+INSERT INTO user_group VALUES (75, 202, '2014-09-30 17:42:22.672476-06', NULL, 1);
+INSERT INTO user_group VALUES (76, 203, '2014-09-30 17:57:10.282663-06', NULL, 1);
+INSERT INTO user_group VALUES (77, 204, '2014-09-30 17:59:16.840939-06', NULL, 1);
+INSERT INTO user_group VALUES (78, 205, '2014-09-30 18:01:42.764321-06', NULL, 1);
+INSERT INTO user_group VALUES (79, 206, '2014-10-09 19:06:44.54972-06', NULL, 1);
+INSERT INTO user_group VALUES (80, 207, '2014-10-12 20:10:43.750496-06', NULL, 1);
+INSERT INTO user_group VALUES (81, 208, '2014-10-12 20:14:11.109017-06', NULL, 1);
+INSERT INTO user_group VALUES (82, 209, '2014-10-12 20:14:41.895775-06', NULL, 1);
 
 
 --
@@ -3876,8 +4243,190 @@ INSERT INTO "user" VALUES (88, 'e8db0a62-67dd-3d0c-13fd-d2372f4b5d0c', 'admin', 
 --
 
 INSERT INTO user_organization VALUES (89, 88, 18, 85, '2014-08-01 15:09:53.544925-06', NULL, 1);
-INSERT INTO user_organization VALUES (90, 89, 18, 85, '2014-08-01 15:13:12.763613-06', NULL, 1);
+INSERT INTO user_organization VALUES (155, 176, 313, 85, '2014-09-21 20:11:58.09187-06', NULL, 1);
 INSERT INTO user_organization VALUES (86, 85, 13, 85, '2014-08-01 09:43:43.165403-06', NULL, 1);
+INSERT INTO user_organization VALUES (156, 177, 312, 85, '2014-09-21 21:07:33.548051-06', NULL, 1);
+INSERT INTO user_organization VALUES (157, 178, 47, 85, '2014-09-22 09:38:51.061305-06', NULL, 1);
+INSERT INTO user_organization VALUES (158, 179, 46, 85, '2014-09-22 09:47:10.597229-06', NULL, 1);
+INSERT INTO user_organization VALUES (159, 180, 46, 85, '2014-09-22 09:50:01.795534-06', NULL, 1);
+INSERT INTO user_organization VALUES (160, 181, 314, 85, '2014-09-22 10:21:35.153486-06', NULL, 1);
+INSERT INTO user_organization VALUES (161, 183, 315, 85, '2014-09-22 22:47:00.747556-06', NULL, 1);
+INSERT INTO user_organization VALUES (162, 184, 315, 85, '2014-09-22 23:36:28.588378-06', NULL, 1);
+INSERT INTO user_organization VALUES (163, 185, 315, 85, '2014-09-22 23:37:51.576488-06', NULL, 1);
+INSERT INTO user_organization VALUES (164, 186, 315, 85, '2014-09-22 23:39:21.793526-06', NULL, 1);
+INSERT INTO user_organization VALUES (165, 187, 46, 85, '2014-09-24 11:56:11.420315-06', NULL, 1);
+INSERT INTO user_organization VALUES (166, 188, 47, 85, '2014-09-25 14:32:37.915404-06', NULL, 1);
+INSERT INTO user_organization VALUES (167, 189, 47, 85, '2014-09-25 14:39:49.680569-06', NULL, 1);
+INSERT INTO user_organization VALUES (168, 190, 316, 85, '2014-09-25 20:12:48.125505-06', NULL, 1);
+INSERT INTO user_organization VALUES (169, 191, 47, 85, '2014-09-26 16:39:57.863657-06', NULL, 1);
+INSERT INTO user_organization VALUES (170, 192, 317, 85, '2014-09-26 16:44:02.851672-06', NULL, 1);
+INSERT INTO user_organization VALUES (171, 193, 311, 85, '2014-09-26 16:47:13.994202-06', NULL, 1);
+INSERT INTO user_organization VALUES (172, 194, 47, 85, '2014-09-27 09:07:55.924757-06', NULL, 1);
+INSERT INTO user_organization VALUES (173, 195, 47, 85, '2014-09-27 09:49:20.075441-06', NULL, 1);
+INSERT INTO user_organization VALUES (174, 196, 318, 85, '2014-09-27 10:01:54.240825-06', NULL, 1);
+INSERT INTO user_organization VALUES (175, 197, 47, 85, '2014-09-28 14:21:52.825707-06', NULL, 1);
+INSERT INTO user_organization VALUES (176, 198, 314, 85, '2014-09-28 16:17:35.255944-06', NULL, 1);
+INSERT INTO user_organization VALUES (177, 199, 319, 85, '2014-09-30 17:16:51.695598-06', NULL, 1);
+INSERT INTO user_organization VALUES (178, 200, 319, 85, '2014-09-30 17:22:33.898814-06', NULL, 1);
+INSERT INTO user_organization VALUES (179, 201, 320, 85, '2014-09-30 17:25:32.94797-06', NULL, 1);
+INSERT INTO user_organization VALUES (180, 202, 312, 85, '2014-09-30 17:42:22.648897-06', NULL, 1);
+INSERT INTO user_organization VALUES (181, 203, 320, 85, '2014-09-30 17:57:10.207429-06', NULL, 1);
+INSERT INTO user_organization VALUES (182, 204, 320, 85, '2014-09-30 17:59:16.817223-06', NULL, 1);
+INSERT INTO user_organization VALUES (183, 205, 320, 85, '2014-09-30 18:01:42.738499-06', NULL, 1);
+INSERT INTO user_organization VALUES (184, 206, 47, 85, '2014-10-09 19:06:44.515959-06', NULL, 1);
+INSERT INTO user_organization VALUES (185, 207, 321, 85, '2014-10-12 20:10:43.716037-06', NULL, 1);
+INSERT INTO user_organization VALUES (186, 208, 322, 85, '2014-10-12 20:14:11.036145-06', NULL, 1);
+INSERT INTO user_organization VALUES (187, 209, 314, 85, '2014-10-12 20:14:41.824347-06', NULL, 1);
+INSERT INTO user_organization VALUES (152, 168, 311, 85, '2014-09-19 14:40:43.77675-06', NULL, 1);
+INSERT INTO user_organization VALUES (153, 174, 312, 85, '2014-09-21 17:26:27.53641-06', NULL, 1);
+INSERT INTO user_organization VALUES (154, 175, 312, 85, '2014-09-21 17:28:13.019731-06', NULL, 1);
+
+
+--
+-- Data for Name: user_session; Type: TABLE DATA; Schema: public; Owner: northbr6
+--
+
+INSERT INTO user_session VALUES (6, 88, '24.13.84.178', '2014-09-02 15:37:41.61445-06');
+INSERT INTO user_session VALUES (10, 88, '24.13.84.178', '2014-09-03 11:27:36.03215-06');
+INSERT INTO user_session VALUES (12, 88, '24.13.84.178', '2014-09-03 12:32:16.87019-06');
+INSERT INTO user_session VALUES (14, 88, '24.13.84.178', '2014-09-03 12:33:45.421893-06');
+INSERT INTO user_session VALUES (26, 88, '24.13.84.178', '2014-09-13 09:00:38.253152-06');
+INSERT INTO user_session VALUES (27, 88, '24.13.84.178', '2014-09-13 09:30:19.50917-06');
+INSERT INTO user_session VALUES (30, 88, '24.13.84.178', '2014-09-13 15:06:41.278427-06');
+INSERT INTO user_session VALUES (42, 88, '24.13.84.178', '2014-09-17 09:37:55.256539-06');
+INSERT INTO user_session VALUES (46, 88, '184.78.90.22', '2014-09-17 17:21:40.457485-06');
+INSERT INTO user_session VALUES (50, 88, '24.13.84.178', '2014-09-17 19:57:02.486815-06');
+INSERT INTO user_session VALUES (54, 88, '24.13.84.178', '2014-09-18 08:16:31.096343-06');
+INSERT INTO user_session VALUES (55, 88, '24.13.84.178', '2014-09-18 08:20:46.00066-06');
+INSERT INTO user_session VALUES (71, 88, '24.13.84.178', '2014-09-19 09:21:52.1566-06');
+INSERT INTO user_session VALUES (72, 88, '24.13.84.178', '2014-09-19 09:22:21.825928-06');
+INSERT INTO user_session VALUES (74, 88, '24.13.84.178', '2014-09-19 09:42:57.795168-06');
+INSERT INTO user_session VALUES (75, 88, '24.13.84.178', '2014-09-19 09:44:09.206741-06');
+INSERT INTO user_session VALUES (76, 88, '24.13.84.178', '2014-09-19 09:50:55.710072-06');
+INSERT INTO user_session VALUES (77, 88, '24.13.84.178', '2014-09-19 09:52:34.01051-06');
+INSERT INTO user_session VALUES (78, 88, '24.13.84.178', '2014-09-19 09:55:04.592129-06');
+INSERT INTO user_session VALUES (79, 176, '50.140.185.114', '2014-09-21 20:26:34.880257-06');
+INSERT INTO user_session VALUES (80, 178, '24.13.84.178', '2014-09-22 09:39:53.139037-06');
+INSERT INTO user_session VALUES (81, 88, '24.13.84.178', '2014-09-22 13:40:07.869138-06');
+INSERT INTO user_session VALUES (82, 88, '24.13.84.178', '2014-09-22 13:41:17.319014-06');
+INSERT INTO user_session VALUES (83, 180, '24.13.84.178', '2014-09-22 14:00:38.85999-06');
+INSERT INTO user_session VALUES (84, 88, '24.13.84.178', '2014-09-22 14:12:32.405886-06');
+INSERT INTO user_session VALUES (85, 180, '24.13.84.178', '2014-09-22 14:12:45.417244-06');
+INSERT INTO user_session VALUES (86, 180, '24.13.84.178', '2014-09-22 14:17:51.24315-06');
+INSERT INTO user_session VALUES (87, 180, '24.13.84.178', '2014-09-22 14:18:13.936839-06');
+INSERT INTO user_session VALUES (88, 180, '24.13.84.178', '2014-09-22 14:18:59.741517-06');
+INSERT INTO user_session VALUES (89, 180, '24.13.84.178', '2014-09-22 14:28:30.411665-06');
+INSERT INTO user_session VALUES (90, 180, '24.13.84.178', '2014-09-22 14:29:16.551608-06');
+INSERT INTO user_session VALUES (91, 180, '24.13.84.178', '2014-09-22 14:34:14.937506-06');
+INSERT INTO user_session VALUES (92, 180, '24.13.84.178', '2014-09-22 14:34:41.383155-06');
+INSERT INTO user_session VALUES (93, 180, '24.13.84.178', '2014-09-22 14:35:05.275066-06');
+INSERT INTO user_session VALUES (94, 186, '67.175.116.168', '2014-09-22 23:42:29.184416-06');
+INSERT INTO user_session VALUES (95, 180, '24.13.84.178', '2014-09-23 10:04:12.126808-06');
+INSERT INTO user_session VALUES (96, 180, '24.13.84.178', '2014-09-23 10:33:55.647547-06');
+INSERT INTO user_session VALUES (97, 180, '24.13.84.178', '2014-09-23 10:47:39.204517-06');
+INSERT INTO user_session VALUES (98, 180, '24.13.84.178', '2014-09-23 16:14:08.081381-06');
+INSERT INTO user_session VALUES (99, 180, '24.13.84.178', '2014-09-23 19:15:52.196564-06');
+INSERT INTO user_session VALUES (100, 88, '24.13.84.178', '2014-09-24 11:25:44.418979-06');
+INSERT INTO user_session VALUES (101, 88, '24.13.84.178', '2014-09-24 11:26:51.333315-06');
+INSERT INTO user_session VALUES (102, 88, '24.13.84.178', '2014-09-24 11:40:29.920827-06');
+INSERT INTO user_session VALUES (103, 88, '24.13.84.178', '2014-09-24 11:48:51.511601-06');
+INSERT INTO user_session VALUES (104, 180, '24.13.84.178', '2014-09-24 11:49:18.879646-06');
+INSERT INTO user_session VALUES (105, 88, '24.13.84.178', '2014-09-24 12:00:04.087719-06');
+INSERT INTO user_session VALUES (106, 88, '24.13.84.178', '2014-09-25 09:24:03.892663-06');
+INSERT INTO user_session VALUES (107, 88, '24.13.84.178', '2014-09-25 10:55:40.224244-06');
+INSERT INTO user_session VALUES (108, 88, '24.13.84.178', '2014-09-25 10:57:59.461721-06');
+INSERT INTO user_session VALUES (109, 88, '24.13.84.178', '2014-09-25 11:25:18.562173-06');
+INSERT INTO user_session VALUES (110, 88, '24.13.84.178', '2014-09-25 11:41:04.05097-06');
+INSERT INTO user_session VALUES (111, 88, '24.13.84.178', '2014-09-25 11:44:06.812446-06');
+INSERT INTO user_session VALUES (112, 88, '24.13.84.178', '2014-09-25 11:45:57.378443-06');
+INSERT INTO user_session VALUES (113, 88, '24.13.84.178', '2014-09-25 13:43:41.062061-06');
+INSERT INTO user_session VALUES (114, 88, '24.13.84.178', '2014-09-25 13:46:01.988762-06');
+INSERT INTO user_session VALUES (115, 88, '24.13.84.178', '2014-09-25 13:50:47.447594-06');
+INSERT INTO user_session VALUES (116, 88, '24.13.84.178', '2014-09-25 13:51:47.958162-06');
+INSERT INTO user_session VALUES (117, 88, '24.13.84.178', '2014-09-25 14:02:42.803826-06');
+INSERT INTO user_session VALUES (118, 88, '24.13.84.178', '2014-09-25 14:08:33.730656-06');
+INSERT INTO user_session VALUES (119, 88, '24.13.84.178', '2014-09-25 14:08:42.919718-06');
+INSERT INTO user_session VALUES (120, 88, '24.13.84.178', '2014-09-25 14:14:28.043179-06');
+INSERT INTO user_session VALUES (121, 194, '24.13.84.178', '2014-09-27 09:08:28.739912-06');
+INSERT INTO user_session VALUES (122, 194, '24.13.84.178', '2014-09-27 09:09:48.240162-06');
+INSERT INTO user_session VALUES (123, 194, '24.13.84.178', '2014-09-27 09:33:21.098798-06');
+INSERT INTO user_session VALUES (124, 194, '24.13.84.178', '2014-09-27 09:39:40.234888-06');
+INSERT INTO user_session VALUES (125, 194, '24.13.84.178', '2014-09-27 09:43:11.117338-06');
+INSERT INTO user_session VALUES (126, 197, '24.13.84.178', '2014-09-28 17:39:15.421316-06');
+INSERT INTO user_session VALUES (127, 197, '24.13.84.178', '2014-09-28 17:59:20.015022-06');
+INSERT INTO user_session VALUES (128, 197, '24.13.84.178', '2014-09-28 18:22:06.588774-06');
+INSERT INTO user_session VALUES (129, 197, '24.13.84.178', '2014-09-28 19:00:26.574656-06');
+INSERT INTO user_session VALUES (130, 197, '24.13.84.178', '2014-09-28 19:30:57.505372-06');
+INSERT INTO user_session VALUES (131, 197, '24.13.84.178', '2014-09-30 17:14:00.705219-06');
+INSERT INTO user_session VALUES (132, 88, '24.13.84.178', '2014-09-30 18:12:43.546211-06');
+INSERT INTO user_session VALUES (133, 88, '24.13.84.178', '2014-09-30 18:13:56.769183-06');
+INSERT INTO user_session VALUES (134, 88, '24.13.84.178', '2014-09-30 18:14:56.800083-06');
+INSERT INTO user_session VALUES (135, 202, '24.1.189.243', '2014-09-30 18:58:52.356129-06');
+INSERT INTO user_session VALUES (136, 202, '162.192.220.133', '2014-10-02 17:28:31.918414-06');
+INSERT INTO user_session VALUES (137, 88, '24.13.84.178', '2014-10-02 19:33:43.607775-06');
+INSERT INTO user_session VALUES (138, 88, '24.13.84.178', '2014-10-02 19:35:46.791495-06');
+INSERT INTO user_session VALUES (139, 197, '24.13.84.178', '2014-10-02 19:36:03.558957-06');
+INSERT INTO user_session VALUES (140, 88, '24.13.84.178', '2014-10-02 19:36:51.947845-06');
+INSERT INTO user_session VALUES (141, 197, '24.13.84.178', '2014-10-02 19:38:22.067696-06');
+INSERT INTO user_session VALUES (142, 197, '24.13.84.178', '2014-10-02 19:41:05.269244-06');
+INSERT INTO user_session VALUES (143, 88, '24.13.84.178', '2014-10-02 19:43:15.766334-06');
+INSERT INTO user_session VALUES (144, 197, '24.13.84.178', '2014-10-02 19:43:49.032641-06');
+INSERT INTO user_session VALUES (145, 197, '24.13.84.178', '2014-10-02 19:50:02.174363-06');
+INSERT INTO user_session VALUES (146, 197, '24.13.84.178', '2014-10-02 20:08:56.07383-06');
+INSERT INTO user_session VALUES (147, 197, '24.13.84.178', '2014-10-05 16:04:49.089757-06');
+INSERT INTO user_session VALUES (148, 88, '24.13.84.178', '2014-10-05 17:05:02.55988-06');
+INSERT INTO user_session VALUES (149, 197, '24.13.84.178', '2014-10-06 18:53:26.743058-06');
+INSERT INTO user_session VALUES (150, 197, '24.13.84.178', '2014-10-06 18:57:37.112768-06');
+INSERT INTO user_session VALUES (151, 88, '24.13.84.178', '2014-10-06 19:03:27.925034-06');
+INSERT INTO user_session VALUES (152, 197, '24.13.84.178', '2014-10-06 19:11:41.849922-06');
+INSERT INTO user_session VALUES (153, 88, '24.13.84.178', '2014-10-06 19:13:17.210904-06');
+INSERT INTO user_session VALUES (154, 88, '24.13.84.178', '2014-10-06 19:22:17.337568-06');
+INSERT INTO user_session VALUES (155, 197, '24.13.84.178', '2014-10-06 19:23:07.450984-06');
+INSERT INTO user_session VALUES (156, 88, '24.13.84.178', '2014-10-06 19:26:19.167626-06');
+INSERT INTO user_session VALUES (157, 197, '24.13.84.178', '2014-10-06 19:29:16.119573-06');
+INSERT INTO user_session VALUES (158, 88, '24.13.84.178', '2014-10-06 19:32:48.843486-06');
+INSERT INTO user_session VALUES (159, 85, '24.13.84.178', '2014-10-06 19:34:00.49246-06');
+INSERT INTO user_session VALUES (160, 88, '24.13.84.178', '2014-10-06 19:35:33.752214-06');
+INSERT INTO user_session VALUES (161, 88, '24.13.84.178', '2014-10-06 19:50:52.461781-06');
+INSERT INTO user_session VALUES (162, 197, '24.13.84.178', '2014-10-06 19:51:31.203489-06');
+INSERT INTO user_session VALUES (163, 197, '24.13.84.178', '2014-10-06 19:52:04.376845-06');
+INSERT INTO user_session VALUES (164, 88, '24.13.84.178', '2014-10-06 19:53:43.788833-06');
+INSERT INTO user_session VALUES (165, 88, '24.13.84.178', '2014-10-06 20:07:56.784755-06');
+INSERT INTO user_session VALUES (166, 88, '24.13.84.178', '2014-10-06 20:08:37.403126-06');
+INSERT INTO user_session VALUES (167, 197, '24.13.84.178', '2014-10-06 20:12:30.383562-06');
+INSERT INTO user_session VALUES (168, 88, '24.13.84.178', '2014-10-06 20:14:30.419659-06');
+INSERT INTO user_session VALUES (169, 88, '24.13.84.178', '2014-10-06 20:16:35.814639-06');
+INSERT INTO user_session VALUES (170, 88, '24.13.84.178', '2014-10-06 20:17:50.301688-06');
+INSERT INTO user_session VALUES (171, 88, '24.13.84.178', '2014-10-06 20:19:03.958077-06');
+INSERT INTO user_session VALUES (172, 88, '24.13.84.178', '2014-10-06 20:19:26.533051-06');
+INSERT INTO user_session VALUES (173, 88, '24.13.84.178', '2014-10-06 20:20:59.789331-06');
+INSERT INTO user_session VALUES (174, 88, '24.13.84.178', '2014-10-06 20:22:34.434226-06');
+INSERT INTO user_session VALUES (175, 88, '24.13.84.178', '2014-10-06 20:23:56.385748-06');
+INSERT INTO user_session VALUES (176, 197, '24.13.84.178', '2014-10-06 20:26:13.227181-06');
+INSERT INTO user_session VALUES (177, 197, '24.13.84.178', '2014-10-06 20:26:54.00194-06');
+INSERT INTO user_session VALUES (178, 88, '24.13.84.178', '2014-10-06 20:27:27.603067-06');
+INSERT INTO user_session VALUES (179, 88, '24.13.84.178', '2014-10-06 20:28:19.200348-06');
+INSERT INTO user_session VALUES (180, 88, '24.13.84.178', '2014-10-06 20:33:47.135077-06');
+INSERT INTO user_session VALUES (181, 197, '24.13.84.178', '2014-10-06 20:34:11.081804-06');
+INSERT INTO user_session VALUES (182, 197, '24.13.84.178', '2014-10-06 20:36:21.632029-06');
+INSERT INTO user_session VALUES (183, 88, '24.13.84.178', '2014-10-06 20:37:39.676725-06');
+INSERT INTO user_session VALUES (184, 88, '24.13.84.178', '2014-10-06 20:50:49.464217-06');
+INSERT INTO user_session VALUES (185, 197, '24.13.84.178', '2014-10-09 19:00:31.859806-06');
+INSERT INTO user_session VALUES (186, 197, '24.13.84.178', '2014-10-09 19:02:27.458102-06');
+INSERT INTO user_session VALUES (187, 197, '24.13.84.178', '2014-10-09 19:03:05.909474-06');
+INSERT INTO user_session VALUES (188, 88, '24.13.84.178', '2014-10-09 19:21:40.03913-06');
+INSERT INTO user_session VALUES (189, 197, '24.13.84.178', '2014-10-12 17:25:43.688965-06');
+INSERT INTO user_session VALUES (190, 197, '24.13.84.178', '2014-10-12 17:39:10.613569-06');
+INSERT INTO user_session VALUES (191, 197, '24.13.84.178', '2014-10-12 17:42:32.242694-06');
+INSERT INTO user_session VALUES (192, 206, '24.13.84.178', '2014-10-12 19:12:12.431368-06');
+INSERT INTO user_session VALUES (193, 197, '24.13.84.178', '2014-10-12 20:10:24.846625-06');
+INSERT INTO user_session VALUES (194, 197, '24.13.84.178', '2014-10-12 20:11:02.434046-06');
+INSERT INTO user_session VALUES (195, 207, '24.1.189.243', '2014-10-12 20:11:14.088436-06');
+INSERT INTO user_session VALUES (196, 207, '24.1.189.243', '2014-10-12 20:12:08.241865-06');
+INSERT INTO user_session VALUES (197, 88, '24.13.84.178', '2014-10-12 20:13:39.731108-06');
+INSERT INTO user_session VALUES (198, 209, '99.127.218.86', '2014-10-12 20:15:09.326187-06');
+INSERT INTO user_session VALUES (199, 197, '24.13.84.178', '2014-10-12 20:34:31.099153-06');
+INSERT INTO user_session VALUES (200, 197, '24.13.84.178', '2014-10-12 20:39:36.039283-06');
 
 
 --
@@ -3913,6 +4462,14 @@ ALTER TABLE ONLY forum_user
 
 
 --
+-- Name: group_pkey; Type: CONSTRAINT; Schema: public; Owner: northbr6; Tablespace: 
+--
+
+ALTER TABLE ONLY "group"
+    ADD CONSTRAINT group_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: invitation_pkey; Type: CONSTRAINT; Schema: public; Owner: northbr6; Tablespace: 
 --
 
@@ -3942,6 +4499,22 @@ ALTER TABLE ONLY language
 
 ALTER TABLE ONLY location
     ADD CONSTRAINT location_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: message_pkey; Type: CONSTRAINT; Schema: public; Owner: northbr6; Tablespace: 
+--
+
+ALTER TABLE ONLY message
+    ADD CONSTRAINT message_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: message_recipient_pkey; Type: CONSTRAINT; Schema: public; Owner: northbr6; Tablespace: 
+--
+
+ALTER TABLE ONLY message_recipient
+    ADD CONSTRAINT message_recipient_pkey PRIMARY KEY (message_fk, recipient_fk);
 
 
 --
@@ -4041,11 +4614,11 @@ ALTER TABLE ONLY role
 
 
 --
--- Name: role_privilege_role_id_fk_key; Type: CONSTRAINT; Schema: public; Owner: northbr6; Tablespace: 
+-- Name: role_privilege_pkey; Type: CONSTRAINT; Schema: public; Owner: northbr6; Tablespace: 
 --
 
 ALTER TABLE ONLY role_privilege
-    ADD CONSTRAINT role_privilege_role_id_fk_key UNIQUE (role_id_fk, privilege_id_fk);
+    ADD CONSTRAINT role_privilege_pkey PRIMARY KEY (role_id_fk, privilege_id_fk);
 
 
 --
@@ -4073,6 +4646,14 @@ ALTER TABLE ONLY topic
 
 
 --
+-- Name: user_group_pkey; Type: CONSTRAINT; Schema: public; Owner: northbr6; Tablespace: 
+--
+
+ALTER TABLE ONLY user_group
+    ADD CONSTRAINT user_group_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: user_organization_pkey; Type: CONSTRAINT; Schema: public; Owner: northbr6; Tablespace: 
 --
 
@@ -4094,6 +4675,22 @@ ALTER TABLE ONLY user_organization
 
 ALTER TABLE ONLY "user"
     ADD CONSTRAINT user_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: user_session_pkey; Type: CONSTRAINT; Schema: public; Owner: northbr6; Tablespace: 
+--
+
+ALTER TABLE ONLY user_session
+    ADD CONSTRAINT user_session_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: user_username_key; Type: CONSTRAINT; Schema: public; Owner: northbr6; Tablespace: 
+--
+
+ALTER TABLE ONLY "user"
+    ADD CONSTRAINT user_username_key UNIQUE (username);
 
 
 --
@@ -4137,6 +4734,14 @@ ALTER TABLE ONLY user_organization
 
 
 --
+-- Name: invitation_group_fk_fkey; Type: FK CONSTRAINT; Schema: public; Owner: northbr6
+--
+
+ALTER TABLE ONLY invitation
+    ADD CONSTRAINT invitation_group_fk_fkey FOREIGN KEY (group_fk) REFERENCES "group"(id);
+
+
+--
 -- Name: invitation_issuer_fkey; Type: FK CONSTRAINT; Schema: public; Owner: northbr6
 --
 
@@ -4158,6 +4763,38 @@ ALTER TABLE ONLY invitation
 
 ALTER TABLE ONLY invitation
     ADD CONSTRAINT invitation_organization_fk_fkey FOREIGN KEY (organization_fk) REFERENCES organization(id);
+
+
+--
+-- Name: message_recipient_message_fk_fkey; Type: FK CONSTRAINT; Schema: public; Owner: northbr6
+--
+
+ALTER TABLE ONLY message_recipient
+    ADD CONSTRAINT message_recipient_message_fk_fkey FOREIGN KEY (message_fk) REFERENCES message(id);
+
+
+--
+-- Name: message_recipient_recipient_fk_fkey; Type: FK CONSTRAINT; Schema: public; Owner: northbr6
+--
+
+ALTER TABLE ONLY message_recipient
+    ADD CONSTRAINT message_recipient_recipient_fk_fkey FOREIGN KEY (recipient_fk) REFERENCES "user"(id);
+
+
+--
+-- Name: message_reply_to_fk_fkey; Type: FK CONSTRAINT; Schema: public; Owner: northbr6
+--
+
+ALTER TABLE ONLY message
+    ADD CONSTRAINT message_reply_to_fk_fkey FOREIGN KEY (reply_to_fk) REFERENCES message(id);
+
+
+--
+-- Name: message_sender_fk_fkey; Type: FK CONSTRAINT; Schema: public; Owner: northbr6
+--
+
+ALTER TABLE ONLY message
+    ADD CONSTRAINT message_sender_fk_fkey FOREIGN KEY (sender_fk) REFERENCES "user"(id);
 
 
 --
@@ -4305,6 +4942,30 @@ ALTER TABLE ONLY user_organization
 
 
 --
+-- Name: user_group_group_fk_fkey; Type: FK CONSTRAINT; Schema: public; Owner: northbr6
+--
+
+ALTER TABLE ONLY user_group
+    ADD CONSTRAINT user_group_group_fk_fkey FOREIGN KEY (group_fk) REFERENCES "group"(id);
+
+
+--
+-- Name: user_group_user_fk_fkey; Type: FK CONSTRAINT; Schema: public; Owner: northbr6
+--
+
+ALTER TABLE ONLY user_group
+    ADD CONSTRAINT user_group_user_fk_fkey FOREIGN KEY (user_fk) REFERENCES "user"(id);
+
+
+--
+-- Name: user_session_user_fk_fkey; Type: FK CONSTRAINT; Schema: public; Owner: northbr6
+--
+
+ALTER TABLE ONLY user_session
+    ADD CONSTRAINT user_session_user_fk_fkey FOREIGN KEY (user_fk) REFERENCES "user"(id);
+
+
+--
 -- Name: user_status_fk_fkey; Type: FK CONSTRAINT; Schema: public; Owner: northbr6
 --
 
@@ -4330,6 +4991,7 @@ REVOKE ALL ON TABLE category FROM PUBLIC;
 REVOKE ALL ON TABLE category FROM northbr6;
 GRANT ALL ON TABLE category TO northbr6;
 GRANT ALL ON TABLE category TO northbr6_nbnexus;
+GRANT ALL ON TABLE category TO northbr6_devnexus;
 
 
 --
@@ -4340,6 +5002,7 @@ REVOKE ALL ON TABLE category_topic FROM PUBLIC;
 REVOKE ALL ON TABLE category_topic FROM northbr6;
 GRANT ALL ON TABLE category_topic TO northbr6;
 GRANT ALL ON TABLE category_topic TO northbr6_nbnexus;
+GRANT ALL ON TABLE category_topic TO northbr6_devnexus;
 
 
 --
@@ -4350,6 +5013,7 @@ REVOKE ALL ON TABLE contact FROM PUBLIC;
 REVOKE ALL ON TABLE contact FROM northbr6;
 GRANT ALL ON TABLE contact TO northbr6;
 GRANT ALL ON TABLE contact TO northbr6_nbnexus;
+GRANT ALL ON TABLE contact TO northbr6_devnexus;
 
 
 --
@@ -4372,6 +5036,28 @@ REVOKE ALL ON TABLE forum_user FROM northbr6;
 GRANT ALL ON TABLE forum_user TO northbr6;
 GRANT SELECT,INSERT,REFERENCES,UPDATE ON TABLE forum_user TO northbr6_web WITH GRANT OPTION;
 GRANT ALL ON TABLE forum_user TO northbr6_nbnexus;
+GRANT ALL ON TABLE forum_user TO northbr6_devnexus;
+
+
+--
+-- Name: group_id_seq; Type: ACL; Schema: public; Owner: northbr6
+--
+
+REVOKE ALL ON SEQUENCE group_id_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE group_id_seq FROM northbr6;
+GRANT ALL ON SEQUENCE group_id_seq TO northbr6;
+GRANT SELECT,UPDATE ON SEQUENCE group_id_seq TO northbr6_web;
+
+
+--
+-- Name: group; Type: ACL; Schema: public; Owner: northbr6
+--
+
+REVOKE ALL ON TABLE "group" FROM PUBLIC;
+REVOKE ALL ON TABLE "group" FROM northbr6;
+GRANT ALL ON TABLE "group" TO northbr6;
+GRANT SELECT,INSERT,UPDATE ON TABLE "group" TO northbr6_web;
+GRANT ALL ON TABLE "group" TO northbr6_nbnexus;
 
 
 --
@@ -4383,6 +5069,7 @@ REVOKE ALL ON TABLE invitation FROM northbr6;
 GRANT ALL ON TABLE invitation TO northbr6;
 GRANT ALL ON TABLE invitation TO northbr6_nbnexus;
 GRANT SELECT,INSERT,REFERENCES,UPDATE ON TABLE invitation TO northbr6_web;
+GRANT ALL ON TABLE invitation TO northbr6_devnexus;
 
 
 --
@@ -4404,6 +5091,7 @@ REVOKE ALL ON TABLE invitation_organization FROM northbr6;
 GRANT ALL ON TABLE invitation_organization TO northbr6;
 GRANT SELECT,INSERT,REFERENCES,UPDATE ON TABLE invitation_organization TO northbr6_web;
 GRANT ALL ON TABLE invitation_organization TO northbr6_nbnexus;
+GRANT ALL ON TABLE invitation_organization TO northbr6_devnexus;
 
 
 --
@@ -4425,6 +5113,7 @@ REVOKE ALL ON TABLE language FROM northbr6;
 GRANT ALL ON TABLE language TO northbr6;
 GRANT SELECT,INSERT,REFERENCES,UPDATE ON TABLE language TO northbr6_web WITH GRANT OPTION;
 GRANT ALL ON TABLE language TO northbr6_nbnexus;
+GRANT ALL ON TABLE language TO northbr6_devnexus;
 
 
 --
@@ -4435,6 +5124,39 @@ REVOKE ALL ON TABLE location FROM PUBLIC;
 REVOKE ALL ON TABLE location FROM northbr6;
 GRANT ALL ON TABLE location TO northbr6;
 GRANT ALL ON TABLE location TO northbr6_nbnexus;
+GRANT ALL ON TABLE location TO northbr6_devnexus;
+
+
+--
+-- Name: message_id_seq; Type: ACL; Schema: public; Owner: northbr6
+--
+
+REVOKE ALL ON SEQUENCE message_id_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE message_id_seq FROM northbr6;
+GRANT ALL ON SEQUENCE message_id_seq TO northbr6;
+GRANT SELECT,UPDATE ON SEQUENCE message_id_seq TO northbr6_web;
+
+
+--
+-- Name: message; Type: ACL; Schema: public; Owner: northbr6
+--
+
+REVOKE ALL ON TABLE message FROM PUBLIC;
+REVOKE ALL ON TABLE message FROM northbr6;
+GRANT ALL ON TABLE message TO northbr6;
+GRANT SELECT,INSERT,UPDATE ON TABLE message TO northbr6_web;
+GRANT ALL ON TABLE message TO northbr6_nbnexus;
+
+
+--
+-- Name: message_recipient; Type: ACL; Schema: public; Owner: northbr6
+--
+
+REVOKE ALL ON TABLE message_recipient FROM PUBLIC;
+REVOKE ALL ON TABLE message_recipient FROM northbr6;
+GRANT ALL ON TABLE message_recipient TO northbr6;
+GRANT SELECT,INSERT ON TABLE message_recipient TO northbr6_web;
+GRANT ALL ON TABLE message_recipient TO northbr6_nbnexus;
 
 
 --
@@ -4518,6 +5240,7 @@ REVOKE ALL ON TABLE organization_program FROM northbr6;
 GRANT ALL ON TABLE organization_program TO northbr6;
 GRANT SELECT,INSERT,REFERENCES,UPDATE ON TABLE organization_program TO northbr6_web WITH GRANT OPTION;
 GRANT ALL ON TABLE organization_program TO northbr6_nbnexus;
+GRANT ALL ON TABLE organization_program TO northbr6_devnexus;
 
 
 --
@@ -4529,6 +5252,7 @@ REVOKE ALL ON TABLE organization_topic FROM northbr6;
 GRANT ALL ON TABLE organization_topic TO northbr6;
 GRANT SELECT,INSERT,REFERENCES,UPDATE ON TABLE organization_topic TO northbr6_web WITH GRANT OPTION;
 GRANT ALL ON TABLE organization_topic TO northbr6_nbnexus;
+GRANT ALL ON TABLE organization_topic TO northbr6_devnexus;
 
 
 --
@@ -4540,6 +5264,7 @@ REVOKE ALL ON TABLE privilege FROM northbr6;
 GRANT ALL ON TABLE privilege TO northbr6;
 GRANT SELECT,INSERT ON TABLE privilege TO northbr6_web;
 GRANT ALL ON TABLE privilege TO northbr6_nbnexus;
+GRANT ALL ON TABLE privilege TO northbr6_devnexus;
 
 
 --
@@ -4551,6 +5276,7 @@ REVOKE ALL ON TABLE program FROM northbr6;
 GRANT ALL ON TABLE program TO northbr6;
 GRANT SELECT,INSERT,REFERENCES,UPDATE ON TABLE program TO northbr6_web WITH GRANT OPTION;
 GRANT ALL ON TABLE program TO northbr6_nbnexus;
+GRANT ALL ON TABLE program TO northbr6_devnexus;
 
 
 --
@@ -4561,6 +5287,7 @@ REVOKE ALL ON TABLE program_language FROM PUBLIC;
 REVOKE ALL ON TABLE program_language FROM northbr6;
 GRANT ALL ON TABLE program_language TO northbr6;
 GRANT ALL ON TABLE program_language TO northbr6_nbnexus;
+GRANT ALL ON TABLE program_language TO northbr6_devnexus;
 
 
 --
@@ -4572,6 +5299,7 @@ REVOKE ALL ON TABLE role FROM northbr6;
 GRANT ALL ON TABLE role TO northbr6;
 GRANT ALL ON TABLE role TO northbr6_nbnexus;
 GRANT SELECT ON TABLE role TO northbr6_web;
+GRANT ALL ON TABLE role TO northbr6_devnexus;
 
 
 --
@@ -4583,6 +5311,7 @@ REVOKE ALL ON TABLE role_privilege FROM northbr6;
 GRANT ALL ON TABLE role_privilege TO northbr6;
 GRANT SELECT ON TABLE role_privilege TO northbr6_web;
 GRANT ALL ON TABLE role_privilege TO northbr6_nbnexus;
+GRANT ALL ON TABLE role_privilege TO northbr6_devnexus;
 
 
 --
@@ -4594,6 +5323,7 @@ REVOKE ALL ON TABLE status FROM northbr6;
 GRANT ALL ON TABLE status TO northbr6;
 GRANT SELECT,INSERT,UPDATE ON TABLE status TO northbr6_web;
 GRANT ALL ON TABLE status TO northbr6_nbnexus;
+GRANT ALL ON TABLE status TO northbr6_devnexus;
 
 
 --
@@ -4604,6 +5334,7 @@ REVOKE ALL ON TABLE topic FROM PUBLIC;
 REVOKE ALL ON TABLE topic FROM northbr6;
 GRANT ALL ON TABLE topic TO northbr6;
 GRANT ALL ON TABLE topic TO northbr6_nbnexus;
+GRANT ALL ON TABLE topic TO northbr6_devnexus;
 
 
 --
@@ -4614,6 +5345,28 @@ REVOKE ALL ON TABLE "user" FROM PUBLIC;
 REVOKE ALL ON TABLE "user" FROM northbr6;
 GRANT ALL ON TABLE "user" TO northbr6;
 GRANT ALL ON TABLE "user" TO northbr6_nbnexus;
+GRANT ALL ON TABLE "user" TO northbr6_devnexus;
+
+
+--
+-- Name: user_group_id_seq; Type: ACL; Schema: public; Owner: northbr6
+--
+
+REVOKE ALL ON SEQUENCE user_group_id_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE user_group_id_seq FROM northbr6;
+GRANT ALL ON SEQUENCE user_group_id_seq TO northbr6;
+GRANT SELECT,UPDATE ON SEQUENCE user_group_id_seq TO northbr6_web;
+
+
+--
+-- Name: user_group; Type: ACL; Schema: public; Owner: northbr6
+--
+
+REVOKE ALL ON TABLE user_group FROM PUBLIC;
+REVOKE ALL ON TABLE user_group FROM northbr6;
+GRANT ALL ON TABLE user_group TO northbr6;
+GRANT SELECT,INSERT,UPDATE ON TABLE user_group TO northbr6_web;
+GRANT ALL ON TABLE user_group TO northbr6_nbnexus;
 
 
 --
@@ -4634,6 +5387,7 @@ REVOKE ALL ON TABLE user_organization FROM PUBLIC;
 REVOKE ALL ON TABLE user_organization FROM northbr6;
 GRANT ALL ON TABLE user_organization TO northbr6;
 GRANT ALL ON TABLE user_organization TO northbr6_nbnexus;
+GRANT ALL ON TABLE user_organization TO northbr6_devnexus;
 
 
 --
@@ -4644,6 +5398,27 @@ REVOKE ALL ON SEQUENCE user_organization_id_seq FROM PUBLIC;
 REVOKE ALL ON SEQUENCE user_organization_id_seq FROM northbr6;
 GRANT ALL ON SEQUENCE user_organization_id_seq TO northbr6;
 GRANT SELECT,UPDATE ON SEQUENCE user_organization_id_seq TO northbr6_web;
+
+
+--
+-- Name: user_session_id_seq; Type: ACL; Schema: public; Owner: northbr6
+--
+
+REVOKE ALL ON SEQUENCE user_session_id_seq FROM PUBLIC;
+REVOKE ALL ON SEQUENCE user_session_id_seq FROM northbr6;
+GRANT ALL ON SEQUENCE user_session_id_seq TO northbr6;
+GRANT SELECT,UPDATE ON SEQUENCE user_session_id_seq TO northbr6_web;
+
+
+--
+-- Name: user_session; Type: ACL; Schema: public; Owner: northbr6
+--
+
+REVOKE ALL ON TABLE user_session FROM PUBLIC;
+REVOKE ALL ON TABLE user_session FROM northbr6;
+GRANT ALL ON TABLE user_session TO northbr6;
+GRANT SELECT,INSERT ON TABLE user_session TO northbr6_web;
+GRANT ALL ON TABLE user_session TO northbr6_nbnexus;
 
 
 --
