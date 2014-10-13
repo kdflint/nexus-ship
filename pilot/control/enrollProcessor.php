@@ -227,7 +227,7 @@ function sendConfirmationEmail($email, $path, $fname) {
 	
 Your enrollment is complete. 
 	
-You are now enabled to collaborate with " . $_SESSION['groupName'] . " hosted by " . $_SESSION['networkName'] . ".
+You are now enabled to collaborate with the " . $_SESSION['groupName'] . " hosted by " . $_SESSION['networkName'] . ".
 
 This tool is built by committed volunteers working hard to build web resources for organizations that make a positive difference in our communities.
 
@@ -245,7 +245,7 @@ We are working hard on adding:
 - Collaboration Tracking
 - Advanced Mapping functions
 
-You can login to Nexus using this link. filezCheck the Help document for some information about how to use this site.
+You can login to Nexus using this link. You may wish to check the Help document right away for some information about how to use this site.
 
 http://northbridgetech.org/" . $path . "/nexus/view/login.php
 
