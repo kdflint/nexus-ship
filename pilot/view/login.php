@@ -60,7 +60,7 @@ $networkName = $row['name'];
 										<tr><td>Password:</td><td><input class="passed" type="password" size="15" name="password" value=""/></td></tr>
 										<tr><td colspan="2"><input type="submit" style="float:right;" value="Login"/></td></tr>
 									</table>
-										<p>Trouble getting in? <a href="mailto:contact@northbridgetech.org">contact@northbridgetech.org</a></p>
+										<p><a href="javascript:void(0)" onclick="document.getElementById('light_user').style.display='block';document.getElementById('fade').style.display='block'">Forgot your user id?</a> | <a href = "javascript:void(0)" onclick = "document.getElementById('light_password').style.display='block';document.getElementById('fade').style.display='block'">Forgot your password? </a></p>
 										<input type="hidden" name="action" value="authenticate" />
 								</form>
 							</div>						
@@ -79,7 +79,28 @@ $networkName = $row['name'];
 		</div>
 	
       </div><!--shell-->
-    </div><!-- container -->         	
+    </div><!-- container -->       
+       
+    <!-- lightboxes -->
+		<div id="light_password" class="white_content">
+			<a href="javascript:void(0)" onclick="document.getElementById('light_password').style.display='none';document.getElementById('fade').style.display='none'" style="float:right">Close</a>
+			<form>
+				<p>There will be a form here containing one field for user id and a Submit button</p>
+				<p>Submit will email a link for reset to the email address on file for this user id.</p>
+				<p>Link will be valid for 30 minutes.</p>
+			</form>
+		</div>
+		
+		<div id="light_user" class="white_content">
+			<a href="javascript:void(0)" onclick="document.getElementById('light_user').style.display='none';document.getElementById('fade').style.display='none'" style="float:right">Close</a>
+			<form>
+				<p>There will be a form here containing one field for email address and Submit button</p>
+				<p>Submit will re-send the enrollment package which includes user ids registered to this email address.</p>
+			</form>
+		</div>
+		<div id="fade" class="black_overlay"></div>
+		<div id="fade" class="black_overlay"></div>
+  	
 	</body>
 	
 </html>
