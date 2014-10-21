@@ -71,6 +71,11 @@ class pgDb {
 		$query = "select exists (select true from public.user where lower(username) = lower($1))";
 		return pgDb::psExecute($query, array($name));
 	}
+	
+	public static function userEmailExists($email) {
+		$query = "select exists (select true from public.user where lower(email) = lower($1))";
+		return pgDb::psExecute($query, array($email));
+	}
 
 	public static function orgTopicExists($orgId, $topics) {
 		$query = "select exists (select true from organization_topic where organization_fk=$1 and topic_fk in ($2))";
@@ -111,6 +116,11 @@ class pgDb {
 		return pgDb::psExecute($query, array($userId, $link));
 	}
 	
+	public static function insertPasswordResetActivity($userId, $uuid) {
+		$query = "insert into user_password (user_fk, activity, create_dttm, uuid) values ($1, 'RESET', now(), $2)";
+		return pgDb::psExecute($query, array($userId, $uuid));
+	}
+	
 	public static function setSecurePasswordImplA($userId, $securePassword, $salt) {
 		$query = "update public.user set 
 			password = $2, 
@@ -126,6 +136,23 @@ class pgDb {
 		// TODO - make usernames in db not required to be unique (or, only unique within network). Pair with network id to do authentication.
 		$query = "select password, salt, cryptimpl from public.user where username = $1";
 		return pgDb::psExecute($query, array($userId));
+	}
+	
+	public static function getUserPasswordResetActivityByUuid($uuid) {
+		$query = "select u.email, u.id as uidpk, u.username, up.id as id
+			from public.user u, user_password up
+			where up.uuid = $1
+			and up.response_dttm is NULL
+			and up.activity = 'RESET'
+			and up.create_dttm + interval '35 minutes' > now()
+			and up.user_fk = u.id
+			limit 1";
+		return pgDb::psExecute($query, array($uuid));
+	}
+
+	public static function updateUserPasswordResetActivityById($id) {
+		$query = "update user_password set response_dttm = now() where id = $1";
+		return pgDb::psExecute($query, array($id));
 	}
 
 	public static function insertUserOrgRelation($userId, $orgId, $grantorId) {
@@ -206,8 +233,13 @@ class pgDb {
 	
 	public static function getUserByUsername($uid) {
 		// TODO: add active check?
-		$query = "select u.id as id, u.fname as fname, u.lname as lname, u.password as password from public.user u where u.username = $1 limit 1";
+		$query = "select u.id as id, u.email as email, u.fname as fname, u.lname as lname, u.password as password from public.user u where u.username = $1 limit 1";
 		return pgDb::psExecute($query, array($uid));	
+	}
+	
+	public static function getUsernamesByEmail($email) {
+		$query = "select username from public.user where lower(email) = lower($1)";
+		return pgDb::psExecute($query, array($email));
 	}
 
 	public static function getForumUserByNexusId($uid) {

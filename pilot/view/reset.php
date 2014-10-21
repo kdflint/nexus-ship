@@ -1,0 +1,7 @@
+<? 
+
+include '../control/resetPasswordProcessor.php';
+
+?>
+
+

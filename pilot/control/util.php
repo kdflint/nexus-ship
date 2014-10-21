@@ -11,6 +11,8 @@ class Util {
 	const VALIDATION_USERNAME_FORMAT_ERROR = "Please enter a valid username.";
 	const VALIDATION_USERNAME_DUPE_ERROR = "This username already exists. Please select a different username.";
 	const VALIDATION_ORGNAME_ERROR = "Please enter the valid organization name that you represent.";
+	const AUTHENTICATION_ERROR = "Your account is not located.";
+	const RESET_ERROR = 'Your reset password link is not valid. Click "Forgot Pasword" to generate a new one.';
 	
 	const NAME_MAX = 25;
 	const NAME_MIN = 1;
@@ -27,6 +29,16 @@ class Util {
 			return true;
 		}
 		return false;
+	}
+	
+	public static function validateUuid($in) {
+		if(Validate::string($in, array(
+		'format' => VALIDATE_ALPHA_LOWER . VALIDATE_NUM . "-", 
+		'min_length' => 36, 
+		'max_length' => 36))) {
+			return TRUE;
+		}
+		return FALSE;
 	}
 
 	public static function validateUserProfile($input, $pwRequired) {
@@ -223,6 +235,28 @@ class Util {
 			return true;
 		}
 		return false;
+	}
+	
+	public static function setSession($username) {
+		session_regenerate_id(TRUE);
+		$_SESSION['groups'] = array();
+		$_SESSION['username'] = $username;
+	
+		$cursor = pgDb::getUserSessionByUsername($_SESSION['username']);
+	
+		while ($row = pg_fetch_array($cursor)) {
+			$_SESSION['fname'] = $row['fname'];
+  		$_SESSION['lname'] = $row['lname'];
+  		$_SESSION['orgName'] = $row['affiliation'];
+  		$_SESSION['uidpk'] = $row['id'];
+  		$_SESSION['networkName'] = $row['network'];
+  		// TODO: Make this dynamic once method decisions network id correctly (see pgDb.php)
+  		$_SESSION['networkId'] = '18'; // $row['networkid'];
+  		$_SESSION['logo'] = $row['logo'];
+  		$_SESSION['email'] = $row['email'];
+		} 
+	
+		$_SESSION['groups'] = pgDb::getUserGroupsByUsername($_SESSION['username']);
 	}
 
 	public static function storeSecurePasswordImplA($plaintextPassword, $userId) {

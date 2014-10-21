@@ -96,7 +96,7 @@ if ($validInvitation){
 		pgDb::insertOrgOrgRelation($_SESSION['networkId'], $_SESSION['orgId'], 'parent');
 	}
 	
-	$_SESSION['orgName'] = $orgName;
+	//$_SESSION['orgName'] = $orgName;
 	
 	pgDb::insertUserOrgRelation($_SESSION['uidpk'], $_SESSION['orgId'], $_SESSION['grantorId']);
 	
@@ -104,7 +104,7 @@ if ($validInvitation){
 	
 	$isAuthenticated = true;
 	
-	sendConfirmationEmail($email, $env_appRoot, $fname);
+	sendConfirmationEmail($email, $env_appRoot, $fname, $uid);
 		
 	$row4 = pg_fetch_row(pgDb::forumEmailExists($email));
 	$emailMatch = $row4[0];
@@ -148,19 +148,11 @@ if ($validInvitation){
 	pgDb::insertRoomLink($_SESSION['uidpk'], $roomLink);
 		
 	if($isAuthenticated){
-		$cursor = pgDb::getUserByUsername($uid);
-		$_SESSION['username'] = $uid;
-		
-		while ($row = pg_fetch_array($cursor)) {
-			$_SESSION['fname'] = $row['fname'];
-  		$_SESSION['lname'] = $row['lname'];
-		}
-		
-		$_SESSION['groups'] = pgDb::getUserGroupsByUsername($_SESSION['username']);
 		unset($_SESSION['groupId']);
 		unset($_SESSION['groupName']);
 		unset($_SESSION['grantorId']);
-	
+		Util::setSession($uid);
+		Util::setLogin($_SESSION['uidpk']);
 		header("location:../view/nexus.php?thisPage=profile");
 		exit(0);
 	
@@ -221,11 +213,11 @@ function conferenceRegistration($name, $room) {
 	return $roomLink;
 }
 
-function sendConfirmationEmail($email, $path, $fname) {
+function sendConfirmationEmail($email, $path, $fname, $username) {
 	
 	$message = "Welcome " . $fname . "!
 	
-Your enrollment is complete. 
+Your enrollment is complete under username: " . $username . "
 	
 You are now enabled to collaborate with the " . $_SESSION['groupName'] . " hosted by " . $_SESSION['networkName'] . ".
 
