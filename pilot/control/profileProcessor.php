@@ -37,6 +37,16 @@ if (strcmp($_SESSION['email'], $result['good']['email'])) {
 	mail("contact@northbridgetech.org", "Email update has been processed", "User id " . $_SESSION['uidpk'] . " has changed their email address. Please complete forum part.", "From: contact@northbridgetech.org");
 }
 
+$messagexyz = "Updated field:\r\n";
+//foreach ($result['good'] as $key=>$val) {
+//		$mesagexyz = $messagexyz . $key;
+//}
+
+// cc new address
+// print updated field, not values
+
+mail($_SESSION['email'], "[Nexus] Profile Update", $messagexyz, "From: noreply@nexus.northbridgetech.org\r\n");		
+
 $_SESSION['email'] = $_SESSION['sms'] = $_SESSION['fname'] = $_SESSION['lname'] = "";
 
 pgDb::updateUserById($_SESSION['uidpk'], 

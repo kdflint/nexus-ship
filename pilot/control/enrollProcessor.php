@@ -104,7 +104,16 @@ if ($validInvitation){
 	
 	$isAuthenticated = true;
 	
-	sendConfirmationEmail($email, $env_appRoot, $fname, $uid);
+	$cursor = pgDb::getUsernamesByEmail($email);
+	$usernames = "";
+	while ($row = pg_fetch_array($cursor)) {
+		// TODO - fix comma problem here and in resendEnrollmentProcessor
+			if (strcmp($row['username'], $uid)) {
+	 			$usernames = $usernames . $row['username'] . ", ";
+	 		}
+	}
+
+	sendConfirmationEmail($email, $env_appRoot, $fname, $uid, $usernames);
 		
 	$row4 = pg_fetch_row(pgDb::forumEmailExists($email));
 	$emailMatch = $row4[0];
@@ -144,7 +153,7 @@ if ($validInvitation){
 	}
 	
 	// Register user with conference room
-	$roomLink = "/openmeetings/swf?invitationHash=" . conferenceRegistration($fname, $wc_roomNumber);
+	$roomLink = "/openmeetings/swf?invitationHash="; // . conferenceRegistration($fname, $wc_roomNumber);
 	pgDb::insertRoomLink($_SESSION['uidpk'], $roomLink);
 		
 	if($isAuthenticated){
@@ -213,11 +222,17 @@ function conferenceRegistration($name, $room) {
 	return $roomLink;
 }
 
-function sendConfirmationEmail($email, $path, $fname, $username) {
+function sendConfirmationEmail($email, $path, $fname, $username, $allUsernames) {
 	
+	$multiples = "";
+	if (strlen($allUsernames) > 3) {
+		$multiples = "
+		
+Note: There are other usernames currently enrolled with this email address: " . $allUsernames;
+	}
 	$message = "Welcome " . $fname . "!
 	
-Your enrollment is complete under username: " . $username . "
+Your enrollment is complete for username: " . $username . $multiples . "
 	
 You are now enabled to collaborate with the " . $_SESSION['groupName'] . " hosted by " . $_SESSION['networkName'] . ".
 

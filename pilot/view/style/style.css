@@ -260,10 +260,10 @@ a.bigbutton:hover {
 .white_content {
 	display: none;
 	position: absolute;
-	top: 35%;
-	left: 35%;
-	width: 25%;
-	height: 25%;
+	top:35%;
+	left:35%;
+	width:450px;
+	height:230px;
 	padding: 10px;
 	border: thin solid #bf6030;
 	border-radius:15px;
