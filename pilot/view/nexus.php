@@ -5,7 +5,7 @@
 
 session_start();
 
-require_once '../control/xmpp-prebind-php/lib/XmppPrebind.php';
+//require_once '../control/xmpp-prebind-php/lib/XmppPrebind.php';
 require_once '../control/util.php';
 require '../control/error/handlers.php';
 
