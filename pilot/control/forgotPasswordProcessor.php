@@ -36,7 +36,7 @@ if (isset($result['email']) && isset($result['id'])) {
 		returnToLoginWithMessage(Util::AUTHENTICATION_ERROR);
 	}
 } else {
-	returnToLoginWithMessage(Util::AUTHENTICATION_ERROR);
+	returnToLoginWithMessage("Your password reset link has been sent to the email address on file.");
 }
 
 function returnToLoginWithMessage($message) {
@@ -48,11 +48,15 @@ function sendResetEmail($email, $path, $fname, $uuid) {
 	
 	$message = "Hello " . $fname . ",
 	
-This is good for 30 minutes so dang it you better hurry.
+Below is your link to reset your password.
+
+Note: This link will expire in 30 minutes. Also, any password links sent to you previously are now void.
 
 http://northbridgetech.org/" . $path . "/nexus/view/reset.php?resetCode=" . $uuid . "
 
-The Development Team at
+If you did not request this password reset, please contact our support team at support@northbridgetech.org.
+
+The Support Team at
 NorthBridge Technology Alliance";
 
 		mail($email, "[Nexus] Password Reset", $message, "From: noreply@nexus.northbridgetech.org\r\n");		

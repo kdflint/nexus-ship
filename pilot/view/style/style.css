@@ -263,12 +263,12 @@ a.bigbutton:hover {
 	top:35%;
 	left:35%;
 	width:450px;
-	height:230px;
+	min-height:230px;
 	padding: 10px;
 	border: thin solid #bf6030;
 	border-radius:15px;
 	background-color: white;
 	z-index:1002;
-	overflow: auto;
+	overflow: visible;
 	text-align:left;
 }
