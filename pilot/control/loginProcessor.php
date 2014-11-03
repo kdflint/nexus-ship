@@ -16,37 +16,12 @@ $password = $_POST['password'];
 $isAuthenticated = Util::authenticate($uid, $password);
 
 if($isAuthenticated){
-	
-	session_regenerate_id(TRUE);
-	
-	$_SESSION['groups'] = array();
-	
-	$_SESSION['username'] = $uid;
-	
-	$cursor = pgDb::getUserSessionByUsername($_SESSION['username']);
-	
-	while ($row = pg_fetch_array($cursor)) {
-		$_SESSION['fname'] = $row['fname'];
-  	$_SESSION['lname'] = $row['lname'];
-  	$_SESSION['orgName'] = $row['affiliation'];
-  	$_SESSION['uidpk'] = $row['id'];
-  	$_SESSION['networkName'] = $row['network'];
-  	// TODO: Make this dynamic once method decisions network id correctly (see pgDb.php)
-  	$_SESSION['networkId'] = '18'; // $row['networkid'];
-  	$_SESSION['logo'] = $row['logo'];
-  	$_SESSION['email'] = $row['email'];
-	} 
-	
-	$_SESSION['groups'] = pgDb::getUserGroupsByUsername($_SESSION['username']);
-
+	Util::setSession($uid);
 	Util::setLogin($_SESSION['uidpk']);
-	
 	header("location:../view/nexus.php?thisPage=directory");
 	exit(0);	
-	
-		
 } else {
-	returnToLoginWithError("");
+	returnToLoginWithError(Util::AUTHENTICATION_ERROR);
 }
 
 function returnToLoginWithError($errorMessage) {

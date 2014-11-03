@@ -30,7 +30,7 @@ if (!strcmp($email_status, "checked")) {
  			<tr><td><a href="#" class="tooltip" title="Optional. 1-25 characters. May contain letters, numbers, accents, &apos; or _">Last</a></td><td>	 		
  				<input type="text" size="22" name="lname" value="<? echo($_SESSION['lname']); ?>"/>
  			</td></tr>
- 			<tr><td valign="top"><a href="#" class="tooltip" title="Optional. 7-25 characters. Must contain at least 1 digit.">Change Password</a></td><td><input type="password" size="22" name="password1" value="" /></td></tr>
+ 			<tr><td valign="top"><a href="#" class="tooltip" title="Optional. 7-25 characters. Must contain at least 1 digit.">Reset Password</a></td><td><input type="password" size="22" name="password1" value="" /></td></tr>
  			<tr><td valign="top">Confirm Password:</td><td><input type="password" size="22" name="password2" value="" /></td></tr>
 		</table>
 	</div>

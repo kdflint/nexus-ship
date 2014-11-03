@@ -42,7 +42,6 @@ $networkName = $row['name'];
   
   <body>
     <div class="container">
-    	<!--<img style="float:left;vertical-align:top;margin:20px;" src="http://chicagofaithandhealth.org/imgs/logo.png" height="88" width="365" border="0" alt="Logo: The Center for Faith and Community Health Transformations"/>-->
    		<img style="float:left;vertical-align:top;margin:20px;" <? echo $logo; ?>  border="0" alt=""/>
    		<p style="text-align:right;color:#4b5b6e;font-size:34px;margin-right:20px;"><b>Nexus</b><br/>
    		<i><span style="text-align:right;color:#4b5b6e;font-size:16px;margin-right:20px;">Building communities that build communities</span></i></p>
@@ -53,14 +52,14 @@ $networkName = $row['name'];
       	<div class="leftColumn"> 
 							<p><b>Login</b></p>
 							<div class="formLogin" style="border:thin solid #4b5b6e;padding:10px;border-radius:15px;">
-								<form action="../control/loginProcessor.php" method="post" id="loginForm">
+								<form autocomplete="off" action="../control/loginProcessor.php" method="post" id="loginForm">
 									<table cellpadding="5">
-								  <tr><td colspan="2"><? echo $error; ?></td></tr>
+								  <tr><td colspan="2" style="color:#bf6030;"><? echo $error; ?></td></tr>
 										<tr><td>User Id:</td><td><input class="passed" type="text" size="15" name="uid" value=""/></td></tr>
 										<tr><td>Password:</td><td><input class="passed" type="password" size="15" name="password" value=""/></td></tr>
 										<tr><td colspan="2"><input type="submit" style="float:right;" value="Login"/></td></tr>
 									</table>
-										<p>Trouble getting in? <a href="mailto:contact@northbridgetech.org">contact@northbridgetech.org</a></p>
+										<p><a href="javascript:void(0)" onclick="document.getElementById('light_user').style.display='block';document.getElementById('fade').style.display='block'">Forgot your user id?</a> | <a href = "javascript:void(0)" onclick = "document.getElementById('light_password').style.display='block';document.getElementById('fade').style.display='block'">Forgot your password? </a></p>
 										<input type="hidden" name="action" value="authenticate" />
 								</form>
 							</div>						
@@ -79,7 +78,33 @@ $networkName = $row['name'];
 		</div>
 	
       </div><!--shell-->
-    </div><!-- container -->         	
+    </div><!-- container -->       
+       
+    <!-- lightboxes -->
+		<div id="light_password" class="white_content">
+			<a href="javascript:void(0)" onclick="document.getElementById('light_password').style.display='none';document.getElementById('fade').style.display='none'" style="float:right">Close</a>
+			<form autocomplete="off" action="../control/forgotPasswordProcessor.php" method="post">
+				<table cellpadding="5">
+					<tr><td colspan="2"><p>No problem!</p><p>Please enter your user id so we can email you a password reset link.</p></td></tr>
+					<tr><td>User Id:</td><td><input class="passed" type="text" size="15" name="uid" value=""/></td></tr>
+					<tr><td><a href="javascript:void(0)" onclick="document.getElementById('light_user').style.display='block';document.getElementById('light_password').style.display='none';document.getElementById('fade').style.display='block'">Forgot your user id?</a></td><td><input type="submit" style="float:right;" value="Reset"/></td></tr>
+				</table>
+			</form>
+		</div>
+		
+		<div id="light_user" class="white_content">
+			<a href="javascript:void(0)" onclick="document.getElementById('light_user').style.display='none';document.getElementById('fade').style.display='none'" style="float:right">Close</a>
+			<form autocomplete="off" action="../control/resendEnrollmentProcessor.php" method="post">
+				<table cellpadding="5">
+					<tr><td colspan="2"><p>Your User ID can be found in your original enrollment confirmation email. Can't find it?</p><p>Please enter your email address and we will resend your enrollment package.</p></td></tr>
+					<tr><td>Email:</td><td><input class="passed" type="text" size="15" name="email" value=""/></td></tr>
+					<tr><td colspan="2"><input type="submit" style="float:right;" value="Resend"/></td></tr>
+				</table>
+			</form>
+		</div>
+		<div id="fade" class="black_overlay"></div>
+		<div id="fade" class="black_overlay"></div>
+  	
 	</body>
 	
 </html>

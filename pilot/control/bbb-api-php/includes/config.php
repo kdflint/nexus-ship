@@ -6,4 +6,7 @@ salt: 8cd8ef52e8e101574e400365b55e11a6
 */		
 define("CONFIG_SECURITY_SALT", "32ae7a3e328fb2c5575d5edf9ca29c35");
 define("CONFIG_SERVER_BASE_URL", "http://ec2-50-19-215-104.compute-1.amazonaws.com/bigbluebutton/");
+// TODO - why does not below work??
+//define("CONFIG_SERVER_BASE_URL", "http://conference1.northbridgetech.org/bigbluebutton/");
+
 ?>

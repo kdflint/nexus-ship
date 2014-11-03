@@ -5,7 +5,7 @@
 
 session_start();
 
-require_once '../control/xmpp-prebind-php/lib/XmppPrebind.php';
+//require_once '../control/xmpp-prebind-php/lib/XmppPrebind.php';
 require_once '../control/util.php';
 require '../control/error/handlers.php';
 
@@ -141,7 +141,6 @@ if(curl_exec($ch) === false) 	{
     <table width="100%">
     	<tr>
     	<td>
-    		<!--<img style="float:left;vertical-align:top;margin:20px;" src="http://chicagofaithandhealth.org/imgs/logo.png" height="88" width="365" border="0" alt=""/>-->
     		<img style="float:left;vertical-align:top;margin:20px;" <? echo $_SESSION['logo']; ?> border="0" alt=""/>
     	</td>
     	<td>

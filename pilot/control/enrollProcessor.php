@@ -96,7 +96,7 @@ if ($validInvitation){
 		pgDb::insertOrgOrgRelation($_SESSION['networkId'], $_SESSION['orgId'], 'parent');
 	}
 	
-	$_SESSION['orgName'] = $orgName;
+	//$_SESSION['orgName'] = $orgName;
 	
 	pgDb::insertUserOrgRelation($_SESSION['uidpk'], $_SESSION['orgId'], $_SESSION['grantorId']);
 	
@@ -104,7 +104,16 @@ if ($validInvitation){
 	
 	$isAuthenticated = true;
 	
-	sendConfirmationEmail($email, $env_appRoot, $fname);
+	$cursor = pgDb::getUsernamesByEmail($email);
+	$usernames = "";
+	while ($row = pg_fetch_array($cursor)) {
+		// TODO - fix comma problem here and in resendEnrollmentProcessor
+			if (strcmp($row['username'], $uid)) {
+	 			$usernames = $usernames . $row['username'] . ", ";
+	 		}
+	}
+
+	sendConfirmationEmail($email, $env_appRoot, $fname, $uid, $usernames);
 		
 	$row4 = pg_fetch_row(pgDb::forumEmailExists($email));
 	$emailMatch = $row4[0];
@@ -144,23 +153,15 @@ if ($validInvitation){
 	}
 	
 	// Register user with conference room
-	$roomLink = "/openmeetings/swf?invitationHash=" . conferenceRegistration($fname, $wc_roomNumber);
+	$roomLink = "/openmeetings/swf?invitationHash="; // . conferenceRegistration($fname, $wc_roomNumber);
 	pgDb::insertRoomLink($_SESSION['uidpk'], $roomLink);
 		
 	if($isAuthenticated){
-		$cursor = pgDb::getUserByUsername($uid);
-		$_SESSION['username'] = $uid;
-		
-		while ($row = pg_fetch_array($cursor)) {
-			$_SESSION['fname'] = $row['fname'];
-  		$_SESSION['lname'] = $row['lname'];
-		}
-		
-		$_SESSION['groups'] = pgDb::getUserGroupsByUsername($_SESSION['username']);
 		unset($_SESSION['groupId']);
 		unset($_SESSION['groupName']);
 		unset($_SESSION['grantorId']);
-	
+		Util::setSession($uid);
+		Util::setLogin($_SESSION['uidpk']);
 		header("location:../view/nexus.php?thisPage=profile");
 		exit(0);
 	
@@ -221,11 +222,17 @@ function conferenceRegistration($name, $room) {
 	return $roomLink;
 }
 
-function sendConfirmationEmail($email, $path, $fname) {
+function sendConfirmationEmail($email, $path, $fname, $username, $allUsernames) {
 	
+	$multiples = "";
+	if (strlen($allUsernames) > 3) {
+		$multiples = "
+		
+Note: There are other usernames currently enrolled with this email address: " . $allUsernames;
+	}
 	$message = "Welcome " . $fname . "!
 	
-Your enrollment is complete. 
+Your enrollment is complete for username: " . $username . $multiples . "
 	
 You are now enabled to collaborate with the " . $_SESSION['groupName'] . " hosted by " . $_SESSION['networkName'] . ".
 

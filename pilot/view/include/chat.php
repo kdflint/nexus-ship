@@ -18,7 +18,7 @@ while ($row = pg_fetch_array($cursor)) {
  	<table>
  		<tr><td>Phone Line:</td><td>(712) 432-1212</td></tr>
  		<tr><td>Meeting ID:</td><td><? echo $wc_phone; ?>#</td></tr>
- 		<tr><td>Host PIN:</td><td>2615#</td></tr>
+ 		<tr><td>Host PIN:</td><td><? echo $wc_ext; ?>#</td></tr>
 	</table>
 	<p>Busy signal? Try (559) 546-1400</p>
 	<p><i>Toll charges will apply in accordance with your phone plan.</i></p>
@@ -28,7 +28,7 @@ while ($row = pg_fetch_array($cursor)) {
 				$displayText = "Your Virtual Room Pass";
 			} else {
 				$formattedLink = "#";
-				$displayText = "Web Room Not Available";
+				$displayText = "Your Virtual Room Pass";;
 			}
 		?>
 		<p>

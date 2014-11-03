@@ -2,9 +2,6 @@
 
 session_start();
 
-//error_reporting(E_ALL);
-//ini_set( 'display_errors','1');
-
 include("../model/pgDb.php");
 include("util.php");
 require_once 'error/handlers.php';
@@ -35,9 +32,18 @@ if (count($result['error']) > 0) {
 if (strcmp($_SESSION['email'], $result['good']['email'])) {
 	// If user is updating an email address, advise them that their forum email change is pending. Handle manually.
 	mail("contact@northbridgetech.org", "Email update has been processed", "User id " . $_SESSION['uidpk'] . " has changed their email address. Please complete forum part.", "From: contact@northbridgetech.org");
-}
 
-$_SESSION['email'] = $_SESSION['sms'] = $_SESSION['fname'] = $_SESSION['lname'] = "";
+	$message = "Hello " . $result['good']['fname'] . ",
+	
+Recently the email address was updated on your Nexus account.
+
+If you did not request this change, please contact our support team at support@northbridgetech.org.
+
+The Support Team at
+NorthBridge Technology Alliance";
+
+	mail($_SESSION['email'], "[Nexus] Profile Update", $message, "From: noreply@nexus.northbridgetech.org\r\nCc: " . $result['good']['email']);
+}
 
 pgDb::updateUserById($_SESSION['uidpk'], 
 											$result['good']['fname'], 
@@ -49,9 +55,22 @@ pgDb::updateUserById($_SESSION['uidpk'],
 
 if (isset($result['good']['password']) && strlen($result['good']['password']) > 0) {
 	Util::storeSecurePasswordImplA($result['good']['password'], $_SESSION['uidpk']);
+	
+	$message = "Hello " . $result['good']['fname'] . ",
+	
+Recently the password was updated on your Nexus account.
+
+If you did not request this change, please contact our support team at support@northbridgetech.org.
+
+The Support Team at
+NorthBridge Technology Alliance";
+
+	mail($_SESSION['email'], "[Nexus] Profile Update", $message, "From: noreply@nexus.northbridgetech.org\r\nCc: " . $result['good']['email']);
 }
 
 $cursor = pgDb::getUserById($_SESSION['uidpk']);
+
+$_SESSION['email'] = $_SESSION['sms'] = $_SESSION['fname'] = $_SESSION['lname'] = "";
 
 while ($row = pg_fetch_array($cursor)) {
 	$_SESSION['email'] = $row['email'];
@@ -60,7 +79,6 @@ while ($row = pg_fetch_array($cursor)) {
   $_SESSION['lname'] = $row['last'];
 }
 
-//header("location:../view/sessionViews.php");
 header("location:../view/nexus.php?thisPage=profile");
 exit(0);
 
