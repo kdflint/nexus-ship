@@ -9,7 +9,7 @@ require_once('bbb-api-php/includes/bbb-api.php');
 $bbb = new BigBlueButton();
 
 $creationParams = array(
-	'meetingId' => '2222' . $env_number . $_SESSION['networkId'];
+	'meetingId' => '2222' . $env_number . $_SESSION['networkId'],
 	'meetingName' => $_SESSION['networkName'] . " Community Room",
 	'attendeePw' => 'ap',
 	'moderatorPw' => 'mp',

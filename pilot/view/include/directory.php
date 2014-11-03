@@ -17,7 +17,7 @@ include '../control/searchPreProcessor.php';
 				<select name="topic" style="width: 230px">    
 					<option value="0" selected>Specialty is</option>	
 					<option value="0" >------------</option>										
-					<? include 'tmpSpecialty/' . $_SESSION['networkId'] . '\.html'; ?>
+					<? include 'include/tmpSpecialty/' . $_SESSION['networkId'] . '.html'; ?>
 				</select>
 				</td></tr>	
 							

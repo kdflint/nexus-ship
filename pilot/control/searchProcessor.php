@@ -34,7 +34,7 @@ if (isset($_POST['topic']) && $_POST['topic'] > 0) {
 
 if (isset($_POST['scope']) && !strcmp($_POST['scope'], "group")) {
 	$groupKeys = "";
-	foreach ($results as $key=>$val) {
+	foreach ($_SESSION['groups'] as $key=>$val) {
 		$groupKeys = $groupKeys . $key . ", ";
 	}
 	$cursor = pgDb::getOrgsByGroupId(Util::stripTrailingComma($groupKeys));

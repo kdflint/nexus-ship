@@ -91,7 +91,6 @@ if ($validInvitation){
 		$row = pg_fetch_array(pgDb::getOrganizationByName($orgName));
 		$_SESSION['orgId'] = $row['id'];
 	} else {
-		//$row = pg_fetch_row(pgDb::insertPendingOrganization($orgName, $_SESSION['grantorId'], 3));
 		$row = pg_fetch_row(pgDb::insertPendingOrganization($orgName));
 		$_SESSION['orgId'] = $row[0];
 		pgDb::insertOrgOrgRelation($_SESSION['networkId'], $_SESSION['orgId'], 'parent');

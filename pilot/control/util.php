@@ -46,7 +46,9 @@ class Util {
 		'format' => VALIDATE_NUM, 
 		'min_length' => 1, 
 		'max_length' => 3))) {
-			return TRUE;
+			if (pgDb::networkIdExists($in)) {	
+				return TRUE;
+			}
 		}
 		return FALSE;
 	}

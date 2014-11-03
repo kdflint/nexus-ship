@@ -62,6 +62,15 @@ class pgDb {
 		return pgDb::psExecute($query, array($username));
 	}
 	
+	public static function networkIdExists($id) {
+		$query = "select exists (select true from organization_organization where organization_to_fk = $1)";
+		$row = pg_fetch_row(pgDb::psExecute($query, array($id)));
+		if (!strcmp($row[0], "t")) {
+			return TRUE;
+		}
+		return FALSE;
+	}
+	
 	public static function orgNameExists($orgName) {
 		$query = "select exists (select true from organization where lower(name) = lower($1))";
 		return pgDb::psExecute($query, array($orgName));
