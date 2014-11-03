@@ -2,6 +2,7 @@
 session_start();
 
 include("../model/pgDb.php");
+include '../control/util.php';
 
 $error = "";
 
@@ -22,10 +23,16 @@ if(isset($_GET['error'])) {
 	$error = "You have signed out succesfully.";
 }
 
-$cursor = pgDb::getOrganizationById('18');
+$cleanNetworkId = "18";
+
+if(isset($_GET['network']) && Util::validateNetworkId($_GET['network'])) {
+ $cleanNetworkId = $_GET['network'];	
+}
+
+$cursor = pgDb::getOrganizationById($cleanNetworkId);
 $row = pg_fetch_array($cursor);
 $logo = $row['logo'];
-$networkName = $row['name'];
+$networkName = $row['name'];	
 
 ?>
 

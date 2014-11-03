@@ -41,7 +41,7 @@ function sendEnrollEmail($email, $path, $fname, $usernames) {
 	
 	$message = "Welcome!
 		
-The Nexus user ids registered for this email address: " . $usernames . "
+The Nexus user ids registered for this email address: " . Util::stripTrailingComma($usernames) . "
 
 This tool is built by committed volunteers working hard to build web resources for organizations that make a positive difference in our communities.
 

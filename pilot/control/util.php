@@ -40,7 +40,24 @@ class Util {
 		}
 		return FALSE;
 	}
-
+	
+	public static function validateNetworkId($in) {
+		if(Validate::string($in, array(
+		'format' => VALIDATE_NUM, 
+		'min_length' => 1, 
+		'max_length' => 3))) {
+			return TRUE;
+		}
+		return FALSE;
+	}
+	
+	public static function stripTrailingComma($in) {
+		if (!strcmp(substr($in, -2), ", ")) {
+			return substr($in, 0, -2);
+		}
+		return $in;
+	}
+	
 	public static function validateUserProfile($input, $pwRequired) {
 		$result = array('good' => array(), 'error' => array());
 		
@@ -250,8 +267,7 @@ class Util {
   		$_SESSION['orgName'] = $row['affiliation'];
   		$_SESSION['uidpk'] = $row['id'];
   		$_SESSION['networkName'] = $row['network'];
-  		// TODO: Make this dynamic once method decisions network id correctly (see pgDb.php)
-  		$_SESSION['networkId'] = '18'; // $row['networkid'];
+  		$_SESSION['networkId'] = $row['networkid'];
   		$_SESSION['logo'] = $row['logo'];
   		$_SESSION['email'] = $row['email'];
 		} 

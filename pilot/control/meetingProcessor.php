@@ -9,11 +9,11 @@ require_once('bbb-api-php/includes/bbb-api.php');
 $bbb = new BigBlueButton();
 
 $creationParams = array(
-	'meetingId' => '2222' . $env_number,
+	'meetingId' => '2222' . $env_number . $_SESSION['networkId'];
 	'meetingName' => $_SESSION['networkName'] . " Community Room",
 	'attendeePw' => 'ap',
 	'moderatorPw' => 'mp',
-	'welcomeMsg' => 'Welcome!<br/><br/>If any conference participants have trouble establishing audio connection through the computer, you may wish to talk on the telephone line instead at<br/><br/><b>712.432.1212<br/>Access code: ' . $wc_phone . '</b>',
+	'welcomeMsg' => 'Welcome!<br/><br/>If any conference participants have trouble establishing audio connection through the computer, you may wish to talk on the telephone line instead at<br/><br/><b>712.432.1212<br/>Access code: ' . $wc_phone[$_SESSION['networkId']] . '</b>',
 	'dialNumber' => '',
 	'voiceBridge' => '',
 	'webVoice' => '',
@@ -24,7 +24,7 @@ $creationParams = array(
 );
 
 $joinParams = array(
-	'meetingId' => '2222' . $env_number,
+	'meetingId' => '2222' . $env_number . $_SESSION['networkId'],
 	'username' => $_SESSION['fname'],
 	'password' => 'mp'
 );

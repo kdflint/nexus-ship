@@ -14,10 +14,10 @@ $networkChecked = !strcmp($groupChecked, "checked") ? "" : "checked";
 unset($_SESSION['stickyForm']);
 
 $cache_life = '600'; //caching time, in seconds
-$filemtime = @filemtime("../view/include/tmpResults/" . $_SESSION['defaultSearchId'] . ".php");  // returns FALSE if file does not exist
+$filetime_search = @filemtime("../view/include/tmpResults/" . $_SESSION['defaultSearchId'] . ".php");  // returns FALSE if file does not exist
 
 // only recreate default search results if it does not exist or is older than 5 minutes
-if (!$filemtime or (time() - $filemtime >= $cache_life)){
+if (!$filetime_search or (time() - $filetime_search >= $cache_life)){
 
 	$cursor = pgDb::getGroupMembersByUserId($_SESSION['uidpk']);
 	
@@ -37,6 +37,12 @@ if (!$filemtime or (time() - $filemtime >= $cache_life)){
 	fwrite($file, "</table>");
 	
 	$_SESSION['defaultSearchId'] = $fileId;
+}
+
+$filetime_specialty = @filemtime("../view/include/tmpSpecialty/" . $_SESSION['networkId'] . ".html"); 
+
+if (!$filetime_specialty or (time() - $filetime_specialty >= $cache_life)){
+	// TODO - fill in
 }
 	
 ?>
