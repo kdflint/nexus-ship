@@ -33,8 +33,11 @@ if (isset($_POST['topic']) && $_POST['topic'] > 0) {
 }
 
 if (isset($_POST['scope']) && !strcmp($_POST['scope'], "group")) {
-	// TODO - make this a dynamic lookup of all the group ids (already in session just loop)
-	$cursor = pgDb::getOrgsByGroupId("1");
+	$groupKeys = "";
+	foreach ($_SESSION['groups'] as $key=>$val) {
+		$groupKeys = $groupKeys . $key . ", ";
+	}
+	$cursor = pgDb::getOrgsByGroupId(Util::stripTrailingComma($groupKeys));
 	$counter = 0;
 	while ($row = pg_fetch_array($cursor)) {		
 		$filters['org'][$counter] = $row['oid'];

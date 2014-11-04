@@ -62,6 +62,15 @@ class pgDb {
 		return pgDb::psExecute($query, array($username));
 	}
 	
+	public static function networkIdExists($id) {
+		$query = "select exists (select true from organization_organization where organization_to_fk = $1)";
+		$row = pg_fetch_row(pgDb::psExecute($query, array($id)));
+		if (!strcmp($row[0], "t")) {
+			return TRUE;
+		}
+		return FALSE;
+	}
+	
 	public static function orgNameExists($orgName) {
 		$query = "select exists (select true from organization where lower(name) = lower($1))";
 		return pgDb::psExecute($query, array($orgName));
@@ -211,7 +220,7 @@ class pgDb {
 	public static function getUserSessionByUsername($uid) {
 		// TODO: add active check?
 		// TODO: fix up network id determination (parent, god, etc)
-		// TODO - this will fail if user in in > 1 group
+		// TODO - this will fail if user in > 1 group
 		$query = "
 			select u.id as id, u.fname as fname, u.lname as lname, u.password as password, u.conference_link as link, u.email as email, o1.name as affiliation, o2.name as network, o2.id as networkid, o2.logo as logo, uo.role_fk as role
 			from public.user u, user_organization uo, organization o1, organization o2, organization_organization oo
