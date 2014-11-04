@@ -91,7 +91,7 @@ if ($validInvitation){
 		$row = pg_fetch_array(pgDb::getOrganizationByName($orgName));
 		$_SESSION['orgId'] = $row['id'];
 	} else {
-		$row = pg_fetch_row(pgDb::insertPendingOrganization($orgName, $_SESSION['grantorId'], 3));
+		$row = pg_fetch_row(pgDb::insertPendingOrganization($orgName));
 		$_SESSION['orgId'] = $row[0];
 		pgDb::insertOrgOrgRelation($_SESSION['networkId'], $_SESSION['orgId'], 'parent');
 	}
@@ -107,7 +107,6 @@ if ($validInvitation){
 	$cursor = pgDb::getUsernamesByEmail($email);
 	$usernames = "";
 	while ($row = pg_fetch_array($cursor)) {
-		// TODO - fix comma problem here and in resendEnrollmentProcessor
 			if (strcmp($row['username'], $uid)) {
 	 			$usernames = $usernames . $row['username'] . ", ";
 	 		}
@@ -228,7 +227,7 @@ function sendConfirmationEmail($email, $path, $fname, $username, $allUsernames) 
 	if (strlen($allUsernames) > 3) {
 		$multiples = "
 		
-Note: There are other usernames currently enrolled with this email address: " . $allUsernames;
+Note: There are other usernames currently enrolled with this email address: " . Util::stripTrailingComma($allUsernames);
 	}
 	$message = "Welcome " . $fname . "!
 	
@@ -254,7 +253,7 @@ We are working hard on adding:
 
 You can login to Nexus using this link. You may wish to check the Help document right away for some information about how to use this site.
 
-http://northbridgetech.org/" . $path . "/nexus/view/login.php
+http://northbridgetech.org/" . $path . "/nexus/view/login.php?network=" . $_SESSION['networkId'] . "
 
 Enjoy,
 
