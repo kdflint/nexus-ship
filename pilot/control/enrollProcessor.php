@@ -112,7 +112,11 @@ if ($validInvitation){
 	 		}
 	}
 
-	sendConfirmationEmail($email, $env_appRoot, $fname, $uid, $usernames);
+	if (!strcmp($_SESSION['networkId'], "19")) {
+		sendEdcConfirmationEmail($email, $env_appRoot, $fname, $uid, $usernames);
+	} else {
+		sendConfirmationEmail($email, $env_appRoot, $fname, $uid, $usernames);
+	}
 		
 	$row4 = pg_fetch_row(pgDb::forumEmailExists($email));
 	$emailMatch = $row4[0];
@@ -264,6 +268,40 @@ P.S. May we recommend that you visit the Profile tab first to set your messaging
 
 		mail($email, "[Nexus] Enrollment Confirmation", $message, "From: noreply@nexus.northbridgetech.org\r\n");		
 		
+}
+
+function sendEdcConfirmationEmail($email, $path, $fname, $username, $allUsernames) {
+	
+	$multiples = "";
+	if (strlen($allUsernames) > 3) {
+		$multiples = "
+		
+Note: There are other usernames currently enrolled with this email address: " . Util::stripTrailingComma($allUsernames);
+	}
+	$message = "Welcome " . $fname . "!
+	
+Your enrollment is complete for username: " . $username . $multiples . "
+	
+You are now enabled to collaborate with the " . $_SESSION['groupName'] . " hosted by " . $_SESSION['networkName'] . ".
+
+We recommend doing these things first:
+
+1. From the Forum tab, subscribe to the Conversation named Nexus Pilot User Group. This is where we will keep track of our group activities.
+
+2. From the Profile tab, make sure your messaging settings and other information are correct.
+
+3. Check the Help link for a quick overview of the site features.
+
+You can login to Nexus using this link. 
+
+http://northbridgetech.org/" . $path . "/nexus/view/login.php?network=" . $_SESSION['networkId'] . "
+
+Enjoy,
+
+The Development Team at
+NorthBridge Technology Alliance";
+
+		mail($email, "[Nexus] Enrollment Confirmation", $message, "From: noreply@nexus.northbridgetech.org\r\n");			
 }
 
 ?>
