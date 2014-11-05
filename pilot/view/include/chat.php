@@ -16,9 +16,9 @@ while ($row = pg_fetch_array($cursor)) {
  	<a href="#">Community Conference</a>
  	<div style="margin-left:50px;margin-top:10px;">
  	<table>
- 		<tr><td>Phone Line:</td><td>(712) 432-1212</td></tr>
- 		<tr><td>Meeting ID:</td><td><? echo $wc_phone[$_SESSION['networkId']]; ?>#</td></tr>
- 		<tr><td>Host PIN:</td><td><? echo $wc_ext; ?>#</td></tr>
+ 		<tr><td>Phone Line:</td><td><? echo $wc_phone[$_SESSION['networkId']]; ?></td></tr>
+ 		<tr><td>Meeting ID:</td><td><? echo $wc_code[$_SESSION['networkId']]; ?>#</td></tr>
+ 		<tr><td>Host PIN:</td><td><? echo $wc_pin; ?>#</td></tr>
 	</table>
 	<p>Busy signal? Try (559) 546-1400</p>
 	<p><i>Toll charges will apply in accordance with your phone plan.</i></p>
