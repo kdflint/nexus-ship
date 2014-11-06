@@ -7,10 +7,12 @@ include("util.php");
 require_once 'error/handlers.php';
 
 $fname = $lname = $sms = $email = $password = "";
-$smsEnabled = $emailEnabled = "false";
+$smsEnabled = $emailEnabled = $smsPublic = $emailPublic = "false";
 
 if (isset($_POST['sms_status'])) {$smsEnabled = "true";}
 if (isset($_POST['email_status'])) {$emailEnabled = "true";}
+if (isset($_POST['sms_public'])) {$smsPublic = "true";}
+if (isset($_POST['email_public'])) {$emailPublic = "true";}
 
 $input = array('email' => $_POST['email'],
 							'fname' => $_POST['fname'],
@@ -51,7 +53,9 @@ pgDb::updateUserById($_SESSION['uidpk'],
 											$result['good']['sms'], 
 											$result['good']['email'], 
 											$smsEnabled, 
-											$emailEnabled);
+											$emailEnabled,
+											$smsPublic,
+											$emailPublic);
 
 if (isset($result['good']['password']) && strlen($result['good']['password']) > 0) {
 	Util::storeSecurePasswordImplA($result['good']['password'], $_SESSION['uidpk']);

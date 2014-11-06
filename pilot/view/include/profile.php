@@ -30,8 +30,9 @@ if (!strcmp($email_status, "checked")) {
  			<tr><td><a href="#" class="tooltip" title="Optional. 1-25 characters. May contain letters, numbers, accents, &apos; or _">Last</a></td><td>	 		
  				<input type="text" size="22" name="lname" value="<? echo($_SESSION['lname']); ?>"/>
  			</td></tr>
- 			<tr><td valign="top"><a href="#" class="tooltip" title="Optional. 7-25 characters. Must contain at least 1 digit.">Reset Password</a></td><td><input type="password" size="22" name="password1" value="" /></td></tr>
- 			<tr><td valign="top">Confirm Password:</td><td><input type="password" size="22" name="password2" value="" /></td></tr>
+ 			<tr><td valign="top"><a href="#" class="tooltip" title="Optional. 7-25 characters. Must contain at least 1 digit.">Reset Password</a></td><td><input type="password" size="22" name="password1" /></td></tr>
+ 			<tr><td valign="top">Confirm Password:</td><td><input type="password" size="22" name="password2" /></td></tr>
+ 			<tr><td valign="top">A few words about you:</td><td valign="top"><textarea maxlength="250" rows="4" cols="30" name="about" ></textarea></td></tr>
 		</table>
 	</div>
 
@@ -45,16 +46,19 @@ if (!strcmp($email_status, "checked")) {
 					</a>
 				</td>
  				<td>Enabled?</td>
+ 				<td>Public?</td>
  			</tr>
  			<tr>
 	 			<td>Text:</td>
  				<td><input type="text" size="22" name="sms" value="<? echo($_SESSION['sms']);?>" onchange="disableTestMessageLink()" /></td>
  				<td><input type="checkbox" name="sms_status" <? echo($sms_status); ?> onchange="disableTestMessageLink()" /></td>
+ 				<td><input type="checkbox" name="sms_public" <? echo($sms_publish); ?> /></td>
  			</tr>
  			<tr>
 	 			<td>Email:</td>
  				<td><input type="text" size="22" name="email" value="<? echo($_SESSION['email']);?>" onchange="disableTestMessageLink()" /></td>
  				<td><input type="checkbox" name="email_status" <? echo($email_status); ?>  onchange="disableTestMessageLink()" /></td>
+ 				<td><input type="checkbox" name="email_public" <? echo($email_publish); ?> /></td>
  			</tr>
 		</table>			
 		<p><input style="float: right" type="submit" value="Update Your Profile"/></p>
