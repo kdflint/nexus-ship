@@ -21,6 +21,7 @@ while ($row = pg_fetch_array($cursor)) {
   $sms_status = (strcmp($row['smson'], "f") == 0 ? "" : "checked");
   $email_publish = (strcmp($row['emailpub'], "f") == 0 ? "" : "checked");
   $sms_publish = (strcmp($row['smspub'], "f") == 0 ? "" : "checked");
+  $descr = $row['descr'];
 }
 
 ?>

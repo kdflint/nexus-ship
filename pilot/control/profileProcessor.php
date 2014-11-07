@@ -19,7 +19,8 @@ $input = array('email' => $_POST['email'],
 							'lname' => $_POST['lname'],
 							'password1' => $_POST['password1'],
 							'password2' => $_POST['password2'],
-							'sms' => $_POST['sms']
+							'sms' => $_POST['sms'],
+							'descr' => $_POST['about']
 							);
 							
 $result = Util::validateUserProfile($input, FALSE);
@@ -55,7 +56,8 @@ pgDb::updateUserById($_SESSION['uidpk'],
 											$smsEnabled, 
 											$emailEnabled,
 											$smsPublic,
-											$emailPublic);
+											$emailPublic,
+											$result['good']['descr']);
 
 if (isset($result['good']['password']) && strlen($result['good']['password']) > 0) {
 	Util::storeSecurePasswordImplA($result['good']['password'], $_SESSION['uidpk']);

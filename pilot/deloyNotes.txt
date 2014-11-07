@@ -7,3 +7,7 @@ alter table public.user add column publish_sms boolean;
 update public.user set publish_sms = false;
 alter table public.user alter column publish_sms set default 'false';
 alter table public.user alter column publish_sms set not null;
+
+alter table public.user add column descr varchar(250);
+update public.user set descr = '';
+alter table public.user alter column descr set default '';

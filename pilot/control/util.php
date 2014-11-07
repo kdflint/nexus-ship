@@ -11,6 +11,7 @@ class Util {
 	const VALIDATION_USERNAME_FORMAT_ERROR = "Please enter a valid username.";
 	const VALIDATION_USERNAME_DUPE_ERROR = "This username already exists. Please select a different username.";
 	const VALIDATION_ORGNAME_ERROR = "Please enter the valid organization name that you represent.";
+	const VALIDATION_DESCR_ERROR = "Please enter a valid description (or none).";
 	const AUTHENTICATION_ERROR = "Your account is not located.";
 	const RESET_ERROR = 'Your reset password link is not valid. Click "Forgot Pasword" to generate a new one.';
 	
@@ -23,6 +24,8 @@ class Util {
 	const PASSWORD_MIN = 7;
 	const USERNAME_MAX = 25;
 	const USERNAME_MIN = 7;
+	const DESCR_MIN = 0;
+	const DESCR_MAX = 250;
 	
 	public static function validateEmail($in) {
 		if (filter_var($in, FILTER_VALIDATE_EMAIL)) {
@@ -96,6 +99,19 @@ class Util {
 			}
  		} else {
 			$result['good']['lname'] = "";
+		}	
+		
+		// DESCRIPTION
+		if (isset($input['descr']) && strlen($input['descr']) > 0) {
+			if (Validate::string($input['descr'], array(
+    				'format' => VALIDATE_EALPHA . VALIDATE_NUM . VALIDATE_PUNCTUATION,
+    				'max_length' => self::DESCR_MAX))) {
+				$result['good']['descr'] = htmlspecialchars($input['descr']);			
+			} else {
+				$result['error']['descr'] = self::VALIDATION_DESCR_ERROR;
+			}
+ 		} else {
+			$result['good']['descr'] = "";
 		}	
 		
 		// SMS

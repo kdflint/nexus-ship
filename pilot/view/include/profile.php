@@ -22,17 +22,17 @@ if (!strcmp($email_status, "checked")) {
 <div class="leftColumn">
 	<p><b>You</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#bf6030;"><? echo $error; ?></span><p>
 	<div style="margin-left:20px;margin-top:5px;">
-			<table cellpadding="5">
+			<table cellpadding="5" width="100%">
 				<tr><td>Username:</td><td><? echo($_SESSION['username']); ?></td></tr>
  			<tr><td><a href="#" class="tooltip" title="1-25 characters. May contain letters, numbers, accents, &apos; or _">First</a></td><td>
 	 			<input type="text" size="22" name="fname" value="<? echo($_SESSION['fname']);?>" />
 	 		</td></tr>
- 			<tr><td><a href="#" class="tooltip" title="Optional. 1-25 characters. May contain letters, numbers, accents, &apos; or _">Last</a></td><td>	 		
+ 			<tr><td><a href="#" class="tooltip" title="Optional, 1-25 characters. May contain letters, numbers, accents, &apos; or _">Last</a></td><td>	 		
  				<input type="text" size="22" name="lname" value="<? echo($_SESSION['lname']); ?>"/>
  			</td></tr>
  			<tr><td valign="top"><a href="#" class="tooltip" title="Optional. 7-25 characters. Must contain at least 1 digit.">Reset Password</a></td><td><input type="password" size="22" name="password1" /></td></tr>
  			<tr><td valign="top">Confirm Password:</td><td><input type="password" size="22" name="password2" /></td></tr>
- 			<tr><td valign="top">A few words about you:</td><td valign="top"><textarea maxlength="250" rows="4" cols="30" name="about" ></textarea></td></tr>
+ 			<tr><td valign="top"><a href="#" class="tooltip" title="Optional, 1-250 characters. May contain accents and sentence punctuation.">A few words about you:</a></td><td valign="top"><textarea maxlength="250" rows="4" cols="30" name="about" ><? echo $descr; ?></textarea></td></tr>
 		</table>
 	</div>
 
