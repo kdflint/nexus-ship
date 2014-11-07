@@ -25,7 +25,7 @@ if (!$filetime_search or (time() - $filetime_search >= $cache_life)){
 	$file = fopen("../view/include/tmpResults/" . $fileId . ".php","w") or die("Unable to open file!");
 	
 	fwrite($file, "<table cellpadding=\"2\">");	
-	fwrite($file, "<tr><td colspan=\"3\" valign=\"top\"><a href=#>Workgroup: " . $_SESSION['groups']['1'] . "</a></td></tr>");	
+	fwrite($file, "<tr><td colspan=\"3\" valign=\"top\"><a href=#>Workgroup: " . reset($_SESSION['groups']) . "</a></td></tr>");	
 	while ($row = pg_fetch_array($cursor)) {
 		$disabled = "disabled";
 		if (pgDb::isUserMessageEnabled($row['id'])) {

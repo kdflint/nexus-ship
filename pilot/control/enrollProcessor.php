@@ -113,7 +113,11 @@ if ($validInvitation){
 	}
 
 	if (!strcmp($_SESSION['networkId'], "19")) {
-		sendEdcConfirmationEmail($email, $env_appRoot, $fname, $uid, $usernames);
+		if (!strcmp($_SESSION['groupId'], "2")) {
+			sendEdcConfirmationEmail($email, $env_appRoot, $fname, $uid, $usernames);
+		} else if (!strcmp($_SESSION['groupId'], "5")) {
+			sendEdcOtherConfirmationEmail($email, $env_appRoot, $fname, $uid, $usernames);
+		}
 	} else {
 		sendConfirmationEmail($email, $env_appRoot, $fname, $uid, $usernames);
 	}
@@ -146,7 +150,7 @@ if ($validInvitation){
 	$user['pw'] = $password;
 	$user['email'] = $email;	
 	$user['name'] = $orgName;
-	$user['usergroupid'] = $wt_forumGroupId[$_SESSION['networkId']];
+	$user['usergroupid'] = $wt_forumGroupId[$_SESSION['groupId']];
 	$user['auto_topic_value'] = "topics";
 	$register_status = forumSignup($user);
 	if($register_status == 'Registration Complete') {
@@ -297,6 +301,42 @@ You can login to Nexus using this link.
 http://northbridgetech.org/" . $path . "/nexus/view/login.php?network=" . $_SESSION['networkId'] . "
 
 Enjoy,
+
+The Development Team at
+NorthBridge Technology Alliance";
+
+		mail($email, "[Nexus] Enrollment Confirmation", $message, "From: noreply@nexus.northbridgetech.org\r\n");			
+}
+
+function sendEdcOtherConfirmationEmail($email, $path, $fname, $username, $allUsernames) {
+	
+	$multiples = "";
+	if (strlen($allUsernames) > 3) {
+		$multiples = "
+		
+Note: There are other usernames currently enrolled with this email address: " . Util::stripTrailingComma($allUsernames);
+	}
+	$message = "Welcome " . $fname . "!
+	
+Your enrollment is complete for username: " . $username . $multiples . "
+	
+You are now enabled to collaborate with the " . $_SESSION['groupName'] . " hosted by " . $_SESSION['networkName'] . ".
+
+For our meeting on November 10 at 7:00 p.m. CT, please complete these steps as soon as possible:
+
+1. Test your login to Nexus (link below).
+
+2. Visit the Collaboration tab and click on the Blue Button to make sure your browser opens up your window into the web conference room.
+
+3. If you have time before the meeting, spend about 15 minutes watching the training videos that you will see in the web conference room.
+
+4. If some folks are unable to join the web conference, we can also utilize the telephone conference line. This number is also posted on the Collaborate tab in Nexus.
+
+You can login to Nexus using this link. 
+
+http://northbridgetech.org/" . $path . "/nexus/view/login.php?network=" . $_SESSION['networkId'] . "
+
+Looking forward!
 
 The Development Team at
 NorthBridge Technology Alliance";
