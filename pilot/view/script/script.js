@@ -146,3 +146,60 @@ function disableTestMessageLink() {
    link.setAttribute("href", "#");
    link.innerHTML = 'To test, save your changes';
 }
+
+function hasGetUserMedia() {
+		return !!(navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
+}
+		
+function checkAudio() {
+	if (hasGetUserMedia()) {
+		navigator.getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
+  	if (navigator.getUserMedia) {
+     	navigator.getUserMedia( {video:false,audio:true}, 
+     	
+     			function(stream) { 
+     				document.getElementById("audio_enabled").src = "image/light_green.png";
+     			}, 
+     			
+     			function(error) { 
+    			if (error == "PERMISSION_DENIED" || error.name == "PermissionDeniedError") {
+     				document.getElementById("audio_enabled").src = "image/light_green.png";
+    			} else {
+     				document.getElementById("audio_enabled").src = "image/light_red.png";
+    			}
+    		});
+  		} else {
+  		}
+ 		} else { 
+ 			document.getElementById("audio_enabled").src = "image/light_red.png";
+		}	
+
+	document.getElementById("audioButton").innerHTML = "Re-Check";
+}
+
+function checkVideo() {
+	if (hasGetUserMedia()) {
+		navigator.getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
+  	if (navigator.getUserMedia) {
+     	navigator.getUserMedia( {video:true,audio:false}, 
+     	
+     			function(stream) { 
+     				document.getElementById("video_enabled").src = "image/light_green.png";
+     			}, 
+     			
+     			function(error) { 
+    			if (error == "PERMISSION_DENIED" || error.name == "PermissionDeniedError") {
+     				document.getElementById("video_enabled").src = "image/light_green.png";
+    			} else {
+     				document.getElementById("video_enabled").src = "image/light_red.png";
+    			}
+    		});
+  		} else {
+  		}
+ 		} else { 
+ 			document.getElementById("video_enabled").src = "image/light_red.png";
+		}	
+
+	document.getElementById("videoButton").innerHTML = "Re-Check";
+}
+	
