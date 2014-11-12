@@ -85,6 +85,18 @@ div.topRightQuad {
 	border-radius:15px;
 }
 
+div.topRightQuad2 {
+	position:absolute;
+	left:350px;
+	width:450px;
+	height:220px;
+	border-left: 0px;
+	border-right: 0px;
+	border-top: 1px solid #bbbbbb;
+	border-bottom: 1px solid #bbbbbb;
+	padding:10px;
+}
+
 div.lowerHalf {
 	position:absolute;
 	top:220px;
@@ -118,6 +130,16 @@ div.rightColumnPlain {
 	left:400px;
 	width:410px;
 	height:520px;
+}
+
+div.bottomHalf {
+	position:absolute;
+	top: 340px;
+	width:800px;
+	border: 1px solid #4b5b6e;
+	box-shadow: 4px 4px 5px #cccccc;
+	padding:10px;
+	border-radius:15px;
 }
 
 .detailHeader1 {
