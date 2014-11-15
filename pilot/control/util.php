@@ -1,6 +1,7 @@
 <?php
 
 require_once("/home1/northbr6/php/Validate.php");
+require_once("../module/calendar/SpcEngine.php");
 
 class Util {
 	
@@ -265,11 +266,20 @@ class Util {
 	}
 
 	public static function authenticate($uid, $pass) {	
+		$coreAuthenticated = false;
 		$hash = self::getPasswordHashByUser($uid, $pass);
 		if (pgDb::countActiveUsers($uid, $hash) == 1) {
-			return true;
+			$coreAuthenticated = true;
 		}
-		return false;
+		//Login to Smart PHP Calendar
+    if ($coreAuthenticated) {     
+        try {
+            Spc::login($uid);
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+    return $coreAuthenticated;
 	}
 	
 	public static function setSession($username) {
