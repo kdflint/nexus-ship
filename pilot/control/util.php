@@ -272,13 +272,13 @@ class Util {
 			$coreAuthenticated = true;
 		}
 		//Login to Smart PHP Calendar
-    if ($coreAuthenticated) {     
-        try {
-            Spc::login($uid);
-        } catch (Exception $e) {
-            echo $e->getMessage();
-        }
-    }
+    //if ($coreAuthenticated) {     
+    //    try {
+    //        Spc::login($uid);
+    //    } catch (Exception $e) {
+    //        echo $e->getMessage();
+    //    }
+    //}
     return $coreAuthenticated;
 	}
 	
