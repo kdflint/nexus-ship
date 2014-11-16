@@ -113,9 +113,9 @@ if ($validInvitation){
 	}
 
 	if (!strcmp($_SESSION['networkId'], "19")) {
-		if (isset($_SESSION['group']['2'] {
+		if (isset($_SESSION['group']['2'])) {
 			sendEdcConfirmationEmail($email, $env_appRoot, $fname, $uid, $usernames);
-		} else if (isset($_SESSION['group']['5'] {
+		} else if (isset($_SESSION['group']['5'])) {
 			sendEdcOtherConfirmationEmail($email, $env_appRoot, $fname, $uid, $usernames);
 		}
 	} else {
