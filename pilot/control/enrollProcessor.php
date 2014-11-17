@@ -163,7 +163,7 @@ if ($validInvitation){
 	// Register user with calendar
 	$user = array('username' => $uid, 'email' => $email);
 	try {
-    	Spc::createUser($user);
+    	Spc::createUserOnNexusEnroll($cal_admin_username[$_SESSION['networkId']], $user);
 	} catch (Exception $e) {
     	trigger_error("Cannot enroll user with calendar: $uid\n", E_USER_ERROR);
  	}
