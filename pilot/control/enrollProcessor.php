@@ -167,7 +167,7 @@ if ($validInvitation){
 	} catch (Exception $e) {
     	trigger_error("Cannot enroll user with calendar: $uid\n", E_USER_ERROR);
  	}
-	
+
 	// Register user with conference room
 	$roomLink = "/openmeetings/swf?invitationHash="; // . conferenceRegistration($fname, $wc_roomNumber);
 	pgDb::insertRoomLink($_SESSION['uidpk'], $roomLink);
@@ -178,6 +178,14 @@ if ($validInvitation){
 		unset($_SESSION['grantorId']);
 		Util::setSession($uid);
 		Util::setLogin($_SESSION['uidpk']);
+		
+		// TODO -duplicated from Util::authenticate
+  	try {
+    	Spc::login($user['username']);
+  	} catch (Exception $e) {
+	    echo $e->getMessage();
+	  }
+		
 		header("location:../view/nexus.php?thisPage=profile");
 		exit(0);
 	
