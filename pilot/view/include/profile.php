@@ -22,16 +22,17 @@ if (!strcmp($email_status, "checked")) {
 <div class="leftColumn">
 	<p><b>You</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#bf6030;"><? echo $error; ?></span><p>
 	<div style="margin-left:20px;margin-top:5px;">
-			<table cellpadding="5">
+			<table cellpadding="5" width="100%">
 				<tr><td>Username:</td><td><? echo($_SESSION['username']); ?></td></tr>
  			<tr><td><a href="#" class="tooltip" title="1-25 characters. May contain letters, numbers, accents, &apos; or _">First</a></td><td>
 	 			<input type="text" size="22" name="fname" value="<? echo($_SESSION['fname']);?>" />
 	 		</td></tr>
- 			<tr><td><a href="#" class="tooltip" title="Optional. 1-25 characters. May contain letters, numbers, accents, &apos; or _">Last</a></td><td>	 		
+ 			<tr><td><a href="#" class="tooltip" title="Optional, 1-25 characters. May contain letters, numbers, accents, &apos; or _">Last</a></td><td>	 		
  				<input type="text" size="22" name="lname" value="<? echo($_SESSION['lname']); ?>"/>
  			</td></tr>
- 			<tr><td valign="top"><a href="#" class="tooltip" title="Optional. 7-25 characters. Must contain at least 1 digit.">Reset Password</a></td><td><input type="password" size="22" name="password1" value="" /></td></tr>
- 			<tr><td valign="top">Confirm Password:</td><td><input type="password" size="22" name="password2" value="" /></td></tr>
+ 			<tr><td valign="top"><a href="#" class="tooltip" title="Optional. 7-25 characters. Must contain at least 1 digit.">Reset Password</a></td><td><input type="password" size="22" name="password1" /></td></tr>
+ 			<tr><td valign="top">Confirm Password:</td><td><input type="password" size="22" name="password2" /></td></tr>
+ 			<tr><td valign="top"><a href="#" class="tooltip" title="Optional, 1-250 characters. May contain accents and sentence punctuation.">A few words about you:</a></td><td valign="top"><textarea maxlength="250" rows="4" cols="30" name="about" ><? echo $descr; ?></textarea></td></tr>
 		</table>
 	</div>
 
@@ -45,16 +46,19 @@ if (!strcmp($email_status, "checked")) {
 					</a>
 				</td>
  				<td>Enabled?</td>
+ 				<td>Public?</td>
  			</tr>
  			<tr>
 	 			<td>Text:</td>
  				<td><input type="text" size="22" name="sms" value="<? echo($_SESSION['sms']);?>" onchange="disableTestMessageLink()" /></td>
  				<td><input type="checkbox" name="sms_status" <? echo($sms_status); ?> onchange="disableTestMessageLink()" /></td>
+ 				<td><input type="checkbox" name="sms_public" <? echo($sms_publish); ?> /></td>
  			</tr>
  			<tr>
 	 			<td>Email:</td>
  				<td><input type="text" size="22" name="email" value="<? echo($_SESSION['email']);?>" onchange="disableTestMessageLink()" /></td>
  				<td><input type="checkbox" name="email_status" <? echo($email_status); ?>  onchange="disableTestMessageLink()" /></td>
+ 				<td><input type="checkbox" name="email_public" <? echo($email_publish); ?> /></td>
  			</tr>
 		</table>			
 		<p><input style="float: right" type="submit" value="Update Your Profile"/></p>

@@ -1,7 +1,13 @@
-update organization set logo = 'src="image/edc_logo.png" height="91" width="164"' where id = '19';
+alter table public.user add column publish_email boolean;
+update public.user set publish_email = false;
+alter table public.user alter column publish_email set default 'false';
+alter table public.user alter column publish_email set not null;
 
-insert into organization_organization (organization_from_fk, organization_to_fk, relationship, create_dttm) values ('19', '19', 'parent', now());
+alter table public.user add column publish_sms boolean;
+update public.user set publish_sms = false;
+alter table public.user alter column publish_sms set default 'false';
+alter table public.user alter column publish_sms set not null;
 
-insert into public.group (name, descr) values ('Nexus Pilot User Group', 'Ths group is formed to evaluate the Nexus product for widespread use in the Episcopal Diocese of Chicago.');
-
-insert into invitation (uuid, create_dttm, network_fk, role_fk, issuer_fk, type, organization_fk, group_fk) values('374c54b6-f5fb-0472-6dbe-d03d2832b9a9', now(), '19', '1', '85', 'global', '19', '2');
+alter table public.user add column descr varchar(250);
+update public.user set descr = '';
+alter table public.user alter column descr set default '';

@@ -12,13 +12,16 @@ $count = pgDb::countOrgsInNetworkById($_SESSION['networkId']);
 
 $cursor = pgDb::getUserById($_SESSION['uidpk']);
 
-$email_status = $sms_status = "";
+$email_status = $sms_status = $email_publish = $sms_publish = "";
 
 while ($row = pg_fetch_array($cursor)) {
 	$_SESSION['email'] = $row['email'];
   $_SESSION['sms'] = Util::prettyPrintPhone($row['cell']);
   $email_status = (strcmp($row['emailon'], "f") == 0 ? "" : "checked");
   $sms_status = (strcmp($row['smson'], "f") == 0 ? "" : "checked");
+  $email_publish = (strcmp($row['emailpub'], "f") == 0 ? "" : "checked");
+  $sms_publish = (strcmp($row['smspub'], "f") == 0 ? "" : "checked");
+  $descr = $row['descr'];
 }
 
 ?>

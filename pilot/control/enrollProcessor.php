@@ -10,6 +10,7 @@ require_once 'util.php';
 require_once '../config/env_config.php';
 require_once '/home1/northbr6/php/Validate.php';
 require_once dirname(__FILE__).'/forum_sso_functions.php';
+require_once '../module/calendar/SpcEngine.php';
 
 // TODO - do I have to put these in session?? Better option?
 $_SESSION['stickyForm']['userid'] = $_POST['userid'];
@@ -159,6 +160,14 @@ if ($validInvitation){
 		$_SESSION['forumSessionError'] = $register_status;
 	}
 	
+	// Register user with calendar
+	$user = array('username' => $uid, 'email' => $email);
+	try {
+    	Spc::createUserOnNexusEnroll($cal_admin_username[$_SESSION['networkId']], $user);
+	} catch (Exception $e) {
+    	trigger_error("Cannot enroll user with calendar: $uid\n", E_USER_ERROR);
+ 	}
+
 	// Register user with conference room
 	$roomLink = "/openmeetings/swf?invitationHash="; // . conferenceRegistration($fname, $wc_roomNumber);
 	pgDb::insertRoomLink($_SESSION['uidpk'], $roomLink);
@@ -169,6 +178,14 @@ if ($validInvitation){
 		unset($_SESSION['grantorId']);
 		Util::setSession($uid);
 		Util::setLogin($_SESSION['uidpk']);
+		
+		// TODO -duplicated from Util::authenticate
+  	try {
+    	Spc::login($user['username']);
+  	} catch (Exception $e) {
+	    echo $e->getMessage();
+	  }
+		
 		header("location:../view/nexus.php?thisPage=profile");
 		exit(0);
 	
