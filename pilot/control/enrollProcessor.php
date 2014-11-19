@@ -10,6 +10,7 @@ require_once 'util.php';
 require_once '../config/env_config.php';
 require_once '/home1/northbr6/php/Validate.php';
 require_once dirname(__FILE__).'/forum_sso_functions.php';
+require_once '../module/calendar/SpcEngine.php';
 
 // TODO - do I have to put these in session?? Better option?
 $_SESSION['stickyForm']['userid'] = $_POST['userid'];
@@ -113,9 +114,9 @@ if ($validInvitation){
 	}
 
 	if (!strcmp($_SESSION['networkId'], "19")) {
-		if (isset($_SESSION['group']['2'])) {
+		if (!strcmp($_SESSION['groupId'], "2")) {
 			sendEdcConfirmationEmail($email, $env_appRoot, $fname, $uid, $usernames);
-		} else if (isset($_SESSION['group']['5'])) {
+		} else if (!strcmp($_SESSION['groupId'], "5")) {
 			sendEdcOtherConfirmationEmail($email, $env_appRoot, $fname, $uid, $usernames);
 		}
 	} else {
@@ -150,7 +151,7 @@ if ($validInvitation){
 	$user['pw'] = $password;
 	$user['email'] = $email;	
 	$user['name'] = $orgName;
-	$user['usergroupid'] = $wt_forumGroupId[$_SESSION['networkId']];
+	$user['usergroupid'] = $wt_forumGroupId[$_SESSION['groupId']];
 	$user['auto_topic_value'] = "topics";
 	$register_status = forumSignup($user);
 	if($register_status == 'Registration Complete') {
@@ -159,6 +160,14 @@ if ($validInvitation){
 		$_SESSION['forumSessionError'] = $register_status;
 	}
 	
+	// Register user with calendar
+	$user = array('username' => $uid, 'email' => $email);
+	try {
+    	Spc::createUserOnNexusEnroll($cal_admin_username[$_SESSION['networkId']], $user);
+	} catch (Exception $e) {
+    	trigger_error("Cannot enroll user with calendar: $uid\n", E_USER_ERROR);
+ 	}
+
 	// Register user with conference room
 	$roomLink = "/openmeetings/swf?invitationHash="; // . conferenceRegistration($fname, $wc_roomNumber);
 	pgDb::insertRoomLink($_SESSION['uidpk'], $roomLink);
@@ -169,6 +178,14 @@ if ($validInvitation){
 		unset($_SESSION['grantorId']);
 		Util::setSession($uid);
 		Util::setLogin($_SESSION['uidpk']);
+		
+		// TODO -duplicated from Util::authenticate
+  	try {
+    	Spc::login($user['username']);
+  	} catch (Exception $e) {
+	    echo $e->getMessage();
+	  }
+		
 		header("location:../view/nexus.php?thisPage=profile");
 		exit(0);
 	
@@ -322,13 +339,21 @@ Your enrollment is complete for username: " . $username . $multiples . "
 	
 You are now enabled to collaborate with the " . $_SESSION['groupName'] . " hosted by " . $_SESSION['networkName'] . ".
 
+For our web conference training meeting, please complete these steps as soon as possible:
 
+1. Test your login to Nexus (link below).
+
+2. Visit the Collaboration tab and click on the Blue Button to make sure your browser opens up your window into the web conference room.
+
+3. If you have time before the meeting, spend about 15 minutes watching the training videos that you will see in the web conference room.
+
+4. If some folks are unable to join the web conference, we can also utilize the telephone conference line. This number is also posted on the Collaborate tab in Nexus.
 
 You can login to Nexus using this link. 
 
 http://northbridgetech.org/" . $path . "/nexus/view/login.php?network=" . $_SESSION['networkId'] . "
 
-Enjoy,
+Looking forward!
 
 The Development Team at
 NorthBridge Technology Alliance";

@@ -243,6 +243,16 @@ class pgDb {
 	  }		
 	  return $resultArray;
 	}
+
+	public static function getUserGroupsByUserId($userid) {
+		$query = "select g.id as id, g.name as name from public.group g, public.user u, user_group ug where u.id = $1 and ug.user_fk = u.id and ug.group_fk = g.id";
+		$cursor = pgDb::psExecute($query, array($userid));
+	  $resultArray = array();
+	  while ($row = pg_fetch_array($cursor)) {
+	  	$resultArray[$row['id']] = $row['name'];
+	  }		
+	  return $resultArray;
+	}
 	
 	public static function getUserByUsername($uid) {
 		// TODO: add active check?

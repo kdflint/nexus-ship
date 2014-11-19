@@ -171,7 +171,7 @@ if(curl_exec($ch) === false) 	{
 			 			 		
       </div><!--shell-->
     </div><!-- container -->
-    
+		<div id="fade" class="black_overlay"></div>    
 	</body>
 	
 
