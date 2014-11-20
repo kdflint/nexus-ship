@@ -20,9 +20,9 @@ if (!strcmp($email_status, "checked")) {
 <form action="../control/profileProcessor.php" method="post" id="profileForm">
 
 <div class="leftColumn">
-	<p><b>You</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#bf6030;"><? echo $error; ?></span><p>
+	<p><b>You</b><span style="color:#bf6030;margin-left:50px;"><? echo $error; ?></span><p>
 	<div style="margin-left:20px;margin-top:5px;">
-			<table cellpadding="5" width="100%">
+			<table cellpadding="2" width="100%">
 				<tr><td>Username:</td><td><? echo($_SESSION['username']); ?></td></tr>
  			<tr><td><a href="#" class="tooltip" title="1-25 characters. May contain letters, numbers, accents, &apos; or _">First</a></td><td>
 	 			<input type="text" size="22" name="fname" value="<? echo($_SESSION['fname']);?>" />
@@ -38,18 +38,18 @@ if (!strcmp($email_status, "checked")) {
 
 	<p><b>Your Messaging</b><p>
 	<div style="margin-left:20px;">
-		<table cellpadding="5">
+		<table cellpadding="2">
 			<tr>
 				<td colspan="2">	
 					<a id="testMessageLink" href="javascript:post('../control/messageProcessor.php',{testMessage:'true',phone:'<? echo($testSms); ?>',email:'<? echo($testEmail); ?>'})">
 					Send yourself a test message
 					</a>
 				</td>
- 				<td>Enabled?</td>
- 				<td>Public?</td>
+ 				<td><a href="#" class="tooltip" title="Nexus users may send messages to this private number or address.">Enabled?</a></td>
+ 				<td><a href="#" class="tooltip" title="This number or address will be published in the directory.">Publish?</a></td>
  			</tr>
  			<tr>
-	 			<td>Text:</td>
+	 			<td>Text Message:</td>
  				<td><input type="text" size="22" name="sms" value="<? echo($_SESSION['sms']);?>" onchange="disableTestMessageLink()" /></td>
  				<td><input type="checkbox" name="sms_status" <? echo($sms_status); ?> onchange="disableTestMessageLink()" /></td>
  				<td><input type="checkbox" name="sms_public" <? echo($sms_publish); ?> /></td>
@@ -60,6 +60,14 @@ if (!strcmp($email_status, "checked")) {
  				<td><input type="checkbox" name="email_status" <? echo($email_status); ?>  onchange="disableTestMessageLink()" /></td>
  				<td><input type="checkbox" name="email_public" <? echo($email_publish); ?> /></td>
  			</tr>
+ 			<? if (!$hideHere) { ?>
+ 			<tr>
+	 			<td>Phone:</td>
+ 				<td><input type="text" size="22" name="phone" value="<? echo($_SESSION['phone']);?>" /></td>
+ 				<td>&nbsp;</td>
+ 				<td><input type="checkbox" name="phone_public" <? echo($phone_publish); ?> /></td>
+ 			</tr>
+ 		<? } ?>
 		</table>			
 		<p><input style="float: right" type="submit" value="Update Your Profile"/></p>
 	</div>

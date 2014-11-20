@@ -14,6 +14,11 @@ if (!Util::isSessionValid()) {
 	exit(0);	
 }
 
+$hideHere = false;
+if (Util::hideInEnvironment()) {
+	$hideHere = true;	
+}
+
 // LEFT OFF - put in session timeout code - or not?
 
 // select content to show based on request variable, which is supplied in navigation.php
@@ -22,8 +27,6 @@ if (isset($_REQUEST['thisPage'])) {
 } else {
 	$thisPage = "directory";
 }
-
-
 
 
 /**

@@ -127,6 +127,9 @@ include '../control/searchPreProcessor.php';
 	<tr><td colspan="2"><input type="submit" id="messageSendSubmit" value="Send your Message" style="float:right;" disabled ></td></tr>
 </table>
 </div>
+
+		<div id="light_userprofile" class="white_content">
+		</div>
 <input type="hidden" name="pageRestore" value="<? echo(!strcmp($pageMode, "results") ? $searchResultId : $detailResultId); ?>" />
 </form>
 
