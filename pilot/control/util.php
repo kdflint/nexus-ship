@@ -8,6 +8,7 @@ class Util {
 	const VALIDATION_FNAME_ERROR = "Please enter a valid first name."; 
 	const VALIDATION_LNAME_ERROR = "Please enter a valid last name (or none)."; 
 	const VALIDATION_SMS_ERROR = "Please enter a valid text number (or none).";
+	const VALIDATION_PHONE_ERROR = "Please enter a valid phone number (or none).";
 	const VALIDATION_PASSWORD_ERROR = "Please enter valid matching passwords.";
 	const VALIDATION_USERNAME_FORMAT_ERROR = "Please enter a valid username.";
 	const VALIDATION_USERNAME_DUPE_ERROR = "This username already exists. Please select a different username.";
@@ -35,11 +36,21 @@ class Util {
 		return false;
 	}
 	
+	public static function validatePhone($in) {
+		if(Validate::string($in, array(
+    	'format' => VALIDATE_NUM . VALIDATE_SPACE . "." . "(" . ")" . "-",
+    	'min_length' => self::PHONE_MIN,
+    	'max_length' => self::PHONE_MAX))) {
+			return TRUE;
+		}
+		return FALSE;
+	}
+	
 	public static function validateUuid($in) {
 		if(Validate::string($in, array(
-		'format' => VALIDATE_ALPHA_LOWER . VALIDATE_NUM . "-", 
-		'min_length' => 36, 
-		'max_length' => 36))) {
+			'format' => VALIDATE_ALPHA_LOWER . VALIDATE_NUM . "-", 
+			'min_length' => 36, 
+			'max_length' => 36))) {
 			return TRUE;
 		}
 		return FALSE;
@@ -47,10 +58,22 @@ class Util {
 	
 	public static function validateNetworkId($in) {
 		if(Validate::string($in, array(
-		'format' => VALIDATE_NUM, 
-		'min_length' => 1, 
-		'max_length' => 3))) {
+			'format' => VALIDATE_NUM, 
+			'min_length' => 1, 
+			'max_length' => 3))) {
 			if (pgDb::networkIdExists($in)) {	
+				return TRUE;
+			}
+		}
+		return FALSE;
+	}
+	
+	public static function validateUserId($in) {
+		if(Validate::string($in, array(
+			'format' => VALIDATE_NUM, 
+			'min_length' => 1, 
+			'max_length' => 8))) {
+			if (pgDb::userIdExists($in)) {	
 				return TRUE;
 			}
 		}
@@ -117,16 +140,24 @@ class Util {
 		
 		// SMS
 		if (isset($input['sms']) && strlen($input['sms']) > 0) {
-			if (Validate::string($input['sms'], array(
-    				'format' => VALIDATE_NUM . VALIDATE_SPACE . "." . "(" . ")" . "-",
-    				'min_length' => self::PHONE_MIN,
-    				'max_length' => self::PHONE_MAX))) {
+			if (self::validatePhone($input['sms'])) {
 				$result['good']['sms'] = self::stripPhone($input['sms']);
 			} else {
 				$result['error']['sms'] = self::VALIDATION_SMS_ERROR;
 			}
 		} else {
 			$result['good']['sms'] = "";
+		}
+		
+		// PHONE
+		if (isset($input['phone']) && strlen($input['phone']) > 0) {
+			if (self::validatePhone($input['phone'])) {
+				$result['good']['phone'] = self::stripPhone($input['phone']);
+			} else {
+				$result['error']['phone'] = self::VALIDATION_PHONE_ERROR;
+			}
+		} else {
+			$result['good']['phone'] = "";
 		}
 		
 		// PASSWORD
@@ -258,6 +289,13 @@ class Util {
 		return false;
 	}
 	
+	public static function hideInEnvironment() {
+		if (!strcmp($_SESSION['environment'], "dev")) {
+			return true;
+		}
+		return false;		
+	}
+	
 	public static function setLogin($uid) {
 		if (isset($_SERVER['REMOTE_ADDR'])) {
 			pgDb::setLoginByIp($_SERVER['REMOTE_ADDR'], $uid);
@@ -283,6 +321,7 @@ class Util {
 	}
 	
 	public static function setSession($username) {
+		require '../config/env_config.php';
 		session_regenerate_id(TRUE);
 		$_SESSION['groups'] = array();
 		$_SESSION['username'] = $username;
@@ -301,6 +340,7 @@ class Util {
 		} 
 	
 		$_SESSION['groups'] = pgDb::getUserGroupsByUsername($_SESSION['username']);
+		$_SESSION['environment'] = $env_name;
 	}
 
 	public static function storeSecurePasswordImplA($plaintextPassword, $userId) {

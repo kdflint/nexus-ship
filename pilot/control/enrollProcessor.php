@@ -339,7 +339,7 @@ Your enrollment is complete for username: " . $username . $multiples . "
 	
 You are now enabled to collaborate with the " . $_SESSION['groupName'] . " hosted by " . $_SESSION['networkName'] . ".
 
-For our meeting on November 10 at 7:00 p.m. CT, please complete these steps as soon as possible:
+For our web conference training meeting, please complete these steps as soon as possible:
 
 1. Test your login to Nexus (link below).
 

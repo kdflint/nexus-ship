@@ -18,6 +18,7 @@ $filetime_search = @filemtime("../view/include/tmpResults/" . $_SESSION['default
 
 // only recreate default search results if it does not exist or is older than 5 minutes
 if (!$filetime_search or (time() - $filetime_search >= $cache_life)){
+//if (true) {
 
 	$cursor = pgDb::getGroupMembersByUserId($_SESSION['uidpk']);
 	
@@ -31,8 +32,8 @@ if (!$filetime_search or (time() - $filetime_search >= $cache_life)){
 		if (pgDb::isUserMessageEnabled($row['id'])) {
 			$disabled = "";
 		}
-		fwrite($file, "<tr><td valign=\"top\"><input type=\"checkbox\" name=\"names[]\" value=\"" . $row['id'] . "::" . $row['fname'] . " " . $row['lname'] . "\" onchange=\"messageToFill()\" " . $disabled . " \></td><td valign=\"top\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" . $row['lname'] . ",&nbsp;" . $row['fname'] . "</td><td>" . $row['oname'] . "</td></tr>\n");
-	
+		fwrite($file, "<tr><td valign=\"top\"><input type=\"checkbox\" name=\"names[]\" value=\"" . $row['id'] . "::" . $row['fname'] . " " . $row['lname'] . "\" onchange=\"messageToFill()\" " . $disabled . " \></td><td valign=\"top\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ 		<a href=\"javascript:void(0)\" style=\"font-size:12px;font-weight:normal;\" onclick=\"showUser(" . $row['id'] . ")\">" . $row['lname'] . ",&nbsp;" . $row['fname'] . "</a></td><td>" . $row['oname'] . "</td></tr>\n");	
 	}	
 	fwrite($file, "</table>");
 	

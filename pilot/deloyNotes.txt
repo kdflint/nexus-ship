@@ -8,6 +8,15 @@ update public.user set publish_sms = false;
 alter table public.user alter column publish_sms set default 'false';
 alter table public.user alter column publish_sms set not null;
 
+alter table public.user add column phone varchar(10);
+update public.user set phone = '';
+alter table public.user alter column phone set default '';
+
+alter table public.user add column publish_phone boolean;
+update public.user set publish_phone = false;
+alter table public.user alter column publish_phone set default 'false';
+alter table public.user alter column publish_phone set not null;
+
 alter table public.user add column descr varchar(250);
 update public.user set descr = '';
 alter table public.user alter column descr set default '';
