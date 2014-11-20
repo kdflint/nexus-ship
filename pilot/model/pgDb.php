@@ -7,8 +7,9 @@ class pgDb {
 	
 	public static function connect() {	
 		include("../config/env_config.php");	
+		//include(dirname(__FILE__) . "/dev/nexus/config/env_config.php");	
 		$con = pg_connect("host=$db_host dbname=$db user=$db_user password=$db_pass")
-    or die ("Could not connect to server\n");    
+    or trigger_error("Could not connect to the database server\n", E_USER_ERROR);   
     return $con;
 	}
 	
@@ -64,6 +65,15 @@ class pgDb {
 	
 	public static function networkIdExists($id) {
 		$query = "select exists (select true from organization_organization where organization_to_fk = $1)";
+		$row = pg_fetch_row(pgDb::psExecute($query, array($id)));
+		if (!strcmp($row[0], "t")) {
+			return TRUE;
+		}
+		return FALSE;
+	}
+	
+	public static function userIdExists($id) {
+		$query = "select exists (select true from public.user where id = $1)";
 		$row = pg_fetch_row(pgDb::psExecute($query, array($id)));
 		if (!strcmp($row[0], "t")) {
 			return TRUE;
@@ -243,6 +253,16 @@ class pgDb {
 	  }		
 	  return $resultArray;
 	}
+
+	public static function getUserGroupsByUserId($userid) {
+		$query = "select g.id as id, g.name as name from public.group g, public.user u, user_group ug where u.id = $1 and ug.user_fk = u.id and ug.group_fk = g.id";
+		$cursor = pgDb::psExecute($query, array($userid));
+	  $resultArray = array();
+	  while ($row = pg_fetch_array($cursor)) {
+	  	$resultArray[$row['id']] = $row['name'];
+	  }		
+	  return $resultArray;
+	}
 	
 	public static function getUserByUsername($uid) {
 		// TODO: add active check?
@@ -263,7 +283,7 @@ class pgDb {
 
 	public static function getUserById($userId) {
 		$query = "
-		select u.fname as first, u.lname as last, u.password, u.email as email, u.sms as cell, u.enable_email as emailon, u.enable_sms as smson, s.name as status, r.name as role 
+		select u.fname as first, u.lname as last, u.password, u.email as email, u.sms as cell, u.phone as phone, u.enable_email as emailon, u.enable_sms as smson, u.publish_email as emailpub, u.publish_sms as smspub, u.publish_phone as phonepub, u.descr as descr, s.name as status, r.name as role 
 			from public.user u, user_organization uo, status s, role r 
 			where u.id = $1
 			and s.id = u.status_fk
@@ -282,7 +302,7 @@ class pgDb {
 		return false;
 	}
 
-	public static function updateUserById($userId, $fname, $lname, $sms, $email, $smsEnabled, $emailEnabled) {
+	public static function updateUserById($userId, $fname, $lname, $sms, $email, $smsEnabled, $emailEnabled, $smsPublic, $emailPublic, $descr, $phone, $phonePublic) {
 		$query = "
 		update public.user set
 			fname = $1,
@@ -290,10 +310,15 @@ class pgDb {
 			sms = $3,
 			email = $4,
 			enable_email = $5,
-			enable_sms = $6
-			where id = $7
+			enable_sms = $6,
+			publish_email = $7,
+			publish_sms = $8,
+			descr = $9,
+			phone = $10,
+			publish_phone = $11
+			where id = $12
 			";
-		return pgDb::psExecute($query, array($fname, $lname, $sms, $email, $emailEnabled, $smsEnabled, $userId));
+		return pgDb::psExecute($query, array($fname, $lname, $sms, $email, $emailEnabled, $smsEnabled, $emailPublic, $smsPublic, $descr, $phone, $phonePublic, $userId));
 	}
 	
 	public static function getOrganizationById($orgId) {

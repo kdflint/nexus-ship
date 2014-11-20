@@ -14,6 +14,11 @@ if (!Util::isSessionValid()) {
 	exit(0);	
 }
 
+$hideHere = false;
+if (Util::hideInEnvironment()) {
+	$hideHere = true;	
+}
+
 // LEFT OFF - put in session timeout code - or not?
 
 // select content to show based on request variable, which is supplied in navigation.php
@@ -22,8 +27,6 @@ if (isset($_REQUEST['thisPage'])) {
 } else {
 	$thisPage = "directory";
 }
-
-
 
 
 /**
@@ -109,7 +112,7 @@ if(curl_exec($ch) === false) 	{
     <script src="script/jquery-ui-1.11.1.custom/external/jquery/jquery.js"></script>
 		<script src="script/jquery-ui-1.11.1.custom/jquery-ui.js"></script>
 		<script>$(function() {$( document ).tooltip();});</script>
-		<style>label {display: inline-block;width: 5em;}</style>
+		<style>label {display: inline-block;width: 5em;}</style>		
 		
   </head>
   
@@ -171,7 +174,7 @@ if(curl_exec($ch) === false) 	{
 			 			 		
       </div><!--shell-->
     </div><!-- container -->
-    
+		<div id="fade" class="black_overlay"></div>    
 	</body>
 	
 

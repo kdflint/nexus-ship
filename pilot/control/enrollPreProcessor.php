@@ -5,7 +5,7 @@
 
 include("../model/pgDb.php");
 include("../control/util.php");
-require_once '/home1/northbr6/php/Validate.php';
+require_once("/home1/northbr6/php/Validate.php");
 
 $inviteId = $networkId = "";
 $validInvitation = false;
@@ -23,7 +23,7 @@ $stickyOrgName = $_SESSION['stickyForm']['orgName'];
 unset($_SESSION['stickyForm']);
 $_SESSION['networkName'] = $_SESSION['orgName'] = $_SESSION['networkId'] = $_SESSION['orgId'] = "";
 
-if(Validate::string($_GET['invitation'], array(
+if (Validate::string($_GET['invitation'], array(
 		'format' => VALIDATE_ALPHA_LOWER . VALIDATE_NUM . "-", 
 		'min_length' => 36, 
 		'max_length' => 36))) {

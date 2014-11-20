@@ -117,6 +117,9 @@ function sendEmail($email, $subject, $message, $uuid, $from, $reply) {
  	
  	$headers = "From: " . $from  . "\r\n" . "Reply-To: " . $reply . "\r\n" . "Bcc: support@nexus.northbridgetech.org"; 	
 	mail($email, $subject, $message, $headers);		
+	
+	// TODO
+	//exec("doTask.php $arg1 $arg2 $arg3 >/dev/null 2>&1 &");
 		
 }
 

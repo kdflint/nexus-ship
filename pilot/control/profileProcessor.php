@@ -6,18 +6,23 @@ include("../model/pgDb.php");
 include("util.php");
 require_once 'error/handlers.php';
 
-$fname = $lname = $sms = $email = $password = "";
-$smsEnabled = $emailEnabled = "false";
+$fname = $lname = $sms = $email = $password = $phone = "";
+$smsEnabled = $emailEnabled = $smsPublic = $emailPublic = $phonePublic = "false";
 
 if (isset($_POST['sms_status'])) {$smsEnabled = "true";}
 if (isset($_POST['email_status'])) {$emailEnabled = "true";}
+if (isset($_POST['sms_public'])) {$smsPublic = "true";}
+if (isset($_POST['email_public'])) {$emailPublic = "true";}
+if (isset($_POST['phone_public'])) {$phonePublic = "true";}
 
 $input = array('email' => $_POST['email'],
 							'fname' => $_POST['fname'],
 							'lname' => $_POST['lname'],
 							'password1' => $_POST['password1'],
 							'password2' => $_POST['password2'],
-							'sms' => $_POST['sms']
+							'sms' => $_POST['sms'],
+							'phone' => $_POST['phone'],
+							'descr' => $_POST['about']
 							);
 							
 $result = Util::validateUserProfile($input, FALSE);
@@ -51,7 +56,12 @@ pgDb::updateUserById($_SESSION['uidpk'],
 											$result['good']['sms'], 
 											$result['good']['email'], 
 											$smsEnabled, 
-											$emailEnabled);
+											$emailEnabled,
+											$smsPublic,
+											$emailPublic,
+											$result['good']['descr'],
+											$result['good']['phone'],
+											$phonePublic);
 
 if (isset($result['good']['password']) && strlen($result['good']['password']) > 0) {
 	Util::storeSecurePasswordImplA($result['good']['password'], $_SESSION['uidpk']);
@@ -70,11 +80,12 @@ NorthBridge Technology Alliance";
 
 $cursor = pgDb::getUserById($_SESSION['uidpk']);
 
-$_SESSION['email'] = $_SESSION['sms'] = $_SESSION['fname'] = $_SESSION['lname'] = "";
+$_SESSION['email'] = $_SESSION['sms'] = $_SESSION['phone'] = $_SESSION['fname'] = $_SESSION['lname'] = "";
 
 while ($row = pg_fetch_array($cursor)) {
 	$_SESSION['email'] = $row['email'];
   $_SESSION['sms'] = Util::prettyPrintPhone($row['cell']);
+  $_SESSION['phone'] = Util::prettyPrintPhone($row['phone']);
   $_SESSION['fname'] = $row['first']; 
   $_SESSION['lname'] = $row['last'];
 }
