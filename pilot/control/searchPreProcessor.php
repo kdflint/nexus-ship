@@ -17,8 +17,8 @@ $cache_life = '600'; //caching time, in seconds
 $filetime_search = @filemtime("../view/include/tmpResults/" . $_SESSION['defaultSearchId'] . ".php");  // returns FALSE if file does not exist
 
 // only recreate default search results if it does not exist or is older than 5 minutes
-if (!$filetime_search or (time() - $filetime_search >= $cache_life)){
-//if (true) {
+//if (!$filetime_search or (time() - $filetime_search >= $cache_life)){
+if (true) {
 
 	$cursor = pgDb::getGroupMembersByUserId($_SESSION['uidpk']);
 	

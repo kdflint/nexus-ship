@@ -204,6 +204,8 @@ function checkVideo() {
 }
 	
 function showUser(str) {
+	
+	showWait();
 
   if (str=="") {
     return;
@@ -225,4 +227,8 @@ function showUser(str) {
   document.getElementById('light_userprofile').style.display='block';
   document.getElementById('fade').style.display='block';
 
+}
+
+function showWait() {
+	document.getElementById("light_userprofile").innerHTML="<a href=\"javascript:void(0)\" onclick=\"document.getElementById('light_userprofile').style.display='none';document.getElementById('fade').style.display='none'\" style=\"float:right\">Close</a><p>One moment please...</p><hr/>";
 }
