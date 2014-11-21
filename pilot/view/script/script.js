@@ -148,6 +148,8 @@ function disableTestMessageLink() {
 }
 
 function showUser(str) {
+	
+	showWait();
 
   if (str=="") {
     return;
@@ -169,4 +171,8 @@ function showUser(str) {
   document.getElementById('light_userprofile').style.display='block';
   document.getElementById('fade').style.display='block';
 
+}
+
+function showWait() {
+	document.getElementById("light_userprofile").innerHTML="One moment please";
 }
