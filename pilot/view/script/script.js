@@ -174,5 +174,5 @@ function showUser(str) {
 }
 
 function showWait() {
-	document.getElementById("light_userprofile").innerHTML="One moment please";
+	document.getElementById("light_userprofile").innerHTML="<a href=\"javascript:void(0)\" onclick=\"document.getElementById('light_userprofile').style.display='none';document.getElementById('fade').style.display='none'\" style=\"float:right\">Close</a><p>One moment please...</p><hr/>";
 }
