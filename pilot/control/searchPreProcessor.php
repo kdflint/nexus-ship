@@ -33,7 +33,7 @@ if (!$filetime_search or (time() - $filetime_search >= $cache_life)){
 			$disabled = "";
 		}
 		fwrite($file, "<tr><td valign=\"top\"><input type=\"checkbox\" name=\"names[]\" value=\"" . $row['id'] . "::" . $row['fname'] . " " . $row['lname'] . "\" onchange=\"messageToFill()\" " . $disabled . " \></td><td valign=\"top\">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
- 		<a href=\"javascript:void(0)\" style=\"font-size:12px;font-weight:normal;\" onclick=\"showUser(" . $row['id'] . ")\">" . $row['lname'] . ",&nbsp;" . $row['fname'] . "</a></td><td>" . $row['oname'] . "</td></tr>\n");	
+ 		<a href=\"javascript:void(0)\" style=\"font-size:12px;font-weight:normal;\" onclick=\"showUser(" . $row['id'] . ")\">" . $row['lname'] . ",&nbsp;" . $row['fname'] . "</a></td><td valign=\"top\">" . $row['oname'] . "</td></tr>\n");	
 	}	
 	fwrite($file, "</table>");
 	

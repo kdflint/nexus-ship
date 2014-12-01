@@ -60,14 +60,12 @@ if (!strcmp($email_status, "checked")) {
  				<td><input type="checkbox" name="email_status" <? echo($email_status); ?>  onchange="disableTestMessageLink()" /></td>
  				<td><input type="checkbox" name="email_public" <? echo($email_publish); ?> /></td>
  			</tr>
- 			<? if (!$hideHere) { ?>
  			<tr>
 	 			<td>Phone:</td>
  				<td><input type="text" size="22" name="phone" value="<? echo($_SESSION['phone']);?>" /></td>
  				<td>&nbsp;</td>
  				<td><input type="checkbox" name="phone_public" <? echo($phone_publish); ?> /></td>
  			</tr>
- 		<? } ?>
 		</table>			
 		<p><input style="float: right" type="submit" value="Update Your Profile"/></p>
 	</div>
