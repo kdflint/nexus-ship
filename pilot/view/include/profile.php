@@ -60,14 +60,12 @@ if (!strcmp($email_status, "checked")) {
  				<td><input type="checkbox" name="email_status" <? echo($email_status); ?>  onchange="disableTestMessageLink()" /></td>
  				<td><input type="checkbox" name="email_public" <? echo($email_publish); ?> /></td>
  			</tr>
- 			<? if (!$hideHere) { ?>
  			<tr>
 	 			<td>Phone:</td>
  				<td><input type="text" size="22" name="phone" value="<? echo($_SESSION['phone']);?>" /></td>
  				<td>&nbsp;</td>
  				<td><input type="checkbox" name="phone_public" <? echo($phone_publish); ?> /></td>
  			</tr>
- 		<? } ?>
 		</table>			
 		<p><input style="float: right" type="submit" value="Update Your Profile"/></p>
 	</div>
@@ -97,6 +95,6 @@ if (!strcmp($email_status, "checked")) {
 	<div style="margin-left:20px;margin-top:5px;font-size:12px;border: 1px solid #4b5b6e;border-radius:15px;padding:10px;">
 		<img src="image/comingSoon.jpg" width="57" height="57" style="float:right;"/>
 		<p><b>For authorized Nexus pilot users</b></p>
-		<p>Collaboration tracking will be available <b>November 2014</b></p>
+		<p>Collaboration tracking will be available <b>early 2015</b></p>
 	</div>
 </div> <!-- rightColumn -->
