@@ -99,7 +99,7 @@ $speed_check = '<img src="image/light_white.png" />';
 	<div id="default" style="display:block;font-size:12px;">
 		<img src="image/comingSoon.jpg" width="85" height="85" />
 		<p><b>For authorized Nexus pilot users</b></p>
-		<p>Your private, in-network messaging and collaboration dashboard<br/>will be available <b>December 2014</b></p>
+		<p>Your private, in-network messaging and collaboration dashboard<br/>will be available <b>early 2015</b></p>
 		<? // include("inbox.php"); ?>
 	</div>
 </div>

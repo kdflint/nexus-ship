@@ -44,7 +44,7 @@ include '../control/searchPreProcessor.php';
 			</td></tr>
 			-->
 				
-			<tr><td>&nbsp;</td><td><input type="submit" value="Search" style="float:right;"/></td></tr>
+			<tr><td colspan="2"><i>Search is temporarily disabled<br/>while we expand this feature.</i><input type="submit" value="Search" style="float:right;" disabled/></td></tr>
 		</table>
 
 	</form>
