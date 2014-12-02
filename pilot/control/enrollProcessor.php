@@ -46,7 +46,7 @@ $clean = Util::validateUserProfile($dirty, TRUE);
 
 // TODO - when we build org screen, move this logic to validateOrgProfile method.
 if (!isset($_POST['orgname']) ||
-		!Validate::string($_POST['orgname'], array('format' => VALIDATE_EALPHA . VALIDATE_NUM . VALIDATE_SPACE . "'" . "_", 'min_length' => 2, 'max_length' => 100))) {
+		!Validate::string($_POST['orgname'], array('format' => VALIDATE_EALPHA . VALIDATE_NUM . VALIDATE_SPACE . "'" . "_" . "-", 'min_length' => 2, 'max_length' => 100))) {
 		$clean['error']['orgname'] = Util::VALIDATION_ORGNAME_ERROR;
 } else {
 	$clean['good']['orgname'] = strtr($_POST['orgname'], array("'" => '&apos;'));
