@@ -100,7 +100,7 @@ class Util {
 		// FIRST NAME
 		if (isset($input['fname'])) {
 			if (Validate::string($input['fname'], array(
-    				'format' => VALIDATE_EALPHA . VALIDATE_NUM . "'" . "_",
+    				'format' => VALIDATE_EALPHA . VALIDATE_NUM . VALIDATE_SPACE . "'" . "_",
     				'min_length' => self::NAME_MIN,
     				'max_length' => self::NAME_MAX))) {
 				$result['good']['fname'] = $input['fname'];			
@@ -114,7 +114,7 @@ class Util {
 		// LAST NAME
 		if (isset($input['lname']) && strlen($input['lname']) > 0) {
 			if (Validate::string($input['lname'], array(
-    				'format' => VALIDATE_EALPHA . VALIDATE_NUM . "'" . "_",
+    				'format' => VALIDATE_EALPHA . VALIDATE_NUM . VALIDATE_SPACE . "'" . "_",
     				'min_length' => self::NAME_MIN,
     				'max_length' => self::NAME_MAX))) {
 				$result['good']['lname'] = $input['lname'];			

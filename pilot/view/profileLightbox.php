@@ -13,9 +13,12 @@ if(Util::validateUserId($_REQUEST['id'])) {
 	trigger_error("Invalid user id\n", E_USER_ERROR);
 }
 
+
+
 $cursor = pgDb::getUserById($cleanId);
 while ($row = pg_fetch_array($cursor)) {
 	echo("<p><b>" . $row['first'] . " " . $row['last'] . "</b></p>");
+	echo("<p><b>Member since:</b> " . date('F Y', strtotime($row['create'])) .  "</p>");
 	echo("<p><b>" . $row['descr'] . "</b></p><hr/>");
 	if (!strcmp($row['emailpub'], "t")) {
 		echo("<p>Email: <a style=\"font-weight:normal;\" href=\"mailto:" . $row['email'] . "\">" . $row['email'] . "</a></p>");
@@ -31,7 +34,7 @@ while ($row = pg_fetch_array($cursor)) {
 
 $groups = pgDb::getUserGroupsByUserId($cleanId);
 foreach ($groups as $key=> $val) {
-	echo("<p>Group : " . $val);
+	echo("<p>Group: " . $val);
 }
 
 	
