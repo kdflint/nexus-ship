@@ -116,10 +116,8 @@ function sendEmail($email, $subject, $message, $uuid, $from, $reply) {
  	*/
  	
  	$headers = "From: " . $from  . "\r\n" . "Reply-To: " . $reply . "\r\n" . "Bcc: support@nexus.northbridgetech.org"; 	
-	mail($email, $subject, $message, $headers);		
-	
-	// TODO
-	//exec("doTask.php $arg1 $arg2 $arg3 >/dev/null 2>&1 &");
+	mail($email, $subject, $message, $headers);
+	//exec('php /home1/northbr6/batch/$env_appRoot/nexus/module/message/asynch_send.php $email $subject $message $headers >/dev/null 2>&1 &');
 		
 }
 
