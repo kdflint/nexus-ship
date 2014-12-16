@@ -283,7 +283,7 @@ class pgDb {
 
 	public static function getUserById($userId) {
 		$query = "
-		select u.fname as first, u.lname as last, u.password, u.email as email, u.sms as cell, u.phone as phone, u.enable_email as emailon, u.enable_sms as smson, u.publish_email as emailpub, u.publish_sms as smspub, u.publish_phone as phonepub, u.descr as descr, s.name as status, r.name as role 
+		select u.fname as first, u.lname as last, u.password, u.email as email, u.sms as cell, u.phone as phone, u.enable_email as emailon, u.enable_sms as smson, u.publish_email as emailpub, u.publish_sms as smspub, u.publish_phone as phonepub, u.descr as descr, u.create_dttm as create, s.name as status, r.name as role 
 			from public.user u, user_organization uo, status s, role r 
 			where u.id = $1
 			and s.id = u.status_fk
