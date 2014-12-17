@@ -363,17 +363,17 @@ class pgDb {
 		return pgDb::psExecute($query, array($uuid));
 	}
 
-	public static function getGroupMembersByUserId($uid) {
+
+	public static function getGroupMembersByGroupId($id) {
 		$query = "select u.id, u.fname, u.lname, o.name as oname
 			from public.user u, user_group ug, organization o, user_organization uo
 			where u.id = ug.user_fk
 			and uo.user_fk = u.id
 			and o.id = uo.organization_fk
-			and ug.group_fk in 
-				(select ug.group_fk from user_group ug where ug.user_fk = $1)
+			and ug.group_fk = $1
 			order by u.lname, o.name
 			";	
-			return pgDb::psExecute($query, array($uid));
+			return pgDb::psExecute($query, array($id));
 	}
 	
 	public static function getOrgsByNetwork($networkId) {

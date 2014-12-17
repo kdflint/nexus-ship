@@ -72,9 +72,11 @@ $speed_check = '<img src="image/light_white.png" />';
  				<tr><td bgcolor="#eeeeee">Javascript</td><td bgcolor="#eeeeee">Enabled</td><td><img id="jscript_enabled" src="image/light_red.png" /></td></tr>
  				<tr><td bgcolor="#eeeeee">Flash</td><td bgcolor="#eeeeee">Version 11.2</td><td><img id="flash_enabled" src="image/light_red.png" /></td></tr>
  				<tr><td bgcolor="#eeeeee">Download speed</td><td bgcolor="#eeeeee">Min. 1 Mb/sec</td><td><? echo $speed_check; ?></td></tr>
+ 				<!--
  				<tr><td bgcolor="#eeeeee">Microphone</td><td bgcolor="#eeeeee">Available</td><td><img id="audio_enabled" src="image/light_white.png" /><button id="audioButton" onclick="checkAudio()">Check</button></td></tr>
  				<tr><td bgcolor="#eeeeee">Camera</td><td bgcolor="#eeeeee">Optional</td><td><img id="video_enabled" src="image/light_white.png" /><button id="videoButton" onclick="checkVideo()">Check</button></td></tr>
- 				<!--<tr><td>Java</td><td>optional</td><td><button onClick="">Check</button></td></tr>-->
+ 				<tr><td>Java</td><td>optional</td><td><button onClick="">Check</button></td></tr>
+ 				-->
  			</table>
 	</div>
 	

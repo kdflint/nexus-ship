@@ -84,7 +84,6 @@ if (!strcmp($email_status, "checked")) {
 	<p style="margin-top:20px;"><b>Your Groups</b><p>
 	<p style="margin-left:20px;margin-top:5px;">
 	<? 
-		// TODO - won't work well with > 1 groups
 		foreach ($_SESSION['groups'] as $key=>$val) {
     			echo $val . "</br>";
     }

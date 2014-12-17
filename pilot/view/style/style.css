@@ -271,7 +271,7 @@ a.bigbutton:hover {
 	top: 0%;
 	left: 0%;
 	width: 5000px;
-	height: 5000px;
+	height: 2000px;
 	background-color: black;
 	z-index:1001;
 	-moz-opacity: 0.8;
