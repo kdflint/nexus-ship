@@ -5,8 +5,8 @@ session_start();
 //error_reporting(E_ALL);
 //ini_set( 'display_errors','1'); 
 
-require_once dirname(__FILE__).'/forum_sso_functions.php';
-require_once ("../model/pgDb.php");
+require_once($_SESSION['appRoot'] . "control/forum_sso_functions.php");
+require_once($_SESSION['appRoot'] . "model/pgDb.php");
 
 $_SESSION['forumSessionError'] = $_SESSION['authtoken'] = $forumUsername = "";
 

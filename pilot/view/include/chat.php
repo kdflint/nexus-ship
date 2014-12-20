@@ -1,7 +1,8 @@
 <?
 
-include("../model/pgDb.php");
-include("../config/env_config.php");
+require_once($_SESSION['appRoot'] . "control/util.php");
+require_once($_SESSION['appRoot'] . "config/env_config.php");
+require_once($_SESSION['appRoot'] . "model/pgDb.php");
 
 $roomLink = "";
 
@@ -102,7 +103,6 @@ $speed_check = '<img src="image/light_white.png" />';
 		<img src="image/comingSoon.jpg" width="85" height="85" />
 		<p><b>For authorized Nexus pilot users</b></p>
 		<p>Your private, in-network messaging and collaboration dashboard<br/>will be available <b>early 2015</b></p>
-		<? // include("inbox.php"); ?>
 	</div>
 </div>
 

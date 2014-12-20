@@ -5,9 +5,9 @@
 
 session_start();
 
-include("../model/pgDb.php");
-include("util.php");
-require_once 'error/handlers.php';
+require_once("util.php");
+require_once($_SESSION['appRoot'] . "model/pgDb.php");
+require_once($_SESSION['appRoot'] . "control/error/handlers.php");
 
 $_SESSION['stickyForm']['string'] = $_POST['string'];
 $_SESSION['stickyForm']['topic'] = $_POST['topic'];
@@ -395,7 +395,7 @@ function formatNewSearchResults(array $results) {
 		// TODO: Figure out a way to purge files
 	
 		$fileId = Util::newUuid();
-		$file = fopen("../view/include/tmpResults/" . $fileId . ".php","w") or die("Unable to open file!");
+		$file = fopen($_SESSION['appRoot'] . "view/include/tmpResults/" . $fileId . ".php","w") or die("Unable to open file!");
 		fwrite($file, "<div>\n");
 	
 		ksort($results);
@@ -454,7 +454,7 @@ function doDetailSearch($id) {
 
 function formatDetailSearchResults(array $results) {
 		$fileId = Util::newUuid();
-		$file = fopen("../view/include/tmpDetail/" . $fileId . ".php","w") or die("Unable to open file!");
+		$file = fopen($_SESSION['appRoot'] . "view/include/tmpDetail/" . $fileId . ".php","w") or die("Unable to open file!");
 
 		fwrite($file, "<div style=\"position:relative;overflow:auto;height:460px;\">\n");	
 		fwrite($file, "<p class=\"detailHeader1\">" . $results['orgName'] . "</p>\n");

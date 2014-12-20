@@ -5,8 +5,8 @@
 
 session_start();
 
-require_once '../control/util.php';
-require '../control/error/handlers.php';
+require_once("../control/util.php");
+require_once(Util::getAppRoot() . "control/error/handlers.php");
 
 if (!Util::isSessionValid()) {
 	header("location:login.php?logout=true");

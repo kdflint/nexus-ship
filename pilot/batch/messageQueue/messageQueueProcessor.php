@@ -60,7 +60,7 @@ if ($row) {
 	$newUuid = Util::newUuid();
 	pgDb::insertMessageRecipient($messageId, $row['userid'], $newUuid);
 	
-	$row2 = pg_fetch_array(pgDb::getRecipientByMessageId($originatingUuid));
+	$row2 = pg_fetch_array(pgDb::getRecipientByMessageUuid($originatingUuid));
 	
 	$sanitizedMessage = strtr($extractedMessage, array($row2['email'] => "private address"));
 	$to = $row['email'];

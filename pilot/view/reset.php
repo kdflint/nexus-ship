@@ -1,6 +1,6 @@
 <? 
 
-include '../control/resetPasswordProcessor.php';
+require($_SESSION['appRoot'] . "control/resetPasswordProcessor.php");
 
 ?>
 

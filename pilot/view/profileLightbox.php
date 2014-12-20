@@ -1,7 +1,7 @@
 <?
 
-require '../model/pgDb.php';
-require '../control/util.php';
+require_once("../control/util.php");
+require_once(Util::getAppRoot() . "model/pgDb.php");
 
 $cleanId="";
 

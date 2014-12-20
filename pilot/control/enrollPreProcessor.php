@@ -3,9 +3,9 @@
 //error_reporting(E_ALL);
 //ini_set( 'display_errors','1');
 
-include("../model/pgDb.php");
-include("../control/util.php");
-require_once("/home1/northbr6/php/Validate.php");
+require_once("util.php");
+require_once(Util::getAppRoot() . "model/pgDb.php");
+require_once(Util::getHome() . "php/Validate.php");
 
 $inviteId = $networkId = "";
 $validInvitation = false;

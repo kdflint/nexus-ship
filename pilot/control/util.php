@@ -1,7 +1,7 @@
 <?php
 
+// TODO - solve warning and use local method
 require_once("/home1/northbr6/php/Validate.php");
-require_once("../module/calendar/SpcEngine.php");
 
 class Util {
 	
@@ -311,6 +311,7 @@ class Util {
 		}
 		//Login to Smart PHP Calendar
     if ($coreAuthenticated) {     
+    	  require_once(self::getAppRoot() . "module/calendar/SpcEngine.php");
         try {
             Spc::login($uid);
         } catch (Exception $e) {
@@ -321,10 +322,15 @@ class Util {
 	}
 	
 	public static function setSession($username) {
-		require '../config/env_config.php';
+
 		session_regenerate_id(TRUE);
-		$_SESSION['groups'] = array();
+		
+		$_SESSION['appRoot'] = self::getAppRoot();
+		require_once($_SESSION['appRoot'] . "config/env_config.php");
+		$_SESSION['environment'] = $env_name;
+		
 		$_SESSION['username'] = $username;
+		$_SESSION['groups'] = pgDb::getUserGroupsByUsername($_SESSION['username']);
 	
 		$cursor = pgDb::getUserSessionByUsername($_SESSION['username']);
 	
@@ -339,8 +345,14 @@ class Util {
   		$_SESSION['email'] = $row['email'];
 		} 
 	
-		$_SESSION['groups'] = pgDb::getUserGroupsByUsername($_SESSION['username']);
-		$_SESSION['environment'] = $env_name;
+	}
+	
+	public static function getAppRoot() {
+		return __DIR__  . "/../";
+	}
+	
+	public static function getHome() {
+		return "/home1/northbr6/";
 	}
 
 	public static function storeSecurePasswordImplA($plaintextPassword, $userId) {

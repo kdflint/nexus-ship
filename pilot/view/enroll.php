@@ -2,7 +2,8 @@
 session_start();
 $error = "";
 
-include '../control/enrollPreProcessor.php';
+require_once("../control/util.php");
+require_once(Util::getAppRoot() . "control/enrollPreProcessor.php");
 
 if(isset($_GET['error'])) {
 	$error = $_GET['error'];

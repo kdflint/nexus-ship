@@ -1,6 +1,6 @@
 <?php
 
-include '../control/searchPreProcessor.php';
+require_once($_SESSION['appRoot'] . "control/searchPreProcessor.php");
 
 ?>
 
@@ -17,7 +17,7 @@ include '../control/searchPreProcessor.php';
 				<select name="topic" style="width: 230px">    
 					<option value="0" selected>Specialty is</option>	
 					<option value="0" >------------</option>										
-					<? include 'include/tmpSpecialty/' . $_SESSION['networkId'] . '.html'; ?>
+					<? include($_SESSION['appRoot'] . "view/include/tmpSpecialty/" . $_SESSION['networkId'] . ".html"); ?>
 				</select>
 				</td></tr>	
 							
@@ -93,25 +93,25 @@ include '../control/searchPreProcessor.php';
 
    ?>
 		<div style="font-size:12px;height:460px;overflow:auto;">
-			<? include("include/tmpResults/" . $_SESSION['searchId'] . ".php"); ?>
+			<? include($_SESSION['appRoot'] . "view/include/tmpResults/" . $_SESSION['searchId'] . ".php"); ?>
 		</div>
 		
 	<? } else if (!strcmp($pageMode, "detail")) { ?>
 
 		<div style="font-size:12px;">
-			<? include("include/tmpDetail/" . $_SESSION['detailId'] . ".php"); ?>
+			<? include($_SESSION['appRoot'] . "view/include/tmpDetail/" . $_SESSION['detailId'] . ".php"); ?>
 		</div>
 
 	<? } else if (!strcmp($pageMode, "map")) { ?>
 
 		<div style="font-size:12px;">
-			<? include("include/mapPlaceholder.php"); ?>
+			<? include($_SESSION['appRoot'] . "view/include/mapPlaceholder.php"); ?>
 		</div>
 		
 	<? } else { // show default search results, at this time equal to group directory for this user ?> 
 	
 		<div style="font-size:12px;height:460px;overflow:auto;">
-			<? include("include/tmpResults/" . $_SESSION['defaultSearchId'] . ".php"); ?>
+			<? include($_SESSION['appRoot'] . "view/include/tmpResults/" . $_SESSION['defaultSearchId'] . ".php"); ?>
 		</div>	
 	
 	<? } ?>

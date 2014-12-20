@@ -2,9 +2,9 @@
 
 session_start();
 
-include("../model/pgDb.php");
-include("util.php");
-require_once 'error/handlers.php';
+require_once("util.php");
+require_once($_SESSION['appRoot'] . "model/pgDb.php");
+require_once($_SESSION['appRoot'] . "control/error/handlers.php");
 
 $fname = $lname = $sms = $email = $password = $phone = "";
 $smsEnabled = $emailEnabled = $smsPublic = $emailPublic = $phonePublic = "false";

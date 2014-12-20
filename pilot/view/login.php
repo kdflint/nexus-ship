@@ -1,14 +1,15 @@
 <? 
 session_start();
 
-include("../model/pgDb.php");
-include '../control/util.php';
+require_once("../control/util.php");
+require_once(Util::getHome() . "php/Validate.php");
+require_once(Util::getAppRoot() . "model/pgDb.php");
 
 $error = "";
 
 if(isset($_GET['logout'])) {
 	// Logout from Forum
-	require_once '../control/forum_sso_functions.php';
+	require_once(Util::getAppRoot() . "control/forum_sso_functions.php");
 	forumSignout();
 	
 	// Logout from NorthBridge

@@ -5,9 +5,9 @@ session_start();
 //error_reporting(E_ALL);
 //ini_set( 'display_errors','1'); 
 
-include("../model/pgDb.php");
-include("util.php");
-require_once 'error/handlers.php';
+require_once("util.php");
+require_once($_SESSION['appRoot'] . "model/pgDb.php");
+require_once($_SESSION['appRoot'] . "control/error/handlers.php");
 
 $message = $subject = $greeting = $salutation = "";
 

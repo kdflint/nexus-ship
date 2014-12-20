@@ -2,8 +2,8 @@
 
 session_start();
 
-include("../model/pgDb.php");
-include("../control/util.php");
+require_once($_SESSION['appRoot'] . "model/pgDb.php");
+require_once($_SESSION['appRoot'] . "control/util.php");
 
 $error = "";
 
@@ -81,7 +81,7 @@ if (isset($_SESSION['role'])) {
   			</table>
   		</td></tr>
   	</table>
-		  	 		  	
+		  	 	
   </div>
   </div>
   </body>

@@ -1,0 +1,29 @@
+Look up the meetings
+select * from spc_calendar_events where (date(created_on) = curdate()-1 or date(updated_on) = curdate()-1) and start_date >= curdate()
+
+Get the email list
+select u.email from public.user u, user_group ug where ug.group_fk = '1' and u.id = ug.user_fk 
+
+TO: 
+BCC: email list 
+SUBJECT: [Nexus] Calendar Digest
+
+Here are new Nexus calendar updates for the Faith-based Community Engaged Research Network calendar.
+
+You can view these meeting details by visiting the Calendar tab in Nexus: http://northbridgetech.org/apps/nexus/view/nexus.php?thisPage=calendar
+
+Nexus Support Team
+
+=================================
+
+New Meeting:  Nexus Web Conference Training
+
+Where: online from your web-enabled computer
+
+When: 12/9 and 12/16 at 10:00 am CT
+
+Description: 
+Hands-on walkthrough of the web conference feature of the Nexus platform.
+In order to attend this session, please RSVP to kathy.flint@northbridgetech.org.
+
+=================================

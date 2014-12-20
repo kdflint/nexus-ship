@@ -6,8 +6,8 @@ class pgDb {
 	// select * from pg_enum e where enumtypid = '1569578'
 	
 	public static function connect() {	
-		include("../config/env_config.php");	
-		//include(dirname(__FILE__) . "/dev/nexus/config/env_config.php");	
+		require_once("../control/util.php");
+		require(Util::getAppRoot() . "config/env_config.php");	
 		$con = pg_connect("host=$db_host dbname=$db user=$db_user password=$db_pass")
     or trigger_error("Could not connect to the database server\n", E_USER_ERROR);   
     return $con;
@@ -358,11 +358,31 @@ class pgDb {
 		return pgDb::psExecute($query, array($uuid));
 	}
 	
-	public static function getRecipientByMessageId($uuid) {
+	public static function getRecipientByMessageUuid($uuid) {
 		$query = "select u.id as userid, u.fname as fname, u.lname as lname, u.email as email from public.user u, message_recipient mr where mr.uuid = $1 and mr.recipient_fk = u.id";
 		return pgDb::psExecute($query, array($uuid));
 	}
+	
+	
+	public static function getRecipientByMessageId($id) {
+		$query = "select u.id as userid, u.fname as fname, u.lname as lname, u.email as email, u.sms as cell, u.enable_sms as smson, u.enable_email as emailon, mr.uuid as uuid, o.name as oname
+			from public.user u, message_recipient mr, user_organization uo, organization o 
+			where mr.message_fk = $1
+			and u.id = mr.recipient_fk
+			and uo.user_fk = mr.recipient_fk
+			and o.id = uo.organization_fk";
+		return pgDb::psExecute($query, array($id));
+	}
+	
+	public static function updateMessageStatus($status, $uuid, $userid) {
+		$query = "update message_recipient set status = $1 where uuid = $2 and recipient_fk = $3";
+		return pgDb::psExecute($query, array($status, $uuid, $userid));
+	}
 
+	public static function getMessageByStatus($status) {
+		$query = "select m.id as id, m.message as message from message m where id in (select distinct mr.message_fk from message_recipient mr where mr.status = $1)";
+		return pgDb::psExecute($query, array($status));
+	}	
 
 	public static function getGroupMembersByGroupId($id) {
 		$query = "select u.id, u.fname, u.lname, o.name as oname

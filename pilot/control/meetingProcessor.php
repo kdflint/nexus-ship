@@ -2,9 +2,9 @@
 
 session_start();
 
-require_once '../config/env_config.php';
-require_once 'error/handlers.php';
-require_once('bbb-api-php/includes/bbb-api.php'); 
+require_once($_SESSION['appRoot'] . "config/env_config.php");
+require_once($_SESSION['appRoot'] . "control/error/handlers.php");
+require_once($_SESSION['appRoot'] . "control/bbb-api-php/includes/bbb-api.php"); 
 
 $bbb = new BigBlueButton();
 
