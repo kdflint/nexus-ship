@@ -6,7 +6,7 @@ class pgDb {
 	// select * from pg_enum e where enumtypid = '1569578'
 	
 	public static function connect() {	
-		require_once("../control/util.php");
+		require_once(dirname(__FILE__) . "/../control/util.php");
 		require(Util::getAppRoot() . "config/env_config.php");	
 		$con = pg_connect("host=$db_host dbname=$db user=$db_user password=$db_pass")
     or trigger_error("Could not connect to the database server\n", E_USER_ERROR);   
@@ -363,24 +363,27 @@ class pgDb {
 		return pgDb::psExecute($query, array($uuid));
 	}
 	
-	
-	public static function getRecipientByMessageId($id) {
-		$query = "select u.id as userid, u.fname as fname, u.lname as lname, u.email as email, u.sms as cell, u.enable_sms as smson, u.enable_email as emailon, mr.uuid as uuid, o.name as oname
-			from public.user u, message_recipient mr, user_organization uo, organization o 
+	public static function getRecipientByPendingMessageId($id) {
+		$query = "select u.id as userid, u.fname as fname, u.lname as lname, u.email as email, u.sms as cell, u.enable_sms as smson, u.enable_email as emailon, mr.uuid as uuid
+			from public.user u, message_recipient mr 
 			where mr.message_fk = $1
-			and u.id = mr.recipient_fk
-			and uo.user_fk = mr.recipient_fk
-			and o.id = uo.organization_fk";
+			and mr.status = 'PENDING'
+			and u.id = mr.recipient_fk";
 		return pgDb::psExecute($query, array($id));
 	}
 	
-	public static function updateMessageStatus($status, $uuid, $userid) {
-		$query = "update message_recipient set status = $1 where uuid = $2 and recipient_fk = $3";
-		return pgDb::psExecute($query, array($status, $uuid, $userid));
+	public static function updateMessageStatus($status, $uuid) {
+		$query = "update message_recipient set status = $1 where uuid = $2";
+		return pgDb::psExecute($query, array($status, $uuid));
 	}
 
 	public static function getMessageByStatus($status) {
-		$query = "select m.id as id, m.message as message from message m where id in (select distinct mr.message_fk from message_recipient mr where mr.status = $1)";
+		$query = "select m.id as id, m.message as message, m.sender_fk as sender, u.fname as fname, u.lname as lname, o.name as oname
+			from message m, public.user u, user_organization uo, organization o
+			where m.id in (select distinct mr.message_fk from message_recipient mr where mr.status = $1)
+			and u.id = m.sender_fk
+			and uo.user_fk = m.sender_fk
+			and o.id = uo.organization_fk";
 		return pgDb::psExecute($query, array($status));
 	}	
 

@@ -348,7 +348,7 @@ class Util {
 	}
 	
 	public static function getAppRoot() {
-		return __DIR__  . "/../";
+		return dirname(__FILE__) . "/../";
 	}
 	
 	public static function getHome() {

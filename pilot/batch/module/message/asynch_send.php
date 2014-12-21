@@ -3,6 +3,13 @@
 <?php
 
 require_once("../../config/env_config.php");
+require_once("../../model/pgDb.php");
+require_once("/home1/northbr6/php/Log.php");
+
+$conf = array('append' => true, 'mode' => 0644, 'timeFormat' => '%X %x');
+$logger = Log::singleton("file", "message_log", "", $conf, PEAR_LOG_INFO);
+
+$logger->log("Message process started", PEAR_LOG_DEBUG);
 
 $subject = "[Nexus] Personal Message";
 
@@ -10,30 +17,44 @@ $cursor1 = pgDb::getMessageByStatus("PENDING");
 
 while ($row1 = pg_fetch_array($cursor1)) {
 
+	$logger->log("Processing pending messages for message id " . $row1['id'], PEAR_LOG_INFO);
 	$message = $row1['message'];
+	$senderFname = $row1['fname'];
+	$senderLname = $row1['lname'];
+	$orgName = $row1['oname'];
+	$counter = 0;
 	
-	$cursor2 = pgDb::getRecipientByMessageId($row1['id']);
+	$cursor2 = pgDb::getRecipientByPendingMessageId($row1['id']);
 
 	while ($row2 = pg_fetch_array($cursor2)) {
-		
+			
 		if (!strcmp($row2['smson'], "t")) {
-			$greeting = $row2['first'] . ", ";
-			$salutation = " -" . $row2['first'] . " " . $row2['last'] . ".";
+			$greeting = $row2['fname'] . ", ";
+			$salutation = " -" . $senderFname . " " . $senderLname[0] . ".";
 			sendSms($row2['cell'], $subject, $greeting . $message . $salutation);
+			$logger->log("SMS message sent to user id " . $row2['userid'] , PEAR_LOG_DEBUG);
 		}
 		
 		if (!strcmp($row2['emailon'], "t")) {				
-			$greeting = $row2['first'] . ", \n\n";
-			$salutation = "\n\nYour colleague,\n\n" . $row2['first'] . " " . $row2['last'] . "\n" . $row2['oname'];
-			$from = $row2['first'] . " " . $row2['last'] . " via Nexus " . "<hit-reply@nexus.northbridgetech.org>";
-  			$reply = $row2['first'] . " " . $row2['last'] . " via Nexus " . "<reply-nexus-" . $row2['uuid'] . "@triple-grove-698.appspotmail.com>";
+			$greeting = $row2['fname'] . ", \n\n";
+			$salutation = "\n\nYour colleague,\n\n" . $senderFname . " " . $senderLname . "\n" . $orgName;
+			$from = $senderFname . " " . $senderLname . " via Nexus " . "<hit-reply@nexus.northbridgetech.org>";
+  			$reply = $senderFname . " " . $senderLname . " via Nexus " . "<reply-nexus-" . $row2['uuid'] . "@triple-grove-698.appspotmail.com>";
 			sendEmail($row2['email'], $subject, $greeting . $message . $salutation, $row2['uuid'], $from, $reply);
+			$logger->log("Email message sent to user id " . $row2['userid'] , PEAR_LOG_DEBUG);
 		}
 		
 		pgDb::updateMessageStatus("SENT", $row2['uuid']);
+		$counter++;
 	
 	}
+	
+	$logger->log("Message id " . $row1['id'] . " sent to " . $counter . " recipients", PEAR_LOG_INFO);
+	
 }
+
+$logger->log("Message process ended", PEAR_LOG_DEBUG);
+exit(0);
 
 
 function sendSms($phonenum, $subject, $message) {
@@ -61,13 +82,7 @@ function sendSms($phonenum, $subject, $message) {
 }
 
 function sendEmail($email, $subject, $message, $uuid, $from, $reply) {
-	
-	/*
-	$headers = "From: " . $_SESSION['fname'] . " " . $_SESSION['lname'] . ' \(via Nexus\) ' . "<hit-reply@nexus.northbridgetech.org>" . "\r\n" .
-    "Reply-To: " . $_SESSION['fname'] . " " . $_SESSION['lname'] . ' \(via Nexus\) ' . "<reply-nexus-" . $uuid . "@triple-grove-698.appspotmail.com>" . "\r\n" .
-    "Bcc: support@nexus.northbridgetech.org";
- 	*/
- 	
+		
  	$headers = "From: " . $from  . "\r\n" . "Reply-To: " . $reply . "\r\n" . "Bcc: support@nexus.northbridgetech.org"; 	
 	mail($email, $subject, $message, $headers);
 		
