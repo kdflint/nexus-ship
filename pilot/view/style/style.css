@@ -65,9 +65,9 @@ div.topLeftQuad {
 
 div.lowerLeftQuad {
 	position:absolute;
-	top:300px;
+	top:200px;
 	width:300px;
-	height:220px;
+	height:320px;
 	background-color: #f1f2df;
 	box-shadow: 5px 5px 5px #cccccc;
 	padding:10px;

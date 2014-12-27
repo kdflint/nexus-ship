@@ -2,6 +2,12 @@
 
 require_once($_SESSION['appRoot'] . "control/searchPreProcessor.php");
 
+$userMessage = "Select recipients from right";
+
+if(isset($_GET['userMessage'])) {
+	$userMessage = $_GET['userMessage'];
+}
+
 ?>
 
 <div class="topLeftQuad">
@@ -13,6 +19,7 @@ require_once($_SESSION['appRoot'] . "control/searchPreProcessor.php");
 			<tr><td>&nbsp;</td><td><input type="radio" name="scope" value="group" <? echo $groupChecked; ?> />Your groups
 		<input type="radio" name="scope" value="network" <? echo $networkChecked; ?> />Entire network </td></tr>
 			<tr><td><img src="image/mag-glass.jpg" width="25" height="25" /></td><td><input type="text" size="20" name="string" value="<? echo $stickyString; ?>"/></td></tr>
+			<!--
 			<tr><td><i>and</i></td><td>
 				<select name="topic" style="width: 230px">    
 					<option value="0" selected>Specialty is</option>	
@@ -34,8 +41,7 @@ require_once($_SESSION['appRoot'] . "control/searchPreProcessor.php");
 				</select>
 			</td></tr>
 			
-			<!--
-				<tr><td><i>and</i></td><td>
+			<tr><td><i>and</i></td><td>
 				<select name="type" style="width: 230px" disabled>    
 					<option value="0" selected>Group is</option>
 					<option value="0" >------------</option>
@@ -120,11 +126,10 @@ require_once($_SESSION['appRoot'] . "control/searchPreProcessor.php");
 
 <div class="lowerLeftQuad">
 	<table cellpadding="2">
-		<tr><td valign="top">To:</td><td><span id="toDisplay" /></tr>
-		<tr><td colspan="2">Your Message:</td></tr>
-	  <!-- TODO: Figure out max length after subtracting NorthBridge text. -->
-		<tr><td colspan="2"><textarea name="message" maxlength="105" rows="5" cols="34"></textarea></td></tr>
-	<tr><td colspan="2"><input type="submit" id="messageSendSubmit" value="Send your Message" style="float:right;" disabled ></td></tr>
+		<tr><td valign="top">To:</td><td><span id="toDisplay" ><? echo $userMessage; ?></span></tr>
+		<tr><td colspan="2">Message:</td></tr>
+		<tr><td colspan="2"><textarea id="messagearea" name="message" onKeyDown="countChars()" onKeyUp="countChars()" maxlength="1000" rows="13" cols="34"></textarea></td></tr>
+		<tr><td><input disabled size="5" value="1000" name="txtLen" id="txtLen"></td><td><input type="submit" id="messageSendSubmit" value="Send Message" style="float:right;" disabled ></td></tr>
 </table>
 </div>
 
