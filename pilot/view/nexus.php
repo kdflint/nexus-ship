@@ -6,8 +6,8 @@
 session_start();
 
 //require_once '../control/xmpp-prebind-php/lib/XmppPrebind.php';
-require_once '../control/util.php';
-require '../control/error/handlers.php';
+require_once($_SESSION['appRoot'] . "control/util.php");
+require_once($_SESSION['appRoot'] . "control/error/handlers.php");
 
 if (!Util::isSessionValid()) {
 	header("location:login.php?logout=true");
@@ -158,13 +158,13 @@ if(curl_exec($ch) === false) 	{
       <div class="shell">
       	
 				<div class="navigation">
-      		<? include 'include/navigation.php'; ?>
+      		<? include($_SESSION['appRoot'] . "view/include/navigation.php"); ?>
  		  	</div>
 
 				<div class="projectsContent">						
 			 	<?
-			   $contentFile = "include/" . $thisPage . ".php";
-			   include $contentFile; 
+			   $contentFile = $_SESSION['appRoot'] . "view/include/" . $thisPage . ".php";
+			   include($contentFile); 
 			 	?>
 			 	</div>
 			 				

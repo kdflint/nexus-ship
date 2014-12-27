@@ -1,5 +1,5 @@
 <?
-include '../control/profilePreProcessor.php';
+require_once($_SESSION['appRoot'] . "control/profilePreProcessor.php");
 
 $error = $testEmail = $testSms = "";
 

@@ -4,8 +4,8 @@
 
 session_start();
 
-include("../model/pgDb.php");
-include("util.php");
+require_once("util.php");
+require_once(Util::getAppRoot() . "model/pgDb.php");
 
 $cleanCode = "";
 

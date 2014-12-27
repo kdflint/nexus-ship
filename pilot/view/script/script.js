@@ -121,8 +121,10 @@ function messageToFill() {
 	var y=document.getElementById("toDisplay");
 	var names = document.forms['messageForm'].elements['names[]'];
 	var toNames = "";
+	var checkedCount = 0;
 	for (var i=0, len=names.length; i<len; i++) {
     toNames = toNames + (names[i].checked ? (names[i].value + ", ") : ""); 
+    if (names[i].checked) {checkedCount++;}
 	}
 	if (i == 0) {
 		// We have only one input, not a list so above loop will return nothing
@@ -130,14 +132,35 @@ function messageToFill() {
 	}
 	var trim1 = toNames.replace(/(, $)/g, "") // remove trailing comma
 	var trim2 = trim1.replace(/([0-9]*::)/g, "") // remove embedded user id
-	y.innerHTML=trim2;
+	if (checkedCount > 3) {
+		y.innerHTML=checkedCount + " recipients";
+	} else {
+		y.innerHTML=trim2;
+	}
 	
 	if (trim2.length < 1) {
 		document.getElementById("messageSendSubmit").disabled = true;
+		y.innerHTML="Select recipients from right";
 	} else {
 		document.getElementById("messageSendSubmit").disabled = false;
 	}
 
+}
+
+function checkAll(namesClass) {
+	var names = document.getElementsByClassName(namesClass);
+	for (var i=0, len=names.length; i<len; i++) {
+		names[i].checked = true;
+	}	
+	messageToFill();
+}
+
+function uncheckAll(namesClass) {
+	var names = document.getElementsByClassName(namesClass);
+	for (var i=0, len=names.length; i<len; i++) {
+		names[i].checked = false;
+	}	
+	messageToFill();
 }
 
 function disableTestMessageLink() {
@@ -232,3 +255,15 @@ function showUser(str) {
 function showWait() {
 	document.getElementById("light_userprofile").innerHTML="<a href=\"javascript:void(0)\" onclick=\"document.getElementById('light_userprofile').style.display='none';document.getElementById('fade').style.display='none'\" style=\"float:right\">Close</a><p>One moment please...</p><hr/>";
 }
+
+function countChars() {
+     var l = "1000";
+     var str = document.getElementById("messagearea").value;
+     var len = str.length;
+     if(len <= l) {
+          document.getElementById("txtLen").value=l-len;
+     } else {
+          //document.getElementById("textArea").value=str.substr(0, 140);
+     }
+}
+

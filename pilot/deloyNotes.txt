@@ -1,22 +1,10 @@
-alter table public.user add column publish_email boolean;
-update public.user set publish_email = false;
-alter table public.user alter column publish_email set default 'false';
-alter table public.user alter column publish_email set not null;
+alter table message_recipient add column status varchar(10);
+update message_recipient set status = 'SENT';
+alter table message_recipient alter column status set default 'PENDING';
+alter table message_recipient alter column status set not null;
 
-alter table public.user add column publish_sms boolean;
-update public.user set publish_sms = false;
-alter table public.user alter column publish_sms set default 'false';
-alter table public.user alter column publish_sms set not null;
+add soft links to prod batch path
 
-alter table public.user add column phone varchar(10);
-update public.user set phone = '';
-alter table public.user alter column phone set default '';
+northbr6@northbridgetech.org [~/batch/dev/nexus/control]# ln -s ~/public_html/dev/nexus/control/util.php util.php
+northbr6@northbridgetech.org [~/batch/dev/nexus/model]# ln -s ~/public_html/dev/nexus/model/pgDb.php pgDb.php
 
-alter table public.user add column publish_phone boolean;
-update public.user set publish_phone = false;
-alter table public.user alter column publish_phone set default 'false';
-alter table public.user alter column publish_phone set not null;
-
-alter table public.user add column descr varchar(250);
-update public.user set descr = '';
-alter table public.user alter column descr set default '';

@@ -2,11 +2,11 @@
 
 session_start();
 
-include("../model/pgDb.php");
-include("util.php");
-require_once 'error/handlers.php';
-require_once("/home1/northbr6/php/Validate.php");
-include("../config/env_config.php");
+require_once("util.php");
+require_once(Util::getAppRoot() . "model/pgDb.php");
+require_once(Util::getAppRoot() . "control/error/handlers.php");
+require_once(Util::getAppRoot() . "config/env_config.php");
+require_once(Util::getHome() . "php/Validate.php");
 
 $dirty = array('username' => $_POST['uid']);
 $clean = array();

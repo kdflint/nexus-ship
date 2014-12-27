@@ -5,12 +5,13 @@ session_start();
 //error_reporting(E_ALL);
 //ini_set( 'display_errors','1'); 
 
-require_once '../model/pgDb.php';
-require_once 'util.php';
-require_once '../config/env_config.php';
-require_once '/home1/northbr6/php/Validate.php';
-require_once dirname(__FILE__).'/forum_sso_functions.php';
-require_once '../module/calendar/SpcEngine.php';
+require_once("util.php");
+require_once(Util::getAppRoot() . "model/pgDb.php");
+require_once(Util::getAppRoot() . "control/error/handlers.php");
+require_once(Util::getAppRoot() . "config/env_config.php");
+require_once(Util::getHome() . "php/Validate.php");
+require_once(Util::getAppRoot() . "module/calendar/SpcEngine.php");
+require_once(Util::getAppRoot() . "control/forum_sso_functions.php");
 
 // TODO - do I have to put these in session?? Better option?
 $_SESSION['stickyForm']['userid'] = $_POST['userid'];

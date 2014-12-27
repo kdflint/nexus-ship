@@ -3,8 +3,8 @@
 //error_reporting(E_ALL);
 //ini_set( 'display_errors','1');
 
-include("../model/pgDb.php");
 require_once("util.php");
+require_once($_SESSION['appRoot'] . "model/pgDb.php");
 
 $_SESSION['email'] = $_SESSION['sms'] = $_SESSION['phone'] = $count = "";
 

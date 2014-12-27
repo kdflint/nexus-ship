@@ -1,6 +1,6 @@
 <?
 
-require_once('../control/bbb-api-php/includes/bbb-api.php'); 
+require_once("../control/bbb-api-php/includes/bbb-api.php"); 
      
 $bbb = new BigBlueButton();
 $hostname = "conference1.northbridgetech.org";
