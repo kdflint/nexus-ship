@@ -17,7 +17,7 @@ $bbb = new BigBlueButton();
 */
 $creationParams = array(
 	'meetingId' => '1234', 					// REQUIRED
-	'meetingName' => 'Test Meeting Name', 	// REQUIRED
+	'meetingName' => 'Northbridge Board of Directors Meeting Room', 	// REQUIRED
 	'attendeePw' => 'ap', 					// Match this value in getJoinMeetingURL() to join as attendee.
 	'moderatorPw' => 'mp', 					// Match this value in getJoinMeetingURL() to join as moderator.
 	'welcomeMsg' => '', 					// ''= use default. Change to customize.

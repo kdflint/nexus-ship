@@ -8,3 +8,4 @@ add soft links to prod batch path
 northbr6@northbridgetech.org [~/batch/dev/nexus/control]# ln -s ~/public_html/dev/nexus/control/util.php util.php
 northbr6@northbridgetech.org [~/batch/dev/nexus/model]# ln -s ~/public_html/dev/nexus/model/pgDb.php pgDb.php
 
+add cron job

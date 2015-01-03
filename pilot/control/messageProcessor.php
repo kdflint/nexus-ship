@@ -11,6 +11,7 @@ require_once($_SESSION['appRoot'] . "control/error/handlers.php");
 require_once(Util::getHome() . "php/Log.php");
 
 $conf1 = array('append' => true, 'mode' => 0644, 'timeFormat' => '%X %x');
+// TODO- make this path dynamic using $_SESSION['environment'] - but there is a problem setting that variable at the moment...
 $logger = Log::singleton("file", Util::getHome() . "batch/dev/nexus/module/message/message_log", "", $conf1, PEAR_LOG_INFO);
 
 $conf2 = array('subject' => 'Message Send Event');
