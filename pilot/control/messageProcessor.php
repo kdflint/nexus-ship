@@ -41,7 +41,7 @@ if (strlen($message) > 0) {
     	$userId = preg_split("/::/", $value);
     	$row = pg_fetch_array(pgDb::getUserById($userId[0]));
 			$uuid = Util::newUuid();
-			pgDb::insertMessageRecipient($messageId, $userId[0], $uuid);
+			pgDb::insertMessageRecipient($messageId, $userId[0], $uuid, "PENDING");
 			$counter++;
 	 	}
 	 	

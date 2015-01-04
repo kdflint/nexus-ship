@@ -58,7 +58,7 @@ if ($row) {
 	$messageId = pgDb::insertMessage($row['recipientid'], $subject, $newMessage, $row['messageid']);	
 	
 	$newUuid = Util::newUuid();
-	pgDb::insertMessageRecipient($messageId, $row['userid'], $newUuid);
+	pgDb::insertMessageRecipient($messageId, $row['userid'], $newUuid, "SENT");
 	
 	$row2 = pg_fetch_array(pgDb::getRecipientByMessageUuid($originatingUuid));
 	

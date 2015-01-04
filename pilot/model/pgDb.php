@@ -348,9 +348,9 @@ class pgDb {
 		return $row[0];
 	}
 	
-	public static function insertMessageRecipient($messageId, $recipientId, $uuid) {
-		$query = "insert into message_recipient (message_fk, recipient_fk, uuid) values ($1, $2, $3)";
-		return pgDb::psExecute($query, array($messageId, $recipientId, $uuid));
+	public static function insertMessageRecipient($messageId, $recipientId, $uuid, $status) {
+		$query = "insert into message_recipient (message_fk, recipient_fk, uuid, status) values ($1, $2, $3, $4)";
+		return pgDb::psExecute($query, array($messageId, $recipientId, $uuid, $status));
 	}		
 	
 	public static function getSenderByMessageId($uuid) {
