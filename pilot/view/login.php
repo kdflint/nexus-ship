@@ -24,16 +24,16 @@ if(isset($_GET['error'])) {
 	$error = "You have signed out succesfully.";
 }
 
-$cleanNetworkId = "18";
+$logo = "";
+$networkName = "";		
 
 if(isset($_GET['network']) && Util::validateNetworkId($_GET['network'])) {
- $cleanNetworkId = $_GET['network'];	
+ 	$cleanNetworkId = $_GET['network'];
+ 	$cursor = pgDb::getOrganizationById($cleanNetworkId);
+	$row = pg_fetch_array($cursor);
+	$logo = $row['logo'];
+	$networkName = $row['name'];		
 }
-
-$cursor = pgDb::getOrganizationById($cleanNetworkId);
-$row = pg_fetch_array($cursor);
-$logo = $row['logo'];
-$networkName = $row['name'];	
 
 ?>
 
