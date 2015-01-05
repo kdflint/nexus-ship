@@ -45,11 +45,11 @@ if (strlen($message) > 0) {
 			$counter++;
 	 	}
 	 	
-	 	$logger->log("Inserted " . $counter . " pending messages for message id " . $messageId, PEAR_LOG_INFO);
-	 	$loggerEmail->log("Inserted " . $counter . " pending messages for message id " . $messageId, PEAR_LOG_INFO);
+	 	$logger->log("Inserted " . $counter . " pending messages for message id " . $messageId . " (but it's possible some were dupes so don't panic).", PEAR_LOG_INFO);
+	 	$loggerEmail->log("Inserted " . $counter . " pending messages for message id " . $messageId . " (but it's possible some were dupes so don't panic).", PEAR_LOG_INFO);
 	 			
 		// TODO: return to directory with correct focus and success message
-		header("location:../view/nexus.php?thisPage=directory" . $_POST['pageRestore'] . "&userMessage=Sent! Please allow 5 minutes for your message to be delivered.");
+		header("location:../view/nexus.php?thisPage=directory" . $_POST['pageRestore'] . "&userMessage=Please allow 5 minutes for your message to be delivered.");
 		exit(0);
 			
 	} else {
