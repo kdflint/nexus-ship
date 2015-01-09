@@ -9,6 +9,11 @@ require_once(Util::getAppRoot() . "config/env_config.php");
 
 // clean email
 $cleanEmail = "";
+$cleanNetwork = "";
+
+if (isset($_POST['network']) && Validate::string($_POST['network'], array('format' => VALIDATE_NUM))) {
+	$cleanNetwork = $_POST['network'];
+} 
 
 if (isset($_POST['email']) && Util::validateEmail($_POST['email'])) {
 			$cleanEmail = $_POST['email'];
@@ -25,15 +30,15 @@ if ($cleanEmail) {
 	  		$usernames = $usernames . $row['username'] . ", ";
 	 	}
 	 	sendEnrollEmail($cleanEmail, $env_appRoot, "", $usernames);
-		returnToLoginWithMessage("Your enrollment package has been sent to " . $cleanEmail . ".");
+		returnToLoginWithMessage("Your enrollment package has been sent to " . $cleanEmail . ".", $cleanNetwork);
 	}		
 
 }
 
-returnToLoginWithMessage(Util::AUTHENTICATION_ERROR);
+returnToLoginWithMessage(Util::AUTHENTICATION_ERROR, $cleanNetwork);
 
-function returnToLoginWithMessage($errorMessage) {
-	header("location:../view/login.php?error=" . $errorMessage);
+function returnToLoginWithMessage($errorMessage, $network) {
+	header("location:../view/login.php?network=" . $network . "&error=" . $errorMessage);
 	exit(0);
 }
 
