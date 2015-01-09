@@ -8,8 +8,14 @@ require_once(Util::getAppRoot() . "control/error/handlers.php");
 require_once(Util::getAppRoot() . "config/env_config.php");
 require_once(Util::getHome() . "php/Validate.php");
 
-$dirty = array('username' => $_POST['uid']);
+$dirty = array('username' => $_POST['uid'], 'network' => $_POST['network']);
 $clean = array();
+
+if (Validate::string($dirty['network'], array('format' => VALIDATE_NUM))) {
+	$clean['good']['network'] = $dirty['network'];
+} else {
+	$clean['good']['network'] = "";	
+}
 
 // Rules here slightly different to be backward compatible to data inserted prior to validation enforcement
 // TODO - disallow spaces when we go public public
@@ -18,7 +24,7 @@ if (Validate::string($dirty['username'], array(
     				'max_length' => Util::USERNAME_MAX))) {
 	$clean['good']['username'] = $dirty['username'];
 } else {
-	returnToLoginWithMessage(Util::AUTHENTICATION_ERROR);	
+	returnToLoginWithMessage(Util::AUTHENTICATION_ERROR, $clean['good']['network']);	
 }
 
 // TODO - make sure username is unique and only one is returned
@@ -30,17 +36,17 @@ if (isset($result['email']) && isset($result['id'])) {
 		$uuid = Util::newUuid();
 		pgDb::insertPasswordResetActivity($result['id'], $uuid);
 		sendResetEmail($result['email'], $env_appRoot, $fname, $uuid);
-		returnToLoginWithMessage("Your password reset link has been sent to the email address on file.");	
+		returnToLoginWithMessage("Your password reset link has been sent to the email address on file.", $clean['good']['network']);	
 	} else {
 		// TODO - or, say contact customer support?
-		returnToLoginWithMessage(Util::AUTHENTICATION_ERROR);
+		returnToLoginWithMessage(Util::AUTHENTICATION_ERROR, $clean['good']['network']);
 	}
 } else {
-	returnToLoginWithMessage("Your password reset link has been sent to the email address on file.");
+	returnToLoginWithMessage("Your password reset link has been sent to the email address on file.", $clean['good']['network']);
 }
 
-function returnToLoginWithMessage($message) {
-	header("location:../view/login.php?error=" . $message);
+function returnToLoginWithMessage($message, $network) {
+	header("location:../view/login.php?network=" . $network . "&error=" . $message);
 	exit(0);
 }
 

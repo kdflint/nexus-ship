@@ -27,3 +27,37 @@ Hands-on walkthrough of the web conference feature of the Nexus platform.
 In order to attend this session, please RSVP to kathy.flint@northbridgetech.org.
 
 =================================
+
+
+
+TO: 
+BCC: email list 
+SUBJECT: [Nexus] Calendar Reminder
+
+This is a calendar reminder for the Faith-based Community Engaged Research Network calendar.
+
+There is a meeting occurring tomorrow, 1/9/2015.
+
+You can view these meeting details by visiting the Calendar tab in Nexus: http://northbridgetech.org/apps/nexus/view/nexus.php?thisPage=calendar
+
+Regards,
+
+Nexus Support Team
+
+=================================
+
+Meeting:  Full Faith-Based Community Engaged Research Network Meeting
+
+Where: AMG Sykes Center 2545/2555 S. Martin Luther King Drive, Conf. room A
+
+When: 1/9, 10:00 am - 12:00 pm CT
+
+Description: (none)
+
+=================================
+
+TO: 
+BCC: sms enabled
+SUBJECT: [Nexus] Calendar Reminder
+
+Full Faith-Based Community Engaged Research Network Meeting occurs tomorrow, 1/9/2015, 10:00 am CT, 2545/2555 S. Martin Luther King Drive. ~ Nexus Support Team

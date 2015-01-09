@@ -26,6 +26,7 @@ if(isset($_GET['error'])) {
 
 $logo = "";
 $networkName = "";		
+$cleanNetworkId = "";
 
 if(isset($_GET['network']) && Util::validateNetworkId($_GET['network'])) {
  	$cleanNetworkId = $_GET['network'];
@@ -97,6 +98,7 @@ if(isset($_GET['network']) && Util::validateNetworkId($_GET['network'])) {
 					<tr><td>User Id:</td><td><input class="passed" type="text" size="15" name="uid" value=""/></td></tr>
 					<tr><td><a href="javascript:void(0)" onclick="document.getElementById('light_user').style.display='block';document.getElementById('light_password').style.display='none';document.getElementById('fade').style.display='block'">Forgot your user id?</a></td><td><input type="submit" style="float:right;" value="Reset"/></td></tr>
 				</table>
+				<input type="hidden" name="network" value="<? echo $cleanNetworkId; ?>"> 
 			</form>
 		</div>
 		
@@ -108,6 +110,7 @@ if(isset($_GET['network']) && Util::validateNetworkId($_GET['network'])) {
 					<tr><td>Email:</td><td><input class="passed" type="text" size="15" name="email" value=""/></td></tr>
 					<tr><td colspan="2"><input type="submit" style="float:right;" value="Resend"/></td></tr>
 				</table>
+				<input type="hidden" name="network" value="<? echo $cleanNetworkId; ?>">
 			</form>
 		</div>
 		<div id="fade" class="black_overlay"></div>
