@@ -94,8 +94,8 @@ if ($row) {
 	}
 	
 } else {
-	
 	fwrite($standardlog, "There is no message to correspond with the input uuid.\n");
+	mail("kathy.flint@northbridgetech.org", "Bad incoming uuid from messageQueueProcessor.php", "Message id = " . $messageId, "From: kathy.flint@northbridgetech.org");
 }
 
 fclose($pipelog);
