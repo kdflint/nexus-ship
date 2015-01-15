@@ -28,12 +28,15 @@ while ($row1 = pg_fetch_array($cursor1)) {
 
 	while ($row2 = pg_fetch_array($cursor2)) {
 			
+		/*
 		if (!strcmp($row2['smson'], "t")) {
 			$greeting = $row2['fname'] . ", ";
 			$salutation = " -" . $senderFname . " " . $senderLname[0] . ".";
+			// TODO - once Inbox is implemented, turn this into an alert
 			sendSms($row2['cell'], $subject, $greeting . $message . $salutation);
 			$logger->log("SMS message sent to user id " . $row2['userid'] , PEAR_LOG_DEBUG);
 		}
+		*/
 		
 		if (!strcmp($row2['emailon'], "t")) {				
 			$greeting = $row2['fname'] . ", \n\n";
