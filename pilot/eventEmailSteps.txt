@@ -4,6 +4,16 @@ select * from spc_calendar_events where (date(created_on) = curdate()-1 or date(
 Get the email list
 select u.email from public.user u, user_group ug where ug.group_fk = '1' and u.id = ug.user_fk 
 
+Get the sms list
+select distinct u.sms from public.user u, user_group ug where ug.group_fk = '1' and u.id = ug.user_fk and u.enable_sms = true  
+
+Translate the sms numbers
+https://api.data24-7.com/v/2.0?api=T&user=kdflint&pass=A56L9Q1X&p1=$phonenum
+
+7087855078	7087855078@vtext.com
+3129195627	3129195627@vtext.com
+7733913358	7733913358@txt.att.net
+
 TO: 
 BCC: email list 
 SUBJECT: [Nexus] Calendar Digest
@@ -11,6 +21,8 @@ SUBJECT: [Nexus] Calendar Digest
 Here are new Nexus calendar updates for the Faith-based Community Engaged Research Network calendar.
 
 You can view these meeting details by visiting the Calendar tab in Nexus: http://northbridgetech.org/apps/nexus/view/nexus.php?thisPage=calendar
+
+Regards,
 
 Nexus Support Team
 
@@ -28,6 +40,12 @@ In order to attend this session, please RSVP to kathy.flint@northbridgetech.org.
 
 =================================
 
+
+TO: 
+BCC: sms enabled
+SUBJECT: [Nexus] Calendar Digest
+
+New meeting: Faith Based Research Sub-committee (Caregivers), 1/16/2015, 10:00 CT, 1947 W. 95th Street, Chicago, IL
 
 
 TO: 
@@ -60,4 +78,4 @@ TO:
 BCC: sms enabled
 SUBJECT: [Nexus] Calendar Reminder
 
-Full Faith-Based Community Engaged Research Network Meeting occurs tomorrow, 1/9/2015, 10:00 am CT, 2545/2555 S. Martin Luther King Drive. ~ Nexus Support Team
+Full Faith-Based Community Engaged Research Network Meeting occurs tomorrow, 1/9/2015, 10:00 am CT, 2545/2555 S. Martin  <= MAX LENGTH

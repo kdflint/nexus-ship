@@ -34,21 +34,27 @@ $row = pg_fetch_array(pgDb::getSenderByMessageId($originatingUuid));
 
 if ($row) {
 	
+	$regex = $extractedMessage = "";
+	
 	preg_match("/^Begin Original Message Data Stream$.*^Subject: (.*)$/Usm", $messageIn, $matches);
 	$subject = $matches[1];
-	
-	//preg_match("/^From: (.*) <.*>/m", $messageIn, $matches);
-	//$toName = $matches[1];
 	
 	// From spec on boundary syntax: http://www.w3.org/Protocols/rfc1341/7_2_Multipart.html. Apparently implementations may or may not enclose in quotes.
 	preg_match("/^Content-Type: multipart.*boundary=[\"]?([0-9a-zA-Z'()+_,=\-\.\/\:\?]*)[\"]?$/Usm", $messageIn, $matches);
 	$boundary = $matches[1];
 	
-	// Excellent debug tool at http://regex101.com.
-	$regex = "/--" . Util::escapeforRegex($boundary) . ".^Content-Type: text\/plain.*$(^Content.*)*(^.*)--" . Util::escapeforRegex($boundary) . "$/Usm";
+	// Excellent preg_match debug tool at http://regex101.com
+	$regex = "/--" . Util::escapeforRegex($boundary) . ".*^Content-Type: text\/plain.*$(^Content.*)*(^.*)--" . Util::escapeforRegex($boundary) . "$/Usm";
 	preg_match($regex, $messageIn, $matches);
 	$extractedMessage = end($matches);
-
+	
+	if (strlen($extractedMessage) < 1) {
+		// The boundary did not match for a multi-part message, so attempt a text/plain message
+		// Excellent preg_split debug tool at https://www.functions-online.com/preg_split.html
+		$regex = "/^Content-Type: text\/plain.*^\s*$/Uism";
+		$matches = preg_split($regex,$messageIn);
+		$extractedMessage = end($matches);		
+	}
 		
 	//TODO - Below only works for some email processors.
 	//preg_match("/(.*)^On.*hit-reply@nexus\.northbridgetech\.org.*wrote:/Usm", $extractedMessage, $matches);
@@ -62,7 +68,7 @@ if ($row) {
 	
 	$row2 = pg_fetch_array(pgDb::getRecipientByMessageUuid($originatingUuid));
 	
-	$sanitizedMessage = strtr($extractedMessage, array($row2['email'] => "private address"));
+	$sanitizedMessage = strtr($extractedMessage, array($row2['email'] => "private address", "=\n" => "", "=20" => ""));
 	$to = $row['email'];
 	$toName = $row2['fname'] . " " . $row2['lname'] . " via Nexus";
 	$from =  $toName . " <hit-reply@nexus.northbridgetech.org>";
@@ -78,8 +84,15 @@ if ($row) {
 	fwrite($standardlog, "Complete (Sanitized) Message = " . $sanitizedMessage . "\n");
 	fwrite($standardlog, "New Portion of Message = " . $newMessage . "\n");
 
-	mail($to, $subject, $sanitizedMessage, $headers);
-
+	if (strlen($sanitizedMessage) < 1) {
+		fwrite($standardlog, "Extracted message is an empty string for message id " . $messageId . ". Email not sent.\n");
+		mail("kathy.flint@northbridgetech.org", "Empty message string from messageQueueProcessor.php", "Message id = " . $messageId, "From: kathy.flint@northbridgetech.org");
+	} else {
+		mail($to, $subject, $sanitizedMessage, $headers);
+		// temporary sanity check
+		mail("kathy.flint@northbridgetech.org", $subject . " - good message copy", $sanitizedMessage, "From: kathy.flint@northbridgetech.org");
+	}
+	
 } else {
 	
 	fwrite($standardlog, "There is no message to correspond with the input uuid.\n");
