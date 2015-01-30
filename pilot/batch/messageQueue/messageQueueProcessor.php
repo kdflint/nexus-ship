@@ -68,7 +68,9 @@ if ($row) {
 	
 	$row2 = pg_fetch_array(pgDb::getRecipientByMessageUuid($originatingUuid));
 	
-	$sanitizedMessage = strtr($extractedMessage, array($row2['email'] => "private address", "=\n" => "", "=20" => ""));
+	// TODO - figure this out so that email is stripped from headers but not from body so that user can put in their own email address.
+	//$sanitizedMessage = strtr($extractedMessage, array($row2['email'] => "private address", "=\n" => "", "=20" => ""));
+	$sanitizedMessage = strtr($extractedMessage, array("=\n" => "", "=20" => ""));
 	$to = $row['email'];
 	$toName = $row2['fname'] . " " . $row2['lname'] . " via Nexus";
 	$from =  $toName . " <hit-reply@nexus.northbridgetech.org>";

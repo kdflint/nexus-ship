@@ -7,12 +7,14 @@ select u.email from public.user u, user_group ug where ug.group_fk = '1' and u.i
 Get the sms list
 select distinct u.sms from public.user u, user_group ug where ug.group_fk = '1' and u.id = ug.user_fk and u.enable_sms = true  
 
-Translate the sms numbers
+Translate new sms numbers
 https://api.data24-7.com/v/2.0?api=T&user=kdflint&pass=A56L9Q1X&p1=$phonenum
 
-7087855078	7087855078@vtext.com
-3129195627	3129195627@vtext.com
-7733913358	7733913358@txt.att.net
+7087855078@vtext.com
+3129195627@vtext.com
+7733913358@txt.att.net
+3123434462@vtext.com
+8157513343@vtext.com
 
 TO: 
 BCC: email list 
@@ -79,3 +81,4 @@ BCC: sms enabled
 SUBJECT: [Nexus] Calendar Reminder
 
 Full Faith-Based Community Engaged Research Network Meeting occurs tomorrow, 1/9/2015, 10:00 am CT, 2545/2555 S. Martin  <= MAX LENGTH
+Faith Based Research Sub-committee (Caregivers) occurs tomorrow, 1/16/15, 10:00 CT, 1947 W. 95th Street, Chicago, IL
