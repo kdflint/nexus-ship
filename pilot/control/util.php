@@ -10,6 +10,7 @@ class Util {
 	const VALIDATION_SMS_ERROR = "Please enter a valid text number (or none).";
 	const VALIDATION_PHONE_ERROR = "Please enter a valid phone number (or none).";
 	const VALIDATION_PASSWORD_ERROR = "Please enter valid matching passwords.";
+	const VALIDATION_PASSWORD_USERNAME_ERROR = "Username and password cannot be the same.";
 	const VALIDATION_USERNAME_FORMAT_ERROR = "Please enter a valid username.";
 	const VALIDATION_USERNAME_DUPE_ERROR = "This username already exists. Please select a different username.";
 	const VALIDATION_ORGNAME_ERROR = "Please enter the valid organization name that you represent.";
@@ -201,7 +202,7 @@ class Util {
 		// PREVENT MATCHING USERNAME, PASSWORD
 		// Since the allowed char lists for these fields aren't compatible, theoretically these conditions can never both be true
 		if (isset($result['good']['password']) && isset($result['good']['username']) && !strcmp($result['good']['password'], $result['good']['username'])) {
-			$result['error']['password'] =  self::VALIDATION_PASSWORD_ERROR;
+			$result['error']['password'] =  self::VALIDATION_PASSWORD_USERNAME_ERROR;
 		}
 
 		return $result;
