@@ -12,12 +12,14 @@
  		Once the speed is calculate it rewrites the html with the calculate value. That happens inside the showResults() function.
  		-->
  		<script>
- 			var imageAddr = "http://northbridgetech.org/dev/nexus/control/ookla-speedtest-mini/speedtest/random2000x2000.jpg"; 
-			var downloadSize = 7610179; //image sized in Bytes
+  		// TODO - pull this address from bbb config.php
+  		// This file resides on jean at /var/lib/tomcat7/webapps/bigbluebutton/images
+ 			var imageAddr = "http://ec2-50-19-215-104.compute-1.amazonaws.com/bigbluebutton/images/speedtest-8MB.jpg"; 
+			var downloadSize = 7907740; //image sized in Bytes
 	
 			window.onload = function() {
     		var oProgress = document.getElementById("progress");
-    		oProgress.innerHTML = "Checking... <span class='fa fa-spinner fa-spin fa-2x'></span>";
+    		oProgress.innerHTML = "<span class='fa fa-spinner fa-spin fa-2x'></span>";
     		window.setTimeout(MeasureConnectionSpeed, 1);
 			};
 			
@@ -44,7 +46,7 @@
         	var speedBps = (bitsLoaded / duration).toFixed(2);
         	var speedKbps = (speedBps / 1024).toFixed(2);
         	var speedMbps = (speedKbps / 1024).toFixed(0);
-        	oProgress.innerHTML = "Your download speed is approx. " + speedMbps + " Mbps";
+        	oProgress.innerHTML = "Your download speed is " + speedMbps + " Mbps";
            	//speedBps + " bps<br />"   + 
            	//speedKbps + " kbps<br />" + 
            	//speedMbps + " Mbps<br />";
