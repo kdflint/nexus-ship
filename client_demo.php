@@ -2,7 +2,7 @@
 
 <?php
 
-	$cacheBuster = time();
+	$cacheBuster = rand();
 	
 ?>
 
@@ -17,6 +17,7 @@
 <img src="http://northbridgetech.org/images/NB_horizontal_tagline_rgb.png" width="500" height="155" style="margin:20px;"/><br> 
 
 <p style="background:#edf0de;width:510px;padding:5px;">Web Conference Meetings</p>
+<? echo $cacheBuster; ?>
 <FORM NAME="form1" METHOD="POST" action="demoMeetingProcessor.php" >
 <table cellpadding="5" cellspacing="5">
 	<tbody>
@@ -60,7 +61,7 @@
 <INPUT TYPE=hidden NAME=action VALUE="create">
 </FORM>
 <p style="background:#edf0de;width:510px;padding:5px;">Pre-meeting System Tech Check</p>
-<iframe src="http://northbridgetech.org/dev/nexus/view/include/conferenceTechCheck.php?nnn=<? echo $cacheBuster; ?>" width="600px" height="800px"frameborder="0" scrolling="no"></iframe> 
+<iframe src="http://northbridgetech.org/dev/nexus/view/include/conferenceTechCheck.html" width="600px" height="800px"frameborder="0" scrolling="no"></iframe> 
 </body>
 </html>
 
