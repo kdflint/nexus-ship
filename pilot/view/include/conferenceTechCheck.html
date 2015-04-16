@@ -32,7 +32,7 @@
  			// Once the speed is calculated it rewrites the DOM with the calculated value. That happens inside the showDownloadResults() function.
 			function MeasureDownConnectionSpeed() {
 				
-  			// TODO - pull this address from bbb config.php
+  			// TODO - pull this address from bbb config.php and get this resource into build/deploy cycle
   			// This file resides on jean at /var/lib/tomcat7/webapps/bigbluebutton/images
  				var imageAddr = "http://ec2-50-19-215-104.compute-1.amazonaws.com/bigbluebutton/images/speedtest-8MB.jpg"; 
 				var downloadSize = 7907740; //image size in Bytes				
@@ -82,6 +82,9 @@
 	    			var xhr = new XMLHttpRequest();
 	    			var postSizeInMB = 4;
           	var url = 'http://northbridgetech.org/dev/nexus/control/uploadSpeedTester.php?cache=' + Math.floor( Math.random() * 10000 ); //random number prevents url caching
+          	// TODO - the below POST to a random jsp page throws an http 500 error. Why? Is this harmful? We should create a POST-able page just for this purpose.
+          	// Leaving the resource path to Northbridge web server for now because results seem very comparable, unlike download speed results.
+          	//var url = 'http://ec2-50-19-215-104.compute-1.amazonaws.com/demo/demo1.jsp?cache=' + Math.floor( Math.random() * 10000 );
           	var data = getRandomString(postSizeInMB); // 1 MB POST size
           	var startTime;
           	var speed = 0;
@@ -129,7 +132,7 @@
 	
  			<table style="font-size:12px;width:350px;" cellpadding="5">
 		 		<tr><td bgcolor="#eeeeee" valign="top" style="text-align: left;"><b>System&nbsp;Component</b><br/>&nbsp;</td><td valign="top" style="text-align: left;"><b>Your&nbsp;Status</b><br/></td><td valign="top" style="text-align: left;"><b>Details</b></td></tr>
- 				<tr><td bgcolor="#eeeeee" valign="top" style="text-align: left;">Javascript</td><td valign="top" style="text-align: left "><img id="jscript_enabled" src="image/red.png" height="15" width="15" style="padding:10px;"/></td><td valign="top" style="text-align: left;"><p id="jscript_version"></p></td></tr>
+ 				<tr><td bgcolor="#eeeeee" valign="top" style="text-align: left;">Javascript</td><td valign="top" style="text-align: left "><img id="jscript_enabled" src="../image/red.png" height="15" width="15" style="padding:10px;"/></td><td valign="top" style="text-align: left;"><p id="jscript_version"></p></td></tr>
  				<tr><td bgcolor="#eeeeee" valign="top" style="text-align: left;">Flash</td><td valign="top" style="text-align: left "><img id="flash_enabled" src="" height="15" width="15" style="padding:10px;"/></td><td valign="top" style="text-align: left;"><p id="flash_version"></p></td></tr>
  				<tr><td bgcolor="#eeeeee" valign="top" style="text-align: left;">Download&nbsp;Speed</td valign="top" style="text-align: left "><td valign="top" style="text-align: left;"><img id="download_speed" src="http://northbridgetech.org/dev/nexus/view/image/white.png" height="15" width="15" style="padding:10px;" /></td><td valign="top" style="text-align: left "><p id="dprogress"></p></td></tr>
  				<tr><td bgcolor="#eeeeee" valign="top" style="text-align: left;">Upload&nbsp;Speed</td valign="top" style="text-align: left "><td valign="top" style="text-align: left;"><img id="upload_speed" src="http://northbridgetech.org/dev/nexus/view/image/white.png" height="15" width="15" style="padding:10px;" /></td><td valign="top" style="text-align: left "><p id="uprogress"></p></td></tr>

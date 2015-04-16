@@ -17,7 +17,6 @@
 <img src="http://northbridgetech.org/images/NB_horizontal_tagline_rgb.png" width="500" height="155" style="margin:20px;"/><br> 
 
 <p style="background:#edf0de;width:510px;padding:5px;">Web Conference Meetings</p>
-<? echo $cacheBuster; ?>
 <FORM NAME="form1" METHOD="POST" action="demoMeetingProcessor.php" >
 <table cellpadding="5" cellspacing="5">
 	<tbody>
