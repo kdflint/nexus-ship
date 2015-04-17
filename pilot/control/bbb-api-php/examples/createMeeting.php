@@ -50,7 +50,7 @@ if ($itsAllGood == true) {
 	print_r($result);
 		if ($result['returncode'] == 'SUCCESS') {
 			// Then do stuff ...
-			echo "<p>Meeting succesfullly created.</p>";
+			echo "<p>Meeting succesfully created.</p>";
 		}
 		else {
 			echo "<p>Meeting creation failed.</p>";

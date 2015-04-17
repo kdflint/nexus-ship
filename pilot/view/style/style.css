@@ -85,18 +85,6 @@ div.topRightQuad {
 	border-radius:15px;
 }
 
-div.topRightQuad2 {
-	position:absolute;
-	left:350px;
-	width:450px;
-	height:220px;
-	border-left: 0px;
-	border-right: 0px;
-	border-top: 1px solid #bbbbbb;
-	border-bottom: 1px solid #bbbbbb;
-	padding:10px;
-}
-
 div.lowerHalf {
 	position:absolute;
 	top:220px;
@@ -138,6 +126,17 @@ div.bottomHalf {
 	width:800px;
 	border: 1px solid #4b5b6e;
 	box-shadow: 4px 4px 5px #cccccc;
+	padding:10px;
+	border-radius:15px;
+}
+
+div.lowerTraining {
+	position:absolute;
+	top:430px;
+	width:800px;
+	height:130px;
+	background-color: #f1f2df;
+	box-shadow: 5px 5px 5px #cccccc;
 	padding:10px;
 	border-radius:15px;
 }
@@ -243,18 +242,18 @@ div.navigation2 #currentpage a {
 .bigbutton { 
   display: block;
   height: 55px;
-  width: 200px;
-  background:#d1dae3;
-  color: #4b5b6e;
+  width: 220px;
+  background: rgba(209,218,227,0.6);
   text-align: center;
   line-height: 20px;
   font: 22px;
   border-radius: 20px; 
-  box-shadow: 8px 8px 10px #cccccc;        
+  box-shadow: 8px 8px 10px #cccccc; 
+  border: thin solid #bf6030;       
 }
  
 a.bigbutton {
-  text-decoration: none;
+  //text-decoration: none;
 }
  
 a.bigbutton:hover {

@@ -2,84 +2,148 @@
 
 <html>
   <head> 
+  	
+		<meta http-equiv="cache-control" content="max-age=0">
+		<meta http-equiv="cache-control" content="no-cache">
+		<meta http-equiv="expires" content="-1">
+		<meta http-equiv="expires" content="Tue, 01 Jan 1980 11:00:00 GMT">
+		<meta http-equiv="pragma" content="no-cache">
+
   	<!-- 	http://www.featureblend.com/javascript-flash-detection-library.html -->
  		<script src="http://northbridgetech.org/dev/nexus/view/script/flash_detect.js"></script>
  		<link rel="stylesheet" type="text/css" href="http://northbridgetech.org/dev/nexus/view/style/style.css" />
 		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
  		
- 		<!-- 
- 		This script is calculating download speed relative to the northbridge web server (not the conference server but that is a TODO) 
- 		Once the speed is calculate it rewrites the html with the calculate value. That happens inside the showResults() function.
- 		-->
+
  		<script>
-  		// TODO - pull this address from bbb config.php
-  		// This file resides on jean at /var/lib/tomcat7/webapps/bigbluebutton/images
- 			var imageAddr = "http://ec2-50-19-215-104.compute-1.amazonaws.com/bigbluebutton/images/speedtest-8MB.jpg"; 
-			var downloadSize = 7907740; //image sized in Bytes
-	
 			window.onload = function() {
-    		var oProgress = document.getElementById("progress");
-    		oProgress.innerHTML = "<span class='fa fa-spinner fa-spin fa-2x'></span>";
-    		window.setTimeout(MeasureConnectionSpeed, 1);
-			};
+    			var dProgress = document.getElementById("dprogress");
+    			dProgress.innerHTML = "<span class='fa fa-spinner fa-spin fa-2x'></span>";
+    			window.setTimeout(MeasureDownConnectionSpeed, 1);
 			
-			function MeasureConnectionSpeed() {
-		    var oProgress = document.getElementById("progress");
+					var uProgress = document.getElementById("uprogress");
+					uProgress.innerHTML = "<span class='fa fa-spinner fa-spin fa-2x'></span>";
+        	window.setTimeout(MeasureUpConnectionSpeed, 2);
+        	
+        	// Result of the above is that speedchecks are being done simultaneously
+				};
+			
+ 			// This function calculates download speed relative to the northbridge web conference server
+ 			// Once the speed is calculated it rewrites the DOM with the calculated value. That happens inside the showDownloadResults() function.
+			function MeasureDownConnectionSpeed() {
+				
+  			// TODO - pull this address from bbb config.php and get this resource into build/deploy cycle
+  			// This file resides on jean at /var/lib/tomcat7/webapps/bigbluebutton/images
+ 				var imageAddr = "http://ec2-50-19-215-104.compute-1.amazonaws.com/bigbluebutton/images/speedtest-8MB.jpg"; 
+				var downloadSize = 7907740; //image size in Bytes				
+	    	var dProgress = document.getElementById("dprogress");
     		var startTime, endTime;
     		var download = new Image();
     		download.onload = function () {
-	        endTime = (new Date()).getTime();
-        	showResults();
-    		}
-	    
+	        	endTime = (new Date()).getTime();
+        		showDownloadResults();
+    			}
+	   
 	    	download.onerror = function (err, msg) {
-	        oProgress.innerHTML = "Error checking download speed.";
-  	  	}
+	       		dProgress.innerHTML = "Error checking download speed.";
+  	  		}
 	    
     		startTime = (new Date()).getTime();
     		var cacheBuster = "?nnn=" + startTime;
     		download.src = imageAddr + cacheBuster;
 	    
-    		function showResults() {
+    		function showDownloadResults() {
 	        var duration = (endTime - startTime) / 1000;
         	var bitsLoaded = downloadSize * 8;
-        	var speedBps = (bitsLoaded / duration).toFixed(2);
-        	var speedKbps = (speedBps / 1024).toFixed(2);
-        	var speedMbps = (speedKbps / 1024).toFixed(0);
-        	oProgress.innerHTML = "Your download speed is " + speedMbps + " Mbps";
-           	//speedBps + " bps<br />"   + 
-           	//speedKbps + " kbps<br />" + 
-           	//speedMbps + " Mbps<br />";
-          if (speedMbps > 2) {
-          	document.getElementById("download_speed").src =  "http://northbridgetech.org/dev/nexus/view/image/light_green.png"; 
-          } else {
-          	document.getElementById("download_speed").src =  "http://northbridgetech.org/dev/nexus/view/image/light_red.png";
-          } 
-    		}
-			}
-		</script>
-		<!-- End download calculation script -->
+        	var speedbps = (bitsLoaded / duration).toFixed(2);
+        	var speedKbps = (speedbps / 1024).toFixed(2);
+        	var speedMbps = (speedKbps / 1024).toFixed(1);
+        	dProgress.innerHTML = "Your&nbsp;download&nbsp;speed&nbsp;is&nbsp;" + speedMbps + "&nbsp;Mbps";
 
-		<!-- Insert and upload speed check here, maybe similar to above? -->
-		
-		
-		<!-- End upload calculation script -->
-		
+		  		if (speedMbps > 5) {
+				  	document.getElementById("download_speed").src =  "http://northbridgetech.org/dev/nexus/view/image/green.png"; 
+		  		} else if (speedMbps > 2) {
+				  	document.getElementById("download_speed").src =  "http://northbridgetech.org/dev/nexus/view/image/orange.png";
+		  		} else {
+				  	document.getElementById("download_speed").src =  "http://northbridgetech.org/dev/nexus/view/image/red.png";
+		  		} 
+    		}
+
+    		
+			}
+
+			// This function calculates upload speed relative to the northbridge web server
+ 			// Once the speed is calculated it rewrites the DOM with the calculated value. That happens inside the showUploadResults() function.
+			function MeasureUpConnectionSpeed() {
+				check();
+
+    		function check() {
+
+	    			var xhr = new XMLHttpRequest();
+	    			var postSizeInMB = 4;
+          	var url = 'http://northbridgetech.org/dev/nexus/control/uploadSpeedTester.php?cache=' + Math.floor( Math.random() * 10000 ); //random number prevents url caching
+          	// TODO - the below POST to a random jsp page throws an http 500 error. Why? Is this harmful? We should create a POST-able page just for this purpose.
+          	// Leaving the resource path to Northbridge web server for now because results seem very comparable, unlike download speed results.
+          	//var url = 'http://ec2-50-19-215-104.compute-1.amazonaws.com/demo/demo1.jsp?cache=' + Math.floor( Math.random() * 10000 );
+          	var data = getRandomString(postSizeInMB); // 1 MB POST size
+          	var startTime;
+          	var speed = 0;
+	
+        		xhr.onreadystatechange = function (event) {
+	            if( xhr.readyState == 4 ) {
+              	Bps = Math.round( (postSizeInMB * 1048576) / ( ( new Date() - startTime ) / 1000 ) ); // divide num bytes uploaded by num seconds elapsed
+              	showUploadResults(Bps);
+            	};
+        		};
+	
+       			xhr.open( 'POST', url, true );
+        		startTime = new Date();
+        		xhr.send( data );
+    			};
+
+    		function getRandomString(sizeInMB) {
+	    		var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~!@#$%^&*()_+`-=[]\{}|;':,./<>?"; //random data prevents gzip effect
+       		var bytes = sizeInMB * 1024 * 1024; // get byte conversion for input
+        	var result = '';
+        	for( var index = 0; index < bytes; index++ ) {
+          	result += chars.charAt( Math.floor( Math.random() * chars.length ) );  // 1 char = 1 byte
+        	};     
+        	return result;
+    		};
+			};
+
+			function showUploadResults(Bps) {
+		  	speedMbps = ((Bps * 8) / 1048576).toFixed(1);
+		  	var uProgress = document.getElementById("uprogress");
+	 	  	uProgress.innerHTML = "Your&nbsp;upload&nbsp;speed&nbsp;is&nbsp;" + speedMbps + "&nbsp;Mbps";
+		  	if (speedMbps > 2) {
+		       document.getElementById("upload_speed").src =  "http://northbridgetech.org/dev/nexus/view/image/green.png";
+		  	} else if (speedMbps > 1) {
+		       document.getElementById("upload_speed").src =  "http://northbridgetech.org/dev/nexus/view/image/orange.png";
+		  	} else {
+		       document.getElementById("upload_speed").src =  "http://northbridgetech.org/dev/nexus/view/image/red.png";
+		  	}
+			};
+
+		</script>
   </head>
  
 	<body>
 	
- 			<table style="font-size:12px;width:350px;" cellpadding="5">
-		 		<tr><td bgcolor="#eeeeee" valign="top" style="text-align: left;"><b>System&nbsp;Component</b><br/>&nbsp;</td><td valign="top" style="text-align: left;"><b>Your&nbsp;Status</b><br/></td><td valign="top" style="text-align: left;"><b>Details</b></td></tr>
- 				<tr><td bgcolor="#eeeeee" valign="top" style="text-align: left;">Javascript</td><td valign="top" style="text-align: left "><img id="jscript_enabled" src="image/light_red.png" /></td><td valign="top" style="text-align: left;"><p id="jscript_version"></p></td></tr>
- 				<tr><td bgcolor="#eeeeee" valign="top" style="text-align: left;">Flash</td><td valign="top" style="text-align: left "><img id="flash_enabled" src="" /></td><td valign="top" style="text-align: left;"><p id="flash_version"></p></td></tr>
- 				<tr><td bgcolor="#eeeeee" valign="top" style="text-align: left;">Download&nbsp;Speed</td valign="top" style="text-align: left "><td valign="top" style="text-align: left;"><img id="download_speed" src="http://northbridgetech.org/dev/nexus/view/image/light_white.png" /></td><td valign="top" style="text-align: left "><p id="progress"></p></td></tr>
- 				<tr><td bgcolor="#eeeeee" valign="top" style="text-align: left;">Upload&nbsp;Speed</td valign="top" style="text-align: left "><td valign="top" style="text-align: left;"><img id="upload_speed" src="http://northbridgetech.org/dev/nexus/view/image/light_white.png" /></td><td valign="top" style="text-align: left ">TODO</p></td></tr>
+ 			<table style="font-size:12px;" cellpadding="5">
+		 		<tr><td bgcolor="#eeeeee" valign="top" style="text-align:left;width:120px;"><b>System&nbsp;Component</b>&nbsp;</td><td valign="top" style="text-align:left;width:70px;"><b>Your&nbsp;Status</b></td><td valign="top" style="text-align:left;width:210px;"><b>Details</b></td></tr>
+ 				<tr><td bgcolor="#eeeeee" valign="top" style="text-align:left;">Javascript</td><td valign="top" style="text-align:center;"><img id="jscript_enabled" src="../image/red.png" height="15" width="15"/></td><td valign="top" style="text-align: left;"><p id="jscript_version" style="margin:0px;"></p></td></tr>
+ 				<tr><td bgcolor="#eeeeee" valign="top" style="text-align:left;">Flash</td><td valign="top" style="text-align:center;"><img id="flash_enabled" src="" height="15" width="15"/></td><td valign="top" style="text-align: left;"><p id="flash_version" style="margin:0px;"></p></td></tr>
+ 				<tr><td bgcolor="#eeeeee" valign="top" style="text-align:left;">Download&nbsp;Speed</td><td valign="top" style="text-align:center;"><img id="download_speed" src="http://northbridgetech.org/dev/nexus/view/image/white.png" height="15" width="15" /></td><td valign="top" style="text-align: left "><p id="dprogress" style="margin:0px;"></p></td></tr>
+ 				<tr><td bgcolor="#eeeeee" valign="top" style="text-align:left;">Upload&nbsp;Speed</td><td valign="top" style="text-align:center;"><img id="upload_speed" src="http://northbridgetech.org/dev/nexus/view/image/white.png" height="15" width="15" /></td><td valign="top" style="text-align: left "><p id="uprogress" style="margin:0px;"></p></td></tr>
+ 			</table>
+ 			<table style="font-size:12px;" cellpadding="5">
  				<tr>
- 					<td bgcolor="#eeeeee" valign="top">Your&nbsp;Media&nbsp;Options</td><td colspan="2">
+ 					<td bgcolor="#eeeeee" valign="top" style="text-align:left;width:120px;">Your&nbsp;Media&nbsp;Options&nbsp;&nbsp;&nbsp;</td>
+ 					<td>
  						<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
-        			width="400"
-   					  height="300"
+        			width="300"
+   						height="300"
     					id="haxe"
     					align="middle">
 							<param name="movie" value="hello.swf"/>
@@ -100,27 +164,28 @@
        					pluginspage="http://www.macromedia.com/go/getflashplayer"
 							/>
 						</object>
- 					</td></tr>
+ 					</td>
+ 				</tr>
  			</table>
  			
 <script>
 	// Check for Javascript
-  document.getElementById("jscript_enabled").src = "http://northbridgetech.org/dev/nexus/view/image/light_green.png";
-  document.getElementById("jscript_version").innerHTML = "You have enabled Javascript.";
+  document.getElementById("jscript_enabled").src = "http://northbridgetech.org/dev/nexus/view/image/green.png";
+  document.getElementById("jscript_version").innerHTML = "You&nbsp;have&nbsp;enabled&nbsp;Javascript.";
 </script>
 
 <script> 
 	// Check for Flash 
  	if(FlashDetect.installed && FlashDetect.versionAtLeast(11,2)) {
-      document.getElementById("flash_enabled").src = "http://northbridgetech.org/dev/nexus/view/image/light_green.png";         
+      document.getElementById("flash_enabled").src = "http://northbridgetech.org/dev/nexus/view/image/green.png";         
   } else {
-   		document.getElementById("flash_enabled").src = "http://northbridgetech.org/dev/nexus/view/image/light_red.png";
+   		document.getElementById("flash_enabled").src = "http://northbridgetech.org/dev/nexus/view/image/red.png";
   }
   
  	if(FlashDetect.installed) {
-      document.getElementById("flash_version").innerHTML = "You are running Flash version " + FlashDetect.major + "." + FlashDetect.minor;         
+      document.getElementById("flash_version").innerHTML = "You&nbsp;are&nbsp;running&nbsp;Flash&nbsp;version " + FlashDetect.major + "." + FlashDetect.minor;         
   } else {
-   		document.getElementById("flash_version").innerHTML = "You do not have Flash installed in this browser.";
+   		document.getElementById("flash_version").innerHTML = "You&nbsp;do&nbsp;not&nbsp;have&nbsp;Flash&nbsp;installed&nbsp;in&nbsp;this&nbsp;browser.";
   }
 </script>	
 
