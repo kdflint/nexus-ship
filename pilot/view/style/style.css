@@ -242,18 +242,18 @@ div.navigation2 #currentpage a {
 .bigbutton { 
   display: block;
   height: 55px;
-  width: 200px;
-  background:#d1dae3;
-  color: #4b5b6e;
+  width: 220px;
+  background: rgba(209,218,227,0.6);
   text-align: center;
   line-height: 20px;
   font: 22px;
   border-radius: 20px; 
-  box-shadow: 8px 8px 10px #cccccc;        
+  box-shadow: 8px 8px 10px #cccccc; 
+  border: thin solid #bf6030;       
 }
  
 a.bigbutton {
-  text-decoration: none;
+  //text-decoration: none;
 }
  
 a.bigbutton:hover {
