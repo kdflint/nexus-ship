@@ -130,6 +130,17 @@ div.bottomHalf {
 	border-radius:15px;
 }
 
+div.lowerTraining {
+	position:absolute;
+	top:430px;
+	width:800px;
+	height:130px;
+	background-color: #f1f2df;
+	box-shadow: 5px 5px 5px #cccccc;
+	padding:10px;
+	border-radius:15px;
+}
+
 .detailHeader1 {
 	font-size:13px;
 	font-weight:bold;
