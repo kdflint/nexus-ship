@@ -60,7 +60,7 @@
 <INPUT TYPE=hidden NAME=action VALUE="create">
 </FORM>
 <p style="background:#edf0de;width:510px;padding:5px;">Pre-meeting System Tech Check</p>
-<iframe src="http://northbridgetech.org/dev/nexus/view/include/conferenceTechCheck.html" width="600px" height="800px"frameborder="0" scrolling="no"></iframe> 
+<iframe src="http://northbridgetech.org/dev/nexus/view/include/conferenceTechCheck.html" width="600px" height="360px" frameborder="0" scrolling="no"></iframe> 
 </body>
 </html>
 

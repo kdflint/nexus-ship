@@ -85,18 +85,6 @@ div.topRightQuad {
 	border-radius:15px;
 }
 
-div.topRightQuad2 {
-	position:absolute;
-	left:350px;
-	width:450px;
-	height:220px;
-	border-left: 0px;
-	border-right: 0px;
-	border-top: 1px solid #bbbbbb;
-	border-bottom: 1px solid #bbbbbb;
-	padding:10px;
-}
-
 div.lowerHalf {
 	position:absolute;
 	top:220px;

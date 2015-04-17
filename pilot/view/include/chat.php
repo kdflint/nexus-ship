@@ -41,25 +41,8 @@ while ($row = pg_fetch_array($cursor)) {
 	</div>
 </div>
  	
- 	<div class="topRightQuad2">	
- 		 <iframe src="http://northbridgetech.org/<? echo $env_appRoot; ?>/nexus/view/include/conferenceTechCheck.php" width="100%" height="100%" frameborder="0"></iframe> 
-	</div>
-
-<div class="bottomHalf" >
-	<div class="navigation2" style="padding:0px;height:0px;">
-  	<ul>
-			<li<?php if ($thisPage=="directory") echo " id=\"currentpage\""; ?>><a href="#">Your Message Center</a></li>
-		</ul>
-	</div>
-	<!--
-	<div id="default" style="display:block;font-size:12px;">
-		<img src="image/comingSoon.jpg" width="85" height="85" />
-		<p><b>For authorized Nexus pilot users</b></p>
-		<p>Your private, in-network messaging and collaboration dashboard<br/>will be available <b>early 2015</b></p>
-	</div>
-	-->
+<div class="rightColumnPlain" style="left:360px;width:450px;">	
+	 	<a href="#">Your System Tech Check</a>
+	 <iframe src="http://northbridgetech.org/<? echo $env_appRoot; ?>/nexus/view/include/conferenceTechCheck.html" width="100%" height="75%" frameborder="0" scrolling="no"></iframe> 
 </div>
-
-
-
 
