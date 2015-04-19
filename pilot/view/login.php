@@ -81,9 +81,9 @@ if(isset($_GET['network']) && Util::validateNetworkId($_GET['network'])) {
       	</div>
       </div>
       
-      <div class="footer" style="position:absolute;top:400px;left:600px;right;color:#4b5b6e;font-size:18px;margin:20px;">
+      <div class="footer" style="position:absolute;top:400px;left:500px;right;color:#4b5b6e;font-size:18px;margin:20px;">
         <i>powered by</i>
-    		<a href="http://northbridgetech.org/index.php"><img style="vertical-align:bottom;" src="http://northbridgetech.org/images/northbridge-logo.png" height="57" width="143" border="0" alt="NorthBridge Technology Alliance"/></a>
+    		<a href="http://northbridgetech.org/index.php" target="_blank"><img style="vertical-align:bottom;padding-left:10px;" src="http://northbridgetech.org/images/NB_horizontal_tagline_rgb.png" height="100" width="322" border="0" alt="Northbridge Technology Alliance"/></a>
 		</div>
 	
       </div><!--shell-->

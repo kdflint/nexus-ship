@@ -6,13 +6,15 @@
 session_start();
 
 //require_once '../control/xmpp-prebind-php/lib/XmppPrebind.php';
-require_once($_SESSION['appRoot'] . "../control/util.php");
-require_once($_SESSION['appRoot'] . "../control/error/handlers.php");
+require_once("../control/util.php");
+
 
 if (!Util::isSessionValid()) {
 	header("location:login.php?logout=true");
 	exit(0);	
 }
+
+require_once($_SESSION['appRoot'] . "control/error/handlers.php");
 
 $hideHere = false;
 if (Util::hideInEnvironment()) {
