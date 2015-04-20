@@ -53,9 +53,9 @@ while ($row = pg_fetch_array($cursor)) {
 </div>
 <div class="lowerTraining">
 
-<p style="margin-left:20px;margin-top:0px;"><b>Ready to give web conferencing a try?</b></p>
-<p style="margin-left:20px;">All <? echo $_SESSION['networkName']; ?> pilot users are eligible for free, personalized, no-obligation web conference training. This will help your network to take full advantage of the benefits of web conferencing.</p>
-<p style="margin-left:20px;"><a href="http://www.eventbrite.com/e/nexus-web-conference-training-tickets-16633180290" target="_blank">Register for a free, no-obligation training session</a></p>
+<p style="margin-left:20px;margin-top:0px;"><b>Is your workgroup ready to give web conferencing a try?</b></p>
+<p style="margin-left:20px;"><? echo $_SESSION['networkName']; ?> users are eligible for free, personalized, no-obligation training on how to use Nexus web conferencing. This will help your group take full advantage of the benefits of web conferencing.</p>
+<p style="margin-left:20px;"><a href="http://www.eventbrite.com/e/nexus-web-conference-training-tickets-16633180290" target="_blank">Register for a free, no-obligation training session.</a></p>
 </div>
  	
 <div class="rightColumnPlain" style="left:360px;width:450px;">	
