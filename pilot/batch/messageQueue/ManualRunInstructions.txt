@@ -1,0 +1,13 @@
+Reconstruct original message. (Base64 decoder at https://www.base64decode.org)
+
+Save as a recover file
+
+Go to PROD file
+
+Swap line 8 for 9 (so you can read from recover from file) and save as yadaYadaManual.php
+
+Move recover file to server
+
+Run yadaYadaManual.php
+
+
