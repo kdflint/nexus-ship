@@ -1,13 +1,18 @@
-Reconstruct original message. (Base64 decoder at https://www.base64decode.org)
+Reconstruct original message from pipe.log (Base64 decoder at https://www.base64decode.org)
 
-Save as a recover file
+Save as a recover file (i.e., recover1.txt)
 
-Go to PROD file
+Go to PROD script messageQueueProcessor.php
 
-Swap line 8 for 9 (so you can read from recover from file) and save as yadaYadaManual.php
+Save as messageQueueProcessorManual.php then swap line 8 for 9 (so you can read from recover from file instead of stdin)
 
-Move recover file to server
+Move recover file(s) to server
 
-Run yadaYadaManual.php
+Run messageQueueProcessorManual.php against each recover file 
+~/batch/apps/nexus/messageQueue php ./messageQueueProcessor.php
+
+Expected output: Content-type: text/html
+
+Delete messageQueueProcessorManual.php and recover file(s) from server
 
 
