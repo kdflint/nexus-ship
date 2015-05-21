@@ -9,9 +9,9 @@ Save as messageQueueProcessorManual.php then swap line 8 for 9 (so you can read 
 Move recover file(s) to server
 
 Run messageQueueProcessorManual.php against each recover file 
-~/batch/apps/nexus/messageQueue php ./messageQueueProcessor.php
+~/batch/apps/nexus/messageQueue php ./messageQueueProcessorManual.php
 
-Expected output: Content-type: text/html
+Takes 5-10 seconds. Expected output: Content-type: text/html
 
 Delete messageQueueProcessorManual.php and recover file(s) from server
 
