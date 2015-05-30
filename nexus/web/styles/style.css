@@ -1,0 +1,291 @@
+body { 
+	//color:#4b5b6e; 
+	font-family:'Helvetica',sans-serif; 
+	text-align:center; 
+	background-color: #ffffff;
+	padding:14px;
+	height: 100%; /* added to support Google map - why? */
+}
+
+div.container {
+	/* top level container for all content, left aligned inside a centered body   */
+	/* optimized, i think, for a tablet -kdf																			*/
+	background-color:#ffffff;
+	margin: 0 auto;
+	height: 800px;
+	width: 900px;
+	text-align:left;
+	border: 1px dotted #343444;
+	box-shadow: 8px 8px 10px #cccccc;
+	border-top: 4px solid #4b5b6e;
+	border-radius:20px;
+	border-bottom: 8px solid #343444;
+}
+
+div.shell {
+	/* holds stuff beneath the header                             */
+	/* point of reference for absolute positioning of body blocks */
+	/* base font stylings                                         */
+	position:relative;
+	top:-15px;
+	left:0px;
+	font-size:14px;
+	color:#4b5b6e;
+}
+
+div.projectsContent {
+	position:absolute;
+	top:80px;
+	left:50px;
+}
+
+a {
+	font-size:14px;
+	font-weight:bold;
+	color:#bf6030;
+	text-decoration:none;
+}
+
+a.tooltip {
+	font-weight:normal;
+	border-bottom: 1px dashed #4b5b6e;
+	color:#bf6030;
+	text-decoration:none;
+}
+
+div.topLeftQuad {
+	position:absolute;
+	width:350px;
+	height:180px;
+}
+
+div.lowerLeftQuad {
+	position:absolute;
+	top:200px;
+	width:300px;
+	height:320px;
+	background-color: #f1f2df;
+	box-shadow: 5px 5px 5px #cccccc;
+	padding:10px;
+	border-radius:15px;
+}
+
+div.topRightQuad {
+	position:absolute;
+	left:350px;
+	width:450px;
+	height:180px;
+	border: 1px solid #003366;
+	box-shadow: 4px 4px 5px #333333;
+	padding:10px;
+	border-radius:15px;
+}
+
+div.lowerHalf {
+	position:absolute;
+	top:220px;
+	height:320px;
+	width:800px;
+	border: 1px solid #003366;
+	box-shadow: 4px 4px 5px #333333;
+	padding:10px;
+	border-radius:15px;
+}
+
+div.leftColumn {
+	position:absolute;
+	width:350px;
+	height:520px;
+}
+
+div.rightColumn {
+	position:absolute;
+	left:360px;
+	width:450px;
+	height:520px;
+	border: 1px solid #4b5b6e;
+	box-shadow: 4px 4px 5px #cccccc;
+	padding:10px;
+	border-radius:15px;
+}
+
+div.rightColumnPlain {
+	position:absolute;
+	left:460px;
+	width:350px;
+	height:520px;
+}
+
+div.bottomHalf {
+	position:absolute;
+	top: 340px;
+	width:800px;
+	border: 1px solid #4b5b6e;
+	box-shadow: 4px 4px 5px #cccccc;
+	padding:10px;
+	border-radius:15px;
+}
+
+div.lowerTraining {
+	position:absolute;
+	top:430px;
+	width:800px;
+	height:110px;
+	background-color: #f1f2df;
+	box-shadow: 5px 5px 5px #cccccc;
+	padding:10px;
+	border-radius:15px;
+}
+
+.detailHeader1 {
+	font-size:13px;
+	font-weight:bold;
+}
+
+.detailHeader2 {
+	font-weight:bold;
+}
+
+.detailText {
+}
+
+.collaboratorsList {
+	background-color: #f1f2df;
+	box-shadow: 5px 5px 5px #cccccc;
+	padding:5px;
+	border-radius:15px;	
+}
+
+
+/* NAVIGATION - LEVEL 1*/
+
+div.navigation {
+	position:absolute;
+	//top:10px;
+	border:thin;
+	text-align:right;
+}
+
+div.navigation ul {
+	list-style: none;
+}
+
+div.navigation li {
+	border-right: 1px solid #343444;
+	border-top: 1px solid #343444;
+	border-radius:10px;
+	float: left;
+	margin:5px;
+	padding:5px; 
+}
+
+div.navigation a {
+	color: #c9c9a7;
+	font-weight: bold;
+	font-size: 16px;
+	padding: 10px;
+	text-decoration: none;
+}
+
+div.navigation a:hover {
+	color: #bf6030;
+}
+
+div.navigation #currentpage a {
+	color: #4b5b6e;
+}
+
+/* NAVIGATION - LEVEL 2*/
+
+div.navigation2 {
+	border:thin;
+	text-align:right;
+	height:50px;
+}
+
+div.navigation2 ul {
+	list-style: none;
+}
+
+div.navigation2 li {
+	border-right: 1px solid #343444;
+	border-top: 1px solid #343444;
+	border-radius:10px;
+	float: right;
+	margin:5px;
+	padding:5px; 
+}
+
+div.navigation2 a {
+	color: #c9c9a7;
+	font-weight: bold;
+	font-size: 12px;
+	padding: 8px;
+	text-decoration: none;
+}
+
+div.navigation2 a:hover {
+	color: #bf6030;
+}
+
+div.navigation2 #currentpage a {
+	color: #4b5b6e;
+}
+
+
+/* BIG BUTTONS */
+
+.bigbutton { 
+  display: block;
+  height: 55px;
+  width: 220px;
+  background: rgba(209,218,227,0.6);
+  text-align: center;
+  line-height: 20px;
+  font: 22px;
+  border-radius: 20px; 
+  box-shadow: 8px 8px 10px #cccccc; 
+  border: thin solid #bf6030;       
+}
+ 
+a.bigbutton {
+  //text-decoration: none;
+}
+ 
+a.bigbutton:hover {
+  border: 1px solid #bf6030;
+  box-shadow: 8px 8px 10px #cccccc;
+  background: #f1f2df;
+}
+
+/* LIGHTBOX 8 */
+
+.black_overlay{
+	display: none;
+	position: absolute;
+	top: 0%;
+	left: 0%;
+	width: 5000px;
+	height: 2000px;
+	background-color: black;
+	z-index:1001;
+	-moz-opacity: 0.8;
+	opacity:.80;
+	filter: alpha(opacity=80);
+}
+
+.white_content {
+	display: none;
+	position: absolute;
+	top:35%;
+	left:35%;
+	width:450px;
+	min-height:230px;
+	padding: 10px;
+	border: thin solid #bf6030;
+	border-radius:15px;
+	background-color: white;
+	z-index:1002;
+	overflow: visible;
+	text-align:left;
+}
