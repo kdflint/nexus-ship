@@ -48,39 +48,23 @@ if(isset($_GET['network']) && Util::validateNetworkId($_GET['network'])) {
   	<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
   	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Oswald:400,300|Open+Sans|Oxygen|Swanky+and+Moo+Moo">
   	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" href="styles/nexus.css" type="text/css" />
     <script src="scripts/nexus.js" language="javascript"></script>
+ 		<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     <link rel="icon" href="images/NB_icon.png" />
     <title>Northbridge Nexus | Login</title>
-    
-    
-	<style>
-		.button {
-  		border-top: 1px solid #a6c3ce;
-   		background: #004d62;
-		  padding: 5px 15px;
-   		-webkit-border-radius: 10px;
-   		-moz-border-radius: 10px;
-   		border-radius: 10px;
-   		text-shadow: rgba(0,0,0,.4) 0 1px 0;
-   		color: #edf0de;
-   		font-size: 18px;
-   		text-decoration: none;
-   		vertical-align: middle;
-   		letter-spacing: .5px;
-   		width: 100%;
-   	}
-   		
-		.button:hover {
-   		background: #a6c3ce;
-   	}
-   	
-		.button:active {
-   		background: #a6c3ce;
-   	}
-  </style>
-  
+
+		<script>
+			$( document ).click(function() {
+  			$( "#schedule_display" ).toggle( "blind" );
+			});
+		</script>
+ 
   </head>
+  
+
   
   <body>
     <div class="container">
@@ -99,10 +83,8 @@ if(isset($_GET['network']) && Util::validateNetworkId($_GET['network'])) {
       </div>
 
 			<div class="frame" >     
-				<div class="something">
-					<button id="contextSwitch" class="button" href="javascript:void(0)" onclick="showJoinForm();" style="float:right;width:30%;margin-top:75px;margin-left:10px;">Schedule</button>
-					<button id="contextSwitch" class="button" href="javascript:void(0)" onclick="showJoinForm();" style="float:right;width:30%;margin-top:75px;margin-right:10px;">Start Now</button>
-				</div> 	
+				<span id="contextSwitch" class="button" href="javascript:void(0)" style="width:100px;margin-left:10px;">Schedule a Meeting</span>
+				<div id="schedule_display" style="display:none;"></div>
       </div>
       
       <div class="footer">
@@ -111,7 +93,7 @@ if(isset($_GET['network']) && Util::validateNetworkId($_GET['network'])) {
 			</div>
 	
     </div><!-- container -->       
-       
+		      
     <!-- lightboxes -->
 		<div id="light_password" class="white_content">
 			<a href="javascript:void(0)" onclick="document.getElementById('light_password').style.display='none';document.getElementById('fade').style.display='none'" style="float:right">Close</a>

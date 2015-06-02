@@ -28,6 +28,9 @@ body {
 
 .frame {
 	padding-bottom:60px;   /* Height of the footer */
+	float: right;
+	margin-right: 50px;
+	margin-top: 75px;
 }
 
 .footer {
@@ -39,6 +42,40 @@ body {
 	font-family: Oswald;
 	letter-spacing: 1px;
 }
+
+/* BUTTONS */
+
+.button {
+	border-top: 1px solid #a6c3ce;
+	background: #004d62;
+  padding: 5px 15px;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	text-shadow: rgba(0,0,0,.4) 0 1px 0;
+	color: #edf0de;
+	font-size: 18px;
+	text-decoration: none;
+	vertical-align: middle;
+	letter-spacing: .5px;
+	width: 100%;
+}
+   		
+.button:hover {
+	background: #a6c3ce;
+}
+   	
+.button:active {
+	background: #a6c3ce;
+}
+
+/* BLINDS */
+
+#schedule_display {
+    width: 600px;
+    height: 400px;
+    background: #ccc;
+  }
 
 /* LIGHTBOXES */
 
