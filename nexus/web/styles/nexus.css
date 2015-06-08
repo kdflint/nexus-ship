@@ -27,10 +27,9 @@ body {
 }
 
 .frame {
+	clear: both;
 	padding-bottom:60px;   /* Height of the footer */
-	float: right;
-	margin-right: 50px;
-	margin-top: 75px;
+	padding: 20px;
 }
 
 .footer {
@@ -43,40 +42,60 @@ body {
 	letter-spacing: 1px;
 }
 
+/* LINKS */
+
+a {
+	color:#d27b4b;
+	text-decoration:none;
+}
+
 /* BUTTONS */
 
-.button {
-	border-top: 1px solid #a6c3ce;
-	background: #004d62;
-  padding: 5px 15px;
-	-webkit-border-radius: 10px;
-	-moz-border-radius: 10px;
-	border-radius: 10px;
-	text-shadow: rgba(0,0,0,.4) 0 1px 0;
-	color: #edf0de;
-	font-size: 18px;
-	text-decoration: none;
-	vertical-align: middle;
-	letter-spacing: .5px;
-	width: 100%;
+.pure-button-primary {
+	background: rgba(0, 77, 98, 1) !important;
+	margin-right: 10px;
 }
-   		
-.button:hover {
+
+.pure-button-secondary {
+	background: rgba(0, 77, 98, .2)!important;
+	margin-right: 10px;
+}
+
+.button-schedule,
+.button-join {
+  color: white;
+  border-radius: 6px;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.button-schedule {
+	background: rgba(0, 77, 98, 1);
+	width: 45%
+}
+
+.button-join {
+	background: rgba(0, 77, 98, .6);
+	width: 45%
+}
+ 		
+.button-schedule:hover {
 	background: #a6c3ce;
 }
    	
-.button:active {
+.button-join:active {
 	background: #a6c3ce;
 }
 
 /* BLINDS */
 
-#schedule_display {
-    width: 600px;
-    height: 400px;
-    background: #ccc;
-  }
-
+#schedule_display,
+#join_display {
+  width: 400px;
+  height: 400px;
+  background: #ccc;
+  margin-left: 420px;
+}
+ 
 /* LIGHTBOXES */
 
 .black_overlay{
