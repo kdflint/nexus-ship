@@ -3,7 +3,7 @@ session_start();
 
 require_once("src/framework/Util.php");
 require_once(Util::getPhpRoot() . "/Validate.php");
-require_once(Util::getWebRoot() . "/src/organization/Organization.php");
+//require_once(Util::getWebRoot() . "/src/organization/Organization.php");
 
 $cleanMessage = "";
 
@@ -35,10 +35,10 @@ if(isset($_GET['network']) && Util::validateNetworkId($_GET['network'])) {
  	$cleanNetworkId = $_GET['network'];		
 }
 
-$cursor = Organization::getOrganizationById($cleanNetworkId);
-$row = pg_fetch_array($cursor);
-$logo = $row['logo'];
-$networkName = $row['name'];
+//$cursor = Organization::getOrganizationById($cleanNetworkId);
+//$row = pg_fetch_array($cursor);
+//$logo = $row['logo'];
+//networkName = $row['name'];
 
 ?>
 
@@ -96,38 +96,41 @@ $networkName = $row['name'];
 
 			<div class="frame"> 
 			  <div class="colLeft" style="width:70%;float:left;margin-top:30px;">
-					<form id="login-form" class="pure-form pure-form-stacked" style="width:95%;">
+					<form id="login-form" class="pure-form pure-form-stacked" autocomplete="off" action="" method="post">
 	    			<fieldset>
-	    				Username<span style="float:right;margin-right:25px;"><a href="javascript:void(0)" onclick="toggleFormDisplay('recover-username-form')">I forgot</a></span>
-        			<input style="width:95%;margin-bottom:20px;">	        		
-        			Password<span style="float:right;margin-right:25px;"><a href="javascript:void(0)" onclick="toggleFormDisplay('recover-password-form')">I forgot</a></span>
-        			<input type="password" style="width:95%;margin-bottom:20px;">	
-        			<a type="submit" class="pure-button pure-button-primary" style="width:45%;">Sign in</a><a class="pure-button pure-button-secondary" onclick="toggleRememberCheckbox();" style="width:45%;" ><input id="login-remember" type="checkbox" /> Remember me</a>
+	    				Username<span class="instruction form-instruction"><a href="javascript:void(0)" onclick="toggleFormDisplay('recover-username-form')">I forgot</a></span>
+        			<input class="form-input">	        		
+        			Password<span class="instruction form-instruction"><a href="javascript:void(0)" onclick="toggleFormDisplay('recover-password-form')">I forgot</a></span>
+        			<input class="form-input" type="password" />	
+        			<a type="submit" class="pure-button pure-button-primary" style="width:45%;">Sign in</a>
+        			<a class="pure-button pure-button-secondary" onclick="toggleRememberCheckbox();" style="width:45%;" ><input id="login-remember" type="checkbox" /> Remember me</a>
      				</fieldset>
      			</form>
      			
-     			<form id="recover-username-form" class="pure-form pure-form-stacked" style="width:95%;display:none;" autocomplete="off" action="" method="post">
+     			<form id="recover-username-form" class="pure-form pure-form-stacked" style="display:none;" autocomplete="off" action="" method="post">
      				<fieldset>
 	     				Recover Username
      					<p style="font-size:90%;">Please enter your email address and we will resend your username.</p>
      					Email
-     					<input style="width:95%;margin-bottom:20px;" type="email" name="email" value="">
-     					<a type="submit" class="pure-button pure-button-primary" style="width:45%;">Recover Username</a><a href="javascript:void(0)" onclick="toggleFormDisplay('login-form')" style="float:right;margin-right:25px;">Return to Login</a>
+     					<input class="form-input" type="email" name="email" value="">
+     					<a type="submit" class="pure-button pure-button-primary" style="width:45%;">Recover Username</a>
+     					<a class="form-instruction" href="javascript:void(0)" onclick="toggleFormDisplay('login-form')">Return to Login</a>
      					<input type="hidden" name="network" value="<? echo $cleanNetworkId; ?>">
      				</fieldset>
      			</form>
      			
-     			<form id="recover-password-form" class="pure-form pure-form-stacked" style="width:95%;display:none;" autocomplete="off" action="" method="post">
+     			<form id="recover-password-form" class="pure-form pure-form-stacked" style="display:none;" autocomplete="off" action="modules/login/recoverPasswordProcessor.php" method="post">
      				<fieldset>
 	     				Password Reset
-     					<p style="font-size:90%;">Please enter your user id so we can email you a password reset link.</p>
-     					Username<span style="float:right;margin-right:25px;"><a href="javascript:void(0)" onclick="toggleFormDisplay('recover-username-form')">I forgot</a></span>
-     					<input style="width:95%;margin-bottom:20px;" type="text" name="uid" value="">
-     					<a type="submit" class="pure-button pure-button-primary" style="width:45%;">Reset Password</a><a href="javascript:void(0)" onclick="toggleFormDisplay('login-form')" style="float:right;margin-right:25px;">Return to Login</a>
+     					<p class="instruction">Please enter your user id so we can email you a password reset link.</p>
+     					Username<span class="instruction form-instruction"><a href="javascript:void(0)" onclick="toggleFormDisplay('recover-username-form')">I forgot</a></span>
+     					<input class="form-input" type="text" name="uid" value="">
+     					<a type="submit" class="pure-button pure-button-primary" style="width:45%;">Reset Password</a>
+     					<a class="form-instruction" href="javascript:void(0)" onclick="toggleFormDisplay('login-form')">Return to Login</a>
      				</fieldset>
-     			</form>
-     			
+     			</form>     			
      		</div>
+     		
      		<div class="colRight" style="width:30%;float:right;margin-top:30px;">
       		<span style="float:left;padding:10px;margin-top:10px;">[Team Logo]</span>
       		<span style="clear:left;float:left;padding:10px;">[Team Name]</span>

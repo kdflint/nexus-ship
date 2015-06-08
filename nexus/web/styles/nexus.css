@@ -42,11 +42,33 @@ body {
 	letter-spacing: 1px;
 }
 
+/* TEXT */
+
+.instruction {
+	font-size:90%;
+}
+
 /* LINKS */
 
 a {
 	color:#d27b4b;
 	text-decoration:none;
+}
+
+/* FORMS */
+
+form {
+	width:95%;
+}
+
+.form-instruction {
+	float:right;
+	margin-right:25px;
+}
+
+.form-input {
+	width:95%;
+	margin-bottom:20px !important;
 }
 
 /* BUTTONS */

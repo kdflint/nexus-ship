@@ -1,11 +1,26 @@
 <?php
 
 require_once(dirname(__FILE__) . "/../../../config/env_config.php");
-
-// TODO - solve warning and use local method
-require_once("/home1/northbr6/php/Validate.php");
+require_once(PHP_ROOT . "/Validate.php");
 
 class Util {
+	
+	public static function getDbHost() {
+		return DB_HOST; 
+	}
+	
+	public static function getDbUser() {
+		return DB_USER;  
+	}
+	
+	public static function getDbPassword() {
+		return DB_PASSWORD; 
+	}
+	
+	public static function getDbName() {
+		return DB_NAME;
+	}		
+		
 	
 	const VALIDATION_FNAME_ERROR = "Please enter a valid first name."; 
 	const VALIDATION_LNAME_ERROR = "Please enter a valid last name (or none)."; 
@@ -363,6 +378,8 @@ class Util {
 	public static function getWebRoot() {	return WEB_ROOT; }
 	
 	public static function getPhpRoot() {	return PHP_ROOT; }
+	
+	public static function getSrcRoot() {	return WEB_ROOT . "/src"; }
 
 	public static function storeSecurePasswordImplA($plaintextPassword, $userId) {
 		$salt = self::generateRandomString(32);
@@ -398,7 +415,7 @@ class Util {
     }
     return $randomString;
 	}
-	
+		
 }
 
 ?>
