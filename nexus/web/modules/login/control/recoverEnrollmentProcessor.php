@@ -2,10 +2,17 @@
 
 session_start();
 
-require_once("util.php");
-require_once(Util::getAppRoot() . "model/pgDb.php");
-require_once(Util::getAppRoot() . "control/error/handlers.php");
-require_once(Util::getAppRoot() . "config/env_config.php");
+require_once("../../../src/framework/Util.php");
+require_once(Util::getPhpRoot() . "/Validate.php");
+require_once(Util::getSrcRoot() . "/user/User.php");
+
+echo "Hello from recover enrollment processor.
+
+" . $_POST['email'] . "
+
+" . $_POST['network'];
+
+exit(0);
 
 // clean email
 $cleanEmail = "";
@@ -21,10 +28,10 @@ if (isset($_POST['email']) && Util::validateEmail($_POST['email'])) {
 
 if ($cleanEmail) {	
 	
-	$row = pg_fetch_row(pgDb::userEmailExists($cleanEmail));
+	$row = pg_fetch_row(User::userEmailExists($cleanEmail));
   $exists = $row[0];	
   if (!strcmp($exists, "t")) {
-		$cursor = pgDb::getUsernamesByEmail($cleanEmail);
+		$cursor = User::getUsernamesByEmail($cleanEmail);
 		$usernames = "";
 		while ($row = pg_fetch_array($cursor)) {
 	  		$usernames = $usernames . $row['username'] . ", ";

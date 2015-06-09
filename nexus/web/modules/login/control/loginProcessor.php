@@ -2,15 +2,20 @@
 
 session_start();
 
-require_once("util.php");
-require_once(Util::getAppRoot() . "model/pgDb.php");
-require_once(Util::getAppRoot() . "control/error/handlers.php");
+require_once("../../../src/framework/Util.php");
 
-//error_reporting(E_ALL);
-//ini_set( 'display_errors','1'); 
+echo "Hello from login processor.
+
+" . $_POST['uid'] . "
+
+" . $_POST['password'];
+
+exit(0);
 
 $uid = $_POST['uid'];
 $password = $_POST['password'];
+
+/*
 
 $isAuthenticated = Util::authenticate($uid, $password);
 
@@ -22,6 +27,8 @@ if($isAuthenticated){
 } else {
 	returnToLoginWithError(Util::AUTHENTICATION_ERROR);
 }
+
+*/
 
 function returnToLoginWithError($errorMessage) {
 	header("location:../view/login.php?error=" . $errorMessage);

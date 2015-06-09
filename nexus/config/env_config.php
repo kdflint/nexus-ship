@@ -2,6 +2,8 @@
 
 // PATHS
 
+// TODO - are these correct?
+
 	define("PHP_ROOT", "/home/kdflint/projects/nexus-community/nexus/web/lib");
 	define("WEB_ROOT", "/home/kdflint/projects/nexus-community/nexus/web");
 	define("APP_NAME", "/nexus");

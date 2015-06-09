@@ -2,7 +2,6 @@
 session_start();
 
 require_once("src/framework/Util.php");
-require_once(Util::getPhpRoot() . "/Validate.php");
 //require_once(Util::getWebRoot() . "/src/organization/Organization.php");
 
 $cleanMessage = "";
@@ -29,7 +28,7 @@ if(isset($_GET['error']) && Util::isSafeCharacterSet($_GET['error'])) {
 
 $logo = "";
 $networkName = "";		
-$cleanNetworkId = ""; // TODO: create default network, that includes default logo
+$cleanNetworkId = "123"; // TODO: create default network, that includes default logo
 
 if(isset($_GET['network']) && Util::validateNetworkId($_GET['network'])) {
  	$cleanNetworkId = $_GET['network'];		
@@ -46,6 +45,7 @@ if(isset($_GET['network']) && Util::validateNetworkId($_GET['network'])) {
 <html>
 	
   <head>
+		<!-- TODO - localize all scripts and stylesheets -->
   	<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
   	<meta id="meta" name="viewport" content="width=device-width; initial-scale=1.0" />	
   	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Oswald:400,300|Open+Sans|Oxygen|Swanky+and+Moo+Moo">
@@ -58,29 +58,10 @@ if(isset($_GET['network']) && Util::validateNetworkId($_GET['network'])) {
   	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     <link rel="icon" href="images/NB_icon.png" />
     <title>Northbridge Nexus | Login</title> 
-    
-    <script>
-    	function toggleRememberCheckbox() {
-    		var loginRemember = document.getElementById("login-remember");
-    		var curState = loginRemember.checked;
-    		if(curState) {
-    			loginRemember.checked = false;
-    		} else {
-    			loginRemember.checked = true;
-    		}
-    	}
-    	
-    	function toggleFormDisplay(formId) {
-    		var showForm = document.getElementById(formId);
-    		document.getElementById("login-form").style.display='none';
-    		document.getElementById("recover-username-form").style.display='none';
-    		document.getElementById("recover-password-form").style.display='none';
-    		showForm.style.display='block';
-    	}
-    </script>
   </head>
   
   <body>
+  	<!-- TODO - finalize container width -->
     <div class="container" style="width:50%;min-width:550px;max-width:640px;">
 
       <div class="header" style="margin-top:20px;">
@@ -95,43 +76,43 @@ if(isset($_GET['network']) && Util::validateNetworkId($_GET['network'])) {
       </div>
 
 			<div class="frame"> 
-			  <div class="colLeft" style="width:70%;float:left;margin-top:30px;">
-					<form id="login-form" class="pure-form pure-form-stacked" autocomplete="off" action="" method="post">
+				
+			  <div class="loginColLeft">
+					<form id="login-form" class="pure-form pure-form-stacked" autocomplete="off" action="modules/login/control/loginProcessor.php" method="post">
 	    			<fieldset>
 	    				Username<span class="instruction form-instruction"><a href="javascript:void(0)" onclick="toggleFormDisplay('recover-username-form')">I forgot</a></span>
-        			<input class="form-input">	        		
+        			<input class="form-input" name="uid" value="" maxlength="25" minlength="7">	        		
         			Password<span class="instruction form-instruction"><a href="javascript:void(0)" onclick="toggleFormDisplay('recover-password-form')">I forgot</a></span>
-        			<input class="form-input" type="password" />	
-        			<a type="submit" class="pure-button pure-button-primary" style="width:45%;">Sign in</a>
+        			<input class="form-input" type="password" name="password" value="" />	
+        			<a id="login-form-submit" type="submit" class="pure-button pure-button-primary" style="width:45%;" href="javascript:void(0);" onclick="loginValidateAndSubmit();">Sign In</a>
         			<a class="pure-button pure-button-secondary" onclick="toggleRememberCheckbox();" style="width:45%;" ><input id="login-remember" type="checkbox" /> Remember me</a>
      				</fieldset>
-     			</form>
-     			
-     			<form id="recover-username-form" class="pure-form pure-form-stacked" style="display:none;" autocomplete="off" action="" method="post">
+     			</form>   			
+     			<form id="recover-username-form" class="pure-form pure-form-stacked" style="display:none;" autocomplete="off" action="modules/login/control/recoverEnrollmentProcessor.php" method="post">
      				<fieldset>
 	     				Recover Username
      					<p style="font-size:90%;">Please enter your email address and we will resend your username.</p>
      					Email
      					<input class="form-input" type="email" name="email" value="">
-     					<a type="submit" class="pure-button pure-button-primary" style="width:45%;">Recover Username</a>
+     					<a id="username-form-submit" type="submit" class="pure-button pure-button-primary" style="width:45%;" href="javascript:void(0);" onclick="usernameValidateAndSubmit();">Recover Username</a>
      					<a class="form-instruction" href="javascript:void(0)" onclick="toggleFormDisplay('login-form')">Return to Login</a>
      					<input type="hidden" name="network" value="<? echo $cleanNetworkId; ?>">
      				</fieldset>
      			</form>
-     			
-     			<form id="recover-password-form" class="pure-form pure-form-stacked" style="display:none;" autocomplete="off" action="modules/login/recoverPasswordProcessor.php" method="post">
+     			<form id="recover-password-form" class="pure-form pure-form-stacked" style="display:none;" autocomplete="off" action="modules/login/control/recoverPasswordProcessor.php" method="post">
      				<fieldset>
 	     				Password Reset
      					<p class="instruction">Please enter your user id so we can email you a password reset link.</p>
      					Username<span class="instruction form-instruction"><a href="javascript:void(0)" onclick="toggleFormDisplay('recover-username-form')">I forgot</a></span>
-     					<input class="form-input" type="text" name="uid" value="">
-     					<a type="submit" class="pure-button pure-button-primary" style="width:45%;">Reset Password</a>
+     					<input class="form-input" type="text" name="uid" value="" maxlength="25">
+     					<a id="password-form-submit" type="submit" class="pure-button pure-button-primary" style="width:45%;" href="javascript:void(0);" onclick="passwordValidateAndSubmit();">Reset Password</a>
      					<a class="form-instruction" href="javascript:void(0)" onclick="toggleFormDisplay('login-form')">Return to Login</a>
+     					<input type="hidden" name="network" value="<? echo $cleanNetworkId; ?>">
      				</fieldset>
      			</form>     			
      		</div>
      		
-     		<div class="colRight" style="width:30%;float:right;margin-top:30px;">
+     		<div class="loginColRight">
       		<span style="float:left;padding:10px;margin-top:10px;">[Team Logo]</span>
       		<span style="clear:left;float:left;padding:10px;">[Team Name]</span>
      		</div>
@@ -142,38 +123,8 @@ if(isset($_GET['network']) && Util::validateNetworkId($_GET['network'])) {
     		<a href="http://northbridgetech.org/index.php" target="_blank"><img src="http://northbridgetech.org/images/NB_horizontal_rgb.png" height="45" width="166" border="0" alt="Northbridge Technology Alliance"/></a>
 			</div>
 	
-    </div><!-- container -->       
-		      
-    <!-- lightboxes -->
-    
-		<div id="fade" class="black_overlay"></div>
-		
-		<div id="light_user" class="white_content">
-			<a href="javascript:void(0)" onclick="document.getElementById('light_user').style.display='none';document.getElementById('fade').style.display='none'" style="float:right">Close</a>
-			<form autocomplete="off" action="" method="post">
-				<table cellpadding="5">
-					<tr><td colspan="2"><p>Your User ID can be found in your original enrollment confirmation email. Can't find it?</p><p>Please enter your email address and we will resend your enrollment package.</p></td></tr>
-					<tr><td>Email:</td><td><input class="passed" type="text" size="15" name="email" value=""/></td></tr>
-					<tr><td colspan="2"><input type="submit" style="float:right;" value="Resend"/></td></tr>
-				</table>
-				<input type="hidden" name="network" value="<? echo $cleanNetworkId; ?>">
-			</form>
-		</div>
-
-		<div id="light_password" class="white_content">
-			<a href="javascript:void(0)" onclick="document.getElementById('light_password').style.display='none';document.getElementById('fade').style.display='none'" style="float:right">Close</a>
-			<form autocomplete="off" action="" method="post">
-				<table cellpadding="5">
-					<tr><td colspan="2"><p>No problem!</p><p>Please enter your user id so we can email you a password reset link.</p></td></tr>
-					<tr><td>User Id:</td><td><input class="passed" type="text" size="15" name="uid" value=""/></td></tr>
-					<tr><td><a href="javascript:void(0)" onclick="document.getElementById('light_user').style.display='block';document.getElementById('light_password').style.display='none';document.getElementById('fade').style.display='block'">Forgot your user id?</a></td><td><input type="submit" style="float:right;" value="Reset"/></td></tr>
-				</table>
-				<input type="hidden" name="network" value="<? echo $cleanNetworkId; ?>"> 
-			</form>
-		</div>
-		  	
+    </div><!-- container -->       		  	
 	</body>
-	
 </html>
 
 

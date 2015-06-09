@@ -6,6 +6,14 @@ require_once("../../../src/framework/Util.php");
 require_once(Util::getPhpRoot() . "/Validate.php");
 require_once(Util::getSrcRoot() . "/user/User.php");
 
+echo "Hello from recover password processor.
+
+" . $_POST['uid'] . "
+
+" . $_POST['network'];
+
+exit(0);
+
 $dirty = array('username' => $_POST['uid'], 'network' => $_POST['network']);
 $clean = array();
 

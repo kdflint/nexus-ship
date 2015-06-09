@@ -42,6 +42,18 @@ body {
 	letter-spacing: 1px;
 }
 
+.loginColLeft {
+	width:70%;
+	float:left;
+	margin-top:30px;
+}
+
+.loginColRight {
+	width:30%;
+	float:right;
+	margin-top:30px;
+}
+
 /* TEXT */
 
 .instruction {
