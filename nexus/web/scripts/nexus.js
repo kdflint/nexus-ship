@@ -44,6 +44,7 @@ function toggleFormDisplay(formId) {
 	document.getElementById("recover-username-form").style.display='none';
 	document.getElementById("recover-password-form").style.display='none';
 	showForm.style.display='block';
+	document.getElementById("login-user-message").innerHTML = "";
 }
 
 // TODO - refactor these front validations scripts - way too redundant!

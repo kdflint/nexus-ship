@@ -2,6 +2,7 @@
 
 require_once(dirname(__FILE__) . "/../../../config/env_config.php");
 require_once(PHP_ROOT . "/Validate.php");
+require_once(Util::getSrcRoot() . "/user/User.php");
 
 class Util {
 	
@@ -20,6 +21,18 @@ class Util {
 	public static function getDbName() {
 		return DB_NAME;
 	}		
+	
+	private static $web_path = "/web";
+	
+	public static function getHttpPath() {
+		return "http://" . ENV_HOST . APP_NAME . self::$web_path;
+	}
+	
+	public static function getWebRoot() {	return WEB_ROOT; }
+	
+	public static function getPhpRoot() {	return PHP_ROOT; }
+	
+	public static function getSrcRoot() {	return self::getWebRoot() . "/src"; }
 		
 	
 	const VALIDATION_FNAME_ERROR = "Please enter a valid first name."; 
@@ -74,29 +87,45 @@ class Util {
 		return FALSE;
 	}
 	
-	public static function validateNetworkId($in) {
+	public static function validateNetworkIdFormat($in) {
 		if(Validate::string($in, array(
 			'format' => VALIDATE_NUM, 
 			'min_length' => 1, 
 			'max_length' => 3))) {
-			if (pgDb::networkIdExists($in)) {	
 				return TRUE;
-			}
 		}
 		return FALSE;
 	}
 	
 	public static function validateUserId($in) {
-		if(Validate::string($in, array(
-			'format' => VALIDATE_NUM, 
-			'min_length' => 1, 
-			'max_length' => 8))) {
+		if(self::validateUserIdFormat($in)) {
 			if (pgDb::userIdExists($in)) {	
 				return TRUE;
 			}
 		}
 		return FALSE;
 	}
+	
+	public static function validateUserIdFormat($in) {
+		if(Validate::string($in, array(
+			'format' => VALIDATE_NUM, 
+			'min_length' => 1, 
+			'max_length' => 8))) {
+				return TRUE;
+		}
+		return FALSE;
+	}		
+		
+	// Rules here slightly different to be backward compatible to data inserted prior to validation enforcement
+	// TODO - disallow spaces when we go public public
+	public static function validateUsernameFormat($in) {
+		if(Validate::string($in, array(
+			'format' => VALIDATE_ALPHA . VALIDATE_NUM . VALIDATE_SPACE . "_",
+    	'max_length' => Util::USERNAME_MAX))) {
+    		return TRUE;
+    }
+    return FALSE;
+  }
 	
 	public static function stripTrailingComma($in) {
 		if (!strcmp(substr($in, -2), ", ")) {
@@ -334,18 +363,9 @@ class Util {
 	public static function authenticate($uid, $pass) {	
 		$coreAuthenticated = false;
 		$hash = self::getPasswordHashByUser($uid, $pass);
-		if (pgDb::countActiveUsers($uid, $hash) == 1) {
+		if (User::countActiveUsers($uid, $hash) == 1) {
 			$coreAuthenticated = true;
 		}
-		//Login to Smart PHP Calendar
-    if ($coreAuthenticated) {     
-    	  require_once(self::getAppRoot() . "module/calendar/SpcEngine.php");
-        try {
-            Spc::login($uid);
-        } catch (Exception $e) {
-            echo $e->getMessage();
-        }
-    }
     return $coreAuthenticated;
 	}
 	
@@ -374,12 +394,6 @@ class Util {
 		} 
 	
 	}
-	
-	public static function getWebRoot() {	return WEB_ROOT; }
-	
-	public static function getPhpRoot() {	return PHP_ROOT; }
-	
-	public static function getSrcRoot() {	return WEB_ROOT . "/src"; }
 
 	public static function storeSecurePasswordImplA($plaintextPassword, $userId) {
 		$salt = self::generateRandomString(32);
@@ -389,7 +403,7 @@ class Util {
 	}
 	
 	public static function getPasswordHashByUser($userId, $plaintextPassword) {
-		$cursor = pgDb::getUserPasswordByUser($userId);
+		$cursor = User::getUserPasswordByUser($userId);
 		$row = pg_fetch_array($cursor, 0);
 		$encrypted = $row['password'];
 		// TODO - handle case where no rows are returned for this username		

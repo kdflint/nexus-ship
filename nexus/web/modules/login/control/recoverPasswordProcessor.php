@@ -3,56 +3,42 @@
 session_start();
 
 require_once("../../../src/framework/Util.php");
-require_once(Util::getPhpRoot() . "/Validate.php");
 require_once(Util::getSrcRoot() . "/user/User.php");
-
-echo "Hello from recover password processor.
-
-" . $_POST['uid'] . "
-
-" . $_POST['network'];
-
-exit(0);
 
 $dirty = array('username' => $_POST['uid'], 'network' => $_POST['network']);
 $clean = array();
 
-if (Validate::string($dirty['network'], array('format' => VALIDATE_NUM))) {
-	$clean['good']['network'] = $dirty['network'];
+if (isset($dirty['network']) && Util::validateNetworkIdFormat($dirty['network'])) {
+	$clean['network'] = $dirty['network'];
 } else {
-	$clean['good']['network'] = "";	
+	$clean['network'] = "";	
 }
 
-// Rules here slightly different to be backward compatible to data inserted prior to validation enforcement
-// TODO - disallow spaces when we go public public
-if (Validate::string($dirty['username'], array(
-						'format' => VALIDATE_ALPHA . VALIDATE_NUM . VALIDATE_SPACE . "_",
-    				'max_length' => Util::USERNAME_MAX))) {
-	$clean['good']['username'] = $dirty['username'];
+if (isset($dirty['username']) && Util::validateUsernameFormat($dirty['username'])) {
+	$clean['username'] = $dirty['username'];
 } else {
-	returnToLoginWithMessage(Util::AUTHENTICATION_ERROR, $clean['good']['network']);	
+	returnToLoginWithMessage(Util::AUTHENTICATION_ERROR, $clean['network']);	
 }
 
 // TODO - make sure username is unique and only one is returned
-echo $clean['good']['username'] . "<br/>";
-$cursor = User::getUserByUsername($clean['good']['username']);
+$cursor = User::getUserByUsername($clean['username']);
 $result = pg_fetch_array($cursor);
 if (isset($result['email']) && isset($result['id'])) {
 	if  (Util::validateEmail($result['email'])) {
 		$uuid = Util::newUuid();
 		User::insertPasswordResetActivity($result['id'], $uuid);
 		sendResetEmail($result['email'], $env_appRoot, $fname, $uuid);
-		returnToLoginWithMessage("Your password reset link has been sent to the email address on file.", $clean['good']['network']);	
+		returnToLoginWithMessage("Your password reset link has been sent to the email address on file.", $clean['network']);	
 	} else {
 		// TODO - or, say contact customer support?
-		returnToLoginWithMessage(Util::AUTHENTICATION_ERROR, $clean['good']['network']);
+		returnToLoginWithMessage(Util::AUTHENTICATION_ERROR, $clean['network']);
 	}
 } else {
-	returnToLoginWithMessage("Your password reset link has been sent to the email address on file.", $clean['good']['network']);
+	returnToLoginWithMessage("Your password reset link has been sent to the email address on file.", $clean['network']);
 }
 
 function returnToLoginWithMessage($message, $network) {
-	header("location:../view/login.php?network=" . $network . "&error=" . $message);
+	header("location:" . Util::getHttpPath() . "/login.php?network=" . $network . "&error=" . $message);
 	exit(0);
 }
 
@@ -64,7 +50,7 @@ Below is your link to reset your password.
 
 Note: This link will expire in 30 minutes. Also, any password links sent to you previously are now void.
 
-http://northbridgetech.org/" . $path . "/nexus/view/reset.php?resetCode=" . $uuid . "
+" . Util::getHttpPath() . "/module/login/view/reset.php?resetCode=" . $uuid . "
 
 If you did not request this password reset, please contact our support team at support@northbridgetech.org.
 

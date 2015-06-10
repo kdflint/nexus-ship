@@ -22,7 +22,7 @@ class PgDb {
 		pg_close($con);
 	}
 		
-	private static function psExecute($query, $input) {
+	public static function psExecute($query, $input) {
 		$result = $prepare = FALSE;
 		$con = pgDb::connect();
 		$prepare = pg_prepare($con, "ps", $query);

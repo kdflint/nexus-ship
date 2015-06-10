@@ -29,7 +29,7 @@ body {
 .frame {
 	clear: both;
 	padding-bottom:60px;   /* Height of the footer */
-	padding: 20px;
+	padding-top: 20px;
 }
 
 .footer {
@@ -58,6 +58,12 @@ body {
 
 .instruction {
 	font-size:90%;
+}
+
+.confirmation {
+	font-size:90%;
+	color:#007582;
+	width:90%;
 }
 
 /* LINKS */

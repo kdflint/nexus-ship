@@ -28,7 +28,18 @@ class User {
 		$query = "select username from public.user where lower(email) = lower($1)";
 		return pgDb::psExecute($query, array($email));
 	}
-
+	
+	public static function getUserPasswordByUser($userId) {
+		// TODO - make usernames in db not required to be unique (or, only unique within network). Pair with network id to do authentication.
+		$query = "select password, salt, cryptimpl from public.user where username = $1";
+		return pgDb::psExecute($query, array($userId));
+	}
+	
+	public static function countActiveUsers($uid, $password) {
+		$query = "select id from public.user where username=$1 and password=$2 and status_fk='1'";
+		return pg_num_rows(pgDb::psExecute($query, array($uid, $password)));
+	}
+	
 }
 
 ?>

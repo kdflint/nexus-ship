@@ -4,34 +4,27 @@ session_start();
 
 require_once("../../../src/framework/Util.php");
 
-echo "Hello from login processor.
+$dirty = array('username' => $_POST['uid'], 'password' => $_POST['password']);
+$clean = array();
 
-" . $_POST['uid'] . "
+if (isset($dirty['username']) && Util::validateUsernameFormat($dirty['username'])) {
+	$clean['username'] = $dirty['username'];
+}
 
-" . $_POST['password'];
-
-exit(0);
-
-$uid = $_POST['uid'];
-$password = $_POST['password'];
-
-/*
-
-$isAuthenticated = Util::authenticate($uid, $password);
+// TODO - clean password
+$isAuthenticated = Util::authenticate($clean['username'], $dirty['password']);
 
 if($isAuthenticated){
-	Util::setSession($uid);
-	Util::setLogin($_SESSION['uidpk']);
-	header("location:../view/nexus.php?thisPage=directory");
+	//Util::setSession($clean['username']);
+	//Util::setLogin($_SESSION['uidpk']);
+	header("location:" . Util::getHttpPath() . "/index.php");
 	exit(0);	
 } else {
 	returnToLoginWithError(Util::AUTHENTICATION_ERROR);
 }
 
-*/
-
 function returnToLoginWithError($errorMessage) {
-	header("location:../view/login.php?error=" . $errorMessage);
+	header("location:" . Util::getHttpPath() . "/login.php?error=" . $errorMessage);
 	exit(0);
 }
 

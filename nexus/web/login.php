@@ -2,9 +2,10 @@
 session_start();
 
 require_once("src/framework/Util.php");
-//require_once(Util::getWebRoot() . "/src/organization/Organization.php");
+require_once(Util::getSrcRoot() . "/organization/Organization.php");
 
 $cleanMessage = "";
+$cleanIcon = "";
 
 if(isset($_GET['logout'])) {
 	// destroy session data
@@ -22,22 +23,24 @@ if(isset($_GET['logout'])) {
 
 if(isset($_GET['error']) && Util::isSafeCharacterSet($_GET['error'])) {
 	$cleanMessage = $_GET['error'];
+	$cleanIcon = "fa fa-info-circle fa-2x";
 } else if(isset($_GET['logout'])) { 
 	$cleanMessage = "You have signed out succesfully.";
+	$cleanIcon = "fa fa-info-circle fa-2x";
 }
 
 $logo = "";
-$networkName = "";		
-$cleanNetworkId = "123"; // TODO: create default network, that includes default logo
+$networkLogo = $networkName = "";		
+$cleanNetworkId = "123"; // TODO: create default network in db, that includes default logo
 
-if(isset($_GET['network']) && Util::validateNetworkId($_GET['network'])) {
+if(isset($_GET['network']) && Organization::validateNetworkId($_GET['network'])) {
  	$cleanNetworkId = $_GET['network'];		
 }
 
-//$cursor = Organization::getOrganizationById($cleanNetworkId);
-//$row = pg_fetch_array($cursor);
-//$logo = $row['logo'];
-//networkName = $row['name'];
+$cursor = Organization::getOrganizationById($cleanNetworkId);
+$row = pg_fetch_array($cursor);
+$networkLogo = $row['logo'];
+$networkName = $row['name'];
 
 ?>
 
@@ -71,13 +74,14 @@ if(isset($_GET['network']) && Util::validateNetworkId($_GET['network'])) {
       		<span>Web Conference Center</span>
       	</span>
       	<span style="float:right;margin-top:80px;">
-      		<a href="#">Request Access</a>
+      		<a href="#">About</a>
       	</span>
       </div>
 
 			<div class="frame"> 
 				
 			  <div class="loginColLeft">
+			  	<p id="login-user-message" class="confirmation"><span class="<? echo $cleanIcon; ?>" style="color:#007582;float:left;margin-right:5px;"></span><? echo $cleanMessage; ?></p>
 					<form id="login-form" class="pure-form pure-form-stacked" autocomplete="off" action="modules/login/control/loginProcessor.php" method="post">
 	    			<fieldset>
 	    				Username<span class="instruction form-instruction"><a href="javascript:void(0)" onclick="toggleFormDisplay('recover-username-form')">I forgot</a></span>
@@ -113,8 +117,8 @@ if(isset($_GET['network']) && Util::validateNetworkId($_GET['network'])) {
      		</div>
      		
      		<div class="loginColRight">
-      		<span style="float:left;padding:10px;margin-top:10px;">[Team Logo]</span>
-      		<span style="clear:left;float:left;padding:10px;">[Team Name]</span>
+      		<span style="clear:right;float:right;text-align:right;margin-top:20px;"><? echo $networkName; ?></span>
+      		<span style="clear:right;float:right;margin-top:20px;"><img <?php echo $networkLogo; ?>/></span>
      		</div>
       </div>
       

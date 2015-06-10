@@ -3,49 +3,41 @@
 session_start();
 
 require_once("../../../src/framework/Util.php");
-require_once(Util::getPhpRoot() . "/Validate.php");
 require_once(Util::getSrcRoot() . "/user/User.php");
 
-echo "Hello from recover enrollment processor.
+$dirty = array('email' => $_POST['email'], 'network' => $_POST['network']);
+$clean = array();
 
-" . $_POST['email'] . "
-
-" . $_POST['network'];
-
-exit(0);
-
-// clean email
-$cleanEmail = "";
-$cleanNetwork = "";
-
-if (isset($_POST['network']) && Validate::string($_POST['network'], array('format' => VALIDATE_NUM))) {
-	$cleanNetwork = $_POST['network'];
-} 
-
-if (isset($_POST['email']) && Util::validateEmail($_POST['email'])) {
-			$cleanEmail = $_POST['email'];
+if (isset($dirty['network']) && Util::validateNetworkIdFormat($dirty['network'])) {
+	$clean['network'] = $dirty['network'];
+} else {
+	$clean['network'] = "";	
 }
 
-if ($cleanEmail) {	
+if (isset($dirty['email']) && Util::validateEmail($dirty['email'])) {
+	$clean['email'] = $dirty['email'];
+}
+
+if ($clean['email']) {	
 	
-	$row = pg_fetch_row(User::userEmailExists($cleanEmail));
+	$row = pg_fetch_row(User::userEmailExists($clean['email']));
   $exists = $row[0];	
   if (!strcmp($exists, "t")) {
-		$cursor = User::getUsernamesByEmail($cleanEmail);
+		$cursor = User::getUsernamesByEmail($clean['email']);
 		$usernames = "";
 		while ($row = pg_fetch_array($cursor)) {
 	  		$usernames = $usernames . $row['username'] . ", ";
 	 	}
-	 	sendEnrollEmail($cleanEmail, $env_appRoot, "", $usernames);
-		returnToLoginWithMessage("Your enrollment package has been sent to " . $cleanEmail . ".", $cleanNetwork);
+	 	sendEnrollEmail($clean['email'], $env_appRoot, "", $usernames);
+		returnToLoginWithMessage("Your enrollment package has been sent to " . $clean['email'] . ".", $clean['network']);
 	}		
 
 }
 
-returnToLoginWithMessage(Util::AUTHENTICATION_ERROR, $cleanNetwork);
+returnToLoginWithMessage(Util::AUTHENTICATION_ERROR, $clean['network']);
 
 function returnToLoginWithMessage($errorMessage, $network) {
-	header("location:../view/login.php?network=" . $network . "&error=" . $errorMessage);
+	header("location:" . Util::getHttpPath() . "/login.php?network=" . $network . "&error=" . $errorMessage);
 	exit(0);
 }
 
@@ -73,7 +65,7 @@ We are working hard on adding:
 
 You can login to Nexus using this link. You may wish to check the Help document right away for some information about how to use this site.
 
-http://northbridgetech.org/" . $path . "/nexus/view/login.php
+" . Util::getHttpPath() . "/login.php
 
 Enjoy,
 
