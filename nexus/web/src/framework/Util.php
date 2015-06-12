@@ -30,9 +30,13 @@ class Util {
 	
 	public static function getWebRoot() {	return WEB_ROOT; }
 	
+	public static function getModulesRoot() {	return self::getWebRoot() . "/modules"; }
+	
 	public static function getPhpRoot() {	return PHP_ROOT; }
 	
 	public static function getSrcRoot() {	return self::getWebRoot() . "/src"; }
+	
+	public static function getEnvName() {return ENV_NAME; }
 		
 	
 	const VALIDATION_FNAME_ERROR = "Please enter a valid first name."; 
@@ -347,15 +351,15 @@ class Util {
 	}
 	
 	public static function hideInEnvironment() {
-		if (!strcmp($_SESSION['environment'], "dev")) {
-			return true;
-		}
+		//if (!strcmp($_SESSION['environment'], "dev")) {
+		//	return true;
+		//}
 		return false;		
 	}
 	
 	public static function setLogin($uid) {
 		if (isset($_SERVER['REMOTE_ADDR'])) {
-			pgDb::setLoginByIp($_SERVER['REMOTE_ADDR'], $uid);
+			User::setLoginByIp($_SERVER['REMOTE_ADDR'], $uid);
 		}
 		return;
 	}
@@ -373,14 +377,12 @@ class Util {
 
 		session_regenerate_id(TRUE);
 		
-		$_SESSION['appRoot'] = self::getAppRoot();
-		require_once($_SESSION['appRoot'] . "config/env_config.php");
-		$_SESSION['environment'] = $env_name;
-		
+		$_SESSION['appRoot'] = self::getWebRoot();
+		$_SESSION['environment'] = self::getEnvName();
 		$_SESSION['username'] = $username;
-		$_SESSION['groups'] = pgDb::getUserGroupsByUsername($_SESSION['username']);
+		$_SESSION['groups'] = User::getUserGroupsByUsername($_SESSION['username']);
 	
-		$cursor = pgDb::getUserSessionByUsername($_SESSION['username']);
+		$cursor = User::getUserSessionByUsername($_SESSION['username']);
 	
 		while ($row = pg_fetch_array($cursor)) {
 			$_SESSION['fname'] = $row['fname'];

@@ -15,8 +15,8 @@ if (isset($dirty['username']) && Util::validateUsernameFormat($dirty['username']
 $isAuthenticated = Util::authenticate($clean['username'], $dirty['password']);
 
 if($isAuthenticated){
-	//Util::setSession($clean['username']);
-	//Util::setLogin($_SESSION['uidpk']);
+	Util::setSession($clean['username']);
+	Util::setLogin($_SESSION['uidpk']);
 	header("location:" . Util::getHttpPath() . "/index.php");
 	exit(0);	
 } else {

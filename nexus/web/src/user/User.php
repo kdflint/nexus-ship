@@ -40,6 +40,38 @@ class User {
 		return pg_num_rows(pgDb::psExecute($query, array($uid, $password)));
 	}
 	
+		public static function getUserSessionByUsername($uid) {
+		// TODO: add active check?
+		// TODO: fix up network id determination (parent, god, etc)
+		// TODO - this will fail if user in > 1 group
+		$query = "
+			select u.id as id, u.fname as fname, u.lname as lname, u.password as password, u.conference_link as link, u.email as email, o1.name as affiliation, o2.name as network, o2.id as networkid, o2.logo as logo, uo.role_fk as role
+			from public.user u, user_organization uo, organization o1, organization o2, organization_organization oo
+			where u.username = $1
+			and uo.user_fk = u.id
+			and uo.organization_fk = o1.id
+			and oo.organization_to_fk = o1.id 
+			and oo.organization_from_fk = o2.id
+			and oo.relationship in ('parent', 'god')
+			";
+		return PgDb::psExecute($query, array($uid));	
+	}
+	
+	public static function getUserGroupsByUsername($uid) {
+		$query = "select g.id as id, g.name as name from public.group g, public.user u, user_group ug where u.username = $1 and ug.user_fk = u.id and ug.group_fk = g.id";
+		$cursor = PgDb::psExecute($query, array($uid));
+	  $resultArray = array();
+	  while ($row = pg_fetch_array($cursor)) {
+	  	$resultArray[$row['id']] = $row['name'];
+	  }		
+	  return $resultArray;
+	}
+	
+	public static function setLoginByIp($ip, $userId) {
+		$query = "insert into user_session (ip, user_fk, create_dttm) values ($1, $2, now())";
+		return PgDb::psExecute($query, array($ip, $userId));
+	}
+	
 }
 
 ?>
