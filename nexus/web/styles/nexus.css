@@ -8,7 +8,7 @@ html {
 body { 
 	color:#333333;
 	font-family:'Oxygen',sans-serif; 
-	text-align:center; 
+	//text-align:center; 
 	background-color: #ffffff;
 	height: 100%;
 }
@@ -126,14 +126,74 @@ form {
 	background: #a6c3ce;
 }
 
+/* DATE */
+
+.event {
+  width: 90px;
+  color: rgba(0, 77, 98, 1);
+  text-align: center;
+  padding-right:20px;
+  border-right:1px solid #a6c3ce;
+ }
+ 
+.day, .date, .month {
+  padding-top: 5px;
+  }
+ 
+.day { 
+  font-size: 90%;
+  top: 15px;
+  }
+  
+.date { 
+  font-size: 150%;
+  top: 15px;
+  }
+ 
+.month { 
+	font-size: 90%;
+  }
+  
+/* TABLES */
+
+table {
+    border-collapse: separate !important; /* IE7 and lower */
+    border: 1px solid #a6c3ce !important;
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+}
+
+.pure-table td:first-child {
+	width: 100px;
+
+}
+
+.pure-table td {
+	border-left: 0px !important;
+	padding: 1em !important;
+}
+
 /* BLINDS */
 
 #schedule_display,
 #join_display {
-  width: 400px;
-  height: 400px;
-  background: #ccc;
-  margin-left: 420px;
+  width: 33.5%;
+  background: #f7f8ef;
+  padding: 10px;
+  position: absolute;
+}
+
+#schedule_display {
+  margin-left: 330px;
+}
+
+#techcheck_display, 
+#user_display {
+  background: #f7f8ef;
+  padding: 10px;
+  border: thin solid;
+  height: 200px;
+  position: absolute;
 }
  
 /* LIGHTBOXES */

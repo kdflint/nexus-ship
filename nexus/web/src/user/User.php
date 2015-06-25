@@ -40,7 +40,7 @@ class User {
 		return pg_num_rows(pgDb::psExecute($query, array($uid, $password)));
 	}
 	
-		public static function getUserSessionByUsername($uid) {
+	public static function getUserSessionByUsername($uid) {
 		// TODO: add active check?
 		// TODO: fix up network id determination (parent, god, etc)
 		// TODO - this will fail if user in > 1 group

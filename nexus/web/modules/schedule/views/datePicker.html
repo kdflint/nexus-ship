@@ -1,15 +1,87 @@
-      <p>Start Date: <input type="text" id="datepicker"></p> 
+<form id="schedule-form" class="pure-form pure-form-aligned" action="" method="post">
+	<fieldset>
+		
+		<div class="pure-control-group">
+  		<label style="width:30%;">Purpose</label>
+      <input type="text" style="width:60%;">
+    </div>
     
-      <p>Time: <input type="text" id="basicExample"></p>
+	  <div class="pure-control-group">
+  		<label for="datepicker" style="width:30%;">Start Date</label>
+      <input type="text" id="datepicker" style="width:60%;">
+    </div>
     
-      <p>Duration: <select name="duration" id="duration">
+	  <div class="pure-control-group">    
+      <label for="basicExample" style="width:30%;vertical-align:top;">Time</label>
+      <!--<input type="text" id="basicExample" style="width:60%;">-->
+      <select name="time" id="basicExample">
+        <option>6:00 a.m.</option>
+        <option>6:30 a.m.</option>
+        <option>7:00 a.m.</option>
+        <option>7:30 a.m.</option>
+        <option>8:00 a.m.</option>
+        <option>8:30 a.m.</option>
+        <option>9:00 a.m.</option>
+        <option>9:30 a.m.</option>
+        <option>10:00 a.m.</option>
+        <option>10:30 a.m.</option>
+        <option>11:00 a.m.</option>
+        <option>11:30 a.m.</option>
+        <option>12:00 p.m.</option>
+        <option>12:30 p.m.</option>       
+        <option>1:00 p.m.</option>
+        <option>1:30 p.m.</option>
+        <option>1:00 p.m.</option>
+        <option>2:30 p.m.</option>
+        <option>2:00 p.m.</option>
+        <option>2:30 p.m.</option>
+        <option>3:00 p.m.</option>
+        <option>3:30 p.m.</option>        
+        <option>4:00 p.m.</option>
+        <option>4:30 p.m.</option>
+        <option>5:00 p.m.</option>
+        <option>5:30 p.m.</option>
+        <option>6:00 p.m.</option>
+        <option>6:30 p.m.</option>
+        <option>7:00 p.m.</option>
+        <option>7:30 p.m.</option>
+        <option>8:00 p.m.</option>
+        <option>8:30 p.m.</option>
+        <option>9:00 p.m.</option>
+        <option>9:30 p.m.</option>
+        <option>10:00 p.m.</option>
+        <option>10:30 p.m.</option>
+        <option>11:00 p.m.</option>
+        <option>11:30 p.m.</option>        
+        <option>12:00 a.m.</option>
+        <option>12:30 a.m.</option>
+        <option>1:00 a.m.</option>
+        <option>1:30 a.m.</option>
+        <option>2:00 a.m.</option>
+        <option>2:30 a.m.</option>
+        <option>3:00 a.m.</option>
+        <option>3:30 a.m.</option>
+        <option>4:00 a.m.</option>
+        <option>4:30 a.m.</option>
+        <option>5:00 a.m.</option>
+        <option>5:30 a.m.</option>
+      </select>
+    </div>
+    
+	  <div class="pure-control-group">    
+      <label for="duration" style="width:30%;vertical-align:top;">Duration</label>
+      <select name="duration" id="duration">
         <option>30 minutes</option>
-          <option>1 hour</option>
-          <option>1 hour 30 minutes</option>
-          <option>2 hours</option>
-          <option>2 hours 30 minutes</option>
-          <option>3 hours</option>
-          <option>3 hours 30 minutes</option>
-          <option>4 hours</option>
-        </select>  
-      </p>
+        <option>1 hour</option>
+        <option>1 hour 30 minutes</option>
+        <option>2 hours</option>
+        <option>2 hours 30 minutes</option>
+        <option>3 hours</option>
+        <option>3 hours 30 minutes</option>
+        <option>4 hours</option>
+      </select>
+    </div> 
+    
+    <input type="submit" value="Reserve the Room" /> 
+  </fieldset>
+</form>   

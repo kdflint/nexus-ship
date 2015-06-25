@@ -73,7 +73,7 @@ $networkName = $row['name'];
       		<hr style="text-align:left;margin-left:0;width:176px;">
       		<span>Web Conference Center</span>
       	</span>
-      	<span style="float:right;margin-top:80px;">
+      	<span style="float:right;margin-top:20px;">
       		<a href="#">About</a>
       	</span>
       </div>
