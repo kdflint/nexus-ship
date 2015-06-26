@@ -48,6 +48,9 @@ if (Util::hideInEnvironment()) {
 				$( '#join_control' ).click(function() {
 	  			$( "#join_display" ).toggle( "blind" );
 				});
+				$( '#adduser_control' ).click(function() {
+	  			$( "#adduser_display" ).toggle( "blind" );
+				});
 				$( '#techcheck_control' ).click(function() {
 	  			$( "#techcheck_display" ).toggle( "blind" );
 				});
@@ -100,71 +103,48 @@ if (Util::hideInEnvironment()) {
     <div class="container">
 
       <div class="header">
-      	<span style="float:left;width:70%;padding:10px;margin-top:10px;border-radius:6px;background:#edf0de;color:#004d62;">
-      		<span style="font-family:Oswald;font-size:130%">Nexus</span>
-      		<hr style="text-align:left;margin-left:0;width:176px;">
-      		<span>Web Conference Center</span>   
-      	</span>  		
-      	<span style="float:right;padding-bottom:10px;margin-top:30px;">
+       	<img src="image/nexus4.png" width="22" height="96" style="float:left;margin-top:10px;" />
+       	<span class="banner">
+					<span class="product-name" style="">Nexus</span><br/>
+					<span class="module-name" style="">Web Meet</span>
+					
+					<a class="pure-button button-join" style="float:right;margin-top:5px;width:120px;padding: .35em;font-size:110%;background:rgba(210, 123, 75, 1) none repeat scroll;color:#004d62;" href="javascript:void(0)" onclick="toggleFrameDisplay('userList')">TEAM</a>
+					<a class="pure-button button-join" style="float:right;margin-top:5px;margin-right:-7px;width:120px;padding: .35em;font-size:110%;background:rgba(137, 157, 112, 1) none repeat scroll;color:#004d62;" href="javascript:void(0)" onclick="toggleFrameDisplay('reserveList')">ROOM</a> 
+					
+      	</span>  	
+  	
+      	<span class="controls" style="float:right;padding-bottom:10px;margin-top:30px;">
       		<a href="#" style="color:#d27b4b;text-decoration:none;">About</a> | 
-      		<a href="login.php?logout=true" style="color:#d27b4b;text-decoration:none;">Logout</a> | 
-      		<a id="techcheck_control" href="javascript:void(0)"><span style="padding:0px;margin:0px;color:#d27b4b;" class="fa fa-exclamation-triangle" ></span></a>
+      		<a href="login.php?logout=true" style="color:#d27b4b;text-decoration:none;">Logout</a>
       	</span>
-      	<a id="user_control" href="javascript:void(0)"><span style="clear:right;float:right;padding-top:12px;margin:0px;color:#d27b4b;" class="fa fa-plus-circle" ></span></a>
+      	<a id="user_control" href="javascript:void(0);"><span style="clear:right;float:right;padding-top:4px;margin:0px;color:#d27b4b;" class="fa fa-caret-down fa-2x" ></span></a>
 				<span style="float:right;padding:10px;">Hello <? echo $_SESSION['fname']; ?></span> 	
       </div>
 
 			<div class="frame" >
 				<div class="loginColLeft" style="width:80%;">
-					<a id="join_control" class="pure-button button-join" href="javascript:void(0)">Start a Meeting</a>    
+					
+					<div id="reserveList" style="display:block;">
+						<a id="join_control" href="javascript:void(0);"></span>RESERVE<span style="padding-top:4px;margin:0px;color:#d27b4b;" class="fa fa-calendar-o fa-2x" ></span><span style="padding-top:4px;margin:0px;color:#d27b4b;" class="fa fa-plus-circle" ></a>
+						<!--<a id="join_control" class="pure-button button-join" href="javascript:void(0)">Start a Meeting</a>    -->
 						<div id="join_display" style="display:none;">
 							<?php include("modules/schedule/views/joinConfirm.html"); ?>	
 						</div>
-					<a id="schedule_control" class="pure-button button-schedule" href="javascript:void(0)">Reserve the Room</a>
+					<p><a id="join_control" style="margin-left:10px;" href="javascript:void(0);">ENTER </span><span style="padding-top:4px;margin:0px;color:#d27b4b;" class="fa fa-sign-in fa-2x" ></span></a></p>
+						<!--<a id="schedule_control" class="pure-button button-schedule" href="javascript:void(0)">Reserve the Room</a>-->
 						<div id="schedule_display" style="display:none;">
 							<?php include("modules/schedule/views/datePicker.html"); ?>	
 						</div>
-					<table style="width:90%;margin-top:30px;" class="pure-table">
-        			<tr>
-            		<td>
-            			<div class="event">
-  									<span class="day">Wednesday</span><br/>
-  									<span class="date">30</span><br/>
-  									<span class="month">June</span><br/>
-  									<span class="time">8:00 pm CT</span>
-									</div>
-								</td>
-            		<td>
-            			<div class="meeting">
-            				<span class="purpose">Board Meeting</span><br/>
-            				<span class="descr" style="font-size:90%;" >This is the quarterly meeting of the Board of Directors
-            					<p><span style="padding-right:5px;margin:0px;color:#d27b4b;" class="fa fa-envelope" ></span>Reserved by: Kathy Flint</p>
-            				</span>
-            			</div>
-            		</td>
-            		<td style="vertical-align:top;">
-            			<a class="pure-button button-join" style="width:100%;" href="javascript:void(0)">Join</a>  
-            		</td>
-        			</tr>
-        			<tr>
-            		<td>
-            			<div class="event">
-  									<span class="day">Wednesday</span><br/>
-  									<span class="date">30</span><br/>
-  									<span class="month">June</span><br/>
-  									<span class="time">8:00 pm CT</span>
-									</div>
-								</td>
-            		<td>
-            			<div class="meeting">
-            				<span class="purpose">Board Meeting</span><br/>
-            				<span class="descr" style="font-size:90%;" >This is the quarterly meeting of the Board of Directors
-            					<p><span style="padding-right:5px;margin:0px;color:#d27b4b;" class="fa fa-envelope" ></span>Reserved by: Kathy Flint</p>
-            				</span>
-            			</div>
-            		</td>
-        			</tr>					
-					</table>
+						<?php include("modules/schedule/views/reservationsList.html"); ?>
+					</div>
+					
+					<div id="userList" style="display:none;">
+						<div id="adduser_display" style="display:none;">
+							<?php include("modules/schedule/views/joinConfirm.html"); ?>	
+						</div>
+						<?php include("modules/user/views/userList.html"); ?>
+					</div>
+
       	</div>
       	
       	<div class="loginColRight" style="width:20%;">
@@ -183,7 +163,7 @@ if (Util::hideInEnvironment()) {
         powered by<br/>
     		<a href="http://northbridgetech.org/index.php" target="_blank"><img src="http://northbridgetech.org/images/NB_horizontal_rgb.png" height="60" width="221" border="0" alt="Northbridge Technology Alliance"/></a>
 			</div>
-	
+
     </div><!-- container -->       
   	
 	</body>

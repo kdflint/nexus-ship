@@ -47,6 +47,13 @@ function toggleFormDisplay(formId) {
 	document.getElementById("login-user-message").innerHTML = "";
 }
 
+function toggleFrameDisplay(frameId) {
+	var showFrame = document.getElementById(frameId);
+	document.getElementById("reserveList").style.display='none';
+	document.getElementById("userList").style.display='none';
+	showFrame.style.display='block';
+}
+
 // TODO - refactor these front validations scripts - way too redundant!
 
 function loginValidateAndSubmit() {
