@@ -28,7 +28,7 @@ body {
 
 .banner {
 	position:absolute;
-	width:70%;
+	width:78%;
 	//height: 106px;
 	height: 96px;
 	padding:0px;
@@ -45,13 +45,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
 
 }
 
-
-
-
 .frame {
 	clear: both;
 	padding-bottom:60px;   /* Height of the footer */
-	padding-top: 20px;
 }
 
 .footer {
@@ -103,9 +99,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
 	padding-top: 5px;
 }
 
-#grad {
-
-} 
 
 /* LINKS */
 
@@ -165,6 +158,16 @@ form {
    	
 .button-join:active {
 	background: #a6c3ce;
+}
+
+.button-menu {
+  border-radius: 6px;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  color: #004D62;
+  font-size: 110%;
+	margin-top: 5px;
+	width: 120px;
+	padding: .35em;
 }
 
 /* DATE */

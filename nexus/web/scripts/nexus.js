@@ -49,9 +49,13 @@ function toggleFormDisplay(formId) {
 
 function toggleFrameDisplay(frameId) {
 	var showFrame = document.getElementById(frameId);
+	var showButton = document.getElementById('menu-' + frameId);
 	document.getElementById("reserveList").style.display='none';
 	document.getElementById("userList").style.display='none';
+	document.getElementById("menu-userList").style.backgroundColor='rgba(210, 123, 75, 1)';
+	document.getElementById("menu-reserveList").style.backgroundColor='rgba(210, 123, 75, 1)';
 	showFrame.style.display='block';
+	showButton.style.backgroundColor='rgba(137, 157, 112, 1)';
 }
 
 // TODO - refactor these front validations scripts - way too redundant!

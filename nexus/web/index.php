@@ -106,11 +106,9 @@ if (Util::hideInEnvironment()) {
        	<img src="image/nexus4.png" width="22" height="96" style="float:left;margin-top:10px;" />
        	<span class="banner">
 					<span class="product-name" style="">Nexus</span><br/>
-					<span class="module-name" style="">Web Meet</span>
-					
-					<a class="pure-button button-join" style="float:right;margin-top:5px;width:120px;padding: .35em;font-size:110%;background:rgba(210, 123, 75, 1) none repeat scroll;color:#004d62;" href="javascript:void(0)" onclick="toggleFrameDisplay('userList')">TEAM</a>
-					<a class="pure-button button-join" style="float:right;margin-top:5px;margin-right:-7px;width:120px;padding: .35em;font-size:110%;background:rgba(137, 157, 112, 1) none repeat scroll;color:#004d62;" href="javascript:void(0)" onclick="toggleFrameDisplay('reserveList')">ROOM</a> 
-					
+					<span class="module-name" style="">Web Meet</span>					
+					<a id="menu-userList" class="pure-button button-menu" href="javascript:void(0)" onclick="toggleFrameDisplay('userList')" style="float:right;background-color:rgba(210, 123, 75, 1);" >TEAM</a>
+					<a id="menu-reserveList" class="pure-button button-menu" href="javascript:void(0)" onclick="toggleFrameDisplay('reserveList')" style="float:right;background-color:rgba(137, 157, 112, 1);margin-right:-7px;">ROOM</a> 
       	</span>  	
   	
       	<span class="controls" style="float:right;padding-bottom:10px;margin-top:30px;">
@@ -123,15 +121,10 @@ if (Util::hideInEnvironment()) {
 
 			<div class="frame" >
 				<div class="loginColLeft" style="width:80%;">
-					
 					<div id="reserveList" style="display:block;">
-						<a id="join_control" href="javascript:void(0);"></span>RESERVE<span style="padding-top:4px;margin:0px;color:#d27b4b;" class="fa fa-calendar-o fa-2x" ></span><span style="padding-top:4px;margin:0px;color:#d27b4b;" class="fa fa-plus-circle" ></a>
-						<!--<a id="join_control" class="pure-button button-join" href="javascript:void(0)">Start a Meeting</a>    -->
 						<div id="join_display" style="display:none;">
 							<?php include("modules/schedule/views/joinConfirm.html"); ?>	
 						</div>
-					<p><a id="join_control" style="margin-left:10px;" href="javascript:void(0);">ENTER </span><span style="padding-top:4px;margin:0px;color:#d27b4b;" class="fa fa-sign-in fa-2x" ></span></a></p>
-						<!--<a id="schedule_control" class="pure-button button-schedule" href="javascript:void(0)">Reserve the Room</a>-->
 						<div id="schedule_display" style="display:none;">
 							<?php include("modules/schedule/views/datePicker.html"); ?>	
 						</div>
