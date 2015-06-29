@@ -1,20 +1,26 @@
-<form id="schedule-form" class="pure-form pure-form-aligned" action="" method="post">
+					<table style="width:100%;" class="pure-table">
+        			<tr>
+            		<td>
+            			<div class="event">
+  									<span class="date">New</span><br/>
+  									<span>Reservation</span>
+									</div>
+								</td>
+            		<td>
+
+<form id="schedule-form" class="pure-form" action="" method="post">
 	<fieldset>
+
+      <div>
+      <input type="text" placeholder="Purpose" style="">
+
+		</div>
 		
-		<div class="pure-control-group">
-  		<label style="width:30%;">Purpose</label>
-      <input type="text" style="width:60%;">
-    </div>
-    
-	  <div class="pure-control-group">
-  		<label for="datepicker" style="width:30%;">Start Date</label>
-      <input type="text" id="datepicker" style="width:60%;">
-    </div>
-    
-	  <div class="pure-control-group">    
-      <label for="basicExample" style="width:30%;vertical-align:top;">Time</label>
-      <!--<input type="text" id="basicExample" style="width:60%;">-->
-      <select name="time" id="basicExample">
+		<div style="margin-top:10px;">
+      <input type="text" id="datepicker" placeholder="Date" style="width:80px;margin-top:-32px;">
+
+      <select name="time" id="basicExample" style="width:140px;">
+      	<option selected>Time</option>
         <option>6:00 a.m.</option>
         <option>6:30 a.m.</option>
         <option>7:00 a.m.</option>
@@ -66,22 +72,31 @@
         <option>5:00 a.m.</option>
         <option>5:30 a.m.</option>
       </select>
-    </div>
-    
-	  <div class="pure-control-group">    
-      <label for="duration" style="width:30%;vertical-align:top;">Duration</label>
-      <select name="duration" id="duration">
+ 
+      <select name="duration" id="duration" style="width:140px;">
+      	<option selected>Duration</option>
         <option>30 minutes</option>
         <option>1 hour</option>
-        <option>1 hour 30 minutes</option>
+        <option>1 hour 30 min</option>
         <option>2 hours</option>
-        <option>2 hours 30 minutes</option>
+        <option>2 hours 30 min</option>
         <option>3 hours</option>
-        <option>3 hours 30 minutes</option>
+        <option>3 hours 30 min</option>
         <option>4 hours</option>
       </select>
-    </div> 
-    
-    <input type="submit" value="Reserve the Room" /> 
+      
+      <input type="submit" value="Go" /> 
+    </div> 			
+		</div>
+   
+
   </fieldset>
-</form>   
+</form>  
+
+            		</td>
+            		            		<td>
+            			<a href="javascript:void(0);" style="float:right;margin-right:6px;">Cancel</a>
+            		</td>
+        			</tr>
+        	</table> 
+

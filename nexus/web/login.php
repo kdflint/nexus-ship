@@ -65,18 +65,20 @@ $networkName = $row['name'];
   
   <body>
   	<!-- TODO - finalize container width -->
-    <div class="container" style="width:50%;min-width:550px;max-width:640px;">
+    <div class="container" style="width:550px;">
 
-      <div class="header" style="margin-top:20px;">
-      	<span style="float:left;width:60%;padding:10px;margin-top:10px;border-radius:6px;background:#edf0de;color:#004d62;">
-      		<span style="font-family:Oswald;font-size:130%;">Nexus</span>
-      		<hr style="text-align:left;margin-left:0;width:176px;">
-      		<span>Web Conference Center</span>
-      	</span>
-      	<span style="float:right;margin-top:20px;">
-      		<a href="#">About</a>
+      <div class="header">
+       	<img class="banner-image" src="image/nexus4.png" />
+       	<span class="banner" style="width:60%">
+					<span class="product-name" style="">Nexus</span><br/>
+					<span class="module-name" style="">Web Meet</span>					
+      	</span>  	
+  	
+      	<span class="controls" style="float:right;padding-bottom:10px;margin-top:30px;">
+      		<a href="#" style="color:#d27b4b;text-decoration:none;">About</a>
       	</span>
       </div>
+
 
 			<div class="frame"> 
 				

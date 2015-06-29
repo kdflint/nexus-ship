@@ -33,16 +33,24 @@ body {
 	height: 96px;
 	padding:0px;
 	margin-top:10px;
-	border-radius:6px;
-background: #edf0de; /* Old browsers */
-background: -moz-linear-gradient(top,  #ffffff 45%, #edf0de 70%); /* FF3.6+ */
-background: -webkit-gradient(linear, left top, left bottom, color-stop(45%,#ffffff), color-stop(70%,#edf0de)); /* Chrome,Safari4+ */
-background: -webkit-linear-gradient(top,  #ffffff 45%,#edf0de 70%); /* Chrome10+,Safari5.1+ */
-background: -o-linear-gradient(top,  #ffffff 45%,#edf0de 70%); /* Opera 11.10+ */
-background: -ms-linear-gradient(top,  #ffffff 45%,#edf0de 70%); /* IE10+ */
-background: linear-gradient(to bottom,  #ffffff 45%,#edf0de 70%); /* W3C */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#edf0de',GradientType=0 ); /* IE6-9 */
+	border-bottom-right-radius: 6px;
+	background: #edf0de; /* Old browsers */
+	background: -moz-linear-gradient(top,  #ffffff 45%, #edf0de 70%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(45%,#ffffff), color-stop(70%,#edf0de)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #ffffff 45%,#edf0de 70%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #ffffff 45%,#edf0de 70%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #ffffff 45%,#edf0de 70%); /* IE10+ */
+	background: linear-gradient(to bottom,  #ffffff 45%,#edf0de 70%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#edf0de',GradientType=0 ); /* IE6-9 */
+}
 
+.banner-image {
+	float:left;
+	margin-top:10px;
+	border-top-left-radius:5px;
+	border-bottom-left-radius:5px;
+	width: 22px;
+	height: 96px;
 }
 
 .frame {
@@ -208,6 +216,10 @@ table {
     -moz-border-radius: 10px;
 }
 
+td {
+	vertical-align: top;
+}
+
 .pure-table td:first-child {
 	width: 100px;
 
@@ -220,23 +232,32 @@ table {
 
 /* BLINDS */
 
-#schedule_display,
 #join_display {
-  width: 33.5%;
-  background: #f7f8ef;
+  width: 63%;
+  background: #edf0de;
   padding: 10px;
+  border-radius: 8px;
+  margin-left: 124px;
+}
+
+#join_display {
   position: absolute;
+  margin-top: 3px;
+	height: 65px;
 }
 
 #schedule_display {
-  margin-left: 330px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  height: 160px;
+  border-radius: 8px;
+  background: #edf0de;
 }
 
 #techcheck_display, 
 #user_display {
-  background: #f7f8ef;
+  background: #edf0de;
   padding: 10px;
-  border: thin solid;
   height: 200px;
   position: absolute;
 }

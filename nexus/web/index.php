@@ -4,7 +4,7 @@ session_start();
 require_once("src/framework/Util.php");
 
 if (!Util::isSessionValid()) {
-	header("location:login.php?logout=true");
+	header("location:login.php?network=" . $_SESSION['networkId'] . "&logout=true");
 	exit(0);	
 }
 
@@ -12,13 +12,6 @@ $hideHere = false;
 if (Util::hideInEnvironment()) {
 	$hideHere = true;	
 }
-
-// select content to show based on request variable, which is supplied in navigation.php
-//if (isset($_REQUEST['thisPage'])) {
-//	$thisPage = $_REQUEST['thisPage'];
-//} else {
-//	$thisPage = "directory";
-//}
 
 ?>
 
@@ -33,6 +26,7 @@ if (Util::hideInEnvironment()) {
   	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 		<link rel="stylesheet" href="//yui.yahooapis.com/pure/0.6.0/pure-min.css">
+		<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
     <link rel="stylesheet" href="styles/nexus.css" type="text/css" />
     <script src="scripts/nexus.js" language="javascript"></script>
  		<script src="//code.jquery.com/jquery-1.10.2.js"></script>
@@ -103,7 +97,7 @@ if (Util::hideInEnvironment()) {
     <div class="container">
 
       <div class="header">
-       	<img src="image/nexus4.png" width="22" height="96" style="float:left;margin-top:10px;" />
+       	<img class="banner-image" src="image/nexus4.png" />
        	<span class="banner">
 					<span class="product-name" style="">Nexus</span><br/>
 					<span class="module-name" style="">Web Meet</span>					
@@ -113,7 +107,7 @@ if (Util::hideInEnvironment()) {
   	
       	<span class="controls" style="float:right;padding-bottom:10px;margin-top:30px;">
       		<a href="#" style="color:#d27b4b;text-decoration:none;">About</a> | 
-      		<a href="login.php?logout=true" style="color:#d27b4b;text-decoration:none;">Logout</a>
+      		<a href="login.php?network=<? echo $_SESSION['networkId']; ?>&logout=true"?logout=true" style="color:#d27b4b;text-decoration:none;">Logout</a>
       	</span>
       	<a id="user_control" href="javascript:void(0);"><span style="clear:right;float:right;padding-top:4px;margin:0px;color:#d27b4b;" class="fa fa-caret-down fa-2x" ></span></a>
 				<span style="float:right;padding:10px;">Hello <? echo $_SESSION['fname']; ?></span> 	
@@ -125,6 +119,7 @@ if (Util::hideInEnvironment()) {
 						<div id="join_display" style="display:none;">
 							<?php include("modules/schedule/views/joinConfirm.html"); ?>	
 						</div>
+						<?php include("modules/schedule/views/openNow.html"); ?>
 						<div id="schedule_display" style="display:none;">
 							<?php include("modules/schedule/views/datePicker.html"); ?>	
 						</div>
