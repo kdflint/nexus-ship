@@ -116,7 +116,7 @@ if (Util::hideInEnvironment()) {
 			<div class="frame" >
 				<div class="loginColLeft" style="width:80%;">
 					<div id="reserveList" style="display:block;">
-						<div id="join_display" style="display:none;">
+						<div id="join_display" style="display:none;margin-bottom:5px;">
 							<?php include("modules/schedule/views/joinConfirm.html"); ?>	
 						</div>
 						<?php include("modules/schedule/views/openNow.html"); ?>

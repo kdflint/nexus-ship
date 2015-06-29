@@ -233,33 +233,37 @@ td {
 /* BLINDS */
 
 #join_display {
-  width: 63%;
+  width: 64%;
   background: #edf0de;
   padding: 10px;
   border-radius: 8px;
-  margin-left: 124px;
+  margin-left: 120px;
 }
 
 #join_display {
   position: absolute;
-  margin-top: 3px;
-	height: 65px;
+  margin-top: 2px;
+	height: 60px;
 }
 
 #schedule_display {
-  margin-top: 5px;
   margin-bottom: 5px;
-  height: 160px;
+  height: 146px;
   border-radius: 8px;
   background: #edf0de;
 }
 
 #techcheck_display, 
 #user_display {
-  background: #edf0de;
-  padding: 10px;
-  height: 200px;
-  position: absolute;
+	background: #EDF0DE none repeat scroll 0% 0%;
+	padding: 10px;
+	height: 315px;
+	position: absolute;
+	border-radius: 8px;
+	margin-top: 10px;
+	margin-left: 10px;
+	width: 160px;
+	border: 2px solid #a6c3ce;
 }
  
 /* LIGHTBOXES */
