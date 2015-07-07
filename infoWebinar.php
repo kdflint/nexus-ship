@@ -12,6 +12,7 @@
 	 	<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Oswald:400,300|Open+Sans|Oxygen|Swanky+and+Moo+Moo">
 	 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 		<link rel="stylesheet" href="//yui.yahooapis.com/pure/0.6.0/pure-min.css">
+	  <link rel="stylesheet" href="nexus.css" type="text/css" />
 	  <link rel="stylesheet" href="webinar.css" type="text/css" />
 	  <title>Northbridge Nexus | Community Room</title> 
 	  	
@@ -44,19 +45,21 @@
 	<body>	
 	  <div class="container" style="width:50%;min-width:550px;max-width:640px;">
     	<div class="header" style="margin-top:20px;">
-	    	<span style="float:left;width:60%;padding:10px;margin-top:10px;border-radius:6px;background:#edf0de;color:#004d62;">
-   				<span style="font-family:Oswald;font-size:130%;">Nexus</span>
-   				<hr style="text-align:left;margin-left:0;width:176px;">
-   				<span>Web Conference Center</span>
-    		</span>
-     		<span style="float:right;margin-top:70px;">
-	     		<a href="http://northbridgetech.org/index.php" target="_blank">About Northbridge</a>
-     		</span>
+    		
+    		<img class="banner-image" src="http://northbridgetech.org/dev/new_nexus/web/image/nexus4.png" />
+       	<span class="banner" style="width:60%">
+					<span class="product-name" style="">Nexus</span><br/>
+					<span class="module-name" style="">Web Meet</span>					
+      	</span>
+      	
+      	<span class="controls" style="float:right;padding-bottom:10px;margin-top:30px;">
+      		<a href="#" style="color:#d27b4b;text-decoration:none;">About</a>
+      	</span>
     	</div>
     	
 			<div class="frame"> 
 			  <div class="loginColLeft">
-			  	<!--<p id="login-user-message" class="confirmation"><span class="fa fa-exclamation-triangle fa-2x" style="color:#d27b4b;float:left;margin-right:5px;"></span>The webinar room is not open at this time. It will open fifteen minutes prior to published start time.</p>-->
+			  	<p id="login-user-message" class="confirmation"><span class="fa fa-exclamation-triangle fa-2x" style="color:#d27b4b;float:left;margin-right:5px;"></span>The webinar room is not open at this time. It will open fifteen minutes prior to published start time.</p>
 			  	<p id="login-user-message" class="confirmation"><span class="fa fa-info-circle fa-2x" style="color:#007582;float:left;margin-right:5px;margin-bottom:10px;"></span>Please join the meeting from any laptop computer, desktop computer, or Windows tablet device. (iPads and Android are incompatible.)</p>
 					<form id="join-form" class="pure-form pure-form-stacked" autocomplete="off" action="webinarMeetingProcessor.php" method="post">
 	    			<fieldset>

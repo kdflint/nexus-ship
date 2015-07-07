@@ -47,8 +47,11 @@ require_once "config.php";
 
 class BigBlueButton {
 		
-	private $_securitySalt;				
-	private $_bbbServerBaseUrl;			
+	//private $_securitySalt;				
+	//private $_bbbServerBaseUrl;		
+	public $_securitySalt;				
+	public $_bbbServerBaseUrl;	
+		
 	
 	/* ___________ General Methods for the BigBlueButton Class __________ */
 	
@@ -62,7 +65,8 @@ class BigBlueButton {
 		$this->_bbbServerBaseUrl 	= CONFIG_SERVER_BASE_URL;		
 	}
 	
-	private function _processXmlResponse($url, $xml = ''){
+	public function _processXmlResponse($url, $xml = ''){
+	//private function _processXmlResponse($url, $xml = ''){
 	/* 
 	A private utility method used by other public methods to process XML responses.
 	*/
