@@ -28,8 +28,7 @@
 				var joinForm = document.forms["join-form"];
 				joinForm.submit();
 			}
-		</script>
-			
+		</script>	
 		
 	</head>
 	
@@ -44,6 +43,7 @@
 	
 	<body>	
 	  <div class="container" style="width:50%;min-width:550px;max-width:640px;">
+
     	<div class="header" style="margin-top:20px;">
     		
     		<img class="banner-image" src="http://northbridgetech.org/dev/new_nexus/web/image/nexus4.png" />
@@ -65,10 +65,10 @@
 	    			<fieldset>
 	    				Your Name
         			<input class="form-input" name="username">	        		
-        			<!--<a type="submit" class="pure-button pure-button-primary not-active" style="width:45%;float:right;margin-right:20px;" href="javascript:void(0);" onclick="return false;" disabled="disabled">Join the Webinar</a>-->
-        			<a type="submit" class="pure-button pure-button-primary" style="width:45%;float:right;margin-right:20px;" href="javascript:void(0);" onclick="validateAndSubmit();">Join the Webinar</a>
+        			<a type="submit" class="pure-button pure-button-primary not-active" style="width:45%;float:right;margin-right:20px;" href="javascript:void(0);" onclick="return false;" disabled="disabled">Join the Webinar</a>
+        			<!--<a type="submit" class="pure-button pure-button-primary" style="width:45%;float:right;margin-right:20px;" href="javascript:void(0);" onclick="validateAndSubmit();">Join the Webinar</a>-->
      				</fieldset>
-     			</form>   		  	
+     			</form>   
 				</div>
      		<div class="loginColRight">
       		<span style="clear:right;float:right;text-align:right;margin-top:20px;">Northbridge Technology Alliance Informational Webinar</span>

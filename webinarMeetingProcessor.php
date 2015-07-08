@@ -36,19 +36,19 @@ $creationParams = array(
 $joinParams = array(
 	'meetingId' => '8888',
 	'username' => $_POST['username'],
-	'password' => $joinerPassword
+	'password' => $joinerPassword,
+	'configToken' => ''  /* LEFT OFF HERE */
 );
 
 $bbb->createMeetingWithXmlResponseArray($creationParams);
 
 $configUrl = $bbb->_bbbServerBaseUrl."api/setConfigXML?";
 $configMeetingId = '8888';
-$configXML = urlencode('<config><localeversion suppressWarning="false">0.9.0</localeversion><modules></modules></config>');
-//$configXML = urlencode(getConfigXml());
-$checksum = sha1("setConfigXMLconfigXML=".$configXML."meetingId=".$configMeetingId."32ae7a3e328fb2c5575d5edf9ca29c35");
-$configPostFields =	'configXML=' . $configXML . '&meetingId=' . $configMeetingId . '&checksum=' . $checksum;
+$configXML = urlencode(getConfigXml());
+$checksum = sha1("setConfigXMLconfigXML=".$configXML."&meetingID=".$configMeetingId."32ae7a3e328fb2c5575d5edf9ca29c35");
+$configPostFields =	"configXML=".$configXML."&meetingID=".$configMeetingId . '&checksum=' . $checksum;
 echo $configPostFields . "<br/><br/>";
-$back = $bbb->_processXmlResponse($configUrl, $configPostFields);
+$back = _processXmlResponse($configUrl, $configPostFields);
 echo print_r($back); exit(0);
 
 // TODO - check returnCodes
@@ -68,6 +68,42 @@ if ($itsAllGood) {
 	exit(0);
 }
 
+function _processXmlResponse($url, $xml = ''){
+	//private function _processXmlResponse($url, $xml = ''){
+	/* 
+	A private utility method used by other public methods to process XML responses.
+	*/
+		if (extension_loaded('curl')) {
+			$ch = curl_init() or die ( curl_error() );
+			$timeout = 10;
+			curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false);	
+			curl_setopt( $ch, CURLOPT_URL, $url );
+			curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
+			curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+			if(!empty($xml)){
+				curl_setopt($ch, CURLOPT_HEADER, 0);
+				curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+				curl_setopt($ch, CURLOPT_POST, 1);
+				curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
+				curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                                       'Content-type: application/x-www-form-urlencoded',
+                                       'Content-length: ' . strlen($xml)
+                                     ));
+			}
+			$data = curl_exec( $ch );
+			curl_close( $ch );
+
+			if($data)
+				return (new SimpleXMLElement($data));
+			else
+				return false;
+		}
+		if(!empty($xml))
+			throw new Exception('Set xml, but curl does not installed.');
+
+		return (simplexml_load_file($url));	
+}
+
 function getConfigXml() {
 	$thisConfig = 
 	
@@ -84,7 +120,7 @@ function getConfigXml() {
     <language userSelectionEnabled="true" />
     <skinning enabled="true" url="http://ec2-50-19-215-104.compute-1.amazonaws.com/client/branding/css/BBBDefault.css.swf" />
     <shortcutKeys showButton="false" />
-    <layout showLogButton="false" showVideoLayout="false" showResetLayout="true" defaultLayout="Webinar"
+    <layout showLogButton="false" showVideoLayout="false" showResetLayout="true" defaultLayout="Default"
             showToolbar="true" showFooter="false" showMeetingName="true" showHelpButton="false" 
             showLogoutWindow="true" showLayoutTools="false" showNetworkMonitor="false" confirmLogout="true"/>
     <lock allowModeratorLocking="true" disableCamForLockedUsers="true" disableMicForLockedUsers="true" disablePrivateChatForLockedUsers="false" 
@@ -209,7 +245,6 @@ function getConfigXml() {
     		
 	</modules>
 </config>
-
 ';
 
 return $thisConfig;
@@ -217,3 +252,7 @@ return $thisConfig;
 
 
 ?>
+
+setConfigXMLconfigXML=%3Cconfig%3E%3Clocaleversion+suppressWarning%3D%22false%22%3E0.9.0%3C%2Flocaleversion%3E%3Cmodules%3E%3C%2Fmodules%3E%3C%2Fconfig%3EmeetingId=888832ae7a3e328fb2c5575d5edf9ca29c35
+
+setConfigXMLconfigXML=%3Cconfig%3E%3Clocaleversion+suppressWarning%3D%22false%22%3E0.9.0%3C%2Flocaleversion%3E%3C%2Fmodules%3E%3C%2Fconfig%3E&meetingID=random-8228800aae06642a13942004fd83b3ba6e4o9s8
