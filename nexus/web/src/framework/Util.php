@@ -36,6 +36,8 @@ class Util {
 	
 	public static function getSrcRoot() {	return self::getWebRoot() . "/src"; }
 	
+	public static function getLibRoot() {	return self::getWebRoot() . "/lib"; }
+	
 	public static function getEnvName() {return ENV_NAME; }
 		
 	

@@ -1,110 +1,86 @@
 <?php
 
-session_start();
-
-require_once("config/env_config.php");
-require_once("control/error/handlers.php");
-require_once("control/bbb-api-php/includes/bbb-api.php"); 
-//require_once("control/bbb-api-php/includes/config.php"); 
-
-//$base_url_setConfigXML = CONFIG_SERVER_BASE_URL . "api/setConfigXML.xml?";
-//$securitySalt = CONFIG_SECURITY_SALT;
+require_once("../../../src/framework/Util.php");
+require_once(Util::getModulesRoot() . "/error/handlers.php");
+require_once(Util::getLibRoot() . "/bigbluebutton/bbb-api-php/includes/bbb-api.php"); 
 
 $bbb = new BigBlueButton();
 
-$joinerPassword = "mp";
-
-if (!strcmp($env_name, "prod")) {
-	$joinerPassword = "ap";
-}
+$joinerPassword = "ap";
+$trainingMeetingId = '7777';
 
 $creationParams = array(
-	'meetingId' => '8888',
-	'meetingName' => "Northbridge Community Room",
+	'meetingId' => $trainingMeetingId,
+	'meetingName' => "Northbridge Training Room",
 	'attendeePw' => 'ap',
 	'moderatorPw' => 'mp',
-	'welcomeMsg' => 'Welcome to the Northbridge Technology Alliance Information Webinar!<br/><br/>To join the session audio, click the headphone icon in the upper left corner of your display.<br/><br/>Messages entered here will be displayed to the entire group including the presenter.',
+	'welcomeMsg' => 'Welcome to the Northbridge Technology Alliance Nexus Training Session!<br/><br/>Messages entered here will be displayed to the entire group, including the presenter.',
 	'dialNumber' => '',
 	'voiceBridge' => '',
 	'webVoice' => '',
-	'logoutUrl' => 'http://northbridgetech.org/index.php?view=apply',
+	'logoutUrl' => 'http://northbridgetech.org/index.php?view=apply', // <= this will be special
 	'maxParticipants' => '',
 	'record' => '',
 	'duration' => '0'
 );
 
-$joinParams = array(
-	'meetingId' => '8888',
-	'username' => $_POST['username'],
-	'password' => $joinerPassword,
-	'configToken' => ''  /* LEFT OFF HERE */
-);
-
-$bbb->createMeetingWithXmlResponseArray($creationParams);
-
-$configUrl = $bbb->_bbbServerBaseUrl."api/setConfigXML?";
-$configMeetingId = '8888';
-$configXML = urlencode(getConfigXml());
-$checksum = sha1("setConfigXMLconfigXML=".$configXML."&meetingID=".$configMeetingId."32ae7a3e328fb2c5575d5edf9ca29c35");
-$configPostFields =	"configXML=".$configXML."&meetingID=".$configMeetingId . '&checksum=' . $checksum;
-echo $configPostFields . "<br/><br/>";
-$back = _processXmlResponse($configUrl, $configPostFields);
-echo print_r($back); exit(0);
-
-// TODO - check returnCodes
 $itsAllGood = TRUE;
+$joinUrl = "";
+$configToken = "";
 
 try {
-	$result = $bbb->getJoinMeetingUrl($joinParams);
+	$response = $bbb->createMeetingWithXmlResponseArray($creationParams);
+	if (strcasecmp($response['returncode'], 'SUCCESS') != 0) {
+		$itsAllGood = FALSE;
+	}
 } catch (Exception $e) {
+	trigger_error("Cannot create meeting: " . $e->getMessage() . "\n", E_USER_ERROR);
 	$itsAllGood = FALSE;
 }
 
 if ($itsAllGood) {
-	header("location:" . $result);	
+	try {
+		$response = $bbb->setMeetingConfig(getConfigXml(), $trainingMeetingId);
+		if (strcasecmp($response['returncode'], 'SUCCESS') != 0 || !isset($response['token']) || strlen($response['token']) < 1) {
+			$itsAllGood = FALSE;
+		} else {
+			$configToken = (string)$response['token'];
+		}
+ 	} catch (Exception $e) {
+		trigger_error("Cannot set configuration: " . $e->getMessage() . "\n", E_USER_ERROR);
+		$itsAllGood = FALSE;
+	}	
+}
+
+$joinParams = array(
+	'meetingId' => $trainingMeetingId,
+	'username' => $_POST['username'],
+	'password' => $joinerPassword,
+	'configToken' => $configToken
+);
+
+if ($itsAllGood) {
+	try {
+		$joinUrl = $bbb->getJoinMeetingUrl($joinParams);
+		//echo $joinUrl; exit(0);
+		// TODO - figure out how to tell if this url is well formed and valid. See under "join" at https://docs.bigbluebutton.org/dev/api.html
+	} catch (Exception $e) {
+		trigger_error("Cannot get join meeting url: " . $e->getMessage() . "\n", E_USER_ERROR);
+		$itsAllGood = FALSE;
+	}
+}
+
+if ($itsAllGood) {
+	header("location:" . $joinUrl);	
 	exit(0);
 } else {
-	trigger_error("Cannot join conference: $result\n", E_USER_ERROR);
+	trigger_error("Cannot join conference: " . $joinUrl . "\n", E_USER_ERROR);
 	exit(0);
 }
 
-function _processXmlResponse($url, $xml = ''){
-	//private function _processXmlResponse($url, $xml = ''){
-	/* 
-	A private utility method used by other public methods to process XML responses.
-	*/
-		if (extension_loaded('curl')) {
-			$ch = curl_init() or die ( curl_error() );
-			$timeout = 10;
-			curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false);	
-			curl_setopt( $ch, CURLOPT_URL, $url );
-			curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
-			curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-			if(!empty($xml)){
-				curl_setopt($ch, CURLOPT_HEADER, 0);
-				curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
-				curl_setopt($ch, CURLOPT_POST, 1);
-				curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
-				curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                                       'Content-type: application/x-www-form-urlencoded',
-                                       'Content-length: ' . strlen($xml)
-                                     ));
-			}
-			$data = curl_exec( $ch );
-			curl_close( $ch );
-
-			if($data)
-				return (new SimpleXMLElement($data));
-			else
-				return false;
-		}
-		if(!empty($xml))
-			throw new Exception('Set xml, but curl does not installed.');
-
-		return (simplexml_load_file($url));	
-}
 
 function getConfigXml() {
+
 	$thisConfig = 
 	
 '
@@ -250,5 +226,5 @@ function getConfigXml() {
 return $thisConfig;
 }
 
-
 ?>
+
