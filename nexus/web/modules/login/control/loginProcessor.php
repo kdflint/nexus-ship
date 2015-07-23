@@ -7,15 +7,22 @@ require_once("../../../src/framework/Util.php");
 $dirty = array('username' => $_POST['uid'], 'password' => $_POST['password']);
 $clean = array();
 
+$clean['remember'] = (isset($_POST['login-remember']) ? true : false);
+
 if (isset($dirty['username']) && Util::validateUsernameFormat($dirty['username'])) {
 	$clean['username'] = $dirty['username'];
 }
 
 // TODO - clean password
-$isAuthenticated = Util::authenticate($clean['username'], $dirty['password']);
+if ($_SESSION['remembered']) {
+	unset($_SESSION['remembered']);
+	$isAuthenticated = true;
+} else {
+	$isAuthenticated = Util::authenticate($clean['username'], $dirty['password']);
+}
 
 if($isAuthenticated){
-	Util::setSession($clean['username']);
+	Util::setSession($clean['username'], $clean['remember']);
 	Util::setLogin($_SESSION['uidpk']);
 	header("location:" . Util::getHttpPath() . "/index.php");
 	exit(0);	

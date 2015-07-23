@@ -4,9 +4,12 @@
 
 	define("PHP_ROOT", "/home/kdflint/projects/nexus-community/nexus/web/lib");
 	define("WEB_ROOT", "/home/kdflint/projects/nexus-community/nexus/web");
+	define("TKN_ROOT", "");
 	define("APP_NAME", "/nexus/nexus");
 	define("ENV_NAME", "local");
 	define("ENV_HOST", "localhost");
+	define("SSN_TIMEOUT", "60"); // in seconds
+
 
 // DATABASE
 

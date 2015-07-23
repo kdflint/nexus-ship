@@ -1,5 +1,9 @@
 <?php
 
+session_start();
+
+$_SESSION['traineeName'] = $_POST['username'];
+
 require_once("../../../src/framework/Util.php");
 require_once(Util::getModulesRoot() . "/error/handlers.php");
 require_once(Util::getLibRoot() . "/bigbluebutton/bbb-api-php/includes/bbb-api.php"); 
@@ -14,11 +18,11 @@ $creationParams = array(
 	'meetingName' => "Northbridge Training Room",
 	'attendeePw' => 'ap',
 	'moderatorPw' => 'mp',
-	'welcomeMsg' => 'Welcome to the Northbridge Technology Alliance Nexus Training Session!<br/><br/>Messages entered here will be displayed to the entire group, including the presenter.',
+	'welcomeMsg' => '<b>Welcome to the Northbridge Technology Alliance Nexus Training Session!</b><br/><br/>Messages entered here will be displayed to the entire group, including the presenter.',
 	'dialNumber' => '',
 	'voiceBridge' => '',
 	'webVoice' => '',
-	'logoutUrl' => 'http://northbridgetech.org/index.php?view=apply', // <= this will be special
+	'logoutUrl' => Util::getHttpPath() . '/training-1b.php',
 	'maxParticipants' => '',
 	'record' => '',
 	'duration' => '0'
@@ -54,7 +58,7 @@ if ($itsAllGood) {
 
 $joinParams = array(
 	'meetingId' => $trainingMeetingId,
-	'username' => $_POST['username'],
+	'username' => $_SESSION['traineeName'],
 	'password' => $joinerPassword,
 	'configToken' => $configToken
 );
@@ -69,6 +73,8 @@ if ($itsAllGood) {
 		$itsAllGood = FALSE;
 	}
 }
+
+echo $joinUrl; exit(0);
 
 if ($itsAllGood) {
 	header("location:" . $joinUrl);	

@@ -1,24 +1,53 @@
-<? 
+<?php
 session_start();
 
 require_once("src/framework/Util.php");
 require_once(Util::getSrcRoot() . "/organization/Organization.php");
 
+// TODO - this should be handled by the autoloader in Util
+require_once(Util::getLibRoot() . "/rememberme/rememberme/src/Rememberme/Storage/File.php");
+require_once(Util::getLibRoot() . "/rememberme/rememberme/src/Rememberme/Authenticator.php");
+
+use Birke\Rememberme;
+
+// Initialize RememberMe Library with file storage
+$storagePath = Util::getTokenRoot();
+if(!is_writable($storagePath) || !is_dir($storagePath)) {
+    die("'$storagePath' does not exist or is not writable by the web server.
+            Please create the directory and give it the
+            correct permissions.");
+}
+$storage = new Rememberme\Storage\File($storagePath);
+$rememberMe = new Rememberme\Authenticator($storage);
+$remembered = false;
 $cleanMessage = "";
 $cleanIcon = "";
 
 if(isset($_GET['logout'])) {
+	$rememberMe->clearCookie($_SESSION['username']);
 	// destroy session data
 	$_SESSION = array();
-	
 	// destroy session cookie if exists
 	if (ini_get("session.use_cookies")) {
     $params = session_get_cookie_params();
     setcookie(session_name(), '', time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
 	}
-	
 	// destroy server session
 	session_destroy();
+}
+
+if(isset($_GET['logoutAll'])) {
+   $storage->cleanAllTriplets($_SESSION['username']);
+   // also kill session using above code
+}
+
+$rememberedUsername = $rememberMe->login();
+
+if(Util::isSessionValid()) {
+	header("location:" . Util::getHttpPath() . "/index.php");
+	exit(0);
+} else if ($rememberedUsername){
+	$_SESSION['remembered'] = $remembered = true;
 }
 
 if(isset($_GET['error']) && Util::isSafeCharacterSet($_GET['error'])) {
@@ -33,6 +62,7 @@ $logo = "";
 $networkLogo = $networkName = "";		
 $cleanNetworkId = "123"; // TODO: create default network in db, that includes default logo
 
+/*
 if(isset($_GET['network']) && Organization::validateNetworkId($_GET['network'])) {
  	$cleanNetworkId = $_GET['network'];		
 }
@@ -41,7 +71,7 @@ $cursor = Organization::getOrganizationById($cleanNetworkId);
 $row = pg_fetch_array($cursor);
 $networkLogo = $row['logo'];
 $networkName = $row['name'];
-
+*/
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
@@ -61,6 +91,24 @@ $networkName = $row['name'];
   	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     <link rel="icon" href="images/NB_icon.png" />
     <title>Northbridge Nexus | Login</title> 
+   
+   	<script> 
+			$(document).ready(function () {
+				$(document).on("keyup", function (event) {
+    			if (event.which == 13) {
+       			document.getElementById("login-form-submit").click();   
+    			}
+				});
+				if (<?php echo $remembered; ?>) {
+					alert("auto-submit form");
+					var loginForm = document.forms["login-form"];
+					loginForm.elements['uid'].value = <? echo $rememberedUsername; ?>;
+					loginForm.elements['password'].value = "remembered";
+					loginForm.elements['login-remember'].checked = true;
+					document.getElementById("login-form-submit").click();
+				}
+			});
+		</script>
   </head>
   
   <body>
@@ -91,7 +139,7 @@ $networkName = $row['name'];
         			Password<span class="instruction form-instruction"><a href="javascript:void(0)" onclick="toggleFormDisplay('recover-password-form')">I forgot</a></span>
         			<input class="form-input" type="password" name="password" value="" />	
         			<a id="login-form-submit" type="submit" class="pure-button pure-button-primary" style="width:45%;" href="javascript:void(0);" onclick="loginValidateAndSubmit();">Sign In</a>
-        			<a class="pure-button pure-button-secondary" onclick="toggleRememberCheckbox();" style="width:45%;" ><input id="login-remember" type="checkbox" /> Remember me</a>
+        			<a class="pure-button pure-button-secondary" onclick="toggleRememberCheckbox();" style="width:45%;" ><input id="login-remember" name="login-remember" type="checkbox" /> Remember me</a>
      				</fieldset>
      			</form>   			
      			<form id="recover-username-form" class="pure-form pure-form-stacked" style="display:none;" autocomplete="off" action="modules/login/control/recoverEnrollmentProcessor.php" method="post">

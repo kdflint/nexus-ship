@@ -5,3 +5,5 @@
 *.bak
 *.cfg
 pilot/view/include/scrapToggleCode.php
+nexus/web/lib/*
+nexus/web/vendor/*

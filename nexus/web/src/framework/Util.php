@@ -3,6 +3,27 @@
 require_once(dirname(__FILE__) . "/../../../config/env_config.php");
 require_once(PHP_ROOT . "/Validate.php");
 require_once(Util::getSrcRoot() . "/user/User.php");
+require_once(Util::getLibRoot() . "/autoload/autoloader.php");
+
+// set config settings
+autoloader(array(array(
+      'debug' => false, // turn on debug mode (by default debug mode is off)
+      'basepath' => Util::getLibRoot(), // basepath is used to define where your project is located
+      'extensions' => array('.php'), // allowed class file extensions
+      // 'extensions' => array('.php', '.php4', '.php5'), // example of multiple extensions
+)));
+
+// now we can set class autoload paths
+autoloader(array(
+      //'rememberme/rememberme/src/Rememberme',
+      //'rememberme/rememberme/src/Rememberme/Storage'
+));
+
+// useful when in debug mode
+//$cached_paths = autoloader();
+
+// print array of class autoload paths:
+// print_r($cached_paths); exit(0);
 
 class Util {
 	
@@ -38,7 +59,11 @@ class Util {
 	
 	public static function getLibRoot() {	return self::getWebRoot() . "/lib"; }
 	
-	public static function getEnvName() {return ENV_NAME; }
+	public static function getTokenRoot() { return self::getWebRoot() . "/token"; }
+	
+	public static function getEnvName() { return ENV_NAME; }
+	
+	private static function getSessionTimeout() { return SSN_TIMEOUT; }
 		
 	
 	const VALIDATION_FNAME_ERROR = "Please enter a valid first name."; 
@@ -345,13 +370,6 @@ class Util {
     return $guidText;
 	}
 	
-	public static function isSessionValid() {
-		if (isset($_SESSION['username']) && strlen($_SESSION['username']) > 0) {
-			return true;
-		}
-		return false;
-	}
-	
 	public static function hideInEnvironment() {
 		//if (!strcmp($_SESSION['environment'], "dev")) {
 		//	return true;
@@ -374,8 +392,15 @@ class Util {
 		}
     return $coreAuthenticated;
 	}
+
+	public static function isSessionValid() {
+		if (isset($_SESSION['username']) && strlen($_SESSION['username']) > 0 && !self::isSessionExpired()) {
+			return true;
+		}
+		return false;
+	}
 	
-	public static function setSession($username) {
+	public static function setSession($username, $remember = false) {
 
 		session_regenerate_id(TRUE);
 		
@@ -383,7 +408,9 @@ class Util {
 		$_SESSION['environment'] = self::getEnvName();
 		$_SESSION['username'] = $username;
 		$_SESSION['groups'] = User::getUserGroupsByUsername($_SESSION['username']);
-	
+		self::setSessionLastActivity();
+		$_SESSION['remember'] = ($remember ? "true" : "false");
+		
 		$cursor = User::getUserSessionByUsername($_SESSION['username']);
 	
 		while ($row = pg_fetch_array($cursor)) {
@@ -397,6 +424,21 @@ class Util {
   		$_SESSION['email'] = $row['email'];
 		} 
 	
+	}
+	
+	public static function setSessionLastActivity() {
+		$_SESSION['lastActivity'] = time();
+	}
+	
+	public static function isSessionExpired() {
+		if (isset($_SESSION['remember']) && $_SESSION['remember'] == "true") {
+			// don't expire a session if the user has asked to be remembered on login form
+			return false;
+		}
+		if (isset($_SESSION['lastActivity']) && (time() - $_SESSION['lastActivity'] > getSessionTimeout())) {
+			return true;
+		}
+		return false;
 	}
 
 	public static function storeSecurePasswordImplA($plaintextPassword, $userId) {

@@ -3,10 +3,14 @@ session_start();
 
 require_once("src/framework/Util.php");
 
+echo $_SESSION['remember'];
+
 if (!Util::isSessionValid()) {
 	header("location:login.php?network=" . $_SESSION['networkId'] . "&logout=true");
 	exit(0);	
 }
+
+Util::setSessionLastActivity();
 
 $hideHere = false;
 if (Util::hideInEnvironment()) {
@@ -107,7 +111,7 @@ if (Util::hideInEnvironment()) {
   	
       	<span class="controls" style="float:right;padding-bottom:10px;margin-top:30px;">
       		<a href="#" style="color:#d27b4b;text-decoration:none;">About</a> | 
-      		<a href="login.php?network=<? echo $_SESSION['networkId']; ?>&logout=true"?logout=true" style="color:#d27b4b;text-decoration:none;">Logout</a>
+      		<a href="login.php?network=<?php echo $_SESSION['networkId']; ?>&logout=true"?logout=true" style="color:#d27b4b;text-decoration:none;">Logout</a>
       	</span>
       	<a id="user_control" href="javascript:void(0);"><span style="clear:right;float:right;padding-top:4px;margin:0px;color:#d27b4b;" class="fa fa-caret-down fa-2x" ></span></a>
 				<span style="float:right;padding:10px;">Hello <? echo $_SESSION['fname']; ?></span> 	
