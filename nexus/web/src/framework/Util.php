@@ -128,6 +128,16 @@ class Util {
 		return FALSE;
 	}
 	
+	public static function validateOrganizationUidFormat($in) {
+		if(Validate::string($in, array(
+			'format' => VALIDATE_NUM . VALIDATE_ALPHA,
+			'min_length' => 8, 
+			'max_length' => 8))) {
+				return TRUE;
+		}
+		return FALSE;
+	}
+	
 	public static function validateUserId($in) {
 		if(self::validateUserIdFormat($in)) {
 			if (pgDb::userIdExists($in)) {	
@@ -242,10 +252,8 @@ class Util {
 		if (isset($input['password1']) && isset($input['password2']) && strlen($input['password1']) > 0) {
 			if (strlen($input['password1']) >= self::PASSWORD_MIN
 				&& strlen($input['password1']) <= self::PASSWORD_MAX
-    		//&& preg_match("/[A-Z]+/", $input['password1'])
     		&& preg_match("/[a-zA-Z]+/", $input['password1'])
     		&& preg_match("/[0-9]+/", $input['password1'])
-    		//&& preg_match("/[~!@#$%^&*_+=`|?:;.,*\'\"\/\-]+/", $input['password1'])
     		&& !preg_match("/[ ]+/", $input['password1'])
     		&& !strcmp($input['password1'], $input['password2'])) { 
 				$result['good']['password'] = $input['password1'];			
@@ -400,7 +408,7 @@ class Util {
 		return false;
 	}
 	
-	public static function setSession($username, $remember = false) {
+	public static function setSession($username, $remember) {
 
 		session_regenerate_id(TRUE);
 		
@@ -435,10 +443,19 @@ class Util {
 			// don't expire a session if the user has asked to be remembered on login form
 			return false;
 		}
-		if (isset($_SESSION['lastActivity']) && (time() - $_SESSION['lastActivity'] > getSessionTimeout())) {
+		if (isset($_SESSION['lastActivity']) && (time() - $_SESSION['lastActivity'] > self::getSessionTimeout())) {
 			return true;
 		}
 		return false;
+	}
+	
+	public static function destroySession() {
+		$_SESSION = array();
+		if (ini_get("session.use_cookies")) {
+    	$params = session_get_cookie_params();
+    	setcookie(session_name(), '', time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
+		}
+		session_destroy();
 	}
 
 	public static function storeSecurePasswordImplA($plaintextPassword, $userId) {

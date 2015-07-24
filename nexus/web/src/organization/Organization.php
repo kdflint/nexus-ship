@@ -12,6 +12,11 @@ class Organization {
 		$query = "select name, type, structure, logo, status_fk as status from organization where id = $1";
 		return pgDb::psExecute($query, array($orgId));
 	}
+	
+	public static function getOrganizationByUid($orgUid) {
+		$query = "select name, type, structure, logo, status_fk as status from organization where uid = $1";
+		return pgDb::psExecute($query, array($orgId));
+	}
 
 	public static function validateNetworkId($in) {
 		if(Util::validateNetworkIdFormat($in)) {
@@ -21,9 +26,27 @@ class Organization {
 		}
 		return FALSE;
 	}
+
+	public static function validateOrganizationUid($in) {
+		if(Util::validateNetworkIdFormat($in)) {
+			if (self::organizationUidExists($in)) {	
+				return TRUE;
+			}
+		}
+		return FALSE;
+	}
 	
 	private static function networkIdExists($id) {
 		$query = "select exists (select true from organization_organization where organization_to_fk = $1)";
+		$row = pg_fetch_row(PgDb::psExecute($query, array($id)));
+		if (!strcmp($row[0], "t")) {
+			return TRUE;
+		}
+		return FALSE;
+	}
+	
+	private static function organizationUidExists($id) {
+		$query = "select exists (select true from organization where uid = $1)";
 		$row = pg_fetch_row(PgDb::psExecute($query, array($id)));
 		if (!strcmp($row[0], "t")) {
 			return TRUE;

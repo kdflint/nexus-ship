@@ -13,9 +13,7 @@ use Birke\Rememberme;
 // Initialize RememberMe Library with file storage
 $storagePath = Util::getTokenRoot();
 if(!is_writable($storagePath) || !is_dir($storagePath)) {
-    die("'$storagePath' does not exist or is not writable by the web server.
-            Please create the directory and give it the
-            correct permissions.");
+    die("'$storagePath' does not exist or is not writable by the web server.");
 }
 $storage = new Rememberme\Storage\File($storagePath);
 $rememberMe = new Rememberme\Authenticator($storage);
@@ -25,20 +23,12 @@ $cleanIcon = "";
 
 if(isset($_GET['logout'])) {
 	$rememberMe->clearCookie($_SESSION['username']);
-	// destroy session data
-	$_SESSION = array();
-	// destroy session cookie if exists
-	if (ini_get("session.use_cookies")) {
-    $params = session_get_cookie_params();
-    setcookie(session_name(), '', time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
-	}
-	// destroy server session
-	session_destroy();
+	Util::destroySession();
 }
 
 if(isset($_GET['logoutAll'])) {
-   $storage->cleanAllTriplets($_SESSION['username']);
-   // also kill session using above code
+  $storage->cleanAllTriplets($_SESSION['username']);
+	Util::destroySession();
 }
 
 $rememberedUsername = $rememberMe->login();
@@ -50,6 +40,7 @@ if(Util::isSessionValid()) {
 	$_SESSION['remembered'] = $remembered = true;
 }
 
+// TODO - add message for your session timed out
 if(isset($_GET['error']) && Util::isSafeCharacterSet($_GET['error'])) {
 	$cleanMessage = $_GET['error'];
 	$cleanIcon = "fa fa-info-circle fa-2x";
@@ -62,8 +53,7 @@ $logo = "";
 $networkLogo = $networkName = "";		
 $cleanNetworkId = "123"; // TODO: create default network in db, that includes default logo
 
-/*
-if(isset($_GET['network']) && Organization::validateNetworkId($_GET['network'])) {
+if(isset($_GET['oid']) && Organization::validateOrganizationUid($_GET['oid'])) {
  	$cleanNetworkId = $_GET['network'];		
 }
 
@@ -71,7 +61,6 @@ $cursor = Organization::getOrganizationById($cleanNetworkId);
 $row = pg_fetch_array($cursor);
 $networkLogo = $row['logo'];
 $networkName = $row['name'];
-*/
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
@@ -100,7 +89,6 @@ $networkName = $row['name'];
     			}
 				});
 				if (<?php echo $remembered; ?>) {
-					alert("auto-submit form");
 					var loginForm = document.forms["login-form"];
 					loginForm.elements['uid'].value = <? echo $rememberedUsername; ?>;
 					loginForm.elements['password'].value = "remembered";

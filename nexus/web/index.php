@@ -3,13 +3,12 @@ session_start();
 
 require_once("src/framework/Util.php");
 
-echo $_SESSION['remember'];
-
 if (!Util::isSessionValid()) {
 	header("location:login.php?network=" . $_SESSION['networkId'] . "&logout=true");
 	exit(0);	
 }
 
+// TODO - update session activity on mouse clicks
 Util::setSessionLastActivity();
 
 $hideHere = false;

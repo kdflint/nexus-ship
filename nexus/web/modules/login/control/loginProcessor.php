@@ -9,11 +9,12 @@ $clean = array();
 
 $clean['remember'] = (isset($_POST['login-remember']) ? true : false);
 
-if (isset($dirty['username']) && Util::validateUsernameFormat($dirty['username'])) {
+if (isset($dirty['username']) && Util::validateUserIdFormat($dirty['username'])) {
 	$clean['username'] = $dirty['username'];
 }
 
 // TODO - clean password
+
 if ($_SESSION['remembered']) {
 	unset($_SESSION['remembered']);
 	$isAuthenticated = true;
