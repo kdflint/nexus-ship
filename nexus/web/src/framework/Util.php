@@ -162,6 +162,7 @@ class Util {
 	public static function validateUsernameFormat($in) {
 		if(Validate::string($in, array(
 			'format' => VALIDATE_ALPHA . VALIDATE_NUM . VALIDATE_SPACE . "_",
+			'min_length' => 1, 
     	'max_length' => Util::USERNAME_MAX))) {
     		return TRUE;
     }
@@ -395,7 +396,7 @@ class Util {
 	public static function authenticate($uid, $pass) {	
 		$coreAuthenticated = false;
 		$hash = self::getPasswordHashByUser($uid, $pass);
-		if (User::countActiveUsers($uid, $hash) == 1) {
+		if ($hash && User::countActiveUsers($uid, $hash) == 1) {
 			$coreAuthenticated = true;
 		}
     return $coreAuthenticated;
@@ -466,10 +467,14 @@ class Util {
 	}
 	
 	public static function getPasswordHashByUser($userId, $plaintextPassword) {
-		$cursor = User::getUserPasswordByUser($userId);
+		$cursor = User::getUserPasswordByUser($userId);	
+		if (pg_num_rows($cursor) < 1) {
+			return FALSE;
+		}
+		// greater than one returned, we ignore
 		$row = pg_fetch_array($cursor, 0);
 		$encrypted = $row['password'];
-		// TODO - handle case where no rows are returned for this username		
+	
 		if (substr($encrypted, 0, 7) === "[[ENC]]") {
 			// Return the salted hash for the plaintext password (using user's unique salt)
 			$hash = "[[ENC]]" . self::systemHashImplA($row['salt'] . $plaintextPassword);

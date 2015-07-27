@@ -3,18 +3,14 @@ session_start();
 
 require_once("src/framework/Util.php");
 
-if (!Util::isSessionValid()) {
+//if (!Util::isSessionValid()) {
+if (false) {
 	header("location:login.php?network=" . $_SESSION['networkId'] . "&logout=true");
 	exit(0);	
 }
 
 // TODO - update session activity on mouse clicks
 Util::setSessionLastActivity();
-
-$hideHere = false;
-if (Util::hideInEnvironment()) {
-	$hideHere = true;	
-}
 
 ?>
 
@@ -118,8 +114,13 @@ if (Util::hideInEnvironment()) {
 
 			<div class="frame" >
 				<div class="loginColLeft" style="width:80%;">
+			  	<noscript>
+			  		<p><span class="fa fa-exclamation-triangle fa-2x" style="color:#d27b4b;float:left;margin-right:5px;"></span>To use Nexus it is necessary to enable JavaScript.</p>
+			  		<p>Here are the <a href="http://www.enable-javascript.com" target="_blank"> instructions how to enable JavaScript in your web browser</a></p>
+			  	</noscript>					
 					<div id="reserveList" style="display:block;">
 						<div id="join_display" style="display:none;margin-bottom:5px;">
+						<!--<div id="join_display" style="display:block;margin-bottom:5px;">-->
 							<?php include("modules/schedule/views/joinConfirm.html"); ?>	
 						</div>
 						<?php include("modules/schedule/views/openNow.html"); ?>
@@ -139,7 +140,7 @@ if (Util::hideInEnvironment()) {
       	</div>
       	
       	<div class="loginColRight" style="width:20%;">
-      		<span style="clear:right;float:right;text-align:right;margin-top:20px;"><? echo $_SESSION['networkName']; ?></span>   
+      		<span style="clear:right;float:right;text-align:right;margin-top:20px;"><? echo $_SESSION['orgName']; ?></span>   
       		<span style="clear:right;float:right;margin-top:20px;"><img <?php echo $_SESSION['logo']; ?>/></span>   
       		<div id="techcheck_display" style="display:none;">
 						<?php include("modules/techcheck/views/details.html"); ?>	

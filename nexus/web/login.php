@@ -17,7 +17,7 @@ if(!is_writable($storagePath) || !is_dir($storagePath)) {
 }
 $storage = new Rememberme\Storage\File($storagePath);
 $rememberMe = new Rememberme\Authenticator($storage);
-$remembered = false;
+$remembered = "false";
 $cleanMessage = "";
 $cleanIcon = "";
 
@@ -31,13 +31,13 @@ if(isset($_GET['logoutAll'])) {
 	Util::destroySession();
 }
 
-$rememberedUsername = $rememberMe->login();
+$rememberedUsername = ($rememberMe->login()) ? $rememberMe->login() : false;
 
 if(Util::isSessionValid()) {
 	header("location:" . Util::getHttpPath() . "/index.php");
 	exit(0);
 } else if ($rememberedUsername){
-	$_SESSION['remembered'] = $remembered = true;
+	$_SESSION['remembered'] = $remembered = "true";
 }
 
 // TODO - add message for your session timed out
@@ -51,16 +51,17 @@ if(isset($_GET['error']) && Util::isSafeCharacterSet($_GET['error'])) {
 
 $logo = "";
 $networkLogo = $networkName = "";		
-$cleanNetworkId = "123"; // TODO: create default network in db, that includes default logo
+$cleanNetworkId = "1"; // TODO: create default network in db, that includes default logo
 
 if(isset($_GET['oid']) && Organization::validateOrganizationUid($_GET['oid'])) {
- 	$cleanNetworkId = $_GET['network'];		
+ 	$cleanNetworkId = $_GET['oid'];		
 }
 
-$cursor = Organization::getOrganizationById($cleanNetworkId);
+$cursor = Organization::getOrganizationByUid($cleanNetworkId);
 $row = pg_fetch_array($cursor);
 $networkLogo = $row['logo'];
 $networkName = $row['name'];
+
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
@@ -90,7 +91,7 @@ $networkName = $row['name'];
 				});
 				if (<?php echo $remembered; ?>) {
 					var loginForm = document.forms["login-form"];
-					loginForm.elements['uid'].value = <? echo $rememberedUsername; ?>;
+					loginForm.elements['uid'].value = <?php echo var_export($rememberedUsername); ?>;
 					loginForm.elements['password'].value = "remembered";
 					loginForm.elements['login-remember'].checked = true;
 					document.getElementById("login-form-submit").click();
@@ -119,6 +120,10 @@ $networkName = $row['name'];
 			<div class="frame"> 
 				
 			  <div class="loginColLeft">
+			  	<noscript>
+			  		<p><span class="fa fa-exclamation-triangle fa-2x" style="color:#d27b4b;float:left;margin-right:5px;"></span>To use Nexus it is necessary to enable JavaScript.</p>
+			  		<p>Here are the <a href="http://www.enable-javascript.com" target="_blank"> instructions how to enable JavaScript in your web browser</a></p>
+			  	</noscript>
 			  	<p id="login-user-message" class="confirmation"><span class="<? echo $cleanIcon; ?>" style="color:#007582;float:left;margin-right:5px;"></span><? echo $cleanMessage; ?></p>
 					<form id="login-form" class="pure-form pure-form-stacked" autocomplete="off" action="modules/login/control/loginProcessor.php" method="post">
 	    			<fieldset>

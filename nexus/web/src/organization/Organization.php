@@ -15,7 +15,7 @@ class Organization {
 	
 	public static function getOrganizationByUid($orgUid) {
 		$query = "select name, type, structure, logo, status_fk as status from organization where uid = $1";
-		return pgDb::psExecute($query, array($orgId));
+		return pgDb::psExecute($query, array($orgUid));
 	}
 
 	public static function validateNetworkId($in) {
@@ -28,7 +28,7 @@ class Organization {
 	}
 
 	public static function validateOrganizationUid($in) {
-		if(Util::validateNetworkIdFormat($in)) {
+		if(Util::validateOrganizationUidFormat($in)) {
 			if (self::organizationUidExists($in)) {	
 				return TRUE;
 			}
