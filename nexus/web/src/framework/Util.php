@@ -421,18 +421,18 @@ class Util {
 		$_SESSION['remember'] = ($remember ? "true" : "false");
 		
 		$cursor = User::getUserSessionByUsername($_SESSION['username']);
-	
+		
 		while ($row = pg_fetch_array($cursor)) {
 			$_SESSION['fname'] = $row['fname'];
   		$_SESSION['lname'] = $row['lname'];
   		$_SESSION['orgName'] = $row['affiliation'];
+  		$_SESSION['orgId'] = $row['affiliationuid'];
   		$_SESSION['uidpk'] = $row['id'];
   		$_SESSION['networkName'] = $row['network'];
   		$_SESSION['networkId'] = $row['networkid'];
   		$_SESSION['logo'] = $row['logo'];
   		$_SESSION['email'] = $row['email'];
-		} 
-	
+		} 	
 	}
 	
 	public static function setSessionLastActivity() {
@@ -440,7 +440,7 @@ class Util {
 	}
 	
 	public static function isSessionExpired() {
-		if (isset($_SESSION['remember']) && $_SESSION['remember'] == "true") {
+		if ((isset($_SESSION['remember']) && $_SESSION['remember'] == "true") || Util::getSessionTimeout() == "-1") {
 			// don't expire a session if the user has asked to be remembered on login form
 			return false;
 		}
@@ -459,10 +459,11 @@ class Util {
 		session_destroy();
 	}
 
+	// TODO - this security stuff should not be inside Util class
 	public static function storeSecurePasswordImplA($plaintextPassword, $userId) {
 		$salt = self::generateRandomString(32);
 		$securePassword = self::systemHashImplA($salt . $plaintextPassword);
-		pgDb::setSecurePasswordImplA($userId, '[[ENC]]' . $securePassword, $salt);
+		User::setSecurePasswordImplA($userId, '[[ENC]]' . $securePassword, $salt);
 		return;
 	}
 	

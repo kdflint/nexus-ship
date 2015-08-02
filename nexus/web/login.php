@@ -40,12 +40,15 @@ if(Util::isSessionValid()) {
 	$_SESSION['remembered'] = $remembered = "true";
 }
 
-// TODO - add message for your session timed out
 if(isset($_GET['error']) && Util::isSafeCharacterSet($_GET['error'])) {
 	$cleanMessage = $_GET['error'];
 	$cleanIcon = "fa fa-info-circle fa-2x";
-} else if(isset($_GET['logout'])) { 
-	$cleanMessage = "You have signed out succesfully.";
+} else if(isset($_GET['logout'])) {
+	if(isset($_GET['expired'])) {
+		$cleanMessage = "Your session has timed out.";
+	} else {
+		$cleanMessage = "You have signed out succesfully.";
+	}
 	$cleanIcon = "fa fa-info-circle fa-2x";
 }
 
@@ -112,7 +115,7 @@ $networkName = $row['name'];
       	</span>  	
   	
       	<span class="controls" style="float:right;padding-bottom:10px;margin-top:30px;">
-      		<a href="#" style="color:#d27b4b;text-decoration:none;">About</a>
+      		<a href="http://northbridgetech.org/downloads/Northbridge_web_conference_center.pdf" style="color:#d27b4b;text-decoration:none;" target="_blank">About</a>
       	</span>
       </div>
 
@@ -124,7 +127,7 @@ $networkName = $row['name'];
 			  		<p><span class="fa fa-exclamation-triangle fa-2x" style="color:#d27b4b;float:left;margin-right:5px;"></span>To use Nexus it is necessary to enable JavaScript.</p>
 			  		<p>Here are the <a href="http://www.enable-javascript.com" target="_blank"> instructions how to enable JavaScript in your web browser</a></p>
 			  	</noscript>
-			  	<p id="login-user-message" class="confirmation"><span class="<? echo $cleanIcon; ?>" style="color:#007582;float:left;margin-right:5px;"></span><? echo $cleanMessage; ?></p>
+			  	<p id="login-user-message" class="confirmation"><span class="<?php echo $cleanIcon; ?>" style="color:#007582;float:left;margin-right:5px;"></span><?php echo $cleanMessage; ?></p>
 					<form id="login-form" class="pure-form pure-form-stacked" autocomplete="off" action="modules/login/control/loginProcessor.php" method="post">
 	    			<fieldset>
 	    				Username<span class="instruction form-instruction"><a href="javascript:void(0)" onclick="toggleFormDisplay('recover-username-form')">I forgot</a></span>
@@ -143,7 +146,7 @@ $networkName = $row['name'];
      					<input class="form-input" type="email" name="email" value="">
      					<a id="username-form-submit" type="submit" class="pure-button pure-button-primary" style="width:45%;" href="javascript:void(0);" onclick="usernameValidateAndSubmit();">Recover Username</a>
      					<a class="form-instruction" href="javascript:void(0)" onclick="toggleFormDisplay('login-form')">Return to Login</a>
-     					<input type="hidden" name="network" value="<? echo $cleanNetworkId; ?>">
+     					<input type="hidden" name="network" value="<?php echo $cleanNetworkId; ?>">
      				</fieldset>
      			</form>
      			<form id="recover-password-form" class="pure-form pure-form-stacked" style="display:none;" autocomplete="off" action="modules/login/control/recoverPasswordProcessor.php" method="post">
@@ -154,13 +157,13 @@ $networkName = $row['name'];
      					<input class="form-input" type="text" name="uid" value="" maxlength="25">
      					<a id="password-form-submit" type="submit" class="pure-button pure-button-primary" style="width:45%;" href="javascript:void(0);" onclick="passwordValidateAndSubmit();">Reset Password</a>
      					<a class="form-instruction" href="javascript:void(0)" onclick="toggleFormDisplay('login-form')">Return to Login</a>
-     					<input type="hidden" name="network" value="<? echo $cleanNetworkId; ?>">
+     					<input type="hidden" name="network" value="<?php echo $cleanNetworkId; ?>">
      				</fieldset>
      			</form>     			
      		</div>
      		
      		<div class="loginColRight">
-      		<span style="clear:right;float:right;text-align:right;margin-top:20px;"><? echo $networkName; ?></span>
+      		<span style="clear:right;float:right;text-align:right;margin-top:20px;"><?php echo $networkName; ?></span>
       		<span style="clear:right;float:right;margin-top:20px;"><img <?php echo $networkLogo; ?>/></span>
      		</div>
       </div>

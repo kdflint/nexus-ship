@@ -1,41 +1,55 @@
-					<table style="width:100%;" class="pure-table">
-        			<tr>
-            		<td>
-            			<div class="event">
-  									<span class="day">Wednesday</span><br/>
-  									<span class="date">30</span><br/>
-  									<span class="month">June</span><br/>
-  									<span class="time">8:00 pm CT</span>
-									</div>
-								</td>
-            		<td>
-            			<div class="meeting">
-            				<span class="purpose">Board Meeting</span><br/>
-            				<span class="descr" style="font-size:90%;" >This is the quarterly meeting of the Board of Directors
-            					<p><span style="padding-right:5px;margin:0px;color:#d27b4b;" class="fa fa-envelope" ></span>Reserved by: Kathy Flint</p>
-            				</span>
-            			</div>
-            		</td>
-            		<td style="vertical-align:top;">
-            		<a id="schedule_control" href="javascript:void(0);" style="float:right;"></span><span style="padding:0px;" class="fa fa-calendar-o fa-2x" ></span><span style="padding-left:2px;" class="fa fa-plus" ></span>Add</a>
-            		</td>
-        			</tr>
-        			<tr>
-            		<td>
-            			<div class="event">
-  									<span class="day">Wednesday</span><br/>
-  									<span class="date">30</span><br/>
-  									<span class="month">June</span><br/>
-  									<span class="time">8:00 pm CT</span>
-									</div>
-								</td>
-            		<td>
-            			<div class="meeting">
-            				<span class="purpose">Board Meeting</span><br/>
-            				<span class="descr" style="font-size:90%;" >This is the quarterly meeting of the Board of Directors
-            					<p><span style="padding-right:5px;margin:0px;color:#d27b4b;" class="fa fa-envelope" ></span>Reserved by: Kathy Flint</p>
-            				</span>
-            			</div>
-            		</td>
-        			</tr>					
-					</table>
+<script>
+	function getReservationList() {
+		var xmlhttp = new XMLHttpRequest();
+		xmlhttp.onreadystatechange=function() {
+			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+			 	var jsonObj = JSON.parse(xmlhttp.responseText);
+			 	
+			 	// put row containers in the table, 1 for each event
+			 	var tableRows = "";
+			 	for (var i = 0; i < jsonObj.length; i++) { 
+			 		tableRows = tableRows + "<tr id='reservationRow" + i + "'></tr>"; 
+			 	}
+       	document.getElementById("reservationTable").innerHTML = tableRows;
+       	
+       	// write eac event into its row container
+			 	for (var i = 0; i < jsonObj.length; i++) { 
+			 		var tableEvent = "<tr>" +
+       			"<td>" +
+	       			"<div class='event'>" +
+  					  	"<span class='day'>" + jsonObj[i].day + "</span><br/>" +
+  							"<span class='date'>" + jsonObj[i].date + "</span><br/>" +
+  							"<span class='month'>" + jsonObj[i].month + "</span><br/>" +
+  							"<span>" + jsonObj[i].hour + ":" + jsonObj[i].minute + "</span><span class='period'> " + jsonObj[i].period + " " + jsonObj[i].abbrev + "</span>" +
+							"</div>" +
+       			"</td>" +
+          	"<td>" +
+	          	"<div class='meeting'>" +
+          			"<span class='purpose'></span>" + jsonObj[i].purpose + "<br/>" +
+          			"<span class='descr' style='font-size:90%;' >" + jsonObj[i].descr + 
+	          			//"<p><span style='padding-right:5px;margin:0px;color:#d27b4b;' class='fa fa-envelope' ></span>Reserved by: " + jsonObj[i].fname + " " +  jsonObj[i].lname + "<span id='reserveLname'></span></p>" +
+	          			"<p>Reserved by: " + jsonObj[i].fname + " " +  jsonObj[i].lname + "<span id='reserveLname'></span></p>" +
+          			"</span>" +
+          		"</div>" +
+          	"</td>" +
+       		"</tr>";
+       		document.getElementById("reservationRow" + i).innerHTML = tableEvent;
+				}       	
+			}
+		}
+		xmlhttp.open("GET","src/framework/reservationManager.php");
+		xmlhttp.send();  		
+	}
+</script>
+
+<script>
+	function xyz() {
+		document.getElementById('schedule_control').style.display='none';
+	}
+</script>
+
+<a id='schedule_control' href='javascript:void(0);' style='position:absolute;padding-left:650px;padding-top: 20px;'></span><span style='padding:0px;' class='fa fa-calendar-o fa-2x' ></span><span style='padding-left:2px;' class='fa fa-plus' ></span></a>				
+<table id="reservationTable" style="width:100%;" class="pure-table">
+	<script> getReservationList(); </script>
+</table>
+

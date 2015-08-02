@@ -50,7 +50,7 @@ Below is your link to reset your password.
 
 Note: This link will expire in 30 minutes. Also, any password links sent to you previously are now void.
 
-" . Util::getHttpPath() . "/module/login/view/reset.php?resetCode=" . $uuid . "
+" . Util::getHttpPath() . "/modules/login/views/reset.php?resetCode=" . $uuid . "
 
 If you did not request this password reset, please contact our support team at support@northbridgetech.org.
 

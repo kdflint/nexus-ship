@@ -90,7 +90,7 @@ function getConfigXml() {
 	$thisConfig = 
 	
 '
-<?xml version="1.0" ?>
+<?phpxml version="1.0" ?>
 <config>
     <localeversion suppressWarning="false">0.9.0</localeversion>
     <version>158</version>

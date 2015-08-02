@@ -1,16 +1,28 @@
-<? 
+<?php 
 session_start();
 
 require_once("src/framework/Util.php");
 
-//if (!Util::isSessionValid()) {
-if (false) {
-	header("location:login.php?network=" . $_SESSION['networkId'] . "&logout=true");
-	exit(0);	
+if (!Util::isSessionValid()) {
+	// TODO - this should consume a sessionManager object
+	if (Util::isSessionExpired()) {
+		header("location:login.php?oid=" . $_SESSION['orgId'] . "&logout=true&expired=true");
+		exit(0);	
+	} else {
+		header("location:login.php?oid=" . $_SESSION['orgId'] . "&logout=true");
+		exit(0);	
+	}
 }
 
-// TODO - update session activity on mouse clicks
 Util::setSessionLastActivity();
+
+$showProfile = "false";
+
+if(isset($_GET['view']) && Util::isSafeCharacterSet($_GET['view'])) {
+	switch($_GET['view']) {
+		case "profile": $showProfile = "true";
+	}
+}
 
 ?>
 
@@ -30,6 +42,7 @@ Util::setSessionLastActivity();
     <script src="scripts/nexus.js" language="javascript"></script>
  		<script src="//code.jquery.com/jquery-1.10.2.js"></script>
   	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>  
+  	<script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js"></script>
 	  <link rel="icon" href="images/NB_icon.png" />
     <title>Northbridge Nexus</title> 
     
@@ -37,6 +50,8 @@ Util::setSessionLastActivity();
 			$(document).ready(function () {
 				$( '#schedule_control' ).click(function() {
 	  			$( "#schedule_display" ).toggle( "blind" );
+	  			$( "#schedule_control" ).toggle();
+	  			displayLocalTz();
 				});
 				$( '#join_control' ).click(function() {
 	  			$( "#join_display" ).toggle( "blind" );
@@ -50,6 +65,9 @@ Util::setSessionLastActivity();
 				$( '#user_control' ).click(function() {
 	  			$( "#user_display" ).toggle( "blind" );
 				});
+				if(<?php echo $showProfile; ?>) {
+					$( "#user_display" ).toggle( "blind" );
+				}				 	
 			});
 		</script>
     
@@ -82,7 +100,6 @@ Util::setSessionLastActivity();
         });
       });
       $(function() {
-        //$( "#basicExample" ).timepicker();
         $( "#basicExample" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
       });
       $(function() {
@@ -90,11 +107,29 @@ Util::setSessionLastActivity();
       });
     </script> 
     
+    <script>  	
+    	var activityFlag = 1;
+			document.onmousemove = function() { activityFlag = 1; };
+			document.onkeyup = function() { activityFlag = 1; };
+			document.onclick = function() { activityFlag = 1; };
+			window.setInterval(recordActivity, 60000);
+			// every 60 seconds, if there has been user activity then send a request to update the session activity timestamp		
+			function recordActivity() {
+				if(activityFlag) {
+					var xmlhttp = new XMLHttpRequest();
+					xmlhttp.onreadystatechange=function() {
+	  				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {	}
+  				}
+					xmlhttp.open("GET","src/framework/sessionManager.php");
+					xmlhttp.send();  					
+				}
+				activityFlag = 0;
+			}
+    </script>
   </head>
   
   <body>
     <div class="container">
-
       <div class="header">
        	<img class="banner-image" src="image/nexus4.png" />
        	<span class="banner">
@@ -105,11 +140,11 @@ Util::setSessionLastActivity();
       	</span>  	
   	
       	<span class="controls" style="float:right;padding-bottom:10px;margin-top:30px;">
-      		<a href="#" style="color:#d27b4b;text-decoration:none;">About</a> | 
-      		<a href="login.php?network=<?php echo $_SESSION['networkId']; ?>&logout=true"?logout=true" style="color:#d27b4b;text-decoration:none;">Logout</a>
+      		<a href="http://northbridgetech.org/downloads/Northbridge_web_conference_center.pdf" style="color:#d27b4b;text-decoration:none;" target="_blank">About</a> | 
+      		<a href="login.php?oid=<?php echo $_SESSION['orgId']; ?>&logout=true" style="color:#d27b4b;text-decoration:none;">Logout</a>
       	</span>
       	<a id="user_control" href="javascript:void(0);"><span style="clear:right;float:right;padding-top:4px;margin:0px;color:#d27b4b;" class="fa fa-caret-down fa-2x" ></span></a>
-				<span style="float:right;padding:10px;">Hello <? echo $_SESSION['fname']; ?></span> 	
+				<span style="float:right;padding:10px;">Hello <?php echo $_SESSION['fname']; ?></span> 	
       </div>
 
 			<div class="frame" >
@@ -120,12 +155,11 @@ Util::setSessionLastActivity();
 			  	</noscript>					
 					<div id="reserveList" style="display:block;">
 						<div id="join_display" style="display:none;margin-bottom:5px;">
-						<!--<div id="join_display" style="display:block;margin-bottom:5px;">-->
 							<?php include("modules/schedule/views/joinConfirm.html"); ?>	
 						</div>
 						<?php include("modules/schedule/views/openNow.html"); ?>
 						<div id="schedule_display" style="display:none;">
-							<?php include("modules/schedule/views/datePicker.html"); ?>	
+							<?php include("modules/schedule/views/reservationAdd.html"); ?>	
 						</div>
 						<?php include("modules/schedule/views/reservationsList.html"); ?>
 					</div>
@@ -140,7 +174,7 @@ Util::setSessionLastActivity();
       	</div>
       	
       	<div class="loginColRight" style="width:20%;">
-      		<span style="clear:right;float:right;text-align:right;margin-top:20px;"><? echo $_SESSION['orgName']; ?></span>   
+      		<span style="clear:right;float:right;text-align:right;margin-top:20px;"><?php echo $_SESSION['orgName']; ?></span>   
       		<span style="clear:right;float:right;margin-top:20px;"><img <?php echo $_SESSION['logo']; ?>/></span>   
       		<div id="techcheck_display" style="display:none;">
 						<?php include("modules/techcheck/views/details.html"); ?>	

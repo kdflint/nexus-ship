@@ -1,1 +1,13 @@
-User profile details.
+<form id="profile-form" class="pure-form pure-form-stacked" style="font-size:80%" action="modules/user/control/profileProcessor.php" method="post">
+	First
+	<input name="fname" style="padding:0.2em 0.2em;width:100%;" readonly value="<?php echo $_SESSION['fname']; ?>">	        		
+	Last
+	<input name="lname" style="padding:0.2em 0.2em;width:100%;" readonly value="<?php echo $_SESSION['lname']; ?>">	 
+	Email
+	<input name="email" style="padding:0.2em 0.2em;width:100%;" readonly value="<?php echo $_SESSION['email']; ?>">	 
+	Reset Password
+	<input name="password1" minlength="7" maxlength="25" style="padding:0.2em 0.2em;width:100%;" placeholder="7-25 characters please">
+	Confirm Password
+	<input name="password2" minlength="7" maxlength="25" style="padding:0.2em 0.2em;width:100%;">
+	<a id="profile-form-submit" type="submit" class="pure-button pure-button-primary" style="float:right;" href="javascript:void(0);" onclick="passwordValidateAndSubmit2('profile-form');">Update Profile</a>
+</form>  

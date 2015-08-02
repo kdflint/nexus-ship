@@ -139,7 +139,7 @@ if (isset($_SESSION['traineeName'])) {
 								<form id="join-form" class="pure-form pure-form-stacked" autocomplete="off" style="width:105%;margin-top:10px;" action="../new_nexus/web/modules/training/control/trainingMeetingProcessor.php" method="post">
 		    					<fieldset>
 	    							Your Name
-        						<input class="form-input" name="username" value="<? echo $_SESSION['traineeName']; ?>" <? echo $readonly_value; ?>>	  
+        						<input class="form-input" name="username" value="<?php echo $_SESSION['traineeName']; ?>" <?php echo $readonly_value; ?>>	  
      							</fieldset>
      						</form>   
 								<a id="join-form-submit" type="submit" class="pure-button pure-button-primary pure-button-disabled training-button" href="javascript:void(0);" onclick="validateAndSubmit();" disabled="disabled">Join Now</a>

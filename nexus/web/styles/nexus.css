@@ -181,14 +181,14 @@ form {
 /* DATE */
 
 .event, .user {
-  width: 90px;
+  width: 110px;
   color: rgba(0, 77, 98, 1);
   text-align: center;
-  padding-right:20px;
+  padding-right:10px;
   border-right:1px solid #a6c3ce;
  }
  
-.day, .date, .month, .fname, .lname {
+.day, .date, .month, .fname, .lname, .time {
   padding-top: 5px;
   }
  
@@ -205,6 +205,11 @@ form {
 .month { 
 	font-size: 90%;
   }
+  
+.period {
+	font-size: 80%;
+	text-align: bottom;
+} 
   
 
 /* TABLES */
