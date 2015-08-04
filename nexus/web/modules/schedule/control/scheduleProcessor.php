@@ -18,7 +18,7 @@ $dirty = array('meeting-name' => $_POST['meeting-name'],
 							'meeting-duration' => $_POST['meeting-duration'],
 							'tzone-name' => $_POST['tzone-name']
 							);
-							
+											
 $result = validateEvent($dirty);
 
 if (count($result['error']) > 0) {
@@ -26,14 +26,14 @@ if (count($result['error']) > 0) {
 	exit(0);
 }
 
-$tmpTz = "America/Chicago";
+// TOTO - update session with this time zone
 
-$timestamp = $result['clean']['meeting-date'] . " " . $result['clean']['meeting-time'] . " " . $tmpTz;
+$timestamp = $result['clean']['meeting-date'] . " " . $result['clean']['meeting-time'] . " " . $result['clean']['tzone-name'];
 
-Event::addEvent($timestamp, $result['clean']['meeting-duration'], $result['clean']['meeting-name'], $_SESSION['uidpk'], array_keys($_SESSION['groups'])[0], $tmpTz);
+Event::addEvent($timestamp, $result['clean']['meeting-duration'], $result['clean']['meeting-name'], $_SESSION['uidpk'], array_keys($_SESSION['groups'])[0], $result['clean']['tzone-name']);
 
 header("location:" . Util::getHttpPath() . "/index.php");
-//exit(0);
+exit(0);
 
 function validateEvent($input) {
 	$result = array('clean' => array(), 'error' => array());
@@ -56,10 +56,16 @@ function validateEvent($input) {
  		$result['error']['meeting-date'] = "error";
  	}	
  	
+	// MEETING TIME ZONE
+	if (isset($input['tzone-name']) && Event::isValidTimeZone($input['tzone-name'])) {
+		$result['clean']['tzone-name'] = $input['tzone-name'];
+	} else {
+		$result['error']['tzone-name'] = "error";
+	}
+ 	
  	$result['clean']['meeting-time'] = $input['meeting-time'];
  	$result['clean']['meeting-duration'] = $input['meeting-duration'];
- 	$result['clean']['tzone-name'] = $input['tzone-name'];
- 	
+
  	return $result;
 }
 

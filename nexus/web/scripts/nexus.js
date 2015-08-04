@@ -1,12 +1,5 @@
 var errorBackground = "rgba(247,248,239,0.6) url('') no-repeat right top";
 
-function displayLocalTz() {
-	// https://bitbucket.org/pellepim/jstimezonedetect
-	var tz = jstz.determine();
-  document.getElementById("local-tzDisplay").innerHTML = tz.name();
-  document.getElementById("local-tzFormField").innerHTML = tz.name();
-}
-
 function formSubmit(formId) {
  		document.forms[formId].submit();
 }
@@ -74,6 +67,51 @@ function toggleFrameDisplay(frameId) {
 	showFrame.style.display='block';
 	showButton.style.backgroundColor='rgba(137, 157, 112, 1)';
 }
+
+function getLocalTz() {
+	// https://bitbucket.org/pellepim/jstimezonedetect
+	var tz = jstz.determine();
+	return tz.name();
+}
+
+function showTimeZoneDisplay(displayId) {
+	var showDisplay = document.getElementById(displayId);
+	document.getElementById("tz-static").style.display='none';
+	document.getElementById("tz-select").style.display='none';	 
+	showDisplay.style.display='block';
+}
+
+function setTimeZoneDisplay(zone) {
+  document.getElementById("local-tzDisplay").innerHTML = zone;
+  document.getElementById("local-tzFormField").value = zone;
+  showTimeZoneDisplay("tz-static");
+}	
+
+function displayTimeZones() {
+	var timeZone = document.getElementById("countryTimeZones");
+	var countryCode = document.getElementById("country").value;
+	// TODO - this line clears previous selections - how does it work?
+	for (a in timeZone.options) { timeZone.options.remove(0); }
+	//for (var i=0; i<timeZone.options.length; i++) {
+	//	timeZone.remove(i);
+	//}
+  var countryTimeZones = timeZoneData[countryCode];
+  if (countryTimeZones.length == 1) {
+  	setTimeZoneDisplay(Object.getOwnPropertyNames(countryTimeZones[0]));
+  } else {
+		var option = document.createElement("option");
+  	option.text = "Time Zone";
+  	option.selected = true;
+  	timeZone.add(option);
+  	for (var i=0; i<countryTimeZones.length; i++) {
+	  	var option = document.createElement("option");
+  		option.text = Object.getOwnPropertyNames(countryTimeZones[i]);
+  		timeZone.add(option);
+		}
+    $( "#countryTimeZones" ).selectmenu( "refresh" );
+  }
+}
+
 
 // TODO - refactor these front validations scripts - way too redundant!
 

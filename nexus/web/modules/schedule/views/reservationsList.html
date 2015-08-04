@@ -12,7 +12,7 @@
 			 	}
        	document.getElementById("reservationTable").innerHTML = tableRows;
        	
-       	// write eac event into its row container
+       	// write each event into its row container
 			 	for (var i = 0; i < jsonObj.length; i++) { 
 			 		var tableEvent = "<tr>" +
        			"<td>" +
@@ -28,7 +28,8 @@
           			"<span class='purpose'></span>" + jsonObj[i].purpose + "<br/>" +
           			"<span class='descr' style='font-size:90%;' >" + jsonObj[i].descr + 
 	          			//"<p><span style='padding-right:5px;margin:0px;color:#d27b4b;' class='fa fa-envelope' ></span>Reserved by: " + jsonObj[i].fname + " " +  jsonObj[i].lname + "<span id='reserveLname'></span></p>" +
-	          			"<p>Reserved by: " + jsonObj[i].fname + " " +  jsonObj[i].lname + "<span id='reserveLname'></span></p>" +
+	          			"<p>Reserved by: " + jsonObj[i].fname + " " +  jsonObj[i].lname + "</p>" +
+	          			((jsonObj[i].adder == jsonObj[i].sessionUser) ? "<p><a href='modules/schedule/control/eventDeleteProcessor.php?id=" + jsonObj[i].uuid + "' onclick='return confirm(\"Please confirm this delete.\");'><span class='fa fa-trash-o' style='color:#d27b4b;'></span></a></p>" : " ") +
           			"</span>" +
           		"</div>" +
           	"</td>" +

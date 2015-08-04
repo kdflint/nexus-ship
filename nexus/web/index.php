@@ -40,6 +40,7 @@ if(isset($_GET['view']) && Util::isSafeCharacterSet($_GET['view'])) {
 		<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
     <link rel="stylesheet" href="styles/nexus.css" type="text/css" />
     <script src="scripts/nexus.js" language="javascript"></script>
+  	<script src="scripts/timeZoneData.js" language="javascript"></script>
  		<script src="//code.jquery.com/jquery-1.10.2.js"></script>
   	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>  
   	<script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js"></script>
@@ -51,7 +52,6 @@ if(isset($_GET['view']) && Util::isSafeCharacterSet($_GET['view'])) {
 				$( '#schedule_control' ).click(function() {
 	  			$( "#schedule_display" ).toggle( "blind" );
 	  			$( "#schedule_control" ).toggle();
-	  			displayLocalTz();
 				});
 				$( '#join_control' ).click(function() {
 	  			$( "#join_display" ).toggle( "blind" );
@@ -105,8 +105,16 @@ if(isset($_GET['view']) && Util::isSafeCharacterSet($_GET['view'])) {
       $(function() {
         $( "#duration" ).selectmenu();
       });
+      $(function() {
+        $( "#country" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
+        $( "#country" ).selectmenu({ change: function() { displayTimeZones(); } });
+      });
+      $(function() {
+        $( "#countryTimeZones" ).selectmenu();
+        $( "#countryTimeZones" ).selectmenu({ change: function() { setTimeZoneDisplay(document.getElementById("countryTimeZones").value); } });
+      });
     </script> 
-    
+       
     <script>  	
     	var activityFlag = 1;
 			document.onmousemove = function() { activityFlag = 1; };
@@ -159,7 +167,7 @@ if(isset($_GET['view']) && Util::isSafeCharacterSet($_GET['view'])) {
 						</div>
 						<?php include("modules/schedule/views/openNow.html"); ?>
 						<div id="schedule_display" style="display:none;">
-							<?php include("modules/schedule/views/reservationAdd.html"); ?>	
+							<?php include("modules/schedule/views/reservationAdd.php"); ?>	
 						</div>
 						<?php include("modules/schedule/views/reservationsList.html"); ?>
 					</div>

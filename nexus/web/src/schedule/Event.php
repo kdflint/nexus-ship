@@ -51,24 +51,69 @@ class Event {
 		}
 	}
 	
-	public static function getFutureEvents($groupId) {
-		$query = "select extract(day from e.start_dttm) as date, extract(dow from e.start_dttm) as day, extract(month from e.start_dttm) as month, extract(hour from e.start_dttm) as hour, extract(minute from e.start_dttm) as minute, e.tz_name as name, e.tz_abbrev as abbrev, e.duration as duration, e.name as name, e.descr as descr, u.fname as fname, u.lname as lname from event e, public.user u where e.group_fk = $1 and e.start_dttm > now() and u.id = e.reserved_user_fk order by e.start_dttm;";
-		$cursor = pgDb::psExecute($query, array($groupId));
-		$counter = 0;
+	public static function isValidTimeZone($in) {
+		$query = "select exists (select name from pg_timezone_names where name = $1)";		
+		$row = pg_fetch_row(pgDb::psExecute($query, array($in)));
+		if (!strcmp($row[0], "t")) {
+			return TRUE;
+		}
+		return FALSE;		
+	}
+	
+	public static function isValidEventUuid($in) {
+		$query = "select exists (select uuid from event where uuid = $1)";		
+		$row = pg_fetch_row(pgDb::psExecute($query, array($in)));
+		if (!strcmp($row[0], "t")) {
+			return TRUE;
+		}
+		return FALSE;		
+	}
+	
+	public static function getFutureEvents($groupId, $localTz = "Greenwich", $ssnUser) {	
 		$events = array();
-		while ($row = pg_fetch_array($cursor)) {
-			$events[$counter]['date'] = $row['date'];
-			$events[$counter]['day'] = self::getDay($row['day']);
-			$events[$counter]['month'] = self::getMonth($row['month']-1);
-			$events[$counter]['hour'] = self::getHour($row['hour']);
-			$events[$counter]['minute'] = self::getMinute($row['minute']);
-			$events[$counter]['period'] = self::getPeriod($row['hour']);
-			$events[$counter]['abbrev'] = $row['abbrev'];
-			$events[$counter]['purpose'] = $row['name'];
-			$events[$counter]['descr'] = $row['descr'];
-			$events[$counter]['fname'] = $row['fname'];
-			$events[$counter]['lname'] = $row['lname'];
-			$counter++;
+		if (self::isValidTimeZone($localTz)) {
+			$query = "select 
+				extract(day from (select e.start_dttm at time zone $2)) as date, 
+				extract(dow from (select e.start_dttm at time zone $2)) as day, 
+				extract(month from (select e.start_dttm at time zone $2)) as month, 
+				extract(hour from (select e.start_dttm at time zone $2)) as hour, 
+				extract(minute from (select e.start_dttm at time zone $2)) as minute, 
+				e.tz_name as name, 
+				e.duration as duration, 
+				e.name as name, 
+				e.descr as descr, 
+				e.uuid as uuid,
+				e.reserved_user_fk as adder,
+				u.fname as fname, 
+				u.lname as lname,
+				pg.abbrev as abbrev 
+			from event e, public.user u, pg_timezone_names pg
+			where e.group_fk = $1
+			and e.start_dttm > now() 
+			and e.active = true
+			and pg.name = $2
+			and u.id = e.reserved_user_fk 
+			order by e.start_dttm";
+				
+			$cursor = pgDb::psExecute($query, array($groupId, $localTz));
+			$counter = 0;
+			while ($row = pg_fetch_array($cursor)) {
+				$events[$counter]['date'] = $row['date'];
+				$events[$counter]['day'] = self::getDay($row['day']);
+				$events[$counter]['month'] = self::getMonth($row['month']-1);
+				$events[$counter]['hour'] = self::getHour($row['hour']);
+				$events[$counter]['minute'] = self::getMinute($row['minute']);
+				$events[$counter]['period'] = self::getPeriod($row['hour']);
+				$events[$counter]['abbrev'] = $row['abbrev'];
+				$events[$counter]['purpose'] = $row['name'];
+				$events[$counter]['descr'] = $row['descr'];
+				$events[$counter]['uuid'] = $row['uuid'];
+				$events[$counter]['fname'] = $row['fname'];
+				$events[$counter]['lname'] = $row['lname'];
+				$events[$counter]['adder'] = $row['adder'];
+				$events[$counter]['sessionUser'] = $ssnUser;
+				$counter++;
+			}
 		}
 		return $events;
 	}
@@ -81,6 +126,12 @@ class Event {
 		pgDb::psExecute($query, array(Util:: newUuid(), $dttm, $duration, $name, $reservedUserId, $groupId, $tzName, $tzAbbrev, ""));
 		return;
 	}	
+	
+	public static function deleteEvent($uuid) {
+		$query = "update event set active = false where uuid = $1";
+		pgDb::psExecute($query, array($uuid));
+		return;
+	}
 }
 
 

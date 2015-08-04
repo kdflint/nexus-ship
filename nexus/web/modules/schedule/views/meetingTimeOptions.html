@@ -1,27 +1,3 @@
-<table style="width:100%;border:2px solid #a6c3ce !important;" class="pure-table">
-	<tr>
-  	<td>
-  		<div class="event">
-  			<span class="date">New</span><br/>
-  			<span>Reservation</span>
-			</div>
-		</td>
-    <td>
-			<form id="schedule-form" class="pure-form" action="modules/schedule/control/scheduleProcessor.php" method="post">
-				<fieldset>
-      		<div>
-	      		<input type="text" name="meeting-name" style="width:97%;" maxlength="50" placeholder="Purpose" >
-					</div>
-					<div id="tz-static" style="margin-top:10px;">
-						<span style="font-size:90%;"><b>Time Zone: </b><span id="local-tzDisplay">Test</span><a href="javascript:void(0);" style="margin-left:10px;">Change</a></span>
-						<input id="local-tzFormField" type="hidden" name="tzone-name" value="America/Chicago" />
-					</div>
-					<div id="tz-select" style="display:none;margin-top:10px;">
-					</div>
-					<div style="margin-top:10px;">
-	      		<input type="text" id="datepicker" name="meeting-date" placeholder="Date" style="width:110px;margin-top:-32px;">	
-      			<select id="basicExample" name="meeting-time" style="width:140px;">
-	      			<option selected>Time</option>
         			<option value="06:00:00">6:00 AM</option>
         			<option value="06:30:00">6:30 AM</option>
         			<option value="07:00:00">7:00 AM</option>
@@ -72,26 +48,3 @@
         			<option value="04:30:00">4:30 AM</option>
         			<option value="05:00:00">5:00 AM</option>
         			<option value="05:30:00">5:30 AM</option>
-      			</select>	 
-      			<select id="duration" name="meeting-duration" style="width:140px;">
-	      			<option selected>Duration</option>
-        			<option value="00:30:00">30 minutes</option>
-        			<option value="01:00:00">1 hour</option>
-        			<option value="01:30:00">1 hour 30 min</option>
-        			<option value="02:00:00">2 hours</option>
-        			<option value="02:30:00">2 hours 30 min</option>
-        			<option value="03:00:00">3 hours</option>
-        			<option value="03:30:00">3 hours 30 min</option>
-        			<option value="04:00:00">4 hours</option>
-      			</select>
-		    	</div> 			
-				</fieldset>
-			</form>  
-		</td>
-    <td>
-    	<a href="javascript:void(0);" onclick="document.getElementById('schedule_control').click();" style="float:right;margin-right:6px;">Cancel</a><br/>
-      <a id="schedule-form-submit" class="pure-button button-menu" href="javascript:void(0)" onclick="eventValidateAndSubmit();" style="float:right;background-color:#d27b4b;width:70px;font-size:90%;margin-top:45px;color:#e6e6e6">Reserve</a>
- 		</td>
-	</tr>
-</table> 
-

@@ -82,6 +82,7 @@ $networkName = $row['name'];
     <script src="scripts/nexus.js" language="javascript"></script>
  		<script src="//code.jquery.com/jquery-1.10.2.js"></script>
   	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  	<script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js"></script>
     <link rel="icon" href="images/NB_icon.png" />
     <title>Northbridge Nexus | Login</title> 
    
@@ -99,6 +100,7 @@ $networkName = $row['name'];
 					loginForm.elements['login-remember'].checked = true;
 					document.getElementById("login-form-submit").click();
 				}
+				document.getElementById("localTz").value = getLocalTz();
 			});
 		</script>
   </head>
@@ -134,6 +136,7 @@ $networkName = $row['name'];
         			<input class="form-input" name="uid" value="" maxlength="25" minlength="7">	        		
         			Password<span class="instruction form-instruction"><a href="javascript:void(0)" onclick="toggleFormDisplay('recover-password-form')">I forgot</a></span>
         			<input class="form-input" type="password" name="password" value="" />	
+        			<input id="localTz" name="timezone" type="hidden" value="">
         			<a id="login-form-submit" type="submit" class="pure-button pure-button-primary" style="width:45%;" href="javascript:void(0);" onclick="loginValidateAndSubmit();">Sign In</a>
         			<a class="pure-button pure-button-secondary" onclick="toggleRememberCheckbox();" style="width:45%;" ><input id="login-remember" name="login-remember" type="checkbox" /> Remember me</a>
      				</fieldset>

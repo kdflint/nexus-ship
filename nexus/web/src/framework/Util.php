@@ -3,6 +3,7 @@
 require_once(dirname(__FILE__) . "/../../../config/env_config.php");
 require_once(PHP_ROOT . "/Validate.php");
 require_once(Util::getSrcRoot() . "/user/User.php");
+require_once(Util::getSrcRoot() . "/schedule/Event.php");
 require_once(Util::getLibRoot() . "/autoload/autoloader.php");
 
 // set config settings
@@ -168,6 +169,18 @@ class Util {
     }
     return FALSE;
   }
+  
+	public static function isValidPassword($in) {
+		if (isset($in) 
+				&& strlen($in) >= self::PASSWORD_MIN
+				&& strlen($in) <= self::PASSWORD_MAX
+    		&& preg_match("/[a-zA-Z]+/", $in)
+    		&& preg_match("/[0-9]+/", $in)
+    		&& !preg_match("/[ ]+/", $in)) { 
+					return TRUE;			
+			} 
+			return FALSE;
+	}
 	
 	public static function stripTrailingComma($in) {
 		if (!strcmp(substr($in, -2), ", ")) {
@@ -409,7 +422,7 @@ class Util {
 		return false;
 	}
 	
-	public static function setSession($username, $remember) {
+	public static function setSession($username, $remember, $zone = "undefined") {
 
 		session_regenerate_id(TRUE);
 		
@@ -419,6 +432,7 @@ class Util {
 		$_SESSION['groups'] = User::getUserGroupsByUsername($_SESSION['username']);
 		self::setSessionLastActivity();
 		$_SESSION['remember'] = ($remember ? "true" : "false");
+		$_SESSION['timezone'] = (Event::isValidTimeZone($zone) ? $zone : "undefined");
 		
 		$cursor = User::getUserSessionByUsername($_SESSION['username']);
 		
@@ -457,6 +471,10 @@ class Util {
     	setcookie(session_name(), '', time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
 		}
 		session_destroy();
+	}
+	
+	public static function is_ajax() {
+		return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
 	}
 
 	// TODO - this security stuff should not be inside Util class

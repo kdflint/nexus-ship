@@ -16,7 +16,7 @@ if ($cleanCode) {
 	$cursor = User::getUserPasswordResetActivityByUuid($cleanCode);
 	$result = pg_fetch_array($cursor);
 	if (isset($result['uidpk']) && isset($result['username']) && isset($result['id'])) {
-		Util::setSession($result['username'], false);
+		Util::setSession($result['username'], false, "undefined");
 		Util::setLogin($_SESSION['uidpk']);
 		User::updateUserPasswordResetActivityById($result['id']);
 		header("location:" . Util::getHttpPath() . "/index.php?view=profile");
