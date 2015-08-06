@@ -133,12 +133,14 @@ $networkName = $row['name'];
 					<form id="login-form" class="pure-form pure-form-stacked" autocomplete="off" action="modules/login/control/loginProcessor.php" method="post">
 	    			<fieldset>
 	    				Username<span class="instruction form-instruction"><a href="javascript:void(0)" onclick="toggleFormDisplay('recover-username-form')">I forgot</a></span>
-        			<input class="form-input" name="uid" value="" maxlength="25" minlength="7">	        		
+        			<input class="form-input" name="uid" value="" maxlength="25" >	        		
         			Password<span class="instruction form-instruction"><a href="javascript:void(0)" onclick="toggleFormDisplay('recover-password-form')">I forgot</a></span>
-        			<input class="form-input" type="password" name="password" value="" />	
+        			<input class="form-input" type="password" name="password" value="" maxlength="25" />	
         			<input id="localTz" name="timezone" type="hidden" value="">
         			<a id="login-form-submit" type="submit" class="pure-button pure-button-primary" style="width:45%;" href="javascript:void(0);" onclick="loginValidateAndSubmit();">Sign In</a>
-        			<a class="pure-button pure-button-secondary" onclick="toggleRememberCheckbox();" style="width:45%;" ><input id="login-remember" name="login-remember" type="checkbox" /> Remember me</a>
+        			<a class="pure-button pure-button-secondary" onclick="toggleRememberCheckbox();" style="width:45%;" ><span id="fakeCheckBox" class="fa fa-square-o" style="color:#004d62;padding-right:4px;"></span> Remember me</a>
+        			<input id="login-remember" name="login-remember" type="checkbox" style="visibility:hidden;"/>
+        			
      				</fieldset>
      			</form>   			
      			<form id="recover-username-form" class="pure-form pure-form-stacked" style="display:none;" autocomplete="off" action="modules/login/control/recoverEnrollmentProcessor.php" method="post">

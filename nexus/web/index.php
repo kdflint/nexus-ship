@@ -50,14 +50,14 @@ if(isset($_GET['view']) && Util::isSafeCharacterSet($_GET['view'])) {
     <script type="text/javascript">
 			$(document).ready(function () {
 				$( '#schedule_control' ).click(function() {
-	  			$( "#schedule_display" ).toggle( "blind" );
+	  			$( "#new_event_display" ).toggle( "blind" );
 	  			$( "#schedule_control" ).toggle();
 				});
 				$( '#join_control' ).click(function() {
 	  			$( "#join_display" ).toggle( "blind" );
 				});
-				$( '#adduser_control' ).click(function() {
-	  			$( "#adduser_display" ).toggle( "blind" );
+				$( '#add_user_control' ).click(function() {
+	  			$( "#add_user_display" ).toggle( "blind" );
 				});
 				$( '#techcheck_control' ).click(function() {
 	  			$( "#techcheck_display" ).toggle( "blind" );
@@ -166,17 +166,21 @@ if(isset($_GET['view']) && Util::isSafeCharacterSet($_GET['view'])) {
 							<?php include("modules/schedule/views/joinConfirm.html"); ?>	
 						</div>
 						<?php include("modules/schedule/views/openNow.html"); ?>
-						<div id="schedule_display" style="display:none;">
+						<div id="new_event_display" style="display:none;">
 							<?php include("modules/schedule/views/reservationAdd.php"); ?>	
 						</div>
-						<?php include("modules/schedule/views/reservationsList.html"); ?>
+						<div id="schedule_display">
+							<?php include("modules/schedule/views/reservationsList.html"); ?>
+						</div>
 					</div>
 					
 					<div id="userList" style="display:none;">
-						<div id="adduser_display" style="display:none;">
-							<?php include("modules/schedule/views/joinConfirm.html"); ?>	
+						<div id="add_user_display" style="display:none;">
+							<?php include("modules/user/views/userAdd.html"); ?>	
 						</div>
-						<?php include("modules/user/views/userList.html"); ?>
+						<div id="user_display">
+							<?php include("modules/user/views/userList.html"); ?>
+						</div>
 					</div>
 
       	</div>

@@ -11,13 +11,13 @@ $clean = array();
 if (isset($dirty['username']) && Util::validateUsernameFormat($dirty['username'])) {
 	$clean['username'] = $dirty['username'];
 } else {
-	returnToLoginWithError("");
+	returnToLoginWithError(Util::AUTHENTICATION_ERROR);
 }
 
 if (isset($dirty['password']) && Util::isValidPassword($dirty['password'])) {
 	$clean['password'] = $dirty['password'];
 } else {
-	returnToLoginWithError("");
+	returnToLoginWithError(Util::AUTHENTICATION_ERROR);
 }
 
 if (isset($dirty['tz']) && Event::isValidTimeZone($dirty['tz'])) {

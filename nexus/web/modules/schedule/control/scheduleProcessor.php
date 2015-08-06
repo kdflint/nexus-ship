@@ -22,11 +22,16 @@ $dirty = array('meeting-name' => $_POST['meeting-name'],
 $result = validateEvent($dirty);
 
 if (count($result['error']) > 0) {
-	header("location:" . Util::getHttpPath() . "/login.php?oid=" . $_SESSION['orgId'] . "&logout=true");
+	//header("location:" . Util::getHttpPath() . "/login.php?logout=true");
+	print_r($result); exit(0);
 	exit(0);
 }
 
-// TOTO - update session with this time zone
+/* ====================================================
+
+Use only clean input beyond this point (i.e. $clean[])
+
+======================================================= */
 
 $timestamp = $result['clean']['meeting-date'] . " " . $result['clean']['meeting-time'] . " " . $result['clean']['tzone-name'];
 
@@ -40,8 +45,8 @@ function validateEvent($input) {
 	
 	// MEETING NAME
 	if (isset($input['meeting-name'])) {
-		if (strlen($input['meeting-name']) <= 50 && Util::isSafeCharacterSet($input['meeting-name'])) {
-			$result['clean']['meeting-name'] = $input['meeting-name'];			
+		if (strlen($input['meeting-name']) <= 50) {
+			$result['clean']['meeting-name'] = Util::sanitize($input['meeting-name']);			
 		} else {
 			$result['error']['meeting-name'] = "error";
 		}
@@ -49,9 +54,14 @@ function validateEvent($input) {
  		$result['clean']['meeting-name'] = "undefined";
  	}
  
-	// MEETING DATE
+	// MEETING DATE		
 	if (isset($input['meeting-date'])) {
-		$result['clean']['meeting-date'] = $input['meeting-date'];			
+		$dateParts = explode('/', $input['meeting-date']);
+		if (checkdate($dateParts[0], $dateParts[1], $dateParts[2])) {
+			$result['clean']['meeting-date'] = $input['meeting-date'];	
+		} else {
+			$result['error']['meeting-date'] = "error";
+		}	
  	}	else {
  		$result['error']['meeting-date'] = "error";
  	}	
@@ -62,9 +72,20 @@ function validateEvent($input) {
 	} else {
 		$result['error']['tzone-name'] = "error";
 	}
+
+  // MEETING TIME 
+  if (isset($input['meeting-time']) && Event::isValidTimeInterval($input['meeting-time'])) {
+ 	 	$result['clean']['meeting-time'] = $input['meeting-time'];
+ 	} else {	
+ 		$result['error']['meeting-time'] = "error";
+ 	}
  	
- 	$result['clean']['meeting-time'] = $input['meeting-time'];
- 	$result['clean']['meeting-duration'] = $input['meeting-duration'];
+ 	// MEETING DURATION
+  if (isset($input['meeting-duration']) && Event::isValidTimeInterval($input['meeting-duration'])) {
+ 	 	$result['clean']['meeting-duration'] = $input['meeting-duration'];
+ 	} else {	
+ 		$result['error']['meeting-duration'] = "error";
+ 	}
 
  	return $result;
 }

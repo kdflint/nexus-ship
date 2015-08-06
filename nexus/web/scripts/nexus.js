@@ -33,8 +33,12 @@ function toggleRememberCheckbox() {
 	var curState = loginRemember.checked;
 	if(curState) {
 		loginRemember.checked = false;
+		document.getElementById("fakeCheckBox").className = "fa fa-square-o";
+		document.getElementById("fakeCheckBox").style = "color:#004d62;padding-right:5px;"
 	} else {
 		loginRemember.checked = true;
+		document.getElementById("fakeCheckBox").className = "fa fa-check-square-o";
+		document.getElementById("fakeCheckBox").style = "color:#004d62;padding-right:4px;"
  	}
 }
     	
@@ -45,17 +49,19 @@ function toggleFormDisplay(formId) {
 	document.getElementById("recover-password-form").style.display='none';
 	showForm.style.display='block';
 	document.getElementById("login-user-message").innerHTML = "";
-}			function recordActivity() {
-				if(activityFlag) {
-					var xmlhttp = new XMLHttpRequest();
-					xmlhttp.onreadystatechange=function() {
-	  				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {	}
-  				}
-					xmlhttp.open("GET","src/framework/sessionManager.php");
-					xmlhttp.send();  					
-				}
-				activityFlag = 0;
-			}
+}			
+
+function recordActivity() {
+	if(activityFlag) {
+		var xmlhttp = new XMLHttpRequest();
+		xmlhttp.onreadystatechange=function() {
+			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {	}
+  	}
+		xmlhttp.open("GET","src/framework/sessionManager.php");
+		xmlhttp.send();  					
+	}
+	activityFlag = 0;
+}
 
 function toggleFrameDisplay(frameId) {
 	var showFrame = document.getElementById(frameId);
@@ -92,9 +98,6 @@ function displayTimeZones() {
 	var countryCode = document.getElementById("country").value;
 	// TODO - this line clears previous selections - how does it work?
 	for (a in timeZone.options) { timeZone.options.remove(0); }
-	//for (var i=0; i<timeZone.options.length; i++) {
-	//	timeZone.remove(i);
-	//}
   var countryTimeZones = timeZoneData[countryCode];
   if (countryTimeZones.length == 1) {
   	setTimeZoneDisplay(Object.getOwnPropertyNames(countryTimeZones[0]));
@@ -123,25 +126,17 @@ function loginValidateAndSubmit() {
 	
   var usernameField = loginForm["uid"];
   var username = usernameField.value;
-  usernameField.style.backgroundColor = "white";
-  usernameField.placeholder = "";
+  setFieldPassStyles(usernameField, "");
   if (username == null || username == "") {
-    usernameField.placeholder = "Username name is required.";
-    usernameField.style.background = errorBackground;
-    usernameField.style.borderColor = "#f68620";
-   	usernameField.style.borderWidth = "2px";
+    setFieldErrorStyles(usernameField, "Username is required.");
     pass = false;
   }
   
   var passwordField = loginForm["password"];
   var password = passwordField.value;
-  passwordField.style.backgroundColor = "white";
-  passwordField.placeholder = "";
+  setFieldPassStyles(passwordField, "");
   if (password == null || password == "") {
-    passwordField.placeholder = "Password is required.";
-    passwordField.style.background = errorBackground;
-    passwordField.style.borderColor = "#f68620";
-    passwordField.style.borderWidth = "2px";
+    setFieldErrorStyles(passwordField, "Password is required.");
     pass = false;
   }
 
@@ -161,19 +156,12 @@ function usernameValidateAndSubmit() {
 	
   var emailField = usernameForm["email"];
   var email = emailField.value;
-  emailField.style.backgroundColor = "white";
-  emailField.placeholder = "Email";
+  setFieldPassStyles(emailField, "Email");
   if (email == null || email == "") {
-    emailField.placeholder = "Email is required.";
-    emailField.style.background = errorBackground;
-    emailField.style.borderColor = "#f68620";
-    emailField.style.borderWidth = "2px";
+    setFieldErrorStyles(emailField, "Email is required.");
     pass = false;
   } else if (!isValidEmail(email)) {
-    emailField.placeholder = "Valid email is required.";
-    emailField.style.background = errorBackground;
-    emailField.style.borderColor = "#f68620";
-    emailField.style.borderWidth = "2px";
+    setFieldErrorStyles(emailField, "Valid email is required.");
     emailField.value = "";
   	pass = false;
   }
@@ -194,13 +182,9 @@ function passwordValidateAndSubmit() {
 	
   var usernameField = passwordForm["uid"];
   var username = usernameField.value;
-  usernameField.style.backgroundColor = "white";
-  usernameField.placeholder = "";
+  setFieldPassStyles(usernameField, "");
   if (username == null || username == "") {
-    usernameField.placeholder = "Username name is required.";
-    usernameField.style.background = errorBackground;
-    usernameField.style.borderColor = "#f68620";
-    usernameField.style.borderWidth = "2px";
+    setFieldErrorStyles(usernameField, "Username is required.");
     pass = false;
   }
   
@@ -266,18 +250,30 @@ function eventValidateAndSubmit() {
 	var nameField = eventForm['meeting-name'];
   var name = nameField.value;
 	setFieldPassStyles(nameField, "Purpose");
-  if (name == null || name == "") {
+  if (name == null || name == "" || name.length > 50) {
   	setFieldErrorStyles(nameField, "Meeting purpose is required");
     pass = false;
   }
-
+  
 	var dateField = eventForm['meeting-date'];
   var date = dateField.value;
   var patt = new RegExp(/\d{2}\/\d{2}\/\d{4}/);  
 	setFieldPassStyles(dateField, "Date");
-  if (date == null || date == "" || !patt.test(date)) {
+  if (date == null || date == "") {
   	setFieldErrorStyles(dateField, "mm/dd/yyyy");
     pass = false;
+  } else if (patt.test(date)) {
+  	 var parts = date.split("/");
+  	 // TODO - this does not match valid date to month, so, 04/31/2000 will pass through
+  	 if (
+  	 			1 <= parseInt(parts[0], 10) && parseInt(parts[0], 10) <= 12 &&
+  	 			1 <= parseInt(parts[1], 10) && parseInt(parts[1], 10) <= 31 &&
+  	 			2000 <= parseInt(parts[2], 10) && parseInt(parts[2], 10) <= 2100
+  	 ) {
+  	} else {
+  		setFieldErrorStyles(dateField, "mm/dd/yyyy");
+    	pass = false;  		
+  	}
   }
   
  	var timeField = eventForm['meeting-time'];
@@ -295,10 +291,11 @@ function eventValidateAndSubmit() {
   	setFieldErrorStyles(document.getElementById("duration-button"), "Duration");
     pass = false;
   }
+  
+  // TODO - validate timezone?
  
 	if (Boolean(pass)) {
  		submitButton.disabled = true;  
- 		submitButton.innerHTML = "One Moment"; 
  		submitButton.style.opacity = ".6";
  		eventForm.submit();
  	}

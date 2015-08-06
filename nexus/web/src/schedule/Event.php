@@ -60,6 +60,13 @@ class Event {
 		return FALSE;		
 	}
 	
+	public static function isValidTimeInterval($in) {
+		if (isset($in) && preg_match("/^([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/", $in)) {
+			return TRUE;
+		}
+		return FALSE;
+	}
+	
 	public static function isValidEventUuid($in) {
 		$query = "select exists (select uuid from event where uuid = $1)";		
 		$row = pg_fetch_row(pgDb::psExecute($query, array($in)));
@@ -110,8 +117,8 @@ class Event {
 				$events[$counter]['uuid'] = $row['uuid'];
 				$events[$counter]['fname'] = $row['fname'];
 				$events[$counter]['lname'] = $row['lname'];
-				$events[$counter]['adder'] = $row['adder'];
 				$events[$counter]['sessionUser'] = $ssnUser;
+				$events[$counter]['adder'] = $row['adder'];
 				$counter++;
 			}
 		}

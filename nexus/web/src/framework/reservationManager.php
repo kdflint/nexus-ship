@@ -5,7 +5,8 @@ session_start();
 require_once("Util.php");
 require_once(Util::getSrcRoot() . "/schedule/Event.php");
 
-if (Util::is_ajax()) {
+// TODO - this check causes JSON object parse to be thrown from javascript -- better to tokenize it anyway
+//if (Util::is_ajax()) {
 	if (Util::isSessionValid()) {
 		// TODO - this will break if user has > 1 group
 		$data = Event::getFutureEvents(array_keys($_SESSION['groups'])[0], $_SESSION['timezone'], $_SESSION['uidpk']);
@@ -15,7 +16,7 @@ if (Util::is_ajax()) {
 		header("location:" . Util::getHttpPath() . "/index.php");
 		exit(0);		
 	}			
-}	
+//}	
 	
 
 

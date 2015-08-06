@@ -210,13 +210,18 @@ form {
 	font-size: 80%;
 	text-align: bottom;
 } 
-  
+ 
+#country-button, #countryTimeZones-button {
+	vertical-align: middle;
+}
 
 /* TABLES */
 
 table {
     border-collapse: separate !important; /* IE7 and lower */
     border: 1px solid #a6c3ce !important;
+    margin-bottom: 5px;
+    width: 100%;
     border-radius: 10px;
     -moz-border-radius: 10px;
 }
@@ -249,13 +254,6 @@ td {
   position: absolute;
   margin-top: 2px;
 	height: 60px;
-}
-
-#schedule_display {
-  margin-bottom: 5px;
-  height: 176px;
-  border-radius: 8px;
-  background: #edf0de;
 }
 
 #techcheck_display, 
