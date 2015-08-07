@@ -21,7 +21,7 @@ if (isset($dirty['username']) && Util::validateUsernameFormat($dirty['username']
 }
 
 // TODO - make sure username is unique and only one is returned
-$cursor = User::getUserByUsername($clean['username']);
+$cursor = User::getActiveUserByUsername($clean['username']);
 $result = pg_fetch_array($cursor);
 if (isset($result['email']) && isset($result['id'])) {
 	if  (Util::validateEmail($result['email'])) {

@@ -451,6 +451,7 @@ class Util {
   		$_SESSION['networkId'] = $row['networkid'];
   		$_SESSION['logo'] = $row['logo'];
   		$_SESSION['email'] = $row['email'];
+  		$_SESSION['role'] = ($row['roleid'] < 5) ? "admin" : "user";
 		} 	
 	}
 	

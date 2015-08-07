@@ -2,7 +2,7 @@
 
 require_once(dirname(__FILE__) . "/../framework/PgDb.php");
 
-class Organization {
+class Group {
 	
 	public static function getGroupById($groupId) {
 		$query = "select name, descr, logo from group_new where uid = $1";
@@ -18,16 +18,29 @@ class Organization {
 		return FALSE;
 	}
 	
-	public static function getGroupMembersByGroupId($id) {
+	public static function getGroupMembersByGroupId($id, $ssnUser) {
+		$users = array();
 		$query = "select u.id, u.fname, u.lname, o.name as oname
 			from public.user u, user_group ug, organization o, user_organization uo
 			where u.id = ug.user_fk
+			and u.suspend_dttm is NULL
 			and uo.user_fk = u.id
 			and o.id = uo.organization_fk
 			and ug.group_fk = $1
 			order by u.lname, o.name
 			";
-			return pgDb::psExecute($query, array($id));
+			$cursor = pgDb::psExecute($query, array($id));
+			$counter = 0;
+			while ($row = pg_fetch_array($cursor)) {
+				$users[$counter]['fname'] = $row['fname'];
+				$users[$counter]['lname'] = $row['lname'];
+				$users[$counter]['title'] = "";
+				$users[$counter]['descr'] = "";
+				$users[$counter]['sessionUser'] = $ssnUser;
+				$users[$counter]['uidpk'] = $row['id'];
+				$counter++;
+			}
+			return $users;
 	}	
 	
 	private static function groupIdExists($id) {

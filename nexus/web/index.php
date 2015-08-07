@@ -58,12 +58,16 @@ if(isset($_GET['view']) && Util::isSafeCharacterSet($_GET['view'])) {
 				});
 				$( '#add_user_control' ).click(function() {
 	  			$( "#add_user_display" ).toggle( "blind" );
+	  			$( "#add_user_control" ).toggle();
 				});
 				$( '#techcheck_control' ).click(function() {
 	  			$( "#techcheck_display" ).toggle( "blind" );
 				});
 				$( '#user_control' ).click(function() {
 	  			$( "#user_display" ).toggle( "blind" );
+				});
+				$( '#profile_control' ).click(function() {
+	  			$( "#profile_display" ).toggle( "blind" );
 				});
 				if(<?php echo $showProfile; ?>) {
 					$( "#user_display" ).toggle( "blind" );
@@ -151,7 +155,7 @@ if(isset($_GET['view']) && Util::isSafeCharacterSet($_GET['view'])) {
       		<a href="http://northbridgetech.org/downloads/Northbridge_web_conference_center.pdf" style="color:#d27b4b;text-decoration:none;" target="_blank">About</a> | 
       		<a href="login.php?oid=<?php echo $_SESSION['orgId']; ?>&logout=true" style="color:#d27b4b;text-decoration:none;">Logout</a>
       	</span>
-      	<a id="user_control" href="javascript:void(0);"><span style="clear:right;float:right;padding-top:4px;margin:0px;color:#d27b4b;" class="fa fa-caret-down fa-2x" ></span></a>
+      	<a id="profile_control" href="javascript:void(0);"><span style="clear:right;float:right;padding-top:4px;margin:0px;color:#d27b4b;" class="fa fa-caret-down fa-2x" ></span></a>
 				<span style="float:right;padding:10px;">Hello <?php echo $_SESSION['fname']; ?></span> 	
       </div>
 
@@ -176,7 +180,7 @@ if(isset($_GET['view']) && Util::isSafeCharacterSet($_GET['view'])) {
 					
 					<div id="userList" style="display:none;">
 						<div id="add_user_display" style="display:none;">
-							<?php include("modules/user/views/userAdd.html"); ?>	
+							<?php include("modules/user/views/userAdd.php"); ?>	
 						</div>
 						<div id="user_display">
 							<?php include("modules/user/views/userList.html"); ?>
@@ -191,7 +195,7 @@ if(isset($_GET['view']) && Util::isSafeCharacterSet($_GET['view'])) {
       		<div id="techcheck_display" style="display:none;">
 						<?php include("modules/techcheck/views/details.html"); ?>	
 					</div>		
-      		<div id="user_display" style="display:none;">
+      		<div id="profile_display" style="display:none;">
 						<?php include("modules/user/views/profile.html"); ?>	
 					</div>	
       	</div>

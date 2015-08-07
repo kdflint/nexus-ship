@@ -1,5 +1,5 @@
 <script>
-	function getUserList() {
+	function getUserList(ssnRole) {
 		var xmlhttp = new XMLHttpRequest();
 		xmlhttp.onreadystatechange=function() {
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
@@ -16,17 +16,18 @@
 			 	for (var i = 0; i < jsonObj.length; i++) { 
 			 		var tableUser = "<tr>" +
        			"<td>" +
-	       			"<div class='event'>" +
+	       			"<div class='user'>" +
   							"<span class='date'>" + jsonObj[i].fname + "</span><br/>" +
-  							"<span class='month'>" + jsonObj[i].lname + "</span>"
+  							"<span class='month'>" + jsonObj[i].lname + "</span>" +
 							"</div>" +
-       			"</td>" +
-          	"<td>" +
+       			"</td>" + 
+       			"<td>" +
 	          	"<div class='meeting'>" +
-          			"<span class='purpose'></span>" + jsonObj[i].title + "<br/>" +
+          			"<span class='purpose'></span>" + "test" + "<br/>" +
           			"<span class='descr' style='font-size:90%;' >" + jsonObj[i].descr + 
 	          			//"<p><span style='padding-right:5px;margin:0px;color:#d27b4b;' class='fa fa-envelope' ></span>Reserved by: " + jsonObj[i].fname + " " +  jsonObj[i].lname + "<span id='reserveLname'></span></p>" +
 	          			//((jsonObj[i].adder == jsonObj[i].sessionUser) ? "<p><a href='modules/schedule/control/eventDeleteProcessor.php?id=" + jsonObj[i].uuid + "' onclick='return confirm(\"Please confirm this delete.\");'><span class='fa fa-trash-o' style='color:#d27b4b;'></span></a></p>" : " ") +
+	          			((ssnRole == "admin") ? "<p><a href='modules/user/control/userDeleteProcessor.php?id=" + jsonObj[i].uidpk + "' onclick='return confirm(\"Please confirm this delete.\");'><span class='fa fa-trash-o' style='color:#d27b4b;'></span></a></p>" : " ") +
           			"</span>" +
           		"</div>" +
           	"</td>" +
@@ -40,14 +41,8 @@
 	}
 </script>
 
-<script>
-	function abc() {
-		document.getElementById('add_user_control').style.display='none';
-	}
-</script>
-
 <a id='add_user_control' href='javascript:void(0);' style='position:absolute;padding-left:650px;padding-top: 20px;'></span><span style='padding:0px;' class='fa fa-user-plus fa-2x' ></span></a>				
 <table id="userTable" class="pure-table">
-	<script> getUserList(); </script>
+	<script> getUserList('<?php echo $_SESSION['role']; ?>'); </script>
 </table>
 

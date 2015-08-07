@@ -4,9 +4,8 @@ require_once(dirname(__FILE__) . "/../framework/PgDb.php");
 
 class User {
 	
-	public static function getUserByUsername($uid) {
-		// TODO: add active check?
-		$query = "select u.id as id, u.email as email, u.fname as fname, u.lname as lname, u.password as password from public.user u where u.username = $1 limit 1";
+	public static function getActiveUserByUsername($uid) {
+		$query = "select u.id as id, u.email as email, u.fname as fname, u.lname as lname, u.password as password from public.user u where u.username = $1 and suspend_dttm is NULL limit 1";
 		return PgDb::psExecute($query, array($uid));	
 	}
 	
@@ -36,7 +35,7 @@ class User {
 	}
 	
 	public static function countActiveUsers($uid, $password) {
-		$query = "select id from public.user where username=$1 and password=$2 and status_fk='1'";
+		$query = "select id from public.user where username=$1 and password=$2 and status_fk='1' and suspend_dttm is NULL";
 		return pg_num_rows(pgDb::psExecute($query, array($uid, $password)));
 	}
 	
@@ -45,10 +44,11 @@ class User {
 		// TODO: fix up network id determination (parent, god, etc)
 		// TODO - this will fail if user in > 1 group
 		$query = "
-			select u.id as id, u.fname as fname, u.lname as lname, u.password as password, u.conference_link as link, u.email as email, o1.name as affiliation, o1.uid as affiliationuid, o2.name as network, o2.id as networkid, o2.logo as logo, uo.role_fk as role
-			from public.user u, user_organization uo, organization o1, organization o2, organization_organization oo
+			select u.id as id, u.fname as fname, u.lname as lname, u.password as password, u.conference_link as link, u.email as email, ug.role_fk as roleid, o1.name as affiliation, o1.uid as affiliationuid, o2.name as network, o2.id as networkid, o2.logo as logo, uo.role_fk as role
+			from public.user u, user_organization uo, user_group ug, organization o1, organization o2, organization_organization oo
 			where u.username = $1
 			and uo.user_fk = u.id
+			and ug.user_fk = u.id
 			and uo.organization_fk = o1.id
 			and oo.organization_to_fk = o1.id 
 			and oo.organization_from_fk = o2.id
@@ -131,6 +131,10 @@ class User {
 		return PgDb::psExecute($query, array($userId, $securePassword, $salt));
 	}
 	
+	public static function deleteUser($id) {
+		$query = "update public.user set suspend_dttm = now() where id = $1";
+		return PgDb::psExecute($query, array($id));
+	}
 	
 }
 

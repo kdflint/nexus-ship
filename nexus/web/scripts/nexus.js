@@ -41,6 +41,21 @@ function toggleRememberCheckbox() {
 		document.getElementById("fakeCheckBox").style = "color:#004d62;padding-right:4px;"
  	}
 }
+
+// TODO - combine these
+function toggleAdminCheckbox() {
+	var adminValue = document.getElementById("new-user-admin");
+	var curState = adminValue.checked;
+	if(curState) {
+		adminValue.checked = false;
+		document.getElementById("fakeCheckBox2").className = "fa fa-square-o";
+		document.getElementById("fakeCheckBox2").style = "color:#004d62;padding-right:5px;"
+	} else {
+		adminValue.checked = true;
+		document.getElementById("fakeCheckBox2").className = "fa fa-check-square-o";
+		document.getElementById("fakeCheckBox2").style = "color:#004d62;padding-right:4px;"
+ 	}
+}
     	
 function toggleFormDisplay(formId) {
 	var showForm = document.getElementById(formId);
@@ -157,14 +172,7 @@ function usernameValidateAndSubmit() {
   var emailField = usernameForm["email"];
   var email = emailField.value;
   setFieldPassStyles(emailField, "Email");
-  if (email == null || email == "") {
-    setFieldErrorStyles(emailField, "Email is required.");
-    pass = false;
-  } else if (!isValidEmail(email)) {
-    setFieldErrorStyles(emailField, "Valid email is required.");
-    emailField.value = "";
-  	pass = false;
-  }
+	pass = validateEmail(emailField);
   
  	if (Boolean(pass)) {
  		submitButton.disabled = true;  
@@ -195,6 +203,45 @@ function passwordValidateAndSubmit() {
  		passwordForm.submit();
  	}
 
+}
+
+function enrollValidateAndSubmit() {
+
+	pass = true;
+	var enrollForm = document.forms["enroll-form"];
+	var submitButton = document.getElementById("enroll-form-submit");
+	
+  var fnameField = enrollForm["fname"];
+  var fname = fnameField.value;
+  setFieldPassStyles(fnameField, "First Name");
+  if (fname == null || fname == "") {
+    setFieldErrorStyles(fnameField, "First name is required.");
+    pass = false;
+  }	
+	
+	var emailField = enrollForm["email"];
+	setFieldPassStyles(emailField, "Email");
+	pass = validateEmail(emailField);
+
+ 	if (Boolean(pass)) {
+ 		submitButton.disabled = true;  
+ 		submitButton.style.opacity = ".6";
+ 		enrollForm.submit();
+ 	}
+	
+}
+
+function validateEmail(emailField) {
+	var email = emailField.value;
+	if (email == null || email == "") {
+    setFieldErrorStyles(emailField, "Email is required.");
+    return false;
+  } else if (!isValidEmail(email)) {
+    setFieldErrorStyles(emailField, "Valid email is required.");
+    emailField.value = "";
+  	return false;
+  }
+  return true;
 }
 
 function passwordValidateAndSubmit2(formId) {
