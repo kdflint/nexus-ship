@@ -135,6 +135,33 @@ class User {
 		$query = "update public.user set suspend_dttm = now() where id = $1";
 		return PgDb::psExecute($query, array($id));
 	}
+
+	public static function userNameExists($name) {
+		$query = "select exists (select true from public.user where lower(username) = lower($1))";
+		$row = pg_fetch_row(pgDb::psExecute($query, array($name)));
+		if (!strcmp($row[0], "t")) {
+			return TRUE;
+		}
+		return FALSE;
+	}
+	
+	public static function addActiveUser($uuid, $username, $fname, $lname, $email, $password) {
+			$query = "insert into public.user (uuid, username, fname, lname, email, status_fk, create_dttm, activate_dttm, enable_email) values ($1, $2, $3, $4, $5, '1', now(), now(), $6) returning id";
+			$result = PgDb::psExecute($query, array($uuid, $username, $fname, $lname, $email, "true"));		
+			$row = pg_fetch_row($result);
+			Util::storeSecurePasswordImplA($password, $row[0]);
+			return $row[0];
+	}
+	
+	public static function addUserOrgRelation($userId, $orgId, $grantorId) {
+			$query = "insert into user_organization (user_fk, organization_fk, grantor_fk, role_fk, create_dttm) values ($1, $2, $3, '1', now()) returning id";
+			return PgDb::psExecute($query, array($userId, $orgId, $grantorId));		
+	}
+	
+	public static function addUserGroupRelation($userId, $groupId, $roleId) {
+			$query = "insert into user_group (user_fk, group_fk, role_fk, create_dttm) values ($1, $2, $3, now())";
+			return PgDb::psExecute($query, array($userId, $groupId, $roleId));		
+	}
 	
 }
 

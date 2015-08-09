@@ -130,6 +130,15 @@ function displayTimeZones() {
   }
 }
 
+function isValidEmail(email) {
+    var atpos = email.indexOf("@");
+    var dotpos = email.lastIndexOf(".");
+    if (atpos < 1 || dotpos < atpos + 2 || dotpos + 2 >= email.length) {
+        return false;
+    }
+    return true;
+}
+
 
 // TODO - refactor these front validations scripts - way too redundant!
 
@@ -205,13 +214,13 @@ function passwordValidateAndSubmit() {
 
 }
 
-function enrollValidateAndSubmit() {
+function inviteValidateAndSubmit() {
 
 	pass = true;
-	var enrollForm = document.forms["enroll-form"];
-	var submitButton = document.getElementById("enroll-form-submit");
+	var inviteForm = document.forms["invite-form"];
+	var submitButton = document.getElementById("invite-form-submit");
 	
-  var fnameField = enrollForm["fname"];
+  var fnameField = inviteForm["fname"];
   var fname = fnameField.value;
   setFieldPassStyles(fnameField, "First Name");
   if (fname == null || fname == "") {
@@ -219,16 +228,75 @@ function enrollValidateAndSubmit() {
     pass = false;
   }	
 	
-	var emailField = enrollForm["email"];
+	var emailField = inviteForm["email"];
 	setFieldPassStyles(emailField, "Email");
 	pass = validateEmail(emailField);
 
  	if (Boolean(pass)) {
  		submitButton.disabled = true;  
  		submitButton.style.opacity = ".6";
+ 		inviteForm.submit();
+ 	}
+}
+
+function enrollValidateAndSubmit() {
+
+	pass = true;
+	var enrollForm = document.forms["enroll-form"];
+	var submitButton = document.getElementById("enroll-form-submit");
+  var re = /[0-9]/;
+  var re2 = /\s/;
+
+	var emailField = enrollForm["email"];
+	setFieldPassStyles(emailField, "");
+  if (!isValidEmail(emailField.value)) {
+  	setFieldErrorStyles(emailField, "Valid email is required.");
+  	emailField.value = "";
+  	pass = false;
+  }
+
+  var usernameField = enrollForm["uid"];
+  var username = usernameField.value;
+  setFieldPassStyles(usernameField, "");
+  if (username == null || username == "" || username.length < 7 || username.length > 25 || re2.test(username)) {
+    setFieldErrorStyles(usernameField, "Valid username is required.");
+    usernameField.value = "";
+    pass = false;
+  }		
+	
+  var passwordField = enrollForm["password1"];
+  var password = passwordField.value;
+  setFieldPassStyles(passwordField, "");
+  if (password == null || password == "" || password.length < 7 || password.length > 25 || !re.test(password)) {
+    setFieldErrorStyles(passwordField, "Valid password is required.");
+    passwordField.value = "";
+    pass = false;
+  }
+  
+  var passwordField2 = enrollForm["password2"];
+  var password2 = passwordField2.value;
+  setFieldPassStyles(passwordField2, "");
+  if (password2 == null || password2 == "" || password != password2) {
+    setFieldErrorStyles(passwordField2, "Matching confirmation password is required.");
+    passwordField2.value = "";
+    pass = false;
+  }	
+  
+  var fnameField = enrollForm["fname"];
+  var fname = fnameField.value;
+  setFieldPassStyles(fnameField, "");
+  if (fname == null || fname == "" || fname.length > 25) {
+    setFieldErrorStyles(fnameField, "Valid first name is required.");
+    pass = false;
+  }	
+  	
+ 	if (Boolean(pass)) {
+ 		submitButton.disabled = true;  
+ 		submitButton.innerHTML = "One Moment";
+ 		submitButton.style.opacity = ".6";
  		enrollForm.submit();
  	}
-	
+
 }
 
 function validateEmail(emailField) {

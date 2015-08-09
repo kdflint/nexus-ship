@@ -7,7 +7,7 @@
 			</div>
 		</td>
     <td>
-			<form id="enroll-form" class="pure-form" action="modules/user/control/userAddProcessor.php" method="post">
+			<form id="invite-form" class="pure-form" action="modules/user/control/userAddProcessor.php" method="post">
 				<fieldset>
       		<div>
       			An enrollment packet will be emailed to this new user.
@@ -25,7 +25,7 @@
 		</td>
     <td>
     	<a href="javascript:void(0);" onclick="document.getElementById('add_user_control').click();" style="float:right;margin-right:6px;">Cancel</a><br/>
-      <a id="enroll-form-submit" class="pure-button button-menu" href="javascript:void(0)" onclick="enrollValidateAndSubmit();" style="float:right;background-color:#d27b4b;width:70px;font-size:90%;margin-top:45px;color:#e6e6e6">Enroll</a>
+      <a id="invite-form-submit" class="pure-button button-menu" href="javascript:void(0)" onclick="inviteValidateAndSubmit();" style="float:right;background-color:#d27b4b;width:70px;font-size:90%;margin-top:45px;color:#e6e6e6">Enroll</a>
  		</td>
 	</tr>
 </table> 

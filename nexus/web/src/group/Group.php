@@ -1,6 +1,8 @@
 <?php
 
 require_once(dirname(__FILE__) . "/../framework/PgDb.php");
+require_once(dirname(__FILE__) . "/../framework/Util.php");
+require_once(Util::getSrcRoot() . "/user/Invitation.php");
 
 class Group {
 	
@@ -20,15 +22,16 @@ class Group {
 	
 	public static function getGroupMembersByGroupId($id, $ssnUser) {
 		$users = array();
-		$query = "select u.id, u.fname, u.lname, o.name as oname
+		$query = "select u.id, u.fname, u.lname, u.email, ug.role_fk as roleid, o.name as oname
 			from public.user u, user_group ug, organization o, user_organization uo
 			where u.id = ug.user_fk
 			and u.suspend_dttm is NULL
 			and uo.user_fk = u.id
 			and o.id = uo.organization_fk
 			and ug.group_fk = $1
-			order by u.lname, o.name
+			order by u.fname, u.lname
 			";
+			
 			$cursor = pgDb::psExecute($query, array($id));
 			$counter = 0;
 			while ($row = pg_fetch_array($cursor)) {
@@ -36,8 +39,20 @@ class Group {
 				$users[$counter]['lname'] = $row['lname'];
 				$users[$counter]['title'] = "";
 				$users[$counter]['descr'] = "";
+				$users[$counter]['email'] = $row['email'];
 				$users[$counter]['sessionUser'] = $ssnUser;
 				$users[$counter]['uidpk'] = $row['id'];
+				$users[$counter]['role'] = Util::getRoleName($row['roleid']);
+				$counter++;
+			}
+			
+			$cursor = Invitation::getOpenGroupInvitations($id);
+			$counter = 0;
+			while ($row = pg_fetch_array($cursor)) {
+				$users[$counter]['fname'] = "Pending";
+				$users[$counter]['lname'] = "Enrollment";
+				$users[$counter]['email'] = $row['email'];
+				$users[$counter]['role'] = Util::getRoleName($row['roleid']);
 				$counter++;
 			}
 			return $users;

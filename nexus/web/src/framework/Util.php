@@ -156,15 +156,19 @@ class Util {
 				return TRUE;
 		}
 		return FALSE;
-	}		
+	}	
+	
+	public static function getRoleName($in) {
+		return (($in < 5) ? "admin" : "user");	
+	}
 		
 	// Rules here slightly different to be backward compatible to data inserted prior to validation enforcement
 	// TODO - disallow spaces when we go public public
 	public static function validateUsernameFormat($in) {
 		if(Validate::string($in, array(
-			'format' => VALIDATE_ALPHA . VALIDATE_NUM . VALIDATE_SPACE . "_",
-			'min_length' => 1, 
-    	'max_length' => Util::USERNAME_MAX))) {
+				'min_length' => 1, 
+    		'max_length' => Util::USERNAME_MAX) 
+    	 && !preg_match("/[ ]+/", $in))) {
     		return TRUE;
     }
     return FALSE;
@@ -202,10 +206,9 @@ class Util {
 		// FIRST NAME
 		if (isset($input['fname'])) {
 			if (Validate::string($input['fname'], array(
-    				'format' => VALIDATE_EALPHA . VALIDATE_NUM . VALIDATE_SPACE . "'" . "_" . "-",
     				'min_length' => self::NAME_MIN,
     				'max_length' => self::NAME_MAX))) {
-				$result['good']['fname'] = $input['fname'];			
+				$result['good']['fname'] = Util::sanitize($input['fname']);			
 			} else {
 				$result['error']['fname'] = self::VALIDATION_FNAME_ERROR;
 			}
@@ -219,7 +222,7 @@ class Util {
     				'format' => VALIDATE_EALPHA . VALIDATE_NUM . VALIDATE_SPACE . "'" . "_" . "-",
     				'min_length' => self::NAME_MIN,
     				'max_length' => self::NAME_MAX))) {
-				$result['good']['lname'] = $input['lname'];			
+				$result['good']['lname'] = Util::sanitize($input['lname']);			
 			} else {
 				$result['error']['lname'] = self::VALIDATION_LNAME_ERROR;
 			}
@@ -282,13 +285,8 @@ class Util {
 		
 		// USERNAME
 		if (isset($input['username'])) {
-			if (Validate::string($input['username'], array(
-    				'format' => VALIDATE_ALPHA . VALIDATE_NUM . "_",
-    				'min_length' => self::USERNAME_MIN,
-    				'max_length' => self::USERNAME_MAX))) {
-    		$row = pg_fetch_row(pgDb::userNameExists($input['username']));
-    		$exists = $row[0];	
-    		if (!strcmp($exists, "t")) {
+			if (self::validateUsernameFormat($input['username'])) {
+    		if (User::userNameExists($input['username'])) {
 					$result['error']['username'] = self::VALIDATION_USERNAME_DUPE_ERROR;
 				}	else {	 					
 					$result['good']['username'] = $input['username'];
@@ -451,7 +449,7 @@ class Util {
   		$_SESSION['networkId'] = $row['networkid'];
   		$_SESSION['logo'] = $row['logo'];
   		$_SESSION['email'] = $row['email'];
-  		$_SESSION['role'] = ($row['roleid'] < 5) ? "admin" : "user";
+  		$_SESSION['role'] = self::getRoleName($row['roleid']);
 		} 	
 	}
 	
