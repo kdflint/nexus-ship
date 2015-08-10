@@ -1,14 +1,13 @@
 <?php
+
 session_start();
 
 require_once("src/framework/Util.php");
 require_once(Util::getSrcRoot() . "/user/Invitation.php");
 require_once(Util::getSrcRoot() . "/organization/Organization.php");
 
-$inviteId = $networkname = $networlLogo = "";
+$inviteId = $networkName = $networkLogo = $cleanMessage = $cleanIcon = "";
 $validInvitation = false;
-
-Util::destroySession();
 
 if (Util::validateUuid($_GET['invitation'])) {
 	if (Invitation::isInvitationOpen($_GET['invitation'])) {
@@ -21,11 +20,10 @@ if ($validInvitation) {
 	
 	$_SESSION['invitation'] = $inviteId;
 	
-	$cursor1 = Invitation::getOpenInvitationByUuid($inviteId);
-	$row1 = pg_fetch_array($cursor1);
-
-	$cursor2 = Organization::getOrganizationById($row1['orgid']);
-	$row2 = pg_fetch_array($cursor2);
+	$row1 = pg_fetch_array(Invitation::getOpenInvitationByUuid($inviteId));
+	
+	$row2 = pg_fetch_array(Organization::getOrganizationById($row1['orgid']));
+	
 	$networkLogo = $row2['logo'];
 	$networkName = $row2['name'];
 		
@@ -33,7 +31,6 @@ if ($validInvitation) {
 	header("location:login.php");
 	exit(0);
 }
-
 
 if(isset($_GET['error']) && Util::isSafeCharacterSet($_GET['error'])) {
 	$cleanMessage = $_GET['error'];
@@ -129,6 +126,7 @@ if(isset($_GET['error']) && Util::isSafeCharacterSet($_GET['error'])) {
 			  		<p><span class="fa fa-exclamation-triangle fa-2x" style="color:#d27b4b;float:left;margin-right:5px;"></span>To use Nexus it is necessary to enable JavaScript.</p>
 			  		<p>Here are the <a href="http://www.enable-javascript.com" target="_blank"> instructions how to enable JavaScript in your web browser</a></p>
 			  	</noscript>
+			  	<p id="enroll-user-message" class="confirmation"><span class="<?php echo $cleanIcon; ?>" style="color:#007582;float:left;margin-right:5px;"></span><?php echo $cleanMessage; ?></p>
 					<form id="enroll-form" class="pure-form pure-form-stacked" autocomplete="off" action="modules/login/control/enrollProcessor.php" method="post">
 	    			<fieldset>
 							Choose your username*

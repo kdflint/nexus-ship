@@ -65,8 +65,7 @@ class BigBlueButton {
 		$this->_bbbServerBaseUrl 	= CONFIG_SERVER_BASE_URL;		
 	}
 	
-	public function _processXmlResponse($url, $xml = ''){
-	//private function _processXmlResponse($url, $xml = ''){
+	private function _processXmlResponse($url, $xml = ''){
 	/* 
 	A private utility method used by other public methods to process XML responses.
 	*/

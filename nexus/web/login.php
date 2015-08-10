@@ -17,7 +17,7 @@ if(!is_writable($storagePath) || !is_dir($storagePath)) {
 }
 $storage = new Rememberme\Storage\File($storagePath);
 $rememberMe = new Rememberme\Authenticator($storage);
-$remembered = "false";
+$remembered = $enrolled = "false";
 $cleanMessage = "";
 $cleanIcon = "";
 
@@ -31,13 +31,21 @@ if(isset($_GET['logoutAll'])) {
 	Util::destroySession();
 }
 
+$enrolled = (isset($_SESSION['invitation']) && isset($_SESSION['username'])) ? "true" : "false"; 
+$enrolledUsername = (isset($_SESSION['invitation']) && isset($_SESSION['username'])) ? $_SESSION['username'] : false; 
+
 $rememberedUsername = ($rememberMe->login()) ? $rememberMe->login() : false;
+
+echo ":" . $enrolledUsername;
+echo ":" . $rememberedUsername;
 
 if(Util::isSessionValid()) {
 	header("location:" . Util::getHttpPath() . "/index.php");
 	exit(0);
-} else if ($rememberedUsername){
+} else if ($rememberedUsername) {
 	$_SESSION['remembered'] = $remembered = "true";
+} else if ($enrolledUsername) {
+	$_SESSION['remembered'] = "true";
 }
 
 if(isset($_GET['error']) && Util::isSafeCharacterSet($_GET['error'])) {
@@ -93,14 +101,22 @@ $networkName = $row['name'];
        			document.getElementById("login-form-submit").click();   
     			}
 				});
+				document.getElementById("localTz").value = getLocalTz();
+				var loginForm = document.forms["login-form"];
 				if (<?php echo $remembered; ?>) {
-					var loginForm = document.forms["login-form"];
 					loginForm.elements['uid'].value = <?php echo var_export($rememberedUsername); ?>;
-					loginForm.elements['password'].value = "remembered";
+					loginForm.elements['password'].value = "Passthru1";
 					loginForm.elements['login-remember'].checked = true;
 					document.getElementById("login-form-submit").click();
 				}
-				document.getElementById("localTz").value = getLocalTz();
+				if (<?php echo $enrolled; ?>) {
+					alert(<?php echo var_export($enrolledUsername); ?>);
+					loginForm.elements['uid'].value = <?php echo var_export($enrolledUsername); ?>;
+					loginForm.elements['password'].value = "Passthru1";
+					loginForm.elements['login-remember'].checked = false;
+					document.getElementById("login-form-submit").click();
+				}
+
 			});
 		</script>
   </head>

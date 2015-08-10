@@ -8,7 +8,7 @@ class Group {
 	
 	public static function getGroupById($groupId) {
 		$query = "select name, descr, logo from group_new where uid = $1";
-		return pgDb::psExecute($query, array($orgId));
+		return pgDb::psExecute($query, array($groupId));
 	}
 
 	public static function validateGroupId($in) {

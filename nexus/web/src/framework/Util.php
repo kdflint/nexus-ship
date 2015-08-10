@@ -78,6 +78,7 @@ class Util {
 	const VALIDATION_ORGNAME_ERROR = "Please enter the valid organization name that you represent.";
 	const VALIDATION_DESCR_ERROR = "Please enter a valid description (or none).";
 	const AUTHENTICATION_ERROR = "Your account is not located.";
+	const ENROLLMENT_ERROR = "An error has occurred with your enrollment.";
 	const RESET_ERROR = 'Your reset password link is not valid. Click "Forgot Pasword" to generate a new one.';
 	
 	const NAME_MAX = 25;
@@ -162,8 +163,6 @@ class Util {
 		return (($in < 5) ? "admin" : "user");	
 	}
 		
-	// Rules here slightly different to be backward compatible to data inserted prior to validation enforcement
-	// TODO - disallow spaces when we go public public
 	public static function validateUsernameFormat($in) {
 		if(Validate::string($in, array(
 				'min_length' => 1, 
@@ -419,7 +418,12 @@ class Util {
 	}
 
 	public static function isSessionValid() {
-		if (isset($_SESSION['username']) && strlen($_SESSION['username']) > 0 && !self::isSessionExpired()) {
+		if (isset($_SESSION['username']) && 
+				strlen($_SESSION['username']) > 0 && 
+				!self::isSessionExpired() &&
+				isset($_SESSION['fname']) &&
+				strlen($_SESSION['fname']) > 0 &&
+				$_SESSION['role']) {
 			return true;
 		}
 		return false;
@@ -429,6 +433,8 @@ class Util {
 
 		session_regenerate_id(TRUE);
 		
+		unset($_SESSION['invitation']);
+		unset($_SESSION['username']);
 		$_SESSION['appRoot'] = self::getWebRoot();
 		$_SESSION['environment'] = self::getEnvName();
 		$_SESSION['username'] = $username;
@@ -443,7 +449,8 @@ class Util {
 			$_SESSION['fname'] = $row['fname'];
   		$_SESSION['lname'] = $row['lname'];
   		$_SESSION['orgName'] = $row['affiliation'];
-  		$_SESSION['orgId'] = $row['affiliationuid'];
+  		$_SESSION['orgUid'] = $row['affiliationuid'];
+  		$_SESSION['orgId'] = $row['affiliationid'];
   		$_SESSION['uidpk'] = $row['id'];
   		$_SESSION['networkName'] = $row['network'];
   		$_SESSION['networkId'] = $row['networkid'];

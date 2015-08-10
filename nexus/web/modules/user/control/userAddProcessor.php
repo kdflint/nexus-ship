@@ -35,7 +35,7 @@ Use only clean input beyond this point (i.e. $clean[])
 
 ======================================================= */
 
-$inviteUuid = Invitation::addInvitation($clean['email'], $_SESSION['groups'][0], Util::newUuid(), $clean['admin'], $_SESSION['uidpk']);
+$inviteUuid = Invitation::addInvitation($clean['email'], array_keys($_SESSION['groups'])[0], Util::newUuid(), $clean['admin'], $_SESSION['uidpk'], $_SESSION['orgId']);
 
 if (Invitation::isInvitationOpen($inviteUuid)) {
 	$message = "Hello " . $clean['fname'] . ",

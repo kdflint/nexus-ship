@@ -8,6 +8,19 @@ require_once(Util::getSrcRoot() . "/schedule/Event.php");
 $dirty = array('username' => $_POST['uid'], 'password' => $_POST['password'], 'tz' => $_POST['timezone']);
 $clean = array();
 
+/*
+echo (isset($dirty['username']) ? "true" : "false");
+echo $dirty['username'];
+echo (Util::validateUsernameFormat($dirty['username']) ? "true" : "false");
+echo (isset($dirty['password']) ? "true" : "false");
+echo (Util::isValidPassword($dirty['password']) ? "true" : "false");
+echo $dirty['password'];
+echo (isset($dirty['tz']) ? "true" : "false");
+echo (Event::isValidTimeZone($dirty['tz']) ? "true" : "false");
+echo $dirty['tz'];
+exit(0);
+*/
+
 if (isset($dirty['username']) && Util::validateUsernameFormat($dirty['username'])) {
 	$clean['username'] = $dirty['username'];
 } else {
