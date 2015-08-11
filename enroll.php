@@ -4,47 +4,6 @@ session_start();
 require_once("src/framework/Util.php");
 require_once(Util::getSrcRoot() . "/organization/Organization.php");
 
-// TODO - this should be handled by the autoloader in Util
-require_once(Util::getLibRoot() . "/rememberme/rememberme/src/Rememberme/Storage/File.php");
-require_once(Util::getLibRoot() . "/rememberme/rememberme/src/Rememberme/Authenticator.php");
-
-use Birke\Rememberme;
-
-// Initialize RememberMe Library with file storage
-$storagePath = Util::getTokenRoot();
-if(!is_writable($storagePath) || !is_dir($storagePath)) {
-    die("'$storagePath' does not exist or is not writable by the web server.");
-}
-$storage = new Rememberme\Storage\File($storagePath);
-$rememberMe = new Rememberme\Authenticator($storage);
-$remembered = $enrolled = "false";
-$cleanMessage = "";
-$cleanIcon = "";
-
-if(isset($_GET['logout'])) {
-	$rememberMe->clearCookie($_SESSION['username']);
-	Util::destroySession();
-}
-
-if(isset($_GET['logoutAll'])) {
-  $storage->cleanAllTriplets($_SESSION['username']);
-	Util::destroySession();
-}
-
-$enrolled = (isset($_SESSION['invitation']) && isset($_SESSION['username'])) ? "true" : "false"; 
-$enrolledUsername = (isset($_SESSION['invitation']) && isset($_SESSION['username'])) ? $_SESSION['username'] : false; 
-
-$rememberedUsername = ($rememberMe->login()) ? $rememberMe->login() : false;
-
-if(Util::isSessionValid()) {
-	header("location:" . Util::getHttpPath() . "/index.php");
-	exit(0);
-} else if ($rememberedUsername) {
-	$_SESSION['remembered'] = $remembered = "true";
-} else if ($enrolledUsername) {
-	$_SESSION['remembered'] = "true";
-}
-
 if(isset($_GET['error']) && Util::isSafeCharacterSet($_GET['error'])) {
 	$cleanMessage = $_GET['error'];
 	$cleanIcon = "fa fa-info-circle fa-2x";
@@ -98,21 +57,6 @@ $networkName = $row['name'];
        			document.getElementById("login-form-submit").click();   
     			}
 				});
-				document.getElementById("localTz").value = getLocalTz();
-				var loginForm = document.forms["login-form"];
-				if (<?php echo $remembered; ?>) {
-					loginForm.elements['uid'].value = <?php echo var_export($rememberedUsername); ?>;
-					loginForm.elements['password'].value = "Passthru1";
-					loginForm.elements['login-remember'].checked = true;
-					document.getElementById("login-form-submit").click();
-				}
-				if (<?php echo $enrolled; ?>) {
-					loginForm.elements['uid'].value = <?php echo var_export($enrolledUsername); ?>;
-					loginForm.elements['password'].value = "Passthru1";
-					loginForm.elements['login-remember'].checked = false;
-					document.getElementById("login-form-submit").click();
-				}
-
 			});
 		</script>
   </head>
@@ -154,29 +98,7 @@ $networkName = $row['name'];
         			<input id="login-remember" name="login-remember" type="checkbox" style="visibility:hidden;"/>
         			
      				</fieldset>
-     			</form>   			
-     			<form id="recover-username-form" class="pure-form pure-form-stacked" style="display:none;" autocomplete="off" action="modules/login/control/recoverEnrollmentProcessor.php" method="post">
-     				<fieldset>
-	     				Recover Username
-     					<p style="font-size:90%;">Please enter your email address and we will resend your username.</p>
-     					Email
-     					<input class="form-input" type="email" name="email" value="">
-     					<a id="username-form-submit" type="submit" class="pure-button pure-button-primary" style="width:45%;" href="javascript:void(0);" onclick="usernameValidateAndSubmit();">Recover Username</a>
-     					<a class="form-instruction" href="javascript:void(0)" onclick="toggleFormDisplay('login-form')">Return to Login</a>
-     					<input type="hidden" name="network" value="<?php echo $cleanNetworkId; ?>">
-     				</fieldset>
-     			</form>
-     			<form id="recover-password-form" class="pure-form pure-form-stacked" style="display:none;" autocomplete="off" action="modules/login/control/recoverPasswordProcessor.php" method="post">
-     				<fieldset>
-	     				Password Reset
-     					<p class="instruction">Please enter your user id so we can email you a password reset link.</p>
-     					Username<span class="instruction form-instruction"><a href="javascript:void(0)" onclick="toggleFormDisplay('recover-username-form')">I forgot</a></span>
-     					<input class="form-input" type="text" name="uid" value="" maxlength="25">
-     					<a id="password-form-submit" type="submit" class="pure-button pure-button-primary" style="width:45%;" href="javascript:void(0);" onclick="passwordValidateAndSubmit();">Reset Password</a>
-     					<a class="form-instruction" href="javascript:void(0)" onclick="toggleFormDisplay('login-form')">Return to Login</a>
-     					<input type="hidden" name="network" value="<?php echo $cleanNetworkId; ?>">
-     				</fieldset>
-     			</form>     			
+     			</form>   			 			
      		</div>
      		
      		<div class="loginColRight">

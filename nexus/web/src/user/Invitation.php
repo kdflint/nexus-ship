@@ -6,7 +6,7 @@ require_once(dirname(__FILE__) . "/../framework/Util.php");
 class Invitation {
 	
 	public static function addInvitation($email, $groupId, $uuid, $roleId, $issuerId, $orgId) {
-		$query = "insert into invitation (uuid, email, create_dttm, accept_dttm, network_fk, invitation_dttm, role_fk, expire_dt, issuer_fk, type, organization_fk, group_fk) values ($3, $1, now(), NULL, NULL, now(), $4, (CURRENT_DATE + interval '31 days'), $5, 'single', $6, $2)";
+		$query = "insert into invitation (uuid, email, create_dttm, accept_dttm, network_fk, invitation_dttm, role_fk, expire_dt, issuer_fk, type, organization_fk, group_fk) values ($3, $1, now(), NULL, NULL, now(), $4, (CURRENT_DATE + interval '31 days'), $5, 'single', $6, $2) returning uuid";
 		$cursor = PgDb::psExecute($query, array($email, $groupId, $uuid, $roleId, $issuerId, $orgId));		
 		$row = pg_fetch_row($cursor);
 		return $row[0];

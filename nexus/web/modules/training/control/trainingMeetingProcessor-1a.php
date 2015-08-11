@@ -22,7 +22,7 @@ $creationParams = array(
 	'dialNumber' => '',
 	'voiceBridge' => '',
 	'webVoice' => '',
-	'logoutUrl' => Util::getHttpPath() . '/training-1b.php',
+	'logoutUrl' => 'http://northbridgetech.org/dev/nexus/training-1b.php',
 	'maxParticipants' => '',
 	'record' => '',
 	'duration' => '0'
@@ -74,7 +74,7 @@ if ($itsAllGood) {
 	}
 }
 
-echo $joinUrl; exit(0);
+//echo $joinUrl; exit(0);
 
 if ($itsAllGood) {
 	header("location:" . $joinUrl);	
@@ -104,7 +104,7 @@ function getConfigXml() {
     <shortcutKeys showButton="false" />
     <layout showLogButton="false" showVideoLayout="false" showResetLayout="true" defaultLayout="Default"
             showToolbar="true" showFooter="false" showMeetingName="true" showHelpButton="false" 
-            showLogoutWindow="true" showLayoutTools="false" showNetworkMonitor="false" confirmLogout="true"/>
+            showLogoutWindow="true" showLayoutTools="false" showNetworkMonitor="false" confirmLogout="false"/>
     <lock allowModeratorLocking="true" disableCamForLockedUsers="true" disableMicForLockedUsers="true" disablePrivateChatForLockedUsers="false" 
           disablePublicChatForLockedUsers="false" lockLayoutForLockedUsers="false"/>
             
@@ -133,7 +133,7 @@ function getConfigXml() {
 		<module name="DeskShareModule" 
 			url="http://ec2-50-19-215-104.compute-1.amazonaws.com/client/DeskShareModule.swf?v=4105" 
 			uri="rtmp://ec2-50-19-215-104.compute-1.amazonaws.com/deskShare"
-			showButton="true"
+			showButton="false"
 			autoStart="false"
 			autoFullScreen="false"
 			baseTabIndex="201"

@@ -1,3 +1,9 @@
+<?php
+
+session_start();
+
+?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
 	
 <!-- 	To open the room, change the return value in roomCheck.php to "open"	-->
@@ -88,8 +94,30 @@
    		    document.getElementById("techCheck").innerHTML = "Uh oh. The Flash browser plugin is required in order to attend this session. <a href='https://get.adobe.com/flashplayer/' target='_blank'>Get Flash</a>";
       	}
       }      
-    </script>    
-	</head>
+    </script>   
+ 
+      <!-- For Formilla feedback form -->
+  <script type="text/javascript">
+    (function () {
+        var head = document.getElementsByTagName("head").item(0);
+        var script = document.createElement("script");
+        var src = (document.location.protocol == 'https:' ? 'https://www.formilla.com/scripts/feedback.js' : 'http://www.formilla.com/scripts/feedback.js');
+        script.setAttribute("type", "text/javascript"); script.setAttribute("src", src); script.setAttribute("async", true);
+        var complete = false;
+
+        script.onload = script.onreadystatechange = function () {
+            if (!complete && (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete')) {
+                complete = true;
+                Formilla.guid = 'd94fe060-648d-45c5-9698-2e43d5817798';
+                Formilla.loadFormillaChatButton();
+            }
+        };
+
+        head.appendChild(script);
+    })();
+  </script> 
+
+  </head> 
 	
 	<body>	
 	  <div class="container" style="width:620px;">
@@ -101,7 +129,7 @@
 					<span class="module-name" style="">Web Meet Training</span>					
       	</span>    	
       	<span class="controls" style="float:right;padding-bottom:10px;margin-top:30px;">
-      		<a href="#" style="color:#d27b4b;text-decoration:none;">About</a>
+      		<a href="javascript:void(0)" onclick="if(typeof Formilla != 'undefined'){Formilla.initFormillaChat();}"><b>Problem?</b></a> 
       	</span>
     	</div>
     	
@@ -124,7 +152,7 @@
 							<td><span id="step-2" class="fa fa-square-o fa-2x"></span><br/>Step&nbsp;2
 							</td><td>
 								<span class="confirmation">Enter your name and join the training session</span>
-								<form id="join-form" class="pure-form pure-form-stacked" autocomplete="off" style="width:105%;margin-top:10px;" action="../new_nexus/web/modules/training/control/trainingMeetingProcessor.php" method="post">
+								<form id="join-form" class="pure-form pure-form-stacked" autocomplete="off" style="width:105%;margin-top:10px;" action="http://northbridgetech.org/dev/new_nexus/web/modules/training/control/trainingMeetingProcessor-1a.php" method="post">
 		    					<fieldset>
 	    							Your Name
         						<input class="form-input" name="username">	  

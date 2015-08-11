@@ -103,7 +103,7 @@ You are now enabled to collaborate with " . $groupName . "
 
 You can login to Nexus using this link.
 
-" . Util::getHttpPath() . "login.php?oid=" . $orgid . "
+" . Util::getHttpPath() . "/login.php?oid=" . $orgid . "
 
 Enjoy,
 

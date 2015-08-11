@@ -37,12 +37,15 @@ Use only clean input beyond this point (i.e. $clean[])
 
 $inviteUuid = Invitation::addInvitation($clean['email'], array_keys($_SESSION['groups'])[0], Util::newUuid(), $clean['admin'], $_SESSION['uidpk'], $_SESSION['orgId']);
 
-if (Invitation::isInvitationOpen($inviteUuid)) {
+//if (Invitation::isInvitationOpen($inviteUuid)) {
+if (true) {
 	$message = "Hello " . $clean['fname'] . ",
 	
 You have been added to the team.
 
-To complete your enrollment, click here:" . $inviteUuid . "
+Follow this link to complete your enrollment:
+
+" . Util::getHttpPath() . "/enroll.php?invitation=" . $inviteUuid . "
 
 The Support Team at
 NorthBridge Technology Alliance";
