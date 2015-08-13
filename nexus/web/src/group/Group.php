@@ -22,6 +22,17 @@ class Group {
 	
 	public static function getGroupMembersByGroupId($id, $ssnUser) {
 		$users = array();
+		
+		$cursor = Invitation::getOpenGroupInvitations($id);
+		$counter = 0;		
+		while ($row = pg_fetch_array($cursor)) {
+			$users[$counter]['fname'] = "Pending";
+			$users[$counter]['lname'] = "Enrollment";
+			$users[$counter]['email'] = $row['email'];
+			$users[$counter]['role'] = Util::getRoleName($row['roleid']);
+			$counter++;
+		}
+
 		$query = "select u.id, u.fname, u.lname, u.email, ug.role_fk as roleid, o.name as oname
 			from public.user u, user_group ug, organization o, user_organization uo
 			where u.id = ug.user_fk
@@ -30,10 +41,8 @@ class Group {
 			and o.id = uo.organization_fk
 			and ug.group_fk = $1
 			order by u.fname, u.lname
-			";
-			
+			";			
 			$cursor = pgDb::psExecute($query, array($id));
-			$counter = 0;
 			while ($row = pg_fetch_array($cursor)) {
 				$users[$counter]['fname'] = $row['fname'];
 				$users[$counter]['lname'] = $row['lname'];
@@ -46,15 +55,6 @@ class Group {
 				$counter++;
 			}
 			
-			$cursor = Invitation::getOpenGroupInvitations($id);
-			$counter = 0;
-			while ($row = pg_fetch_array($cursor)) {
-				$users[$counter]['fname'] = "Pending";
-				$users[$counter]['lname'] = "Enrollment";
-				$users[$counter]['email'] = $row['email'];
-				$users[$counter]['role'] = Util::getRoleName($row['roleid']);
-				$counter++;
-			}
 			return $users;
 	}	
 	

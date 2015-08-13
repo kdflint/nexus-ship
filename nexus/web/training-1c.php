@@ -51,7 +51,7 @@ if (isset($_SESSION['traineeName'])) {
 					<span class="module-name" style="">Web Meet Training</span>					
       	</span>    	
       	<span class="controls" style="float:right;padding-bottom:10px;margin-top:30px;">
-      		<a href="#" style="color:#d27b4b;text-decoration:none;"><b>About</b></a>
+      		<a href="http://northbridgetech.org/downloads/Northbridge_web_conference_center.pdf" style="color:#d27b4b;text-decoration:none;" target="_blank"><b>About</b></a>
       	</span>
     	</div>
     	
@@ -66,7 +66,7 @@ if (isset($_SESSION['traineeName'])) {
 							<td><span id="step-nplus1" class="fa fa-check-square-o fa-3x"></span></td>
 							<td><span class="confirmation" style="font-size:200%;">Training Complete!</span></td>
 						</tr>
-						<tr><td>&nbsp;</td><td>If this is your organization's first training, you will receive Nexus activation instructions on the schedule that your trainer explained.</td></tr>
+						<tr><td>&nbsp;</td><td>You will receive Nexus activation instructions on the schedule that your trainer explained.</td></tr>
 						<tr><td>&nbsp;</td><td><a href="http://northbridgetech.org">Northbridge Technology Alliance</a></td></tr>
 					</table>
 				</div>

@@ -6,7 +6,8 @@ $readonly = "";
 if (isset($_SESSION['traineeName'])) {
 	$readonly_value = "readonly";
 }
-	
+
+echo "htllo"; exit(0);
 
 ?>
 
@@ -85,11 +86,11 @@ if (isset($_SESSION['traineeName'])) {
 				xmlhttp.send();
 			}
 
-    	function flashCheck() {
-    		if(FlashDetect.installed) {
-    		 if(FlashDetect.versionAtLeast(11,2)) {
+    	function speedCheck() {
+    		if(true) {
+    		 if(true) {
           	document.getElementById("techCheck").innerHTML = "Success!"; 
-          	document.getElementById("step-1").className = "fa fa-check-square-o fa-2x";
+          	document.getElementById("step-n").className = "fa fa-check-square-o fa-2x";
           	document.getElementById("join-form-submit").className = "pure-button pure-button-primary training-button";
           	document.getElementById("join-form-submit").removeAttribute("disabled");
           	
@@ -101,6 +102,27 @@ if (isset($_SESSION['traineeName'])) {
       	}
       }      
     </script>    
+      <!-- For Formilla feedback form -->
+  <script type="text/javascript">
+    (function () {
+        var head = document.getElementsByTagName("head").item(0);
+        var script = document.createElement("script");
+        var src = (document.location.protocol == 'https:' ? 'https://www.formilla.com/scripts/feedback.js' : 'http://www.formilla.com/scripts/feedback.js');
+        script.setAttribute("type", "text/javascript"); script.setAttribute("src", src); script.setAttribute("async", true);
+        var complete = false;
+
+        script.onload = script.onreadystatechange = function () {
+            if (!complete && (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete')) {
+                complete = true;
+                Formilla.guid = 'd94fe060-648d-45c5-9698-2e43d5817798';
+                Formilla.loadFormillaChatButton();
+            }
+        };
+
+        head.appendChild(script);
+    })();
+  </script> 
+
 	</head>
 	
 	<body>	
@@ -113,7 +135,7 @@ if (isset($_SESSION['traineeName'])) {
 					<span class="module-name" style="">Web Meet Training</span>					
       	</span>    	
       	<span class="controls" style="float:right;padding-bottom:10px;margin-top:30px;">
-      		<a href="#" style="color:#d27b4b;text-decoration:none;">About</a>
+      		<a href="javascript:void(0)" onclick="if(typeof Formilla != 'undefined'){Formilla.initFormillaChat();}"><b>Problem?</b></a>
       	</span>
     	</div>
     	
@@ -125,24 +147,20 @@ if (isset($_SESSION['traineeName'])) {
 			  	</noscript>
 					<table>
 						<tr>
-							<td>
-								<span id="step-1" class="fa fa-square-o fa-2x"></span><br/>Step&nbsp;1
-							</td><td>			  	
-			  				<a class="pure-button pure-button-primary training-button" href="javascript:void(0);" onclick="flashCheck();">Check Now</a>
-			  				<span class="confirmation">Check your internet browser compatibility</span>
-			  				<p id="techCheck"></p>
-							</td>
-						</tr><tr>
-							<td><span id="step-2" class="fa fa-square-o fa-2x"></span><br/>Step&nbsp;2
-							</td><td>
-								<span class="confirmation">Enter your name and join the training session</span>
-								<form id="join-form" class="pure-form pure-form-stacked" autocomplete="off" style="width:105%;margin-top:10px;" action="../new_nexus/web/modules/training/control/trainingMeetingProcessor.php" method="post">
+						<tr>
+							<td><span id="step-nplus1" class="fa fa-square-o fa-3x"></span></td>
+							<td><span class="confirmation" style="font-size:200%;">Come on back!</span></td>
+						</tr>
+						<tr><td>&nbsp;</td><td>Please join the media portion of the training session.</td></tr>
+						<tr><td>&nbsp;</td><td>For best results, please make sure you have earbuds or headphones.
+
+								<form id="join-form" class="pure-form pure-form-stacked" autocomplete="off" style="width:105%;margin-top:10px;" action="http://northbridgetech.org/dev/new_nexus/web/modules/training/control/trainingMeetingProcessor-1b.php" method="post">
 		    					<fieldset>
 	    							Your Name
         						<input class="form-input" name="username" value="<?php echo $_SESSION['traineeName']; ?>" <?php echo $readonly_value; ?>>	  
      							</fieldset>
      						</form>   
-								<a id="join-form-submit" type="submit" class="pure-button pure-button-primary pure-button-disabled training-button" href="javascript:void(0);" onclick="validateAndSubmit();" disabled="disabled">Join Now</a>
+								<a id="join-form-submit" type="submit" class="pure-button pure-button-primary training-button" href="javascript:void(0);" onclick="validateAndSubmit();">Re-Join Now</a>
 							</td>
 						</tr>
 					</table>

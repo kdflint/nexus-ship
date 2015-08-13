@@ -2,15 +2,13 @@
 
 session_start();
 
-$_SESSION['traineeName'] = $_POST['username'];
-
 require_once("../../../src/framework/Util.php");
 require_once(Util::getModulesRoot() . "/error/handlers.php");
 require_once(Util::getLibRoot() . "/bigbluebutton/bbb-api-php/includes/bbb-api.php"); 
 
 $bbb = new BigBlueButton();
 
-$joinerPassword = "ap";
+$joinerPassword = "mp";
 $trainingMeetingId = '7777';
 
 $creationParams = array(
@@ -40,25 +38,12 @@ try {
 } catch (Exception $e) {
 	trigger_error("Cannot create meeting: " . $e->getMessage() . "\n", E_USER_ERROR);
 	$itsAllGood = FALSE;
-}
-
-if ($itsAllGood) {
-	try {
-		$response = $bbb->setMeetingConfig(getConfigXml(), $trainingMeetingId);
-		if (strcasecmp($response['returncode'], 'SUCCESS') != 0 || !isset($response['token']) || strlen($response['token']) < 1) {
-			$itsAllGood = FALSE;
-		} else {
-			$configToken = (string)$response['token'];
-		}
- 	} catch (Exception $e) {
-		trigger_error("Cannot set configuration: " . $e->getMessage() . "\n", E_USER_ERROR);
-		$itsAllGood = FALSE;
-	}	
+	echo "Problem with create meeting:" . $e->getMessage();
 }
 
 $joinParams = array(
 	'meetingId' => $trainingMeetingId,
-	'username' => $_SESSION['traineeName'],
+	'username' => "Kathy Flint",
 	'password' => $joinerPassword,
 	'configToken' => $configToken
 );
@@ -66,25 +51,17 @@ $joinParams = array(
 if ($itsAllGood) {
 	try {
 		$joinUrl = $bbb->getJoinMeetingUrl($joinParams);
-		//echo $joinUrl; exit(0);
 		// TODO - figure out how to tell if this url is well formed and valid. See under "join" at https://docs.bigbluebutton.org/dev/api.html
 	} catch (Exception $e) {
 		trigger_error("Cannot get join meeting url: " . $e->getMessage() . "\n", E_USER_ERROR);
 		$itsAllGood = FALSE;
+		echo "Problem with getting join url:" . $e->getMessage();
 	}
 }
 
-//echo $joinUrl; exit(0);
+echo $joinUrl; exit(0);
 
-if ($itsAllGood) {
-	header("location:" . $joinUrl);	
-	exit(0);
-} else {
-	trigger_error("Cannot join conference: " . $joinUrl . "\n", E_USER_ERROR);
-	exit(0);
-}
-
-
+/*
 function getConfigXml() {
 
 	$thisConfig = 
@@ -163,7 +140,7 @@ function getConfigXml() {
 			resolutions = "320x240,640x480,1280x720"
 			autoStart = "false"
 			skipCamSettingsCheck="false"
-			showButton = "false"
+			showButton = "true"
 			showCloseButton = "true"
 			publishWindowVisible = "true"
 			viewerWindowMaxed = "false"
@@ -210,8 +187,8 @@ function getConfigXml() {
 			dependsOn="VideoconfModule, UsersModule"
 			autoDock="true"
 			showControls="true"
-			maximizeWindow="true"
-			position="bottom-left"
+			maximizeWindow="false"
+			position="bottom-right"
 			width="172"
 			height="179"
 			layout="smart"
@@ -231,6 +208,6 @@ function getConfigXml() {
 
 return $thisConfig;
 }
-
+*/
 ?>
 

@@ -22,7 +22,7 @@ class Invitation {
 	}
 	
 	public static function getOpenGroupInvitations($groupId) {
-		$query = "select email, role_fk as roleid from invitation where group_fk = $1 and accept_dttm is NULL and expire_dt > now() and type = 'single'";
+		$query = "select email, role_fk as roleid from invitation where group_fk = $1 and accept_dttm is NULL and expire_dt > now() and type = 'single' order by email";
 		return PgDb::psExecute($query, array($groupId));
 	}
 	
