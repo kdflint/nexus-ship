@@ -167,11 +167,7 @@ if(isset($_GET['view']) && Util::isSafeCharacterSet($_GET['view'])) {
 			  	</noscript>					
 					<div id="reserveList" style="display:block;">
 						<div id="join_display" style="display:none;margin-bottom:5px;">
-							<?php include("modules/schedule/views/joinConfirm.html"); ?>	
-						</div>
-						<?php include("modules/schedule/views/openNow.html"); ?>
-						<div id="new_event_display" style="display:none;">
-							<?php include("modules/schedule/views/reservationAdd.php"); ?>	
+							<?php include("modules/schedule/views/joinConfirm.html"); ?>
 						</div>
 						<div id="schedule_display">
 							<?php include("modules/schedule/views/reservationsList.html"); ?>

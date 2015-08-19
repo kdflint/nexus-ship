@@ -85,7 +85,8 @@ class Event {
 				extract(month from (select e.start_dttm at time zone $2)) as month, 
 				extract(hour from (select e.start_dttm at time zone $2)) as hour, 
 				extract(minute from (select e.start_dttm at time zone $2)) as minute, 
-				e.tz_name as name, 
+				extract(epoch from (select e.start_dttm)) as epoch,
+				e.tz_name as tzname, 
 				e.duration as duration, 
 				e.name as name, 
 				e.descr as descr, 
@@ -95,8 +96,8 @@ class Event {
 				u.lname as lname,
 				pg.abbrev as abbrev 
 			from event e, public.user u, pg_timezone_names pg
-			where e.group_fk = $1
-			and e.start_dttm > now() 
+			where e.group_fk = $1		
+			and (e.start_dttm + e.duration) > now() 
 			and e.active = true
 			and pg.name = $2
 			and u.id = e.reserved_user_fk 
@@ -110,6 +111,7 @@ class Event {
 				$events[$counter]['month'] = self::getMonth($row['month']-1);
 				$events[$counter]['hour'] = self::getHour($row['hour']);
 				$events[$counter]['minute'] = self::getMinute($row['minute']);
+				$events[$counter]['epoch'] = $row['epoch'];
 				$events[$counter]['period'] = self::getPeriod($row['hour']);
 				$events[$counter]['abbrev'] = $row['abbrev'];
 				$events[$counter]['purpose'] = $row['name'];

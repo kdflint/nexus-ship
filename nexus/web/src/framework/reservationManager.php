@@ -17,8 +17,6 @@ require_once(Util::getSrcRoot() . "/schedule/Event.php");
 		exit(0);		
 	}			
 //}	
-	
-
 
 ?>
 

@@ -51,6 +51,7 @@ if ($itsAllGood) {
 			$configToken = (string)$response['token'];
 		}
  	} catch (Exception $e) {
+ 		//echo "Cannot set configuration: " . $e->getMessage() . "\n", E_USER_ERROR;
 		trigger_error("Cannot set configuration: " . $e->getMessage() . "\n", E_USER_ERROR);
 		$itsAllGood = FALSE;
 	}	
@@ -69,6 +70,7 @@ if ($itsAllGood) {
 		//echo $joinUrl; exit(0);
 		// TODO - figure out how to tell if this url is well formed and valid. See under "join" at https://docs.bigbluebutton.org/dev/api.html
 	} catch (Exception $e) {
+		//echo "Cannot get join meeting url: " . $e->getMessage() . "\n", E_USER_ERROR;
 		trigger_error("Cannot get join meeting url: " . $e->getMessage() . "\n", E_USER_ERROR);
 		$itsAllGood = FALSE;
 	}

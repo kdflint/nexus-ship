@@ -1,41 +1,87 @@
 <script>
-	function getReservationList() {
+	function getReservationList(referenceTime) {
 		var xmlhttp = new XMLHttpRequest();
 		xmlhttp.onreadystatechange=function() {
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 			 	var jsonObj = JSON.parse(xmlhttp.responseText);
 			 	
-			 	// put row containers in the table, 1 for each event
+
+			 	// put row container in the now, 1 row always
+			 	var nowMeeting = undefined;		 	
+			 	if (jsonObj.length > 0 && jsonObj[0].epoch < referenceTime) {
+			 		nowMeeting = jsonObj.shift();
+			 	}
+       	document.getElementById("nowTable").innerHTML = "<tr id='nowRow0'></tr>";
+
+			 	// put row containers in the reservation table, 1 for each event
 			 	var tableRows = "";
 			 	for (var i = 0; i < jsonObj.length; i++) { 
 			 		tableRows = tableRows + "<tr id='reservationRow" + i + "'></tr>"; 
 			 	}
        	document.getElementById("reservationTable").innerHTML = tableRows;
-       	
-       	// write each event into its row container
-			 	for (var i = 0; i < jsonObj.length; i++) { 
-			 		var tableEvent = "<tr>" +
-       			"<td>" +
-	       			"<div class='event'>" +
-  					  	"<span class='day'>" + jsonObj[i].day + "</span><br/>" +
-  							"<span class='date'>" + jsonObj[i].date + "</span><br/>" +
-  							"<span class='month'>" + jsonObj[i].month + "</span><br/>" +
-  							"<span>" + jsonObj[i].hour + ":" + jsonObj[i].minute + "</span><span class='period'> " + jsonObj[i].period + " " + jsonObj[i].abbrev + "</span>" +
+
+				// write the current meeting into its row container, or default content if none
+				nowEvent = "";
+
+				if (nowMeeting === undefined) {
+       		nowEvent =  "<tr>" +
+	       		"<td>" +
+		      		"<div class='event'>" +
+	       				"<span class='date'>Now</span><br/>" + 
+	       			"</div>" +
+       			"</td>" +
+          	"<td>" +	       				
+			       	"<div class='meeting'>" +
+          			"<span class='purpose'>Good news! Your room is available right now.</span>" + 
+          		"</div>" +
+          	"</td>" +
+       		"</tr>";		
+       	}	else {
+					indicator = (Math.floor(new Date()/1000) < nowMeeting.epoch ) ? "Soon" : "Now";
+				 	nowEvent =  "<tr>" +
+	       		"<td>" +
+		      		"<div class='event'>" +
+	       				"<span class='date'>" + indicator + "</span><br/>" +
+	       				"<span class='month'>" + nowMeeting.hour + ":" + nowMeeting.minute + "</span><span class='period'> " + nowMeeting.period + " " + nowMeeting.abbrev + "</span>" +
 							"</div>" +
        			"</td>" +
-          	"<td>" +
-	          	"<div class='meeting'>" +
-          			"<span class='purpose'></span>" + jsonObj[i].purpose + "<br/>" +
-          			"<span class='descr' style='font-size:90%;' >" + jsonObj[i].descr + 
-	          			//"<p><span style='padding-right:5px;margin:0px;color:#d27b4b;' class='fa fa-envelope' ></span>Reserved by: " + jsonObj[i].fname + " " +  jsonObj[i].lname + "<span id='reserveLname'></span></p>" +
-	          			"<p>Reserved by: " + jsonObj[i].fname + " " +  jsonObj[i].lname + "</p>" +
-	          			((jsonObj[i].adder == jsonObj[i].sessionUser) ? "<p><a href='modules/schedule/control/eventDeleteProcessor.php?id=" + jsonObj[i].uuid + "' onclick='return confirm(\"Please confirm this delete.\");'><span class='fa fa-trash-o' style='color:#d27b4b;'></span></a></p>" : " ") +
+          	"<td>" +	       				
+			        "<div class='meeting'>" +
+          			"<span class='purpose'>" + nowMeeting.purpose + "</span><br/>" +
+	        			"<p>Reserved by: " + nowMeeting.fname + " " +  nowMeeting.lname + "</p>" +
+	        			((nowMeeting.adder == nowMeeting.sessionUser) ? "<p><a href='modules/schedule/control/eventDeleteProcessor.php?id=" + nowMeeting.uuid + "' onclick='return confirm(\"Please confirm this delete.\");'><span class='fa fa-trash-o' style='color:#d27b4b;'></span></a></p>" : " ") +
           			"</span>" +
           		"</div>" +
           	"</td>" +
-       		"</tr>";
-       		document.getElementById("reservationRow" + i).innerHTML = tableEvent;
-				}       	
+       		"</tr>";	
+       	}  
+       	document.getElementById("nowRow0").innerHTML = nowEvent;     					
+
+       	
+       	// write each future event into its row container
+			 	for (var i = 0; i < jsonObj.length; i++) {
+		 			tableEvent = "<tr>" +
+       			"<td>" +
+       				"<div class='event'>" +
+  					  	"<span class='day'>" + jsonObj[i].day + "</span><br/>" +
+ 								"<span class='date'>" + jsonObj[i].date + "</span><br/>" +
+ 								"<span class='month'>" + jsonObj[i].month + "</span><br/>" +
+ 								"<span>" + jsonObj[i].hour + ":" + jsonObj[i].minute + "</span><span class='period'> " + jsonObj[i].period + " " + jsonObj[i].abbrev + "</span>" +
+							"</div>" +
+      				"</td>" +
+         		"<td>" +
+	          	"<div class='meeting'>" +
+         				"<span class='purpose'></span>" + jsonObj[i].purpose + "<br/>" +
+         				"<span class='descr' style='font-size:90%;' >" + jsonObj[i].descr + 
+	          			//"<p><span style='padding-right:5px;margin:0px;color:#d27b4b;' class='fa fa-envelope' ></span>Reserved by: " + jsonObj[i].fname + " " +  jsonObj[i].lname + "<span id='reserveLname'></span></p>" +
+          				"<p>Reserved by: " + jsonObj[i].fname + " " +  jsonObj[i].lname + "</p>" +
+          				((jsonObj[i].adder == jsonObj[i].sessionUser) ? "<p><a href='modules/schedule/control/eventDeleteProcessor.php?id=" + jsonObj[i].uuid + "' onclick='return confirm(\"Please confirm this delete.\");'><span class='fa fa-trash-o' style='color:#d27b4b;'></span></a></p>" : " ") +
+         				"</span>" +
+         			"</div>" +
+         		"</td>" +
+      			"</tr>";
+     			document.getElementById("reservationRow" + i).innerHTML = tableEvent;   
+     		}
 			}
 		}
 		xmlhttp.open("GET","src/framework/reservationManager.php");
@@ -43,8 +89,17 @@
 	}
 </script>
 
-<a id='schedule_control' href='javascript:void(0);' style='position:absolute;padding-left:650px;padding-top: 20px;'></span><span style='padding:0px;' class='fa fa-calendar-o fa-2x' ></span><span style='padding-left:2px;' class='fa fa-plus' ></span></a>				
-<table id="reservationTable" class="pure-table">
-	<script> getReservationList(); </script>
+<a id='join_control' href='javascript:void(0);' style='position:absolute;padding-left:648px;padding-top:8px;'><span class="fa fa-sign-in fa-3x" ></span></a>				
+<table id="nowTable" class="pure-table">
 </table>
 
+<div id="new_event_display" style="display:none;">
+	<?php include("modules/schedule/views/reservationAdd.php"); ?>	
+</div>
+						
+<a id='schedule_control' href='javascript:void(0);' style='position:absolute;padding-left:650px;padding-top: 20px;'></span><span style='padding:0px;' class='fa fa-calendar-o fa-2x' ></span><span style='padding-left:2px;' class='fa fa-plus' ></span></a>				
+<table id="reservationTable" class="pure-table">
+</table>
+
+<script> getReservationList(<?php echo (time() + 15*60); ?>); </script>
+	
