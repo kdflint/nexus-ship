@@ -55,27 +55,46 @@ function validateEvent($input) {
  	}
  
 	// MEETING DATE		
-	if (isset($input['meeting-date'])) {
-		$dateParts = explode('/', $input['meeting-date']);
-		if (checkdate($dateParts[0], $dateParts[1], $dateParts[2])) {
-			$result['clean']['meeting-date'] = $input['meeting-date'];	
+	if (isset($input['meeting-date']) && strlen($input['meeting-date']) > 0) {
+		$todayNow = date('m/d/Y');
+		if ($input['meeting-date'] == "today") {
+			$result['clean']['meeting-date'] = $todayNow;
 		} else {
-			$result['error']['meeting-date'] = "error";
-		}	
+			$dateParts = explode('/', $input['meeting-date']);
+			if (checkdate($dateParts[0], $dateParts[1], $dateParts[2])) {
+				$result['clean']['meeting-date'] = $input['meeting-date'];	
+			} else {
+				$result['error']['meeting-date'] = "error";
+			}	
+		}
  	}	else {
  		$result['error']['meeting-date'] = "error";
  	}	
  	
 	// MEETING TIME ZONE
-	if (isset($input['tzone-name']) && Event::isValidTimeZone($input['tzone-name'])) {
-		$result['clean']['tzone-name'] = $input['tzone-name'];
+	if (isset($input['tzone-name']) && strlen($input['tzone-name']) > 0) {
+		$systemTz = date('e');
+		if ($input['tzone-name'] == "system" && Event::isValidTimeZone($systemTz)) {
+			$result['clean']['tzone-name'] = $systemTz;
+		} else if (Event::isValidTimeZone($input['tzone-name'])) {
+			$result['clean']['tzone-name'] = $input['tzone-name'];
+		} else {
+			$result['error']['tzone-name'] = "error";
+		}
 	} else {
 		$result['error']['tzone-name'] = "error";
 	}
 
   // MEETING TIME 
-  if (isset($input['meeting-time']) && Event::isValidTimeInterval($input['meeting-time'])) {
- 	 	$result['clean']['meeting-time'] = $input['meeting-time'];
+  if (isset($input['meeting-time']) && strlen($input['meeting-time']) > 0) {
+  	$timeNow = date('H:i') . ':00';
+  	if ($input['meeting-time'] == "now" && Event::isValidTimeInterval($timeNow)) {
+  		$result['clean']['meeting-time'] = $timeNow;
+  	} else if (Event::isValidTimeInterval($input['meeting-time'])) {
+  		$result['clean']['meeting-time'] = $input['meeting-time'];
+ 		} else {
+ 			$result['error']['meeting-time'] = "error";
+ 		}
  	} else {	
  		$result['error']['meeting-time'] = "error";
  	}

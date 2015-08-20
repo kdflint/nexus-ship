@@ -242,20 +242,6 @@ td {
 
 /* BLINDS */
 
-#join_display {
-  width: 64%;
-  background: #edf0de;
-  padding: 10px;
-  border-radius: 8px;
-  margin-left: 120px;
-}
-
-#join_display {
-  position: absolute;
-  margin-top: 2px;
-	height: 60px;
-}
-
 #techcheck_display, 
 #profile_display {
 	background: #EDF0DE none repeat scroll 0% 0%;

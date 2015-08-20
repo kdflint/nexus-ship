@@ -55,6 +55,7 @@ if(isset($_GET['view']) && Util::isSafeCharacterSet($_GET['view'])) {
 				});
 				$( '#join_control' ).click(function() {
 	  			$( "#join_display" ).toggle( "blind" );
+	  			$( "#join_control" ).toggle();
 				});
 				$( '#add_user_control' ).click(function() {
 	  			$( "#add_user_display" ).toggle( "blind" );
@@ -104,10 +105,16 @@ if(isset($_GET['view']) && Util::isSafeCharacterSet($_GET['view'])) {
         });
       });
       $(function() {
-        $( "#basicExample" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
+        $( "#schedule-form-time" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
       });
       $(function() {
-        $( "#duration" ).selectmenu();
+        $( "#schedule-form-duration" ).selectmenu();
+      });
+      $(function() {
+        $( "#now-form-duration" ).selectmenu();
+      });
+      $(function() {
+        $( "#now-form-type" ).selectmenu();
       });
       $(function() {
         $( "#country" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
@@ -166,9 +173,6 @@ if(isset($_GET['view']) && Util::isSafeCharacterSet($_GET['view'])) {
 			  		<p>Here are the <a href="http://www.enable-javascript.com" target="_blank"> instructions how to enable JavaScript in your web browser</a></p>
 			  	</noscript>					
 					<div id="reserveList" style="display:block;">
-						<div id="join_display" style="display:none;margin-bottom:5px;">
-							<?php include("modules/schedule/views/joinConfirm.html"); ?>
-						</div>
 						<div id="schedule_display">
 							<?php include("modules/schedule/views/reservationsList.html"); ?>
 						</div>

@@ -357,10 +357,10 @@ function passwordValidateAndSubmit2(formId) {
  	}
 }
  	
-function eventValidateAndSubmit() {
+function eventValidateAndSubmit(thisForm) {
 	pass = true;
-	var eventForm = document.forms["schedule-form"];
-	var submitButton = document.getElementById("schedule-form-submit");
+	var eventForm = document.forms[thisForm];
+	var submitButton = document.getElementById(thisForm + "-submit");	
 	
 	var nameField = eventForm['meeting-name'];
   var name = nameField.value;
@@ -393,17 +393,17 @@ function eventValidateAndSubmit() {
   
  	var timeField = eventForm['meeting-time'];
   var time = timeField.value;
-	setFieldPassStyles(document.getElementById("basicExample-button"), "Time");
+	setFieldPassStyles(document.getElementById(thisForm + "-time-button"), "Time");
   if (time == null || time == "" || time == "Time") {
-   	setFieldErrorStyles(document.getElementById("basicExample-button"), "Time");
+   	setFieldErrorStyles(document.getElementById(thisForm + "-time-button"), "Time");
     pass = false;
   }
   
   var durationField = eventForm['meeting-duration'];
   var duration = durationField.value;
-	setFieldPassStyles(document.getElementById("duration-button"), "Duration");
+	setFieldPassStyles(document.getElementById(thisForm + "-duration-button"), "Duration");
   if (duration == null || duration == "" || duration == "Duration") {
-  	setFieldErrorStyles(document.getElementById("duration-button"), "Duration");
+  	setFieldErrorStyles(document.getElementById(thisForm + "-duration-button"), "Duration");
     pass = false;
   }
   
