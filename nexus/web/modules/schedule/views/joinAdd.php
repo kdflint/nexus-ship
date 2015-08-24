@@ -34,7 +34,7 @@
 		</td>
     <td>
     	<a href="javascript:void(0);" onclick="document.getElementById('join_control').click();" style="float:right;margin-right:6px;">Cancel</a><br/>
-      <a id="now-form-submit" class="pure-button button-menu" href="javascript:void(0)" onclick="eventValidateAndSubmit('now-form');" style="float:right;background-color:#d27b4b;width:90px;font-size:90%;margin-top:45px;color:#e6e6e6">Open Room</a>
+      <a id="now-form-submit" class="pure-button button-menu" href="javascript:void(0);" onclick="eventValidateAndSubmit('now-form');" style="float:right;background-color:#d27b4b;width:90px;font-size:90%;margin-top:45px;color:#e6e6e6">Open Room</a>
  		</td>
 	</tr>
 </table> 

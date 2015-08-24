@@ -50,12 +50,16 @@ if(isset($_GET['view']) && Util::isSafeCharacterSet($_GET['view'])) {
     <script type="text/javascript">
 			$(document).ready(function () {
 				$( '#schedule_control' ).click(function() {
-	  			$( "#new_event_display" ).toggle( "blind" );
-	  			$( "#schedule_control" ).toggle();
+	  			toggleNewEventDisplay();
+	  			if (document.getElementById('join_display').style.display != 'none') {
+	  				toggleJoinDisplay();
+	  			}
 				});
 				$( '#join_control' ).click(function() {
-	  			$( "#join_display" ).toggle( "blind" );
-	  			$( "#join_control" ).toggle();
+					toggleJoinDisplay();  			
+	  			if (document.getElementById('new_event_display').style.display != 'none') {
+	  				toggleNewEventDisplay();
+	  			}
 				});
 				$( '#add_user_control' ).click(function() {
 	  			$( "#add_user_display" ).toggle( "blind" );
@@ -74,6 +78,17 @@ if(isset($_GET['view']) && Util::isSafeCharacterSet($_GET['view'])) {
 					$( "#user_display" ).toggle( "blind" );
 				}				 	
 			});
+			
+			function toggleJoinDisplay() {
+	  		$( "#join_display" ).toggle( "blind" );
+	  		$( "#join_control" ).toggle();
+	  	}		
+	  	
+	  	function toggleNewEventDisplay() {
+	  		$( "#new_event_display" ).toggle( "blind" );
+	  		$( "#schedule_control" ).toggle();
+	  	}
+	  	
 		</script>
     
 		<!--================== Schedule Module Meta ==================-->
