@@ -8,9 +8,12 @@ require_once(Util::getLibRoot() . "/bigbluebutton/bbb-api-php/includes/bbb-api.p
 
 $bbb = new BigBlueButton();
 
-$joinerPassword = "mp";
-// LEFT OFF - get this from session
+
+// LEFT OFF - get from db
+// meeting id
+// meeting name
 $trainingMeetingId = '2963';
+$joinerPassword = "mp";
 
 $creationParams = array(
 	'meetingId' => $trainingMeetingId,
@@ -21,7 +24,7 @@ $creationParams = array(
 	'dialNumber' => '',
 	'voiceBridge' => '',
 	'webVoice' => '',
-	'logoutUrl' => 'http://northbridgetech.org',
+	'logoutUrl' => '',
 	'maxParticipants' => '',
 	'record' => '',
 	'duration' => '0'

@@ -16,9 +16,7 @@
       			<select id="now-form-type" name="meeting-type" style="width:232px;vertical-align:middle;">
 	      			<option selected>Meeting Type</option>
 							<option value="1">Video Chat</option>
-							<option value="2">Webinar</option>
-							<option value="3">Collaboration</option>
-							<option value="4">Remote to Central</option>					
+							<option value="3">Collaboration</option>				
       			</select>	 
       			<select id="now-form-duration" name="meeting-duration" style="width:132px;vertical-align:middle;">
 	      			<option selected>Duration</option>

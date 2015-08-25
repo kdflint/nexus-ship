@@ -312,51 +312,61 @@ function validateEmail(emailField) {
   return true;
 }
 
-function passwordValidateAndSubmit2(formId) {
+function profileValidateAndSubmit() {
 	
 	pass = true;
-	var passwordForm = document.forms[formId];
-	var submitButton = document.getElementById(formId + "-submit");
+	var profileForm = document.forms['profile-form'];
+	var submitButton = document.getElementById('profile-form-submit');
 	
-  var password1Field = passwordForm["password1"];
+  var password1Field = profileForm["password1"];
   var password1 = password1Field.value;
-  password1Field.style.backgroundColor = "white";
-  password1Field.placeholder = "";
-  if (password1 == null || password1 == "" || password1.length < 7 || password1.length > 25) {
-    password1Field.placeholder = "7-25 characters please";
-    password1Field.style.background = errorBackground;
-    passwordField.style.borderColor = "#f68620";
-    passwordField.style.borderWidth = "2px";
-    pass = false;
-  }
+  setFieldPassStyles(password1Field, "");
   
-  var password2Field = passwordForm["password2"];
+  var password2Field = profileForm["password2"];
   var password2 = password2Field.value;
-  password2Field.style.backgroundColor = "white";
-  password2Field.placeholder = "";
-  if (pass && (password2 == null || password2 == "")) {
-    password2Field.placeholder = "Please confirm your new password.";
-    password2Field.style.background = errorBackground;
-    password2Field.style.borderColor = "#f68620";
-    password2Field.style.borderWidth = "2px";
-    pass = false;
+  setFieldPassStyles(password2Field, "");
+  
+  if (password1 == null || password1 == "") {
+  	// don't run any more password validations
+  } else {
+  	if (password1.length < 7 || password1.length > 25) {
+  		setFieldErrorStyles(password1Field, "7-25 characters please");
+  		password1Field.value = "";
+   	 	pass = false;
+   	}
+    if (pass && (password2 == null || password2 == "")) {
+    	setFieldErrorStyles(password2Field, "Please confirm your new password.");
+    	pass = false;
+  	}
+  	if (pass && (password1 !== password2)) {
+  		setFieldErrorStyles(password2Field, "Your passwords do not match.");
+  		password2Field.value = "";
+    	pass = false;
+  	}
   }
-  if (pass && (password1 !== password2)) {
-    password2Field.placeholder = "Your passwords do not match.";
-    password2Field.style.background = errorBackground;
-    password2Field.style.borderColor = "#f68620";
-    password2Field.style.borderWidth = "2px";
+   
+  var fnameField = profileForm["fname"];
+  var fname = fnameField.value;
+  setFieldPassStyles(fnameField, "First Name");
+  if (fname == null || fname == "") {
+    setFieldErrorStyles(fnameField, "First name is required.");
     pass = false;
-  }
+  }	  
+  
+  var emailField = profileForm["email"];
+  var email = emailField.value;
+  setFieldPassStyles(emailField, "Email");
+	pass = validateEmail(emailField);
   
  	if (Boolean(pass)) {
  		submitButton.disabled = true;  
  		submitButton.innerHTML = "One Moment"; 
  		submitButton.style.opacity = ".6";
- 		passwordForm.submit();
+ 		profileForm.submit();
  	}
 }
- 	
+
+	
 function eventValidateAndSubmit(thisForm) {
 	pass = true;
 	var eventForm = document.forms[thisForm];
