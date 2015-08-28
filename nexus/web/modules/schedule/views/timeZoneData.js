@@ -1,6 +1,10 @@
 var timeZoneData = 
 
 {
+    "AA": [
+        {
+        }
+    ],
     "AF": [
         {
             "Asia/Kabul": "(GMT+04:30) Kabul"

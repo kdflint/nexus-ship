@@ -59,7 +59,8 @@ if ($itsAllGood) {
 	}
 }
 
-echo $joinUrl; exit(0);
+echo "<p>Reload this page every time to rerun the create meeting logic</p>";
+echo "<a href='" . $joinUrl . "'>Open Training</a>"; exit(0);
 
 /*
 function getConfigXml() {

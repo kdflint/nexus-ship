@@ -122,10 +122,10 @@ if(isset($_GET['view']) && Util::isSafeCharacterSet($_GET['view'])) {
       	$( "#schedule-form-time" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
         $( "#schedule-form-duration" ).selectmenu();
         $( "#schedule-form-type" ).selectmenu();
-        $( "#country" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
-        $( "#country" ).selectmenu({ change: function() { displayTimeZones(); } });
-        $( "#countryTimeZones" ).selectmenu();
-        $( "#countryTimeZones" ).selectmenu({ change: function() { setTimeZoneDisplay(document.getElementById("countryTimeZones").value); } });
+        $( "#schedule-form-country" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
+        $( "#schedule-form-country" ).selectmenu({ change: function() { displayTimeZones(); } });
+        $( "#schedule-form-countryTimeZones" ).selectmenu();
+        $( "#schedule-form-countryTimeZones" ).selectmenu({ change: function() { setTimeZoneDisplay(document.getElementById("schedule-form-countryTimeZones").value); } });
         // now-form elements
         $( "#now-form-duration" ).selectmenu();
         $( "#now-form-type" ).selectmenu();

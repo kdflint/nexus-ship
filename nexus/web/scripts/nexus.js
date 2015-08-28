@@ -112,6 +112,14 @@ function showTimeZoneDisplay(displayId) {
 	document.getElementById("tz-static").style.display='none';
 	document.getElementById("tz-select").style.display='none';	 
 	showDisplay.style.display='block';
+	if (displayId == 'tz-select') {
+		document.getElementById("local-tzFormChange").value = "true";
+		document.getElementById("schedule-form-country").selectedIndex = "0";
+		$( "#schedule-form-country" ).selectmenu( "refresh" );
+		displayTimeZones();
+	} else {
+		document.getElementById("local-tzFormChange").value = "false";
+	}
 }
 
 function setTimeZoneDisplay(zone) {
@@ -121,24 +129,29 @@ function setTimeZoneDisplay(zone) {
 }	
 
 function displayTimeZones() {
-	var timeZone = document.getElementById("countryTimeZones");
-	var countryCode = document.getElementById("country").value;
+	var timeZone = document.getElementById("schedule-form-countryTimeZones");
+	var countryCode = document.getElementById("schedule-form-country").value;
 	// TODO - this line clears previous selections - how does it work?
 	for (a in timeZone.options) { timeZone.options.remove(0); }
   var countryTimeZones = timeZoneData[countryCode];
-  if (countryTimeZones.length == 1) {
+  var option = document.createElement("option");
+  option.text = "Time Zone";
+  option.selected = true;
+  timeZone.add(option);
+  if (countryTimeZones === undefined) {
+  	// leave the time zone options list unpopulated
+  	$( "#schedule-form-countryTimeZones" ).selectmenu( "refresh" );
+  } else if (countryTimeZones.length == 1) {
+  	// update display and form to show this one time zone option
   	setTimeZoneDisplay(Object.getOwnPropertyNames(countryTimeZones[0]));
   } else {
-		var option = document.createElement("option");
-  	option.text = "Time Zone";
-  	option.selected = true;
-  	timeZone.add(option);
+  	// add the time zone options to the time zone options list
   	for (var i=0; i<countryTimeZones.length; i++) {
 	  	var option = document.createElement("option");
   		option.text = Object.getOwnPropertyNames(countryTimeZones[i]);
   		timeZone.add(option);
 		}
-    $( "#countryTimeZones" ).selectmenu( "refresh" );
+    $( "#schedule-form-countryTimeZones" ).selectmenu( "refresh" );
   }
 }
 
@@ -334,7 +347,31 @@ function resetProfileForm() {
 	setFieldPassStyles(profileForm["email"], "");
 }
 		
-	
+function resetScheduleForm() {
+	document.getElementById('schedule_control').click();
+	var scheduleForm = document.forms['schedule-form'];
+	scheduleForm.reset();
+	setFieldPassStyles(scheduleForm['meeting-name'], "Purpose");
+	setFieldPassStyles(scheduleForm['meeting-date'], "Date");
+	setFieldPassStyles(document.getElementById("schedule-form-time-button"), "Time");
+	setFieldPassStyles(document.getElementById("schedule-form-duration-button"), "Duration");
+	setFieldPassStyles(document.getElementById("schedule-form-type-button"), "Meeting Type");
+	$( "#schedule-form-time" ).selectmenu( "refresh" );
+	$( "#schedule-form-duration" ).selectmenu( "refresh" );
+	$( "#schedule-form-type" ).selectmenu( "refresh" );
+	showTimeZoneDisplay("tz-static");
+}
+
+function resetNowForm() {
+	document.getElementById('join_control').click();
+	var nowForm = document.forms['now-form'];
+	nowForm.reset();
+	setFieldPassStyles(nowForm['meeting-name'], "Purpose");
+	setFieldPassStyles(document.getElementById("now-form-duration-button"), "Duration");
+	setFieldPassStyles(document.getElementById("now-form-type-button"), "Meeting Type");
+	$( "#now-form-duration" ).selectmenu( "refresh" );
+	$( "#now-form-type" ).selectmenu( "refresh" );
+}
 
 function profileValidateAndSubmit() {
 	
@@ -451,7 +488,13 @@ function eventValidateAndSubmit(thisForm) {
     pass = false;
   }
   
-  // TODO - validate timezone?
+	var tzChangeValue = eventForm['tzone-change'].value;
+	if (tzChangeValue == "true") {
+		setFieldErrorStyles(document.getElementById(thisForm + "-country-button"), "Country");
+		setFieldErrorStyles(document.getElementById(thisForm + "-countryTimeZones-button"), "Time Zone");
+		showTimeZoneDisplay('tz-select');
+		pass = false;
+	}
  
 	if (Boolean(pass)) {
  		submitButton.disabled = true;  

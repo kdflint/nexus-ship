@@ -151,8 +151,7 @@ $networkName = $row['name'];
         			<input id="localTz" name="timezone" type="hidden" value="">
         			<a id="login-form-submit" type="submit" class="pure-button pure-button-primary" style="width:45%;" href="javascript:void(0);" onclick="loginValidateAndSubmit();">Sign In</a>
         			<a class="pure-button pure-button-secondary" onclick="toggleRememberCheckbox();" style="width:45%;" ><span id="fakeCheckBox" class="fa fa-square-o" style="color:#004d62;padding-right:4px;"></span> Remember me</a>
-        			<input id="login-remember" name="login-remember" type="checkbox" style="visibility:hidden;"/>
-        			
+        			<input id="login-remember" name="login-remember" type="checkbox" style="visibility:hidden;"/>        			
      				</fieldset>
      			</form>   			
      			<form id="recover-username-form" class="pure-form pure-form-stacked" style="display:none;" autocomplete="off" action="modules/login/control/recoverEnrollmentProcessor.php" method="post">

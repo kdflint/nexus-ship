@@ -211,7 +211,7 @@ form {
 	text-align: bottom;
 } 
  
-#country-button, #countryTimeZones-button {
+#schedule-form-country-button, #schedule-form-countryTimeZones-button {
 	vertical-align: middle;
 }
 

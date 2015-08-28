@@ -15,14 +15,15 @@
 					<div id="tz-static" style="display:block;margin-top:10px;">
 						<span style="font-size:90%;line-height:240%;"><b>Time Zone: </b><span id="local-tzDisplay"><?php echo $_SESSION['timezone']; ?></span><a href="javascript:void(0);" onclick="showTimeZoneDisplay('tz-select');" style="margin-left:10px;">Change</a></span>
 						<input id="local-tzFormField" type="hidden" name="tzone-name" value="<?php echo $_SESSION['timezone']; ?>" />
+						<input id="local-tzFormChange" type="hidden" name="tzone-change" value="false" />
 					</div>
 					<div id="tz-select" style="display:none;margin-top:10px;">
 						<span style="font-size:90%;"><b>Time Zone: </b>
-						<select id="country">
-							<option selected>Country</option>
+						<select id="schedule-form-country">
+							<option value="AA" selected>Country</option>
 							<?php include("timeZoneCountryOptions.html"); ?>
 						</select>
-						<select id="countryTimeZones" style="width:137px;">
+						<select id="schedule-form-countryTimeZones" style="width:137px;">
 							<option selected>Time Zone</option>
 						</select>
 					</div>
@@ -43,7 +44,7 @@
 			</form>  
 		</td>
     <td>
-    	<a href="javascript:void(0);" onclick="document.getElementById('schedule_control').click();" style="float:right;margin-right:6px;">Cancel</a><br/>
+    	<a href="javascript:void(0);" onclick="resetScheduleForm();" style="float:right;margin-right:6px;">Cancel</a><br/>
       <a id="schedule-form-submit" class="pure-button button-menu" href="javascript:void(0)" onclick="eventValidateAndSubmit('schedule-form');" style="float:right;background-color:#d27b4b;width:70px;font-size:90%;margin-top:45px;color:#e6e6e6">Reserve</a>
  		</td>
 	</tr>

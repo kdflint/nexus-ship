@@ -116,8 +116,8 @@ function getConfigXml() {
 '
 <?xml version="1.0" ?>
 <config>
-    <localeversion suppressWarning="false">0.9.0</localeversion>
-    <version>158</version>
+		<localeversion suppressWarning="false">0.9.0</localeversion>
+		<version>264</version>
     <help url="http://ec2-50-19-215-104.compute-1.amazonaws.com/help.html"/>
     <javaTest url="http://ec2-50-19-215-104.compute-1.amazonaws.com/testjava.html"/>
     <porttest host="ec2-50-19-215-104.compute-1.amazonaws.com" application="video/portTest" timeout="10000"/>    

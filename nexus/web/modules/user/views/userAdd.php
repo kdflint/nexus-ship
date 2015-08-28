@@ -30,9 +30,12 @@
 	</tr>
 </table> 
 
+<!--
+Pretty sure this should be deleted
 <?php if (!isset($_SESSION['timezone']) || $_SESSION['timezone'] == "undefined") { ?>
 	<script>
 	  showTimeZoneDisplay('tz-select');
 	</script> 
 <?php } ?>
+-->
 
