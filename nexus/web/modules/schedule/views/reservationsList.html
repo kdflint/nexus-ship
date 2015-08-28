@@ -47,13 +47,19 @@
           	"<td>" +	       				
 			        "<div class='meeting'>" +
           			"<span class='purpose'>" + nowMeeting.purpose + "</span><br/>" +
-	        			"<p>Reserved by: " + nowMeeting.fname + " " +  nowMeeting.lname + "</p>" +
+	        			"<p>" + nowMeeting.mtype + " reserved by " + nowMeeting.fname + " " +  nowMeeting.lname + "</p>" +
 	        			((nowMeeting.adder == nowMeeting.sessionUser) ? "<p><a href='modules/schedule/control/eventDeleteProcessor.php?id=" + nowMeeting.uuid + "' onclick='return confirm(\"Please confirm this delete.\");'><span class='fa fa-trash-o' style='color:#d27b4b;'></span></a></p>" : " ") +
           			"</span>" +
           		"</div>" +
           	"</td>" +
        		"</tr>";	
-       		document.getElementById("join_control_mode").innerHTML = "<a href='modules/meeting/control/joinMeetingProcessor.php' target='_blank' style='position:absolute;padding-left:648px;padding-top:8px;'><span class='fa fa-sign-in fa-3x' ></span></a>";
+       		if (!flashInstalled()) {
+       			document.getElementById("join_control_mode").innerHTML = "<a href='javascript:void(0);' style='position:absolute;padding-left:652px;padding-top:8px;'><span class='fa fa-exclamation-triangle fa-2x' ></span></a>";
+       		} else if (!flashVersionCheck()) {
+       			document.getElementById("join_control_mode").innerHTML = "<a href='javascript:void(0);' style='position:absolute;padding-left:652px;padding-top:8px;'><span class='fa fa-exclamation-triangle fa-2x' ></span></a>";
+					} else {
+       			document.getElementById("join_control_mode").innerHTML = "<a href='modules/meeting/control/joinMeetingProcessor.php?id=" + nowMeeting.uuid + "&type=" + nowMeeting.mtype + "' target='_blank' style='position:absolute;padding-left:648px;padding-top:8px;'><span class='fa fa-sign-in fa-3x' ></span></a>";
+       		}
        	}  
        	document.getElementById("nowRow0").innerHTML = nowEvent;     					
 
@@ -74,7 +80,7 @@
          				"<span class='purpose'></span>" + jsonObj[i].purpose + "<br/>" +
          				"<span class='descr' style='font-size:90%;' >" + jsonObj[i].descr + 
 	          			//"<p><span style='padding-right:5px;margin:0px;color:#d27b4b;' class='fa fa-envelope' ></span>Reserved by: " + jsonObj[i].fname + " " +  jsonObj[i].lname + "<span id='reserveLname'></span></p>" +
-          				"<p>Reserved by: " + jsonObj[i].fname + " " +  jsonObj[i].lname + "</p>" +
+          				"<p>" + jsonObj[i].mtype + " reserved by " + jsonObj[i].fname + " " +  jsonObj[i].lname + "</p>" +
           				((jsonObj[i].adder == jsonObj[i].sessionUser) ? "<p><a href='modules/schedule/control/eventDeleteProcessor.php?id=" + jsonObj[i].uuid + "' onclick='return confirm(\"Please confirm this delete.\");'><span class='fa fa-trash-o' style='color:#d27b4b;'></span></a></p>" : " ") +
          				"</span>" +
          			"</div>" +

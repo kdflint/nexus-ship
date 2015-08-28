@@ -4,6 +4,18 @@ function formSubmit(formId) {
  		document.forms[formId].submit();
 }
 
+function flashInstalled() {
+	return FlashDetect.installed;
+}
+
+function flashVersionCheck() {
+	if (flashInstalled()) {
+		return FlashDetect.versionAtLeast(11,2);
+	} else {
+		return false;
+	}
+}
+
 function isValidEmail(email) {
     var atpos = email.indexOf("@");
     var dotpos = email.lastIndexOf(".");
@@ -312,6 +324,18 @@ function validateEmail(emailField) {
   return true;
 }
 
+function resetProfileForm() {
+	var profileForm = document.forms['profile-form'];
+	profileForm.reset();
+	setFieldPassStyles(profileForm["password1"], "");
+	setFieldPassStyles(profileForm["password2"], "");
+	setFieldPassStyles(profileForm["fname"], "");
+	setFieldPassStyles(profileForm["lname"], "");
+	setFieldPassStyles(profileForm["email"], "");
+}
+		
+	
+
 function profileValidateAndSubmit() {
 	
 	pass = true;
@@ -356,7 +380,9 @@ function profileValidateAndSubmit() {
   var emailField = profileForm["email"];
   var email = emailField.value;
   setFieldPassStyles(emailField, "Email");
-	pass = validateEmail(emailField);
+	if (!validateEmail(emailField)) {
+		pass = false;
+	}
   
  	if (Boolean(pass)) {
  		submitButton.disabled = true;  
@@ -414,6 +440,14 @@ function eventValidateAndSubmit(thisForm) {
 	setFieldPassStyles(document.getElementById(thisForm + "-duration-button"), "Duration");
   if (duration == null || duration == "" || duration == "Duration") {
   	setFieldErrorStyles(document.getElementById(thisForm + "-duration-button"), "Duration");
+    pass = false;
+  }
+  
+  var typeField = eventForm['meeting-type'];
+  var typeValue = typeField.value;
+  setFieldPassStyles(document.getElementById(thisForm + "-type-button"), "Meeting Type");
+  if (typeValue == null || typeValue == "" || typeValue == "Meeting Type") {
+  	setFieldErrorStyles(document.getElementById(thisForm + "-type-button"), "Meeting Type");
     pass = false;
   }
   

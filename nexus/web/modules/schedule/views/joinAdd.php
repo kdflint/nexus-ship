@@ -14,12 +14,9 @@
 					</div>
 					<div style="margin-top:10px;">
       			<select id="now-form-type" name="meeting-type" style="width:232px;vertical-align:middle;">
-	      			<option selected>Meeting Type</option>
-							<option value="1">Video Chat</option>
-							<option value="3">Collaboration</option>				
+	      			<?php include("meetingTypeOptions.html"); ?>			
       			</select>	 
       			<select id="now-form-duration" name="meeting-duration" style="width:132px;vertical-align:middle;">
-	      			<option selected>Duration</option>
 	      			<?php include("meetingDurationOptions.html"); ?>
       			</select>
 		    	</div> 	

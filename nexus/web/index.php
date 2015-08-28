@@ -41,6 +41,7 @@ if(isset($_GET['view']) && Util::isSafeCharacterSet($_GET['view'])) {
     <link rel="stylesheet" href="styles/nexus.css" type="text/css" />
     <script src="scripts/nexus.js" language="javascript"></script>
   	<script src="scripts/timeZoneData.js" language="javascript"></script>
+ 		<script src="scripts/lib/flash_detect.js"></script>
  		<script src="//code.jquery.com/jquery-1.10.2.js"></script>
   	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>  
   	<script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js"></script>
@@ -73,6 +74,8 @@ if(isset($_GET['view']) && Util::isSafeCharacterSet($_GET['view'])) {
 				});
 				$( '#profile_control' ).click(function() {
 	  			$( "#profile_display" ).toggle( "blind" );
+	  			$( "#profile_control_icon" ).toggleClass("fa-caret-down fa-caret-up");
+	  			resetProfileForm();		
 				});
 				if(<?php echo $showProfile; ?>) {
 					$( "#user_display" ).toggle( "blind" );
@@ -114,30 +117,18 @@ if(isset($_GET['view']) && Util::isSafeCharacterSet($_GET['view'])) {
 
     <script type="text/javascript">
       $(function() {
-        $( "#datepicker" ).datepicker({
-          changeMonth: true,
-          changeYear: true
-        });
-      });
-      $(function() {
-        $( "#schedule-form-time" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
-      });
-      $(function() {
+      	// schedule-form elements
+        $( "#datepicker" ).datepicker({ changeMonth: true, changeYear: true });
+      	$( "#schedule-form-time" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
         $( "#schedule-form-duration" ).selectmenu();
-      });
-      $(function() {
-        $( "#now-form-duration" ).selectmenu();
-      });
-      $(function() {
-        $( "#now-form-type" ).selectmenu();
-      });
-      $(function() {
+        $( "#schedule-form-type" ).selectmenu();
         $( "#country" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
         $( "#country" ).selectmenu({ change: function() { displayTimeZones(); } });
-      });
-      $(function() {
         $( "#countryTimeZones" ).selectmenu();
         $( "#countryTimeZones" ).selectmenu({ change: function() { setTimeZoneDisplay(document.getElementById("countryTimeZones").value); } });
+        // now-form elements
+        $( "#now-form-duration" ).selectmenu();
+        $( "#now-form-type" ).selectmenu();
       });
     </script> 
        
@@ -177,7 +168,7 @@ if(isset($_GET['view']) && Util::isSafeCharacterSet($_GET['view'])) {
       		<a href="http://northbridgetech.org/downloads/Northbridge_web_conference_center.pdf" style="color:#d27b4b;text-decoration:none;" target="_blank">About</a> | 
       		<a href="login.php?oid=<?php echo $_SESSION['orgId']; ?>&logout=true" style="color:#d27b4b;text-decoration:none;">Logout</a>
       	</span>
-      	<a id="profile_control" href="javascript:void(0);"><span style="clear:right;float:right;padding-top:4px;margin:0px;color:#d27b4b;" class="fa fa-caret-down fa-2x" ></span></a>
+      	<a id="profile_control" href="javascript:void(0);"><span id="profile_control_icon" style="clear:right;float:right;padding-top:4px;margin:0px;color:#d27b4b;" class="fa fa-caret-down fa-2x" ></span></a>
 				<span style="float:right;padding:10px;">Hello <?php echo $_SESSION['fname']; ?></span> 	
       </div>
 

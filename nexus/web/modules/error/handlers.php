@@ -9,6 +9,8 @@ define("LOG_FILE", "/home1/northbr6/errors.log");
 // Destination types
 define("DEST_EMAIL", "1");
 define("DEST_LOGFILE", "3");
+
+// TODO - fix header location and set up for all site
  
 function my_error_handler($errno, $errstr, $errfile, $errline)
 {  

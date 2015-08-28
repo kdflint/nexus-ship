@@ -76,6 +76,20 @@ class Event {
 		return FALSE;		
 	}
 	
+	public static function isValidMeetingType($in) {
+  	$query = "select exists 
+  		(select e.enumlabel 
+  		from pg_type t, pg_enum e 
+  		where t.oid = e.enumtypid
+  		and t.typname like 'meeting%'
+  		and e.enumlabel = $1)";
+  	$row = pg_fetch_row(pgDb::psExecute($query, array($in)));
+		if (!strcmp($row[0], "t")) {
+			return TRUE;
+		}
+		return FALSE;	
+	}
+	
 	public static function getFutureEvents($groupId, $localTz = "Greenwich", $ssnUser) {	
 		$events = array();
 		if (self::isValidTimeZone($localTz)) {
@@ -92,6 +106,7 @@ class Event {
 				e.descr as descr, 
 				e.uuid as uuid,
 				e.reserved_user_fk as adder,
+				e.type as meetingtype,
 				u.fname as fname, 
 				u.lname as lname,
 				pg.abbrev as abbrev 
@@ -117,6 +132,7 @@ class Event {
 				$events[$counter]['purpose'] = $row['name'];
 				$events[$counter]['descr'] = $row['descr'];
 				$events[$counter]['uuid'] = $row['uuid'];
+				$events[$counter]['mtype'] = $row['meetingtype'];
 				$events[$counter]['fname'] = $row['fname'];
 				$events[$counter]['lname'] = $row['lname'];
 				$events[$counter]['sessionUser'] = $ssnUser;
@@ -127,12 +143,12 @@ class Event {
 		return $events;
 	}
 
-	public static function addEvent($dttm, $duration, $name, $reservedUserId, $groupId, $tzName) {
+	public static function addEvent($dttm, $duration, $name, $reservedUserId, $groupId, $tzName, $type) {
 		$query = "select abbrev from pg_timezone_names where name = $1";
 		$row = pg_fetch_row(pgDb::psExecute($query, array($tzName)));
 		$tzAbbrev = $row[0];
-		$query = "insert into event (uuid, start_dttm, duration, name, descr, reserved_user_fk, group_fk, tz_name, tz_abbrev) values ($1, $2, $3, $4, $9, $5, $6, $7, $8)";
-		pgDb::psExecute($query, array(Util:: newUuid(), $dttm, $duration, $name, $reservedUserId, $groupId, $tzName, $tzAbbrev, ""));
+		$query = "insert into event (uuid, start_dttm, duration, name, descr, reserved_user_fk, group_fk, tz_name, tz_abbrev, type) values ($1, $2, $3, $4, $9, $5, $6, $7, $8, $10)";
+		pgDb::psExecute($query, array(Util:: newUuid(), $dttm, $duration, $name, $reservedUserId, $groupId, $tzName, $tzAbbrev, "", $type));
 		return;
 	}	
 	

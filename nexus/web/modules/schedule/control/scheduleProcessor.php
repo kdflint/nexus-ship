@@ -16,7 +16,8 @@ $dirty = array('meeting-name' => $_POST['meeting-name'],
 							'meeting-date' => $_POST['meeting-date'],
 							'meeting-time' => $_POST['meeting-time'],
 							'meeting-duration' => $_POST['meeting-duration'],
-							'tzone-name' => $_POST['tzone-name']
+							'tzone-name' => $_POST['tzone-name'],
+							'meeting-type' => $_POST['meeting-type']
 							);
 											
 $result = validateEvent($dirty);
@@ -33,9 +34,11 @@ Use only clean input beyond this point (i.e. $clean[])
 
 ======================================================= */
 
+$meetingType = array("1" => "video chat", "2" => "collaboration", "3" => "webinar", "4" => "video tether");
+
 $timestamp = $result['clean']['meeting-date'] . " " . $result['clean']['meeting-time'] . " " . $result['clean']['tzone-name'];
 
-Event::addEvent($timestamp, $result['clean']['meeting-duration'], $result['clean']['meeting-name'], $_SESSION['uidpk'], array_keys($_SESSION['groups'])[0], $result['clean']['tzone-name']);
+Event::addEvent($timestamp, $result['clean']['meeting-duration'], $result['clean']['meeting-name'], $_SESSION['uidpk'], array_keys($_SESSION['groups'])[0], $result['clean']['tzone-name'], $meetingType[$result['clean']['meeting-type']]);
 
 header("location:" . Util::getHttpPath() . "/index.php");
 exit(0);
@@ -105,6 +108,13 @@ function validateEvent($input) {
  	} else {	
  		$result['error']['meeting-duration'] = "error";
  	}
+ 	
+ 	// MEETING TYPE
+  if (isset($input['meeting-type']) && $input['meeting-type'] < 5) {
+ 	 	$result['clean']['meeting-type'] = $input['meeting-type'];
+ 	} else {	
+ 		$result['error']['meeting-type'] = "error";
+ 	} 	
 
  	return $result;
 }
