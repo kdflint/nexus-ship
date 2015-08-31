@@ -27,7 +27,7 @@ class Invitation {
 	}
 	
 	public static function getOpenInvitationByUuid($uuid) {
-		$query = "select network_fk as networkid, organization_fk as orgid, issuer_fk as grantorid, type as type, role_fk as roleid, group_fk as groupid from invitation where uuid=$1 order by create_dttm desc limit 1";
+		$query = "select i.network_fk as networkid, i.organization_fk as orgid, i.issuer_fk as grantorid, i.type as type, i.role_fk as roleid, i.group_fk as groupid, o.uid as uid from invitation i, organization o where uuid=$1 and i.organization_fk = o.id order by create_dttm desc limit 1";
 		return PgDb::psExecute($query, array($uuid));
 	}
 	

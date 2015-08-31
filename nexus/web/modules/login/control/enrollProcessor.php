@@ -73,7 +73,7 @@ while ($row = pg_fetch_array($cursor)) {
 	}
 }
 
-sendConfirmationEmail($clean['email'], $clean['fname'], $clean['username'], $usernames, $groupName, $invitation['orgid']);
+sendConfirmationEmail($clean['email'], $clean['fname'], $clean['username'], $usernames, $groupName, $invitation['uid']);
 
 if($isAuthenticated){
 	header("location:" . Util::getHttpPath() . "/login.php");
