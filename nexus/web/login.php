@@ -142,10 +142,10 @@ $networkName = $row['name'];
 			  		<p>Here are the <a href="http://www.enable-javascript.com" target="_blank"> instructions how to enable JavaScript in your web browser</a></p>
 			  	</noscript>
 			  	<p id="login-user-message" class="confirmation"><span class="<?php echo $cleanIcon; ?>" style="color:#007582;float:left;margin-right:5px;"></span><?php echo $cleanMessage; ?></p>
-					<form id="login-form" class="pure-form pure-form-stacked" autocomplete="off" action="modules/login/control/loginProcessor.php" method="post">
+					<form id="login-form" class="pure-form pure-form-stacked" action="modules/login/control/loginProcessor.php" method="post">
 	    			<fieldset>
 	    				Username<span class="instruction form-instruction"><a href="javascript:void(0)" onclick="toggleFormDisplay('recover-username-form')">I forgot</a></span>
-        			<input class="form-input" name="uid" value="" maxlength="25" >	        		
+        			<input class="form-input" name="uid" value="" maxlength="25" autofocus>	        		
         			Password<span class="instruction form-instruction"><a href="javascript:void(0)" onclick="toggleFormDisplay('recover-password-form')">I forgot</a></span>
         			<input class="form-input" type="password" name="password" value="" maxlength="25" />	
         			<input id="localTz" name="timezone" type="hidden" value="">

@@ -245,14 +245,6 @@ function inviteValidateAndSubmit() {
 	var inviteForm = document.forms["invite-form"];
 	var submitButton = document.getElementById("invite-form-submit");
 	
-  var fnameField = inviteForm["fname"];
-  var fname = fnameField.value;
-  setFieldPassStyles(fnameField, "First Name");
-  if (fname == null || fname == "") {
-    setFieldErrorStyles(fnameField, "First name is required.");
-    pass = false;
-  }	
-	
 	var emailField = inviteForm["email"];
 	setFieldPassStyles(emailField, "Email");
 	pass = validateEmail(emailField);
@@ -371,6 +363,16 @@ function resetNowForm() {
 	setFieldPassStyles(document.getElementById("now-form-type-button"), "Meeting Type");
 	$( "#now-form-duration" ).selectmenu( "refresh" );
 	$( "#now-form-type" ).selectmenu( "refresh" );
+}
+
+function resetInviteForm() {
+	document.getElementById('add_user_control').click();
+	var inviteForm = document.forms['invite-form'];
+ 	if (inviteForm["new-user-admin"].checked) {
+ 		toggleAdminCheckbox();
+ 	}
+	inviteForm.reset();
+	setFieldPassStyles(inviteForm['email'], "Email");
 }
 
 function profileValidateAndSubmit() {
@@ -506,7 +508,8 @@ function eventValidateAndSubmit(thisForm) {
 function setFieldPassStyles(formField, placeholder) {
 	formField.style.backgroundColor = "white";
 	formField.placeholder = placeholder;
-  formField.style.borderWidth = "0px";
+	formField.style.borderColor = "#cccccc";
+  formField.style.borderWidth = "1px";
 }
 
 function setFieldErrorStyles(formField, placeholder) {
