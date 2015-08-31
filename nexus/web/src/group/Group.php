@@ -29,7 +29,10 @@ class Group {
 			$users[$counter]['fname'] = "Pending";
 			$users[$counter]['lname'] = "Enrollment";
 			$users[$counter]['email'] = $row['email'];
+			$users[$counter]['sessionUser'] = $ssnUser;
+			$users[$counter]['uidpk'] = $row['uuid'];
 			$users[$counter]['role'] = Util::getRoleName($row['roleid']);
+			$users[$counter]['status'] = "pending";
 			$counter++;
 		}
 
@@ -52,6 +55,7 @@ class Group {
 				$users[$counter]['sessionUser'] = $ssnUser;
 				$users[$counter]['uidpk'] = $row['id'];
 				$users[$counter]['role'] = Util::getRoleName($row['roleid']);
+				$users[$counter]['status'] = "active";
 				$counter++;
 			}
 			

@@ -22,17 +22,22 @@ class Invitation {
 	}
 	
 	public static function getOpenGroupInvitations($groupId) {
-		$query = "select email, role_fk as roleid from invitation where group_fk = $1 and accept_dttm is NULL and expire_dt > now() and type = 'single' order by email";
+		$query = "select email, role_fk as roleid, uuid as uuid from invitation where group_fk = $1 and accept_dttm is NULL and expire_dt > now() and type = 'single' order by email";
 		return PgDb::psExecute($query, array($groupId));
 	}
-	
+
 	public static function getOpenInvitationByUuid($uuid) {
-		$query = "select i.network_fk as networkid, i.organization_fk as orgid, i.issuer_fk as grantorid, i.type as type, i.role_fk as roleid, i.group_fk as groupid, o.uid as uid from invitation i, organization o where uuid=$1 and i.organization_fk = o.id order by create_dttm desc limit 1";
+		$query = "select i.network_fk as networkid, i.organization_fk as orgid, i.issuer_fk as grantorid, i.type as type, i.role_fk as roleid, i.group_fk as groupid, o.uid as uid from invitation i, organization o where i.uuid=$1 and i.organization_fk = o.id order by i.create_dttm desc limit 1";
 		return PgDb::psExecute($query, array($uuid));
 	}
 	
 	public static function consumeInvitationByUuid($uuid) {
 		$query = "update invitation set accept_dttm = now() where uuid = $1";
+		return PgDb::psExecute($query, array($uuid));
+	}
+	
+	public static function expireInvitationByUUid($uuid) {
+		$query = "update invitation set expire_dt = DATE 'yesterday' where uuid = $1";
 		return PgDb::psExecute($query, array($uuid));
 	}
 

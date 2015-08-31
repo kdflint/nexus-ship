@@ -132,7 +132,7 @@ class User {
 	}
 	
 	public static function deleteUser($id) {
-		$query = "update public.user set suspend_dttm = now() where id = $1";
+		$query = "update public.user set suspend_dttm = now(), status_fk = '2', update_dttm = now() where id = $1";
 		return PgDb::psExecute($query, array($id));
 	}
 
