@@ -17,10 +17,12 @@ if (!Util::isSessionValid()) {
 Util::setSessionLastActivity();
 
 $showProfile = "false";
+$showTeam = "false";
 
 if(isset($_GET['view']) && Util::isSafeCharacterSet($_GET['view'])) {
 	switch($_GET['view']) {
 		case "profile": $showProfile = "true";
+		case "team": $showTeam = "true";
 	}
 }
 
@@ -79,7 +81,10 @@ if(isset($_GET['view']) && Util::isSafeCharacterSet($_GET['view'])) {
 				});
 				if(<?php echo $showProfile; ?>) {
 					$( "#user_display" ).toggle( "blind" );
-				}				 	
+				}
+				if(<?php echo $showTeam; ?>) {
+					$( "#menu-userList" ).click();
+				}					 	
 			});
 			
 			function toggleJoinDisplay() {

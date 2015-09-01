@@ -53,7 +53,7 @@ NorthBridge Technology Alliance";
 	mail($clean['email'], "[Nexus] Enrollment Notification", $message, "From: noreply@nexus.northbridgetech.org");
 }
 
-header("location:" . Util::getHttpPath() . "/index.php");
+header("location:" . Util::getHttpPath() . "/index.php?view=team");
 exit(0);
 
 function returnToLoginWithError($errorMessage) {

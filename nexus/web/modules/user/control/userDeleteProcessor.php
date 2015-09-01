@@ -32,7 +32,7 @@ Use only clean input beyond this point (i.e. $clean[])
 
 User::deleteUser($clean['id']);
 
-header("location:" . Util::getHttpPath() . "/index.php");
+header("location:" . Util::getHttpPath() . "/index.php?view=team");
 exit(0);
 
 function forceLogout() {
