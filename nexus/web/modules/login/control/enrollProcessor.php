@@ -14,8 +14,6 @@ $validInvitation = false;
 			
 $result = Util::validateUserProfile($dirty, TRUE);
 
-// LEFT OFF HERE - why is $_SESSION['invitation'] not set???
-
 if (isset($_SESSION['invitation']) && Util::validateUuid($_SESSION['invitation'])) {
 	if (Invitation::isInvitationOpen($_SESSION['invitation'])) {
 		$validInvitation = true;
@@ -23,9 +21,13 @@ if (isset($_SESSION['invitation']) && Util::validateUuid($_SESSION['invitation']
 }
 
 if (!$validInvitation || count($result['error']) > 0) {
-	echo print_r($result['error']);
-	//header("location:" . Util::getHttpPath() . "/login.php?logout=true");
-	exit(0);
+	if ($result['error']['username'] == Util::VALIDATION_USERNAME_DUPE_ERROR)  {
+		returnToEnrollWithError($result['error']['username']);
+	} else {
+		echo print_r($result['error']);
+		//header("location:" . Util::getHttpPath() . "/login.php?logout=true");
+		exit(0);
+	}
 }
 
 $clean = $result['good'];
@@ -83,6 +85,7 @@ if($isAuthenticated){
 }	
 		
 function returnToEnrollWithError($errorMessage) {
+	//echo Util::getHttpPath() . "/enroll.php?invitation=" . $_SESSION['invitation'] . "&error=" . $errorMessage;
 	header("location:" . Util::getHttpPath() . "/enroll.php?invitation=" . $_SESSION['invitation'] . "&error=" . $errorMessage);
 	exit(0);
 }
