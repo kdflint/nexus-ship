@@ -431,6 +431,32 @@ function profileValidateAndSubmit() {
  	}
 }
 
+function getMaxDaysForMonth(month) {
+	switch(month) {
+    case 4:
+    case 6:
+    case 9:
+    case 11:
+        return 30;
+        break;
+    default:
+        return 31;
+	} 
+}
+
+function getMaxDaysForFebruary(year) {
+	switch(year) {
+    case 2016:
+    case 2020:
+    case 2024:
+    case 2028:
+    case 2032:
+        return 29;
+        break;
+    default:
+        return 28;
+	} 
+}
 	
 function eventValidateAndSubmit(thisForm) {
 	pass = true;
@@ -447,23 +473,41 @@ function eventValidateAndSubmit(thisForm) {
   
 	var dateField = eventForm['meeting-date'];
   var date = dateField.value;
-  var patt = new RegExp(/\d{2}\/\d{2}\/\d{4}/);  
+  var re = /\d{2}\/\d{2}\/\d{4}/;
 	setFieldPassStyles(dateField, "Date");
   if (date == null || date == "") {
   	setFieldErrorStyles(dateField, "mm/dd/yyyy");
+  	dateField.value = "";
     pass = false;
-  } else if (patt.test(date)) {
+	} else if (re.test(date)) {
   	 var parts = date.split("/");
-  	 // TODO - this does not match valid date to month, so, 04/31/2000 will pass through
   	 if (
   	 			1 <= parseInt(parts[0], 10) && parseInt(parts[0], 10) <= 12 &&
   	 			1 <= parseInt(parts[1], 10) && parseInt(parts[1], 10) <= 31 &&
   	 			2000 <= parseInt(parts[2], 10) && parseInt(parts[2], 10) <= 2100
   	 ) {
-  	} else {
-  		setFieldErrorStyles(dateField, "mm/dd/yyyy");
+  	 	if (parseInt(parts[1], 10) > getMaxDaysForMonth(parseInt(parts[0], 10))) {
+  	 		// too many days for month
+		 		setFieldErrorStyles(dateField, "mm/dd/yyyy");
+  			dateField.value = "";
+    		pass = false;  	
+  	 	} else if (parseInt(parts[0], 10) == 2 && parseInt(parts[1], 10) > getMaxDaysForFebruary(parseInt(parts[2], 10))) {
+  	 		// too many days for Feb
+		 		setFieldErrorStyles(dateField, "mm/dd/yyyy");
+  			dateField.value = "";
+    		pass = false;  
+  	 	} else {
+  	 		// All is good - do nothing!
+  	 	}
+   	} else {
+		 	setFieldErrorStyles(dateField, "mm/dd/yyyy");
+  		dateField.value = "";
     	pass = false;  		
-  	}
+  	} 
+  } else {
+  	setFieldErrorStyles(dateField, "mm/dd/yyyy");
+  	dateField.value = "";
+   	pass = false;
   }
   
  	var timeField = eventForm['meeting-time'];
