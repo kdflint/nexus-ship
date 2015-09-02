@@ -470,7 +470,7 @@ function eventValidateAndSubmit(thisForm) {
   	setFieldErrorStyles(nameField, "Meeting purpose is required");
     pass = false;
   }
-  
+
 	var dateField = eventForm['meeting-date'];
   var date = dateField.value;
   var re = /\d{2}\/\d{2}\/\d{4}/;
@@ -479,6 +479,8 @@ function eventValidateAndSubmit(thisForm) {
   	setFieldErrorStyles(dateField, "mm/dd/yyyy");
   	dateField.value = "";
     pass = false;
+	} else if (date == "today") { 
+		// All is good - do nothing
 	} else if (re.test(date)) {
   	 var parts = date.split("/");
   	 if (
@@ -497,7 +499,7 @@ function eventValidateAndSubmit(thisForm) {
   			dateField.value = "";
     		pass = false;  
   	 	} else {
-  	 		// All is good - do nothing!
+  	 		// All is good - do nothing
   	 	}
    	} else {
 		 	setFieldErrorStyles(dateField, "mm/dd/yyyy");
