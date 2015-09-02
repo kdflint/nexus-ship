@@ -185,7 +185,7 @@ function getConfigXml() {
 			presenterShareOnly = "false"
 			controlsForPresenter = "false"
 			resolutions = "320x240,640x480,1280x720"
-			autoStart = "false"
+			autoStart = "true"
 			skipCamSettingsCheck="false"
 			showButton = "true"
 			showCloseButton = "true"
