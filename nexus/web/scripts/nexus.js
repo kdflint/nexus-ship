@@ -445,12 +445,8 @@ function getMaxDaysForMonth(month) {
 }
 
 function getMaxDaysForFebruary(year) {
-	switch(year) {
-    case 2016:
-    case 2020:
-    case 2024:
-    case 2028:
-    case 2032:
+	switch(year%4) {
+    case 0:
         return 29;
         break;
     default:
@@ -462,18 +458,19 @@ function eventValidateAndSubmit(thisForm) {
 	pass = true;
 	var eventForm = document.forms[thisForm];
 	var submitButton = document.getElementById(thisForm + "-submit");	
-	
-	var nameField = eventForm['meeting-name'];
-  var name = nameField.value;
-	setFieldPassStyles(nameField, "Purpose");
-  if (name == null || name == "" || name.length > 50) {
-  	setFieldErrorStyles(nameField, "Meeting purpose is required");
+	 
+ 	var timeField = eventForm['meeting-time'];
+  var time = timeField.value;
+	setFieldPassStyles(document.getElementById(thisForm + "-time-button"), "Time");
+  if (time == null || time == "" || time == "Time") {
+   	setFieldErrorStyles(document.getElementById(thisForm + "-time-button"), "Time");
     pass = false;
   }
-
+   
 	var dateField = eventForm['meeting-date'];
   var date = dateField.value;
   var re = /\d{2}\/\d{2}\/\d{4}/;
+  var parts = new Array();
 	setFieldPassStyles(dateField, "Date");
   if (date == null || date == "") {
   	setFieldErrorStyles(dateField, "mm/dd/yyyy");
@@ -482,23 +479,26 @@ function eventValidateAndSubmit(thisForm) {
 	} else if (date == "today") { 
 		// All is good - do nothing
 	} else if (re.test(date)) {
-  	 var parts = date.split("/");
+  	 parts = date.split("/");
+  	 var year = parseInt(parts[2], 10);
+  	 var month = parseInt(parts[0], 10);
+  	 var day = parseInt(parts[1], 10);
   	 if (
-  	 			1 <= parseInt(parts[0], 10) && parseInt(parts[0], 10) <= 12 &&
-  	 			1 <= parseInt(parts[1], 10) && parseInt(parts[1], 10) <= 31 &&
-  	 			2000 <= parseInt(parts[2], 10) && parseInt(parts[2], 10) <= 2100
+  	 			1 <= month && month <= 12 &&
+  	 			1 <= day && day <= 31 &&
+  	 			2000 <= year && year <= 2100
   	 ) {
-  	 	if (parseInt(parts[1], 10) > getMaxDaysForMonth(parseInt(parts[0], 10))) {
-  	 		// too many days for month
+  	 	if (day > getMaxDaysForMonth(month)) {
+  	 		// too many days for the month
 		 		setFieldErrorStyles(dateField, "mm/dd/yyyy");
   			dateField.value = "";
     		pass = false;  	
-  	 	} else if (parseInt(parts[0], 10) == 2 && parseInt(parts[1], 10) > getMaxDaysForFebruary(parseInt(parts[2], 10))) {
+  	 	} else if (month == 2 && day > getMaxDaysForFebruary(year)) {
   	 		// too many days for Feb
 		 		setFieldErrorStyles(dateField, "mm/dd/yyyy");
   			dateField.value = "";
     		pass = false;  
-  	 	} else {
+    	} else {
   	 		// All is good - do nothing
   	 	}
    	} else {
@@ -512,14 +512,26 @@ function eventValidateAndSubmit(thisForm) {
    	pass = false;
   }
   
- 	var timeField = eventForm['meeting-time'];
-  var time = timeField.value;
-	setFieldPassStyles(document.getElementById(thisForm + "-time-button"), "Time");
-  if (time == null || time == "" || time == "Time") {
-   	setFieldErrorStyles(document.getElementById(thisForm + "-time-button"), "Time");
-    pass = false;
+  if (Boolean(pass)) {
+  	// if all formatting date/time formatting passes, check that this valid date is not in the past
+    var nowEpoch = Date.now();
+    var reserveEpoch = Date.parse(parts[2] + "-" + parts[0] + "-" + parts[1] + "T" + time);
+    if (nowEpoch > reserveEpoch) {
+    	alert("Your meeting time is in the past.");
+  		setFieldErrorStyles(dateField, "mm/dd/yyyy");
+   		setFieldErrorStyles(document.getElementById(thisForm + "-time-button"), "Time");
+   		pass = false;
+		}
   }
   
+ 	var nameField = eventForm['meeting-name'];
+  var name = nameField.value;
+	setFieldPassStyles(nameField, "Purpose");
+  if (name == null || name == "" || name.length > 50) {
+  	setFieldErrorStyles(nameField, "Meeting purpose is required");
+    pass = false;
+  }
+
   var durationField = eventForm['meeting-duration'];
   var duration = durationField.value;
 	setFieldPassStyles(document.getElementById(thisForm + "-duration-button"), "Duration");
