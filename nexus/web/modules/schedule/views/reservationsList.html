@@ -54,11 +54,11 @@
           		"</div>" +
           	"</td>";	
        		if (!flashInstalled()) {
-       			document.getElementById("join_control_mode").innerHTML = "<a href='javascript:void(0);' style='position:absolute;padding-left:652px;padding-top:8px;'><span class='fa fa-exclamation-triangle fa-2x' ></span></a>";
+       			document.getElementById("join_control_mode").innerHTML = "<a href='javascript:void(0);' style='position:absolute;margin-left:652px;padding-top:8px;'><span class='fa fa-exclamation-triangle fa-2x' ></span></a>";
        		} else if (!flashVersionCheck()) {
-       			document.getElementById("join_control_mode").innerHTML = "<a href='javascript:void(0);' style='position:absolute;padding-left:652px;padding-top:8px;'><span class='fa fa-exclamation-triangle fa-2x' ></span></a>";
+       			document.getElementById("join_control_mode").innerHTML = "<a href='javascript:void(0);' style='position:absolute;margin-left:652px;padding-top:8px;'><span class='fa fa-exclamation-triangle fa-2x' ></span></a>";
 					} else {
-       			document.getElementById("join_control_mode").innerHTML = "<a href='modules/meeting/control/joinMeetingProcessor.php?id=" + nowMeeting.uuid + "&type=" + nowMeeting.mtype + "' target='_blank' style='position:absolute;padding-left:648px;padding-top:8px;'><span class='fa fa-sign-in fa-3x' ></span></a>";
+       			document.getElementById("join_control_mode").innerHTML = "<a href='modules/meeting/control/joinMeetingProcessor.php?id=" + nowMeeting.uuid + "&type=" + nowMeeting.mtype + "' target='_blank' style='position:absolute;margin-left:648px;padding-top:8px;'><span class='fa fa-sign-in fa-3x' ></span></a>";
        		}
        	}  
        	document.getElementById("nowRow0").innerHTML = nowEvent;     					
@@ -112,7 +112,7 @@
 
 <div id="join_control_mode">
 	<!-- These link parameters are altered if there is a meeting currently running. See the construction of 'nowRow0' in json processing script above -->
-	<a id='join_control' href='javascript:void(0);' style='position:absolute;padding-left:648px;padding-top:16px;'><span class='fa fa-circle-o-notch fa-2x' ></span></a>
+	<a id='join_control' href='javascript:void(0);' style='position:absolute;margin-left:648px;padding-top:16px;'><span class='fa fa-circle-o-notch fa-2x' ></span></a>
 </div>
 <table id="nowTable" class="pure-table">
 </table>
@@ -125,7 +125,7 @@
 	<?php include("modules/schedule/views/reservationAdd.php"); ?>	
 </div>
 					
-<a id='schedule_control' href='javascript:void(0);' style='position:absolute;padding-left:650px;padding-top: 20px;'></span><span style='padding:0px;' class='fa fa-calendar-o fa-2x' ></span><span style='padding-left:2px;' class='fa fa-plus' ></span></a>				
+<a id='schedule_control' href='javascript:void(0);' style='position:absolute;margin-left:650px;padding-top: 20px;'></span><span style='padding:0px;' class='fa fa-calendar-o fa-2x' ></span><span style='padding-left:2px;' class='fa fa-plus' ></span></a>				
 <table id="reservationTable" class="pure-table">
 </table>
 
