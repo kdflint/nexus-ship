@@ -24,7 +24,7 @@ class User {
 	}
 	
 	public static function getUsernamesByEmail($email) {
-		$query = "select username from public.user where lower(email) = lower($1)";
+		$query = "select username from public.user where lower(email) = lower($1) and suspend_dttm is NULL";
 		return pgDb::psExecute($query, array($email));
 	}
 	
