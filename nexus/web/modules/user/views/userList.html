@@ -11,6 +11,9 @@
 			 		tableRows = tableRows + "<tr id='userRow" + i + "'></tr>"; 
 			 	}
        	document.getElementById("userTable").innerHTML = tableRows;
+       	if (jsonObj.length > 9) {
+       		document.getElementById('add_user_control_icon').className = "";
+       	}
        	
        	// write each event into its row container
 			 	for (var i = 0; i < jsonObj.length; i++) { 
@@ -45,7 +48,7 @@
 	}
 </script>
 
-<a id='add_user_control' href='javascript:void(0);' style='position:absolute;margin-left:650px;padding-top: 20px;'></span><span style='padding:0px;' class='fa fa-user-plus fa-2x' ></span></a>				
+<a id='add_user_control' href='javascript:void(0);' style='position:absolute;margin-left:650px;padding-top: 20px;'></span><span id="add_user_control_icon" style='padding:0px;' class='fa fa-user-plus fa-2x' ></span></a>			
 <table id="userTable" class="pure-table">
 	<script> getUserList('<?php echo $_SESSION['role']; ?>'); </script>
 </table>
