@@ -171,7 +171,7 @@ if(isset($_GET['view']) && Util::isSafeCharacterSet($_GET['view'])) {
   	
       	<span class="controls" style="float:right;padding-bottom:10px;margin-top:30px;">
       		<a href="http://northbridgetech.org/downloads/Northbridge_web_conference_center.pdf" style="color:#d27b4b;text-decoration:none;" target="_blank">About</a> | 
-      		<a href="login.php?oid=<?php echo $_SESSION['orgId']; ?>&logout=true" style="color:#d27b4b;text-decoration:none;">Logout</a>
+      		<a href="login.php?oid=<?php echo $_SESSION['orgUid']; ?>&logout=true" style="color:#d27b4b;text-decoration:none;">Logout</a>
       	</span>
       	<a id="profile_control" href="javascript:void(0);"><span id="profile_control_icon" style="clear:right;float:right;padding-top:4px;margin:0px;color:#d27b4b;" class="fa fa-caret-down fa-2x" ></span></a>
 				<span style="float:right;padding:10px;">Hello <?php echo $_SESSION['fname']; ?></span> 	
