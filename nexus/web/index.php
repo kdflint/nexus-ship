@@ -156,6 +156,27 @@ if(isset($_GET['view']) && Util::isSafeCharacterSet($_GET['view'])) {
 				activityFlag = 0;
 			}
     </script>
+    
+  <!-- For Formilla feedback form -->
+  <script type="text/javascript">
+    (function () {
+        var head = document.getElementsByTagName("head").item(0);
+        var script = document.createElement("script");
+        var src = (document.location.protocol == 'https:' ? 'https://www.formilla.com/scripts/feedback.js' : 'http://www.formilla.com/scripts/feedback.js');
+        script.setAttribute("type", "text/javascript"); script.setAttribute("src", src); script.setAttribute("async", true);
+        var complete = false;
+
+        script.onload = script.onreadystatechange = function () {
+            if (!complete && (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete')) {
+                complete = true;
+                Formilla.guid = 'd94fe060-648d-45c5-9698-2e43d5817798';
+                Formilla.loadFormillaChatButton();
+            }
+        };
+
+        head.appendChild(script);
+    })();
+  </script>
   </head>
   
   <body>
@@ -170,7 +191,7 @@ if(isset($_GET['view']) && Util::isSafeCharacterSet($_GET['view'])) {
       	</span>  	
   	
       	<span class="controls" style="float:right;padding-bottom:10px;margin-top:30px;">
-      		<a href="http://northbridgetech.org/downloads/Northbridge_web_conference_center.pdf" style="color:#d27b4b;text-decoration:none;" target="_blank">About</a> | 
+					<a href="javascript:void(0)" onclick="if(typeof Formilla != 'undefined'){Formilla.initFormillaChat();}">Problem?</a> | 
       		<a href="login.php?oid=<?php echo $_SESSION['orgUid']; ?>&logout=true" style="color:#d27b4b;text-decoration:none;">Logout</a>
       	</span>
       	<a id="profile_control" href="javascript:void(0);"><span id="profile_control_icon" style="clear:right;float:right;padding-top:4px;margin:0px;color:#d27b4b;" class="fa fa-caret-down fa-2x" ></span></a>
