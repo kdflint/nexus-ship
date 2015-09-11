@@ -1,36 +1,24 @@
 <?php
 
-require_once("../core/domain/Util.php");
+require_once("../../../src/framework/Util.php");
 
-class MessageActivation {
+class MessageEnrollment {
 	
 	private $replyTo = "noreply@nexus.northbridgetech.org";
 	private $bcc = "";
 	private $subject = "[Nexus] Enrollment Confirmation";
 	private $from = "Northbridge Technology Alliance <noreply@nexus.northbridgetech.org>";
-	private $to = "";
-	private $fname = "";
-	private $username = "";
-	private $allUsernames = "";
-	private $groupName = "";
-	private $orgId = "";
-	private $multiples = "";	
+	private $to = "";	
 	private $emailStyle = "";
+	private $messageBody = "";
 	
-	private $messageBody = 
-	"Welcome " . $fname . "!\r\n\r\nYour enrollment is complete for username: " . $username . $multiples . "\r\n\r\nYou are now enabled to collaborate with " . $groupName . "\r\n\r\nYou can login to Nexus using this link.\r\n\r\n" . Util::getHttpPath() . "/login.php?oid=" . $orgid . "Enjoy,\r\n\r\nThe Development Team at\r\n\r\nNorthBridge Technology Alliance";
-	
-	public function __construct($email, $fname, $username, $allUsernames, $groupName, $orgid) {
+	public function __construct($email, $message) {
 		$this->to = $email;
-		$this->fname = $fname;
-		$this->username = $username;
-		$this->allUsernames = $allUsernames;
-		$this->groupName = $groupName;
-		$this->orgId = $orgid;
+		$this->messageBody = $message;
+	}
 	
-		if (strlen($allUsernames) > 3) {
-			$this->multiples = "\r\n\r\nNote: There are other usernames currently enrolled with this email address: " . Util::stripTrailingComma($allUsernames);
-		}
+	public function setMessageBody($message) {
+		$this->messageBody = $message;
 	}
 	
 	private $links = array(
@@ -52,8 +40,8 @@ class MessageActivation {
 	
 	/* generate these social media images from Front Awesome library at http://fa2png.io/ */
 	private function constructHtmlMessage($boundary) {
-		$formatLineBreaks = str_replace("\r\n\r\n", "</p><p>",$this->messageBody);
-		$formatLineBreaks = str_replace("\r\n", "<br/>",$formatLineBreaks);
+		$formatLineBreaks = str_replace('\r\n\r\n', "</p><p>",$this->messageBody);
+		$formatLineBreaks = str_replace('\r\n', "<br/>",$formatLineBreaks);
 		$formatLinkButtons = $this->formatLinks($formatLineBreaks);
 		return "--" . $boundary . "
 Content-Type: text/html; charset=\"iso-8859-1\"
@@ -67,15 +55,15 @@ Content-Transfer-Encoding: 7bit
 	<body style='font-family:Oxygen,Arial,sans-serif;color:#484848;'>
 		<table style='width:90%;display:block;max-width:620px;'>
 			<tr>
-				<td colspan='2'><img src='" . Util::getHttpPath() . "/images/NB_horizontal_rgb.png' alt='Northbridge Technology Alliance Logo' width='252' height='68' style='padding-bottom:10px;padding-right:30px;'/></td>
+				<td colspan='2'><img src='http://northbridgetech.org/images/NB_horizontal_rgb.png' alt='Northbridge Technology Alliance Logo' width='252' height='68' style='padding-bottom:10px;padding-right:30px;'/></td>
 			</tr>
 			<tr>
 				<td style='vertical-align:top;padding-top:10px;'>
-					<a href='https://twitter.com/'" . Util::getTwitterHandle() . "' target='_blank'><img src='" . Util::getHttpPath() . "/images/twitter_dae0bc_32.png' width='32' height=32' /></a><br/>
-					<a href='//plus.google.com/u/0/101145194341428988499?prsrc=3' rel='publisher' target='_blank' style='text-decoration:none;'><img src='" . Util::getHttpPath() . "/images/google-plus-square_dae0bc_32.png' width='32' height=32' /></a><br/>
-					<a href='https://www.linkedin.com/company/2232384' target='_blank'><img src='" . Util::getHttpPath() . "/images/linkedin_dae0bc_32.png' width='32' height=32' /></a><br/>
-					<a href='https://www.facebook.com/northbridgenfp#' target='_blank'><img src='" . Util::getHttpPath() . "/images/facebook-square_dae0bc_32.png' width='32' height=32' /></a><br/>
-					<a href='https://github.com/NorthBridge/playbook/wiki/1.How-We-Do' target='_blank'><img src='" . Util::getHttpPath() . "/images/github_dae0bc_32.png' width='32' height=32' /></a>
+					<a href='https://twitter.com/'" . Util::getTwitterHandle() . "' target='_blank'><img src='http://northbridgetech.org/images/twitter_dae0bc_32.png' width='32' height=32' /></a><br/>
+					<a href='//plus.google.com/u/0/101145194341428988499?prsrc=3' rel='publisher' target='_blank' style='text-decoration:none;'><img src='http://northbridgetech.org/images/google-plus-square_dae0bc_32.png' width='32' height=32' /></a><br/>
+					<a href='https://www.linkedin.com/company/2232384' target='_blank'><img src='http://northbridgetech.org/images/linkedin_dae0bc_32.png' width='32' height=32' /></a><br/>
+					<a href='https://www.facebook.com/northbridgenfp#' target='_blank'><img src='http://northbridgetech.org/images/facebook-square_dae0bc_32.png' width='32' height=32' /></a><br/>
+					<a href='https://github.com/NorthBridge/playbook/wiki/1.How-We-Do' target='_blank'><img src='http://northbridgetech.org/images/github_dae0bc_32.png' width='32' height=32' /></a>
 				</td>
 				<td style='vertical-align:top;padding-left:10px;'><p>" . $formatLinkButtons . "</p></td>
 			</tr>
@@ -110,7 +98,6 @@ Content-Transfer-Encoding: 7bit
 		$output .= "Reply To = " . $this->replyTo . "\r\n";
 		$output .= "Bcc = " . $this->bcc . "\r\n";
 		$output .= "Subject = " . $this->subject . "\r\n";
-		$output .= "Path = " . Util::getHttpPath() . "\r\n";
 		$output .= "Twitter = " . Util::getTwitterHandle() . "\r\n";
 		$output .= "Message Body = " . $this->messageBody . "\r\n";
 		return $output;

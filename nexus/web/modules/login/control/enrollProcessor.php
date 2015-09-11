@@ -5,7 +5,7 @@ session_start();
 require_once("../../../src/framework/Util.php");
 require_once(Util::getSrcRoot() . "/user/Invitation.php");
 require_once(Util::getSrcRoot() . "/group/Group.php");
-require_once("MessageEnrollment.php");
+require_once(Util::getModulesRoot() . "/login/control/MessageEnrollment.php");
 
 // Cleanse all user input
 
@@ -91,39 +91,17 @@ function returnToEnrollWithError($errorMessage) {
 	exit(0);
 }
 
-function sendConfirmationEmail_depr($email, $fname, $username, $allUsernames, $groupName, $orgid) {
+function sendConfirmationEmail($email, $fname, $username, $allUsernames, $groupName, $orgid) {
 	
 	$multiples = "";
 	if (strlen($allUsernames) > 3) {
-		$multiples = "
-		
-Note: There are other usernames currently enrolled with this email address: " . Util::stripTrailingComma($allUsernames);
+		$multiples = '\r\n\r\nNote: There are other usernames currently enrolled with this email address: ' . Util::stripTrailingComma($allUsernames);
 	}
-	$message = "Welcome " . $fname . "!
-	
-Your enrollment is complete for username: " . $username . $multiples . "
-	
-You are now enabled to collaborate with " . $groupName . "
-
-You can login to Nexus using this link.
-
-" . Util::getHttpPath() . "/login.php?oid=" . $orgid . "
-
-Enjoy,
-
-The Development Team at
-NorthBridge Technology Alliance
-";
-
-		mail($email, "[Nexus] Enrollment Confirmation", $message, "From: noreply@nexus.northbridgetech.org\r\n");		
+	$message = 'Welcome ' . $fname . '!\r\n\r\nYour Nexus enrollment is complete for username: ' . $username . $multiples . '\r\n\r\nYou are now enabled to collaborate with ' . $groupName . '\r\n\r\nYou can login to Nexus using this link.\r\n\r\n' . Util::getHttpPath() . '/login.php?oid=' . $orgid . '\r\n\r\nSincerely,\r\n\r\nThe Development Team at\r\nNorthBridge Technology Alliance';
+	echo $message;
+	$message = new MessageEnrollment($email, $message);
+	$message->send();
 		
 }
-
-function sendConfirmationEmail($email) {
-	$message = new MessageEnrollment($email);
-	$message.send();
-}
-
-
 
 ?>
