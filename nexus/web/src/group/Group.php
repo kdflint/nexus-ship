@@ -7,7 +7,7 @@ require_once(Util::getSrcRoot() . "/user/Invitation.php");
 class Group {
 	
 	public static function getGroupById($groupId) {
-		$query = "select name, descr, logo from group_new where uid = $1";
+		$query = "select name, descr, logo from public.group where uid = $1";
 		return pgDb::psExecute($query, array($groupId));
 	}
 
@@ -63,7 +63,7 @@ class Group {
 	}	
 	
 	private static function groupIdExists($id) {
-		$query = "select exists (select true from group_new where uid = $1)";
+		$query = "select exists (select true from public.group where uid = $1)";
 		$row = pg_fetch_row(PgDb::psExecute($query, array($id)));
 		if (!strcmp($row[0], "t")) {
 			return TRUE;

@@ -51,7 +51,7 @@ $uidpk = User::addActiveUser(
 	Util::newUuid(),
 	$clean['username'],
 	$clean['fname'],
-	$clean['fname'],
+	$clean['lname'],
 	$clean['email'],
 	$clean['password']
 	);

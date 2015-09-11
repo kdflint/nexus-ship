@@ -1,3 +1,5 @@
+FIRST - copy all data from group to group_new
+
 --
 -- Name: meeting_type; Type: TYPE; Schema: public; Owner: northbr6
 --
