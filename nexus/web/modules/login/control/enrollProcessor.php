@@ -97,9 +97,8 @@ function sendConfirmationEmail($email, $fname, $username, $allUsernames, $groupN
 	if (strlen($allUsernames) > 3) {
 		$multiples = '\r\n\r\nNote: There are other usernames currently enrolled with this email address: ' . Util::stripTrailingComma($allUsernames);
 	}
-	$message = 'Welcome ' . $fname . '!\r\n\r\nYour Nexus enrollment is complete for username: ' . $username . $multiples . '\r\n\r\nYou are now enabled to collaborate with ' . $groupName . '\r\n\r\nYou can login to Nexus using this link.\r\n\r\n' . Util::getHttpPath() . '/login.php?oid=' . $orgid . '\r\n\r\nSincerely,\r\n\r\nThe Development Team at\r\nNorthBridge Technology Alliance';
-	echo $message;
-	$message = new MessageEnrollment($email, $message);
+	$messageBody = 'Welcome ' . $fname . '!\r\n\r\nYour Nexus enrollment is complete for username: ' . $username . $multiples . '\r\n\r\nYou are now enabled to collaborate with ' . $groupName . '\r\n\r\nYou can login to Nexus using this link.\r\n\r\n' . Util::getHttpPath() . '/login.php?oid=' . $orgid . '\r\n\r\nSincerely,\r\n\r\nThe Development Team at\r\nNorthBridge Technology Alliance';
+	$message = new MessageEnrollment($email, $messageBody);
 	$message->send();
 		
 }
