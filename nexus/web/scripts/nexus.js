@@ -513,7 +513,7 @@ function eventValidateAndSubmit(thisForm) {
   }
   
   if (Boolean(pass)) {
-  	// if all formatting date/time formatting passes, check that this valid date is not in the past
+  	// if all date/time formatting passes, check that this valid date is not in the past
     var nowEpoch = Date.now();
     var reserveEpoch = Date.parse(parts[2] + "-" + parts[0] + "-" + parts[1] + "T" + time);
     if (nowEpoch > reserveEpoch) {

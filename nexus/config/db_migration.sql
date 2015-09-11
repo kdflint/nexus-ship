@@ -174,3 +174,17 @@ GRANT SELECT,INSERT ON TABLE user_organization TO northbr6_web;
 
 ALTER TABLE invitation ALTER COLUMN network_fk integer nullable;
 
+ALTER TABLE invitation DROP CONSTRAINT invitation_group_fk_fkey;
+
+ALTER TABLE user_group DROP CONSTRAINT user_group_group_fk_fkey;
+
+DROP TABLE public.group;
+
+ALTER TABLE group_new RENAME TO "group";
+
+ALTER TABLE ONLY invitation
+    ADD CONSTRAINT invitation_group_fk_fkey FOREIGN KEY (group_fk) REFERENCES "group"(id);
+        
+ALTER TABLE ONLY user_group
+    ADD CONSTRAINT user_group_group_fk_fkey FOREIGN KEY (group_fk) REFERENCES "group"(id);
+
