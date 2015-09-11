@@ -7,7 +7,7 @@ require_once(Util::getSrcRoot() . "/user/Invitation.php");
 class Group {
 	
 	public static function getGroupById($groupId) {
-		$query = "select name, descr, logo from public.group where uid = $1";
+		$query = "select name, descr, logo from public.group where id = $1";
 		return pgDb::psExecute($query, array($groupId));
 	}
 
