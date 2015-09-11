@@ -65,6 +65,10 @@ class Util {
 	public static function getEnvName() { return ENV_NAME; }
 	
 	private static function getSessionTimeout() { return SSN_TIMEOUT; }
+	
+	public static function getTwitterHandle() {
+		return "NorthbridgeNFP";
+	}
 		
 	
 	const VALIDATION_FNAME_ERROR = "Please enter a valid first name."; 

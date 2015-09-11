@@ -5,6 +5,7 @@ session_start();
 require_once("../../../src/framework/Util.php");
 require_once(Util::getSrcRoot() . "/user/Invitation.php");
 require_once(Util::getSrcRoot() . "/group/Group.php");
+require_once("MessageEnrollment.php");
 
 // Cleanse all user input
 
@@ -90,7 +91,7 @@ function returnToEnrollWithError($errorMessage) {
 	exit(0);
 }
 
-function sendConfirmationEmail($email, $fname, $username, $allUsernames, $groupName, $orgid) {
+function sendConfirmationEmail_depr($email, $fname, $username, $allUsernames, $groupName, $orgid) {
 	
 	$multiples = "";
 	if (strlen($allUsernames) > 3) {
@@ -116,6 +117,11 @@ NorthBridge Technology Alliance
 
 		mail($email, "[Nexus] Enrollment Confirmation", $message, "From: noreply@nexus.northbridgetech.org\r\n");		
 		
+}
+
+function sendConfirmationEmail($email) {
+	$message = new MessageEnrollment($email);
+	$message.send();
 }
 
 
