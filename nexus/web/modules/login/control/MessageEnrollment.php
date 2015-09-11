@@ -75,8 +75,10 @@ Content-Transfer-Encoding: 7bit
 	}
 	
 	private function constructTextMessage($boundary) {
+		$formatLineBreaks = str_replace('\r\n\r\n', "\r\n\r\n",$this->messageBody);
+		$formatLineBreaks = str_replace('\r\n', "\r\n",$formatLineBreaks);
 		return "--" . $boundary . "\r\n" . "Content-Type: text/plain; charset=\"iso-8859-1\"\r\n" . "Content-Transfer-Encoding: 7bit\r\n
-" . $this->messageBody . "\r\n\r\n=================\r\n" . $this->getMessageFooter() . "\r\n";
+" . $formatLineBreaks . "\r\n\r\n=================\r\n" . $this->getMessageFooter() . "\r\n";
 	}
 	
 	private function constructMessage($boundary) {
