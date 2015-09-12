@@ -1,6 +1,6 @@
 <?php
 
-require_once(dirname(__FILE__) . "/../../../config/env_config.php");
+require_once(dirname(__FILE__) . "/../../../config/config_env.php");
 require_once(PHP_ROOT . "/Validate.php");
 require_once(Util::getSrcRoot() . "/user/User.php");
 require_once(Util::getSrcRoot() . "/schedule/Event.php");
