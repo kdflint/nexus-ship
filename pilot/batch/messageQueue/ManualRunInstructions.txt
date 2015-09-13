@@ -14,5 +14,3 @@ Run messageQueueProcessorManual.php against each recover file
 Takes 5-10 seconds. Expected output: Content-type: text/html
 
 Delete messageQueueProcessorManual.php and recover file(s) from server
-
-

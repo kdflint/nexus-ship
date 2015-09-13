@@ -47,8 +47,11 @@ require_once "config.php";
 
 class BigBlueButton {
 		
-	private $_securitySalt;				
-	private $_bbbServerBaseUrl;			
+	//private $_securitySalt;				
+	//private $_bbbServerBaseUrl;		
+	public $_securitySalt;				
+	public $_bbbServerBaseUrl;	
+		
 	
 	/* ___________ General Methods for the BigBlueButton Class __________ */
 	

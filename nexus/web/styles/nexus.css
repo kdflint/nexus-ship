@@ -1,0 +1,288 @@
+/* CORE LAYOUT                                                                    *
+ * http://matthewjamestaylor.com/blog/keeping-footers-at-the-bottom-of-the-page   */
+
+html {
+	height: 95%;
+}
+
+body { 
+	color:#333333;
+	font-family:'Oxygen',sans-serif; 
+	//text-align:center; 
+	background-color: #ffffff;
+	height: 100%;
+}
+
+.container {
+	/* top level container for all content, left aligned inside a centered body   *
+	 * optimized for a tablet -kdf																								*/
+	position: relative;
+	min-height: 100%;
+	width: 900px;
+	margin: 0px auto;
+	text-align: left;
+}
+
+.header {
+}
+
+.banner {
+	position:absolute;
+	width:78%;
+	//height: 106px;
+	height: 96px;
+	padding:0px;
+	margin-top:10px;
+	border-bottom-right-radius: 6px;
+	background: #edf0de; /* Old browsers */
+	background: -moz-linear-gradient(top,  #ffffff 45%, #edf0de 70%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(45%,#ffffff), color-stop(70%,#edf0de)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #ffffff 45%,#edf0de 70%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #ffffff 45%,#edf0de 70%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #ffffff 45%,#edf0de 70%); /* IE10+ */
+	background: linear-gradient(to bottom,  #ffffff 45%,#edf0de 70%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#edf0de',GradientType=0 ); /* IE6-9 */
+}
+
+.banner-image {
+	float:left;
+	margin-top:10px;
+	border-top-left-radius:5px;
+	border-bottom-left-radius:5px;
+	width: 22px;
+	height: 96px;
+}
+
+.frame {
+	clear: both;
+	padding-bottom:60px;   /* Height of the footer */
+}
+
+.footer {
+  position: absolute;
+  bottom: 20px;
+  height: 60px;
+  width: 100%;
+  text-align: right;
+	font-family: Oswald;
+	letter-spacing: 1px;
+}
+
+.loginColLeft {
+	width:70%;
+	float:left;
+	margin-top:10px;
+}
+
+.loginColRight {
+	width:30%;
+	float:right;
+}
+
+/* TEXT */
+
+.instruction {
+	font-size:90%;
+}
+
+.confirmation {
+	font-size:90%;
+	color:#007582;
+	width:90%;
+}
+
+.product-name {
+	font-family:Oswald;
+	font-size:220%;
+	margin-left: 10px;
+	color: #004d62;
+}
+
+.module-name {
+	font-size:150%;
+	margin-left: 30px;
+	color: #899d70;
+	font-weight: bold;
+	position: absolute;
+	padding-top: 5px;
+}
+
+
+/* LINKS */
+
+a {
+	color:#d27b4b;
+	text-decoration:none;
+}
+
+/* FORMS */
+
+form {
+	width:95%;
+}
+
+.form-instruction {
+	float:right;
+	margin-right:25px;
+}
+
+.form-input {
+	width:95%;
+	margin-bottom:20px !important;
+}
+
+/* BUTTONS */
+
+.pure-button-primary {
+	background: rgba(0, 77, 98, 1) !important;
+	margin-right: 10px;
+}
+
+.pure-button-secondary {
+	background: rgba(0, 77, 98, .2)!important;
+	margin-right: 10px;
+}
+
+.button-schedule,
+.button-join {
+  color: white;
+  border-radius: 6px;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.button-schedule {
+	background: rgba(0, 77, 98, 1);
+	width: 45%
+}
+
+.button-join {
+	background: rgba(0, 77, 98, .6);
+	width: 45%
+}
+ 		
+.button-schedule:hover {
+	background: #a6c3ce;
+}
+   	
+.button-join:active {
+	background: #a6c3ce;
+}
+
+.button-menu {
+  border-radius: 6px;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  color: #004D62;
+  font-size: 110%;
+	margin-top: 5px;
+	width: 120px;
+	padding: .35em;
+}
+
+/* DATE */
+
+.event, .user {
+  width: 110px;
+  color: rgba(0, 77, 98, 1);
+  text-align: center;
+  padding-right:10px;
+  border-right:1px solid #a6c3ce;
+ }
+ 
+.day, .date, .month, .fname, .lname, .time {
+  padding-top: 5px;
+  }
+ 
+.day, .lname { 
+  font-size: 90%;
+  //top: 15px;
+  }
+  
+.date, .fname { 
+  font-size: 150%;
+  //top: 15px;
+  }
+ 
+.month { 
+	font-size: 90%;
+  }
+  
+.period {
+	font-size: 80%;
+	text-align: bottom;
+} 
+ 
+#schedule-form-country-button, #schedule-form-countryTimeZones-button {
+	vertical-align: middle;
+}
+
+/* TABLES */
+
+table {
+    border-collapse: separate !important; /* IE7 and lower */
+    border: 1px solid #a6c3ce !important;
+    margin-bottom: 5px;
+    width: 100%;
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+}
+
+td {
+	vertical-align: top;
+}
+
+.pure-table td:first-child {
+	width: 100px;
+
+}
+
+.pure-table td {
+	border-left: 0px !important;
+	padding: 1em !important;
+}
+
+/* BLINDS */
+
+#techcheck_display, 
+#profile_display {
+	background: #EDF0DE none repeat scroll 0% 0%;
+	padding: 10px;
+	height: 315px;
+	position: absolute;
+	border-radius: 8px;
+	margin-top: 10px;
+	margin-left: 10px;
+	width: 160px;
+	border: 2px solid #a6c3ce;
+}
+ 
+/* LIGHTBOXES */
+
+.black_overlay{
+	display: none;
+	position: absolute;
+	top: 0%;
+	left: 0%;
+	width: 5000px;
+	height: 2000px;
+	background-color: black;
+	z-index:1001;
+	-moz-opacity: 0.8;
+	opacity:.80;
+	filter: alpha(opacity=80);
+}
+
+.white_content {
+	display: none;
+	position: absolute;
+	top:35%;
+	left:35%;
+	width:450px;
+	min-height:230px;
+	padding: 10px;
+	border: thin solid #bf6030;
+	border-radius:15px;
+	background-color: white;
+	z-index:1002;
+	overflow: visible;
+	text-align:left;
+}

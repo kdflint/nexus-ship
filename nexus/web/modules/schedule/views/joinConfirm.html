@@ -1,0 +1,18 @@
+<form id="join-form" class="pure-form pure-form-aligned" action="" method="post">
+	<fieldset>
+	  <div class="pure-control-group">  
+			<form id="now-form" class="pure-form" action="modules/schedule/control/scheduleProcessor.php" method="post">
+				<fieldset>
+      		<div>
+	      		<input type="text" name="meeting-name" style="width:70%;" maxlength="50" placeholder="Purpose" >
+      			<select id="duration" name="meeting-duration" style="width:135px;vertical-align:middle;">
+	      			<option selected>Duration</option>
+	      			<?php include("meetingDurationOptions.html"); ?>
+      			</select>
+		    	</div> 			
+				</fieldset>
+			</form> 
+			    </div>
+			    <!--			<p><a id="techcheck_control" href="javascript:void(0)"><span style="padding:0px;margin:0px;color:#d27b4b;" class="fa fa-exclamation-triangle" ></span></a> Status check summary message here with correct icon. </p>-->
+  </fieldset>
+</form>   
