@@ -1,4 +1,4 @@
-FIRST - copy all data from group to group_new
+
 
 --
 -- Name: meeting_type; Type: TYPE; Schema: public; Owner: northbr6
@@ -180,6 +180,10 @@ ALTER TABLE invitation DROP CONSTRAINT invitation_group_fk_fkey;
 
 ALTER TABLE user_group DROP CONSTRAINT user_group_group_fk_fkey;
 
+-- BREAK - NOW - copy all data from group to group_new
+
+-- THEN EXECUTE
+
 DROP TABLE public.group;
 
 ALTER TABLE group_new RENAME TO "group";
@@ -190,3 +194,6 @@ ALTER TABLE ONLY invitation
 ALTER TABLE ONLY user_group
     ADD CONSTRAINT user_group_group_fk_fkey FOREIGN KEY (group_fk) REFERENCES "group"(id);
 
+-- STATIC DATA
+
+INSERT INTO status VALUES (3, 'pending', '');
