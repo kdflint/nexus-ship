@@ -21,16 +21,6 @@ if ($cleanCode) {
 	$cursor = User::getUserPasswordResetActivityByUuid($cleanCode);
 	$result = pg_fetch_array($cursor);
 	if (isset($result['uidpk']) && isset($result['username']) && isset($result['id'])) {
-		
-		// TODO - this is a total c&p from loginProcessor. This must be centralized.
-		$storagePath = Util::getTokenRoot();
-		if(!is_writable($storagePath) || !is_dir($storagePath)) {
-	    die("'$storagePath' does not exist or is not writable by the web server.");
-		}
-		$storage = new Rememberme\Storage\File($storagePath);
-		$rememberMe = new Rememberme\Authenticator($storage);
-		$rememberMe->clearCookie($result['username']);
-		Util::destroySession();
 		Util::setSession($result['username'], false, "undefined");
 		Util::setLogin($_SESSION['uidpk']);
 		User::updateUserPasswordResetActivityById($result['id']);
