@@ -196,6 +196,13 @@ class Util {
 		return $in;
 	}
 	
+	public static function stripTrailingSpace($in) {
+		if (!strcmp(substr($in, -1), " ")) {
+			return substr($in, 0, -1);
+		}
+		return $in;
+	}
+	
 	public static function validateUserProfile($input, $pwRequired) {
 		$result = array('good' => array(), 'error' => array());
 		
