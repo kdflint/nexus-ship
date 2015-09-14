@@ -80,7 +80,7 @@ if(isset($_GET['view']) && Util::isSafeCharacterSet($_GET['view'])) {
 	  			resetProfileForm();		
 				});
 				if(<?php echo $showProfile; ?>) {
-					$( "#user_display" ).toggle( "blind" );
+					$( "#profile_control" ).click();
 				}
 				if(<?php echo $showTeam; ?>) {
 					$( "#menu-userList" ).click();
