@@ -5,11 +5,6 @@ session_start();
 require_once("../../../src/framework/Util.php");
 require_once(Util::getSrcRoot() . "/user/User.php");
 
-require_once(Util::getLibRoot() . "/rememberme/rememberme/src/Rememberme/Storage/File.php");
-require_once(Util::getLibRoot() . "/rememberme/rememberme/src/Rememberme/Authenticator.php");
-
-use Birke\Rememberme;
-
 $cleanCode = "";
 
 // TODO - use this method in enroll
