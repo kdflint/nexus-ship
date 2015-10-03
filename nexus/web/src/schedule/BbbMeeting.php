@@ -4,7 +4,7 @@ class BbbMeeting {
 	
 	const VIDEO_CHAT = 'video chat';
 	const COLLABORATION = 'collaboration';
-	const VIDEO_LINK = 'video link';
+	const VIDEO_LINK = 'video tether';
 	const WEBINAR = 'webinar';
 	
 	var $creationParams = array(
