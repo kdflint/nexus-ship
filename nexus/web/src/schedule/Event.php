@@ -150,7 +150,8 @@ class Event {
 				$events[$counter]['purpose'] = $row['name'];
 				$events[$counter]['descr'] = $row['descr'];
 				$events[$counter]['uuid'] = $row['uuid'];
-				$events[$counter]['mtype'] = self::getMeetingTypeDisplay($row['meetingtype']);
+				$events[$counter]['mtype'] = $row['meetingtype'];
+				$events[$counter]['mtypdisplay'] = self::getMeetingTypeDisplay($row['meetingtype']);
 				$events[$counter]['fname'] = $row['fname'];
 				$events[$counter]['lname'] = $row['lname'];
 				$events[$counter]['sessionUser'] = $ssnUser;
