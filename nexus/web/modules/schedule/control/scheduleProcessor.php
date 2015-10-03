@@ -34,7 +34,7 @@ Use only clean input beyond this point (i.e. $clean[])
 
 ======================================================= */
 
-$meetingType = array("1" => "video chat", "2" => "collaboration", "3" => "webinar", "4" => "video tether");
+$meetingType = array("1" => "video chat", "2" => "collaboration", "3" => "webinar", "4" => "video link");
 
 $timestamp = $result['clean']['meeting-date'] . " " . $result['clean']['meeting-time'] . " " . $result['clean']['tzone-name'];
 

@@ -95,6 +95,7 @@ function toggleFrameDisplay(frameId) {
 	var showButton = document.getElementById('menu-' + frameId);
 	document.getElementById("reserveList").style.display='none';
 	document.getElementById("userList").style.display='none';
+	document.getElementById("fatalError").style.display='none';
 	document.getElementById("menu-userList").style.backgroundColor='rgba(210, 123, 75, 1)';
 	document.getElementById("menu-reserveList").style.backgroundColor='rgba(210, 123, 75, 1)';
 	showFrame.style.display='block';

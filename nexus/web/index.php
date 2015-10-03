@@ -18,11 +18,13 @@ Util::setSessionLastActivity();
 
 $showProfile = "false";
 $showTeam = "false";
+$showFatal = "false";
 
 if(isset($_GET['view']) && Util::isSafeCharacterSet($_GET['view'])) {
 	switch($_GET['view']) {
-		case "profile": $showProfile = "true";
-		case "team": $showTeam = "true";
+		case "profile": $showProfile = "true"; break;
+		case "team": $showTeam = "true"; break;
+		case "fatal": $showFatal = "true"; break;
 	}
 }
 
@@ -84,6 +86,11 @@ if(isset($_GET['view']) && Util::isSafeCharacterSet($_GET['view'])) {
 				}
 				if(<?php echo $showTeam; ?>) {
 					$( "#menu-userList" ).click();
+				}	
+				if(<?php echo $showFatal; ?>) {
+					document.getElementById("reserveList").style.display='none';
+					document.getElementById("userList").style.display='none';
+					document.getElementById("fatalError").style.display='block';
 				}					 	
 			});
 			
@@ -217,6 +224,10 @@ if(isset($_GET['view']) && Util::isSafeCharacterSet($_GET['view'])) {
 						<div id="user_display">
 							<?php include("modules/user/views/userList.html"); ?>
 						</div>
+					</div>
+					
+					<div id="fatalError" style="display:none;">
+						<?php include("modules/error/views/error.php"); ?>
 					</div>
 
       	</div>

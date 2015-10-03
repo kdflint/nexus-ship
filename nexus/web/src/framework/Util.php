@@ -46,8 +46,14 @@ class Util {
 	
 	private static $web_path = "/web";
 	
+	private static $config_path = "/config";
+	
 	public static function getHttpPath() {
 		return "http://" . ENV_HOST . APP_NAME . self::$web_path;
+	}
+	
+	public static function getConfigPath() {
+		return "http://" . ENV_HOST . APP_NAME . self::$config_path;
 	}
 	
 	public static function getWebRoot() {	return WEB_ROOT; }
