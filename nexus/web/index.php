@@ -3,6 +3,14 @@ session_start();
 
 require_once("src/framework/Util.php");
 
+$demoSession = "false";
+$disabled = "";
+
+if (isset($_SESSION['demo']) && $_SESSION['demo']) {
+	$demoSession = "true";
+	$disabled = "disabled";
+}
+
 if (!Util::isSessionValid()) {
 	// TODO - this should consume a sessionManager object
 	if (Util::isSessionExpired()) {
@@ -91,7 +99,13 @@ if(isset($_GET['view']) && Util::isSafeCharacterSet($_GET['view'])) {
 					document.getElementById("reserveList").style.display='none';
 					document.getElementById("userList").style.display='none';
 					document.getElementById("fatalError").style.display='block';
-				}					 	
+				}	
+				if(<?php echo $demoSession; ?>) {
+					document.getElementById("profile_control_icon").className = "";
+					document.getElementById("schedule-form-submit").onclick = "";
+					document.getElementById("invite-form-submit").onclick = "";
+					document.getElementById("index-module-name").innerHTML = "Web Meet Demo";
+				}				 	
 			});
 			
 			function toggleJoinDisplay() {
@@ -192,7 +206,7 @@ if(isset($_GET['view']) && Util::isSafeCharacterSet($_GET['view'])) {
        	<img class="banner-image" src="image/nexus4.png" />
        	<span class="banner">
 					<span class="product-name" style="">Nexus</span><br/>
-					<span class="module-name" style="">Web Meet</span>					
+					<span id="index-module-name" class="module-name" style="">Web Meet</span>					
 					<a id="menu-userList" class="pure-button button-menu" href="javascript:void(0)" onclick="toggleFrameDisplay('userList')" style="float:right;background-color:rgba(210, 123, 75, 1);" >TEAM</a>
 					<a id="menu-reserveList" class="pure-button button-menu" href="javascript:void(0)" onclick="toggleFrameDisplay('reserveList')" style="float:right;background-color:rgba(137, 157, 112, 1);margin-right:-7px;">ROOM</a> 
       	</span>  	
@@ -213,7 +227,7 @@ if(isset($_GET['view']) && Util::isSafeCharacterSet($_GET['view'])) {
 			  	</noscript>					
 					<div id="reserveList" style="display:block;">
 						<div id="schedule_display">
-							<?php include("modules/schedule/views/reservationsList.html"); ?>
+							<?php include("modules/schedule/views/reservationsList.php"); ?>
 						</div>
 					</div>
 					
@@ -222,7 +236,7 @@ if(isset($_GET['view']) && Util::isSafeCharacterSet($_GET['view'])) {
 							<?php include("modules/user/views/userAdd.php"); ?>	
 						</div>
 						<div id="user_display">
-							<?php include("modules/user/views/userList.html"); ?>
+							<?php include("modules/user/views/userList.php"); ?>
 						</div>
 					</div>
 					

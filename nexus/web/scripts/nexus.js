@@ -198,6 +198,28 @@ function loginValidateAndSubmit() {
  	}
 }
 
+function demoValidateAndSubmit() {
+	
+	pass = true;
+	var loginForm = document.forms["login-form"];
+	var submitButton = document.getElementById("login-form-submit");
+	
+  var usernameField = loginForm["uid"];
+  var username = usernameField.value;
+  setFieldPassStyles(usernameField, "");
+  if (username == null || username == "") {
+    setFieldErrorStyles(usernameField, "Name is required.");
+    pass = false;
+  }
+  
+ 	if (Boolean(pass)) {
+ 		submitButton.disabled = true;  
+ 		submitButton.innerHTML = "One Moment"; 
+ 		submitButton.style.opacity = ".6";
+ 		loginForm.submit();
+ 	}
+}
+
 function usernameValidateAndSubmit() {
 		
 	pass = true;

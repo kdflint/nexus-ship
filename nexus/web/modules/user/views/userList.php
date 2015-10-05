@@ -24,8 +24,9 @@
 			 		var tableUser = "<tr>" +
        			"<td>" +
 	       			"<div class='user'>" +
-  							"<span class='date'>" + jsonObj[i].fname + "</span><br/>" +
-  							"<span class='month'>" + jsonObj[i].lname + "</span>" +
+	       			// LEFT OFF - do a transform of fname, lname based on DEMO_UIDPK
+  							"<span class='date'>" + ((jsonObj[i].uidpk == <?php echo(Util::getDemoUidpk()); ?>) ? '<?php echo($_SESSION['fname']); ?>' : jsonObj[i].fname) + "</span><br/>" +
+  							"<span class='month'>" + ((jsonObj[i].uidpk == <?php echo(Util::getDemoUidpk()); ?>) ? '<?php echo($_SESSION['lname']); ?>' : jsonObj[i].lname) + "</span>" +
 							"</div>" +
        			"</td>" + 
        			"<td>" +
@@ -52,4 +53,3 @@
 <table id="userTable" class="pure-table">
 	<script> getUserList('<?php echo $_SESSION['role']; ?>'); </script>
 </table>
-

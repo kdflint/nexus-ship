@@ -46,7 +46,7 @@
 		</td>
     <td>
     	<a href="javascript:void(0);" onclick="resetScheduleForm();" style="float:right;margin-right:6px;">Cancel</a><br/>
-      <a id="schedule-form-submit" class="pure-button button-menu" href="javascript:void(0)" onclick="eventValidateAndSubmit('schedule-form');" style="float:right;background-color:#d27b4b;width:70px;font-size:90%;margin-top:45px;color:#e6e6e6">Reserve</a>
+      <a id="schedule-form-submit" class="pure-button button-menu" href="javascript:void(0)" onclick="eventValidateAndSubmit('schedule-form');" style="float:right;background-color:#d27b4b;width:70px;font-size:90%;margin-top:45px;color:#e6e6e6" <?php echo($disabled); ?> >Reserve</a>
  		</td>
 	</tr>
 </table> 
