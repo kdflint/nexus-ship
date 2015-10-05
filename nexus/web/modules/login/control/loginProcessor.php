@@ -9,8 +9,8 @@ $dirty = array('username' => $_POST['uid'], 'password' => (isset($_POST['passwor
 $clean = array();
 
 if (isset($_SESSION['demo']) && $_SESSION['demo'] && isset($dirty['username'])) {
-	$clean['username'] =  Util::sanitize($dirty['username']);
-	$dirty['password'] = "fakepassword295";
+	$clean['username'] = Util::sanitize($dirty['username']);
+	$dirty['password'] = Util::getDemoPassword();
 } else if (isset($dirty['username']) && Util::validateUsernameFormat($dirty['username'])) {
 	$clean['username'] = $dirty['username'];
 } else {

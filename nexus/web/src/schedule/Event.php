@@ -176,6 +176,19 @@ class Event {
 		pgDb::psExecute($query, array($uuid));
 		return;
 	}
+	
+	public static function updateDemoNowEvent() {
+		$query = "update event set start_dttm = (now() - interval '5 minutes') where id = '" . Util::getDemoNowEvent() . "'";
+		pgDb::psExecute($query, array());
+		return;
+	}
+	
+	public static function updateDemoFutureEvent() {
+		$query = "update event set start_dttm = (start_dttm + interval '1 week') where id in (" . Util::getDemoFutureEvent() . ")";
+		pgDb::psExecute($query, array());
+		return;
+	}
+	
 }
 
 

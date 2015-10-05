@@ -22,5 +22,9 @@
 // DEMO
 
 	define("DEMO_UIDPK", "287");
+	define("DEMO_USERNAME", "demouser");
+	define("DEMO_PASSWORD", "fakepassword295");
+	define("DEMO_EVENT_NOW", "75");
+	define("DEMO_EVENT_FUTURE", "76,77");
 		
 ?>

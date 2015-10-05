@@ -48,6 +48,22 @@ class Util {
 		return DEMO_UIDPK;
 	}		
 	
+	public static function getDemoPassword() {
+		return DEMO_PASSWORD;
+	}	
+	
+	private static function getDemoUsername() {
+		return DEMO_USERNAME;
+	}
+	
+	public static function getDemoNowEvent() {
+		return DEMO_EVENT_NOW;
+	}
+	
+	public static function getDemoFutureEvent() {
+		return DEMO_EVENT_FUTURE;
+	}
+	
 	private static $web_path = "/web";
 	
 	private static $config_path = "/config";
@@ -482,7 +498,7 @@ class Util {
 	}
 	
 	public static function setDemoSession($username, $remember, $zone = "undefined") {
-		self::setSession("userdemo", false, $zone);
+		self::setSession(self::getDemoUsername(), false, $zone);
 		$pos = strpos($username, " ");
   	$_SESSION['fname'] = substr($username, 0, $pos);
   	$_SESSION['lname'] = substr($username, $pos);

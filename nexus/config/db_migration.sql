@@ -30,8 +30,6 @@ insert into invitation (uuid, email, create_dttm, accept_dttm, network_fk, invit
 
 -- login as an admin and add meetings
 
--- set chron jobs
+-- add soft link to Util.php batch folder
 
-update event set start_dttm = (now() - interval '5 minutes') where id = '33';
-update event set start_dttm = (start_dttm +) interval '1 week') where id in ('34', '35');
-
+-- set cron jobs
