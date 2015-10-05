@@ -482,7 +482,7 @@ class Util {
 	}
 	
 	public static function setDemoSession($username, $remember, $zone = "undefined") {
-		self::setSession("demoUsername", false, $zone);
+		self::setSession("userdemo", false, $zone);
 		$pos = strpos($username, " ");
   	$_SESSION['fname'] = substr($username, 0, $pos);
   	$_SESSION['lname'] = substr($username, $pos);
