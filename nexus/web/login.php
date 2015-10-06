@@ -61,8 +61,9 @@ if(isset($_GET['error']) && Util::isSafeCharacterSet($_GET['error'])) {
 $logo = "";
 $disabled = "";
 $networkLogo = $networkName = "";		
-$cleanNetworkId = "1"; // TODO: create default network in db, that includes default logo
+$cleanNetworkId = "1"; // TODO: create default network in db, that includes default logo?
 $demoSession = "false";
+unset($_SESSION['demo']);
 
 if(isset($_GET['oid']) && Organization::validateOrganizationUid($_GET['oid'])) {
  	$cleanNetworkId = $_GET['oid'];		
