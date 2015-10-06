@@ -18,15 +18,25 @@
        	// write each event into its row container
 			 	for (var i = 0; i < jsonObj.length; i++) { 
 			 		var processor = "modules/user/control/userDeleteProcessor.php";
+			 		var firstName = ((jsonObj[i].uidpk == <?php echo(Util::getDemoUidpk()); ?>) ? '<?php echo($_SESSION['fname']); ?>' : jsonObj[i].fname);
+			 		var firstNameStyle  = "fname";
 			 		if (jsonObj[i].status == "pending") {
 			 			processor = "modules/user/control/invitationDeleteProcessor.php";
+			 		}
+			 		if (firstName.length < 9) {
+			 			firstNameStyle  = "fname";
+			 		} else if (firstName.length < 11) {
+			 			firstNameStyle  = "fname125";
+			 		} else if (firstName.length < 15) {
+			 			firstNameStyle  = "fname110";
+			 		} else {
+			 			firstNameStyle = "lname";
 			 		}
 			 		var tableUser = "<tr>" +
        			"<td>" +
 	       			"<div class='user'>" +
-	       			// LEFT OFF - do a transform of fname, lname based on DEMO_UIDPK
-  							"<span class='date'>" + ((jsonObj[i].uidpk == <?php echo(Util::getDemoUidpk()); ?>) ? '<?php echo($_SESSION['fname']); ?>' : jsonObj[i].fname) + "</span><br/>" +
-  							"<span class='month'>" + ((jsonObj[i].uidpk == <?php echo(Util::getDemoUidpk()); ?>) ? '<?php echo($_SESSION['lname']); ?>' : jsonObj[i].lname) + "</span>" +
+  							"<span class='" + firstNameStyle + "'>" + firstName + "</span><br/>" +
+  							"<span class='lname'>" + ((jsonObj[i].uidpk == <?php echo(Util::getDemoUidpk()); ?>) ? '<?php echo($_SESSION['lname']); ?>' : jsonObj[i].lname) + "</span>" +
 							"</div>" +
        			"</td>" + 
        			"<td>" +

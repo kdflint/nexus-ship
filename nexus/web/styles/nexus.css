@@ -194,12 +194,18 @@ form {
  
 .day, .lname { 
   font-size: 90%;
-  //top: 15px;
   }
   
 .date, .fname { 
   font-size: 150%;
-  //top: 15px;
+  }
+  
+ .fname125 { 
+  font-size: 125%;
+  }
+  
+ .fname110 { 
+  font-size: 110%;
   }
  
 .month { 
