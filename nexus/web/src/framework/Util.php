@@ -500,8 +500,13 @@ class Util {
 	public static function setDemoSession($username, $remember, $zone = "undefined") {
 		self::setSession(self::getDemoUsername(), false, $zone);
 		$pos = strpos($username, " ");
-  	$_SESSION['fname'] = substr($username, 0, $pos);
-  	$_SESSION['lname'] = substr($username, $pos);
+		if ($pos) {
+  		$_SESSION['fname'] = substr($username, 0, $pos);
+  		$_SESSION['lname'] = substr($username, $pos+1);
+  	} else {
+  		$_SESSION['fname'] = $username;
+  		$_SESSION['lname'] = " ";
+  	}
   	$_SESSION['demo'] = "true";
 	}
 	
