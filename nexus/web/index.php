@@ -14,10 +14,10 @@ if (isset($_SESSION['demo']) && $_SESSION['demo']) {
 if (!Util::isSessionValid()) {
 	// TODO - this should consume a sessionManager object
 	if (Util::isSessionExpired()) {
-		header("location:login.php?oid=" . $_SESSION['orgId'] . "&logout=true&expired=true");
+		header("location:login.php?oid=" . $_SESSION['orgUid'] . "&logout=true&expired=true");
 		exit(0);	
 	} else {
-		header("location:login.php?oid=" . $_SESSION['orgId'] . "&logout=true");
+		header("location:login.php?oid=" . $_SESSION['orgUid'] . "&logout=true");
 		exit(0);	
 	}
 }
