@@ -18,5 +18,13 @@
 	define("DB_USER", "northbr6_web"); 
 	define("DB_NAME", "localnexus");	
 	require_once("sensitive_config.php");
+	
+// DEMO
+
+	define("DEMO_UIDPK", "287");
+	define("DEMO_USERNAME", "userdemo");
+	define("DEMO_PASSWORD", "fakepassword295");
+	define("DEMO_EVENT_NOW", "75");
+	define("DEMO_EVENT_FUTURE", "76,77");
 		
 ?>

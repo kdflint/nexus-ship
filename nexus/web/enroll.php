@@ -147,7 +147,7 @@ if(isset($_GET['error']) && Util::isSafeCharacterSet($_GET['error'])) {
 							Your last name
 							<input class="form-input" type="text" name="lname" maxlength="25" title="Optional. 0-25 characters."/>
 
-        			<a id="enroll-form-submit" type="submit" class="pure-button pure-button-primary" style="width:45%;" href="javascript:void(0);" onclick="enrollValidateAndSubmit();">Enroll</a
+        			<a id="enroll-form-submit" type="submit" class="pure-button pure-button-primary" style="width:45%;" href="javascript:void(0);" onclick="enrollValidateAndSubmit();">Enroll</a>
         			
      				</fieldset>
      			</form>   			 			

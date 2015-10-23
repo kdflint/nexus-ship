@@ -1,10 +1,12 @@
 copy image and determine dimensions: web/image
 
+--https://www.uuidgenerator.net
+
 insert into organization (name, create_dttm, activate_dttm, tax_exempt, status_fk, logo, uid) values ('The Demo Organization', now(), now(), true, 1, 'src="image/demo.jpg" height="120" width="120"', '12345678') returning id;
 
 insert into organization_organization (organization_from_fk, organization_to_fk, relationship, create_dttm) values (13, 331, 'parent', now());
 
---https://www.uuidgenerator.net
+
 
 insert into public.group (name, create_dttm, activate_dttm, logo, uid) values ('The Sunflower Foundation (Australia) Inc.', now(), now(), '', '54fc6c40') returning id;
 

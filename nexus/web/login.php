@@ -3,13 +3,11 @@ session_start();
 
 require_once("src/framework/Util.php");
 require_once(Util::getSrcRoot() . "/organization/Organization.php");
-
 // TODO - this should be handled by the autoloader in Util
 require_once(Util::getLibRoot() . "/rememberme/rememberme/src/Rememberme/Storage/File.php");
 require_once(Util::getLibRoot() . "/rememberme/rememberme/src/Rememberme/Authenticator.php");
 
 use Birke\Rememberme;
-
 // Initialize RememberMe Library with file storage
 $storagePath = Util::getTokenRoot();
 if(!is_writable($storagePath) || !is_dir($storagePath)) {
@@ -17,19 +15,22 @@ if(!is_writable($storagePath) || !is_dir($storagePath)) {
 }
 $storage = new Rememberme\Storage\File($storagePath);
 $rememberMe = new Rememberme\Authenticator($storage);
-$remembered = $enrolled = "false";
-$cleanMessage = "";
-$cleanIcon = "";
 
 if(isset($_GET['logout'])) {
-	$rememberMe->clearCookie($_SESSION['username']);
+	$rememberMe->clearCookie(isset($_SESSION['username']) ? $_SESSION['username'] : '');
 	Util::destroySession();
+	session_start();
 }
 
 if(isset($_GET['logoutAll'])) {
   $storage->cleanAllTriplets($_SESSION['username']);
 	Util::destroySession();
+	session_start();
 }
+
+$remembered = $enrolled = "false";
+$cleanMessage = "";
+$cleanIcon = "";
 
 $enrolled = (isset($_SESSION['invitation']) && isset($_SESSION['username'])) ? "true" : "false"; 
 $enrolledUsername = (isset($_SESSION['invitation']) && isset($_SESSION['username'])) ? $_SESSION['username'] : false; 
@@ -58,8 +59,11 @@ if(isset($_GET['error']) && Util::isSafeCharacterSet($_GET['error'])) {
 }
 
 $logo = "";
+$disabled = "";
 $networkLogo = $networkName = "";		
-$cleanNetworkId = "1"; // TODO: create default network in db, that includes default logo
+$cleanNetworkId = "1"; // TODO: create default network in db, that includes default logo?
+$demoSession = "false";
+unset($_SESSION['demo']);
 
 if(isset($_GET['oid']) && Organization::validateOrganizationUid($_GET['oid'])) {
  	$cleanNetworkId = $_GET['oid'];		
@@ -69,6 +73,13 @@ $cursor = Organization::getOrganizationByUid($cleanNetworkId);
 $row = pg_fetch_array($cursor);
 $networkLogo = $row['logo'];
 $networkName = $row['name'];
+
+if ($cleanNetworkId == 'userdemo') {
+	$demoSession = "true";
+	$disabled = "disabled";
+	$_SESSION['demo'] = "true";
+	// TODO - react to existing session or remembered user?
+}
 
 ?>
 
@@ -112,9 +123,21 @@ $networkName = $row['name'];
 					loginForm.elements['login-remember'].checked = false;
 					document.getElementById("login-form-submit").click();
 				}
+				if (<?php echo $demoSession; ?>) {
+					loginForm.elements['password'].disabled = true;
+					document.getElementById("username-field-label").innerHTML = "Your Name";
+					document.getElementById("username-instruction-field-label").innerHTML = "";
+					document.getElementById("login-form-submit").innerHTML = "View Demo";
+					document.getElementById("login-form-submit").onclick = demoValidateAndSubmit;
+					document.getElementById("password-form-submit").onclick = "";
+					document.getElementById("username-form-submit").onclick = "";
+					document.getElementById("remember-me-toggle").onclick = "";
+					document.getElementById("login-module-name").innerHTML = "Web Meet Demo";
+				}
 
 			});
 		</script>
+		
   </head>
   
   <body>
@@ -125,7 +148,7 @@ $networkName = $row['name'];
        	<img class="banner-image" src="image/nexus4.png" />
        	<span class="banner" style="width:60%">
 					<span class="product-name" style="">Nexus</span><br/>
-					<span class="module-name" style="">Web Meet</span>					
+					<span id="login-module-name" class="module-name" style="">Web Meet</span>					
       	</span>  	
   	
       	<span class="controls" style="float:right;padding-bottom:10px;margin-top:30px;">
@@ -144,13 +167,13 @@ $networkName = $row['name'];
 			  	<p id="login-user-message" class="confirmation"><span class="<?php echo $cleanIcon; ?>" style="color:#007582;float:left;margin-right:5px;"></span><?php echo $cleanMessage; ?></p>
 					<form id="login-form" class="pure-form pure-form-stacked" action="modules/login/control/loginProcessor.php" method="post">
 	    			<fieldset>
-	    				Username<span class="instruction form-instruction"><a href="javascript:void(0)" onclick="toggleFormDisplay('recover-username-form')">I forgot</a></span>
+	    				<span id="username-field-label">Username</span><span class="instruction form-instruction"><a href="javascript:void(0)" onclick="toggleFormDisplay('recover-username-form')"><span id="username-instruction-field-label">I forgot</span></a></span>
         			<input class="form-input" name="uid" value="" maxlength="25" autofocus>	        		
         			Password<span class="instruction form-instruction"><a href="javascript:void(0)" onclick="toggleFormDisplay('recover-password-form')">I forgot</a></span>
-        			<input class="form-input" type="password" name="password" value="" maxlength="25" />	
+        			<input class="form-input" type="password" name="password" value="" maxlength="25"/>	
         			<input id="localTz" name="timezone" type="hidden" value="">
         			<a id="login-form-submit" type="submit" class="pure-button pure-button-primary" style="width:45%;" href="javascript:void(0);" onclick="loginValidateAndSubmit();">Sign In</a>
-        			<a class="pure-button pure-button-secondary" onclick="toggleRememberCheckbox();" style="width:45%;" ><span id="fakeCheckBox" class="fa fa-square-o" style="color:#004d62;padding-right:4px;"></span> Remember me</a>
+        			<a id="remember-me-toggle" class="pure-button pure-button-secondary" onclick="toggleRememberCheckbox();" style="width:45%;" <?php echo($disabled);?> ><span id="fakeCheckBox" class="fa fa-square-o" style="color:#004d62;padding-right:4px;"></span> Remember me</a>
         			<input id="login-remember" name="login-remember" type="checkbox" style="visibility:hidden;"/>        			
      				</fieldset>
      			</form>   			
@@ -160,7 +183,7 @@ $networkName = $row['name'];
      					<p style="font-size:90%;">Please enter your email address and we will resend your username.</p>
      					Email
      					<input class="form-input" type="email" name="email" value="">
-     					<a id="username-form-submit" type="submit" class="pure-button pure-button-primary" style="width:45%;" href="javascript:void(0);" onclick="usernameValidateAndSubmit();">Recover Username</a>
+     					<a id="username-form-submit" type="submit" class="pure-button pure-button-primary" style="width:45%;" href="javascript:void(0);" onclick="usernameValidateAndSubmit();" <?php echo($disabled);?> >Recover Username</a>
      					<a class="form-instruction" href="javascript:void(0)" onclick="toggleFormDisplay('login-form')">Return to Login</a>
      					<input type="hidden" name="network" value="<?php echo $cleanNetworkId; ?>">
      				</fieldset>
@@ -171,7 +194,7 @@ $networkName = $row['name'];
      					<p class="instruction">Please enter your user id so we can email you a password reset link.</p>
      					Username<span class="instruction form-instruction"><a href="javascript:void(0)" onclick="toggleFormDisplay('recover-username-form')">I forgot</a></span>
      					<input class="form-input" type="text" name="uid" value="" maxlength="25">
-     					<a id="password-form-submit" type="submit" class="pure-button pure-button-primary" style="width:45%;" href="javascript:void(0);" onclick="passwordValidateAndSubmit();">Reset Password</a>
+     					<a id="password-form-submit" type="submit" class="pure-button pure-button-primary" style="width:45%;" href="javascript:void(0);" onclick="passwordValidateAndSubmit();" <?php echo($disabled);?> >Reset Password</a>
      					<a class="form-instruction" href="javascript:void(0)" onclick="toggleFormDisplay('login-form')">Return to Login</a>
      					<input type="hidden" name="network" value="<?php echo $cleanNetworkId; ?>">
      				</fieldset>
@@ -189,7 +212,8 @@ $networkName = $row['name'];
     		<a href="http://northbridgetech.org/index.php" target="_blank"><img src="http://northbridgetech.org/images/NB_horizontal_rgb.png" height="45" width="166" border="0" alt="Northbridge Technology Alliance"/></a>
 			</div>
 	
-    </div><!-- container -->       		  	
+    </div><!-- container -->   
+       		  	
 	</body>
 </html>
 

@@ -51,6 +51,24 @@ class Event {
 		}
 	}
 	
+	private static function getMeetingTypeDisplay($in) {
+		// TODO - should leverage the constants defined in BbbMEeting.php. This is duplicated stringage
+		switch($in) {
+			case 'video tether':
+				return 'Video Link';
+				break;
+			case 'video chat':
+				return 'Video Chat';
+				break;
+			case 'webinar':
+				return 'Webinar';
+				break;
+			default:
+				return 'Collaboration';
+				break;
+			}
+	}
+	
 	public static function isValidTimeZone($in) {
 		$query = "select exists (select name from pg_timezone_names where name = $1)";		
 		$row = pg_fetch_row(pgDb::psExecute($query, array($in)));
@@ -133,6 +151,7 @@ class Event {
 				$events[$counter]['descr'] = $row['descr'];
 				$events[$counter]['uuid'] = $row['uuid'];
 				$events[$counter]['mtype'] = $row['meetingtype'];
+				$events[$counter]['mtypdisplay'] = self::getMeetingTypeDisplay($row['meetingtype']);
 				$events[$counter]['fname'] = $row['fname'];
 				$events[$counter]['lname'] = $row['lname'];
 				$events[$counter]['sessionUser'] = $ssnUser;
@@ -157,6 +176,19 @@ class Event {
 		pgDb::psExecute($query, array($uuid));
 		return;
 	}
+	
+	public static function updateDemoNowEvent() {
+		$query = "update event set start_dttm = (now() - interval '5 minutes') where id = '" . Util::getDemoNowEvent() . "'";
+		pgDb::psExecute($query, array());
+		return;
+	}
+	
+	public static function updateDemoFutureEvent() {
+		$query = "update event set start_dttm = (start_dttm + interval '1 week') where id in (" . Util::getDemoFutureEvent() . ")";
+		pgDb::psExecute($query, array());
+		return;
+	}
+	
 }
 
 

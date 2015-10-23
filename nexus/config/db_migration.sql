@@ -1,199 +1,37 @@
+insert into organization (name, create_dttm, activate_dttm, tax_exempt, status_fk, logo, uid) values ('Nexus Web Meet Demonstration', now(), now(), true, 1, 'src="image/partners/userdemo.png"', 'userdemo') returning id;
+
+insert into organization_organization (organization_from_fk, organization_to_fk, relationship, create_dttm) values (13, 345, 'parent', now());
+
+insert into public.group (name, create_dttm, activate_dttm, logo, uid) values ('Nexus Web Meet Demonstration', now(), now(), '', '29892965') returning id;
+
+insert into invitation (uuid, email, create_dttm, accept_dttm, network_fk, invitation_dttm, role_fk, expire_dt, issuer_fk, type, organization_fk, group_fk) values ('caf7c611-3d93-4814-b441-780ab2f1f5ab', '', now(), NULL, NULL, now(), '5', (CURRENT_DATE + interval '31 days'), '88', 'single', 345, 14) returning uuid;
+
+--http://northbridgetech.org/dev/new_nexus/web/enroll.php?invitation=caf7c611-3d93-4814-b441-780ab2f1f5ab
+
+-- enroll demo user using above link: userdemo/fakepassword295
+
+-- add DEMO_UIDPK	to config
+
+insert into invitation (uuid, email, create_dttm, accept_dttm, network_fk, invitation_dttm, role_fk, expire_dt, issuer_fk, type, organization_fk, group_fk) values ('d44da407-26d4-4788-bd0a-1e7eebc859e7', '', now(), NULL, NULL, now(), '4', (CURRENT_DATE + interval '31 days'), '88', 'single', 345, 14);
+
+insert into invitation (uuid, email, create_dttm, accept_dttm, network_fk, invitation_dttm, role_fk, expire_dt, issuer_fk, type, organization_fk, group_fk) values ('aa8fb27b-8bfa-408d-a122-a5cc96c09248', '', now(), NULL, NULL, now(), '4', (CURRENT_DATE + interval '31 days'), '88', 'single', 345, 14);
+
+insert into invitation (uuid, email, create_dttm, accept_dttm, network_fk, invitation_dttm, role_fk, expire_dt, issuer_fk, type, organization_fk, group_fk) values ('df0f6eef-0e3c-47f7-b4f9-a372ada4eb25', '', now(), NULL, NULL, now(), '5', (CURRENT_DATE + interval '31 days'), '88', 'single', 345, 14);
+
+insert into invitation (uuid, email, create_dttm, accept_dttm, network_fk, invitation_dttm, role_fk, expire_dt, issuer_fk, type, organization_fk, group_fk) values ('dfd1fdb4-23ff-4934-a0ef-e6a38672f76d', '', now(), NULL, NULL, now(), '5', (CURRENT_DATE + interval '31 days'), '88', 'single', 345, 14);
 
 
---
--- Name: meeting_type; Type: TYPE; Schema: public; Owner: northbr6
---
+-- invite and enroll more users - demo_email@northbridgetech.org
 
-CREATE TYPE meeting_type AS ENUM (
-    'video chat',
-    'collaboration',
-    'webinar',
-    'video tether'
-);
+-- F. L. Hamer - admin
+-- Marlyn Wescoff - admin
+-- Jean E. Sammet
+-- Erna Schneider
 
+-- login as an admin and add meetings
 
-ALTER TYPE public.meeting_type OWNER TO northbr6;
+-- add soft link to Util.php batch folder
 
---
--- Name: event; Type: TABLE; Schema: public; Owner: northbr6_nbnexus; Tablespace: 
---
+-- set cron jobs
 
-CREATE TABLE event (
-    id integer NOT NULL,
-    uuid uuid NOT NULL,
-    start_dttm timestamp with time zone NOT NULL,
-    duration interval NOT NULL,
-    name character varying(200) NOT NULL,
-    descr character varying(500),
-    reserved_user_fk integer NOT NULL,
-    admin_user_fk integer,
-    group_fk integer NOT NULL,
-    tz_name character varying(50),
-    tz_abbrev character varying(10),
-    create_dttm timestamp with time zone DEFAULT now() NOT NULL,
-    update_dttm timestamp with time zone,
-    active boolean DEFAULT true,
-    type meeting_type DEFAULT 'collaboration'::meeting_type NOT NULL
-);
-
-
-ALTER TABLE public.event OWNER TO northbr6_nbnexus;
-
---
--- Name: event_id_seq; Type: SEQUENCE; Schema: public; Owner: northbr6_nbnexus
---
-
-CREATE SEQUENCE event_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MAXVALUE
-    NO MINVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.event_id_seq OWNER TO northbr6_nbnexus;
-
---
--- Name: event_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: northbr6_nbnexus
---
-
-ALTER SEQUENCE event_id_seq OWNED BY event.id;
-
---
--- Name: group_new; Type: TABLE; Schema: public; Owner: northbr6; Tablespace: 
---
-
-CREATE TABLE group_new (
-    id integer DEFAULT nextval('group_id_seq'::regclass) NOT NULL,
-    name character varying(100) NOT NULL,
-    descr character varying(200),
-    create_dttm timestamp with time zone DEFAULT now() NOT NULL,
-    update_dttm timestamp with time zone,
-    activate_dttm timestamp with time zone,
-    suspend_dttm timestamp with time zone,
-    logo character varying(100) DEFAULT ''::character varying,
-    uid character(8) NOT NULL
-);
-
-
-ALTER TABLE public.group_new OWNER TO northbr6;
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: northbr6_nbnexus
---
-
-ALTER TABLE ONLY event ALTER COLUMN id SET DEFAULT nextval('event_id_seq'::regclass);
-
---
--- Name: event_pkey; Type: CONSTRAINT; Schema: public; Owner: northbr6_nbnexus; Tablespace: 
---
-
-ALTER TABLE ONLY event
-    ADD CONSTRAINT event_pkey PRIMARY KEY (id);
-
---
--- Name: group_new_pkey; Type: CONSTRAINT; Schema: public; Owner: northbr6; Tablespace: 
---
-
-ALTER TABLE ONLY group_new
-    ADD CONSTRAINT group_new_pkey PRIMARY KEY (id);
-    
---
--- Name: organization_uid_key; Type: CONSTRAINT; Schema: public; Owner: northbr6_nbnexus; Tablespace: 
---
-
-ALTER TABLE organization ADD uid character(8);
-
-ALTER TABLE ONLY organization
-    ADD CONSTRAINT organization_uid_key UNIQUE (uid);
-    
-    
---
--- Name: event_admin_user_fk_fkey; Type: FK CONSTRAINT; Schema: public; Owner: northbr6_nbnexus
---
-
-ALTER TABLE ONLY event
-    ADD CONSTRAINT event_admin_user_fk_fkey FOREIGN KEY (admin_user_fk) REFERENCES "user"(id);
-
-
---
--- Name: event_group_fk_fkey; Type: FK CONSTRAINT; Schema: public; Owner: northbr6_nbnexus
---
-
-ALTER TABLE ONLY event
-    ADD CONSTRAINT event_group_fk_fkey FOREIGN KEY (group_fk) REFERENCES group_new(id);
-
-
---
--- Name: event_reserved_user_fk_fkey; Type: FK CONSTRAINT; Schema: public; Owner: northbr6_nbnexus
---
-
-ALTER TABLE ONLY event
-    ADD CONSTRAINT event_reserved_user_fk_fkey FOREIGN KEY (reserved_user_fk) REFERENCES "user"(id);
-
---
--- Name: user_group_role_fk_fkey; Type: FK CONSTRAINT; Schema: public; Owner: northbr6_nbnexus
---
-
-ALTER TABLE user_group add role_fk integer;
-
-ALTER TABLE ONLY user_group
-    ADD CONSTRAINT user_group_role_fk_fkey FOREIGN KEY (role_fk) REFERENCES role(id);
-
---
--- Name: event; Type: ACL; Schema: public; Owner: northbr6_nbnexus
---
-
-REVOKE ALL ON TABLE event FROM PUBLIC;
-REVOKE ALL ON TABLE event FROM northbr6_nbnexus;
-GRANT ALL ON TABLE event TO northbr6_nbnexus;
-GRANT SELECT,INSERT,UPDATE ON TABLE event TO northbr6_web;
-
-
---
--- Name: event_id_seq; Type: ACL; Schema: public; Owner: northbr6_nbnexus
---
-
-REVOKE ALL ON SEQUENCE event_id_seq FROM PUBLIC;
-REVOKE ALL ON SEQUENCE event_id_seq FROM northbr6_nbnexus;
-GRANT ALL ON SEQUENCE event_id_seq TO northbr6_nbnexus;
-GRANT SELECT,UPDATE ON SEQUENCE event_id_seq TO northbr6_web;
-
---
--- Name: group_new; Type: ACL; Schema: public; Owner: northbr6
---
-
-REVOKE ALL ON TABLE group_new FROM PUBLIC;
-REVOKE ALL ON TABLE group_new FROM northbr6;
-GRANT ALL ON TABLE group_new TO northbr6;
-GRANT SELECT,INSERT,UPDATE ON TABLE group_new TO northbr6_web;
-
-GRANT SELECT,INSERT ON TABLE organization_organization TO northbr6_web;
-
-GRANT SELECT,INSERT,UPDATE ON TABLE "user" TO northbr6_web;
-
-GRANT SELECT,INSERT ON TABLE user_organization TO northbr6_web;
-
-ALTER TABLE invitation ALTER COLUMN network_fk integer nullable;
-
-ALTER TABLE invitation DROP CONSTRAINT invitation_group_fk_fkey;
-
-ALTER TABLE user_group DROP CONSTRAINT user_group_group_fk_fkey;
-
--- BREAK - NOW - copy all data from group to group_new
-
--- THEN EXECUTE
-
-DROP TABLE public.group;
-
-ALTER TABLE group_new RENAME TO "group";
-
-ALTER TABLE ONLY invitation
-    ADD CONSTRAINT invitation_group_fk_fkey FOREIGN KEY (group_fk) REFERENCES "group"(id);
-        
-ALTER TABLE ONLY user_group
-    ADD CONSTRAINT user_group_group_fk_fkey FOREIGN KEY (group_fk) REFERENCES "group"(id);
-
--- STATIC DATA
-
-INSERT INTO status VALUES (3, 'pending', '');
+-- move redirect

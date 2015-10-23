@@ -95,6 +95,7 @@ function toggleFrameDisplay(frameId) {
 	var showButton = document.getElementById('menu-' + frameId);
 	document.getElementById("reserveList").style.display='none';
 	document.getElementById("userList").style.display='none';
+	document.getElementById("fatalError").style.display='none';
 	document.getElementById("menu-userList").style.backgroundColor='rgba(210, 123, 75, 1)';
 	document.getElementById("menu-reserveList").style.backgroundColor='rgba(210, 123, 75, 1)';
 	showFrame.style.display='block';
@@ -189,6 +190,28 @@ function loginValidateAndSubmit() {
     pass = false;
   }
 
+ 	if (Boolean(pass)) {
+ 		submitButton.disabled = true;  
+ 		submitButton.innerHTML = "One Moment"; 
+ 		submitButton.style.opacity = ".6";
+ 		loginForm.submit();
+ 	}
+}
+
+function demoValidateAndSubmit() {
+	
+	pass = true;
+	var loginForm = document.forms["login-form"];
+	var submitButton = document.getElementById("login-form-submit");
+	
+  var usernameField = loginForm["uid"];
+  var username = usernameField.value;
+  setFieldPassStyles(usernameField, "");
+  if (username == null || username == "") {
+    setFieldErrorStyles(usernameField, "Name is required.");
+    pass = false;
+  }
+  
  	if (Boolean(pass)) {
  		submitButton.disabled = true;  
  		submitButton.innerHTML = "One Moment"; 

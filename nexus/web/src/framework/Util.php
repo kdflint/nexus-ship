@@ -42,12 +42,38 @@ class Util {
 	
 	public static function getDbName() {
 		return DB_NAME;
+	}
+	
+	public static function getDemoUidpk() {
+		return DEMO_UIDPK;
 	}		
+	
+	public static function getDemoPassword() {
+		return DEMO_PASSWORD;
+	}	
+	
+	private static function getDemoUsername() {
+		return DEMO_USERNAME;
+	}
+	
+	public static function getDemoNowEvent() {
+		return DEMO_EVENT_NOW;
+	}
+	
+	public static function getDemoFutureEvent() {
+		return DEMO_EVENT_FUTURE;
+	}
 	
 	private static $web_path = "/web";
 	
+	private static $config_path = "/config";
+	
 	public static function getHttpPath() {
 		return "http://" . ENV_HOST . APP_NAME . self::$web_path;
+	}
+	
+	public static function getConfigPath() {
+		return "http://" . ENV_HOST . APP_NAME . self::$config_path;
 	}
 	
 	public static function getWebRoot() {	return WEB_ROOT; }
@@ -192,6 +218,13 @@ class Util {
 	public static function stripTrailingComma($in) {
 		if (!strcmp(substr($in, -2), ", ")) {
 			return substr($in, 0, -2);
+		}
+		return $in;
+	}
+	
+	public static function stripTrailingSpace($in) {
+		if (!strcmp(substr($in, -1), " ")) {
+			return substr($in, 0, -1);
 		}
 		return $in;
 	}
@@ -464,6 +497,19 @@ class Util {
 		} 	
 	}
 	
+	public static function setDemoSession($username, $remember, $zone = "undefined") {
+		self::setSession(self::getDemoUsername(), false, $zone);
+		$pos = strpos($username, " ");
+		if ($pos) {
+  		$_SESSION['fname'] = substr($username, 0, $pos);
+  		$_SESSION['lname'] = substr($username, $pos+1);
+  	} else {
+  		$_SESSION['fname'] = $username;
+  		$_SESSION['lname'] = " ";
+  	}
+  	$_SESSION['demo'] = "true";
+	}
+	
 	public static function setSessionLastActivity() {
 		$_SESSION['lastActivity'] = time();
 	}
@@ -481,10 +527,26 @@ class Util {
 	
 	public static function destroySession() {
 		$_SESSION = array();
-		if (ini_get("session.use_cookies")) {
-    	$params = session_get_cookie_params();
-    	setcookie(session_name(), '', time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
-		}
+		/* ====================================================================================================================================
+		| It is typically recommended to delete the session cookie on the client side in order to fully kill a PHP session. (Like following code).
+		|
+		| We do NOT do this, and this is why:
+		|
+		| In login.php we set SESSION variables for different purposes when the page loads, even before a user actually logs in to the app.
+		| This is how we securely inform server processors of certain usage contexts (like this being a demo session, for instance)
+		| We need those SESSION variables to be useful even after a user initiates a logout (which calls this Util::destroySession() method).
+		| If we kill the session cookie then we can't use this technique. For instance, if we delete the SESSION cookie when a demo user logs out
+		| then we lose track of the fact that this session context is demo session and a subsequent log in fails. Without the cookie, there is no
+		| place to store this info and communicate it back to the server.
+		|
+		| Instead, we leave the old SESSION cookie in place on the client side even though the SESSION array is emptied on the server. This way we
+		| still have a place to hang this context state information. Then, we regenerate the session id after a succesful login. This should
+		| answer to any sesson hijacking concerns but I am documenting carefully for the next person who wanders over here and wonders about this!
+		======================================================================================================================================= */
+		//if (ini_get("session.use_cookies")) {
+    //	$params = session_get_cookie_params();
+    //	setcookie(session_name(), '', time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
+		//}
 		session_destroy();
 	}
 	

@@ -25,7 +25,7 @@
 		</td>
     <td>
     	<a href="javascript:void(0);" onclick="resetInviteForm();" style="float:right;margin-right:6px;">Cancel</a><br/>
-      <a id="invite-form-submit" class="pure-button button-menu" href="javascript:void(0)" onclick="inviteValidateAndSubmit();" style="float:right;background-color:#d27b4b;width:70px;font-size:90%;margin-top:45px;color:#e6e6e6">Enroll</a>
+      <a id="invite-form-submit" class="pure-button button-menu" href="javascript:void(0)" onclick="inviteValidateAndSubmit();" style="float:right;background-color:#d27b4b;width:70px;font-size:90%;margin-top:45px;color:#e6e6e6" <?php echo($disabled); ?> >Enroll</a>
  		</td>
 	</tr>
 </table> 
