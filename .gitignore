@@ -14,3 +14,4 @@ nexus/lib/bigbluebutton/*
 nexus/web/vendor/*
 nexus/partner/*
 pilot/view/include/tmpResults/*
+pilot/migration/Util.php
