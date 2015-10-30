@@ -37,7 +37,8 @@
       			</select>
 		    	</div>
 		    	<div style="margin-top:10px;">
-		    		<select id="schedule-form-type" name="meeting-type" style="width:398px;vertical-align:middle;">
+		    		<?php include("meetingTypeTooltip.html"); ?>
+		    		<select id="schedule-form-type" name="meeting-type" style="width:370px;vertical-align:middle;">
 		    			<?php include("meetingTypeOptions.html"); ?>
 		    		</select>
 		    	</div> 			

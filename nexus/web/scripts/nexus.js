@@ -165,6 +165,15 @@ function isValidEmail(email) {
     return true;
 }
 
+function toggleTooltip(tip) {
+	var curState = document.getElementById(tip).className;
+	if (curState == "tooltip-hover") {
+		document.getElementById(tip).className = "";
+	} else {
+		document.getElementById(tip).className = "tooltip-hover";
+	}
+}
+
 
 // TODO - refactor these front validations scripts - way too redundant!
 
