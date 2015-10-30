@@ -8,7 +8,7 @@
 *.gz
 error_log
 pilot/view/include/scrapToggleCode.php
-nexus/web/lib/Validate.php
+nexus/lib/Validate.php
 nexus/lib/rememberme/*
 nexus/lib/bigbluebutton/*
 nexus/web/vendor/*
