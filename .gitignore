@@ -4,6 +4,13 @@
 *.key
 *.bak
 *.cfg
+*.tar
+*.gz
+error_log
 pilot/view/include/scrapToggleCode.php
 nexus/web/lib/Validate.php
+nexus/lib/rememberme/*
+nexus/lib/bigbluebutton/*
 nexus/web/vendor/*
+nexus/partner/*
+pilot/view/include/tmpResults/*

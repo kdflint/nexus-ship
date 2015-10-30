@@ -94,3 +94,15 @@ insert into invitation (uuid, email, create_dttm, accept_dttm, network_fk, invit
 
 --http://nexus.northbridgetech.org/web/enroll.php?invitation=13dcf104-6297-43d3-85b1-7e5127548c96
 
+insert into organization (name, create_dttm, activate_dttm, tax_exempt, status_fk, logo, uid) values ('Mansfield Institute for Social Justice and Transformation', now(), now(), true, 1, 'src="image/partners/roosevelt_univ.png" height="40" width="120"', '1db72823') returning id;
+
+insert into organization_organization (organization_from_fk, organization_to_fk, relationship, create_dttm) values (13, 346, 'parent', now());
+
+insert into public.group (name, create_dttm, activate_dttm, logo, uid) values ('Mansfield Institute for Social Justice and Transformation', now(), now(), '', '5204e034') returning id;
+
+insert into invitation (uuid, email, create_dttm, accept_dttm, network_fk, invitation_dttm, role_fk, expire_dt, issuer_fk, type, organization_fk, group_fk) values ('15694699-729a-4cc3-abc1-1d9a19771308', 'lharrington01@roosevelt.edu', now(), NULL, NULL, now(), '4', (CURRENT_DATE + interval '31 days'), '88', 'single', 346, 15) returning uuid;
+
+--http://nexus.northbridgetech.org/web/enroll?invitation=15694699-729a-4cc3-abc1-1d9a19771308
+
+
+
