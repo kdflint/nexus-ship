@@ -11,7 +11,6 @@
 			 		nowMeeting = jsonObj.shift();
 			 	}
        	document.getElementById("nowTable").innerHTML = "<tr id='nowRow0'></tr>";
-
 			 	// put row containers in the reservation table, 1 for each event
 			 	var nextMeetings = undefined;
 			 	var tableRows = "";
@@ -38,6 +37,8 @@
           	"</td>";	 
        	}	else {
 					indicator = (Math.floor(new Date()/1000) < nowMeeting.epoch ) ? "Soon" : "Now";
+					// If this is a demo session, show the session user as the now meeting reserver instead of the placeholder name that is in the database
+					reservedBy = nowMeeting.adder == <?php echo(Utilities::getDemoUidpk()); ?> ? '<?php echo($_SESSION['fname'] . " " . $_SESSION['lname']); ?>' : nowMeeting.fname + " " + nowMeeting.lname;
 				 	nowEvent =  
 	       		"<td>" +
 		      		"<div class='event'>" +
@@ -48,7 +49,8 @@
           	"<td>" +	       				
 			        "<div class='meeting'>" +
           			"<span class='purpose'>" + nowMeeting.purpose + "</span><br/>" +
-	        			"<p>" + nowMeeting.mtypdisplay + " reserved by " + nowMeeting.fname + " " +  nowMeeting.lname + "</p>" +
+          			"<p>" + nowMeeting.mtypdisplay + " reserved by " + reservedBy +
+	        			//"<p>" + nowMeeting.mtypdisplay + " reserved by " + nowMeeting.fname + " " +  nowMeeting.lname + "</p>" +
 	        			((nowMeeting.adder == nowMeeting.sessionUser) ? "<p><a href='modules/schedule/control/eventDeleteProcessor.php?id=" + nowMeeting.uuid + "' onclick='return confirm(\"Please confirm this delete.\");'><span class='fa fa-trash-o' style='color:#d27b4b;'></span></a></p>" : " ") +
           			"</span>" +
           		"</div>" +
@@ -96,8 +98,8 @@
          					"<span class='descr' style='font-size:90%;' >" + jsonObj[i].descr + 
 		          			//"<p><span style='padding-right:5px;margin:0px;color:#d27b4b;' class='fa fa-envelope' ></span>Reserved by: " + jsonObj[i].fname + " " +  jsonObj[i].lname + "<span id='reserveLname'></span></p>" +
           					"<p>" + jsonObj[i].mtypdisplay + " reserved by " + 
-          					((jsonObj[i].adder == <?php echo(Util::getDemoUidpk()); ?>) ? '<?php echo($_SESSION['fname']); ?>' : jsonObj[i].fname) + " " +  
-          					((jsonObj[i].adder == <?php echo(Util::getDemoUidpk()); ?>) ? '<?php echo($_SESSION['lname']); ?>' : jsonObj[i].lname) + "</p>" +
+          					((jsonObj[i].adder == <?php echo(Utilities::getDemoUidpk()); ?>) ? '<?php echo($_SESSION['fname']); ?>' : jsonObj[i].fname) + " " +  
+          					((jsonObj[i].adder == <?php echo(Utilities::getDemoUidpk()); ?>) ? '<?php echo($_SESSION['lname']); ?>' : jsonObj[i].lname) + "</p>" +
           					((jsonObj[i].adder == jsonObj[i].sessionUser) ? "<p><a href='modules/schedule/control/eventDeleteProcessor.php?id=" + jsonObj[i].uuid + "' onclick='return confirm(\"Please confirm this delete.\");'><span class='fa fa-trash-o' style='color:#d27b4b;'></span></a></p>" : " ") +
          					"</span>" +
          				"</div>" +
@@ -138,7 +140,7 @@
 			<div class="meeting">
 				<span class='purpose'>Use this link to add Nexus Web Meet events to your calendar</span><br/>
 				<span class='descr' style='font-size:90%;' >
-					<p><?php echo Util::getHttpPath(); ?>/login.php?oid=<?php echo $_SESSION['orgUid']; ?></p>
+					<p><?php echo Utilities::getHttpPath(); ?>/login.php?oid=<?php echo $_SESSION['orgUid']; ?></p>
 					<p>Your attendees must be enrolled in Nexus Web Meet to attend a web event.</p>
 				</span>
 			</div>
