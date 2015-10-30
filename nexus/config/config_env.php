@@ -4,7 +4,9 @@
 
 	define("PHP_ROOT", "/home/kdflint/projects/nexus-community/nexus/web/lib");
 	define("WEB_ROOT", "/home/kdflint/projects/nexus-community/nexus/web");
-	define("TKN_ROOT", "");
+	define("TKN_ROOT", "/home/kdflint/projects/nexus-community/nexus/token");
+	define("LIB_ROOT", "/home/kdflint/projects/nexus-community/nexus/lib");
+	define("PTR_STC_ROOT", "/home/kdflint/projects/nexus-community/nexus/partner");
 	define("APP_NAME", "/nexus/nexus");
 	define("ENV_NAME", "local");
 	define("ENV_HOST", "localhost");
