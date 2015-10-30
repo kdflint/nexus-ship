@@ -3,18 +3,18 @@
 session_start();
 
 require_once("../../../src/framework/Util.php");
-require_once(Util::getSrcRoot() . "/user/User.php");
+require_once(Utilities::getSrcRoot() . "/user/User.php");
 
 $dirty = array('email' => $_POST['email'], 'network' => $_POST['network']);
 $clean = array();
 
-if (isset($dirty['network']) && Util::validateNetworkIdFormat($dirty['network'])) {
+if (isset($dirty['network']) && Utilities::validateNetworkIdFormat($dirty['network'])) {
 	$clean['network'] = $dirty['network'];
 } else {
 	$clean['network'] = "";	
 }
 
-if (isset($dirty['email']) && Util::validateEmail($dirty['email'])) {
+if (isset($dirty['email']) && Utilities::validateEmail($dirty['email'])) {
 	$clean['email'] = $dirty['email'];
 }
 
@@ -34,10 +34,10 @@ if ($clean['email']) {
 
 }
 
-returnToLoginWithMessage(Util::AUTHENTICATION_ERROR, $clean['network']);
+returnToLoginWithMessage(Utilities::AUTHENTICATION_ERROR, $clean['network']);
 
 function returnToLoginWithMessage($errorMessage, $network) {
-	header("location:" . Util::getHttpPath() . "/login.php?network=" . $network . "&error=" . $errorMessage);
+	header("location:" . Utilities::getHttpPath() . "/login.php?network=" . $network . "&error=" . $errorMessage);
 	exit(0);
 }
 
@@ -45,7 +45,7 @@ function sendEnrollEmail($email, $path, $fname, $usernames) {
 	
 	$message = "Welcome!
 		
-The Nexus user ids registered for this email address: " . Util::stripTrailingComma($usernames) . "
+The Nexus user ids registered for this email address: " . Utilities::stripTrailingComma($usernames) . "
 
 This tool is built by committed volunteers working hard to build web resources for organizations that make a positive difference in our communities.
 
@@ -65,7 +65,7 @@ We are working hard on adding:
 
 You can login to Nexus using this link. You may wish to check the Help document right away for some information about how to use this site.
 
-" . Util::getHttpPath() . "/login.php
+" . Utilities::getHttpPath() . "/login.php
 
 Enjoy,
 

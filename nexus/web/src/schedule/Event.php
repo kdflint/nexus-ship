@@ -71,7 +71,7 @@ class Event {
 	
 	public static function isValidTimeZone($in) {
 		$query = "select exists (select name from pg_timezone_names where name = $1)";		
-		$row = pg_fetch_row(pgDb::psExecute($query, array($in)));
+		$row = pg_fetch_row(PgDatabase::psExecute($query, array($in)));
 		if (!strcmp($row[0], "t")) {
 			return TRUE;
 		}
@@ -87,7 +87,7 @@ class Event {
 	
 	public static function isValidEventUuid($in) {
 		$query = "select exists (select uuid from event where uuid = $1)";		
-		$row = pg_fetch_row(pgDb::psExecute($query, array($in)));
+		$row = pg_fetch_row(PgDatabase::psExecute($query, array($in)));
 		if (!strcmp($row[0], "t")) {
 			return TRUE;
 		}
@@ -101,7 +101,7 @@ class Event {
   		where t.oid = e.enumtypid
   		and t.typname like 'meeting%'
   		and e.enumlabel = $1)";
-  	$row = pg_fetch_row(pgDb::psExecute($query, array($in)));
+  	$row = pg_fetch_row(PgDatabase::psExecute($query, array($in)));
 		if (!strcmp($row[0], "t")) {
 			return TRUE;
 		}
@@ -136,7 +136,7 @@ class Event {
 			and u.id = e.reserved_user_fk 
 			order by e.start_dttm";
 				
-			$cursor = pgDb::psExecute($query, array($groupId, $localTz));
+			$cursor = PgDatabase::psExecute($query, array($groupId, $localTz));
 			$counter = 0;
 			while ($row = pg_fetch_array($cursor)) {
 				$events[$counter]['date'] = $row['date'];
@@ -164,28 +164,28 @@ class Event {
 
 	public static function addEvent($dttm, $duration, $name, $reservedUserId, $groupId, $tzName, $type) {
 		$query = "select abbrev from pg_timezone_names where name = $1";
-		$row = pg_fetch_row(pgDb::psExecute($query, array($tzName)));
+		$row = pg_fetch_row(PgDatabase::psExecute($query, array($tzName)));
 		$tzAbbrev = $row[0];
 		$query = "insert into event (uuid, start_dttm, duration, name, descr, reserved_user_fk, group_fk, tz_name, tz_abbrev, type) values ($1, $2, $3, $4, $9, $5, $6, $7, $8, $10)";
-		pgDb::psExecute($query, array(Util:: newUuid(), $dttm, $duration, $name, $reservedUserId, $groupId, $tzName, $tzAbbrev, "", $type));
+		PgDatabase::psExecute($query, array(Utilities:: newUuid(), $dttm, $duration, $name, $reservedUserId, $groupId, $tzName, $tzAbbrev, "", $type));
 		return;
 	}	
 	
 	public static function deleteEvent($uuid) {
 		$query = "update event set active = false where uuid = $1";
-		pgDb::psExecute($query, array($uuid));
+		PgDatabase::psExecute($query, array($uuid));
 		return;
 	}
 	
 	public static function updateDemoNowEvent() {
-		$query = "update event set start_dttm = (now() - interval '5 minutes') where id = '" . Util::getDemoNowEvent() . "'";
-		pgDb::psExecute($query, array());
+		$query = "update event set start_dttm = (now() - interval '5 minutes') where id = '" . Utilities::getDemoNowEvent() . "'";
+		PgDatabase::psExecute($query, array());
 		return;
 	}
 	
 	public static function updateDemoFutureEvent() {
-		$query = "update event set start_dttm = (start_dttm + interval '1 week') where id in (" . Util::getDemoFutureEvent() . ")";
-		pgDb::psExecute($query, array());
+		$query = "update event set start_dttm = (start_dttm + interval '1 week') where id in (" . Utilities::getDemoFutureEvent() . ")";
+		PgDatabase::psExecute($query, array());
 		return;
 	}
 	

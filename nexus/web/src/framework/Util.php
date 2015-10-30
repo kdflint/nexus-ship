@@ -2,14 +2,14 @@
 
 require_once(dirname(__FILE__) . "/../../../config/config_env.php");
 require_once(PHP_ROOT . "/Validate.php");
-require_once(Util::getSrcRoot() . "/user/User.php");
-require_once(Util::getSrcRoot() . "/schedule/Event.php");
-require_once(Util::getLibRoot() . "/autoload/autoloader.php");
+require_once(Utilities::getSrcRoot() . "/user/User.php");
+require_once(Utilities::getSrcRoot() . "/schedule/Event.php");
+require_once(Utilities::getLibRoot() . "/autoload/autoloader.php");
 
 // set config settings
 autoloader(array(array(
       'debug' => false, // turn on debug mode (by default debug mode is off)
-      'basepath' => Util::getLibRoot(), // basepath is used to define where your project is located
+      'basepath' => Utilities::getLibRoot(), // basepath is used to define where your project is located
       'extensions' => array('.php'), // allowed class file extensions
       // 'extensions' => array('.php', '.php4', '.php5'), // example of multiple extensions
 )));
@@ -26,7 +26,7 @@ autoloader(array(
 // print array of class autoload paths:
 // print_r($cached_paths); exit(0);
 
-class Util {
+class Utilities {
 	
 	public static function getDbHost() {
 		return DB_HOST; 
@@ -84,9 +84,13 @@ class Util {
 	
 	public static function getSrcRoot() {	return self::getWebRoot() . "/src"; }
 	
-	public static function getLibRoot() {	return self::getWebRoot() . "/lib"; }
+	public static function getLibRoot() {	return LIB_ROOT; }
 	
-	public static function getTokenRoot() { return self::getWebRoot() . "/token"; }
+	public static function getTokenRoot() { return TKN_ROOT; }
+	
+	public static function getImageRoot() { return self::getWebRoot() . "/image"; }
+	
+	public static function getPartnerImageRoot() { PTR_STC_ROOT . "/image/"; }
 	
 	public static function getEnvName() { return ENV_NAME; }
 	
@@ -172,7 +176,7 @@ class Util {
 	
 	public static function validateUserId($in) {
 		if(self::validateUserIdFormat($in)) {
-			if (pgDb::userIdExists($in)) {	
+			if (PgDatabase::userIdExists($in)) {	
 				return TRUE;
 			}
 		}
@@ -196,7 +200,7 @@ class Util {
 	public static function validateUsernameFormat($in) {
 		if(Validate::string($in, array(
 				'min_length' => 1, 
-    		'max_length' => Util::USERNAME_MAX) 
+    		'max_length' => Utilities::USERNAME_MAX) 
     	 && !preg_match("/[ ]+/", $in))) {
     		return TRUE;
     }
@@ -244,7 +248,7 @@ class Util {
 			if (Validate::string($input['fname'], array(
     				'min_length' => self::NAME_MIN,
     				'max_length' => self::NAME_MAX))) {
-				$result['good']['fname'] = Util::sanitize($input['fname']);			
+				$result['good']['fname'] = Utilities::sanitize($input['fname']);			
 			} else {
 				$result['error']['fname'] = self::VALIDATION_FNAME_ERROR;
 			}
@@ -258,7 +262,7 @@ class Util {
     				'format' => VALIDATE_EALPHA . VALIDATE_NUM . VALIDATE_SPACE . "'" . "_" . "-",
     				'min_length' => self::NAME_MIN,
     				'max_length' => self::NAME_MAX))) {
-				$result['good']['lname'] = Util::sanitize($input['lname']);			
+				$result['good']['lname'] = Utilities::sanitize($input['lname']);			
 			} else {
 				$result['error']['lname'] = self::VALIDATION_LNAME_ERROR;
 			}
@@ -459,8 +463,7 @@ class Util {
 				strlen($_SESSION['username']) > 0 && 
 				!self::isSessionExpired() &&
 				isset($_SESSION['fname']) &&
-				strlen($_SESSION['fname']) > 0 &&
-				$_SESSION['role']) {
+				strlen($_SESSION['fname']) > 0) {
 			return true;
 		}
 		return false;
@@ -474,6 +477,7 @@ class Util {
 		unset($_SESSION['username']);
 		$_SESSION['appRoot'] = self::getWebRoot();
 		$_SESSION['environment'] = self::getEnvName();
+		$_SESSION['nexusContext'] = "NWM";
 		$_SESSION['username'] = $username;
 		$_SESSION['groups'] = User::getUserGroupsByUsername($_SESSION['username']);
 		self::setSessionLastActivity();
@@ -515,7 +519,11 @@ class Util {
 	}
 	
 	public static function isSessionExpired() {
-		if ((isset($_SESSION['remember']) && $_SESSION['remember'] == "true") || Util::getSessionTimeout() == "-1") {
+		if (isset($_SESSION['nexusContext']) && $_SESSION['nexusContext'] == "ADV") {
+			// Nexus Advantage sessions don't time out (yet)
+			return false;
+		}
+		if ((isset($_SESSION['remember']) && $_SESSION['remember'] == "true") || Utilities::getSessionTimeout() == "-1") {
 			// don't expire a session if the user has asked to be remembered on login form
 			return false;
 		}
@@ -534,7 +542,7 @@ class Util {
 		|
 		| In login.php we set SESSION variables for different purposes when the page loads, even before a user actually logs in to the app.
 		| This is how we securely inform server processors of certain usage contexts (like this being a demo session, for instance)
-		| We need those SESSION variables to be useful even after a user initiates a logout (which calls this Util::destroySession() method).
+		| We need those SESSION variables to be useful even after a user initiates a logout (which calls this Utilities::destroySession() method).
 		| If we kill the session cookie then we can't use this technique. For instance, if we delete the SESSION cookie when a demo user logs out
 		| then we lose track of the fact that this session context is demo session and a subsequent log in fails. Without the cookie, there is no
 		| place to store this info and communicate it back to the server.

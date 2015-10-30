@@ -13,7 +13,8 @@
 	      		<input type="text" name="meeting-name" style="width:97%;" maxlength="50" placeholder="Purpose" >
 					</div>
 					<div style="margin-top:10px;">
-      			<select id="now-form-type" name="meeting-type" style="width:232px;vertical-align:middle;">
+						<?php include("meetingTypeTooltip.html"); ?>
+      			<select id="now-form-type" name="meeting-type" style="width:204px;vertical-align:middle;">
 	      			<?php include("meetingTypeOptions.html"); ?>			
       			</select>	 
       			<select id="now-form-duration" name="meeting-duration" style="width:132px;vertical-align:middle;">

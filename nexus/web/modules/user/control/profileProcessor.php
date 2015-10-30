@@ -3,13 +3,13 @@
 session_start();
 
 require_once("../../../src/framework/Util.php");
-require_once(Util::getSrcRoot() . "/user/User.php");
+require_once(Utilities::getSrcRoot() . "/user/User.php");
 //require_once($_SESSION['appRoot'] . "control/error/handlers.php");
 
 // TODO - put authorization checker, session checker, error handling, etc. in a central place. These should go at the top of every processor.
 
-if (!Util::isSessionValid()) {
-	header("location:" . Util::getHttpPath() . "/index.php");
+if (!Utilities::isSessionValid()) {
+	header("location:" . Utilities::getHttpPath() . "/index.php");
 	exit(0);
 }
 
@@ -32,7 +32,7 @@ $input = array('email' => $_POST['email'],
 							'descr' => $_POST['about']
 							);
 							
-$result = Util::validateUserProfile($input, FALSE);
+$result = Utilities::validateUserProfile($input, FALSE);
 
 if (count($result['error']) > 0) {
 	foreach ($result['error'] as $value) {
@@ -68,7 +68,7 @@ User::updateUserById($_SESSION['uidpk'],
 											$phonePublic);
 
 if (isset($result['good']['password']) && strlen($result['good']['password']) > 0) {
-	Util::storeSecurePasswordImplA($result['good']['password'], $_SESSION['uidpk']);
+	Utilities::storeSecurePasswordImplA($result['good']['password'], $_SESSION['uidpk']);
 	
 	$message = "Hello " . $result['good']['fname'] . ",
 	
@@ -88,17 +88,17 @@ $_SESSION['email'] = $_SESSION['fname'] = $_SESSION['lname'] = ""; // = $_SESSIO
 
 while ($row = pg_fetch_array($cursor)) {
 	$_SESSION['email'] = $row['email'];
-  //$_SESSION['sms'] = Util::prettyPrintPhone($row['cell']);
-  //$_SESSION['phone'] = Util::prettyPrintPhone($row['phone']);
+  //$_SESSION['sms'] = Utilities::prettyPrintPhone($row['cell']);
+  //$_SESSION['phone'] = Utilities::prettyPrintPhone($row['phone']);
   $_SESSION['fname'] = $row['first']; 
   $_SESSION['lname'] = $row['last'];
 }
 
-header("location:" . Util::getHttpPath() . "/index.php?view=profile");
+header("location:" . Utilities::getHttpPath() . "/index.php?view=profile");
 exit(0);
 
 function returnToProfileWithError($errorMessage) {
-	header("location:" . Util::getHttpPath() . "/index.php?view=profile&error=" . $errorMessage);
+	header("location:" . Utilities::getHttpPath() . "/index.php?view=profile&error=" . $errorMessage);
 	exit(0);
 }
 

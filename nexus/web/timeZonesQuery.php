@@ -345,7 +345,7 @@ $zones = array(
 
 foreach ($zones as $key => $value) {
 		$query = "select abbrev from pg_timezone_names where name = $1";
-		$cursor = pgDb::psExecute($query, array($key));
+		$cursor = PgDatabase::psExecute($query, array($key));
 		$count = pg_num_rows($cursor);
 		if ($count != 1) {
 			echo $key . ":" . $count . "\r\n\r\n";

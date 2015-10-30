@@ -3,13 +3,13 @@
 session_start();
 
 require_once("src/framework/Util.php");
-require_once(Util::getSrcRoot() . "/user/Invitation.php");
-require_once(Util::getSrcRoot() . "/organization/Organization.php");
+require_once(Utilities::getSrcRoot() . "/user/Invitation.php");
+require_once(Utilities::getSrcRoot() . "/organization/Organization.php");
 
 $inviteId = $networkName = $networkLogo = $cleanMessage = $cleanIcon = "";
 $validInvitation = false;
 
-if (Util::validateUuid($_GET['invitation'])) {
+if (Utilities::validateUuid($_GET['invitation'])) {
 	if (Invitation::isInvitationOpen($_GET['invitation'])) {
 		$inviteId = $_GET['invitation'];
 		$validInvitation = true;
@@ -32,7 +32,7 @@ if ($validInvitation) {
 	exit(0);
 }
 
-if(isset($_GET['error']) && Util::isSafeCharacterSet($_GET['error'])) {
+if(isset($_GET['error']) && Utilities::isSafeCharacterSet($_GET['error'])) {
 	$cleanMessage = $_GET['error'];
 	$cleanIcon = "fa fa-info-circle fa-2x";
 }

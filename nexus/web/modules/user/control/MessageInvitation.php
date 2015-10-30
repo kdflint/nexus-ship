@@ -58,7 +58,7 @@ Content-Transfer-Encoding: 7bit
 			</tr>
 			<tr>
 				<td style='vertical-align:top;padding-top:10px;'>
-					<a href='https://twitter.com/'" . Util::getTwitterHandle() . "' target='_blank'><img src='http://northbridgetech.org/images/twitter_dae0bc_32.png' width='32' height=32' /></a><br/>
+					<a href='https://twitter.com/'" . Utilities::getTwitterHandle() . "' target='_blank'><img src='http://northbridgetech.org/images/twitter_dae0bc_32.png' width='32' height=32' /></a><br/>
 					<a href='//plus.google.com/u/0/101145194341428988499?prsrc=3' rel='publisher' target='_blank' style='text-decoration:none;'><img src='http://northbridgetech.org/images/google-plus-square_dae0bc_32.png' width='32' height=32' /></a><br/>
 					<a href='https://www.linkedin.com/company/2232384' target='_blank'><img src='http://northbridgetech.org/images/linkedin_dae0bc_32.png' width='32' height=32' /></a><br/>
 					<a href='https://www.facebook.com/northbridgenfp#' target='_blank'><img src='http://northbridgetech.org/images/facebook-square_dae0bc_32.png' width='32' height=32' /></a><br/>
@@ -99,7 +99,7 @@ Content-Transfer-Encoding: 7bit
 		$output .= "Reply To = " . $this->replyTo . "\r\n";
 		$output .= "Bcc = " . $this->bcc . "\r\n";
 		$output .= "Subject = " . $this->subject . "\r\n";
-		$output .= "Twitter = " . Util::getTwitterHandle() . "\r\n";
+		$output .= "Twitter = " . Utilities::getTwitterHandle() . "\r\n";
 		$output .= "Message Body = " . $this->messageBody . "\r\n";
 		return $output;
 	}

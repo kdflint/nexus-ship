@@ -11,9 +11,9 @@ if (isset($_SESSION['demo']) && $_SESSION['demo']) {
 	$disabled = "disabled";
 }
 
-if (!Util::isSessionValid()) {
+if (!Utilities::isSessionValid()) {
 	// TODO - this should consume a sessionManager object
-	if (Util::isSessionExpired()) {
+	if (Utilities::isSessionExpired()) {
 		header("location:login.php?oid=" . $_SESSION['orgUid'] . "&logout=true&expired=true");
 		exit(0);	
 	} else {
@@ -22,13 +22,13 @@ if (!Util::isSessionValid()) {
 	}
 }
 
-Util::setSessionLastActivity();
+Utilities::setSessionLastActivity();
 
 $showProfile = "false";
 $showTeam = "false";
 $showFatal = "false";
 
-if(isset($_GET['view']) && Util::isSafeCharacterSet($_GET['view'])) {
+if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
 	switch($_GET['view']) {
 		case "profile": $showProfile = "true"; break;
 		case "team": $showTeam = "true"; break;
@@ -55,7 +55,7 @@ if(isset($_GET['view']) && Util::isSafeCharacterSet($_GET['view'])) {
   	<script src="scripts/timeZoneData.js" language="javascript"></script>
  		<script src="scripts/lib/flash_detect.js"></script>
  		<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-  	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>  
+  	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
   	<script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js"></script>
 	  <link rel="icon" href="images/NB_icon.png" />
     <title>Northbridge Nexus</title> 
@@ -105,7 +105,7 @@ if(isset($_GET['view']) && Util::isSafeCharacterSet($_GET['view'])) {
 					document.getElementById("schedule-form-submit").onclick = "";
 					document.getElementById("invite-form-submit").onclick = "";
 					document.getElementById("index-module-name").innerHTML = "Web Meet Demo";
-				}				 	
+				}			 	
 			});
 			
 			function toggleJoinDisplay() {
@@ -248,7 +248,7 @@ if(isset($_GET['view']) && Util::isSafeCharacterSet($_GET['view'])) {
       	
       	<div class="loginColRight" style="width:20%;">
       		<span style="clear:right;float:right;text-align:right;margin-top:20px;"><?php echo $_SESSION['orgName']; ?></span>   
-      		<span style="clear:right;float:right;margin-top:20px;"><img <?php echo $_SESSION['logo']; ?>/></span>   
+      		<span style="clear:right;float:right;margin-top:20px;"><img src="<?php echo Utilities::getPartnerImageRoot(); ?><?php echo $_SESSION['logo']; ?>" /></span>   
       		<div id="techcheck_display" style="display:none;">
 						<?php include("modules/techcheck/views/details.html"); ?>	
 					</div>		
@@ -268,7 +268,4 @@ if(isset($_GET['view']) && Util::isSafeCharacterSet($_GET['view'])) {
 	</body>
 	
 </html>
-
-
-
 

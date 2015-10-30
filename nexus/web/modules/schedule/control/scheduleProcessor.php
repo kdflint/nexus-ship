@@ -3,12 +3,12 @@
 session_start();
 
 require_once("../../../src/framework/Util.php");
-require_once(Util::getSrcRoot() . "/schedule/Event.php");
+require_once(Utilities::getSrcRoot() . "/schedule/Event.php");
 
 // TODO - put authorization checker, session checker, error handling, etc. in a central place. These should go at the top of every processor.
 
-if (!Util::isSessionValid()) {
-	header("location:" . Util::getHttpPath() . "/index.php");
+if (!Utilities::isSessionValid()) {
+	header("location:" . Utilities::getHttpPath() . "/index.php");
 	exit(0);
 }
 
@@ -23,7 +23,7 @@ $dirty = array('meeting-name' => $_POST['meeting-name'],
 $result = validateEvent($dirty);
 
 if (count($result['error']) > 0) {
-	//header("location:" . Util::getHttpPath() . "/login.php?logout=true");
+	//header("location:" . Utilities::getHttpPath() . "/login.php?logout=true");
 	print_r($result); exit(0);
 	exit(0);
 }
@@ -40,7 +40,7 @@ $timestamp = $result['clean']['meeting-date'] . " " . $result['clean']['meeting-
 
 Event::addEvent($timestamp, $result['clean']['meeting-duration'], $result['clean']['meeting-name'], $_SESSION['uidpk'], array_keys($_SESSION['groups'])[0], $result['clean']['tzone-name'], $meetingType[$result['clean']['meeting-type']]);
 
-header("location:" . Util::getHttpPath() . "/index.php");
+header("location:" . Utilities::getHttpPath() . "/index.php");
 exit(0);
 
 function validateEvent($input) {
@@ -49,7 +49,7 @@ function validateEvent($input) {
 	// MEETING NAME
 	if (isset($input['meeting-name'])) {
 		if (strlen($input['meeting-name']) <= 50) {
-			$result['clean']['meeting-name'] = Util::sanitize($input['meeting-name']);			
+			$result['clean']['meeting-name'] = Utilities::sanitize($input['meeting-name']);			
 		} else {
 			$result['error']['meeting-name'] = "error";
 		}

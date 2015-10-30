@@ -28,7 +28,7 @@ class BbbMeeting {
 		require_once(dirname(__FILE__) . "/../framework/Util.php");
 		$this->creationParams['meetingId'] = $id;
 		$this->creationParams['meetingName'] = $name;	
-		$this->creationParams['logoutUrl'] = Util::getHttpPath() . '/roomLogout.html';
+		$this->creationParams['logoutUrl'] = Utilities::getHttpPath() . '/roomLogout.html';
 		$this->meetingType = $type;
 	}
 	

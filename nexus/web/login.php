@@ -2,14 +2,14 @@
 session_start();
 
 require_once("src/framework/Util.php");
-require_once(Util::getSrcRoot() . "/organization/Organization.php");
+require_once(Utilities::getSrcRoot() . "/organization/Organization.php");
 // TODO - this should be handled by the autoloader in Util
-require_once(Util::getLibRoot() . "/rememberme/rememberme/src/Rememberme/Storage/File.php");
-require_once(Util::getLibRoot() . "/rememberme/rememberme/src/Rememberme/Authenticator.php");
+require_once(Utilities::getLibRoot() . "/rememberme/rememberme/src/Rememberme/Storage/File.php");
+require_once(Utilities::getLibRoot() . "/rememberme/rememberme/src/Rememberme/Authenticator.php");
 
 use Birke\Rememberme;
 // Initialize RememberMe Library with file storage
-$storagePath = Util::getTokenRoot();
+$storagePath = Utilities::getTokenRoot();
 if(!is_writable($storagePath) || !is_dir($storagePath)) {
     die("'$storagePath' does not exist or is not writable by the web server.");
 }
@@ -18,13 +18,13 @@ $rememberMe = new Rememberme\Authenticator($storage);
 
 if(isset($_GET['logout'])) {
 	$rememberMe->clearCookie(isset($_SESSION['username']) ? $_SESSION['username'] : '');
-	Util::destroySession();
+	Utilities::destroySession();
 	session_start();
 }
 
 if(isset($_GET['logoutAll'])) {
   $storage->cleanAllTriplets($_SESSION['username']);
-	Util::destroySession();
+	Utilities::destroySession();
 	session_start();
 }
 
@@ -37,8 +37,8 @@ $enrolledUsername = (isset($_SESSION['invitation']) && isset($_SESSION['username
 
 $rememberedUsername = ($rememberMe->login()) ? $rememberMe->login() : false;
 
-if(Util::isSessionValid()) {
-	header("location:" . Util::getHttpPath() . "/index.php");
+if(Utilities::isSessionValid()) {
+	header("location:" . Utilities::getHttpPath() . "/index.php");
 	exit(0);
 } else if ($rememberedUsername) {
 	$_SESSION['remembered'] = $remembered = "true";
@@ -46,7 +46,7 @@ if(Util::isSessionValid()) {
 	$_SESSION['remembered'] = "true";
 }
 
-if(isset($_GET['error']) && Util::isSafeCharacterSet($_GET['error'])) {
+if(isset($_GET['error']) && Utilities::isSafeCharacterSet($_GET['error'])) {
 	$cleanMessage = $_GET['error'];
 	$cleanIcon = "fa fa-info-circle fa-2x";
 } else if(isset($_GET['logout'])) {
@@ -203,7 +203,7 @@ if ($cleanNetworkId == 'userdemo') {
      		
      		<div class="loginColRight">
       		<span style="clear:right;float:right;text-align:right;margin-top:20px;"><?php echo $networkName; ?></span>
-      		<span style="clear:right;float:right;margin-top:20px;"><img <?php echo $networkLogo; ?>/></span>
+      		<span style="clear:right;float:right;margin-top:20px;"><img src="<?php echo Utilities::getPartnerImageRoot(); ?><?php echo $networkLogo; ?>" /></span>
      		</div>
       </div>
       

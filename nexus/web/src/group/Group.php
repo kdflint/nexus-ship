@@ -2,17 +2,17 @@
 
 require_once(dirname(__FILE__) . "/../framework/PgDb.php");
 require_once(dirname(__FILE__) . "/../framework/Util.php");
-require_once(Util::getSrcRoot() . "/user/Invitation.php");
+require_once(Utilities::getSrcRoot() . "/user/Invitation.php");
 
 class Group {
 	
 	public static function getGroupById($groupId) {
 		$query = "select name, descr, logo from public.group where id = $1";
-		return pgDb::psExecute($query, array($groupId));
+		return PgDatabase::psExecute($query, array($groupId));
 	}
 
 	public static function validateGroupId($in) {
-		if(Util::validateGroupIdFormat($in)) {
+		if(Utilities::validateGroupIdFormat($in)) {
 			if (self::groupIdExists($in)) {	
 				return TRUE;
 			}
@@ -31,7 +31,7 @@ class Group {
 			$users[$counter]['email'] = $row['email'];
 			$users[$counter]['sessionUser'] = $ssnUser;
 			$users[$counter]['uidpk'] = $row['uuid'];
-			$users[$counter]['role'] = Util::getRoleName($row['roleid']);
+			$users[$counter]['role'] = Utilities::getRoleName($row['roleid']);
 			$users[$counter]['status'] = "pending";
 			$counter++;
 		}
@@ -45,7 +45,7 @@ class Group {
 			and ug.group_fk = $1
 			order by u.fname, u.lname
 			";			
-			$cursor = pgDb::psExecute($query, array($id));
+			$cursor = PgDatabase::psExecute($query, array($id));
 			while ($row = pg_fetch_array($cursor)) {
 				$users[$counter]['fname'] = $row['fname'];
 				$users[$counter]['lname'] = $row['lname'];
@@ -54,7 +54,7 @@ class Group {
 				$users[$counter]['email'] = $row['email'];
 				$users[$counter]['sessionUser'] = $ssnUser;
 				$users[$counter]['uidpk'] = $row['id'];
-				$users[$counter]['role'] = Util::getRoleName($row['roleid']);
+				$users[$counter]['role'] = Utilities::getRoleName($row['roleid']);
 				$users[$counter]['status'] = "active";
 				$counter++;
 			}
@@ -64,7 +64,7 @@ class Group {
 	
 	private static function groupIdExists($id) {
 		$query = "select exists (select true from public.group where uid = $1)";
-		$row = pg_fetch_row(PgDb::psExecute($query, array($id)));
+		$row = pg_fetch_row(PgDatabase::psExecute($query, array($id)));
 		if (!strcmp($row[0], "t")) {
 			return TRUE;
 		}
