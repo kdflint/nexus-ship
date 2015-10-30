@@ -2,7 +2,7 @@
 
 // PATHS
 
-	define("PHP_ROOT", "/home/kdflint/projects/nexus-community/nexus/web/lib");
+	define("PHP_ROOT", "/home/kdflint/projects/nexus-community/nexus/lib");
 	define("WEB_ROOT", "/home/kdflint/projects/nexus-community/nexus/web");
 	define("TKN_ROOT", "/home/kdflint/projects/nexus-community/nexus/token");
 	define("LIB_ROOT", "/home/kdflint/projects/nexus-community/nexus/lib");
