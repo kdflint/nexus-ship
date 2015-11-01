@@ -31,7 +31,18 @@ Use only clean input beyond this point (i.e. $clean[])
 
 Event::deleteEvent($clean['uuid']);
 
-header("location:" . Utilities::getHttpPath() . "/index.php");
+if ((session_status() === PHP_SESSION_ACTIVE) && isset($_SESSION['nexusContext'])) {
+ switch($_SESSION['nexusContext']) {
+ 		case "NWM":
+			header("location:" . Utilities::getHttpPath() . "/index.php");
+ 			break;
+ 		case "ADV":
+			header("location:" . Utilities::getPilotPath() . "/view/nexus.php?thisPage=calendar");
+ 			break;
+ 		default: 			
+ 	}
+}
+
 exit(0);
 
 function forceLogout() {

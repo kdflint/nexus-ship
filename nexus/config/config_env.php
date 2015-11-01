@@ -8,6 +8,7 @@
 	define("LIB_ROOT", "/home/kdflint/projects/nexus-community/nexus/lib");
 	define("PTR_STC_ROOT", "/home/kdflint/projects/nexus-community/nexus/partner");
 	define("APP_NAME", "/nexus/nexus");
+	define("PILOT_NAME", "/nexus/pilot");
 	define("ENV_NAME", "local");
 	define("ENV_HOST", "localhost");
 	define("SSN_TIMEOUT", "-1"); // in seconds

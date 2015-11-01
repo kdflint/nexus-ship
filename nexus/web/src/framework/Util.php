@@ -72,6 +72,10 @@ class Utilities {
 		return "http://" . ENV_HOST . APP_NAME . self::$web_path;
 	}
 	
+	public static function getPilotPath() {
+		return "http://" . ENV_HOST . PILOT_NAME;
+	}
+	
 	public static function getConfigPath() {
 		return "http://" . ENV_HOST . APP_NAME . self::$config_path;
 	}
@@ -499,6 +503,12 @@ class Utilities {
   		$_SESSION['email'] = $row['email'];
   		$_SESSION['role'] = self::getRoleName($row['roleid']);
 		} 	
+	}
+	
+	public static function setPluginSession($oid, $zone = "undefined") {
+		$_SESSION['groups'] = User::getUserGroupsByUsername($_SESSION['username']);	
+		$_SESSION['timezone'] = (Event::isValidTimeZone($zone) ? $zone : "undefined");
+  	$_SESSION['uidpk'] = $row['id'];
 	}
 	
 	public static function setDemoSession($username, $remember, $zone = "undefined") {
