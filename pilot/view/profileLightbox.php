@@ -1,4 +1,4 @@
-<?
+<?php
 
 require_once("../control/util.php");
 require_once(Util::getAppRoot() . "model/pgDb.php");

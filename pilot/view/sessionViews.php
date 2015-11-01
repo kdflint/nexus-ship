@@ -44,7 +44,7 @@ if (isset($_SESSION['role'])) {
 	  	<h3>Create Authentication</h3>
 	  	
 	  	<form action="control/sessionProcessor.php" method="post">
-			  	<p><? echo $error; ?></p>
+			  	<p><?php echo $error; ?></p>
 					User Id: <input class="passed" type="text" size="25" name="uid" value="grace"/><br/>
 					Password: <input class="passed" type="text" size="25" name="password" value=""/><br/>
 					<input type="hidden" name="action" value="authenticate" />

@@ -1,5 +1,7 @@
-<?
-require_once($_SESSION['appRoot'] . "config/env_config.php");
-?> 
+<?php 
 
-<iframe src="http://northbridgetech.org/<? echo $env_appRoot; ?>/nexus/module/calendar/" height="550" width="800" frameborder="0"></iframe>
+include(Utilities::getModulesRoot() . "/event/mod_controller.php");
+
+// LEFT OFF - trying to log in and set a tz in SESSION. Renamed db class, login failing.
+
+?>

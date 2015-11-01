@@ -44,9 +44,9 @@ function pingDomain($domain){
 
 					<table cellpadding = "10">
 						<tr><td>host</td><td>ip</td><td>port 80 response time</td></tr>
-						<tr><td><? echo $hostname; ?></td><td><? echo gethostbyname($hostname); ?></td><td><? echo pingDomain($hostname); ?></td></tr>
+						<tr><td><?php echo $hostname; ?></td><td><? echo gethostbyname($hostname); ?></td><td><? echo pingDomain($hostname); ?></td></tr>
 					</table>
-					Running meetings: <? echo print_r($bbb->getMeetingsWithXmlResponseArray());  ?>					
+					Running meetings: <?php echo print_r($bbb->getMeetingsWithXmlResponseArray());  ?>					
   				<!-- Show current server load: memory, cpu -->
   				<!-- Show test meeting room link for every meeting room -->
         

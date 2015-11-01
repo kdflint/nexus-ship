@@ -9,15 +9,15 @@ if (isset($_SESSION['forumSessionError']) && strcmp($_SESSION['forumSessionError
 
 ?>
 
-	<iframe src="http://northbridge.websitetoolbox.com/register/dologin?authtoken=<? echo($_SESSION['authtoken']); ?>" height="550" width="800" frameborder="0"></iframe>
+	<iframe src="http://northbridge.websitetoolbox.com/register/dologin?authtoken=<?php echo($_SESSION['authtoken']); ?>" height="550" width="800" frameborder="0"></iframe>
 
-<? } ?>
+<?php } ?>
 
 <script>
 	
 	 function keepForumAlive() {
 		 http_request = new XMLHttpRequest();
-     http_request.open('GET', "http://northbridge.websitetoolbox.com/register/dologin?authtoken=<? echo($_SESSION['authtoken']); ?>");
+     http_request.open('GET', "http://northbridge.websitetoolbox.com/register/dologin?authtoken=<?php echo($_SESSION['authtoken']); ?>");
      http_request.send(null);
 	 };
 

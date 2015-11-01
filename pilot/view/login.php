@@ -1,9 +1,10 @@
-<? 
+<?php 
 session_start();
 
 require_once("../control/util.php");
-require_once(Util::getHome() . "php/Validate.php");
+require_once(PHP_ROOT . "/Validate.php");
 require_once(Util::getAppRoot() . "model/pgDb.php");
+require_once("../migration/Util.php");
 
 $error = "";
 
@@ -44,14 +45,24 @@ if(isset($_GET['network']) && Util::validateNetworkId($_GET['network'])) {
   <head>
   	<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
     <link rel="stylesheet" href="style/style.css" type="text/css" />
+    <script src="../../nexus/web/scripts/nexus.js" language="javascript"></script>
     <script src="script/script.js" language="javascript"></script>
+ 		<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  	<script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js"></script>
     <link rel="shortcut icon" href="image/northbridge-ico.png" />
     <title>Nexus | Login</title>
+    
+   	<script> 
+			$(document).ready(function () {
+				document.getElementById("localTz").value = getLocalTz();
+				}
+			)
+		</script>
   </head>
   
   <body>
     <div class="container">
-   		<img style="float:left;vertical-align:top;margin:20px;" <? echo $logo; ?>  border="0" alt=""/>
+   		<img style="float:left;vertical-align:top;margin:20px;" <?php echo $logo; ?>  border="0" alt=""/>
    		<p style="text-align:right;color:#4b5b6e;font-size:34px;margin-right:20px;"><b>Nexus</b><br/>
    		<i><span style="text-align:right;color:#4b5b6e;font-size:16px;margin-right:20px;">Building communities that build communities</span></i></p>
 
@@ -63,13 +74,14 @@ if(isset($_GET['network']) && Util::validateNetworkId($_GET['network'])) {
 							<div class="formLogin" style="border:thin solid #4b5b6e;padding:10px;border-radius:15px;">
 								<form autocomplete="off" action="../control/loginProcessor.php" method="post" id="loginForm">
 									<table cellpadding="5">
-								  <tr><td colspan="2" style="color:#bf6030;"><? echo $error; ?></td></tr>
+								  <tr><td colspan="2" style="color:#bf6030;"><?php echo $error; ?></td></tr>
 										<tr><td>User Id:</td><td><input class="passed" type="text" size="15" name="uid" value=""/></td></tr>
 										<tr><td>Password:</td><td><input class="passed" type="password" size="15" name="password" value=""/></td></tr>
 										<tr><td colspan="2"><input type="submit" style="float:right;" value="Login"/></td></tr>
 									</table>
 										<p><a href="javascript:void(0)" onclick="document.getElementById('light_user').style.display='block';document.getElementById('fade').style.display='block'">Forgot your user id?</a> | <a href = "javascript:void(0)" onclick = "document.getElementById('light_password').style.display='block';document.getElementById('fade').style.display='block'">Forgot your password? </a></p>
 										<input type="hidden" name="action" value="authenticate" />
+        						<input id="localTz" name="timezone" type="hidden" value="">
 								</form>
 							</div>						
 							
@@ -77,7 +89,7 @@ if(isset($_GET['network']) && Util::validateNetworkId($_GET['network'])) {
 							
      		<div class="rightColumn" style="border:0px;background-color:#e6ebf0;padding:10px;top:50px;height:200px;width:350px;">
 									<p><b>Welcome to Nexus!</b></p>
-									<p style="margin:10px;">This is your collaboration space, secure to your community of practice: <b><? echo $networkName; ?></b>.<br/>&nbsp;<br/>This space supports the work you do every day to strengthen communities.</p>
+									<p style="margin:10px;">This is your collaboration space, secure to your community of practice: <b><?php echo $networkName; ?></b>.<br/>&nbsp;<br/>This space supports the work you do every day to strengthen communities.</p>
       	</div>
       </div>
       
@@ -98,7 +110,7 @@ if(isset($_GET['network']) && Util::validateNetworkId($_GET['network'])) {
 					<tr><td>User Id:</td><td><input class="passed" type="text" size="15" name="uid" value=""/></td></tr>
 					<tr><td><a href="javascript:void(0)" onclick="document.getElementById('light_user').style.display='block';document.getElementById('light_password').style.display='none';document.getElementById('fade').style.display='block'">Forgot your user id?</a></td><td><input type="submit" style="float:right;" value="Reset"/></td></tr>
 				</table>
-				<input type="hidden" name="network" value="<? echo $cleanNetworkId; ?>"> 
+				<input type="hidden" name="network" value="<?php echo $cleanNetworkId; ?>"> 
 			</form>
 		</div>
 		
@@ -110,7 +122,7 @@ if(isset($_GET['network']) && Util::validateNetworkId($_GET['network'])) {
 					<tr><td>Email:</td><td><input class="passed" type="text" size="15" name="email" value=""/></td></tr>
 					<tr><td colspan="2"><input type="submit" style="float:right;" value="Resend"/></td></tr>
 				</table>
-				<input type="hidden" name="network" value="<? echo $cleanNetworkId; ?>">
+				<input type="hidden" name="network" value="<?php echo $cleanNetworkId; ?>">
 			</form>
 		</div>
 		<div id="fade" class="black_overlay"></div>
