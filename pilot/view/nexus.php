@@ -1,4 +1,4 @@
-<?
+<?php
 
 //error_reporting(E_ALL);
 //ini_set( 'display_errors','1'); 
@@ -7,7 +7,7 @@ session_start();
 
 //require_once '../control/xmpp-prebind-php/lib/XmppPrebind.php';
 require_once("../control/util.php");
-
+require_once("../migration/Util.php");
 
 if (!Util::isSessionValid()) {
 	header("location:login.php?logout=true");
@@ -30,66 +30,6 @@ if (isset($_REQUEST['thisPage'])) {
 	$thisPage = "directory";
 }
 
-
-/**
- * Comment here for explanation of the options.
- *
- * Create a new XMPP Object with the required params
- *
- * @param string $jabberHost Jabber Server Host (virtual server)
- * @param string $boshUri    Full URI to the http-bind
- * @param string $resource   Resource identifier
- * @param bool   $useSsl     Use SSL (not working yet, TODO)
- * @param bool   $debug      Enable debug
- */
- 
-// Do this during the login sequence 
-//$username = $_SESSION['fname'];
-//$password = "password";
-//$xmppPrebind = new XmppPrebind('nexus.test', 'http://ec2-54-204-130-42.compute-1.amazonaws.com:3306/http-bind', '', false, false);
-//$xmppPrebind->connect($username, $password);
-//$xmppPrebind->auth();
-//$sessionInfo = $xmppPrebind->getSessionInfo(); // array containing sid, rid and jid
-
-/*
-
-if(curl_exec($ch) === false) 	{
-    $out2 = 'Curl error: ' . curl_error($ch);
-}	else 	{
-    $out2 = 'Operation completed without any errors: ' . curl_exec($ch);
-}
-
-*/
-
-//$jid = "'" . $sessionInfo['jid'] . "'";
-//$sid = "'" . $sessionInfo['sid'] . "'";
-//$rid = "'" . $sessionInfo['rid'] . "'";
-
-//This script would go at the end of the page.
-/*
-<script>
-		// Complete list of options published at
-		// https://conversejs.org/docs/html/index.html#configuration-variables
-		// The below are all the non-default values - rest we take defaults as specified in above doc
-    require(['converse'], function (converse) {
-        converse.initialize({
-        		auto_list_rooms: true,
-            bosh_service_url: 'http://ec2-54-204-130-42.compute-1.amazonaws.com:3306/http-bind', // felis connection manager
-            debug: true,
-            hide_muc_server: true,
-            i18n: locales['en'],
-            prebind: true,
-            jid: <? echo $_SESSION['jid']; ?>,
-            sid: <? echo $_SESSION['sid']; ?>,
-        		rid: <? echo $_SESSION['rid']; ?>,
-            show_controlbox_by_default: true,
-            use_vcards: true
-            // TODO: look further into show_call_button, otr, show_only_online_users, user_search, vcards
-        });
-    });
-</script>
-*/
-
 ?>
 
 <!DOCTYPE html> 
@@ -103,21 +43,65 @@ if(curl_exec($ch) === false) 	{
      End Google stuff -->
   	
   	<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+ 		<link rel="stylesheet" href="//yui.yahooapis.com/pure/0.6.0/pure-min.css">
+  	<link rel="stylesheet" type="text/css" href="../../nexus/web/modules/event/mod_style.css" />
 	  <link rel="stylesheet" type="text/css" href="style/style.css" />
+	  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+
 	  <!--<link rel="stylesheet" type="text/css" media="screen" href="style/converse.min.css">-->
+    <script src="../../nexus/web/scripts/nexus.js" language="javascript"></script>
  		<script src="script/script.js" language="javascript"></script>
 		<!--<script src="script/converse.min.js"></script>-->
     <link rel="shortcut icon" href="image/northbridge-ico.png" />
     <title>Nexus Home</title>
-		
 
-    
-    <link rel="stylesheet" href="script/jquery-ui-1.11.1.custom/jquery-ui.css">
+  	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">  
+    <!--<link rel="stylesheet" href="script/jquery-ui-1.11.1.custom/jquery-ui.css">-->
     <script src="script/jquery-ui-1.11.1.custom/external/jquery/jquery.js"></script>
 		<script src="script/jquery-ui-1.11.1.custom/jquery-ui.js"></script>
-		<script>$(function() {$( document ).tooltip();});</script>
-		<style>label {display: inline-block;width: 5em;}</style>		
 		
+		<script>$(function() {$( document ).tooltip();});</script>
+		<style>label {display: inline-block;width: 5em;}</style>	
+		
+    <script type="text/javascript">
+			$(document).ready(function () {
+				$( '#schedule_control' ).click(function() {
+	  			$( "#new_event_display" ).toggle( "blind" );
+	  			$( "#current_schedule_display" ).toggle( "blind" );
+				});
+			});
+		</script>	
+		
+		<!--================== Schedule Module Meta ==================-->
+
+		<link rel="stylesheet" href="<?php echo(Utilities::getHttpPath()); ?>/modules/schedule/views/jquery.timepicker.css">
+		<script src="<?php echo(Utilities::getHttpPath()); ?>/modules/schedule/views/jquery.timepicker.js" type="text/javascript"></script>
+	
+    <style>
+      fieldset { border: 0; }
+      label { display: block; margin: 30px 0 0 0; }
+      select { width: 170px; }
+      .overflow { height: 200px; }
+    </style>
+
+    <script type="text/javascript">
+      $(function() {
+      	// schedule-form elements
+        $( "#datepicker" ).datepicker({ changeMonth: true, changeYear: true });
+      	$( "#schedule-form-time" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
+        $( "#schedule-form-duration" ).selectmenu();
+        $( "#schedule-form-type" ).selectmenu();
+        $( "#schedule-form-country" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
+        $( "#schedule-form-country" ).selectmenu({ change: function() { displayTimeZones(); } });
+        $( "#schedule-form-countryTimeZones" ).selectmenu();
+        $( "#schedule-form-countryTimeZones" ).selectmenu({ change: function() { setTimeZoneDisplay(document.getElementById("schedule-form-countryTimeZones").value); } });
+        // now-form elements
+        $( "#now-form-duration" ).selectmenu();
+        $( "#now-form-type" ).selectmenu();
+      });
+    </script> 
+
   </head>
   
   <!-- For Formilla feedback form -->
@@ -148,13 +132,13 @@ if(curl_exec($ch) === false) 	{
     <table width="100%">
     	<tr>
     	<td>
-    		<img style="float:left;vertical-align:top;margin:20px;" <? echo $_SESSION['logo']; ?> border="0" alt=""/>
+    		<img style="float:left;vertical-align:top;margin:20px;" <?php echo $_SESSION['logo']; ?> border="0" alt=""/>
     	</td>
     	<td>
-    		<p style="text-align:right;color:#c9c9a7;font-size:18px;margin:20px;"><b><? echo($_SESSION['orgName']); ?></b></p>
-    		<p style="text-align:right;margin:20px;color:#4b5b6e"><b>Hello <? echo($_SESSION['fname']); ?></b><br/>
+    		<p style="text-align:right;color:#c9c9a7;font-size:18px;margin:20px;"><b><?php echo($_SESSION['orgName']); ?></b></p>
+    		<p style="text-align:right;margin:20px;color:#4b5b6e"><b>Hello <?php echo($_SESSION['fname']); ?></b><br/>
     		<!-- <a id="chatControlLink" href="javascript:toggleChat('chatControl')">Chat</a> |  -->
-				<a href="include/download/help.pdf">Help</a> | <a href="javascript:void(0)" onclick="if(typeof Formilla != 'undefined'){Formilla.initFormillaChat();}">Problem?</a> | <a href="../control/resetForumSession.php">Support Forum</a> | <a href="login.php?logout=true&network=<? echo $_SESSION['networkId']; ?>">Logout</a></p>
+				<a href="include/download/help.pdf">Help</a> | <a href="javascript:void(0)" onclick="if(typeof Formilla != 'undefined'){Formilla.initFormillaChat();}">Problem?</a> | <a href="../control/resetForumSession.php">Support Forum</a> | <a href="login.php?logout=true&network=<?php echo $_SESSION['networkId']; ?>">Logout</a></p>
 			</td>
     	</tr>
     </table>	
@@ -162,11 +146,11 @@ if(curl_exec($ch) === false) 	{
       <div class="shell">
       	
 				<div class="navigation">
-      		<? include($_SESSION['appRoot'] . "view/include/navigation.php"); ?>
+      		<?php include($_SESSION['appRoot'] . "view/include/navigation.php"); ?>
  		  	</div>
 
 				<div class="projectsContent">						
-			 	<?
+			 	<?php
 			   $contentFile = $_SESSION['appRoot'] . "view/include/" . $thisPage . ".php";
 			   include($contentFile); 
 			 	?>
