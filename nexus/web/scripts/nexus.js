@@ -572,12 +572,14 @@ function eventValidateAndSubmit(thisForm) {
     pass = false;
   }
   
-  var typeField = eventForm['meeting-type'];
-  var typeValue = typeField.value;
-  setFieldPassStyles(document.getElementById(thisForm + "-type-button"), "Meeting Type");
-  if (typeValue == null || typeValue == "" || typeValue == "Meeting Type") {
-  	setFieldErrorStyles(document.getElementById(thisForm + "-type-button"), "Meeting Type");
-    pass = false;
+	if (eventForm['meeting-type'] !== undefined) {
+  	var typeField = eventForm['meeting-type'];
+  	var typeValue = typeField.value;
+  	setFieldPassStyles(document.getElementById(thisForm + "-type-button"), "Meeting Type");
+  	if (typeValue == null || typeValue == "" || typeValue == "Meeting Type") {
+	  	setFieldErrorStyles(document.getElementById(thisForm + "-type-button"), "Meeting Type");
+    	pass = false;
+  	}
   }
   
 	var tzChangeValue = eventForm['tzone-change'].value;

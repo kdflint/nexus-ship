@@ -17,7 +17,10 @@ $dirty = array('meeting-name' => $_POST['meeting-name'],
 							'meeting-time' => $_POST['meeting-time'],
 							'meeting-duration' => $_POST['meeting-duration'],
 							'tzone-name' => $_POST['tzone-name'],
-							'meeting-type' => $_POST['meeting-type']
+							'meeting-type' => $_POST['meeting-type'],
+							'meeting-descr' => $_POST['meeting-descr'],
+							'meeting-loc' => $_POST['meeting-loc'],
+							'isBbbMeeting' => $_POST['isBbbMeeting']
 							);
 											
 $result = validateEvent($dirty);
@@ -38,9 +41,20 @@ $meetingType = array("1" => "video chat", "2" => "collaboration", "3" => "webina
 
 $timestamp = $result['clean']['meeting-date'] . " " . $result['clean']['meeting-time'] . " " . $result['clean']['tzone-name'];
 
-Event::addEvent($timestamp, $result['clean']['meeting-duration'], $result['clean']['meeting-name'], $_SESSION['uidpk'], array_keys($_SESSION['groups'])[0], $result['clean']['tzone-name'], $meetingType[$result['clean']['meeting-type']]);
+Event::addEvent($timestamp, $result['clean']['meeting-duration'], $result['clean']['meeting-name'], $_SESSION['uidpk'], array_keys($_SESSION['groups'])[0], $result['clean']['tzone-name'], $meetingType[$result['clean']['meeting-type']], $result['clean']['meeting-descr'], $result['clean']['meeting-loc'], $result['clean']['isBbbMeeting']);
 
-header("location:" . Utilities::getHttpPath() . "/index.php");
+if ((session_status() === PHP_SESSION_ACTIVE) && isset($_SESSION['nexusContext'])) {
+ switch($_SESSION['nexusContext']) {
+ 		case "NWM":
+			header("location:" . Utilities::getHttpPath() . "/index.php");
+ 			break;
+ 		case "ADV":
+			header("location:" . Utilities::getPilotPath() . "/view/nexus.php?thisPage=calendar");
+ 			break;
+ 		default: 			
+ 	}
+}
+
 exit(0);
 
 function validateEvent($input) {
@@ -112,9 +126,36 @@ function validateEvent($input) {
  	// MEETING TYPE
   if (isset($input['meeting-type']) && $input['meeting-type'] < 5) {
  	 	$result['clean']['meeting-type'] = $input['meeting-type'];
+ 	 	$result['clean']['isBbbMeeting'] = "true";
+ 	} else if (!isset($input['isBbbMeeting'])) {
+ 		$result['clean']['isBbbMeeting'] = "false";
  	} else {	
  		$result['error']['meeting-type'] = "error";
- 	} 	
+ 		$result['error']['isBbbMeeting'] = "error";
+ 	}
+ 	
+ 	// MEETING DESCR
+	if (isset($input['meeting-descr'])) {
+		if (strlen($input['meeting-descr']) <= 400) {
+			$result['clean']['meeting-descr'] = Utilities::sanitize($input['meeting-descr']);			
+		} else {
+			$result['error']['meeting-descr'] = "error";
+		}
+ 	}	else {
+ 		$result['clean']['meeting-descr'] = "";
+ 	}
+ 	 	
+ 	// MEETING LOC 	
+	if (isset($input['meeting-loc'])) {
+		if (strlen($input['meeting-loc']) <= 200) {
+			$result['clean']['meeting-loc'] = str_replace(["\r\n", "\r", "\n"], ",", Utilities::sanitize($input['meeting-loc']));			
+		} else {
+			$result['error']['meeting-loc'] = "error";
+		}
+ 	}	else {
+ 		$result['clean']['meeting-loc'] = "";
+ 	}
+
 
  	return $result;
 }

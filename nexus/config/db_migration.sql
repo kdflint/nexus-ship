@@ -8,6 +8,11 @@ select id from public.user where fname = 'Not'
 
 update event set reserved_user_fk = 287 where id = 75
 
+ALTER TABLE event ADD COLUMN location character varying(250);
+ALTER TABLE event ADD COLUMN isBbbMeet boolean;
+ALTER TABLE event ALTER COLUMN isBbbMeet SET DEFAULT true;
+ALTER TABLE event ALTER COLUMN type DROP NOT NULL;
+
 -- execute migration sql
 
 

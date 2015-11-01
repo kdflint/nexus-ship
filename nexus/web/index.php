@@ -44,13 +44,15 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
   <head>
 		<!-- TODO - localize all scripts and stylesheets -->
   	<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
-  	<meta id="meta" name="viewport" content="width=device-width; initial-scale=1.0" />   	
+  	<meta id="meta" name="viewport" content="width=device-width; initial-scale=1.0" />   
+  		
   	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Oswald:400,300|Open+Sans|Oxygen|Swanky+and+Moo+Moo">
   	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 		<link rel="stylesheet" href="//yui.yahooapis.com/pure/0.6.0/pure-min.css">
 		<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
     <link rel="stylesheet" href="styles/nexus.css" type="text/css" />
+    
     <script src="scripts/nexus.js" language="javascript"></script>
   	<script src="scripts/timeZoneData.js" language="javascript"></script>
  		<script src="scripts/lib/flash_detect.js"></script>
@@ -126,19 +128,10 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
 		<script src="modules/schedule/views/jquery.timepicker.js" type="text/javascript"></script>
 	
     <style>
-      fieldset {
-        border: 0;
-      }
-      label {
-        display: block;
-        margin: 30px 0 0 0;
-      }
-      select {
-        width: 170px;
-      }
-      .overflow {
-        height: 200px;
-      }
+      fieldset { border: 0; }
+      label { display: block; margin: 30px 0 0 0; }
+      select { width: 170px; }
+      .overflow { height: 200px; }
     </style>
 
     <script type="text/javascript">

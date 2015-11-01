@@ -122,6 +122,7 @@ class Event {
 				e.duration as duration, 
 				e.name as name, 
 				e.descr as descr, 
+				e.location as location,
 				e.uuid as uuid,
 				e.reserved_user_fk as adder,
 				e.type as meetingtype,
@@ -149,6 +150,7 @@ class Event {
 				$events[$counter]['abbrev'] = $row['abbrev'];
 				$events[$counter]['purpose'] = $row['name'];
 				$events[$counter]['descr'] = $row['descr'];
+				$events[$counter]['location'] = $row['location'];
 				$events[$counter]['uuid'] = $row['uuid'];
 				$events[$counter]['mtype'] = $row['meetingtype'];
 				$events[$counter]['mtypdisplay'] = self::getMeetingTypeDisplay($row['meetingtype']);
@@ -162,12 +164,12 @@ class Event {
 		return $events;
 	}
 
-	public static function addEvent($dttm, $duration, $name, $reservedUserId, $groupId, $tzName, $type) {
+	public static function addEvent($dttm, $duration, $name, $reservedUserId, $groupId, $tzName, $type, $descr, $loc, $isBbb) {
 		$query = "select abbrev from pg_timezone_names where name = $1";
 		$row = pg_fetch_row(PgDatabase::psExecute($query, array($tzName)));
 		$tzAbbrev = $row[0];
-		$query = "insert into event (uuid, start_dttm, duration, name, descr, reserved_user_fk, group_fk, tz_name, tz_abbrev, type) values ($1, $2, $3, $4, $9, $5, $6, $7, $8, $10)";
-		PgDatabase::psExecute($query, array(Utilities:: newUuid(), $dttm, $duration, $name, $reservedUserId, $groupId, $tzName, $tzAbbrev, "", $type));
+		$query = "insert into event (uuid, start_dttm, duration, name, descr, reserved_user_fk, group_fk, tz_name, tz_abbrev, type, location, isBbbMeet) values ($1, $2, $3, $4, $9, $5, $6, $7, $8, $10, $11, $12)";
+		PgDatabase::psExecute($query, array(Utilities:: newUuid(), $dttm, $duration, $name, $reservedUserId, $groupId, $tzName, $tzAbbrev, $descr, $type, $loc, $isBbb));
 		return;
 	}	
 	
