@@ -6,6 +6,12 @@
 *.cfg
 *.tar
 *.gz
+*.odt
+*.pdf
+*.docx
+*.png
+bbb-test.sh
+sensitive_config.php
 error_log
 pilot/view/include/scrapToggleCode.php
 nexus/lib/Validate.php
@@ -14,4 +20,8 @@ nexus/lib/bigbluebutton/*
 nexus/web/vendor/*
 nexus/partner/*
 pilot/view/include/tmpResults/*
+pilot/view/include/download/tmpResults/*
+pilot/model/test/*
+pilot/batch/messageQueue/recover*
 pilot/migration/Util.php
+flash_scripts/*
