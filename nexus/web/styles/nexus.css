@@ -308,7 +308,7 @@ a.tooltip:hover, tooltip-hover {text-decoration:none;}
 a.tooltip:hover span:first-child, tooltip-hover {
     display:inline; position:absolute;
     color:#111;
-    border:1px solid #DCA; background:#fffAF0;
+    border:1px solid #DCA; background:#f7f8ef;
 }
     
 .callout {

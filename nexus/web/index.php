@@ -241,7 +241,7 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
       	
       	<div class="loginColRight" style="width:20%;">
       		<span style="clear:right;float:right;text-align:right;margin-top:20px;"><?php echo $_SESSION['orgName']; ?></span>   
-      		<span style="clear:right;float:right;margin-top:20px;"><img src="<?php echo Utilities::getPartnerImageRoot(); ?><?php echo $_SESSION['logo']; ?>" /></span>   
+      		<span style="clear:right;float:right;margin-top:20px;"><img src="<?php echo(Utilities::getPartnerImageRoot()); ?><?php echo $_SESSION['logo']; ?>" /></span>   
       		<div id="techcheck_display" style="display:none;">
 						<?php include("modules/techcheck/views/details.html"); ?>	
 					</div>		
