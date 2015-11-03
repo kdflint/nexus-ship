@@ -27,7 +27,7 @@
           	"</td>" +
           	"<td>" +	       				
 			       	"<div class='meeting'>" +
-          			"<span class='purpose'>Click the calendar to reserve this room for a future date.</span>" + 
+          			"<span class='purpose'>Click the calendar icon to add an event.</span>" + 
           		"</div>" +
           	"</td>" +
 					"</tr>";

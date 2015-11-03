@@ -42,7 +42,9 @@ copy file to nexus folder (parent of /web)
 rename web -> web.bak0
 tar xvf web.tar.gz
 
--- copy over entire NWM project, incl batch. (renamed Util class)
+-- copy over entire NWM project
+
+-- copy over NVM batch (renamed Util class)
 
 -- copy over pilot
 

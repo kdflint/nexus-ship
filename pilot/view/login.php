@@ -45,7 +45,7 @@ if(isset($_GET['network']) && Util::validateNetworkId($_GET['network'])) {
   <head>
   	<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
     <link rel="stylesheet" href="style/style.css" type="text/css" />
-    <script src="../../nexus/web/scripts/nexus.js" language="javascript"></script>
+    <script src="../../new_nexus/web/scripts/nexus.js" language="javascript"></script>
     <script src="script/script.js" language="javascript"></script>
  		<script src="//code.jquery.com/jquery-1.10.2.js"></script>
   	<script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js"></script>

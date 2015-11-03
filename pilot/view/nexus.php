@@ -44,13 +44,13 @@ if (isset($_REQUEST['thisPage'])) {
   	
   	<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
  		<link rel="stylesheet" href="//yui.yahooapis.com/pure/0.6.0/pure-min.css">
-  	<link rel="stylesheet" type="text/css" href="../../nexus/web/modules/event/mod_style.css" />
+  	<link rel="stylesheet" type="text/css" href="../../new_nexus/web/modules/event/mod_style.css" />
 	  <link rel="stylesheet" type="text/css" href="style/style.css" />
 	  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
 
 	  <!--<link rel="stylesheet" type="text/css" media="screen" href="style/converse.min.css">-->
-    <script src="../../nexus/web/scripts/nexus.js" language="javascript"></script>
+    <script src="../../new_nexus/web/scripts/nexus.js" language="javascript"></script>
  		<script src="script/script.js" language="javascript"></script>
 		<!--<script src="script/converse.min.js"></script>-->
     <link rel="shortcut icon" href="image/northbridge-ico.png" />
