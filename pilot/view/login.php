@@ -62,7 +62,7 @@ if(isset($_GET['network']) && Util::validateNetworkId($_GET['network'])) {
   
   <body>
     <div class="container">
-   		<img style="float:left;vertical-align:top;margin:20px;" <?php echo $logo; ?>  border="0" alt=""/>
+   		<img style="float:left;vertical-align:top;margin:20px;" src="<?php echo(Utilities::getPartnerImageRoot()); ?><?php echo $logo; ?>"  border="0" alt=""/>
    		<p style="text-align:right;color:#4b5b6e;font-size:34px;margin-right:20px;"><b>Nexus</b><br/>
    		<i><span style="text-align:right;color:#4b5b6e;font-size:16px;margin-right:20px;">Building communities that build communities</span></i></p>
 

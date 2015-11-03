@@ -132,7 +132,7 @@ if (isset($_REQUEST['thisPage'])) {
     <table width="100%">
     	<tr>
     	<td>
-    		<img style="float:left;vertical-align:top;margin:20px;" <?php echo $_SESSION['logo']; ?> border="0" alt=""/>
+    		<img style="float:left;vertical-align:top;margin:20px;" src="<?php echo(Utilities::getPartnerImageRoot()); ?><?php echo $_SESSION['logo']; ?>" border="0" alt=""/>
     	</td>
     	<td>
     		<p style="text-align:right;color:#c9c9a7;font-size:18px;margin:20px;"><b><?php echo($_SESSION['orgName']); ?></b></p>
