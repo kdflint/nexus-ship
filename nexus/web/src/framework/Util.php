@@ -94,7 +94,7 @@ class Utilities {
 	
 	public static function getImageRoot() { return self::getWebRoot() . "/image"; }
 	
-	public static function getPartnerImageRoot() { PTR_STC_ROOT . "/image/"; }
+	public static function getPartnerImageRoot() { return "http://" . ENV_HOST . APP_NAME . PTR_STC_ROOT . "/"; }
 	
 	public static function getEnvName() { return ENV_NAME; }
 	
