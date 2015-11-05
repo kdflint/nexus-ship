@@ -190,24 +190,32 @@ form {
  
 .day, .date, .month, .fname, .lname, .time {
   padding-top: 5px;
-  }
+}
  
 .day, .lname { 
   font-size: 90%;
-  }
+}
   
 .date, .fname { 
   font-size: 150%;
-  }
+}
   
- .fname125 { 
+.fname125 { 
   font-size: 125%;
-  }
+}
   
- .fname110 { 
-  font-size: 110%;
-  }
+.fname110 { 
+  font-size: 105%;
+  font-weight: bold;
+  letter-spacing: .5px;
+}
  
+.fname90 { 
+  font-size: 85%;
+  font-weight: bold;
+  letter-spacing: .5px;
+}
+
 .month { 
 	font-size: 90%;
   }

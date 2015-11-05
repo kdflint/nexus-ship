@@ -5,3 +5,5 @@ insert org into organization_organization with id 13 as parent
 insert group into group
 
 insert admin user into user and tie to org, group, role
+
+insert public user into user and tie to public group, inactive until pay

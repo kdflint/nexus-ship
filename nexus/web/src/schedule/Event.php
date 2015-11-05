@@ -118,6 +118,9 @@ class Event {
 				extract(hour from (select e.start_dttm at time zone $2)) as hour, 
 				extract(minute from (select e.start_dttm at time zone $2)) as minute, 
 				extract(epoch from (select e.start_dttm)) as epoch,
+				extract(hour from (select (e.start_dttm + e.duration) at time zone $2)) as hour_end, 
+				extract(minute from (select (e.start_dttm + e.duration) at time zone $2)) as minute_end, 
+				extract(epoch from (select (e.start_dttm + e.duration) at time zone $2)) as epoch_end,
 				e.tz_name as tzname, 
 				e.duration as duration, 
 				e.name as name, 
@@ -145,8 +148,11 @@ class Event {
 				$events[$counter]['month'] = self::getMonth($row['month']-1);
 				$events[$counter]['hour'] = self::getHour($row['hour']);
 				$events[$counter]['minute'] = self::getMinute($row['minute']);
+				$events[$counter]['hour_end'] = self::getHour($row['hour_end']);
+				$events[$counter]['minute_end'] = self::getMinute($row['minute_end']);
 				$events[$counter]['epoch'] = $row['epoch'];
 				$events[$counter]['period'] = self::getPeriod($row['hour']);
+				$events[$counter]['period_end'] = self::getPeriod($row['hour_end']);
 				$events[$counter]['abbrev'] = $row['abbrev'];
 				$events[$counter]['purpose'] = $row['name'];
 				$events[$counter]['descr'] = $row['descr'];

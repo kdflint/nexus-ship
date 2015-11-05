@@ -3,6 +3,7 @@
 require_once(dirname(__FILE__) . "/../../../config/config_env.php");
 require_once(PHP_ROOT . "/Validate.php");
 require_once(Utilities::getSrcRoot() . "/user/User.php");
+require_once(Utilities::getSrcRoot() . "/group/Group.php");
 require_once(Utilities::getSrcRoot() . "/schedule/Event.php");
 require_once(Utilities::getLibRoot() . "/autoload/autoloader.php");
 
@@ -463,11 +464,11 @@ class Utilities {
 	}
 
 	public static function isSessionValid() {
-		if (isset($_SESSION['username']) && 
-				strlen($_SESSION['username']) > 0 && 
+		if (isset($_SESSION['nexusContext']) && 
+				strlen($_SESSION['nexusContext']) == 3 && 
 				!self::isSessionExpired() &&
-				isset($_SESSION['fname']) &&
-				strlen($_SESSION['fname']) > 0) {
+				isset($_SESSION['groups']) &&
+				isset($_SESSION['username']) ) {
 			return true;
 		}
 		return false;
@@ -483,7 +484,7 @@ class Utilities {
 		$_SESSION['environment'] = self::getEnvName();
 		$_SESSION['nexusContext'] = "NWM";
 		$_SESSION['username'] = $username;
-		$_SESSION['groups'] = User::getUserGroupsByUsername($_SESSION['username']);
+		$_SESSION['groups'] = Group::getUserGroupsByUsername($_SESSION['username']);
 		self::setSessionLastActivity();
 		$_SESSION['remember'] = ($remember ? "true" : "false");
 		$_SESSION['timezone'] = (Event::isValidTimeZone($zone) ? $zone : "undefined");
@@ -505,10 +506,13 @@ class Utilities {
 		} 	
 	}
 	
-	public static function setPluginSession($oid, $zone = "undefined") {
-		$_SESSION['groups'] = User::getUserGroupsByUsername($_SESSION['username']);	
+	public static function setPublicSession($oid, $zone = "undefined") {
+		$_SESSION['nexusContext'] = "PUB";
+		$_SESSION['username'] = "pUser-" . substr($oid, 0, 8);
+		$_SESSION['groups'] = Group::getUserGroupsByUsername($_SESSION['username']);	
+		$row = pg_fetch_row(User::getActiveUserByUsername($_SESSION['username']));
+		$_SESSION['uidpk'] = $row[0];
 		$_SESSION['timezone'] = (Event::isValidTimeZone($zone) ? $zone : "undefined");
-  	$_SESSION['uidpk'] = $row['id'];
 	}
 	
 	public static function setDemoSession($username, $remember, $zone = "undefined") {
@@ -529,8 +533,8 @@ class Utilities {
 	}
 	
 	public static function isSessionExpired() {
-		if (isset($_SESSION['nexusContext']) && $_SESSION['nexusContext'] == "ADV") {
-			// Nexus Advantage sessions don't time out (yet)
+		if (isset($_SESSION['nexusContext']) && $_SESSION['nexusContext'] != "NWM") {
+			// Nexus Advantage and public sessions don't time out (yet)
 			return false;
 		}
 		if ((isset($_SESSION['remember']) && $_SESSION['remember'] == "true") || Utilities::getSessionTimeout() == "-1") {

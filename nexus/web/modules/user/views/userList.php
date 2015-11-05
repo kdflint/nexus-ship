@@ -30,7 +30,7 @@
 			 		} else if (firstName.length < 15) {
 			 			firstNameStyle  = "fname110";
 			 		} else {
-			 			firstNameStyle = "lname";
+			 			firstNameStyle = "fname90";
 			 		}
 			 		var tableUser = "<tr>" +
        			"<td>" +

@@ -66,18 +66,21 @@
 	}
 </script>
 
-<div id="new_event_display" style="display:none;">
-	<?php include(Utilities::getModulesRoot() . "/event/views/eventAdd.php"); ?>	
-</div>
-					
-<div id="current_schedule_display" style="display:block;">
-	<a id='schedule_control' href='javascript:void(0);' style='position:absolute;margin-left:690px;padding-top: 20px;'>
-	<span style='padding:0px;' class='fa fa-calendar-o fa-2x' ></span>
-	<span style='padding-left:2px;' class='fa fa-plus' >	</span>
-	</a>				
-	<table id="reservationTable" class="pure-table">
-	</table>
-</div>
+<div style="width:760px;font-size:110%;">
 
-<script> getEventList(<?php echo (time() + 15*60); ?>); </script>
+	<div id="new_event_display" style="display:none;">
+		<?php include(Utilities::getModulesRoot() . "/event/views/eventAdd.php"); ?>	
+	</div>
+						
+	<div id="current_schedule_display" style="display:block;">
+		<a id='schedule_control' href='javascript:void(0);' style='position:absolute;margin-left:690px;padding-top: 20px;'>
+		<span style='padding:0px;' class='fa fa-calendar-o fa-2x' ></span>
+		<span style='padding-left:2px;' class='fa fa-plus' >	</span>
+		</a>				
+		<table id="reservationTable" class="pure-table">
+		</table>
+	</div>
 	
+	<script> getEventList(<?php echo (time() + 15*60); ?>); </script>
+	
+</div>

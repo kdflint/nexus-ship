@@ -1,4 +1,4 @@
-<div class="mod_event" style="width:760px;font-size:110%;text-align:left;">
+<div class="mod_event" style="text-align:left;">
 
 <?php
 
@@ -13,12 +13,15 @@ if ((session_status() === PHP_SESSION_ACTIVE) && isset($_SESSION['nexusContext']
  		case "ADV":
  			include(dirname(__FILE__) . "/views/eventList.php");
  			break;
+ 		case "PUB":
+ 			include(dirname(__FILE__) . "/views/eventSummary.php");
+ 			break;
  		default: 			
  	}
 } else {
-	echo "public view?" . $_SERVER['QUERY_STRING'];
+	//echo "public view?" . $_SERVER['QUERY_STRING'];
+	include(dirname(__FILE__) . "/views/eventSummary.php");
 	// LEFT OFF = setPluginSession??
-	//include(dirname(__FILE__) . "/eventList.php");
 }
 
 ?>

@@ -4,9 +4,10 @@ nexus config:
 update config path to TKN_ROOT
 add LIB_ROOT to config file
 add PTR_STC to config file
+add PILOT_NAME to config file
 
 pilot config:
-add $$env_fileRoot
+add $env_fileRoot to config file
 add require statement
 
 --filesystem changes
