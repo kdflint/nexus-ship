@@ -45,11 +45,14 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
 		<!-- TODO - localize all scripts and stylesheets -->
   	<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
   	<meta id="meta" name="viewport" content="width=device-width; initial-scale=1.0" />   
+
+	  <link rel="icon" href="images/NB_icon.png" />
   		
   	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Oswald:400,300|Open+Sans|Oxygen|Swanky+and+Moo+Moo">
   	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 		<link rel="stylesheet" href="//yui.yahooapis.com/pure/0.6.0/pure-min.css">
+		<!-- TODO - grids-responsive (below) still used? -->
 		<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
     <link rel="stylesheet" href="styles/nexus.css" type="text/css" />
     
@@ -59,7 +62,7 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
  		<script src="//code.jquery.com/jquery-1.10.2.js"></script>
   	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
   	<script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js"></script>
-	  <link rel="icon" href="images/NB_icon.png" />
+  	
     <title>Northbridge Nexus</title> 
     
     <script type="text/javascript">

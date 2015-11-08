@@ -1,19 +1,16 @@
-<table style="border:2px solid #a6c3ce !important;background: #EDF0DE none repeat scroll 0% 0%;" class="pure-table">
-	<tr>
-  	<td>
-  		<div class="event">
-  			<span class="date">New</span><br/>
-  			<span>Event</span>
-			</div>
-		</td>
-    <td>
 			<form id="schedule-form" class="pure-form" action="<?php echo(Utilities::getHttpPath()); ?>/modules/schedule/control/scheduleProcessor.php" method="post">
 				<fieldset>
-      		<div>
-	      		<input type="text" name="meeting-name" style="width:396px;" maxlength="50" placeholder="Purpose" >
+      		<div style="margin-top:10px;">
+	      		<input type="text" name="meeting-name" style="width:396px;" maxlength="50" placeholder="Meeting Name" >
 					</div>
       		<div style="margin-top:10px;">
 	      		<textarea name="meeting-descr" style="width:396px;" rows="4" maxlength="400" placeholder="Description"></textarea>
+					</div>
+      		<div style="margin-top:10px;">
+	      		<input type="text" name="meeting-url" style="width:396px;" maxlength="50" placeholder="Web Link" >
+					</div>
+					<div style="margin-top:10px;">
+      			<textarea name="meeting-regstr" style="width:396px;" rows="2" maxlength="200" placeholder="Registration Information"></textarea>
 					</div>
       		<div style="margin-top:10px;">
       			<textarea name="meeting-loc" style="width:396px;" rows="2" maxlength="200" placeholder="Location"></textarea>
@@ -42,16 +39,16 @@
 	      			<?php include(Utilities::getModulesRoot() . "/schedule/views/meetingDurationOptions.html"); ?>
       			</select>
 		    	</div>
+      		<div>
+      			<p>Who may we contact with questions about this meeting?</p>
+	      		<input type="text" name="meeting-contact" style="width:396px;" maxlength="50" placeholder="Contact Email" >
+					</div>
 		    	<input id="schedule-form-isBbb" name="isBbbMeeting" type="checkbox" style="visibility:hidden;"/>
+
 				</fieldset>
 			</form>  
-		</td>
-    <td>
     	<a href="javascript:void(0);" onclick="resetScheduleForm();" style="float:right;margin-right:6px;">Cancel</a><br/>
-      <a id="schedule-form-submit" class="pure-button button-menu" href="javascript:void(0)" onclick="eventValidateAndSubmit('schedule-form');" style="float:right;background-color:#d27b4b;width:70px;font-size:90%;margin-top:45px;color:#e6e6e6" <?php echo($disabled); ?> >Add</a>
- 		</td>
-	</tr>
-</table> 
+      <a id="schedule-form-submit" class="pure-button button-menu" href="javascript:void(0)" onclick="eventValidateAndSubmit('schedule-form');" style="float:right;background-color:#d27b4b;width:70px;font-size:90%;margin-top:45px;color:#e6e6e6" <?php echo($disabled); ?> >Submit</a>
 
 <?php if (!isset($_SESSION['timezone']) || $_SESSION['timezone'] == "undefined") { ?>
 	<script>

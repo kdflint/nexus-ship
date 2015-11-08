@@ -3,12 +3,14 @@
 		var xmlhttp = new XMLHttpRequest();
 		xmlhttp.onreadystatechange=function() {
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-			 	var jsonObj = JSON.parse(xmlhttp.responseText);		 	
-
+			 	var jsonObj = JSON.parse(xmlhttp.responseText);	 	
 			 	// put row containers in the reservation table, 1 for each event
 			 	var tableRows = "";
-			 	for (var i = 0; i <= jsonObj.length; i++) { 
-			 		tableRows = tableRows + "<tr id='reservationRow" + i + "'></tr>";
+			 	var n = -1;
+			 	for (var i = 0; i < jsonObj.length; i++) { 
+			 		// increment class name every 5 items to faciliate pagination
+			 		n = (i % viewSetSize == 0 ? n + 1 : n); 
+			 		tableRows = tableRows + "<tr id='reservationRow" + i + "' class='viewSet" + n + "'></tr>";
 			 	}
        	document.getElementById("reservationTable").innerHTML = tableRows;   	
 
@@ -23,45 +25,39 @@
      				"</td>" +
         		"<td>" +
 	          	"<div class='meeting'>" +
-        					"<span class='purpose'>" + jsonObj[i].purpose + "</span><br/>" +
-								"<span>" + jsonObj[i].hour + ":" + jsonObj[i].minute + "</span><span class='period'> " + jsonObj[i].period + " </span> - " +
-								"<span>" + jsonObj[i].hour_end + ":" + jsonObj[i].minute_end + "</span><span class='period'> " + jsonObj[i].period_end + " </span>" +
+        					"<a href='javascript:void(0);' onclick='showEventDetail(\"" + jsonObj[i].uuid + "\");'><span class='purpose'>" + jsonObj[i].purpose + "</span></a><br/>" +
+								"<span class='tod'>" + jsonObj[i].hour + ":" + jsonObj[i].minute + "</span><span class='period'> " + jsonObj[i].period + " </span> - " +
+								"<span class='tod'>" + jsonObj[i].hour_end + ":" + jsonObj[i].minute_end + "</span><span class='period'> " + jsonObj[i].period_end + " </span>" +
 								"<span class='period'> " + jsonObj[i].abbrev + "</span>" +
         			"</div>" +
         		"</td>";
     			document.getElementById("reservationRow" + i).innerHTML = tableEvent;   
-	   		}
-     			
-     		var lastRow = jsonObj.length;
-     		tableEvent =
-	      	"<td>" +
-		    		"<div class='event'>" +	
-		    		"<a id='schedule_control' href='javascript:void(0);' style='padding:0px;'>"	+
-		    			"<span style='padding:0px;' class='fa fa-calendar-o fa-2x' ></span>" + 
-							"<span style='padding-left:2px;' class='fa fa-plus' ></span>" +
-						"</a>	" +				
-        		"</div>" +
-        	"</td>" +
-        	"<td>" +	       				
-			     	"<div class='meeting'>" +
-        			"<span class='purpose'>Click the calendar icon to submit a new event.</span>" + 
-         		"</div>" +
-         	"</td>";
-				document.getElementById("reservationRow" + lastRow).innerHTML = tableEvent;    			
-     	}
+	   		}    			
+     	scrollEvents(viewSetSize,'forward');
+			}
 		}
 		xmlhttp.open("GET", "<?php echo(Utilities::getHttpPath()); ?>" + "/src/framework/reservationManager.php");
 		xmlhttp.send();  		
 	}
+
 </script>
-
-<div style="">
-			
-<div id="current_schedule_display">	
-	<table id="reservationTable" class="pure-table">
-	</table>
-</div>
-
-<script> getEventList(<?php echo (time() + 15*60); ?>); </script>
 	
+<div id="current_schedule_display">	
+	<div class="scroll" style="top:5px;"><a id='eventUpControl' onclick="scrollEvents(viewSetSize,'back');"><span class='fa fa-caret-up fa-3x' ></span></a></div>
+	<div style="position:absolute;top:40px;"><table id="reservationTable" class="pure-table" ></table></div>
+	<div class="scroll" style="top:400px;"><a id='eventDownControl' onclick="scrollEvents(viewSetSize,'forward');"><span class='fa fa-caret-down fa-3x' ></span></a></div>
+	<div style="position:absolute;top:450px">
+		<a id='schedule_control' href='<?php echo(Utilities::getHttpPath()); ?>/plugin/eventCalendar.php?view=add' target='_blank' style='padding:0px;'>
+			<span style='margin-left:18px;' class='fa fa-calendar-o fa-2x' ></span>
+			<span style='margin-right: 20px;' class='fa fa-plus' ></span>	
+			<span class='tod' style="color:#333333;">Submit a new event.</span>
+		</a>	
+  </div>
 </div>
+
+<script> 
+	getEventList(<?php echo (time() + 15*60); ?>);
+	var curViewSet = -1;
+	var viewSetSize = 4;
+</script>
+	

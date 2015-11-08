@@ -19,9 +19,7 @@ if ((session_status() === PHP_SESSION_ACTIVE) && isset($_SESSION['nexusContext']
  		default: 			
  	}
 } else {
-	//echo "public view?" . $_SERVER['QUERY_STRING'];
 	include(dirname(__FILE__) . "/views/eventSummary.php");
-	// LEFT OFF = setPluginSession??
 }
 
 ?>

@@ -132,8 +132,9 @@ class Event {
 				u.fname as fname, 
 				u.lname as lname,
 				pg.abbrev as abbrev 
-			from event e, public.user u, pg_timezone_names pg
-			where e.group_fk = $1		
+			from event e, public.user u, event_group eg, pg_timezone_names pg
+			where eg.group_fk = $1		
+			and eg.event_fk = e.id
 			and (e.start_dttm + e.duration) > now() 
 			and e.active = true
 			and pg.name = $2
@@ -169,13 +170,82 @@ class Event {
 		}
 		return $events;
 	}
+	
+	public static function getEventDetail($uuid, $localTz = "Greenwich", $ssnUser) {
+		$event = array();
+		if (self::isValidEventUuid($uuid)) {
+			$query = "select 
+				extract(day from (select e.start_dttm at time zone $2)) as date, 
+				extract(dow from (select e.start_dttm at time zone $2)) as day, 
+				extract(month from (select e.start_dttm at time zone $2)) as month, 
+				extract(hour from (select e.start_dttm at time zone $2)) as hour, 
+				extract(minute from (select e.start_dttm at time zone $2)) as minute, 
+				extract(epoch from (select e.start_dttm)) as epoch,
+				extract(hour from (select (e.start_dttm + e.duration) at time zone $2)) as hour_end, 
+				extract(minute from (select (e.start_dttm + e.duration) at time zone $2)) as minute_end, 
+				extract(epoch from (select (e.start_dttm + e.duration) at time zone $2)) as epoch_end,
+				e.tz_name as tzname, 
+				e.duration as duration, 
+				e.name as name, 
+				e.descr as descr, 
+				e.location as location,
+				e.uuid as uuid,
+				e.reserved_user_fk as adder,
+				e.type as meetingtype,
+				e.contact as contact,
+				e.registration as registration,
+				e.url as url,
+				u.fname as fname, 
+				u.lname as lname,
+				pg.abbrev as abbrev 
+			from event e, public.user u, pg_timezone_names pg
+			where e.active = true			
+			and pg.name = $2
+			and u.id = e.reserved_user_fk
+			and e.uuid = $1";
+			
+			$cursor = PgDatabase::psExecute($query, array($uuid, $localTz));
+			$counter = 0;
+			while ($row = pg_fetch_array($cursor)) {
+				$event[$counter]['date'] = $row['date'];
+				$event[$counter]['day'] = self::getDay($row['day']);
+				$event[$counter]['month'] = self::getMonth($row['month']-1);
+				$event[$counter]['hour'] = self::getHour($row['hour']);
+				$event[$counter]['minute'] = self::getMinute($row['minute']);
+				$event[$counter]['hour_end'] = self::getHour($row['hour_end']);
+				$event[$counter]['minute_end'] = self::getMinute($row['minute_end']);
+				$event[$counter]['epoch'] = $row['epoch'];
+				$event[$counter]['period'] = self::getPeriod($row['hour']);
+				$event[$counter]['period_end'] = self::getPeriod($row['hour_end']);
+				$event[$counter]['abbrev'] = $row['abbrev'];
+				$event[$counter]['purpose'] = $row['name'];
+				$event[$counter]['descr'] = $row['descr'];
+				$event[$counter]['location'] = $row['location'];
+				$event[$counter]['uuid'] = $row['uuid'];
+				$event[$counter]['mtype'] = $row['meetingtype'];
+				$event[$counter]['mtypdisplay'] = self::getMeetingTypeDisplay($row['meetingtype']);
+				$event[$counter]['contact'] = $row['contact'];
+				$event[$counter]['registration'] = $row['registration'];
+				$event[$counter]['url'] = $row['url'];
+				$event[$counter]['fname'] = $row['fname'];
+				$event[$counter]['lname'] = $row['lname'];
+				$event[$counter]['sessionUser'] = $ssnUser;
+				$event[$counter]['adder'] = $row['adder'];
+				$counter++;
+			}
+		}
+		return $event;
+	}
 
 	public static function addEvent($dttm, $duration, $name, $reservedUserId, $groupId, $tzName, $type, $descr, $loc, $isBbb) {
 		$query = "select abbrev from pg_timezone_names where name = $1";
 		$row = pg_fetch_row(PgDatabase::psExecute($query, array($tzName)));
 		$tzAbbrev = $row[0];
-		$query = "insert into event (uuid, start_dttm, duration, name, descr, reserved_user_fk, group_fk, tz_name, tz_abbrev, type, location, isBbbMeet) values ($1, $2, $3, $4, $9, $5, $6, $7, $8, $10, $11, $12)";
-		PgDatabase::psExecute($query, array(Utilities:: newUuid(), $dttm, $duration, $name, $reservedUserId, $groupId, $tzName, $tzAbbrev, $descr, $type, $loc, $isBbb));
+		$query = "insert into event (uuid, start_dttm, duration, name, descr, reserved_user_fk, tz_name, tz_abbrev, type, location, isBbbMeet) values ($1, $2, $3, $4, $8, $5, $6, $7, $9, $10, $11) returning id";
+		$row = pg_fetch_row(PgDatabase::psExecute($query, array(Utilities:: newUuid(), $dttm, $duration, $name, $reservedUserId, $tzName, $tzAbbrev, $descr, $type, $loc, $isBbb)));
+		$eventId = $row[0];
+		$query = "insert into event_group (event_fk, group_fk) values ($1, $2)";
+		PgDatabase::psExecute($query, array($eventId, $groupId));
 		return;
 	}	
 	

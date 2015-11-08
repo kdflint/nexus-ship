@@ -466,9 +466,11 @@ class Utilities {
 	public static function isSessionValid() {
 		if (isset($_SESSION['nexusContext']) && 
 				strlen($_SESSION['nexusContext']) == 3 && 
-				!self::isSessionExpired() &&
+				isset($_SESSION['orgUid']) && 
+				self::validateOrganizationUidFormat($_SESSION['orgUid']) && 
 				isset($_SESSION['groups']) &&
-				isset($_SESSION['username']) ) {
+				isset($_SESSION['username']) &&
+				!self::isSessionExpired() ) {
 			return true;
 		}
 		return false;
@@ -482,6 +484,7 @@ class Utilities {
 		unset($_SESSION['username']);
 		$_SESSION['appRoot'] = self::getWebRoot();
 		$_SESSION['environment'] = self::getEnvName();
+		// TODO - loading a PUBLIC context will wipe this one out and then screw up Nexus context
 		$_SESSION['nexusContext'] = "NWM";
 		$_SESSION['username'] = $username;
 		$_SESSION['groups'] = Group::getUserGroupsByUsername($_SESSION['username']);
@@ -508,11 +511,19 @@ class Utilities {
 	
 	public static function setPublicSession($oid, $zone = "undefined") {
 		$_SESSION['nexusContext'] = "PUB";
+		$_SESSION['orgUid'] = $oid;
 		$_SESSION['username'] = "pUser-" . substr($oid, 0, 8);
 		$_SESSION['groups'] = Group::getUserGroupsByUsername($_SESSION['username']);	
 		$row = pg_fetch_row(User::getActiveUserByUsername($_SESSION['username']));
 		$_SESSION['uidpk'] = $row[0];
 		$_SESSION['timezone'] = (Event::isValidTimeZone($zone) ? $zone : "undefined");
+
+		$cursor = User::getUserSessionByUsername($_SESSION['username']);
+		while ($row = pg_fetch_array($cursor)) {
+			$_SESSION['logo'] = $row['logo'];
+  		$_SESSION['networkName'] = $row['network'];
+		}
+		
 	}
 	
 	public static function setDemoSession($username, $remember, $zone = "undefined") {
