@@ -13,6 +13,8 @@ add require statement
 --filesystem changes
 
 add soft link: northbr6@northbridgetech.org [~/batch/dev/nexus]# ln -s config_env.php /home1/northbr6/public_html/dev/new_nexus/config/env_config.php
+I think above is incorrect/unnecessary??
+add soft link: ln -s /home1/northbr6/public_html/dev/new_nexus/config/config_env.php config_env.php
 add soft link: pilot/migration/Util.php --> nexus/nexus/../util.php
 move token folder
 move /lib folder

@@ -54,7 +54,7 @@ if(isset($_GET['oid']) && Organization::validateOrganizationUid($_GET['oid'])) {
   
   <style>
   	table { border: 0px !important; margin-bottom: 0px; width: auto; }
-		body { min-width: 215px; min-height: 380px;}
+		body { min-width: 215px; min-height: 440px;}
 		.pure-table td { padding: 10px 0px !important; }
 		.pure-table td:first-child { width: auto; }
 		.event { width: auto; padding-right: 8px; }
