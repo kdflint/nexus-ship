@@ -69,7 +69,7 @@
 <div style="width:760px;font-size:110%;">
 
 	<div id="new_event_display" style="display:none;">
-		<?php include(Utilities::getModulesRoot() . "/event/views/eventAdd.php"); ?>	
+		<?php include(Utilities::getModulesRoot() . "/event/views/eventAddAdvantage.php"); ?>	
 	</div>
 						
 	<div id="current_schedule_display" style="display:block;">

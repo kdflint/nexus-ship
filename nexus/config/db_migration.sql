@@ -15,6 +15,7 @@ add require statement
 add soft link: northbr6@northbridgetech.org [~/batch/dev/nexus]# ln -s config_env.php /home1/northbr6/public_html/dev/new_nexus/config/env_config.php
 I think above is incorrect/unnecessary??
 add soft link: ln -s /home1/northbr6/public_html/dev/new_nexus/config/config_env.php config_env.php
+add soft link: ~/batch/dev ln -s nexus new_nexus
 add soft link: pilot/migration/Util.php --> nexus/nexus/../util.php
 move token folder
 move /lib folder
@@ -23,6 +24,8 @@ move /image/partner folder
 resize every partner logo (in place, no name change)
 
 -- execute db changes
+
+update public.user set fname = 'aaNot' where id = 293
 
 select id, logo from organization where logo like 'src%'
 update organization set logo = 'demo.jpg' where id = 
@@ -79,6 +82,48 @@ ALTER TABLE event_group
 GRANT ALL ON TABLE event_group TO northbr6_devnexus;
 GRANT SELECT, UPDATE, INSERT ON TABLE event_group TO northbr6_web;
 GRANT ALL ON TABLE event_group TO northbr6_nbnexus;
+
+-- prep public user/group
+
+insert into public.user (uuid, username, fname, lname, email, status_fk, create_dttm, activate_dttm) values (
+'209774a1-739a-4b60-bfee-9cb00c7ee6e0', 
+'pUser-12345678',
+'Public',
+'User',
+'',
+'1',
+now(),
+now()) returning id;
+
+insert into public.group (name, descr, create_dttm, activate_dttm, uid) values (
+'Public Group',
+'This group is a placeholder for publicly visible things',
+now(),
+now(),
+'5d0754e7') returning id;
+
+insert into user_group (user_fk, create_dttm, group_fk, role_fk) values
+(307,
+now(),
+13,
+5);
+
+insert into user_organization (user_fk, organization_fk, grantor_fk, create_dttm, role_fk) values (
+307,
+330,
+88,
+now(),
+5)
+
+-- add public meetings
+
+insert into event (uuid, start_dttm, duration, name, descr, reserved_user_fk, group_fk, tz_name, tz_abbrev, type, location, isBbbMeet) values ('589e6019-285c-435f-bc91-a49c9cbb3a6e', '01-01-2016 00:00:00', '30:00:00', 'Public Test Meeting', 'test test test test', 307, 13, 'America/Chicago', 'CDT', 'collaboration', 'location', 'f') returning id;
+insert into event (uuid, start_dttm, duration, name, descr, reserved_user_fk, group_fk, tz_name, tz_abbrev, type, location, isBbbMeet) values ('1f5fc268-117a-4bd1-94a6-626879622867', '01-01-2016 00:00:00', '30:00:00', 'Public Test Meeting With a Longer Name', 'test test test test', 307, 13, 'America/Chicago', 'CDT', 'collaboration', 'location', 'f') returning id;
+insert into event (uuid, start_dttm, duration, name, descr, reserved_user_fk, group_fk, tz_name, tz_abbrev, type, location, isBbbMeet) values ('5807c186-4927-4be4-a1c8-74a885433912', '01-01-2016 00:00:00', '30:00:00', 'Public Test Meeting', 'test test test test <script>alert(''hello'');</script>', 307, 13, 'America/Chicago', 'CDT', 'collaboration', 'location', 'f') returning id;
+insert into event (uuid, start_dttm, duration, name, descr, reserved_user_fk, group_fk, tz_name, tz_abbrev, type, location, isBbbMeet) values ('2aeaf271-3d14-4027-8457-717f903e63da', '01-01-2016 00:00:00', '30:00:00', 'Public Test Meeting', 'test test test test', 307, 13, 'America/Chicago', 'CDT', 'collaboration', '', 'f') returning id;
+insert into event (uuid, start_dttm, duration, name, descr, reserved_user_fk, group_fk, tz_name, tz_abbrev, type, location, isBbbMeet) values ('7023e99c-41da-49db-a4b3-57b24075b1e0', '01-01-2016 00:00:00', '30:00:00', 'Public Test Meeting', '', 307, 13, 'America/Chicago', 'CDT', 'collaboration', 'location', 'f') returning id;
+insert into event (uuid, start_dttm, duration, name, descr, reserved_user_fk, group_fk, tz_name, tz_abbrev, type, location, isBbbMeet) values ('70fd11ee-6908-4630-9228-a732095c0a53', '01-01-2016 00:00:00', '30:00:00', 'Public Test Meeting', 'test test test test', 307, 13, 'America/Chicago', 'CDT', 'collaboration', 'location', 'f') returning id;
+
 
 -- snag migrate statements, then execute (strip " chars first in editor)
 select 'insert into event_group (event_fk, group_fk) values (' || id || ',' || group_fk || ')' from event
