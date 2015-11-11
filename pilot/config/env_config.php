@@ -1,6 +1,6 @@
 <?php
 
-require_once("../../nexus/config/config_env.php");
+require_once(__DIR__ . "/../../new_nexus/config/config_env.php");
 
 // DATABASE
 
