@@ -20,7 +20,7 @@ function my_error_handler($errno, $errstr, $errfile, $errline)
       // Send an e-mail to the administrator
       error_log("Error: $errstr \n\nFatal error on line $errline in file $errfile \n\nUser: " . $_SESSION['uidpk'] . ":" . $_SESSION['email'], DEST_EMAIL, ADMIN_EMAIL);
       // Screen out to user
-      header("location:../../../index.php?view=fatal");
+      header("location:../../../nexus.php?view=fatal");
       break;
   }
  

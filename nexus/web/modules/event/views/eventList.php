@@ -3,8 +3,8 @@
 		var xmlhttp = new XMLHttpRequest();
 		xmlhttp.onreadystatechange=function() {
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+				alert(xmlhttp.responseText);
 			 	var jsonObj = JSON.parse(xmlhttp.responseText);		 	
-
 			 	// put row containers in the reservation table, 1 for each event
 			 	var nextMeetings = undefined;
 			 	var tableRows = "";

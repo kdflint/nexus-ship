@@ -484,8 +484,6 @@ class Utilities {
 		unset($_SESSION['username']);
 		$_SESSION['appRoot'] = self::getWebRoot();
 		$_SESSION['environment'] = self::getEnvName();
-		// TODO - loading a PUBLIC context will wipe this one out and then screw up Nexus context
-		$_SESSION['nexusContext'] = "NWM";
 		$_SESSION['username'] = $username;
 		$_SESSION['groups'] = Group::getUserGroupsByUsername($_SESSION['username']);
 		self::setSessionLastActivity();
@@ -495,6 +493,8 @@ class Utilities {
 		$cursor = User::getUserSessionByUsername($_SESSION['username']);
 		
 		while ($row = pg_fetch_array($cursor)) {
+			// TODO - loading a PUBLIC context will wipe this one out and then screw up Nexus context
+			$_SESSION['nexusContext'] = $row['account'];
 			$_SESSION['fname'] = $row['fname'];
   		$_SESSION['lname'] = $row['lname'];
   		$_SESSION['orgName'] = $row['affiliation'];

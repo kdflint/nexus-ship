@@ -17,6 +17,9 @@ I think above is incorrect/unnecessary??
 add soft link: ln -s /home1/northbr6/public_html/dev/new_nexus/config/config_env.php config_env.php
 add soft link: ~/batch/dev ln -s nexus new_nexus
 add soft link: pilot/migration/Util.php --> nexus/nexus/../util.php
+
+open up permissions on dev/new_nexus/config/config_env.php - ? pending test on Thur a.m.
+
 move token folder
 move /lib folder
 remove Validate.php
@@ -133,7 +136,58 @@ select 'insert into event_group (event_fk, group_fk) values (' || id || ',' || g
 select count(*) from event;
 select count(*) from event_group;
 
+-- add organization_account table
+
+CREATE SEQUENCE organization_account_id_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 7
+  CACHE 1;
+ALTER TABLE organization_account_id_seq
+  OWNER TO northbr6_devnexus;
+GRANT ALL ON TABLE organization_account_id_seq TO northbr6_devnexus;
+GRANT SELECT, UPDATE ON TABLE organization_account_id_seq TO northbr6_web;
+
+CREATE TABLE organization_account
+(
+  id integer NOT NULL DEFAULT nextval('organization_account_id_seq'::regclass),
+  organization_fk integer NOT NULL,
+  account_type character varying(10) NOT NULL,
+  CONSTRAINT organization_account_pkey PRIMARY KEY (id),
+  CONSTRAINT organization_account_organization_fk_fkey FOREIGN KEY (organization_fk)
+      REFERENCES organization (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE organization_account
+  OWNER TO northbr6_devnexus;
+GRANT ALL ON TABLE organization_account TO northbr6_devnexus;
+GRANT ALL ON TABLE organization_account TO northbr6_nbnexus;
+GRANT SELECT, UPDATE, INSERT, REFERENCES ON TABLE organization_account TO northbr6_web WITH GRANT OPTION;
+
+-- migrate organization_account
+
+select distinct uid from organization
+select id from organization where uid in ('userdemo', '12345678', '3000356e', '00ba26d5')
+select 'insert into organization_account (organization_fk, account_type) values (' || id || ',''ADV'');' from organization where id not in (330,331,332,333)
+select 'insert into organization_account (organization_fk, account_type) values (' || id || ',''NWM'');' from organization where id in (330,331,332,333)
+
+-- count should equal
+
+select count(*) from organization
+select count(*) from organization_account
+
 -- code deployment steps
+
+-- testing - org id 1 should be ADV after migration. Add user/group if there is none
+
+-- add uid, logo to org id 1
+-- insert into public.user (uuid, username, fname, lname, email, status_fk, create_dttm, activate_dttm, enable_email) values ('be72d650-9db6-45a1-9cc1-9dca6f5b024f', 'kdfTestAdv', 'Kathy', 'Flint', 'kathy.flint@northbridgetech.org', '1', now(), now(), 'f') returning id
+-- insert into user_organization (user_fk, organization_fk, grantor_fk, role_fk, create_dttm) values (296, 1, 88, 4, now()) returning id
+-- insert into user_group (user_fk, group_fk, role_fk, create_dttm) values (296, 5, 4, now())
 
 pull from github
 build: from ~/projects/nexus-community/nexus, execute build-nexus

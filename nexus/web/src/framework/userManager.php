@@ -11,7 +11,7 @@ if (Utilities::isSessionValid()) {
 	header('Content-Type: application/json');			
 	echo json_encode($data);
 } else {
-	header("location:" . Utilities::getHttpPath() . "/index.php");
+	header("location:" . Utilities::getHttpPath() . "/nexus.php");
 	exit(0);		
 }			
 

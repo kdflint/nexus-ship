@@ -53,8 +53,12 @@ if($isAuthenticated){
 		Utilities::setSession($clean['username'], $clean['remember'], $clean['tz']);
 	}
 	Utilities::setLogin($_SESSION['uidpk']);
-	header("location:" . Utilities::getHttpPath() . "/index.php");
-	exit(0);	
+	
+	//if ((session_status() === PHP_SESSION_ACTIVE) && isset($_SESSION['nexusContext'])) {
+	header("location:" . Utilities::getHttpPath() . "/nexus.php");
+	//}
+	//} else {
+	//}
 } else {
 	returnToLoginWithError(Utilities::AUTHENTICATION_ERROR);
 }

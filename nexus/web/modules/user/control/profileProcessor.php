@@ -9,7 +9,7 @@ require_once(Utilities::getSrcRoot() . "/user/User.php");
 // TODO - put authorization checker, session checker, error handling, etc. in a central place. These should go at the top of every processor.
 
 if (!Utilities::isSessionValid()) {
-	header("location:" . Utilities::getHttpPath() . "/index.php");
+	header("location:" . Utilities::getHttpPath() . "/nexus.php");
 	exit(0);
 }
 
@@ -94,11 +94,11 @@ while ($row = pg_fetch_array($cursor)) {
   $_SESSION['lname'] = $row['last'];
 }
 
-header("location:" . Utilities::getHttpPath() . "/index.php?view=profile");
+header("location:" . Utilities::getHttpPath() . "/nexus.php?view=profile");
 exit(0);
 
 function returnToProfileWithError($errorMessage) {
-	header("location:" . Utilities::getHttpPath() . "/index.php?view=profile&error=" . $errorMessage);
+	header("location:" . Utilities::getHttpPath() . "/nexus.php?view=profile&error=" . $errorMessage);
 	exit(0);
 }
 

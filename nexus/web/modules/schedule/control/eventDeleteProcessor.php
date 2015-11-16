@@ -17,7 +17,7 @@ if (isset($dirty['uuid']) && Event::isValidEventUuid($dirty['uuid'])) {
 // TODO - put authorization checker, session checker, error handling, etc. in a central place. These should go at the top of every processor.
 
 if (!Utilities::isSessionValid()) {
-	header("location:" . Utilities::getHttpPath() . "/index.php");
+	header("location:" . Utilities::getHttpPath() . "/nexus.php");
 	exit(0);
 }
 
@@ -34,10 +34,9 @@ Event::deleteEvent($clean['uuid']);
 if ((session_status() === PHP_SESSION_ACTIVE) && isset($_SESSION['nexusContext'])) {
  switch($_SESSION['nexusContext']) {
  		case "NWM":
-			header("location:" . Utilities::getHttpPath() . "/index.php");
+			header("location:" . Utilities::getHttpPath() . "/nexus.php");
  			break;
  		case "ADV":
-			header("location:" . Utilities::getPilotPath() . "/view/nexus.php?thisPage=calendar");
  			break;
  		default: 			
  	}

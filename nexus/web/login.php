@@ -38,7 +38,7 @@ $enrolledUsername = (isset($_SESSION['invitation']) && isset($_SESSION['username
 $rememberedUsername = ($rememberMe->login()) ? $rememberMe->login() : false;
 
 if(Utilities::isSessionValid()) {
-	header("location:" . Utilities::getHttpPath() . "/index.php");
+	header("location:" . Utilities::getHttpPath() . "/nexus.php");
 	exit(0);
 } else if ($rememberedUsername) {
 	$_SESSION['remembered'] = $remembered = "true";

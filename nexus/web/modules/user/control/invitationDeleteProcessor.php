@@ -18,7 +18,7 @@ if (isset($dirty['id'])) {
 // TODO - put authorization checker, session checker, error handling, etc. in a central place. These should go at the top of every processor.
 
 if (!Utilities::isSessionValid()) {
-	header("location:" . Utilities::getHttpPath() . "/index.php");
+	header("location:" . Utilities::getHttpPath() . "/nexus.php");
 	exit(0);
 }
 
@@ -32,7 +32,7 @@ Use only clean input beyond this point (i.e. $clean[])
 
 Invitation::expireInvitationByUUid($clean['id']);
 
-header("location:" . Utilities::getHttpPath() . "/index.php?view=team");
+header("location:" . Utilities::getHttpPath() . "/nexus.php?view=team");
 exit(0);
 
 function forceLogout() {

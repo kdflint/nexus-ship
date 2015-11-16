@@ -19,7 +19,7 @@ if ($cleanCode) {
 		Utilities::setSession($result['username'], false, "undefined");
 		Utilities::setLogin($_SESSION['uidpk']);
 		User::updateUserPasswordResetActivityById($result['id']);
-		header("location:" . Utilities::getHttpPath() . "/index.php?view=profile");
+		header("location:" . Utilities::getHttpPath() . "/nexus.php?view=profile");
 		exit(0);
 	}
 }

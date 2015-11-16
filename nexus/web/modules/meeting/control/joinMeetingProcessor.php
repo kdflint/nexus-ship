@@ -25,7 +25,7 @@ if (isset($dirty['mtype']) && Event::isValidMeetingType($dirty['mtype'])) {
 }
 
 if (!Utilities::isSessionValid()) {
-	header("location:" . Utilities::getHttpPath() . "/index.php");
+	header("location:" . Utilities::getHttpPath() . "/nexus.php");
 	exit(0);
 }
 
