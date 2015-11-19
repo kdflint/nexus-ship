@@ -48,6 +48,7 @@ ALTER TABLE event ADD COLUMN isBbbMeet boolean;
 ALTER TABLE event ALTER COLUMN isBbbMeet SET DEFAULT true;
 ALTER TABLE event ALTER COLUMN type DROP NOT NULL;
 
+
 -- Sequence: group_id_seq
 
 CREATE SEQUENCE event_group_id_seq
@@ -136,6 +137,10 @@ select 'insert into event_group (event_fk, group_fk) values (' || id || ',' || g
 
 select count(*) from event;
 select count(*) from event_group;
+
+-- drop deprecated event column
+
+alter table event drop column group_fk
 
 -- add organization_account table
 
