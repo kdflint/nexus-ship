@@ -7,9 +7,9 @@ require_once(Utilities::getSrcRoot() . "/organization/Organization.php");
 
 $addView = "false";
 if(isset($_GET['view']) && $_GET['view'] == "add") {
- 	if (Utilities::isSessionValid()) {
+ 	//if (Utilities::isSessionValid()) {
  		$addView = "true";
- 	}	
+ 	//}	
 }
 
 $cleanNetworkId = "";
@@ -57,12 +57,13 @@ if(isset($_GET['oid']) && Organization::validateOrganizationUid($_GET['oid'])) {
 		body { min-width: 215px; min-height: 440px;}
 		.pure-table td { padding: 10px 0px !important; }
 		.pure-table td:first-child { width: auto; }
-		.event { width: auto; padding-right: 8px; }
+		.event { width: 80px; padding-right: 8px; }
 		.date { font-size: 130%; }
 		.meeting { font-size: 90%; padding-left: 8px; }
 		.tod { font-size: 90%; }
 		.period { font-size: 85%; }
 		.instruction { font-size: 95%; }
+		.detail { color: #004d62;}
 		.scroll { text-align: right; padding-left: 195px; position:absolute; }
 	</style>
 
@@ -169,15 +170,13 @@ if(isset($_GET['oid']) && Organization::validateOrganizationUid($_GET['oid'])) {
 		?>
 	</div>
 	
-	<div id="add-event" style="display:none;">
-		<span style="text-align:center">
-			<img src="<?php echo(Utilities::getPartnerImageRoot()); ?><?php echo $_SESSION['logo']; ?>" />
-			Use this form to submit a new event to the <?php echo($_SESSION['networkName']); ?> public calendar.
-		</span>
+	<div id="add-event" style="display:none;text-align:center;">
+		<img src="http://chicagofaithandhealth.org/imgs/logo.png" style="margin:10px;" />
+		<p>Use this form to submit a new event to the Center for Faith and<br/>Community Health Transformation public calendar.</p>
 		<?php include(Utilities::getModulesRoot() . "/event/views/eventAdd.php"); ?>
 	</div>
 	
-	<div id="show-detail" style="display:none;">
+	<div id="show-detail" style="display:none;padding:10px;">
 		<?php include(Utilities::getModulesRoot() . "/event/views/eventDetail.php"); ?>
 	</div>
 	

@@ -156,42 +156,4 @@ class User {
 	
 }
 
-/*
-insert into public.user (uuid, username, fname, lname, email, status_fk, create_dttm, activate_dttm) values (
-'2636faa4-49ac-4a3b-a773-85d75cf47951', 
-'pUser-12345678',
-'Public',
-'User',
-'',
-'1',
-now(),
-now()) returning id
-*/
-
-/*
-insert into public.group (name, descr, create_dttm, activate_dttm, uid) values (
-'Public Group',
-'This group is a placeholder for publicly visible things',
-now(),
-now(),
-'1ab1093b')
-*/
-
-/*
-insert into user_group (user_fk, create_dttm, group_fk, role_fk) values
-(295,
-now(),
-7,
-5);
-*/
-
-/*
-insert into user_organization (user_fk, organization_fk, grantor_fk, create_dttm, role_fk) values (
-295,
-330,
-88,
-now(),
-5)
-*/
-
 ?>

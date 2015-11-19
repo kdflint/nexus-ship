@@ -195,6 +195,7 @@ class Event {
 				e.contact as contact,
 				e.registration as registration,
 				e.url as url,
+				e.registration_url as regr_url,
 				u.fname as fname, 
 				u.lname as lname,
 				pg.abbrev as abbrev 
@@ -227,6 +228,7 @@ class Event {
 				$event[$counter]['contact'] = $row['contact'];
 				$event[$counter]['registration'] = $row['registration'];
 				$event[$counter]['url'] = $row['url'];
+				$event[$counter]['regr_url'] = $row['regr_url'];
 				$event[$counter]['fname'] = $row['fname'];
 				$event[$counter]['lname'] = $row['lname'];
 				$event[$counter]['sessionUser'] = $ssnUser;

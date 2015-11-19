@@ -13,6 +13,9 @@
       			<textarea name="meeting-regstr" style="width:396px;" rows="2" maxlength="200" placeholder="Registration Information"></textarea>
 					</div>
       		<div style="margin-top:10px;">
+	      		<input type="text" name="registration-url" style="width:396px;" maxlength="50" placeholder="Registration Link" >
+					</div>
+      		<div style="margin-top:10px;">
       			<textarea name="meeting-loc" style="width:396px;" rows="2" maxlength="200" placeholder="Location"></textarea>
 					</div>
 					<div id="tz-static" style="display:block;margin-top:10px;">

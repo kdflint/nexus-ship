@@ -43,6 +43,7 @@ ALTER TABLE event ADD COLUMN location character varying(250);
 ALTER TABLE event ADD COLUMN registration character varying(250);
 ALTER TABLE event ADD COLUMN contact character varying(50);
 ALTER TABLE event ADD COLUMN url character varying(150);
+ALTER TABLE event ADD COLUMN registration_url character varying(150);
 ALTER TABLE event ADD COLUMN isBbbMeet boolean;
 ALTER TABLE event ALTER COLUMN isBbbMeet SET DEFAULT true;
 ALTER TABLE event ALTER COLUMN type DROP NOT NULL;
