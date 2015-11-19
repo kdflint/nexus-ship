@@ -194,6 +194,10 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
         head.appendChild(script);
     })();
   </script>
+  
+  <script>
+  	setTechCheckSummaryHtml();
+  </script>
   </head>
   
   <body>
