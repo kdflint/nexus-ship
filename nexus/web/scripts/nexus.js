@@ -16,11 +16,11 @@ function flashVersionCheck() {
 
 function setTechCheckSummaryHtml() {
   if (!flashInstalled()) {	
-		techCheckSummaryHtml = "<span class='fa fa-check-square-o' style='margin-right:10px;'></span>Your system is not compatible to participate in this meeting.</span><span style='margin-left:10px;' class='fa fa-info-circle' >";
+		techCheckSummaryHtml = "<span class='fa fa-check-square-o' style='margin-right:10px;'></span>Your system is not compatible to participate in this meeting.";
   } else if (!flashVersionCheck()) {
-		techCheckSummaryHtml = "<span class='fa fa-check-square-o' style='margin-right:10px;'></span>Your system is not compatible to participate in this meeting.</span><span style='margin-left:10px;' class='fa fa-info-circle' >";  	
+		techCheckSummaryHtml = "<span class='fa fa-check-square-o' style='margin-right:10px;'></span>Your system is not compatible to participate in this meeting.";  	
 	} else {
-		techCheckSummaryHtml = "<span class='fa fa-check-square-o' style='margin-right:10px;'></span>Your system is compatible to participate in this meeting.</span><span style='margin-left:10px;' class='fa fa-info-circle' >";
+		techCheckSummaryHtml = "<span class='fa fa-check-square-o fa-lg' style='margin-right:10px;color:#899d70;'></span>Your system is compatible to participate in this meeting.";
 	}
 }
 
@@ -31,8 +31,6 @@ function getTechCheckSummaryHtml() {
 function formSubmit(formId) {
  		document.forms[formId].submit();
 }
-
-
 
 function isValidEmail(email) {
     var atpos = email.indexOf("@");

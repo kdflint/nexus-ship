@@ -43,7 +43,13 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
 	
   <head>
 		<!-- TODO - localize all scripts and stylesheets -->
-  	<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+  	<meta http-equiv="Content-type" content="text/html;charset=UTF-8"> 	
+  	<meta http-equiv="cache-control" content="max-age=0">
+		<meta http-equiv="cache-control" content="no-cache">
+		<meta http-equiv="expires" content="-1">
+		<meta http-equiv="expires" content="Tue, 01 Jan 1980 11:00:00 GMT">
+		<meta http-equiv="pragma" content="no-cache">
+		
   	<meta id="meta" name="viewport" content="width=device-width; initial-scale=1.0" />   
 
 	  <link rel="icon" href="images/NB_icon.png" />
@@ -72,6 +78,9 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
 	  			if (document.getElementById('join_display').style.display != 'none') {
 	  				toggleJoinDisplay();
 	  			}
+	  			if (document.getElementById('tech_check_display').style.display != 'none') {
+	  				toggleTechCheckDisplay();
+	  			}
 				});
 				$( '#join_control' ).click(function() {
 					toggleJoinDisplay();  			
@@ -79,12 +88,15 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
 	  				toggleNewEventDisplay();
 	  			}
 				});
+				$( '#tech_check_control' ).click(function() {
+					toggleTechCheckDisplay();  			
+	  			if (document.getElementById('new_event_display').style.display != 'none') {
+	  				toggleNewEventDisplay();
+	  			}
+				});
 				$( '#add_user_control' ).click(function() {
 	  			$( "#add_user_display" ).toggle( "blind" );
 	  			$( "#add_user_control" ).toggle();
-				});
-				$( '#techcheck_control' ).click(function() {
-	  			$( "#techcheck_display" ).toggle( "blind" );
 				});
 				$( '#user_control' ).click(function() {
 	  			$( "#user_display" ).toggle( "blind" );
@@ -121,6 +133,10 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
 	  	function toggleNewEventDisplay() {
 	  		$( "#new_event_display" ).toggle( "blind" );
 	  		$( "#schedule_control" ).toggle();
+	  	}
+	  	
+	  	function toggleTechCheckDisplay() {
+	  		$( "#tech_check_display" ).toggle( "blind" );
 	  	}
 	  	
 		</script>

@@ -216,7 +216,7 @@ form {
   letter-spacing: .5px;
 }
 
-.month { 
+.month, .descr { 
 	font-size: 90%;
   }
   

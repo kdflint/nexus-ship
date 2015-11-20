@@ -51,7 +51,7 @@
           			"<span class='purpose'>" + nowMeeting.purpose + "</span><br/>" +
           			"<p>" + nowMeeting.mtypdisplay + " reserved by " + reservedBy +
 	        			((nowMeeting.adder == nowMeeting.sessionUser && nowMeeting.sessionUser != <?php echo(Utilities::getDemoUidpk()); ?>) ? "<a href='modules/schedule/control/eventDeleteProcessor.php?id=" + nowMeeting.uuid + "' onclick='return confirm(\"Please confirm this delete.\");'><span class='fa fa-trash-o' style='color:#d27b4b;margin-left:10px;'></span></a></p>" : " ") +
-	        			"<p><span class='descr' style='font-size:90%;font-style:italic;' >" +  getTechCheckSummaryHtml() + "</span></p>" + 
+	        			"<p><span class='descr' style='font-style:italic;' >" +  getTechCheckSummaryHtml() + "<a href='javascript:void(0);' onclick='document.getElementById(\"tech_check_control\").click();'><span style='margin-left:10px;' class='fa fa-info-circle fa-lg' ></span></a></span></p>" + 
           		"</div>" +
           	"</td>";	
           	
@@ -97,7 +97,7 @@
          			"<td>" +
 		          	"<div class='meeting'>" +
          					"<span class='purpose'>" + jsonObj[i].purpose + "</span><br/>" +
-         					"<span class='descr' style='font-size:90%;' >" + jsonObj[i].descr + 
+         					"<span class='descr'>" + jsonObj[i].descr + 
           					"<p>" + jsonObj[i].mtypdisplay + " reserved by " + 
           					((jsonObj[i].adder == <?php echo(Utilities::getDemoUidpk()); ?>) ? '<?php echo($_SESSION['fname']); ?>' : jsonObj[i].fname) + " " +  
           					((jsonObj[i].adder == <?php echo(Utilities::getDemoUidpk()); ?>) ? '<?php echo($_SESSION['lname']); ?>' : jsonObj[i].lname) + "</p>" +
@@ -129,6 +129,10 @@
 <div id="new_event_display" style="display:none;">
 	<?php include("modules/schedule/views/reservationAdd.php"); ?>	
 </div>
+			
+<div id="tech_check_display" style="display:none;">
+	<?php include("modules/schedule/views/techCheck.php"); ?>	
+</div>			
 					
 <a id='schedule_control' href='javascript:void(0);' style='position:absolute;margin-left:650px;padding-top: 20px;'></span><span style='padding:0px;' class='fa fa-calendar-o fa-2x' ></span><span style='padding-left:2px;' class='fa fa-plus' ></span></a>				
 <table id="reservationTable" class="pure-table">
@@ -150,3 +154,6 @@
 </table>
 
 <script> getReservationList(<?php echo (time() + 15*60); ?>); </script>
+	
+<a id='tech_check_control' href='javascript:void(0);' style="display:none;"></a>
+	
