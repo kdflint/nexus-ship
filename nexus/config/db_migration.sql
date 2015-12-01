@@ -200,6 +200,7 @@ build: from ~/projects/nexus-community/nexus, execute build-nexus
 copy file to nexus folder (parent of /web)
 rename web -> web.bak0
 tar xvf web.tar.gz
+rm web.tar.gz
 
 -- copy over entire NWM project
 
