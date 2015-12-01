@@ -64,11 +64,14 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
     
     <script src="scripts/nexus.js" language="javascript"></script>
   	<script src="scripts/timeZoneData.js" language="javascript"></script>
+  	<!-- http://www.featureblend.com/javascript-flash-detection-library.html -->
  		<script src="scripts/lib/flash_detect.js"></script>
  		<script src="//code.jquery.com/jquery-1.10.2.js"></script>
   	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
   	<script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js"></script>
-  	
+  	<!-- http://www.pinlady.net/PluginDetect/ -->
+  	<script type="text/javascript" src="scripts/lib/javaDetect/scripts/PluginDetect_Java_Simple.js"></script>
+  	 	
     <title>Northbridge Nexus</title> 
     
     <script type="text/javascript">
@@ -141,6 +144,12 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
 	  	
 		</script>
     
+		<!--================== Tech Check Meta =======================-->
+		
+		<script>
+			<?php include("scripts/techCheck.js"); ?>
+		</script>
+
 		<!--================== Schedule Module Meta ==================-->
 
 		<link rel="stylesheet" href="modules/schedule/views/jquery.timepicker.css">
@@ -211,9 +220,6 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
     })();
   </script>
   
-  <script>
-  	setTechCheckSummaryHtml();
-  </script>
   </head>
   
   <body>

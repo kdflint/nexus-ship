@@ -3,62 +3,38 @@
   	<td>
   		<div class="event">
   			<span class="date">System</span><br/>
-  			<span>Check</span>
+  			<span>Details</span>
 			</div>
 		</td>
     <td>
     	<div>
-    		Browser and Platform
+    		Browser Type
+    		<span class="techCheckCol2"><img id="browser_status" src="<?php echo(Utilities::getHttpImagePath()); ?>/fa-square-o_16_486326.png"/></span>
+    		<span id="browser_version" class="techCheckCol3 descr"></span>
     	</div>
     	<div style="margin-top:10px;">
-     		Flash
+     		Flash Plugin
+     		<span class="techCheckCol2"><img id="flash_status" src="<?php echo(Utilities::getHttpImagePath()); ?>/fa-square-o_16_486326.png"/></span>
+    		<span id="flash_version" class="techCheckCol3 descr"></span>
     	</div>
     	<div style="margin-top:10px;">
-     		Java
+     		Java Plugin
+     		<span class="techCheckCol2"><img id="java_status" src="<?php echo(Utilities::getHttpImagePath()); ?>/fa-square-o_16_486326.png"/></span>
+    		<span id="java_version" class="techCheckCol3 descr"></span>
     	</div>
     	<div style="margin-top:10px;">
 				Download Speed
+				<span class="techCheckCol2"><img id="download_speed" src="<?php echo(Utilities::getHttpImagePath()); ?>/fa-square-o_16_486326.png"/></span>
+    		<span id="dprogress" class="techCheckCol3 descr"></span>
     	</div>
     	<div style="margin-top:10px;">
      		Upload Speed
-    	</div>
-		</td>
-		<td>
-    	<div>
-    		<img id="browser_status" src="" height="15" width="15"/>
-    	</div>
-    	<div style="margin-top:10px;">
-     		<img id="flash_status" src="" height="15" width="15"/>
-    	</div>
-    	<div style="margin-top:10px;">
-     		<img id="java_status" src="" height="15" width="15"/>
-    	</div>
-    	<div style="margin-top:10px;">
-				<img id="download_speed" src="http://northbridgetech.org/dev/nexus/view/image/white.png" height="15" width="15" />
-    	</div>
-    	<div style="margin-top:10px;">
-				<img id="upload_speed" src="http://northbridgetech.org/dev/nexus/view/image/white.png" height="15" width="15" />
-    	</div>
-		</td>
-		<td>
-    	<div>
-				<p id="browser_version" style="margin:0px;"></p>
-    	</div>
-    	<div style="margin-top:10px;">
-				<p id="flash_version" style="margin:0px;"></p>
-    	</div>
-    	<div style="margin-top:10px;">
-				<p id="java_version" style="margin:0px;"></p>
-    	</div>
-    	<div style="margin-top:10px;">
-				<p id="dprogress" style="margin:0px;"></p>
-    	</div>
-    	<div style="margin-top:10px;">
-     		<p id="uprogress" style="margin:0px;"></p>
+     		<span class="techCheckCol2"><img id="upload_speed" src="<?php echo(Utilities::getHttpImagePath()); ?>/fa-square-o_16_486326.png" /></span>
+    		<span id="uprogress" class="techCheckCol3 descr"></span>
     	</div>
 		</td>
     <td>
-      <a href="javascript:void(0)" onclick="document.getElementById('tech_check_control').click();" style="float:right;margin-right:25px;"><span class="fa fa-times-circle-o fa-lg"></span></a>
+      <a href="javascript:void(0)" onclick="document.getElementById('tech_check_control').click();" style="float:right;margin-right:15px;">Close</a>
  		</td>
 	</tr>
 </table> 

@@ -51,20 +51,10 @@
           			"<span class='purpose'>" + nowMeeting.purpose + "</span><br/>" +
           			"<p>" + nowMeeting.mtypdisplay + " reserved by " + reservedBy +
 	        			((nowMeeting.adder == nowMeeting.sessionUser && nowMeeting.sessionUser != <?php echo(Utilities::getDemoUidpk()); ?>) ? "<a href='modules/schedule/control/eventDeleteProcessor.php?id=" + nowMeeting.uuid + "' onclick='return confirm(\"Please confirm this delete.\");'><span class='fa fa-trash-o' style='color:#d27b4b;margin-left:10px;'></span></a></p>" : " ") +
-	        			"<p><span class='descr' style='font-style:italic;' >" +  getTechCheckSummaryHtml() + "<a href='javascript:void(0);' onclick='document.getElementById(\"tech_check_control\").click();'><span style='margin-left:10px;' class='fa fa-info-circle fa-lg' ></span></a></span></p>" + 
+	        			"<p><span id='tech_check_summary' class='descr' style='font-style:italic;' ><span class='fa fa-spinner fa-spin fa-lg'></span> Checking your system compatibility... one moment</span><a href='javascript:void(0);' onclick='document.getElementById(\"tech_check_control\").click();' style='font-size:90%;margin-left:5px;'> Details</a></p>" + 
           		"</div>" +
           	"</td>";	
-          	
-          	// LEFT OFF
-          	// Set text to one of three options based on check. Also do this on login... global variable, yes?
-          	// Generate tech check details (seen when you click i) based on check. This should go in the login sequence.
-       		if (!flashInstalled()) {
-       			document.getElementById("join_control_mode").innerHTML = "<a href='javascript:void(0);' style='position:absolute;margin-left:652px;padding-top:8px;'><span class='fa fa-exclamation-triangle fa-2x' ></span></a>";
-       		} else if (!flashVersionCheck()) {
-       			document.getElementById("join_control_mode").innerHTML = "<a href='javascript:void(0);' style='position:absolute;margin-left:652px;padding-top:8px;'><span class='fa fa-exclamation-triangle fa-2x' ></span></a>";
-					} else {
-       			document.getElementById("join_control_mode").innerHTML = "<a href='modules/meeting/control/joinMeetingProcessor.php?id=" + nowMeeting.uuid + "&type=" + nowMeeting.mtype + "' target='_blank' style='position:absolute;margin-left:648px;padding-top:8px;'><span class='fa fa-sign-in fa-3x' ></span></a>";
-       		}
+          document.getElementById("join_control_mode").innerHTML = "<a href='modules/meeting/control/joinMeetingProcessor.php?id=" + nowMeeting.uuid + "&type=" + nowMeeting.mtype + "' target='_blank' style='position:absolute;margin-left:648px;padding-top:8px;'><span class='fa fa-sign-in fa-3x' ></span></a>";
        	}  
        	document.getElementById("nowRow0").innerHTML = nowEvent;     					
        	

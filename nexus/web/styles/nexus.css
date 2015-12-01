@@ -244,6 +244,17 @@ td {
 	vertical-align: top;
 }
 
+td .techCheckCol2 {
+	position: absolute;
+	left: 320px;
+}
+
+td .techCheckCol3 {
+	position: absolute;
+	left: 350px;
+	width: 270px;
+}
+
 .pure-table td:first-child {
 	width: 100px;
 

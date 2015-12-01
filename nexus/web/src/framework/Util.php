@@ -6,6 +6,7 @@ require_once(Utilities::getSrcRoot() . "/user/User.php");
 require_once(Utilities::getSrcRoot() . "/group/Group.php");
 require_once(Utilities::getSrcRoot() . "/schedule/Event.php");
 require_once(Utilities::getLibRoot() . "/autoload/autoloader.php");
+require_once(Utilities::getLibRoot() . "/bigbluebutton/bbb-api-php/includes/config.php");
 
 // set config settings
 autoloader(array(array(
@@ -93,13 +94,17 @@ class Utilities {
 	
 	public static function getTokenRoot() { return TKN_ROOT; }
 	
-	public static function getImageRoot() { return self::getWebRoot() . "/image"; }
+	public static function getHttpImagePath() { return self::getHttpPath() . "/image"; }
 	
-	public static function getPartnerImageRoot() { return "http://" . ENV_HOST . APP_NAME . PTR_STC_ROOT . "/"; }
+	public static function getPartnerImageRoot() { return self::getHttpPath() . PTR_STC_ROOT . "/"; }
 	
 	public static function getEnvName() { return ENV_NAME; }
 	
+	public static function getBbbDomain() { return CONFIG_SERVER_BASE_URL; }
+	
 	private static function getSessionTimeout() { return SSN_TIMEOUT; }
+	
+	
 	
 	public static function getTwitterHandle() {
 		return "NorthbridgeNFP";
