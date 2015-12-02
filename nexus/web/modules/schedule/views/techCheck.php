@@ -35,6 +35,7 @@
 		</td>
     <td>
       <a href="javascript:void(0)" onclick="document.getElementById('tech_check_control').click();" style="float:right;margin-right:15px;">Close</a>
+      <a href="javascript:void(0)" onclick="refreshCheckSummary();" style="float:right;margin-right:15px;"><span class="fa fa-refresh fa-lg"></span></a>
  		</td>
 	</tr>
 </table> 

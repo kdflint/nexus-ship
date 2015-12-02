@@ -1,19 +1,13 @@
       var browserKeys = ["MSIE", "Trident", "Firefox", "Safari", "Chrome"];
 			var browserNames = ["Internet Explorer", "Internet Explorer", "Firefox", "Safari", "Chrome"];
-      var dspeed = null, uspeed = null, has_flash = null, has_java = null;
-      var brake = 0;
+      var dspeed, uspeed, brake, has_flash = null, has_java = null;
 			var minVersion = "1,7,0,35";
  			var jarfile = "lib/javaDetect/files/getJavaInfo.jar";
 			var verifyTags = null;
 			
 			window.onload = function() {
-    			var dProgress = document.getElementById("dprogress");
-    			dProgress.innerHTML = "<span class='fa fa-spinner fa-spin fa-lg'></span>";
-    			window.setTimeout(MeasureDownConnectionSpeed, 1);
-			
-					var uProgress = document.getElementById("uprogress");
-					uProgress.innerHTML = "<span class='fa fa-spinner fa-spin fa-lg'></span>";
-        	window.setTimeout(MeasureUpConnectionSpeed, 2);
+					
+					startSpeedChecks();
 
 					if (getBrowserId() > -1) {
 						document.getElementById("browser_status").src = "<?php echo(Utilities::getHttpImagePath()); ?>/fa-check-square-o_16_486326.png";
@@ -60,31 +54,41 @@
 								
 					PluginDetect.onDetectionDone("Java", displayJavaResults, jarfile, verifyTags);
     		    		
-      		var id = setInterval(function() {
-        		if (dspeed && uspeed && has_flash) {
-        			if (has_java) {
-          			document.getElementById("tech_check_summary").innerHTML = "<span class='fa fa-check-square-o fa-lg' style='margin-right:10px;color:#486326;'></span>Your system is compatible to participate in this meeting.";
-          		} else {
-          			document.getElementById("tech_check_summary").innerHTML = "<span class='fa fa-check-square-o fa-lg' style='margin-right:10px;color:#486326;'></span>Your system is mostly compatible to participate in this meeting.";
-							}
-          		clearInterval(id);
-        		} else {
-        			if (has_flash === false) {
-          			document.getElementById("tech_check_summary").innerHTML = "<span class='fa fa-exclamation-triangle fa-lg' style='margin-right:10px;color:#f64620;'></span>Your system is not compatible to participate in this meeting.";
-          			clearInterval(id);
-          		} else if (dspeed === false || uspeed === false) {
-          			document.getElementById("tech_check_summary").innerHTML = "<span class='fa fa-check-square-o fa-lg' style='margin-right:10px;color:#f68620;'></span>Your system may show connection quality limitations.";
-          			clearInterval(id);     			
-          		}
-          	}
-       			if (brake > 30) {
-       				document.getElementById("tech_check_summary").innerHTML = "<span class='fa fa-check-square-o fa-lg' style='margin-right:10px;color:#f68620;'></span>Your system may show connection quality limitations.";
-       				clearInterval(id);
-       			}
-       			brake++;
-      		}, 1000);
-        	
-				};						
+					displayCheckSummary();
+					       	
+				};	
+				
+			function refreshCheckSummary() {
+				document.getElementById("tech_check_summary").innerHTML = "<span class='fa fa-spinner fa-spin fa-lg'></span> Checking your system compatibility... one moment</span>";
+				startSpeedChecks();
+				displayCheckSummary();
+			}					
+
+			function displayCheckSummary() {
+      	var id = setInterval(function() {
+      		if (dspeed && uspeed && has_flash) {
+        		if (has_java) {
+         			document.getElementById("tech_check_summary").innerHTML = "<span class='fa fa-check-square-o fa-lg' style='margin-right:10px;color:#486326;'></span>Your system is compatible to participate in this meeting.";
+         		} else {
+         			document.getElementById("tech_check_summary").innerHTML = "<span class='fa fa-check-square-o fa-lg' style='margin-right:10px;color:#486326;'></span>Your system is mostly compatible to participate in this meeting.";
+						}
+         		clearInterval(id);
+        	} else {
+        		if (has_flash === false) {
+         			document.getElementById("tech_check_summary").innerHTML = "<span class='fa fa-exclamation-triangle fa-lg' style='margin-right:10px;color:#f64620;'></span>Your system is not compatible to participate in this meeting.";
+         			clearInterval(id);
+         		} else if (dspeed === false || uspeed === false) {
+         			document.getElementById("tech_check_summary").innerHTML = "<span class='fa fa-check-square-o fa-lg' style='margin-right:10px;color:#f68620;'></span>Your system may show connection quality limitations.";
+         			clearInterval(id);     			
+         		}
+         	}
+       		if (brake > 30) {
+       			document.getElementById("tech_check_summary").innerHTML = "<span class='fa fa-check-square-o fa-lg' style='margin-right:10px;color:#f68620;'></span>Your system may show connection quality limitations.";
+       			clearInterval(id);
+       		}
+       		brake++;
+     		}, 1000);
+      }
 
 			// https://developer.mozilla.org/en-US/docs/Web/API/Window/navigator
 			// http://www.javascriptkit.com/javatutors/navigator.shtml
@@ -120,6 +124,21 @@
 
 					has_java = false;
 				}
+			}
+
+			function startSpeedChecks() {
+				
+				dspeed = uspeed = null;
+				brake = 0;
+				 
+    		var dProgress = document.getElementById("dprogress");
+    		dProgress.innerHTML = "<span class='fa fa-spinner fa-spin fa-lg'></span>";
+    		window.setTimeout(MeasureDownConnectionSpeed, 1);
+			
+				var uProgress = document.getElementById("uprogress");
+				uProgress.innerHTML = "<span class='fa fa-spinner fa-spin fa-lg'></span>";
+        window.setTimeout(MeasureUpConnectionSpeed, 2);
+        	
 			}
 			
  			// This function calculates download speed relative to the northbridge web conference server
