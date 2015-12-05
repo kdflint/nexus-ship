@@ -3,6 +3,7 @@ session_start();
 
 require_once("src/framework/Util.php");
 require_once(Utilities::getSrcRoot() . "/organization/Organization.php");
+require_once(Utilities::getSrcRoot() . "/schedule/Event.php");
 // TODO - this should be handled by the autoloader in Util
 require_once(Utilities::getLibRoot() . "/rememberme/rememberme/src/Rememberme/Storage/File.php");
 require_once(Utilities::getLibRoot() . "/rememberme/rememberme/src/Rememberme/Authenticator.php");
@@ -37,7 +38,7 @@ $enrolledUsername = (isset($_SESSION['invitation']) && isset($_SESSION['username
 
 $rememberedUsername = ($rememberMe->login()) ? $rememberMe->login() : false;
 
-if(Utilities::isSessionValid()) {
+if(Utilities::isSessionValid() && !Utilities::isSessionPublic()) {
 	header("location:" . Utilities::getHttpPath() . "/nexus.php");
 	exit(0);
 } else if ($rememberedUsername) {
@@ -53,26 +54,21 @@ if(isset($_GET['error']) && Utilities::isSafeCharacterSet($_GET['error'])) {
 	if(isset($_GET['expired'])) {
 		$cleanMessage = "Your session has timed out.";
 	} else {
-		$cleanMessage = "You have signed out succesfully.";
+		$cleanMessage = "You have signed out successfully.";
 	}
 	$cleanIcon = "fa fa-info-circle fa-2x";
 }
 
 $logo = "";
 $disabled = "";
-$networkLogo = $networkName = "";		
+$networkLogo = $networkName = $cleanMeetingId = "";		
 $cleanNetworkId = "1"; // TODO: create default network in db, that includes default logo?
-$demoSession = "false";
+$demoSession = $guestPass = "false";
 unset($_SESSION['demo']);
 
 if(isset($_GET['oid']) && Organization::validateOrganizationUid($_GET['oid'])) {
  	$cleanNetworkId = $_GET['oid'];		
 }
-
-$cursor = Organization::getOrganizationByUid($cleanNetworkId);
-$row = pg_fetch_array($cursor);
-$networkLogo = $row['logo'];
-$networkName = $row['name'];
 
 if ($cleanNetworkId == 'userdemo') {
 	$demoSession = "true";
@@ -80,6 +76,23 @@ if ($cleanNetworkId == 'userdemo') {
 	$_SESSION['demo'] = "true";
 	// TODO - react to existing session or remembered user?
 }
+
+if(isset($_GET['mid'])) {
+	if (Event::isValidFutureEvent($_GET['mid'], $cleanNetworkId)) {
+		Utilities::destroySession();
+		$guestPass = "true";
+ 		$cleanMeetingId = $_GET['mid'];
+ 		// TODO - react to remembered user?
+ 	} else {
+ 		$cleanMessage = "Your meeting has expired.";
+ 		$cleanIcon = "fa fa-info-circle fa-2x";
+ 	}
+}
+
+$cursor = Organization::getOrganizationByUid($cleanNetworkId);
+$row = pg_fetch_array($cursor);
+$networkLogo = $row['logo'];
+$networkName = $row['name'];
 
 ?>
 
@@ -96,13 +109,21 @@ if ($cleanNetworkId == 'userdemo') {
 		<link rel="stylesheet" href="//yui.yahooapis.com/pure/0.6.0/pure-min.css">
     <link rel="stylesheet" href="styles/nexus.css" type="text/css" />
     <script src="scripts/nexus.js" language="javascript"></script>
+  	<!-- http://www.featureblend.com/javascript-flash-detection-library.html -->
+ 		<script src="scripts/lib/flash_detect.js"></script>
  		<script src="//code.jquery.com/jquery-1.10.2.js"></script>
   	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
   	<script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js"></script>
+  	<!-- http://www.pinlady.net/PluginDetect/ -->
+  	<script type="text/javascript" src="scripts/lib/javaDetect/scripts/PluginDetect_Java_Simple.js"></script>
     <link rel="icon" href="images/NB_icon.png" />
     <title>Northbridge Nexus | Login</title> 
    
    	<script> 
+   		
+   		<!-- include in this manner instead of in a meta link so that php code inside this file will resolve prior to runtime -->
+    	<?php include("scripts/techCheck.js"); ?>
+    	
 			$(document).ready(function () {
 				$(document).on("keyup", function (event) {
     			if (event.which == 13) {
@@ -111,6 +132,9 @@ if ($cleanNetworkId == 'userdemo') {
 				});
 				document.getElementById("localTz").value = getLocalTz();
 				var loginForm = document.forms["login-form"];
+				$( '#tech_check_control' ).click(function() {
+	  			$( "#tech_check_display" ).toggle( "blind" ); 			
+				});
 				if (<?php echo $remembered; ?>) {
 					loginForm.elements['uid'].value = <?php echo var_export($rememberedUsername); ?>;
 					loginForm.elements['password'].value = "Passthru1";
@@ -134,9 +158,22 @@ if ($cleanNetworkId == 'userdemo') {
 					document.getElementById("remember-me-toggle").onclick = "";
 					document.getElementById("login-module-name").innerHTML = "Web Meet Demo";
 				}
-
+				if (<?php echo $guestPass; ?>) {
+					techCheck();
+				}
 			});
 		</script>
+		
+		<style>
+			<!-- override some default techCheck.php styles 
+			.event {width:auto;}
+			td .techCheckCol1 {font-size:90%;}
+			td .techCheckCol2 {left:295px;}
+			td .techCheckCol3 {left:315px;font-size:80%;}
+			.move-it-up {margin-top:-50px;}
+		</style>
+		
+
 		
   </head>
   
@@ -165,40 +202,71 @@ if ($cleanNetworkId == 'userdemo') {
 			  		<p>Here are the <a href="http://www.enable-javascript.com" target="_blank"> instructions how to enable JavaScript in your web browser</a></p>
 			  	</noscript>
 			  	<p id="login-user-message" class="confirmation"><span class="<?php echo $cleanIcon; ?>" style="color:#007582;float:left;margin-right:5px;"></span><?php echo $cleanMessage; ?></p>
-					<form id="login-form" class="pure-form pure-form-stacked" action="modules/login/control/loginProcessor.php" method="post">
-	    			<fieldset>
-	    				<span id="username-field-label">Username</span><span class="instruction form-instruction"><a href="javascript:void(0)" onclick="toggleFormDisplay('recover-username-form')"><span id="username-instruction-field-label">I forgot</span></a></span>
-        			<input class="form-input" name="uid" value="" maxlength="25" autofocus>	        		
-        			Password<span class="instruction form-instruction"><a href="javascript:void(0)" onclick="toggleFormDisplay('recover-password-form')">I forgot</a></span>
-        			<input class="form-input" type="password" name="password" value="" maxlength="25"/>	
-        			<input id="localTz" name="timezone" type="hidden" value="">
-        			<a id="login-form-submit" type="submit" class="pure-button pure-button-primary" style="width:45%;" href="javascript:void(0);" onclick="loginValidateAndSubmit();">Sign In</a>
-        			<a id="remember-me-toggle" class="pure-button pure-button-secondary" onclick="toggleRememberCheckbox();" style="width:45%;" <?php echo($disabled);?> ><span id="fakeCheckBox" class="fa fa-square-o" style="color:#004d62;padding-right:4px;"></span> Remember me</a>
-        			<input id="login-remember" name="login-remember" type="checkbox" style="visibility:hidden;"/>        			
-     				</fieldset>
-     			</form>   			
-     			<form id="recover-username-form" class="pure-form pure-form-stacked" style="display:none;" autocomplete="off" action="modules/login/control/recoverEnrollmentProcessor.php" method="post">
-     				<fieldset>
-	     				Recover Username
-     					<p style="font-size:90%;">Please enter your email address and we will resend your username.</p>
-     					Email
-     					<input class="form-input" type="email" name="email" value="">
-     					<a id="username-form-submit" type="submit" class="pure-button pure-button-primary" style="width:45%;" href="javascript:void(0);" onclick="usernameValidateAndSubmit();" <?php echo($disabled);?> >Recover Username</a>
-     					<a class="form-instruction" href="javascript:void(0)" onclick="toggleFormDisplay('login-form')">Return to Login</a>
-     					<input type="hidden" name="network" value="<?php echo $cleanNetworkId; ?>">
-     				</fieldset>
-     			</form>
-     			<form id="recover-password-form" class="pure-form pure-form-stacked" style="display:none;" autocomplete="off" action="modules/login/control/recoverPasswordProcessor.php" method="post">
-     				<fieldset>
-	     				Password Reset
-     					<p class="instruction">Please enter your user id so we can email you a password reset link.</p>
-     					Username<span class="instruction form-instruction"><a href="javascript:void(0)" onclick="toggleFormDisplay('recover-username-form')">I forgot</a></span>
-     					<input class="form-input" type="text" name="uid" value="" maxlength="25">
-     					<a id="password-form-submit" type="submit" class="pure-button pure-button-primary" style="width:45%;" href="javascript:void(0);" onclick="passwordValidateAndSubmit();" <?php echo($disabled);?> >Reset Password</a>
-     					<a class="form-instruction" href="javascript:void(0)" onclick="toggleFormDisplay('login-form')">Return to Login</a>
-     					<input type="hidden" name="network" value="<?php echo $cleanNetworkId; ?>">
-     				</fieldset>
-     			</form>     			
+
+					<!-- This is a standard login, possibly in demo mode -->
+					<?php if ($guestPass === "false") { ?>
+
+						<form id="login-form" class="pure-form pure-form-stacked" action="modules/login/control/loginProcessor.php" method="post">
+		    			<fieldset>
+	    					<span id="username-field-label">Username</span><span class="instruction form-instruction"><a href="javascript:void(0)" onclick="toggleFormDisplay('recover-username-form')"><span id="username-instruction-field-label">I forgot</span></a></span>
+        				<input class="form-input" name="uid" value="" maxlength="25" autofocus>	        		
+        				Password<span class="instruction form-instruction"><a href="javascript:void(0)" onclick="toggleFormDisplay('recover-password-form')">I forgot</a></span>
+        				<input class="form-input" type="password" name="password" value="" maxlength="25"/>	
+        				<input id="localTz" name="timezone" type="hidden" value="">
+        				<a id="login-form-submit" type="submit" class="pure-button pure-button-primary" style="width:45%;" href="javascript:void(0);" onclick="loginValidateAndSubmit();">Sign In</a>
+        				<a id="remember-me-toggle" class="pure-button pure-button-secondary" onclick="toggleRememberCheckbox();" style="width:45%;" <?php echo($disabled);?> ><span id="fakeCheckBox" class="fa fa-square-o" style="color:#004d62;padding-right:4px;"></span> Remember me</a>
+        				<input id="login-remember" name="login-remember" type="checkbox" style="visibility:hidden;"/>        			
+     					</fieldset>
+     				</form>   			
+     				<form id="recover-username-form" class="pure-form pure-form-stacked" style="display:none;" autocomplete="off" action="modules/login/control/recoverEnrollmentProcessor.php" method="post">
+	     				<fieldset>
+	     					Recover Username
+     						<p style="font-size:90%;">Please enter your email address and we will resend your username.</p>
+     						Email
+     						<input class="form-input" type="email" name="email" value="">
+     						<a id="username-form-submit" type="submit" class="pure-button pure-button-primary" style="width:45%;" href="javascript:void(0);" onclick="usernameValidateAndSubmit();" <?php echo($disabled);?> >Recover Username</a>
+     						<a class="form-instruction" href="javascript:void(0)" onclick="toggleFormDisplay('login-form')">Return to Login</a>
+     						<input type="hidden" name="network" value="<?php echo $cleanNetworkId; ?>">
+     					</fieldset>
+     				</form>
+     				<form id="recover-password-form" class="pure-form pure-form-stacked" style="display:none;" autocomplete="off" action="modules/login/control/recoverPasswordProcessor.php" method="post">
+	     				<fieldset>
+	     					Password Reset
+     						<p class="instruction">Please enter your user id so we can email you a password reset link.</p>
+     						Username<span class="instruction form-instruction"><a href="javascript:void(0)" onclick="toggleFormDisplay('recover-username-form')">I forgot</a></span>
+     						<input class="form-input" type="text" name="uid" value="" maxlength="25">
+     						<a id="password-form-submit" type="submit" class="pure-button pure-button-primary" style="width:45%;" href="javascript:void(0);" onclick="passwordValidateAndSubmit();" <?php echo($disabled);?> >Reset Password</a>
+     						<a class="form-instruction" href="javascript:void(0)" onclick="toggleFormDisplay('login-form')">Return to Login</a>
+     						<input type="hidden" name="network" value="<?php echo $cleanNetworkId; ?>">
+     					</fieldset>
+     				</form>  
+	     			
+     		<!-- This is a meeting guest pass "login" -->
+     		<?php } else { ?>      		
+						<!-- 
+						We set the public session two times. This one is first, because eventDetailSummary.php depends on certain values from $_SESSION.
+						We do it again after the user joins (inside guestValidateAndSubmit()) so we can add the name from the form. 
+						-->
+     				<script> setPublicSession('<?php echo $cleanNetworkId; ?>', '', '<?php echo $cleanMeetingId; ?>'); </script>
+     		
+						<form id="public-join-form" class="pure-form pure-form-stacked" action="" method="post" style="width:92%;">
+		    			<fieldset>
+	    					<span id="username-field-label">Your Name</span>
+        				<input class="form-input" name="uid" value="" maxlength="25" style="width:100%;margin-bottom:10px !important;" autofocus>
+        				<span id="username-email-label">Email</span>
+     						<input class="form-input" type="email" name="email" maxlength="50" style="width:100%;margin-bottom:10px !important;">
+     						<p><span id='tech_check_summary' class='descr' style='font-style:italic;' ><span class='fa fa-spinner fa-spin fa-lg'></span> Checking your system compatibility...</span><a href='javascript:void(0);' onclick='document.getElementById("tech_check_control").click();' style='font-size:90%;margin-left:5px;'> Details</a></p>
+        				<a id="login-form-submit" class="pure-button pure-button-primary pure-button-disabled" style="width:100%;border-radius:6px;" href="javascript:void(0);" onclick="guestValidateAndSubmit('<?php echo $cleanNetworkId; ?>', '<?php echo $cleanMeetingId; ?>');" >Not Started</a>  
+        				<input id="localTz" name="timezone" type="hidden" value="">     		
+             		<?php include(Utilities::getModulesRoot() . "/event/views/eventDetailSummary.php"); ?>	
+     					</fieldset>
+     				</form> 
+      			<a id='tech_check_control' href='javascript:void(0);' style="display:none;"></a>
+						<div id="tech_check_display" style="display:none;width:560px;">
+							<?php include("modules/schedule/views/techCheck.php"); ?>	
+						</div>	
+     				<script> getEventDetail("<?php echo $cleanMeetingId; ?>"); </script>     		  		     		
+     		<?php } ?>   			
      		</div>
      		
      		<div class="loginColRight">

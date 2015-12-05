@@ -8,34 +8,36 @@
 		</td>
     <td>
     	<div>
-    		Browser Type
-    		<span class="techCheckCol2"><img id="browser_status" src="<?php echo(Utilities::getHttpImagePath()); ?>/fa-square-o_16_486326.png"/></span>
+    		<span class="techCheckCol1">Browser Type</span>
+    		<span class="techCheckCol2"><img id="browser_status" src="<?php echo(Utilities::getHttpImagePath()); ?>/fa-square-o_16_486326.png" /></span>
     		<span id="browser_version" class="techCheckCol3 descr"></span>
     	</div>
     	<div style="margin-top:10px;">
-     		Flash Plugin
-     		<span class="techCheckCol2"><img id="flash_status" src="<?php echo(Utilities::getHttpImagePath()); ?>/fa-square-o_16_486326.png"/></span>
+     		<span class="techCheckCol1">Flash Plugin</span>
+     		<span class="techCheckCol2"><img id="flash_status" src="<?php echo(Utilities::getHttpImagePath()); ?>/fa-square-o_16_486326.png" /></span>
     		<span id="flash_version" class="techCheckCol3 descr"></span>
     	</div>
     	<div style="margin-top:10px;">
-     		Java Plugin
-     		<span class="techCheckCol2"><img id="java_status" src="<?php echo(Utilities::getHttpImagePath()); ?>/fa-square-o_16_486326.png"/></span>
+     		<span class="techCheckCol1">Java Plugin</span>
+     		<span class="techCheckCol2"><img id="java_status" src="<?php echo(Utilities::getHttpImagePath()); ?>/fa-square-o_16_486326.png" /></span>
     		<span id="java_version" class="techCheckCol3 descr"></span>
     	</div>
     	<div style="margin-top:10px;">
-				Download Speed
-				<span class="techCheckCol2"><img id="download_speed" src="<?php echo(Utilities::getHttpImagePath()); ?>/fa-square-o_16_486326.png"/></span>
+				<span class="techCheckCol1">Download Speed</span>
+				<span class="techCheckCol2"><img id="download_speed" src="<?php echo(Utilities::getHttpImagePath()); ?>/fa-square-o_16_486326.png" /></span>
     		<span id="dprogress" class="techCheckCol3 descr"></span>
     	</div>
     	<div style="margin-top:10px;">
-     		Upload Speed
+     		<span class="techCheckCol1">Upload Speed</span>
      		<span class="techCheckCol2"><img id="upload_speed" src="<?php echo(Utilities::getHttpImagePath()); ?>/fa-square-o_16_486326.png" /></span>
     		<span id="uprogress" class="techCheckCol3 descr"></span>
     	</div>
 		</td>
     <td>
+    	<div class="move-it-up">
       <a href="javascript:void(0)" onclick="document.getElementById('tech_check_control').click();" style="float:right;margin-right:15px;">Close</a>
       <a href="javascript:void(0)" onclick="refreshCheckSummary();" style="float:right;margin-right:15px;"><span class="fa fa-refresh fa-lg"></span></a>
+    </div>
  		</td>
 	</tr>
 </table> 

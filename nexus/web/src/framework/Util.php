@@ -104,7 +104,7 @@ class Utilities {
 	
 	private static function getSessionTimeout() { return SSN_TIMEOUT; }
 	
-	
+	public static function getOpenMeetingMargin() {return time() + 15*60; }
 	
 	public static function getTwitterHandle() {
 		return "NorthbridgeNFP";
@@ -468,6 +468,13 @@ class Utilities {
     return $coreAuthenticated;
 	}
 
+	public static function isSessionPublic() {
+		if (strcasecmp($_SESSION['nexusContext'], "PUB") == 0) {
+			return TRUE;
+		}
+		return FALSE;
+	}
+
 	public static function isSessionValid() {
 		if (isset($_SESSION['nexusContext']) && 
 				strlen($_SESSION['nexusContext']) == 3 && 
@@ -514,17 +521,19 @@ class Utilities {
 		} 	
 	}
 	
-	public static function setPublicSession($oid, $zone = "undefined") {
+	public static function setPublicSession($oid, $zone = "undefined", $fname = "Anonymous", $uuid = "0") {
 		$_SESSION['nexusContext'] = "PUB";
 		$_SESSION['orgUid'] = $oid;
 		$_SESSION['username'] = "pUser-" . substr($oid, 0, 8);
-		$_SESSION['groups'] = Group::getUserGroupsByUsername($_SESSION['username']);	
+		$_SESSION['groups'] = Group::getGroupByEventUuid($uuid);	
 		$row = pg_fetch_row(User::getActiveUserByUsername($_SESSION['username']));
 		$_SESSION['uidpk'] = $row[0];
 		$_SESSION['timezone'] = (Event::isValidTimeZone($zone) ? $zone : "undefined");
-
+		
 		$cursor = User::getUserSessionByUsername($_SESSION['username']);
 		while ($row = pg_fetch_array($cursor)) {
+			$_SESSION['fname'] = $fname;
+			$_SESSION['lname'] = "";
 			$_SESSION['logo'] = $row['logo'];
   		$_SESSION['networkName'] = $row['network'];
 		}

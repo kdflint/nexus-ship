@@ -75,6 +75,10 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
     <title>Northbridge Nexus</title> 
     
     <script type="text/javascript">
+    	
+			<!-- include in this manner instead of in a meta link so that php code inside this file will resolve prior to runtime -->
+    	<?php include("scripts/techCheck.js"); ?>
+    	  	
 			$(document).ready(function () {
 				$( '#schedule_control' ).click(function() {
 	  			toggleNewEventDisplay();
@@ -125,7 +129,8 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
 					document.getElementById("schedule-form-submit").onclick = "";
 					document.getElementById("invite-form-submit").onclick = "";
 					document.getElementById("index-module-name").innerHTML = "Web Meet Demo";
-				}			 	
+				}		
+				techCheck();
 			});
 			
 			function toggleJoinDisplay() {
@@ -141,15 +146,9 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
 	  	function toggleTechCheckDisplay() {
 	  		$( "#tech_check_display" ).toggle( "blind" );
 	  	}
-	  	
+	  		  	
 		</script>
     
-		<!--================== Tech Check Meta =======================-->
-		
-		<script>
-			<?php include("scripts/techCheck.js"); ?>
-		</script>
-
 		<!--================== Schedule Module Meta ==================-->
 
 		<link rel="stylesheet" href="modules/schedule/views/jquery.timepicker.css">

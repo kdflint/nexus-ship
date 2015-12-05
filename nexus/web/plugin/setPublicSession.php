@@ -14,6 +14,16 @@ if(isset($_GET['oid']) && Utilities::validateOrganizationUidFormat($_GET['oid'])
  	$cleanId = $_GET['oid'];		
 }
 
-Utilities::setPublicSession($cleanId, $cleanTz);	
+$cleanFname = "";
+if(isset($_GET['fname'])) {
+ 	$cleanFname = Utilities::sanitize($_GET['fname']);		
+}
+
+$cleanUuid = 0;
+if(isset($_GET['uuid']) && Utilities::validateUuid($_GET['uuid'])) {
+ 	$cleanUuid = $_GET['uuid'];		
+}
+
+Utilities::setPublicSession($cleanId, $cleanTz, $cleanFname, $cleanUuid);	
 
 ?>

@@ -4,9 +4,9 @@
 			var minVersion = "1,7,0,35";
  			var jarfile = "lib/javaDetect/files/getJavaInfo.jar";
 			var verifyTags = null;
-			
-			window.onload = function() {
-					
+				
+			function techCheck() {		
+				
 					startSpeedChecks();
 
 					if (getBrowserId() > -1) {
@@ -70,7 +70,7 @@
         		if (has_java) {
          			document.getElementById("tech_check_summary").innerHTML = "<span class='fa fa-check-square-o fa-lg' style='margin-right:10px;color:#486326;'></span>Your system is compatible to participate in this meeting.";
          		} else {
-         			document.getElementById("tech_check_summary").innerHTML = "<span class='fa fa-check-square-o fa-lg' style='margin-right:10px;color:#486326;'></span>Your system is mostly compatible to participate in this meeting.";
+         			document.getElementById("tech_check_summary").innerHTML = "<span class='fa fa-check-square-o fa-lg' style='margin-right:10px;color:#486326;'></span>Your system is compatible to participate in this meeting, with restriction on desktop sharing.";
 						}
          		clearInterval(id);
         	} else {
@@ -112,7 +112,7 @@
         		"	<img class='callout' src='image/callout.gif' />	" +
         		"	<table>" +
         		"		<tr><td>" + 
-        		"			<p>Java is required in order to share your desktop.</p>" + 
+        		"			<p>Java is required if you want to share your desktop.</p>" + 
         		"			<p>Desktop sharing means showing meeting participants a conference room tile that contains a real-time view of your running desktop.</p>" +
         		"			<p>If you wish to use this feature, please install a current version of Java at <a href='http://java.com' target='_blank'>http://java.com</a></p>" +
         		"			<p>Note: Java is not supported in the Chromium browser</p>" +

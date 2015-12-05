@@ -28,6 +28,17 @@ function isSafeCharacterSet(set) {
 	return true;
 }
 
+function setPublicSession(oid, fname, mid) {
+	var xmlhttp = new XMLHttpRequest();
+	xmlhttp.onreadystatechange=function() {
+		if (xmlhttp.readyState == 4) {
+			if (xmlhttp.status != 200) { /* do something? */ }
+		}
+	}
+	xmlhttp.open("GET", "plugin/setPublicSession.php?oid=" + oid + "&timezone=" + getLocalTz() + "&fname=" + fname + "&uuid=" + mid);
+	xmlhttp.send();
+}
+
 function toggleRememberCheckbox() {
 	var loginRemember = document.getElementById("login-remember");
 	var curState = loginRemember.checked;
@@ -193,6 +204,33 @@ function loginValidateAndSubmit() {
  		submitButton.style.opacity = ".6";
  		loginForm.submit();
  	}
+}
+
+function guestValidateAndSubmit(oid, mid) {
+	
+	pass = true;
+	var joinForm = document.forms["public-join-form"];
+	
+  var usernameField = joinForm["uid"];
+  var username = usernameField.value;
+  setFieldPassStyles(usernameField, "");
+  if (username == null || username == "") {
+    setFieldErrorStyles(usernameField, "Name is required.");
+    pass = false;
+  }
+  
+	var emailField = joinForm["email"];
+	setFieldPassStyles(emailField, "");
+  if (!isValidEmail(emailField.value)) {
+  	setFieldErrorStyles(emailField, "Valid email is required.");
+  	emailField.value = "";
+  	pass = false;
+  }
+	
+ 	if (Boolean(pass)) {	
+ 		setPublicSession(oid, username, mid);
+ 		document.getElementById('public-meeting-join').click();
+	}
 }
 
 function demoValidateAndSubmit() {

@@ -64,7 +64,7 @@ User::addUserGroupRelation($uidpk, $invitation['groupid'], $invitation['roleid']
 Invitation::consumeInvitationByUuid($_SESSION['invitation']);
 
 $row = pg_fetch_array(Group::getGroupById($invitation['groupid']));
-$groupName = $row['name'];
+$groupName = array_values($row)[0];
 	
 $isAuthenticated = true;
 	

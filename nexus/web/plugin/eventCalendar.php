@@ -119,17 +119,6 @@ if(isset($_GET['oid']) && Organization::validateOrganizationUid($_GET['oid'])) {
 			document.getElementById("eventDownControl").style.display = downDisplayValue;
 		}
 		
-		function setPublicSession() {
-			var xmlhttp = new XMLHttpRequest();
-			xmlhttp.onreadystatechange=function() {
-				if (xmlhttp.readyState == 4) {
-					if (xmlhttp.status != 200) { /* do something? */ }
-				}
-			}
-			xmlhttp.open("GET", "<?php echo(Utilities::getHttpPath()); ?>" + "/plugin/setPublicSession.php?oid=" + "<?php echo($cleanNetworkId); ?>" + "&timezone=" + getLocalTz());
-			xmlhttp.send();
-		}
-
 		function toggleDisplay(displayId) {
 			document.getElementById("show-event").style.display='none';
 			document.getElementById("show-detail").style.display='none';
@@ -159,7 +148,7 @@ if(isset($_GET['oid']) && Organization::validateOrganizationUid($_GET['oid'])) {
   	
   	<!-- set php.ini timeout? -->
 
-	<script> setPublicSession(); </script>
+	<script> setPublicSession("<?php echo $cleanNetworkId; ?>"); </script>
    	
 	<div id="show-event" style="display:block;">
 		<?php	

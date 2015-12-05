@@ -7,9 +7,29 @@ require_once(Utilities::getSrcRoot() . "/user/Invitation.php");
 class Group {
 	
 	public static function getGroupById($groupId) {
-		$query = "select name, descr, logo from public.group where id = $1";
-		return PgDatabase::psExecute($query, array($groupId));
+		$query = "select id, name, descr, logo from public.group where id = $1";	
+		$cursor = PgDatabase::psExecute($query, array($groupId));
+	  $resultArray = array();
+	  while ($row = pg_fetch_array($cursor)) {
+	  	$resultArray[$row['id']] = $row['name'];
+	  }		
+	  return $resultArray;
 	}
+	
+	public static function getGroupByEventUuid($uuid) {
+		$query = "select g.id as id, g.name as name from event e, public.group g, event_group eg
+			where e.uuid = $1
+			and e.id = eg.event_fk
+			and g.id = eg.group_fk
+			and e.active = true
+			limit 1";		
+		$cursor = PgDatabase::psExecute($query, array($uuid));
+	  $resultArray = array();
+	  while ($row = pg_fetch_array($cursor)) {
+	  	$resultArray[$row['id']] = $row['name'];
+	  }		
+	  return $resultArray;
+	}		
 
 	public static function validateGroupId($in) {
 		if(Utilities::validateGroupIdFormat($in)) {
@@ -72,6 +92,7 @@ class Group {
 	  }		
 	  return $resultArray;
 	}
+	
 	
 	/*
 	public static function getPublicUserGroupByOrgId($oid) {

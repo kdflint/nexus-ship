@@ -1,6 +1,7 @@
 <?php
 
 require_once(dirname(__FILE__) . "/../framework/PgDb.php");
+require_once(Utilities::getLibRoot() . "/bigbluebutton/bbb-api-php/includes/bbb-api.php"); 
 
 class Event {
 	
@@ -69,6 +70,15 @@ class Event {
 			}
 	}
 	
+	private static function isBbbEventRunning($in) {
+		$bbbApi = new BigBlueButton();
+		$response = $bbbApi->isMeetingRunningWithXmlResponseArray($in);
+		if ($response && strcasecmp($response['returncode'], 'SUCCESS') == 0 && strcasecmp($response['running'], 'true') == 0) {
+			return TRUE;
+		}
+		return FALSE;
+	}
+	
 	public static function isValidTimeZone($in) {
 		$query = "select exists (select name from pg_timezone_names where name = $1)";		
 		$row = pg_fetch_row(PgDatabase::psExecute($query, array($in)));
@@ -92,6 +102,25 @@ class Event {
 			return TRUE;
 		}
 		return FALSE;		
+	}
+
+	public static function isValidFutureEvent($uuid, $orgId) {
+		if (!self::isValidEventUuid($uuid)) { return FALSE; }
+	
+		// TODO -what if two meetings are running simultaneously?
+		$query = "select exists (select e.id from event e, public.group g, organization o, event_group eg, user_organization uo
+			where e.uuid = $1
+			and e.reserved_user_fk = uo.user_fk
+			and o.id = uo.organization_fk
+			and o.uid = $2
+			and (e.start_dttm + e.duration) > now()
+			and e.active = true)";
+		$row = pg_fetch_row(PgDatabase::psExecute($query, array($uuid, $orgId)));
+		if (!strcmp($row[0], "t")) {
+			return TRUE;
+		}		
+		return FALSE;
+
 	}
 	
 	public static function isValidMeetingType($in) {
@@ -171,7 +200,7 @@ class Event {
 		return $events;
 	}
 	
-	public static function getEventDetail($uuid, $localTz = "Greenwich", $ssnUser) {
+	public static function getEventDetail($uuid, $localTz = "Greenwich", $ssnUser = "0") {
 		$event = array();
 		if (self::isValidEventUuid($uuid)) {
 			$query = "select 
@@ -233,6 +262,7 @@ class Event {
 				$event[$counter]['lname'] = $row['lname'];
 				$event[$counter]['sessionUser'] = $ssnUser;
 				$event[$counter]['adder'] = $row['adder'];
+				$event[$counter]['running'] = var_export(self::isBbbEventRunning($uuid), true);
 				$counter++;
 			}
 		}
