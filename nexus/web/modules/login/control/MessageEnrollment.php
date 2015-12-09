@@ -4,10 +4,10 @@ require_once("../../../src/framework/Util.php");
 
 class MessageEnrollment {
 	
-	private $replyTo = "noreply@nexus.northbridgetech.org";
+	private $replyTo = "noreply@northbridgetech.org";
 	private $bcc = "";
 	private $subject = "[Nexus] Enrollment Confirmation";
-	private $from = "Northbridge Technology Alliance <noreply@nexus.northbridgetech.org>";
+	private $from = "Northbridge Technology Alliance <noreply@northbridgetech.org>";
 	private $to = "";	
 	private $emailStyle = "";
 	private $messageBody = "";

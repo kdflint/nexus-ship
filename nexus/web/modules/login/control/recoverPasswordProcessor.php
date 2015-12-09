@@ -57,7 +57,7 @@ If you did not request this password reset, please contact our support team at s
 The Support Team at
 NorthBridge Technology Alliance";
 
-		mail($email, "[Nexus] Password Reset", $message, "From: noreply@nexus.northbridgetech.org\r\n");		
+		mail($email, "[Nexus] Password Reset", $message, "From: noreply@northbridgetech.org\r\n");		
 		
 }
 

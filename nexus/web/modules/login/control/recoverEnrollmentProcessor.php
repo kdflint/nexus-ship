@@ -75,7 +75,7 @@ NorthBridge Technology Alliance
 P.S. May we recommend that you visit the Profile tab first to set your messaging settings? Then, you may wish to subscribe to one or more discussions on the Forum tab.
 ";
 
-		mail($email, "[Nexus] Enrollment Confirmation", $message, "From: noreply@nexus.northbridgetech.org\r\n");		
+		mail($email, "[Nexus] Enrollment Confirmation", $message, "From: noreply@northbridgetech.org\r\n");		
 		
 }
 

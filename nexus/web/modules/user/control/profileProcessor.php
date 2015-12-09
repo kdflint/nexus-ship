@@ -51,7 +51,7 @@ If you did not request this change, please contact our support team at support@n
 The Support Team at
 NorthBridge Technology Alliance";
 
-	mail($_SESSION['email'], "[Nexus] Profile Update", $message, "From: noreply@nexus.northbridgetech.org\r\nCc: " . $result['good']['email']);
+	mail($_SESSION['email'], "[Nexus] Profile Update", $message, "From: noreply@northbridgetech.org\r\nCc: " . $result['good']['email']);
 }
 
 User::updateUserById($_SESSION['uidpk'], 
@@ -79,7 +79,7 @@ If you did not request this change, please contact our support team at support@n
 The Support Team at
 NorthBridge Technology Alliance";
 
-	mail($_SESSION['email'], "[Nexus] Profile Update", $message, "From: noreply@nexus.northbridgetech.org\r\nCc: " . $result['good']['email']);
+	mail($_SESSION['email'], "[Nexus] Profile Update", $message, "From: noreply@northbridgetech.org\r\nCc: " . $result['good']['email']);
 }
 
 $cursor = User::getUserById($_SESSION['uidpk']);
