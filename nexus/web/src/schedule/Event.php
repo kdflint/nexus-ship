@@ -43,9 +43,9 @@ class Event {
 	}
 	
 	private static function getPeriod($in) {
-		if (0 <= $in && $in < 13) {
+		if (0 <= $in && $in < 12) {
 			return "AM";
-		} else if (13 <= $in && $in < 24) {
+		} else if (12 <= $in && $in < 24) {
 			return "PM";
 		} else {
 			return "undefined";
