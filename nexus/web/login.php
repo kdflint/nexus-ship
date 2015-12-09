@@ -61,7 +61,7 @@ if(isset($_GET['error']) && Utilities::isSafeCharacterSet($_GET['error'])) {
 
 $logo = "";
 $disabled = "";
-$networkLogo = $networkName = $cleanMeetingId = "";		
+$networkLogo = $networkName = $cleanMeetingId = $techCheckInclude = "";		
 $cleanNetworkId = "1"; // TODO: create default network in db, that includes default logo?
 $demoSession = $guestPass = "false";
 unset($_SESSION['demo']);
@@ -82,6 +82,7 @@ if(isset($_GET['mid'])) {
 		Utilities::destroySession();
 		$guestPass = "true";
  		$cleanMeetingId = $_GET['mid'];
+ 		$techCheckInclude = "scripts/techCheck.js";
  		// TODO - react to remembered user?
  	} else {
  		$cleanMessage = "Your meeting has expired.";
@@ -102,7 +103,12 @@ $networkName = $row['name'];
   <head>
 		<!-- TODO - localize all scripts and stylesheets -->
   	<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
-  	<meta id="meta" name="viewport" content="width=device-width; initial-scale=1.0" />	
+		<meta http-equiv="Cache-control" content="no-cache">
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Expires" content="0">
+		<meta http-equiv="Pragma-directive" content="no-cache">				
+		<meta http-equiv="Cache-directive" content="no-cache">	
+  	<meta id="meta" name="viewport" content="width=device-width,initial-scale=1.0" />	
   	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Oswald:400,300|Open+Sans|Oxygen|Swanky+and+Moo+Moo">
   	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
@@ -122,7 +128,7 @@ $networkName = $row['name'];
    	<script> 
    		
    		<!-- include in this manner instead of in a meta link so that php code inside this file will resolve prior to runtime -->
-    	<?php include("scripts/techCheck.js"); ?>
+			<?php include($techCheckInclude); ?>
     	
 			$(document).ready(function () {
 				$(document).on("keyup", function (event) {
@@ -159,13 +165,13 @@ $networkName = $row['name'];
 					document.getElementById("login-module-name").innerHTML = "Web Meet Demo";
 				}
 				if (<?php echo $guestPass; ?>) {
-					techCheck();
+					techCheck();  
 				}
 			});
 		</script>
 		
 		<style>
-			<!-- override some default techCheck.php styles 
+			<!-- override some default techCheck.php styles  -->
 			.event {width:auto;}
 			td .techCheckCol1 {font-size:90%;}
 			td .techCheckCol2 {left:295px;}
@@ -242,12 +248,15 @@ $networkName = $row['name'];
      				</form>  
 	     			
      		<!-- This is a meeting guest pass "login" -->
-     		<?php } else { ?>      		
+     		<?php } else { ?>   
+ 		
 						<!-- 
 						We set the public session two times. This one is first, because eventDetailSummary.php depends on certain values from $_SESSION.
 						We do it again after the user joins (inside guestValidateAndSubmit()) so we can add the name from the form. 
 						-->
-     				<script> setPublicSession('<?php echo $cleanNetworkId; ?>', '', '<?php echo $cleanMeetingId; ?>'); </script>
+     				<script> 
+     					setPublicSession('<?php echo $cleanNetworkId; ?>', '', '<?php echo $cleanMeetingId; ?>');
+     				</script>
      		
 						<form id="public-join-form" class="pure-form pure-form-stacked" action="" method="post" style="width:92%;">
 		    			<fieldset>
@@ -256,7 +265,7 @@ $networkName = $row['name'];
         				<span id="username-email-label">Email</span>
      						<input class="form-input" type="email" name="email" maxlength="50" style="width:100%;margin-bottom:10px !important;">
      						<p><span id='tech_check_summary' class='descr' style='font-style:italic;' ><span class='fa fa-spinner fa-spin fa-lg'></span> Checking your system compatibility...</span><a href='javascript:void(0);' onclick='document.getElementById("tech_check_control").click();' style='font-size:90%;margin-left:5px;'> Details</a></p>
-        				<a id="login-form-submit" class="pure-button pure-button-primary pure-button-disabled" style="width:100%;border-radius:6px;" href="javascript:void(0);" onclick="guestValidateAndSubmit('<?php echo $cleanNetworkId; ?>', '<?php echo $cleanMeetingId; ?>');" >Not Started</a>  
+        				<a id="login-form-submit" class="pure-button pure-button-primary pure-button-disabled" style="width:100%;border-radius:6px;" href="javascript:void(0);" onclick="guestValidateAndSubmit('<?php echo $cleanNetworkId; ?>', '<?php echo $cleanMeetingId; ?>');" >Fetching...</a>  
         				<input id="localTz" name="timezone" type="hidden" value="">     		
              		<?php include(Utilities::getModulesRoot() . "/event/views/eventDetailSummary.php"); ?>	
      					</fieldset>
@@ -265,7 +274,9 @@ $networkName = $row['name'];
 						<div id="tech_check_display" style="display:none;width:560px;">
 							<?php include("modules/schedule/views/techCheck.php"); ?>	
 						</div>	
-     				<script> getEventDetail("<?php echo $cleanMeetingId; ?>"); </script>     		  		     		
+     				<script> 
+     					getEventDetail("<?php echo $cleanMeetingId; ?>");
+     				</script>     		  		     		
      		<?php } ?>   			
      		</div>
      		

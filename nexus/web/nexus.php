@@ -44,12 +44,11 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
   <head>
 		<!-- TODO - localize all scripts and stylesheets -->
   	<meta http-equiv="Content-type" content="text/html;charset=UTF-8"> 	
-  	<meta http-equiv="cache-control" content="max-age=0">
-		<meta http-equiv="cache-control" content="no-cache">
-		<meta http-equiv="expires" content="-1">
-		<meta http-equiv="expires" content="Tue, 01 Jan 1980 11:00:00 GMT">
-		<meta http-equiv="pragma" content="no-cache">
-		
+		<meta http-equiv="Cache-control" content="no-cache">
+		<meta http-equiv="Pragma" content="no-cache">
+		<meta http-equiv="Expires" content="0">
+		<meta http-equiv="Pragma-directive" content="no-cache">				
+		<meta http-equiv="Cache-directive" content="no-cache">				
   	<meta id="meta" name="viewport" content="width=device-width; initial-scale=1.0" />   
 
 	  <link rel="icon" href="images/NB_icon.png" />
@@ -130,7 +129,6 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
 					document.getElementById("invite-form-submit").onclick = "";
 					document.getElementById("index-module-name").innerHTML = "Web Meet Demo";
 				}		
-				techCheck();
 			});
 			
 			function toggleJoinDisplay() {
@@ -187,7 +185,7 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
 			// every 60 seconds, if there has been user activity then send a request to update the session activity timestamp		
 			function recordActivity() {
 				if(activityFlag) {
-					var xmlhttp = new XMLHttpRequest();
+					var xmlhttp = getXmlHttpRequest();
 					xmlhttp.onreadystatechange=function() {
 	  				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {	}
   				}
