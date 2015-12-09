@@ -1,14 +1,11 @@
 <script>
 	function getEventDetail(eventUuid) {
-		var xmlhttp = new XMLHttpRequest();
+		var xmlhttp = getXmlHttpRequest();
 		xmlhttp.onreadystatechange=function() {
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 			 	var jsonObj = JSON.parse(xmlhttp.responseText);		 	
-				var i = 0;
-				// confirm 1 item returned
-				
+				var i = 0;		
 		 		tableEvent = 
-		 			"<td>" +
        			"<div class='detail'>" +
 		    				"<a id='schedule_control' href='javascript:void(0);' onclick='toggleDisplay(\"show-event\");' style='padding:0px;'>"	+
 		    					"<span class='fa fa-chevron-circle-left fa-2x' style='margin-right:5px;' ></span>" + 
@@ -23,9 +20,8 @@
 								(jsonObj[i].registration ? "<p><span>" + jsonObj[i].registration + "</span></p>" : "") + 
 								(jsonObj[i].regr_url ? "<p><span><a href='http://" + jsonObj[i].regr_url + "' target='_blank'>Register Online</a></span></p>" : "") + 
 								(jsonObj[i].contact ? "<p><span>" + jsonObj[i].contact + "</span></p>" : "") +  
-						"</div>" +
-     			"</td>";
-    		document.getElementById("eventRow0").innerHTML = tableEvent;   
+						"</div>";
+    		document.getElementById("eventRow0").innerHTML = "<div class='td-div'>" + tableEvent + "<div>";   
      	}
 		}
 		xmlhttp.open("GET", "<?php echo(Utilities::getHttpPath()); ?>" + "/src/framework/eventDetailManager.php?uuid=" + eventUuid);
@@ -36,9 +32,9 @@
 <div style="">
 			
 <div id="current_detail_display">	
-	<table id="detailTable" class="pure-table">
-		<tr id="eventRow0"></tr>
-	</table>
+	<div id="detailTable" class="table-div">
+		<div id="eventRow0" class="tr-div"></div>
+	</div>
 </div>
 
 </div>

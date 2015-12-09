@@ -1,6 +1,6 @@
 <script>
 	function getEventList(referenceTime) {
-		var xmlhttp = new XMLHttpRequest();
+		var xmlhttp = getXmlHttpRequest();
 		xmlhttp.onreadystatechange=function() {
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 				alert(xmlhttp.responseText);

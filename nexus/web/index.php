@@ -163,7 +163,7 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
 			// every 60 seconds, if there has been user activity then send a request to update the session activity timestamp		
 			function recordActivity() {
 				if(activityFlag) {
-					var xmlhttp = new XMLHttpRequest();
+					var xmlhttp = getXmlHttpRequest();
 					xmlhttp.onreadystatechange=function() {
 	  				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {	}
   				}

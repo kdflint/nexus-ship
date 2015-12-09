@@ -231,7 +231,7 @@ form {
 
 /* TABLES */
 
-table {
+table, .table-div {
     border-collapse: separate !important; /* IE7 and lower */
     border: 1px solid #a6c3ce !important;
     margin-bottom: 5px;
@@ -257,10 +257,9 @@ td .techCheckCol3 {
 
 .pure-table td:first-child {
 	width: 100px;
-
 }
 
-.pure-table td {
+.pure-table td, .td-div {
 	border-left: 0px !important;
 	padding: 1em !important;
 }

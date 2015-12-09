@@ -1,12 +1,12 @@
 -- config changes
 
-nexus config:
+--nexus config:
 update config path to TKN_ROOT
 add LIB_ROOT to config file
 add PTR_STC to config file
 add PILOT_NAME to config file
 
-pilot config:
+--pilot config:
 add $env_fileRoot to config file
 add require statement
 
