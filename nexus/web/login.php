@@ -78,8 +78,11 @@ if ($cleanNetworkId == 'userdemo') {
 }
 
 if(isset($_GET['mid'])) {
-	if (Event::isValidFutureEvent($_GET['mid'], $cleanNetworkId)) {
+	if (Utilities::validateUuid($_GET['mid']) && Event::isValidFutureEvent($_GET['mid'], $cleanNetworkId)) {
 		Utilities::destroySession();
+		// guest context overrides demo context
+		$demoSession = "false";
+		$disabled = "";
 		$guestPass = "true";
  		$cleanMeetingId = $_GET['mid'];
  		$techCheckInclude = "scripts/techCheck.js";
