@@ -9,6 +9,7 @@ rendered. Is there a way to enforce this? */
 if ((session_status() === PHP_SESSION_ACTIVE) && isset($_SESSION['nexusContext'])) {
  switch($_SESSION['nexusContext']) {
  		case "NWM":
+ 			// unused right now
  			break;
  		case "ADV":
  			include(dirname(__FILE__) . "/views/eventList.php");

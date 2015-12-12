@@ -59,7 +59,7 @@
 	        			"</span>" +
           		"</div>" +
           	"</div>";	
-          document.getElementById("join_control_mode").innerHTML = "<a href='modules/meeting/control/joinMeetingProcessor.php?id=" + nowMeeting.uuid + "&type=" + nowMeeting.mtype + "' target='_blank' style='position:absolute;margin-left:648px;padding-top:8px;z-index:10;'><span class='fa fa-sign-in fa-3x' ></span></a>";
+          document.getElementById("join_control_mode").innerHTML = "<a href='modules/meeting/control/joinMeetingProcessor.php?id=" + nowMeeting.uuid + "&type=" + nowMeeting.mtype + "' target='_blank'  class='level1-control'><span class='fa fa-sign-in fa-3x' ></span></a>";
        	}  
        	document.getElementById("nowRow0").innerHTML = nowEvent;  
         var eventHeight = document.getElementById('nowEventDetail').style.height;
@@ -123,7 +123,7 @@
 
 <div id="join_control_mode">
 	<!-- These link parameters are altered if there is a meeting currently running. See the construction of 'nowRow0' in json processing script above -->
-	<a id='join_control' href='javascript:void(0);' style='position:absolute;margin-left:648px;padding-top:16px;z-index:10;'><span class='fa fa-circle-o-notch fa-2x' ></span></a>
+	<a id='join_control' href='javascript:void(0);' class='level1-control'><span class='fa fa-circle-o-notch fa-2x' ></span></a>
 </div>
 <div id="nowTable" class="table-div">
 </div>
@@ -140,7 +140,7 @@
 	<?php include("modules/schedule/views/techCheck.php"); ?>	
 </div>			
 					
-<a id='schedule_control' href='javascript:void(0);' style='position:absolute;margin-left:650px;padding-top: 20px;z-index:10;'></span><span style='padding:0px;' class='fa fa-calendar-o fa-2x' ></span><span style='padding-left:2px;' class='fa fa-plus' ></span></a>				
+<a id='schedule_control' href='javascript:void(0);' class='level1-control'></span><span style='padding:0px;' class='fa fa-calendar-o fa-2x' ></span><span style='padding-left:2px;' class='fa fa-plus' ></span></a>				
 <div id="reservationTable" class="table-div">
 </div>
 

@@ -70,6 +70,7 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
   	<script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js"></script>
   	<!-- http://www.pinlady.net/PluginDetect/ -->
   	<script type="text/javascript" src="scripts/lib/javaDetect/scripts/PluginDetect_Java_Simple.js"></script>
+  	<!-- http://logomakr.com -->
   	 	
     <title>Northbridge Nexus</title> 
     
@@ -80,6 +81,7 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
     	  	
 			$(document).ready(function () {
 				$( '#schedule_control' ).click(function() {
+					//alert("test");
 	  			toggleNewEventDisplay();
 	  			if (document.getElementById('join_display').style.display != 'none') {
 	  				toggleJoinDisplay();
@@ -246,7 +248,7 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
  								include("nwmFrame.php");
  	 							break;
 				 			case "ADV":
-				 			 	include("src/framework/sessionViews.php");
+				 			 	include("advFrame.php");
 	 							break;
  							default: 			
  						}

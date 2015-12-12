@@ -55,7 +55,8 @@ body {
 
 .frame {
 	clear: both;
-	padding-bottom:60px;   /* Height of the footer */
+	padding-bottom: 60px;   /* Height of the footer */
+	padding-top: 10px;
 }
 
 .footer {
@@ -71,14 +72,24 @@ body {
 .loginColLeft {
 	width:70%;
 	float:left;
-	margin-top:10px;
 }
 
 .loginColRight {
 	width:30%;
 	float:right;
+	margin-top: 10px;
 }
 
+.frameColLeft {
+	width:80%;
+	float:left;
+}
+
+.frameColRight {
+	width:20%;
+	float:right;
+}
+	
 /* TEXT */
 
 .instruction {
@@ -227,6 +238,13 @@ form {
  
 #schedule-form-country-button, #schedule-form-countryTimeZones-button {
 	vertical-align: middle;
+}
+
+.level1-control {
+	position: absolute;
+	margin-left: 650px;
+	padding-top: 20px;
+	z-index:10;
 }
 
 /* TABLES */
