@@ -155,7 +155,7 @@ if(isset($_GET['error']) && Utilities::isSafeCharacterSet($_GET['error'])) {
      		
      		<div class="loginColRight">
       		<span style="clear:right;float:right;text-align:right;margin-top:20px;"><?php echo $networkName; ?></span>
-      		<span style="clear:right;float:right;margin-top:20px;"><img <?php echo $networkLogo; ?>/></span>
+      		<span style="clear:right;float:right;margin-top:20px;"><img src="<?php echo Utilities::getPartnerImageRoot(); ?><?php echo $networkLogo; ?>" /></span>
      		</div>
       </div>
       
