@@ -19,8 +19,10 @@ if(isset($_GET['fname'])) {
  	$cleanFname = Utilities::sanitize($_GET['fname']);		
 }
 
-$cleanUuid = 0;
-if(isset($_GET['uuid']) && Utilities::validateUuid($_GET['uuid'])) {
+//fake uuid to cover no uuid input
+//$cleanUuid = "f1178137-a8a8-4843-9043-d1d772a325b0";
+$cleanUuid = false;
+if(isset($_GET['uuid']) && strlen($_GET['uuid']) > 0 && Utilities::validateUuid($_GET['uuid'])) {
  	$cleanUuid = $_GET['uuid'];		
 }
 

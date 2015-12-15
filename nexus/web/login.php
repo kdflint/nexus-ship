@@ -258,7 +258,7 @@ $networkName = $row['name'];
 						We do it again after the user joins (inside guestValidateAndSubmit()) so we can add the name from the form. 
 						-->
      				<script> 
-     					setPublicSession('<?php echo $cleanNetworkId; ?>', '', '<?php echo $cleanMeetingId; ?>');
+     					setPublicSession('<?php echo $cleanNetworkId; ?>', '', '<?php echo $cleanMeetingId; ?>', '');
      				</script>
      		
 						<form id="public-join-form" class="pure-form pure-form-stacked" action="" method="post" style="width:92%;">

@@ -15,12 +15,12 @@ if ((session_status() === PHP_SESSION_ACTIVE) && isset($_SESSION['nexusContext']
  			include(dirname(__FILE__) . "/views/eventList.php");
  			break;
  		case "PUB":
- 			include(dirname(__FILE__) . "/views/eventSummary.php");
+ 			include(dirname(__FILE__) . "/mod_publicEvents.php");
  			break;
  		default: 			
  	}
 } else {
-	include(dirname(__FILE__) . "/views/eventSummary.php");
+	include(dirname(__FILE__) . "/mod_publicEvents.php");
 }
 
 ?>

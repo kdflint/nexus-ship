@@ -480,7 +480,6 @@ class Utilities {
 				strlen($_SESSION['nexusContext']) == 3 && 
 				isset($_SESSION['orgUid']) && 
 				self::validateOrganizationUidFormat($_SESSION['orgUid']) && 
-				isset($_SESSION['groups']) &&
 				isset($_SESSION['username']) &&
 				!self::isSessionExpired() ) {
 			return true;
@@ -521,11 +520,15 @@ class Utilities {
 		} 	
 	}
 	
-	public static function setPublicSession($oid, $zone = "undefined", $fname = "Anonymous", $uuid = "0") {
+	public static function setPublicSession($oid, $zone = "undefined", $fname = "Anonymous", $uuid = false) {
 		$_SESSION['nexusContext'] = "PUB";
 		$_SESSION['orgUid'] = $oid;
 		$_SESSION['username'] = "pUser-" . substr($oid, 0, 8);
-		$_SESSION['groups'] = Group::getGroupByEventUuid($uuid);	
+		if (!$uuid) {
+			$_SESSION['groups'] = Group::getUserGroupsByUsername($_SESSION['username']);
+		} else {
+			$_SESSION['groups'] = Group::getGroupByEventUuid($uuid);	
+		}
 		$row = pg_fetch_row(User::getActiveUserByUsername($_SESSION['username']));
 		$_SESSION['uidpk'] = $row[0];
 		$_SESSION['timezone'] = (Event::isValidTimeZone($zone) ? $zone : "undefined");

@@ -92,6 +92,7 @@
  									"<span>" + jsonObj[i].hour + ":" + jsonObj[i].minute + "</span><span class='period'> " + jsonObj[i].period + " " + jsonObj[i].abbrev + "</span>" +
 								"</div>" +
       				"</div>" +
+      				// TODO - multiple items with same id - wrong
        				"<div id='futureEventDetail' class='td-div' style='position:absolute;left:140px;top:5px;height:180px;'>" + 
 		          	"<div class='meeting'>" +
          					"<span class='purpose'>" + jsonObj[i].purpose + "</span><br/>" +

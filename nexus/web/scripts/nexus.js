@@ -38,16 +38,32 @@ function getXmlHttpRequest() {
   return xmlhttp;
 }
 
-function setPublicSession(oid, fname, mid) {
+function setPublicSession(oid, fname, mid, relativePath) {
 	var xmlhttp = getXmlHttpRequest();
 	xmlhttp.onreadystatechange=function() {
 		if (xmlhttp.readyState == 4) {
-			if (xmlhttp.status != 200) { /* do something? */ }
+			if (xmlhttp.status != 200) { return true; }
+		} else {
+			return false;
 		}
 	}
-	xmlhttp.open("GET", "plugin/setPublicSession.php?oid=" + oid + "&timezone=" + getLocalTz() + "&fname=" + fname + "&uuid=" + mid);
+	xmlhttp.open("GET", relativePath + "plugin/setPublicSession.php?oid=" + oid + "&timezone=" + getLocalTz() + "&fname=" + fname + "&uuid=" + mid);
 	xmlhttp.send();
 }
+
+function setPublicSession2(oid, fname, relativePath) {
+	var xmlhttp = getXmlHttpRequest();
+	xmlhttp.onreadystatechange=function() {
+		if (xmlhttp.readyState == 4) {
+			if (xmlhttp.status != 200) { return true; }
+		} else {
+			return false;
+		}
+	}
+	xmlhttp.open("GET", relativePath + "plugin/setPublicSession.php?oid=" + oid + "&timezone=" + getLocalTz() + "&fname=" + fname);
+	xmlhttp.send();
+}
+	
 
 function toggleRememberCheckbox() {
 	var loginRemember = document.getElementById("login-remember");

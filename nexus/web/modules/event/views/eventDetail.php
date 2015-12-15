@@ -7,9 +7,9 @@
 				var i = 0;		
 		 		tableEvent = 
        			"<div class='detail'>" +
-		    				"<a id='schedule_control' href='javascript:void(0);' onclick='toggleDisplay(\"show-event\");' style='padding:0px;'>"	+
-		    					"<span class='fa fa-chevron-circle-left fa-2x' style='margin-right:5px;' ></span>" + 
-		    				"</a>" + 
+		    				//"<a id='schedule_control' href='javascript:void(0);' onclick='toggleDisplay(\"show-event\");' style='padding:0px;'>"	+
+		    				//	"<span class='fa fa-chevron-circle-left fa-2x' style='margin-right:5px;' ></span>" + 
+		    				//"</a>" + 
        					"<span class='date'>" + jsonObj[i].purpose + "</span><br/>" +
        					"<span>" + jsonObj[i].location + "</span><br/>" + 
        					"<span class='tod'>" + jsonObj[i].hour + ":" + jsonObj[i].minute + "</span><span class='period'> " + jsonObj[i].period + " </span> - " +
@@ -24,7 +24,7 @@
     		document.getElementById("eventRow0").innerHTML = "<div class='td-div'>" + tableEvent + "<div>";   
      	}
 		}
-		xmlhttp.open("GET", "<?php echo(Utilities::getHttpPath()); ?>" + "/src/framework/eventDetailManager.php?uuid=" + eventUuid);
+		xmlhttp.open("GET", "<?php echo(Utilities::getHttpPath()); ?>" + "/src/framework/eventDetailManager.php?uuid=" + eventUuid, true);
 		xmlhttp.send();  		
 	}
 </script>

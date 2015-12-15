@@ -36,15 +36,13 @@ if(isset($_GET['oid']) && Organization::validateOrganizationUid($_GET['oid'])) {
    	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 		<link rel="stylesheet" href="//yui.yahooapis.com/pure/0.6.0/pure-min.css">
     <link rel="stylesheet" href="../styles/nexus.css" type="text/css" />
-		<link rel="stylesheet" href="../modules/schedule/views/jquery.timepicker.css">
     
     <script src="../scripts/nexus.js" language="javascript"></script>
   	<script src="../scripts/timeZoneData.js" language="javascript"></script>
-		<script src="../modules/schedule/views/jquery.timepicker.js" language="javascript"></script>
   	<script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js" language="javascript"></script>
  		<script src="//code.jquery.com/jquery-1.10.2.js" language="javascript"></script>
   	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js" language="javascript"></script>
-  	
+ 	  	
     <style>
       fieldset { border: 0; }
       label { display: block; margin: 30px 0 0 0; }
@@ -86,6 +84,8 @@ if(isset($_GET['oid']) && Organization::validateOrganizationUid($_GET['oid'])) {
     </script>
 	
 	<script>
+		
+
 			
 		function scrollEvents(setSize, direction) {
 			if (direction == "forward") {
@@ -93,8 +93,20 @@ if(isset($_GET['oid']) && Organization::validateOrganizationUid($_GET['oid'])) {
 			} else if (direction == "back") {
 				curViewSet = curViewSet-1;
 			}	
-			var allRows = document.getElementById("reservationTable").rows;
-			var showRows = document.getElementsByClassName("viewSet" + curViewSet);
+
+			// Following is compatible with IE8			
+			var table = document.getElementById("reservationTable");
+			var allRows = [];
+			var showRows = [];
+			for (var i = 0; i < table.childNodes.length; i++) {
+	    	if (table.childNodes[i].className.indexOf("tr-div") > -1) {
+	      	allRows.push(table.childNodes[i]);
+  	  	}
+	    	if (table.childNodes[i].className.indexOf("viewSet" + curViewSet) > -1) {
+	      	showRows.push(table.childNodes[i]);
+  	  	}
+			}			
+			//var showRows = document.getElementsByClassName("viewSet" + curViewSet);
 			for (i = 0; i < allRows.length; i++) { allRows[i].style.display = "none"; }
 			for (i = 0; i < showRows.length; i++) { showRows[i].style.display = "block"; }
 			// viewSet starts count at 0
@@ -128,7 +140,6 @@ if(isset($_GET['oid']) && Organization::validateOrganizationUid($_GET['oid'])) {
 		
 		function showEventDetail(eventUuid) {
 			getEventDetail(eventUuid);
-			toggleDisplay("show-detail");
 		}	
 				
 	</script>
@@ -140,7 +151,7 @@ if(isset($_GET['oid']) && Organization::validateOrganizationUid($_GET['oid'])) {
 			}
 		});
 	</script>
-  
+ 
   </head>
   <body>
  	
@@ -148,26 +159,27 @@ if(isset($_GET['oid']) && Organization::validateOrganizationUid($_GET['oid'])) {
   	
   	<!-- set php.ini timeout? -->
 
-	<script> setPublicSession("<?php echo $cleanNetworkId; ?>"); </script>
+	<script> setPublicSession2("<?php echo $cleanNetworkId; ?>", "", "../"); </script>
    	
-	<div id="show-event" style="display:block;">
+	<div id="show-event" style="position:relative;margin:10px;height:460px;">
 		<?php	
 			// Block until we have a valid session. Wait 10 seconds then bail. 	
-			$timer = 0;
-			while (!Utilities::isSessionValid() && $timer < 10) { sleep(1); $timer++; }
-			include(Utilities::getModulesRoot() . "/event/mod_controller.php"); 
+			// TODO - why not working?
+			//$timer = 0;
+			//while (!Utilities::isSessionValid() && $timer < 10) { sleep(1); $timer++; }
+			if (Utilities::isSessionValid()) {
+				// Calendar module controller
+				include(Utilities::getModulesRoot() . "/event/mod_controller.php"); 
+			}
 		?>
 	</div>
 	
+	<!--
 	<div id="add-event" style="display:none;text-align:center;">
 		<img src="http://chicagofaithandhealth.org/imgs/logo.png" style="margin:10px;" />
 		<p>Use this form to submit a new event to the Center for Faith and<br/>Community Health Transformation public calendar.</p>
 		<?php include(Utilities::getModulesRoot() . "/event/views/eventAdd.php"); ?>
 	</div>
-	
-	<div id="show-detail" style="display:none;padding:10px;">
-		<?php include(Utilities::getModulesRoot() . "/event/views/eventDetail.php"); ?>
-	</div>
-	
+	-->
 	</body>
 </html>
