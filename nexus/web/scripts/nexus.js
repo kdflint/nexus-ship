@@ -254,7 +254,7 @@ function guestValidateAndSubmit(oid, mid) {
   }
 	
  	if (Boolean(pass)) {	
- 		setPublicSession(oid, username, mid);
+ 		setPublicSession(oid, username, mid, '');
  		document.getElementById('public-meeting-join').click();
 	}
 }

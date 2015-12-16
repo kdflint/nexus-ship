@@ -164,9 +164,8 @@ if(isset($_GET['oid']) && Organization::validateOrganizationUid($_GET['oid'])) {
 	<div id="show-event" style="position:relative;margin:10px;height:460px;">
 		<?php	
 			// Block until we have a valid session. Wait 10 seconds then bail. 	
-			// TODO - why not working?
-			//$timer = 0;
-			//while (!Utilities::isSessionValid() && $timer < 10) { sleep(1); $timer++; }
+			$timer = 0;
+			while (!Utilities::isSessionValid() && $timer < 10) { sleep(1); $timer++; }
 			if (Utilities::isSessionValid()) {
 				// Calendar module controller
 				include(Utilities::getModulesRoot() . "/event/mod_controller.php"); 

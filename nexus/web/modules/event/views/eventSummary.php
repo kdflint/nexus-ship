@@ -57,7 +57,7 @@
 	<div class="scroll" style="top:380px;"><a id='eventDownControl' onclick="scrollEvents(viewSetSize,'forward');"><span class='fa fa-caret-down fa-3x' ></span></a></div>
 	<div style="position:absolute;top:430px;bottom:0px;">
 		<!--<a id='schedule_control' href='<?php echo(Utilities::getHttpPath()); ?>/plugin/eventCalendar.php?view=add' target='_blank' style='padding:0px;'>-->
-		<a id='schedule_control' href='' style='padding:0px;'>
+		<a id='schedule_control' href='#' style='padding:0px;'>
 			<span style='margin-left:18px;margin-right:5px;float:left' class='fa fa-calendar-o fa-2x' ></span>
 			<span style='float:left' class='fa fa-plus' ></span>	
 			<span class='tod' style="color:#333333;margin-left:20px;">Submit a new event</span>
