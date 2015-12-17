@@ -32,8 +32,22 @@
 <div style="">
 			
 <div id="current_detail_display">	
-	<div id="detailTable" class="table-div">
-		<div id="eventRow0" class="tr-div"></div>
+
+<!--	<a id='schedule_control' href='javascript:void(0);' class='level1-control'><span style='padding:0px;' class='fa fa-calendar-o fa-2x' ></span><span style='padding-left:2px;' class='fa fa-plus' ></span></a>				->
+
+	<!--<a id='schedule_control' href='<?php echo(Utilities::getHttpPath()); ?>/plugin/eventCalendar.php?view=add' target='_blank' style='padding:0px;'>-->
+	<div id="detailTable" class="table-div" style="border: 0px none !important;">
+		<div style="margin-top:10px;margin-right:10px;float:right">
+			<a id='schedule_control' href='#'>
+				<span style='' class='fa fa-calendar-o fa-2x' ></span>
+				<span style='' class='fa fa-plus' ></span>
+				<!--<span class='tod' style="color:#333333;margin-left:20px;">Submit new event</span>-->
+			</a>	
+  	</div>
+		<div id="eventRow0" class="tr-div">
+					<div style="text-align:center;"><span class='fa fa-spinner fa-spin fa-lg' style="margin-right:10px;margin-top:45px;"></span>Loading detail...</div></div>
+	
+		</div>
 	</div>
 </div>
 

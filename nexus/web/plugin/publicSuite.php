@@ -161,7 +161,16 @@ if(isset($_GET['oid']) && Organization::validateOrganizationUid($_GET['oid'])) {
 
 	<script> setPublicSession2("<?php echo $cleanNetworkId; ?>", "", "../"); </script>
    	
-	<div id="show-event" style="position:relative;margin:10px;height:460px;">
+	<div id="show-event" style="position:relative;margin:8px;height:460px;">
+		<div id="public-suite-nav" style="position:relative;width:100%;height:42px;background-color:#eeeeee;font-size:110%;">
+			<div class="pure-menu pure-menu-horizontal">
+    		<ul class="pure-menu-list">
+	        <li class="pure-menu-item pure-menu-selected"><a href="#" class="pure-menu-link">Calendar</a></li>
+        	<li class="pure-menu-item"><div style="cursor:not-allowed;"><a href="#" class="pure-menu-link" style="pointer-events:none;">Directory</a></div></li>
+        	<li class="pure-menu-item"><div style="cursor:not-allowed;"><a href="#" class="pure-menu-link" style="pointer-events:none;">Forum</a></div></li>
+    		</ul>
+			</div>
+		</div>
 		<?php	
 			// Block until we have a valid session. Wait 10 seconds then bail. 	
 			$timer = 0;

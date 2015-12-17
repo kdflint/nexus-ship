@@ -52,17 +52,12 @@
 </script>
 	
 <div id="current_schedule_display">	
-	<div class="scroll" style="top:5px;"><a id='eventUpControl' onclick="scrollEvents(viewSetSize,'back');"><span class='fa fa-caret-up fa-3x' ></span></a></div>
-	<div style="position:absolute;top:40px;width:100%;"><div id="reservationTable" class="table-div" style="border:0px !important;"></div></div>
-	<div class="scroll" style="top:380px;"><a id='eventDownControl' onclick="scrollEvents(viewSetSize,'forward');"><span class='fa fa-caret-down fa-3x' ></span></a></div>
-	<div style="position:absolute;top:430px;bottom:0px;">
-		<!--<a id='schedule_control' href='<?php echo(Utilities::getHttpPath()); ?>/plugin/eventCalendar.php?view=add' target='_blank' style='padding:0px;'>-->
-		<a id='schedule_control' href='#' style='padding:0px;'>
-			<span style='margin-left:18px;margin-right:5px;float:left' class='fa fa-calendar-o fa-2x' ></span>
-			<span style='float:left' class='fa fa-plus' ></span>	
-			<span class='tod' style="color:#333333;margin-left:20px;">Submit a new event</span>
-		</a>	
-  </div>
+	<div class="scroll" style="top:5px;"><a id='eventUpControl' onclick="scrollEvents(viewSetSize,'back');" style="display:none;"><span class='fa fa-caret-up fa-3x' ></span></a></div>
+	<div style="position:absolute;top:40px;width:100%;">
+		<div id="reservationTable" class="table-div" style="border: 0px none !important;">
+			<div style="text-align:center;"><span class='fa fa-spinner fa-spin fa-lg' style="margin-right:10px;"></span>Loading calendar...</div></div>
+	</div>
+	<div class="scroll" style="top:380px;"><a id='eventDownControl' onclick="scrollEvents(viewSetSize,'forward');" style="display:none;"><span class='fa fa-caret-down fa-3x' ></span></a></div>
 </div>
 
 <script> 
