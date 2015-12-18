@@ -52,12 +52,12 @@
 </script>
 	
 <div id="current_schedule_display">	
-	<div class="scroll" style="top:5px;"><a id='eventUpControl' onclick="scrollEvents(viewSetSize,'back');" style="display:none;"><span class='fa fa-caret-up fa-3x' ></span></a></div>
-	<div style="position:absolute;top:40px;width:100%;">
+	<div class="scroll" style="top:-10px;z-index:10;"><a id='eventUpControl' onclick="scrollEvents(viewSetSize,'back');" style="display:none;"><span class='fa fa-caret-up fa-3x' ></span></a></div>
+	<div style="position:absolute;top:20px;width:100%;">
 		<div id="reservationTable" class="table-div" style="border: 0px none !important;">
 			<div style="text-align:center;"><span class='fa fa-spinner fa-spin fa-lg' style="margin-right:10px;"></span>Loading calendar...</div></div>
 	</div>
-	<div class="scroll" style="top:380px;"><a id='eventDownControl' onclick="scrollEvents(viewSetSize,'forward');" style="display:none;"><span class='fa fa-caret-down fa-3x' ></span></a></div>
+	<div class="scroll" style="top:365px;z-index:10;"><a id='eventDownControl' onclick="scrollEvents(viewSetSize,'forward');" style="display:none;"><span class='fa fa-caret-down fa-3x' ></span></a></div>
 </div>
 
 <script> 

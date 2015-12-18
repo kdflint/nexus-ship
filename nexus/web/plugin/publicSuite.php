@@ -68,7 +68,7 @@ if(isset($_GET['oid']) && Organization::validateOrganizationUid($_GET['oid'])) {
 			.period { font-size: 85%; }
 			.instruction { font-size: 95%; }
 			.detail { color: #004d62;}
-			.scroll { text-align: right; padding-left: 195px; position:absolute; }
+			.scroll { text-align: right; padding-left: 220px; position:absolute; }
 		</style>
 
    	<script type="text/javascript">
@@ -192,15 +192,5 @@ if(isset($_GET['oid']) && Organization::validateOrganizationUid($_GET['oid'])) {
 
 	</body>
 </html>
-
-				<!--<?php	
-					// Block until we have a valid session. Wait 10 seconds then bail. 	
-					//$timer = 0;
-					//while (!Utilities::isSessionValid() && $timer < 10) { sleep(1); $timer++; }
-					//if (Utilities::isSessionValid()) {
-						// Calendar module controller
-						include(Utilities::getModulesRoot() . "/event/mod_controller.php"); 
-					//}
-				?>-->
-				
+			
 						
