@@ -5,11 +5,17 @@ session_start();
 require_once("../src/framework/Util.php");
 require_once(Utilities::getSrcRoot() . "/organization/Organization.php");
 
-$addView = "false";
-if(isset($_GET['view']) && $_GET['view'] == "add") {
- 	//if (Utilities::isSessionValid()) {
- 		$addView = "true";
- 	//}	
+$viewId = "'mod_event', '0'";
+if(isset($_GET['context']) && strlen($_GET['context']) > 0) {
+	switch(strtolower($_GET['context'])) {
+ 		case "directory":
+ 			$viewId = "'mod_directory', '1'";
+ 			break;
+ 		case "forum":
+ 			$viewId = "'mod_forum', '2'";
+ 			break;
+ 		default: 				
+	}
 }
 
 $cleanNetworkId = "";
@@ -50,21 +56,26 @@ if(isset($_GET['oid']) && Organization::validateOrganizationUid($_GET['oid'])) {
       .overflow { height: 200px; }
     </style>
   
-  <style>
-  	table { border: 0px !important; margin-bottom: 0px; width: auto; }
-		body { min-width: 215px; min-height: 440px;}
-		.pure-table td { padding: 10px 0px !important; }
-		.pure-table td:first-child { width: auto; }
-		.event { width: 80px; padding-right: 8px; }
-		.date { font-size: 130%; }
-		.meeting { font-size: 90%; padding-left: 8px; }
-		.tod { font-size: 90%; }
-		.period { font-size: 85%; }
-		.instruction { font-size: 95%; }
-		.detail { color: #004d62;}
-		.scroll { text-align: right; padding-left: 195px; position:absolute; }
-	</style>
+  	<style>
+	  	table { border: 0px !important; margin-bottom: 0px; width: auto; }
+			body { min-width: 215px; min-height: 440px;}
+			.pure-table td { padding: 10px 0px !important; }
+			.pure-table td:first-child { width: auto; }
+			.event { width: 80px; padding-right: 8px; }
+			.date { font-size: 130%; }
+			.meeting { font-size: 90%; padding-left: 8px; }
+			.tod { font-size: 90%; }
+			.period { font-size: 85%; }
+			.instruction { font-size: 95%; }
+			.detail { color: #004d62;}
+			.scroll { text-align: right; padding-left: 195px; position:absolute; }
+		</style>
 
+   	<script type="text/javascript">
+			$(document).ready(function () {
+				toggleDisplay(<?php echo $viewId; ?>);
+			});
+		</script>
 
     <script type="text/javascript">
       $(function() {
@@ -77,81 +88,81 @@ if(isset($_GET['oid']) && Organization::validateOrganizationUid($_GET['oid'])) {
         $( "#schedule-form-country" ).selectmenu({ change: function() { displayTimeZones(); } });
         $( "#schedule-form-countryTimeZones" ).selectmenu();
         $( "#schedule-form-countryTimeZones" ).selectmenu({ change: function() { setTimeZoneDisplay(document.getElementById("schedule-form-countryTimeZones").value); } });
-        // now-form elements
-        $( "#now-form-duration" ).selectmenu();
-        $( "#now-form-type" ).selectmenu();
       });
     </script>
 	
-	<script>
-		
-
+		<script>
 			
-		function scrollEvents(setSize, direction) {
-			if (direction == "forward") {
-				curViewSet = curViewSet+1;
-			} else if (direction == "back") {
-				curViewSet = curViewSet-1;
-			}	
-
-			// Following is compatible with IE8			
-			var table = document.getElementById("reservationTable");
-			var allRows = [];
-			var showRows = [];
-			for (var i = 0; i < table.childNodes.length; i++) {
-	    	if (table.childNodes[i].className.indexOf("tr-div") > -1) {
-	      	allRows.push(table.childNodes[i]);
-  	  	}
-	    	if (table.childNodes[i].className.indexOf("viewSet" + curViewSet) > -1) {
-	      	showRows.push(table.childNodes[i]);
-  	  	}
+			function toggleDisplay(displayId, selectNdx) {
+				document.getElementById("mod_event").style.display='none';
+				document.getElementById("mod_directory").style.display='none';
+				document.getElementById("mod_forum").style.display='none';
+				var list = document.getElementById("navList").getElementsByTagName("li");
+				var show = document.getElementById(displayId);
+				for (var i = 0; i < list.length; i++) {
+					list[i].className = 'pure-menu-item';
+				}
+				show.style.display='block';
+				list[selectNdx].className = 'pure-menu-item pure-menu-selected'; 
 			}			
-			//var showRows = document.getElementsByClassName("viewSet" + curViewSet);
-			for (i = 0; i < allRows.length; i++) { allRows[i].style.display = "none"; }
-			for (i = 0; i < showRows.length; i++) { showRows[i].style.display = "block"; }
-			// viewSet starts count at 0
-			x = Math.ceil(allRows.length/setSize)
-			var upDisplayValue, downDisplayValue;
-			if (curViewSet <= 0) {
-				if (x <= 1) {
-					upDisplayValue = downDisplayValue = "none";
-				} else {
-					upDisplayValue = "none";
-					downDisplayValue = "block";
-				}
-			} else {
-				if (x > curViewSet+1) {
-					upDisplayValue = downDisplayValue = "block";
-				} else if (x <= curViewSet+1) {
-					upDisplayValue = "block";
-					downDisplayValue = "none";
-				}
-			}					
-			document.getElementById("eventUpControl").style.display = upDisplayValue;
-			document.getElementById("eventDownControl").style.display = downDisplayValue;
-		}
 		
-		function toggleDisplay(displayId) {
-			document.getElementById("show-event").style.display='none';
-			document.getElementById("show-detail").style.display='none';
-			document.getElementById("add-event").style.display='none';
-			document.getElementById(displayId).style.display='block';
-		}			
-		
-		function showEventDetail(eventUuid) {
-			getEventDetail(eventUuid);
-		}	
-				
-	</script>
-
-   <script type="text/javascript">
-		$(document).ready(function () {
-			if(<?php echo $addView; ?>) {
-				toggleDisplay("add-event");
+			function showEventDetail(eventUuid) {
+				document.getElementById("show-add").style.display='none';
+				document.getElementById("show-detail").style.display='block';				
+				getEventDetail(eventUuid);
+			}	
+			
+			function showEventAdd() {
+				//document.getElementById("show-add").style.display='block';
+				//document.getElementById("show-detail").style.display='none';
 			}
-		});
-	</script>
- 
+				
+			function scrollEvents(setSize, direction) {
+				if (direction == "forward") {
+					curViewSet = curViewSet+1;
+				} else if (direction == "back") {
+					curViewSet = curViewSet-1;
+				}	
+	
+				// Following is compatible with IE8			
+				var table = document.getElementById("reservationTable");
+				var allRows = [];
+				var showRows = [];
+				for (var i = 0; i < table.childNodes.length; i++) {
+		    	if (table.childNodes[i].className.indexOf("tr-div") > -1) {
+	      		allRows.push(table.childNodes[i]);
+  	  		}
+	    		if (table.childNodes[i].className.indexOf("viewSet" + curViewSet) > -1) {
+		      	showRows.push(table.childNodes[i]);
+  	  		}
+				}			
+				//var showRows = document.getElementsByClassName("viewSet" + curViewSet);
+				for (i = 0; i < allRows.length; i++) { allRows[i].style.display = "none"; }
+				for (i = 0; i < showRows.length; i++) { showRows[i].style.display = "block"; }
+				// viewSet starts count at 0
+				x = Math.ceil(allRows.length/setSize)
+				var upDisplayValue, downDisplayValue;
+				if (curViewSet <= 0) {
+					if (x <= 1) {
+						upDisplayValue = downDisplayValue = "none";
+					} else {
+						upDisplayValue = "none";
+						downDisplayValue = "block";
+					}
+				} else {
+					if (x > curViewSet+1) {
+						upDisplayValue = downDisplayValue = "block";
+					} else if (x <= curViewSet+1) {
+						upDisplayValue = "block";
+						downDisplayValue = "none";
+					}
+				}					
+				document.getElementById("eventUpControl").style.display = upDisplayValue;
+				document.getElementById("eventDownControl").style.display = downDisplayValue;
+			}
+				
+		</script>
+		
   </head>
   <body>
  	
@@ -159,35 +170,37 @@ if(isset($_GET['oid']) && Organization::validateOrganizationUid($_GET['oid'])) {
   	
   	<!-- set php.ini timeout? -->
 
-	<script> setPublicSession2("<?php echo $cleanNetworkId; ?>", "", "../"); </script>
+		<script> setPublicSession2("<?php echo $cleanNetworkId; ?>", "", "../"); </script>
    	
-	<div id="show-event" style="position:relative;margin:8px;height:460px;">
-		<div id="public-suite-nav" style="position:relative;width:100%;height:42px;background-color:#eeeeee;font-size:110%;">
-			<div class="pure-menu pure-menu-horizontal">
-    		<ul class="pure-menu-list">
-	        <li class="pure-menu-item pure-menu-selected"><a href="#" class="pure-menu-link">Calendar</a></li>
-        	<li class="pure-menu-item"><div style="cursor:not-allowed;"><a href="#" class="pure-menu-link" style="pointer-events:none;">Directory</a></div></li>
-        	<li class="pure-menu-item"><div style="cursor:not-allowed;"><a href="#" class="pure-menu-link" style="pointer-events:none;">Forum</a></div></li>
-    		</ul>
+		<div style="position:relative;margin:8px;height:460px;">
+			<div id="public-suite-nav" style="position:relative;width:100%;height:42px;background-color:#eeeeee;font-size:110%;">
+				<div class="pure-menu pure-menu-horizontal">
+	    		<ul id="navList" class="pure-menu-list">
+	        	<li class="pure-menu-item pure-menu-selected"><a href="#" onclick="toggleDisplay('mod_event', '0')" class="pure-menu-link">Calendar</a></li>
+        		<li class="pure-menu-item"><a href="#" onclick="toggleDisplay('mod_directory', '1')" class="pure-menu-link">Directory</a></li>
+        		<li class="pure-menu-item"><a href="#" onclick="toggleDisplay('mod_forum', '2')" class="pure-menu-link">Forum</a></li>
+        		<!--<div style="cursor:not-allowed;"></div>-->
+    			</ul>
+				</div>
 			</div>
+
+			<!-- TODO - block until data loaded? session valid? -->
+			<div id="mod_event"><?php include(Utilities::getModulesRoot() . "/event/mod_controller.php"); ?></div>
+			<div id="mod_directory"><?php include(Utilities::getModulesRoot() . "/directory/mod_controller.php"); ?></div>
+			<div id="mod_forum"><?php include(Utilities::getModulesRoot() . "/forum/mod_controller.php"); ?></div>			
 		</div>
-		<?php	
-			// Block until we have a valid session. Wait 10 seconds then bail. 	
-			$timer = 0;
-			while (!Utilities::isSessionValid() && $timer < 10) { sleep(1); $timer++; }
-			if (Utilities::isSessionValid()) {
-				// Calendar module controller
-				include(Utilities::getModulesRoot() . "/event/mod_controller.php"); 
-			}
-		?>
-	</div>
-	
-	<!--
-	<div id="add-event" style="display:none;text-align:center;">
-		<img src="http://chicagofaithandhealth.org/imgs/logo.png" style="margin:10px;" />
-		<p>Use this form to submit a new event to the Center for Faith and<br/>Community Health Transformation public calendar.</p>
-		<?php include(Utilities::getModulesRoot() . "/event/views/eventAdd.php"); ?>
-	</div>
-	-->
+
 	</body>
 </html>
+
+				<!--<?php	
+					// Block until we have a valid session. Wait 10 seconds then bail. 	
+					//$timer = 0;
+					//while (!Utilities::isSessionValid() && $timer < 10) { sleep(1); $timer++; }
+					//if (Utilities::isSessionValid()) {
+						// Calendar module controller
+						include(Utilities::getModulesRoot() . "/event/mod_controller.php"); 
+					//}
+				?>-->
+				
+						

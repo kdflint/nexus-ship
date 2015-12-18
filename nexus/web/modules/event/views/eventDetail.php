@@ -38,14 +38,14 @@
 	<!--<a id='schedule_control' href='<?php echo(Utilities::getHttpPath()); ?>/plugin/eventCalendar.php?view=add' target='_blank' style='padding:0px;'>-->
 	<div id="detailTable" class="table-div" style="border: 0px none !important;">
 		<div style="margin-top:10px;margin-right:10px;float:right">
-			<a id='schedule_control' href='#'>
+			<a id='schedule_control' href='#' onclick="showEventAdd();">
 				<span style='' class='fa fa-calendar-o fa-2x' ></span>
 				<span style='' class='fa fa-plus' ></span>
 				<!--<span class='tod' style="color:#333333;margin-left:20px;">Submit new event</span>-->
 			</a>	
   	</div>
 		<div id="eventRow0" class="tr-div">
-					<div style="text-align:center;"><span class='fa fa-spinner fa-spin fa-lg' style="margin-right:10px;margin-top:45px;"></span>Loading detail...</div></div>
+					<div style="text-align:center;"><span class='fa fa-spinner fa-spin fa-lg' style="margin-right:10px;margin-top:45px;"></span>Loading detail...</div>
 	
 		</div>
 	</div>

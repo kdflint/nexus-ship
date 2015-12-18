@@ -59,3 +59,25 @@ false)
 returning id
 
 insert into event_group (event_fk, group_fk) values (47, 18)
+
+-- Real data
+
+insert into event (uuid, start_dttm, duration, name, descr, reserved_user_fk, admin_user_fk, tz_name, tz_abbrev, create_dttm, location, isBbbMeet, registration, url, contact, registration_url) values (
+'6160e9c2-a58d-4480-9d8a-52b9c2408724',
+'2015-12-05 10:00:00-07',
+'03:00:00',
+'Honest, Open, Proud (HOP) Workshop ',
+'Participants in the program will attend three two-hour workshops that guide people through the process of making disclosure decisions. A leader with lived experience will run the group.',
+'88',
+'88',
+'America/Chicago',
+'CST',
+now(),
+'NAMI Chicago, 1536 W. Chicago Ave., Chicago, IL  60642',
+false,
+'Registration is closed. The workshop is free to participants. Contact Kyra Wilson to register for the Honest, Open, Proud workshop at 312-563-0445 or Kyra@namichicago.org',
+'http://www.chicagofaithandhealth.org/app/files/public/439/Honest-Open-Proud-HOP.pdf',
+'',
+'') returning id
+
+insert into event_group (event_fk, group_fk) values (, 18)
