@@ -18,7 +18,7 @@
 								(jsonObj[i].descr ? "<p><span class=''>" + jsonObj[i].descr + "</span></p>" : "") + 
 								(jsonObj[i].url ? "<p><span><a href='http://" + jsonObj[i].url + "' target='_blank'>More Information</a></span></p>" : "") + 
 								(jsonObj[i].registration ? "<p><span class='tod'>" + jsonObj[i].registration + "</span></p>" : "") + 
-								(jsonObj[i].regr_url ? "<p><span><a href='http://" + jsonObj[i].regr_url + "' target='_blank'>Registration Details</a></span></p>" : "") + 
+								(jsonObj[i].regr_url ? "<p><span><a href='http://" + jsonObj[i].regr_url + "' target='_blank'>Registration</a></span></p>" : "") + 
 								(jsonObj[i].contact ? "<p><span>" + jsonObj[i].contact + "</span></p>" : "") +  
 						"</div>";
     		document.getElementById("eventRow0").innerHTML = "<div class='td-div'>" + tableEvent + "<div>";   
