@@ -10,7 +10,7 @@
 			<form id="now-form" class="pure-form" action="modules/schedule/control/scheduleProcessor.php" method="post">
 				<fieldset>
       		<div>
-	      		<input type="text" name="meeting-name" style="width:97%;" maxlength="50" placeholder="Purpose" >
+	      		<input type="text" name="meeting-name" style="width:97%;" maxlength="50" placeholder="Meeting Name" >
 					</div>
 					<div style="margin-top:10px;">
 						<?php include("meetingTypeTooltip.html"); ?>

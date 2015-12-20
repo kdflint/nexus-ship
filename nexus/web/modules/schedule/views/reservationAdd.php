@@ -10,7 +10,7 @@
 			<form id="schedule-form" class="pure-form" action="modules/schedule/control/scheduleProcessor.php" method="post">
 				<fieldset>
       		<div>
-	      		<input type="text" name="meeting-name" style="width:396px;" maxlength="50" placeholder="Purpose" >
+	      		<input type="text" name="meeting-name" style="width:396px;" maxlength="50" placeholder="Meeting Name" >
 					</div>
 					<div id="tz-static" style="display:block;margin-top:10px;">
 						<span style="font-size:90%;line-height:240%;"><b>Time Zone: </b><span id="local-tzDisplay"><?php echo $_SESSION['timezone']; ?></span><a href="javascript:void(0);" onclick="showTimeZoneDisplay('tz-select');" style="margin-left:10px;">Change</a></span>
@@ -30,6 +30,7 @@
 					<div style="margin-top:10px;">
 	      		<input type="text" id="datepicker" name="meeting-date" placeholder="Date" style="width:120px;margin-top:-32px;">	
       			<select id="schedule-form-time" name="meeting-time" style="width:135px;vertical-align:middle;">
+      				<option selected>Time</option>
 	      			<?php include("meetingTimeOptions.html"); ?>
       			</select>	 
       			<select id="schedule-form-duration" name="meeting-duration" style="width:135px;vertical-align:middle;">

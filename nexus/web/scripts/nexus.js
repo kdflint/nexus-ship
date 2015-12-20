@@ -181,15 +181,6 @@ function displayTimeZones() {
   }
 }
 
-function isValidEmail(email) {
-    var atpos = email.indexOf("@");
-    var dotpos = email.lastIndexOf(".");
-    if (atpos < 1 || dotpos < atpos + 2 || dotpos + 2 >= email.length) {
-        return false;
-    }
-    return true;
-}
-
 function toggleTooltip(tip) {
 	var curState = document.getElementById(tip).className;
 	if (curState == "tooltip-hover") {
@@ -427,7 +418,7 @@ function resetScheduleForm() {
 	document.getElementById('schedule_control').click();
 	var scheduleForm = document.forms['schedule-form'];
 	scheduleForm.reset();
-	setFieldPassStyles(scheduleForm['meeting-name'], "Purpose");
+	setFieldPassStyles(scheduleForm['meeting-name'], "Meeting Name");
 	setFieldPassStyles(scheduleForm['meeting-date'], "Date");
 	setFieldPassStyles(document.getElementById("schedule-form-time-button"), "Time");
 	setFieldPassStyles(document.getElementById("schedule-form-duration-button"), "Duration");
@@ -442,7 +433,7 @@ function resetNowForm() {
 	document.getElementById('join_control').click();
 	var nowForm = document.forms['now-form'];
 	nowForm.reset();
-	setFieldPassStyles(nowForm['meeting-name'], "Purpose");
+	setFieldPassStyles(nowForm['meeting-name'], "Meeting Name");
 	setFieldPassStyles(document.getElementById("now-form-duration-button"), "Duration");
 	setFieldPassStyles(document.getElementById("now-form-type-button"), "Meeting Type");
 	$( "#now-form-duration" ).selectmenu( "refresh" );
@@ -545,21 +536,132 @@ function eventValidateAndSubmit(thisForm) {
 	 
  	var timeField = eventForm['meeting-time'];
   var time = timeField.value;
-	setFieldPassStyles(document.getElementById(thisForm + "-time-button"), "Time");
-  if (time == null || time == "" || time == "Time") {
-   	setFieldErrorStyles(document.getElementById(thisForm + "-time-button"), "Time");
+	setFieldPassStyles(document.getElementById(thisForm + "-time-button"), "Start Time");
+	if (time == null || time == "" || time.indexOf("Time") > -1) {
+   	setFieldErrorStyles(document.getElementById(thisForm + "-time-button"), "Start Time");
     pass = false;
   }
-   
+
+	if (eventForm['meeting-time-end'] !== undefined) {
+		var timeField = eventForm['meeting-time-end'];
+  	var timeEnd = timeField.value;
+		setFieldPassStyles(document.getElementById(thisForm + "-time-end-button"), "End Time");
+  	if (timeEnd == null || timeEnd == "" || timeEnd == "End Time") {
+	   	setFieldErrorStyles(document.getElementById(thisForm + "-time-end-button"), "End Time");
+    	pass = false;
+  	}
+	}
+
 	var dateField = eventForm['meeting-date'];
-  var date = dateField.value;
-  var re = /\d{2}\/\d{2}\/\d{4}/;
+  setFieldPassStyles(dateField, "Start Date");
+  pass = validateDateFormat(dateField);
+	if (Boolean(pass)) {
+		pass = validateDateFuture(dateField, time);
+	}  
+  
+	if (eventForm['meeting-date-end'] !== undefined) {
+		var dateField = eventForm['meeting-date-end'];
+  	setFieldPassStyles(dateField, "End Date");
+  	pass = validateDateFormat(dateField);
+  	if (Boolean(pass)) {
+			pass = validateDateFuture(dateField, timeEnd);
+		}  
+	}
+	  
+ 	var nameField = eventForm['meeting-name'];
+  var name = nameField.value;
+	setFieldPassStyles(nameField, "Meeting Name");
+  if (name == null || name == "" || name.length > 50) {
+  	setFieldErrorStyles(nameField, "Meeting name is required");
+    pass = false;
+  }
+
+	var tzChangeValue = eventForm['tzone-change'].value;
+	if (tzChangeValue == "true") {
+		setFieldErrorStyles(document.getElementById(thisForm + "-country-button"), "Country");
+		setFieldErrorStyles(document.getElementById(thisForm + "-countryTimeZones-button"), "Time Zone");
+		showTimeZoneDisplay('tz-select');
+		pass = false;
+	}
+
+	if (eventForm['meeting-descr'] !== undefined) {
+ 		var descrField = eventForm['meeting-descr'];
+  	var descr = descrField.value;
+		setFieldPassStyles(descrField, "Description");
+  	if (descr == null || descr == "" || descr.length > 1500) {
+	  	setFieldErrorStyles(descrField, "Meeting description is required");
+    	pass = false;		
+    }
+	}
+
+	if (eventForm['meeting-duration'] !== undefined) {
+	  var durationField = eventForm['meeting-duration'];
+	  var duration = durationField.value;
+		setFieldPassStyles(document.getElementById(thisForm + "-duration-button"), "Duration");
+	  if (duration == null || duration == "" || duration == "Duration") {
+  		setFieldErrorStyles(document.getElementById(thisForm + "-duration-button"), "Duration");
+    	pass = false;
+  	}
+	}
+  
+	if (eventForm['meeting-type'] !== undefined) {
+  	var typeField = eventForm['meeting-type'];
+  	var typeValue = typeField.value;
+  	setFieldPassStyles(document.getElementById(thisForm + "-type-button"), "Meeting Type");
+  	if (typeValue == null || typeValue == "" || typeValue == "Meeting Type") {
+	  	setFieldErrorStyles(document.getElementById(thisForm + "-type-button"), "Meeting Type");
+    	pass = false;
+  	}
+  }
+  
+  var forApproval = false;
+  var contact = "";
+  if (eventForm['meeting-contact'] !== undefined) {
+  	forApproval = true;
+  	var contactField = eventForm['meeting-contact'];
+  	contact = contactField.value;
+  	setFieldPassStyles(contactField, "Contact Email");
+  	if (!isValidEmail(contact)) {
+  		setFieldErrorStyles(contactField, "Valid email is required.");
+  		contactField.value = "";
+  		pass = false;
+  	}  	
+  }
+  
+	if (Boolean(pass)) {
+ 		submitButton.disabled = true;  
+ 		submitButton.style.opacity = ".6";
+ 		eventForm.submit();
+ 		if (Boolean(forApproval)) {
+ 			alert("Thank you! Your meeting has been submitted.\n\nAn administrator will follow up with you at " + contact);
+ 		}
+ 	}
+}
+
+function setFieldPassStyles(formField, placeholder) {
+	if (formField) {
+		formField.style.backgroundColor = "white";
+		formField.placeholder = placeholder;
+		formField.style.borderColor = "#cccccc";
+  	formField.style.borderWidth = "1px";
+  }
+}
+
+function setFieldErrorStyles(formField, placeholder) {
+  formField.placeholder = placeholder;
+  formField.style.background = errorBackground;
+  formField.style.borderColor = "#f68620";
+  formField.style.borderWidth = "2px";
+}	
+
+function validateDateFormat(dateField) {
+	var date = dateField.value;
+	var re = /\d{2}\/\d{2}\/\d{4}/;
   var parts = new Array();
-	setFieldPassStyles(dateField, "Date");
   if (date == null || date == "") {
   	setFieldErrorStyles(dateField, "mm/dd/yyyy");
   	dateField.value = "";
-    pass = false;
+    return false;
 	} else if (date == "today") { 
 		// All is good - do nothing
 	} else if (re.test(date)) {
@@ -576,89 +678,41 @@ function eventValidateAndSubmit(thisForm) {
   	 		// too many days for the month
 		 		setFieldErrorStyles(dateField, "mm/dd/yyyy");
   			dateField.value = "";
-    		pass = false;  	
+    		return false;  	
   	 	} else if (month == 2 && day > getMaxDaysForFebruary(year)) {
   	 		// too many days for Feb
 		 		setFieldErrorStyles(dateField, "mm/dd/yyyy");
   			dateField.value = "";
-    		pass = false;  
+    		return false;  
     	} else {
   	 		// All is good - do nothing
   	 	}
    	} else {
 		 	setFieldErrorStyles(dateField, "mm/dd/yyyy");
   		dateField.value = "";
-    	pass = false;  		
+    	return false;  		
   	} 
   } else {
   	setFieldErrorStyles(dateField, "mm/dd/yyyy");
   	dateField.value = "";
-   	pass = false;
+   	return false;
   }
-  
-  if (Boolean(pass)) {
-  	// if all date/time formatting passes, check that this valid date is not in the past
-    var nowEpoch = Date.now();
-    var reserveEpoch = Date.parse(parts[2] + "-" + parts[0] + "-" + parts[1] + "T" + time);
-    if (nowEpoch > reserveEpoch) {
-    	alert("Your meeting time is in the past.");
-  		setFieldErrorStyles(dateField, "mm/dd/yyyy");
-   		setFieldErrorStyles(document.getElementById(thisForm + "-time-button"), "Time");
-   		pass = false;
-		}
-  }
-  
- 	var nameField = eventForm['meeting-name'];
-  var name = nameField.value;
-	setFieldPassStyles(nameField, "Purpose");
-  if (name == null || name == "" || name.length > 50) {
-  	setFieldErrorStyles(nameField, "Meeting purpose is required");
-    pass = false;
-  }
+  return true;
+}
 
-  var durationField = eventForm['meeting-duration'];
-  var duration = durationField.value;
-	setFieldPassStyles(document.getElementById(thisForm + "-duration-button"), "Duration");
-  if (duration == null || duration == "" || duration == "Duration") {
-  	setFieldErrorStyles(document.getElementById(thisForm + "-duration-button"), "Duration");
-    pass = false;
-  }
-  
-	if (eventForm['meeting-type'] !== undefined) {
-  	var typeField = eventForm['meeting-type'];
-  	var typeValue = typeField.value;
-  	setFieldPassStyles(document.getElementById(thisForm + "-type-button"), "Meeting Type");
-  	if (typeValue == null || typeValue == "" || typeValue == "Meeting Type") {
-	  	setFieldErrorStyles(document.getElementById(thisForm + "-type-button"), "Meeting Type");
-    	pass = false;
-  	}
-  }
-  
-	var tzChangeValue = eventForm['tzone-change'].value;
-	if (tzChangeValue == "true") {
-		setFieldErrorStyles(document.getElementById(thisForm + "-country-button"), "Country");
-		setFieldErrorStyles(document.getElementById(thisForm + "-countryTimeZones-button"), "Time Zone");
-		showTimeZoneDisplay('tz-select');
-		pass = false;
+function validateDateFuture(dateField, time) {
+	var date = dateField.value;
+  var nowEpoch = Date.now();
+  var parts = new Array();
+  parts = date.split("/");
+  var reserveEpoch = Date.parse(parts[2] + "-" + parts[0] + "-" + parts[1] + "T" + time);
+  if (nowEpoch > reserveEpoch) {
+  	// TODO - not factoring in user input time zone
+  	alert("Your meeting time is in the past.");
+  	setFieldErrorStyles(dateField, "mm/dd/yyyy");
+  	//setFieldErrorStyles(document.getElementById(thisForm + "-time-button"), "Time");
+  	return false;
 	}
- 
-	if (Boolean(pass)) {
- 		submitButton.disabled = true;  
- 		submitButton.style.opacity = ".6";
- 		eventForm.submit();
- 	}
+	return true;
 }
 
-function setFieldPassStyles(formField, placeholder) {
-	formField.style.backgroundColor = "white";
-	formField.placeholder = placeholder;
-	formField.style.borderColor = "#cccccc";
-  formField.style.borderWidth = "1px";
-}
-
-function setFieldErrorStyles(formField, placeholder) {
-  formField.placeholder = placeholder;
-  formField.style.background = errorBackground;
-  formField.style.borderColor = "#f68620";
-  formField.style.borderWidth = "2px";
-}	

@@ -19,7 +19,7 @@
 	      		<input type="text" name="meeting-url" style="width:396px;" maxlength="50" placeholder="Web Link" >
 					</div>
 					<div style="margin-top:10px;">
-      			<textarea name="meeting-regstr" style="width:396px;" rows="2" maxlength="200" placeholder="Registration Information"></textarea>
+      			<textarea name="meeting-registr" style="width:396px;" rows="2" maxlength="200" placeholder="Registration Information"></textarea>
 					</div>
       		<div style="margin-top:10px;">
 	      		<input type="text" name="registration-url" style="width:396px;" maxlength="50" placeholder="Registration Link" >
@@ -45,6 +45,7 @@
 					<div style="margin-top:10px;">
 	      		<input type="text" id="datepicker" name="meeting-date" placeholder="Date" style="width:120px;margin-top:-32px;">	
       			<select id="schedule-form-time" name="meeting-time" style="width:135px;vertical-align:middle;text-align:left;">
+      				<option selected>Time</option>
 	      			<?php include(Utilities::getModulesRoot() . "/schedule/views/meetingTimeOptions.html"); ?>
       			</select>	 
       			<select id="schedule-form-duration" name="meeting-duration" style="width:135px;vertical-align:middle;text-align:left;">

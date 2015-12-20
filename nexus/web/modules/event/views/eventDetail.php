@@ -37,6 +37,7 @@
 			<a id='schedule_control' href='#' onclick="showEventAdd();">
 				<span style='' class='fa fa-calendar-o fa-2x' ></span>
 				<span style='' class='fa fa-plus' ></span>
+				<p style="font-size:90%;">Submit<br/>New Event</p>
 			</a>	
   	</div>
 		<div id="eventRow0" class="tr-div">

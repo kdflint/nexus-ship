@@ -74,6 +74,10 @@ class Utilities {
 		return "http://" . ENV_HOST . APP_NAME . self::$web_path;
 	}
 	
+	public static function getPluginPath() {
+		return self::getHttpPath() . "/plugin";
+	}
+	
 	public static function getPilotPath() {
 		return "http://" . ENV_HOST . PILOT_NAME;
 	}

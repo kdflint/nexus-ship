@@ -80,10 +80,8 @@ if(isset($_GET['oid']) && Organization::validateOrganizationUid($_GET['oid'])) {
     <script type="text/javascript">
       $(function() {
       	// schedule-form elements
-        $( "#datepicker" ).datepicker({ changeMonth: true, changeYear: true });
-      	$( "#schedule-form-time" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
-        $( "#schedule-form-duration" ).selectmenu();
-        $( "#schedule-form-type" ).selectmenu();
+        $( "[id^=datepicker]" ).datepicker({ changeMonth: true, changeYear: true });
+      	$( "[id^=schedule-form-time]").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
         $( "#schedule-form-country" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
         $( "#schedule-form-country" ).selectmenu({ change: function() { displayTimeZones(); } });
         $( "#schedule-form-countryTimeZones" ).selectmenu();
@@ -113,8 +111,8 @@ if(isset($_GET['oid']) && Organization::validateOrganizationUid($_GET['oid'])) {
 			}	
 			
 			function showEventAdd() {
-				//document.getElementById("show-add").style.display='block';
-				//document.getElementById("show-detail").style.display='none';
+				document.getElementById("show-add").style.display='block';
+				document.getElementById("show-detail").style.display='none';
 			}
 				
 			function scrollEvents(setSize, direction) {
