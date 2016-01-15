@@ -156,3 +156,28 @@ false,
 'www.chicagofaithandhealth.org/app/files/public/441/Access-to-Care-Informational-Workshop.docx') returning id
 
 insert into event_group (event_fk, group_fk) values (58, 18)
+
+insert into event (uuid, start_dttm, duration, name, descr, reserved_user_fk, admin_user_fk, tz_name, tz_abbrev, create_dttm, location, isBbbMeet, registration, url, contact, registration_url) values (
+'e256131f-5d0d-48e1-b0ab-c58fc68a23e5',
+'2016-02-13 08:00:00-07',
+'06:00:00',
+'All in the Family',
+'<p>Heart Disease Lecture & Hands Only CPR Class</p>
+<p>Presenters:<br/>Justine Parker, MD (English)<br/>Pilar Ortega, MD (Spanish)</p>
+<p>Refreshments will be served!</p>
+<p>FREE SCREENINGS: BP, Cholesterol, Glucose and BMI</p>
+<p>Registration: 9am  Lecture: 9:30am (English and Spanish – Two tracks)</p>
+<p>CPR Class: 1pm – 3pm (Limited to the first 20 Registrants - English)</p>',
+'88',
+'88',
+'America/Chicago',
+'CST',
+now(),
+'Advocate Illinois Masonic Medical Center, Center for Education Building – Ringel Rooms 1-3',
+false,
+'To Register, please call 1800-323-8622 or Hispanocare at (1-844) 414-7979 Toll Free and Mentioned Code: #9C74 and specify English or Spanish Presentation',
+'',
+'northbridgetech.org/downloads/tmp/2016_Flyer_Heart_Health_Feb_Program_-_Bilingual.pdf',
+'') returning id
+
+insert into event_group (event_fk, group_fk) values (75, 18);
