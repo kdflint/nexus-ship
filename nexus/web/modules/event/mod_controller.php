@@ -17,10 +17,8 @@ if ((session_status() === PHP_SESSION_ACTIVE) && isset($_SESSION['nexusContext']
  		case "PUB":
  			include(dirname(__FILE__) . "/mod_publicEvents.php");
  			break;
- 		default: 			
+ 		default: 		
  	}
-} else {
-	include(dirname(__FILE__) . "/mod_publicEvents.php");
 }
 
 ?>

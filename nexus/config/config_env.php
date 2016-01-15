@@ -6,13 +6,13 @@
 	define("WEB_ROOT", "/home/kdflint/projects/nexus-community/nexus/web");
 	define("TKN_ROOT", "/home/kdflint/projects/nexus-community/nexus/token");
 	define("LIB_ROOT", "/home/kdflint/projects/nexus-community/nexus/lib");
+	define("PTR_ROOT", "/home/kdflint/projects/nexus-community/nexus/partner");
 	define("PTR_STC_ROOT", "/partner");
 	define("APP_NAME", "/nexus/nexus");
 	define("PILOT_NAME", "/nexus/pilot");
 	define("ENV_NAME", "local");
 	define("ENV_HOST", "localhost");
 	define("SSN_TIMEOUT", "-1"); // in seconds
-
 
 // DATABASE
 

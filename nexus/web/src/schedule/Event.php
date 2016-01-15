@@ -158,6 +158,7 @@ class Event {
 				e.uuid as uuid,
 				e.reserved_user_fk as adder,
 				e.type as meetingtype,
+				e.file as file,
 				u.fname as fname, 
 				u.lname as lname,
 				pg.abbrev as abbrev 
@@ -190,6 +191,7 @@ class Event {
 				$events[$counter]['uuid'] = $row['uuid'];
 				$events[$counter]['mtype'] = $row['meetingtype'];
 				$events[$counter]['mtypdisplay'] = self::getMeetingTypeDisplay($row['meetingtype']);
+				$events[$counter]['fileext'] = $row['file'];
 				$events[$counter]['fname'] = $row['fname'];
 				$events[$counter]['lname'] = $row['lname'];
 				$events[$counter]['sessionUser'] = $ssnUser;
@@ -225,6 +227,7 @@ class Event {
 				e.registration as registration,
 				e.url as url,
 				e.registration_url as regr_url,
+				e.file as file,
 				u.fname as fname, 
 				u.lname as lname,
 				pg.abbrev as abbrev 
@@ -258,6 +261,7 @@ class Event {
 				$event[$counter]['registration'] = $row['registration'];
 				$event[$counter]['url'] = $row['url'];
 				$event[$counter]['regr_url'] = $row['regr_url'];
+				$event[$counter]['fileext'] = $row['file'];
 				$event[$counter]['fname'] = $row['fname'];
 				$event[$counter]['lname'] = $row['lname'];
 				$event[$counter]['sessionUser'] = $ssnUser;
@@ -273,12 +277,13 @@ class Event {
 		$query = "select abbrev from pg_timezone_names where name = $1";
 		$row = pg_fetch_row(PgDatabase::psExecute($query, array($tzName)));
 		$tzAbbrev = $row[0];
+		$uuid = Utilities:: newUuid();
 		$query = "insert into event (uuid, start_dttm, duration, name, descr, reserved_user_fk, tz_name, tz_abbrev, type, location, isBbbMeet) values ($1, $2, $3, $4, $8, $5, $6, $7, $9, $10, $11) returning id";
-		$row = pg_fetch_row(PgDatabase::psExecute($query, array(Utilities:: newUuid(), $dttm, $duration, $name, $reservedUserId, $tzName, $tzAbbrev, $descr, $type, $loc, $isBbb)));
+		$row = pg_fetch_row(PgDatabase::psExecute($query, array($uuid, $dttm, $duration, $name, $reservedUserId, $tzName, $tzAbbrev, $descr, $type, $loc, $isBbb)));
 		$eventId = $row[0];
 		$query = "insert into event_group (event_fk, group_fk) values ($1, $2)";
 		PgDatabase::psExecute($query, array($eventId, $groupId));
-		return;
+		return $uuid;
 	}	
 	
 	public static function deleteEvent($uuid) {

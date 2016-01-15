@@ -7,18 +7,16 @@
 				var i = 0;		
 		 		tableEvent = 
        			"<div class='detail'>" +
-		    				//"<a id='schedule_control' href='javascript:void(0);' onclick='toggleDisplay(\"show-event\");' style='padding:0px;'>"	+
-		    				//	"<span class='fa fa-chevron-circle-left fa-2x' style='margin-right:5px;' ></span>" + 
-		    				//"</a>" + 
        					"<span class='date'>" + jsonObj[i].purpose + "</span><br/>" +
        					"<span class='tod'>" + jsonObj[i].location + "</span><br/>" + 
        					"<span class='tod'>" + jsonObj[i].hour + ":" + jsonObj[i].minute + "</span><span class='period'> " + jsonObj[i].period + " </span> - " +
 								"<span class='tod'>" + jsonObj[i].hour_end + ":" + jsonObj[i].minute_end + "</span><span class='period'> " + jsonObj[i].period_end + " </span>" +
 								"<span class='period'> " + jsonObj[i].abbrev + "</span>" +
 								(jsonObj[i].descr ? "<p><span class=''>" + jsonObj[i].descr + "</span></p>" : "") + 
-								(jsonObj[i].url ? "<p><span><a href='http://" + jsonObj[i].url + "' target='_blank'>More Information</a></span></p>" : "") + 
+								(jsonObj[i].url ? "<p><span><a href='http://" + jsonObj[i].url + "' target='_blank'>Web Link</a></span></p>" : "") + 
+								(jsonObj[i].fileext ? "<p><span><a href='<?php echo(Utilities::getPartnerFileRoot()); ?>/event-" + jsonObj[i].uuid + "." + jsonObj[i].fileext + "' target='_blank'>Flyer</a></span></p>" : "") + 
 								(jsonObj[i].registration ? "<p><span class='tod'>" + jsonObj[i].registration + "</span></p>" : "") + 
-								(jsonObj[i].regr_url ? "<p><span><a href='http://" + jsonObj[i].regr_url + "' target='_blank'>Registration</a></span></p>" : "") + 
+								(jsonObj[i].regr_url ? "<p><span><a href='http://" + jsonObj[i].regr_url + "' target='_blank'>Registration Link</a></span></p>" : "") + 
 								(jsonObj[i].contact ? "<p><span>" + jsonObj[i].contact + "</span></p>" : "") +  
 						"</div>";
     		document.getElementById("eventRow0").innerHTML = "<div class='td-div'>" + tableEvent + "<div>";   

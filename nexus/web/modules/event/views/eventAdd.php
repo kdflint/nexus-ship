@@ -1,5 +1,4 @@
-			<form id="schedule-form" class="pure-form" action="<?php echo(Utilities::getHttpPath()); ?>/modules/schedule/control/scheduleProcessorTemp.php" method="post">
-			<form id="schedule-form" class="pure-form" action="" method="post">
+			<form id="schedule-form" class="pure-form" action="<?php echo(Utilities::getHttpPath()); ?>/modules/schedule/control/scheduleProcessorTemp.php" method="post" enctype="multipart/form-data">
 				<fieldset style="position:absolute;width:400px;">
       		<p style="width:100%;font-size:130%;font-weight:bold;line-height:80%;" class='detail'>New Event Submission Form</p>					
       		<div style="margin-top:10px;">
@@ -52,15 +51,18 @@
       		<div style="margin-top:10px;">
       			<input type="text" name="meeting-loc" style="width:100%;" maxlength="200" placeholder="Location"></textarea>
 					</div>
-      		<div>
-      			<p style="width:100%;">Who may we contact with questions about this meeting?</p>
+      		<div style="margin-top:10px;">
 	      		<input type="text" name="meeting-contact" style="width:100%" maxlength="50" placeholder="Contact Email" >
 					</div>
+					<div style="margin-top:10px;">
+						<p style="font-size:90%;line-height:240%;"><b>Attach a file</b> (optional)</p>
+						<input type="file" name="fileToUpload" id="fileToUpload" style="width:90%;" onchange="toggleFileClear();"><a id="fileClearControl" href="javascript:void(0)" onclick="clearFileInput(document.getElementById('fileToUpload'));" style="display:none;"><span class="fa fa-times" style="margin-left:10px;"></span></a>
+					</div>
 		    	<input id="schedule-form-isBbb" name="isBbbMeeting" type="checkbox" style="visibility:hidden;"/>
-		      <a id="schedule-form-submit" class="pure-button button-menu" href="javascript:void(0)" onclick="eventValidateAndSubmit('schedule-form');" style="float:right;background-color:#d27b4b;width:70px;font-size:90%;margin-top:45px;color:#e6e6e6" <?php echo($disabled); ?> >Submit</a>
-    			<a href="<?php echo(Utilities::getPluginPath()); ?>/publicSuite.php?oid=<?php echo($_SESSION['orgUid']); ?>&amp;context=calendar" style="float:right;margin-right:20px;margin-top:48px;"><span id="cancel_link">Cancel</span></a>
+		      <a id="schedule-form-submit" class="pure-button button-menu" href="javascript:void(0)" onclick="eventValidateAndSubmit('schedule-form');" style="float:right;background-color:#d27b4b;width:70px;font-size:90%;margin-top:25px;color:#e6e6e6" <?php echo($disabled); ?> >Submit</a>
+    			<a href="<?php echo(Utilities::getPluginPath()); ?>/publicSuite.php?oid=<?php echo($_SESSION['orgUid']); ?>&amp;context=calendar" style="float:right;margin-right:20px;margin-top:28px;"><span id="cancel_link">Cancel</span></a>
 				</fieldset>
-			</form>  
+			</form>     
 			
 <?php if (!isset($_SESSION['timezone']) || $_SESSION['timezone'] == "undefined") { ?>
 	<script>

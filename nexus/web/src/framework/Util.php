@@ -98,6 +98,8 @@ class Utilities {
 	
 	public static function getTokenRoot() { return TKN_ROOT; }
 	
+	public static function getPartnerFileRoot() { return PTR_ROOT . "/file"; }
+
 	public static function getHttpImagePath() { return self::getHttpPath() . "/image"; }
 	
 	public static function getPartnerImageRoot() { return "http://" . ENV_HOST . APP_NAME . PTR_STC_ROOT . "/"; }

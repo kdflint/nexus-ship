@@ -63,7 +63,26 @@ function setPublicSession2(oid, fname, relativePath) {
 	xmlhttp.open("GET", relativePath + "plugin/setPublicSession.php?oid=" + oid + "&timezone=" + getLocalTz() + "&fname=" + fname);
 	xmlhttp.send();
 }
-	
+
+function toggleFileClear() {
+	var fieldValue = document.getElementById('fileToUpload').value;
+	var fileClear = document.getElementById('fileClearControl');
+	if (fieldValue) {
+		fileClear.style.display = 'inline';
+	} else {
+		fileClear.style.display = 'none';
+	}
+}
+
+function clearFileInput(ctrl) {
+  try {
+    ctrl.value = null;
+  } catch(ex) { }
+  if (ctrl.value) {
+    ctrl.parentNode.replaceChild(ctrl.cloneNode(true), ctrl);
+  }
+  toggleFileClear();
+}
 
 function toggleRememberCheckbox() {
 	var loginRemember = document.getElementById("login-remember");
