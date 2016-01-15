@@ -76,6 +76,8 @@ if(isset($_GET['oid']) && Organization::validateOrganizationUid($_GET['oid'])) {
 				toggleDisplay(<?php echo $viewId; ?>);
 			});
 		</script>
+		
+		<script> setPublicSession2("<?php echo $cleanNetworkId; ?>", "", "../"); </script>
 
     <script type="text/javascript">
       $(function() {
@@ -165,11 +167,7 @@ if(isset($_GET['oid']) && Organization::validateOrganizationUid($_GET['oid'])) {
   <body>
  	
   	<!-- TODO - check if javascript is supported -->
-  	
-  	<!-- set php.ini timeout? -->
-
-		<script> setPublicSession2("<?php echo $cleanNetworkId; ?>", "", "../"); </script>
-   	
+  	 	
 		<div style="position:relative;margin:8px;height:460px;">
 			<div id="public-suite-nav" style="position:relative;width:100%;height:42px;background-color:#eeeeee;font-size:110%;">
 				<div class="pure-menu pure-menu-horizontal">
@@ -185,7 +183,7 @@ if(isset($_GET['oid']) && Organization::validateOrganizationUid($_GET['oid'])) {
 			<!-- TODO - block until data loaded? session valid? -->
 			<div id="mod_event"><?php include(Utilities::getModulesRoot() . "/event/mod_controller.php"); ?></div>
 			<div id="mod_directory"><?php include(Utilities::getModulesRoot() . "/directory/mod_controller.php"); ?></div>
-			<div id="mod_forum"><?php include(Utilities::getModulesRoot() . "/forum/mod_controller.php"); ?></div>			
+			<div id="mod_forum"><?php include(Utilities::getModulesRoot() . "/forum/mod_controller.php"); ?></div>		
 		</div>
 
 	</body>
