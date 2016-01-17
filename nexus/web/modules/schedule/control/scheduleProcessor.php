@@ -67,7 +67,7 @@ if ($isFile) {
 }
 
 if ($meetingStatus == "3") {
-	$message = "Hello,\r\n\r\nA new event has just been submitted to the Center for Faith and Community Health Transformation Public Calendar.\r\n\r\nPlease approve this event for publication at\r\n\r\nhttp://nexus.northbridgetech.org/login?oid=ed787a92\r\n\r\nLet me know if you have any questions!\r\n\r\nKathy Flint";
+	$message = "Hello Olga,\r\n\r\nA new event has just been submitted to the Center for Faith and Community Health Transformation Public Calendar.\r\n\r\nPlease approve this event for publication at\r\n\r\nhttp://nexus.northbridgetech.org/login?oid=ed787a92\r\n\r\nLet me know if you have any questions!\r\n\r\nKathy Flint";
 	mail(Utilities::getEventApprovalList(), "[Nexus] Public Calendar Event Approval", $message, "");
 }	
 
