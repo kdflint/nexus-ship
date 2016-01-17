@@ -190,13 +190,13 @@ function validateEvent($input) {
 	// MEETING URL
 	if (isset($input['meeting-url'])) {
 		// TODO - proper validation and compare to javascript
-		$result['clean']['meeting-url'] = $input['meeting-url'];
+		$result['clean']['meeting-url'] = str_replace("http://", "", $input['meeting-url']);
 	}
 	
 	// MEETING REGISTRATION URL
 	if (isset($input['registration-url'])) {
 		// TODO - proper validation and compare to javascript
-		$result['clean']['registration-url'] = $input['registration-url'];
+		$result['clean']['registration-url'] = str_replace("http://", "", $input['registration-url']);
 	}
 	
 	// MEETING REGISTRATION
