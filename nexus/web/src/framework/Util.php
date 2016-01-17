@@ -48,7 +48,7 @@ class Utilities {
 	}
 	
 	// Very Temporary Method
-	public static getEventApprovalList() {
+	public static function getEventApprovalList() {
 		return EVENT_APPROVE_LIST;
 	}
 	
