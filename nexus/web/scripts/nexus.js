@@ -46,7 +46,7 @@ function setPublicSession(oid, fname, mid, relativePath) {
 		} else {
 			return false;
 		}
-	}
+	};
 	xmlhttp.open("GET", relativePath + "plugin/setPublicSession.php?oid=" + oid + "&timezone=" + getLocalTz() + "&fname=" + fname + "&uuid=" + mid);
 	xmlhttp.send();
 }
@@ -59,7 +59,7 @@ function setPublicSession2(oid, fname, relativePath) {
 		} else {
 			return false;
 		}
-	}
+	};
 	xmlhttp.open("GET", relativePath + "plugin/setPublicSession.php?oid=" + oid + "&timezone=" + getLocalTz() + "&fname=" + fname);
 	xmlhttp.send();
 }
@@ -90,11 +90,11 @@ function toggleRememberCheckbox() {
 	if(curState) {
 		loginRemember.checked = false;
 		document.getElementById("fakeCheckBox").className = "fa fa-square-o";
-		document.getElementById("fakeCheckBox").style = "color:#004d62;padding-right:5px;"
+		document.getElementById("fakeCheckBox").style = "color:#004d62;padding-right:5px;";
 	} else {
 		loginRemember.checked = true;
 		document.getElementById("fakeCheckBox").className = "fa fa-check-square-o";
-		document.getElementById("fakeCheckBox").style = "color:#004d62;padding-right:4px;"
+		document.getElementById("fakeCheckBox").style = "color:#004d62;padding-right:4px;";
  	}
 }
 
@@ -105,11 +105,11 @@ function toggleAdminCheckbox() {
 	if(curState) {
 		adminValue.checked = false;
 		document.getElementById("fakeCheckBox2").className = "fa fa-square-o";
-		document.getElementById("fakeCheckBox2").style = "color:#004d62;padding-right:5px;"
+		document.getElementById("fakeCheckBox2").style = "color:#004d62;padding-right:5px;";
 	} else {
 		adminValue.checked = true;
 		document.getElementById("fakeCheckBox2").className = "fa fa-check-square-o";
-		document.getElementById("fakeCheckBox2").style = "color:#004d62;padding-right:4px;"
+		document.getElementById("fakeCheckBox2").style = "color:#004d62;padding-right:4px;";
  	}
 }
     	
@@ -127,7 +127,7 @@ function recordActivity() {
 		var xmlhttp = getXmlHttpRequest();
 		xmlhttp.onreadystatechange=function() {
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {	}
-  	}
+  	};
 		xmlhttp.open("GET","src/framework/sessionManager.php");
 		xmlhttp.send();  					
 	}
@@ -192,9 +192,9 @@ function displayTimeZones() {
   } else {
   	// add the time zone options to the time zone options list
   	for (var i=0; i<countryTimeZones.length; i++) {
-	  	var option = document.createElement("option");
-  		option.text = Object.getOwnPropertyNames(countryTimeZones[i]);
-  		timeZone.add(option);
+	  	var optionNew = document.createElement("option");
+  		optionNew.text = Object.getOwnPropertyNames(countryTimeZones[i]);
+  		timeZone.add(optionNew);
 		}
     $( "#schedule-form-countryTimeZones" ).selectmenu( "refresh" );
   }
@@ -552,39 +552,82 @@ function eventValidateAndSubmit(thisForm) {
 	pass = true;
 	var eventForm = document.forms[thisForm];
 	var submitButton = document.getElementById(thisForm + "-submit");	
-	 
+ 
  	var timeField = eventForm['meeting-time'];
   var time = timeField.value;
+	var dateField = eventForm['meeting-date'];
+	var date = dateField.value;
+	var timeFieldEnd;
+  var timeEnd;
+	var dateFieldEnd;
+	var dateEnd;  
+	
+	var isTimeEnd = (eventForm['meeting-time-end'] !== undefined ? true : false);
+	var isDateEnd = (eventForm['meeting-date-end'] !== undefined ? true : false);
+  
+  setFieldPassStyles(dateField, "Start Date");
+	if (validateDateFormat(dateField)) {
+		if (!validateTimeFuture(dateField, time)) {
+			pass = false;
+		}
+	} else {
+		pass = false;
+	}
+	
 	setFieldPassStyles(document.getElementById(thisForm + "-time-button"), "Start Time");
 	if (time == null || time == "" || time.indexOf("Time") > -1) {
    	setFieldErrorStyles(document.getElementById(thisForm + "-time-button"), "Start Time");
     pass = false;
   }
+ 
+	if (Boolean(isDateEnd)) {
+		dateFieldEnd = eventForm['meeting-date-end'];
+  	setFieldPassStyles(dateFieldEnd, "End Date");
+  	if (validateDateFormat(dateFieldEnd)) {
+			if (!validateTimeFuture(dateFieldEnd, timeEnd)) {
+				pass = false;
+			}	
+		} else {
+			pass = false;
+		}  
+	}
 
-	if (eventForm['meeting-time-end'] !== undefined) {
-		var timeField = eventForm['meeting-time-end'];
-  	var timeEnd = timeField.value;
-		setFieldPassStyles(document.getElementById(thisForm + "-time-end-button"), "End Time");
+	if (Boolean(isTimeEnd)) {
+		timeFieldEnd = eventForm['meeting-time-end'];
+  	timeEnd = timeFieldEnd.value;
+		setFieldPassStyles(timeFieldEnd, "Time End");
   	if (timeEnd == null || timeEnd == "" || timeEnd == "End Time") {
 	   	setFieldErrorStyles(document.getElementById(thisForm + "-time-end-button"), "End Time");
     	pass = false;
   	}
 	}
 
-	var dateField = eventForm['meeting-date'];
-  setFieldPassStyles(dateField, "Start Date");
-  pass = validateDateFormat(dateField);
-	if (Boolean(pass)) {
-		pass = validateDateFuture(dateField, time);
-	}  
-  
-	if (eventForm['meeting-date-end'] !== undefined) {
-		var dateField = eventForm['meeting-date-end'];
-  	setFieldPassStyles(dateField, "End Date");
-  	pass = validateDateFormat(dateField);
-  	if (Boolean(pass)) {
-			pass = validateDateFuture(dateField, timeEnd);
-		}  
+  var durationField = eventForm['meeting-duration'];
+	if (Boolean(pass) && Boolean(isDateEnd) && Boolean(isTimeEnd)) {
+		if (!validateEndTimeGreater(dateField, time, eventForm['meeting-date-end'], eventForm['meeting-time-end'].value)) {
+			pass = false;
+		} else {
+  		var firstEpoch = Date.parse(createTimeStampString(date, time));
+  		var secondEpoch = Date.parse(createTimeStampString(eventForm['meeting-date-end'].value, eventForm['meeting-time-end'].value));
+ 			var epochDiff = secondEpoch - firstEpoch;
+ 			if (epochDiff/1000 > 86400) {
+ 				alert("A meeting cannot be longer than 24 hours");
+ 				setFieldErrorStyles(setFieldErrorStyles(eventForm['meeting-date-end'], "mm/dd/yyyy"));
+ 				pass = false;
+ 			} else {
+ 				durationField.value = millisecondsToHms(epochDiff);
+ 			}
+		}
+	}
+	
+  var duration = durationField.value;
+	setFieldPassStyles(document.getElementById(thisForm + "-duration-button"), "Duration");
+  if (duration == null || duration == "" || duration == "Duration") {
+ 		setFieldErrorStyles(document.getElementById(thisForm + "-duration-button"), "Duration");
+   	pass = false;
+ 	} else if (!validateTimeFormat(duration)) {
+ 		alert("Bad duration: " + duration);
+ 		pass = false;
 	}
 	  
  	var nameField = eventForm['meeting-name'];
@@ -611,16 +654,6 @@ function eventValidateAndSubmit(thisForm) {
 	  	setFieldErrorStyles(descrField, "Meeting description is required");
     	pass = false;		
     }
-	}
-
-	if (eventForm['meeting-duration'] !== undefined) {
-	  var durationField = eventForm['meeting-duration'];
-	  var duration = durationField.value;
-		setFieldPassStyles(document.getElementById(thisForm + "-duration-button"), "Duration");
-	  if (duration == null || duration == "" || duration == "Duration") {
-  		setFieldErrorStyles(document.getElementById(thisForm + "-duration-button"), "Duration");
-    	pass = false;
-  	}
 	}
   
 	if (eventForm['meeting-type'] !== undefined) {
@@ -651,9 +684,6 @@ function eventValidateAndSubmit(thisForm) {
  		submitButton.disabled = true;  
  		submitButton.style.opacity = ".6";
  		eventForm.submit();
- 		if (Boolean(forApproval)) {
- 			alert("Thank you! Your meeting has been submitted.\n\nAn administrator will follow up with you at " + contact);
- 		}
  	}
 }
 
@@ -719,19 +749,49 @@ function validateDateFormat(dateField) {
   return true;
 }
 
-function validateDateFuture(dateField, time) {
-	var date = dateField.value;
+function validateTimeFuture(dateField, time) {
   var nowEpoch = Date.now();
-  var parts = new Array();
-  parts = date.split("/");
-  var reserveEpoch = Date.parse(parts[2] + "-" + parts[0] + "-" + parts[1] + "T" + time);
+  var reserveEpoch = Date.parse(createTimeStampString(dateField.value, time));
   if (nowEpoch > reserveEpoch) {
-  	// TODO - not factoring in user input time zone
   	alert("Your meeting time is in the past.");
   	setFieldErrorStyles(dateField, "mm/dd/yyyy");
-  	//setFieldErrorStyles(document.getElementById(thisForm + "-time-button"), "Time");
   	return false;
 	}
 	return true;
 }
 
+function validateEndTimeGreater(dateField1, time1, dateField2, time2) {
+	var date1 = dateField1.value;
+  var firstEpoch = Date.parse(createTimeStampString(date1, time1));
+
+	var date2 = dateField2.value;
+  var secondEpoch = Date.parse(createTimeStampString(date2, time2));
+
+  if (firstEpoch > secondEpoch) {
+  	alert("Your meeting ends before it starts.");
+  	setFieldErrorStyles(dateField2, "mm/dd/yyyy");
+  	return false;
+	}
+	return true;
+}
+
+function createTimeStampString(date, time) {
+	var parts = new Array();
+  parts = date.split("/");
+  return (parts[2] + "-" + parts[0] + "-" + parts[1] + "T" + time);
+}
+
+function millisecondsToHms(ms) {
+	ms = Number(ms);
+	var d = ms/1000;
+	var h = Math.floor(d / 3600);
+	var m = Math.floor(d % 3600 / 60);
+	//var s = Math.floor(d % 3600 % 60);
+	var s = "00";
+	return ((h > 0 ? h + ":" : "00:") + (m > 0 ? (h > 0 && m < 10 ? "0" : "") + m + ":" : "00:") + s); 
+}
+
+function validateTimeFormat(t) {
+	// TODO - complete this
+	return true;
+}

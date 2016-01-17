@@ -1,4 +1,4 @@
-			<form id="schedule-form" class="pure-form" action="<?php echo(Utilities::getHttpPath()); ?>/modules/schedule/control/scheduleProcessorTemp.php" method="post" enctype="multipart/form-data">
+			<form id="schedule-form" class="pure-form" action="<?php echo(Utilities::getHttpPath()); ?>/modules/schedule/control/scheduleProcessor.php" method="post" enctype="multipart/form-data">
 				<fieldset style="position:absolute;width:400px;">
       		<p style="width:100%;font-size:130%;font-weight:bold;line-height:80%;" class='detail'>New Event Submission Form</p>					
       		<div style="margin-top:10px;">
@@ -47,6 +47,7 @@
       				<option selected>End Time</option>
 	      			<?php include(Utilities::getModulesRoot() . "/schedule/views/meetingTimeOptions.html"); ?>
       			</select>
+      			<input type="hidden" name="meeting-duration" value="false" />
 		    	</div>
       		<div style="margin-top:10px;">
       			<input type="text" name="meeting-loc" style="width:100%;" maxlength="200" placeholder="Location"></textarea>

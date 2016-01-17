@@ -29,5 +29,9 @@
 	define("DEMO_PASSWORD", "fakepassword295");
 	define("DEMO_EVENT_NOW", "75");
 	define("DEMO_EVENT_FUTURE", "76,77");
+	
+// TEMPORARY
+
+	define("EVENT_APPROVE_LIST", "kathy.flint@northbridgetech.org");
 		
 ?>

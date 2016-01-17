@@ -1,7 +1,8 @@
 <?php
 
 require_once(dirname(__FILE__) . "/../../../config/config_env.php");
-require_once(PHP_ROOT . "/Validate.php");
+require_once(Utilities::getModulesRoot() . "/error/handlers.php");
+require_once(Utilities::getPhpRoot() . "/Validate.php");
 require_once(Utilities::getSrcRoot() . "/user/User.php");
 require_once(Utilities::getSrcRoot() . "/group/Group.php");
 require_once(Utilities::getSrcRoot() . "/schedule/Event.php");
@@ -44,6 +45,11 @@ class Utilities {
 	
 	public static function getDbName() {
 		return DB_NAME;
+	}
+	
+	// Very Temporary Method
+	public static getEventApprovalList() {
+		return EVENT_APPROVE_LIST;
 	}
 	
 	public static function getDemoUidpk() {

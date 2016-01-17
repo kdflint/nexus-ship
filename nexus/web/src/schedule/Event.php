@@ -137,6 +137,7 @@ class Event {
 		return FALSE;	
 	}
 	
+	// TODO - this only returns actives - rename method?
 	public static function getFutureEvents($groupId, $localTz = "Greenwich", $ssnUser) {	
 		$events = array();
 		if (self::isValidTimeZone($localTz)) {
@@ -165,6 +166,7 @@ class Event {
 			from event e, public.user u, event_group eg, pg_timezone_names pg
 			where eg.group_fk = $1		
 			and eg.event_fk = e.id
+			and eg.status_fk = '1'
 			and (e.start_dttm + e.duration) > now() 
 			and e.active = true
 			and pg.name = $2
@@ -273,16 +275,16 @@ class Event {
 		return $event;
 	}
 
-	public static function addEvent($dttm, $duration, $name, $reservedUserId, $groupId, $tzName, $type, $descr, $loc, $isBbb) {
+	public static function addEvent($dttm, $duration, $name, $reservedUserId, $groupId, $tzName, $type, $descr, $loc, $isBbb, $fileExt, $status, $url, $regUrl, $registr, $contact) {
 		$query = "select abbrev from pg_timezone_names where name = $1";
 		$row = pg_fetch_row(PgDatabase::psExecute($query, array($tzName)));
 		$tzAbbrev = $row[0];
 		$uuid = Utilities:: newUuid();
-		$query = "insert into event (uuid, start_dttm, duration, name, descr, reserved_user_fk, tz_name, tz_abbrev, type, location, isBbbMeet) values ($1, $2, $3, $4, $8, $5, $6, $7, $9, $10, $11) returning id";
-		$row = pg_fetch_row(PgDatabase::psExecute($query, array($uuid, $dttm, $duration, $name, $reservedUserId, $tzName, $tzAbbrev, $descr, $type, $loc, $isBbb)));
+		$query = "insert into event (uuid, start_dttm, duration, name, descr, reserved_user_fk, tz_name, tz_abbrev, type, location, isBbbMeet, file, url, registration_url, registration, contact) values ($1, $2, $3, $4, $8, $5, $6, $7, $9, $10, $11, $12, $13, $14, $15, $16) returning id";
+		$row = pg_fetch_row(PgDatabase::psExecute($query, array($uuid, $dttm, $duration, $name, $reservedUserId, $tzName, $tzAbbrev, $descr, $type, $loc, $isBbb, $fileExt, $url, $regUrl, $registr, $contact)));
 		$eventId = $row[0];
-		$query = "insert into event_group (event_fk, group_fk) values ($1, $2)";
-		PgDatabase::psExecute($query, array($eventId, $groupId));
+		$query = "insert into event_group (event_fk, group_fk, status_fk) values ($1, $2, $3)";
+		PgDatabase::psExecute($query, array($eventId, $groupId, $status));
 		return $uuid;
 	}	
 	

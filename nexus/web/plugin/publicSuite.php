@@ -29,6 +29,13 @@ if(isset($_GET['oid']) && Organization::validateOrganizationUid($_GET['oid'])) {
 	exit(0);
 }
 
+$showConfirm = "false";
+$confirmEmail = "";
+if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
+	$showConfirm = "true";
+	$confirmEmail = $_GET['confirm'];
+}
+
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
@@ -166,7 +173,7 @@ if(isset($_GET['oid']) && Organization::validateOrganizationUid($_GET['oid'])) {
   </head>
   <body>
  	
-  	<!-- TODO - check if javascript is supported -->
+		<script>if(<?php echo $showConfirm; ?>) {	alert("Thank you! Your meeting has been submitted.\n\nAn administrator will follow up with you at <?php echo($confirmEmail); ?>"); }</script>
   	 	
 		<div style="position:relative;margin:8px;height:460px;">
 			<div id="public-suite-nav" style="position:relative;width:100%;height:42px;background-color:#eeeeee;font-size:110%;">

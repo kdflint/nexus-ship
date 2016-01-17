@@ -12,6 +12,7 @@ if (!Utilities::isSessionValid()) {
 	exit(0);
 }
 
+// TODO - um, why am I assigning all these to another array? -kdf
 $dirty = array('meeting-name' => $_POST['meeting-name'],
 							'meeting-date' => $_POST['meeting-date'],
 							'meeting-time' => $_POST['meeting-time'],
@@ -20,14 +21,19 @@ $dirty = array('meeting-name' => $_POST['meeting-name'],
 							'meeting-type' => $_POST['meeting-type'],
 							'meeting-descr' => $_POST['meeting-descr'],
 							'meeting-loc' => $_POST['meeting-loc'],
-							'isBbbMeeting' => $_POST['isBbbMeeting']
+							'isBbbMeeting' => $_POST['isBbbMeeting'],
+							'meeting-url' => $_POST['meeting-url'],
+							'meeting-registr' => $_POST['meeting-registr'],
+							'registration-url' => $_POST['registration-url'],
+							'meeting-date-end' => $_POST['meeting-date-end'],
+							'meeting-time-end' => $_POST['meeting-time-end'],
+							'meeting-contact' => $_POST['meeting-contact']
 							);
 											
 $result = validateEvent($dirty);
 
 if (count($result['error']) > 0) {
-	//header("location:" . Utilities::getHttpPath() . "/login.php?logout=true");
-	print_r($result); exit(0);
+	print_r($result);
 	exit(0);
 }
 
@@ -38,10 +44,32 @@ Use only clean input beyond this point (i.e. $clean[])
 ======================================================= */
 
 $meetingType = array("1" => "video chat", "2" => "collaboration", "3" => "webinar", "4" => "video tether");
-
+$meetingStatus = ($_SESSION['nexusContext'] == "PUB" ? 3 : 1);
 $timestamp = $result['clean']['meeting-date'] . " " . $result['clean']['meeting-time'] . " " . $result['clean']['tzone-name'];
+$targetExt = "";
+$isFile = false;
 
-Event::addEvent($timestamp, $result['clean']['meeting-duration'], $result['clean']['meeting-name'], $_SESSION['uidpk'], array_keys($_SESSION['groups'])[0], $result['clean']['tzone-name'], $meetingType[$result['clean']['meeting-type']], $result['clean']['meeting-descr'], $result['clean']['meeting-loc'], $result['clean']['isBbbMeeting']);
+if (isset($_FILES) && isset($_FILES["fileToUpload"]["name"]) && strlen($_FILES["fileToUpload"]["name"]) > 0) {
+	$isFile = true;
+	$inputFile = basename($_FILES["fileToUpload"]["name"]);
+	$targetExt = pathinfo($inputFile,PATHINFO_EXTENSION);
+}
+
+$eventUid = Event::addEvent($timestamp, $result['clean']['meeting-duration'], $result['clean']['meeting-name'], $_SESSION['uidpk'], array_keys($_SESSION['groups'])[0], $result['clean']['tzone-name'], $meetingType[$result['clean']['meeting-type']], $result['clean']['meeting-descr'], $result['clean']['meeting-loc'], $result['clean']['isBbbMeeting'], $targetExt, $meetingStatus, $result['clean']['meeting-url'], $result['clean']['registration-url'], $result['clean']['meeting-registr'], $result['clean']['meeting-contact']);
+
+if ($isFile) {
+	$targetFile = Utilities::getPartnerFileRoot() . "/event-" . $eventUid . "." . $targetExt;
+	if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $targetFile)) {
+	  // All good
+	} else {
+	  trigger_error("Could not upload a file for event " . $eventUid . "\n", E_USER_ERROR);
+	}
+}
+
+if ($meetingStatus == "3") {
+	$message = "Hello,\r\n\r\nA new event has just been submitted to the Center for Faith and Community Health Transformation Public Calendar.\r\n\r\nPlease approve this event for publication at\r\n\r\n<a href='http://nexus.northbridgetech.org/login?oid=ed787a92'>http://nexus.northbridgetech.org/login?oid=ed787a92</a>\r\n\r\nLet me know if you have any questions!\r\n\r\nKathy Flint";
+	mail(Utilities::getEventApprovalList(), "[Nexus] Public Calendar Event Approval", $message, "");
+}	
 
 if ((session_status() === PHP_SESSION_ACTIVE) && isset($_SESSION['nexusContext'])) {
  switch($_SESSION['nexusContext']) {
@@ -50,6 +78,9 @@ if ((session_status() === PHP_SESSION_ACTIVE) && isset($_SESSION['nexusContext']
  			break;
  		case "ADV":
 			header("location:" . Utilities::getPilotPath() . "/view/nexus.php?thisPage=calendar");
+ 			break;
+ 		case "PUB":
+ 			header("location:" . Utilities::getPluginPath() . "/publicSuite.php?oid=" . $_SESSION['orgId'] . "&context=calendar&confirm=" . $result['clean']['meeting-contact']);
  			break;
  		default: 			
  	}
@@ -115,14 +146,14 @@ function validateEvent($input) {
  	} else {	
  		$result['error']['meeting-time'] = "error";
  	}
- 	
- 	// MEETING DURATION
+
+	// MEETING DURATION
   if (isset($input['meeting-duration']) && Event::isValidTimeInterval($input['meeting-duration'])) {
  	 	$result['clean']['meeting-duration'] = $input['meeting-duration'];
  	} else {	
  		$result['error']['meeting-duration'] = "error";
  	}
- 	
+ 		
  	// MEETING TYPE
   if (isset($input['meeting-type']) && $input['meeting-type'] < 5) {
  	 	$result['clean']['meeting-type'] = $input['meeting-type'];
@@ -156,8 +187,47 @@ function validateEvent($input) {
  		$result['clean']['meeting-loc'] = "";
  	}
 
+	// MEETING URL
+	if (isset($input['meeting-url'])) {
+		// TODO - proper validation and compare to javascript
+		$result['clean']['meeting-url'] = $input['meeting-url'];
+	}
+	
+	// MEETING REGISTRATION URL
+	if (isset($input['registration-url'])) {
+		// TODO - proper validation and compare to javascript
+		$result['clean']['registration-url'] = $input['registration-url'];
+	}
+	
+	// MEETING REGISTRATION
+	if (isset($input['meeting-registr'])) {
+		// TODO - proper validation and compare to javascript
+		$result['clean']['meeting-registr'] = $input['meeting-registr'];
+	}	
+	
+	// MEETING CONTACT
+	if (isset($input['meeting-contact'])) {
+		// TODO - proper validation and compare to javascript
+		$result['clean']['meeting-contact'] = $input['meeting-contact'];
+	}	
 
  	return $result;
+}
+
+function secondsToTime($seconds)
+{
+    // extract hours
+    $hours = floor($seconds / (60 * 60));
+ 
+    // extract minutes
+    $divisor_for_minutes = $seconds % (60 * 60);
+    $minutes = floor($divisor_for_minutes / 60);
+ 
+    // extract the remaining seconds
+    $divisor_for_seconds = $divisor_for_minutes % 60;
+    $seconds = ceil($divisor_for_seconds);
+    
+    return $hours . ":" . $minutes . ":00";
 }
 
 ?>

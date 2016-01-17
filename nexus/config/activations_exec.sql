@@ -160,3 +160,38 @@ insert into user_group (user_fk, create_dttm, group_fk, role_fk) values (257, no
 insert into user_organization (user_fk, organization_fk, grantor_fk, create_dttm, role_fk) values (257, 351, 88, now(), 4);
 
 --http://nexus.northbridgetech.org/web/enroll?invitation=c3fbda92-d3ed-41f8-bb40-0b3e7d2e07d1
+
+
+insert into organization (name, create_dttm, activate_dttm, tax_exempt, status_fk, logo, uid) values ('Episcopal Diocese of Chicago Hunger Committee', now(), now(), true, 1, 'edc_logo.png', '51fd21a1') returning id;
+
+insert into organization_organization (organization_from_fk, organization_to_fk, relationship, create_dttm) values (13, 352, 'parent', now());
+
+insert into organization_account (organization_fk, account_type) values (352, 'NWM');
+
+insert into public.group (name, create_dttm, activate_dttm, logo, uid) values ('Episcopal Diocese of Chicago Hunger Committee', now(), now(), '', '754e159a') returning id;
+
+insert into invitation (uuid, email, create_dttm, accept_dttm, network_fk, invitation_dttm, role_fk, expire_dt, issuer_fk, type, organization_fk, group_fk) values ('45241c03-2315-4e76-987b-9f2e4831d910', 'ndavis@episcopalchicago.org', now(), NULL, NULL, now(), '4', (CURRENT_DATE + interval '31 days'), '88', 'single', 352, 21) returning uuid;
+
+insert into public.user (uuid, username, fname, lname, email, status_fk, create_dttm, activate_dttm) values ('ba55d95b-fb8b-48a2-8e20-61ca658411d7', 'pUser-51fd21a1', 'Public', 'User', '', '1', now(), now()) returning id;
+
+insert into user_group (user_fk, create_dttm, group_fk, role_fk) values (258, now(), 16, 4);
+
+insert into user_organization (user_fk, organization_fk, grantor_fk, create_dttm, role_fk) values (258, 352, 88, now(), 4);
+
+--http://nexus.northbridgetech.org/web/enroll?invitation=45241c03-2315-4e76-987b-9f2e4831d910
+
+-- CONVERT EDC ANTI-RACISM COMMISSION
+
+change name of org id 19 and add uid = f4470d42
+
+update organization_organization set organization_from_fk = 13 where id = 277
+
+update organization_account set account_type = 'NWM' where id = 301
+
+change name of group where id = 5
+
+insert into public.user (uuid, username, fname, lname, email, status_fk, create_dttm, activate_dttm) values ('836bb228-b718-4172-9108-10380f44ddd1', 'pUser-f4470d42', 'Public', 'User', '', '1', now(), now()) returning id;
+
+insert into user_group (user_fk, create_dttm, group_fk, role_fk) values (259, now(), 16, 4);
+
+insert into user_organization (user_fk, organization_fk, grantor_fk, create_dttm, role_fk) values (259, 19, 88, now(), 4);
