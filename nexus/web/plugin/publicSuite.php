@@ -22,6 +22,8 @@ $cleanNetworkId = "";
 if(isset($_GET['oid']) && Organization::validateOrganizationUid($_GET['oid'])) {
  	$cleanNetworkId = $_GET['oid'];	
  	$addView = "false";	
+ 	// This stinks - somehow we must get the timezone into the session from the client prior to page rendering. Is this possible??
+ 	//Utilities::setPublicSession($cleanNetworkId, "America/Chicago");
 } else if (Utilities::isSessionValid()) {
 	$cleanNetworkId = $_SESSION['orgUid'];
 } else {
@@ -84,7 +86,7 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 			});
 		</script>
 		
-		<script> setPublicSession2("<?php echo $cleanNetworkId; ?>", "", "../"); </script>
+		<script> setPublicSession2("<?php echo $cleanNetworkId; ?>", "", "../");</script>
 
     <script type="text/javascript">
       $(function() {
@@ -187,7 +189,12 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 				</div>
 			</div>
 
-			<!-- TODO - block until data loaded? session valid? -->
+			<?php 
+			// On first page load the session may not be ready as it's being accomplished by async ajax call from head
+			if (!Utilities::isSessionValid()) { ?>
+				<script> location.reload(); </script>
+			<?php } ?>
+			
 			<div id="mod_event"><?php include(Utilities::getModulesRoot() . "/event/mod_controller.php"); ?></div>
 			<div id="mod_directory"><?php include(Utilities::getModulesRoot() . "/directory/mod_controller.php"); ?></div>
 			<div id="mod_forum"><?php include(Utilities::getModulesRoot() . "/forum/mod_controller.php"); ?></div>		

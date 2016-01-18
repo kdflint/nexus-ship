@@ -10,5 +10,10 @@ define("EVENT_APPROVE_LIST", "kathy.flint@northbridgetech.org");
 -- check on php.ini file upload settings, dir permissions
 -- create nexus/partner/file folder
 
+====================
+
+	$oid_conversion = array("19" => "2518da9e");
+	$login_redirect = "http://northbridgetech.org/dev/new_nexus/web/login.php?oid=";
+
 
 

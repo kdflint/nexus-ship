@@ -595,7 +595,7 @@ function eventValidateAndSubmit(thisForm) {
 	if (Boolean(isTimeEnd)) {
 		timeFieldEnd = eventForm['meeting-time-end'];
   	timeEnd = timeFieldEnd.value;
-		setFieldPassStyles(timeFieldEnd, "Time End");
+		setFieldPassStyles(document.getElementById(thisForm + "-time-end-button"), "Time End");
   	if (timeEnd == null || timeEnd == "" || timeEnd == "End Time") {
 	   	setFieldErrorStyles(document.getElementById(thisForm + "-time-end-button"), "End Time");
     	pass = false;

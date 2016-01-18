@@ -37,6 +37,11 @@ if(isset($_GET['network']) && Util::validateNetworkId($_GET['network'])) {
 	$networkName = $row['name'];		
 }
 
+// This forces migration
+session_destroy();
+header("location:" . $login_redirect . $oid_conversion[$cleanNetworkid]);
+exit(0);
+
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">

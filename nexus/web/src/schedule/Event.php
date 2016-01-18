@@ -274,6 +274,72 @@ class Event {
 		}
 		return $event;
 	}
+	
+	public static function getPendingEvents($groupId, $localTz = "Greenwich", $ssnUser) {	
+		$events = array();
+		if (self::isValidTimeZone($localTz)) {
+			$query = "select 
+				extract(day from (select e.start_dttm at time zone $2)) as date, 
+				extract(dow from (select e.start_dttm at time zone $2)) as day, 
+				extract(month from (select e.start_dttm at time zone $2)) as month, 
+				extract(hour from (select e.start_dttm at time zone $2)) as hour, 
+				extract(minute from (select e.start_dttm at time zone $2)) as minute, 
+				extract(epoch from (select e.start_dttm)) as epoch,
+				extract(hour from (select (e.start_dttm + e.duration) at time zone $2)) as hour_end, 
+				extract(minute from (select (e.start_dttm + e.duration) at time zone $2)) as minute_end, 
+				extract(epoch from (select (e.start_dttm + e.duration) at time zone $2)) as epoch_end,
+				e.tz_name as tzname, 
+				e.duration as duration, 
+				e.name as name, 
+				e.descr as descr, 
+				e.location as location,
+				e.uuid as uuid,
+				e.reserved_user_fk as adder,
+				e.type as meetingtype,
+				e.file as file,
+				u.fname as fname, 
+				u.lname as lname,
+				pg.abbrev as abbrev 
+			from event e, public.user u, event_group eg, pg_timezone_names pg
+			where eg.group_fk = $1		
+			and eg.event_fk = e.id
+			and eg.status_fk = '3'
+			and (e.start_dttm + e.duration) > now() 
+			and e.active = true
+			and pg.name = $2
+			and u.id = e.reserved_user_fk 
+			order by e.start_dttm";
+				
+			$cursor = PgDatabase::psExecute($query, array($groupId, $localTz));
+			$counter = 0;
+			while ($row = pg_fetch_array($cursor)) {
+				$events[$counter]['date'] = $row['date'];
+				$events[$counter]['day'] = self::getDay($row['day']);
+				$events[$counter]['month'] = self::getMonth($row['month']-1);
+				$events[$counter]['hour'] = self::getHour($row['hour']);
+				$events[$counter]['minute'] = self::getMinute($row['minute']);
+				$events[$counter]['hour_end'] = self::getHour($row['hour_end']);
+				$events[$counter]['minute_end'] = self::getMinute($row['minute_end']);
+				$events[$counter]['epoch'] = $row['epoch'];
+				$events[$counter]['period'] = self::getPeriod($row['hour']);
+				$events[$counter]['period_end'] = self::getPeriod($row['hour_end']);
+				$events[$counter]['abbrev'] = $row['abbrev'];
+				$events[$counter]['purpose'] = $row['name'];
+				$events[$counter]['descr'] = $row['descr'];
+				$events[$counter]['location'] = $row['location'];
+				$events[$counter]['uuid'] = $row['uuid'];
+				$events[$counter]['mtype'] = $row['meetingtype'];
+				$events[$counter]['mtypdisplay'] = self::getMeetingTypeDisplay($row['meetingtype']);
+				$events[$counter]['fileext'] = $row['file'];
+				$events[$counter]['fname'] = $row['fname'];
+				$events[$counter]['lname'] = $row['lname'];
+				$events[$counter]['sessionUser'] = $ssnUser;
+				$events[$counter]['adder'] = $row['adder'];
+				$counter++;
+			}
+		}
+		return $events;
+	}
 
 	public static function addEvent($dttm, $duration, $name, $reservedUserId, $groupId, $tzName, $type, $descr, $loc, $isBbb, $fileExt, $status, $url, $regUrl, $registr, $contact) {
 		$query = "select abbrev from pg_timezone_names where name = $1";
@@ -290,6 +356,12 @@ class Event {
 	
 	public static function deleteEvent($uuid) {
 		$query = "update event set active = false where uuid = $1";
+		PgDatabase::psExecute($query, array($uuid));
+		return;
+	}
+	
+	public static function approveEvent($uuid) {
+		$query = "update event_group set status_fk = 1 where event_fk = (select id from event where uuid = $1)";
 		PgDatabase::psExecute($query, array($uuid));
 		return;
 	}

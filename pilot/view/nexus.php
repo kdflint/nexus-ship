@@ -9,10 +9,11 @@ session_start();
 require_once("../control/util.php");
 require_once("../migration/Util.php");
 
-if (!Util::isSessionValid()) {
+// Force migration
+//if (!Util::isSessionValid()) {
 	header("location:login.php?logout=true");
 	exit(0);	
-}
+//}
 
 require_once($_SESSION['appRoot'] . "control/error/handlers.php");
 

@@ -165,7 +165,9 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
       $(function() {
       	// schedule-form elements
         $( "#datepicker" ).datepicker({ changeMonth: true, changeYear: true });
+        $( "#datepicker-end" ).datepicker({ changeMonth: true, changeYear: true });
       	$( "#schedule-form-time" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
+      	$( "#schedule-form-time-end" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
         $( "#schedule-form-duration" ).selectmenu();
         $( "#schedule-form-type" ).selectmenu();
         $( "#schedule-form-country" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );

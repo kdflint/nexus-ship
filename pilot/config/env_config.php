@@ -37,4 +37,9 @@ require_once(__DIR__ . "/../../new_nexus/config/config_env.php");
 	$env_appRoot = "dev";
 	$env_fileRoot = "/home1/northbr6/";
 	
+// SWITCHOVER
+
+	$oid_conversion = array("19" => "2518da9e", "" => "");
+	$login_redirect = "http://northbridgetech.org/dev/new_nexus/web/login.php?oid=";
+	
 ?>

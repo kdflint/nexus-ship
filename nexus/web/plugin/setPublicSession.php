@@ -28,4 +28,6 @@ if(isset($_GET['uuid']) && strlen($_GET['uuid']) > 0 && Utilities::validateUuid(
 
 Utilities::setPublicSession($cleanId, $cleanTz, $cleanFname, $cleanUuid);	
 
+exit(0);
+
 ?>
