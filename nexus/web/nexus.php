@@ -22,6 +22,11 @@ if (!Utilities::isSessionValid()) {
 	}
 }
 
+if ($_SESSION['nexusContext'] == "PUB") {
+	header("location:login.php?oid=" . $_SESSION['orgUid']);
+	exit(0);	
+}	
+
 Utilities::setSessionLastActivity();
 
 $showProfile = "false";

@@ -296,7 +296,11 @@ class Event {
 				e.uuid as uuid,
 				e.reserved_user_fk as adder,
 				e.type as meetingtype,
-				e.file as file
+				e.file as file,
+				e.contact as contact,
+				e.registration as registration,
+				e.url as url,
+				e.registration_url as regr_url
 			from event e,event_group eg
 			where eg.status_fk = '3'
 			and eg.event_fk = e.id
@@ -329,6 +333,10 @@ class Event {
 				$events[$counter]['lname'] = $row['lname'];
 				$events[$counter]['sessionUser'] = $ssnUser;
 				$events[$counter]['adder'] = $row['adder'];
+				$events[$counter]['contact'] = $row['contact'];
+				$events[$counter]['registration'] = $row['registration'];
+				$events[$counter]['url'] = $row['url'];
+				$events[$counter]['regr_url'] = $row['regr_url'];
 				$counter++;
 			}
 		}

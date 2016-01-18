@@ -21,18 +21,19 @@
 					tableRow = "<div id='reservationRow0' class='div-tr' style='position:relative;'>" + 
        			"<div class='td-div'>" +
 		      		"<div class='event'>" +		
-	       				"<span class='date'>Future</span><br/>" + 				
+	       				"<span class='date'>Pending</span><br/>" + 				
           		"</div>" +
           	"</div>" +
        			"<div id='nowEventDetail' class='td-div' style='position:absolute;left:140px;top:5px;height:70px;'>" +	  	       				
 			       	"<div class='meeting'>" +
-          			"<span class='purpose'>Click the calendar icon to add an event.</span>" + 
+          			"<span class='purpose'>All of your events have been published to your public calendar.</span>" + 
           		"</div>" +
           	"</div>" +
 					"</div>";
 					document.getElementById("reservationTable").innerHTML = tableRow
 				} else {
-			 		for (var i = 0; i < jsonObj.length; i++) {
+			 		//for (var i = 0; i < jsonObj.length; i++) {
+			 		for (var i = 0; i < 1; i++) {
 			 			tableEvent = 
        				"<div class='td-div'>" +
 	       				"<div class='event'>" +
@@ -46,20 +47,22 @@
 		          	"<div class='meeting'>" +
          					"<span class='purpose'>" + jsonObj[i].purpose + "</span><br/>" +
          					"<span class='descr' style='font-size:90%;width:90%;padding-right:80px;' >" + jsonObj[i].descr + 
-         					((jsonObj[i].location != null) ? "<br/><span class='fa fa-map-marker'></span> " + jsonObj[i].location : "") +
-		          			//"<p><span style='padding-right:5px;margin:0px;color:#d27b4b;' class='fa fa-envelope' ></span>Reserved by: " + jsonObj[i].fname + " " +  jsonObj[i].lname + "<span id='reserveLname'></span></p>" +
-          					"<p>reserved by " + 
-          					((jsonObj[i].adder == <?php echo(Utilities::getDemoUidpk()); ?>) ? '<?php echo($_SESSION['fname']); ?>' : jsonObj[i].fname) + " " +  
-          					((jsonObj[i].adder == <?php echo(Utilities::getDemoUidpk()); ?>) ? '<?php echo($_SESSION['lname']); ?>' : jsonObj[i].lname) + 
-          					((jsonObj[i].adder == jsonObj[i].sessionUser) ? "<br/><a href='<?php echo(Utilities::getHttpPath()); ?>/modules/schedule/control/eventDeleteProcessor.php?id=" + jsonObj[i].uuid + "' onclick='return confirm(\"Please confirm this delete.\");'><span class='fa fa-trash-o' style='color:#d27b4b;'></span></a></p>" : " ") +
-          					"<p><a href='<?php echo(Utilities::getHttpPath()); ?>/modules/schedule/control/eventApproveProcessor.php?id=" + jsonObj[i].uuid + "'><b>Approve for Public Calendar</b></a></p>" +
+         						((jsonObj[i].location != null) ? "<br/><span class='fa fa-map-marker'></span> " + jsonObj[i].location : "") +
+										(jsonObj[i].url ? "<p><span><a href='http://" + jsonObj[i].url + "' target='_blank'>Web Link</a></span></p>" : "") +
+										(jsonObj[i].fileext ? "<p><span><a href='<?php echo(Utilities::getPartnerFileUrl()); ?>/event-" + jsonObj[i].uuid + "." + jsonObj[i].fileext + "' target='_blank'>Flyer</a></span></p>" : "") + 
+										(jsonObj[i].registration ? "<p><span class='tod'>" + jsonObj[i].registration + "</span></p>" : "") + 
+										(jsonObj[i].regr_url ? "<p><span><a href='http://" + jsonObj[i].regr_url + "' target='_blank'>Registration Link</a></span></p>" : "") + 
+										(jsonObj[i].contact ? "<p><span>Follow up with: " + jsonObj[i].contact + "</span></p>" : "") +
+										
+          					"<p><a href='<?php echo(Utilities::getHttpPath()); ?>/modules/schedule/control/eventApproveProcessor.php?id=" + jsonObj[i].uuid + "'><b>Approve for Public Calendar</b></a> | " +
+										"<a href='<?php echo(Utilities::getHttpPath()); ?>/modules/schedule/control/eventDeleteProcessor.php?id=" + jsonObj[i].uuid + "' onclick='return confirm(\"Please confirm this delete.\");'><b>Delete</b></a></p>" +
          					"</span>" +
          				"</div>" +
-         			"</div>";
+         			"</div>"; 
      				document.getElementById("reservationRow" + i).innerHTML = tableEvent; 
-     				document.getElementById("reservationRow" + i).style.height = "180px";
+     				document.getElementById("reservationRow" + i).style.height = "200px";
      			}
-     			document.getElementById('reservationTable').style.height = (180 * jsonObj.length) + "px";
+     			document.getElementById('reservationTable').style.height = (200 * jsonObj.length) + "px";
      		}
 			}
 		}
@@ -81,7 +84,7 @@
 		<span style='padding-left:2px;' class='fa fa-plus' >	</span>
 		</a>	
 		-->			
-		<div id="reservationTable" class="table-div">
+		<div id="reservationTable" class="table-div" style="border:0px !important;">
 		</div>
 	</div>
 	

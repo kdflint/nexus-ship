@@ -22,10 +22,6 @@ $cleanNetworkId = "";
 if(isset($_GET['oid']) && Organization::validateOrganizationUid($_GET['oid'])) {
  	$cleanNetworkId = $_GET['oid'];	
  	$addView = "false";	
- 	// This stinks - somehow we must get the timezone into the session from the client prior to page rendering. Is this possible??
- 	//Utilities::setPublicSession($cleanNetworkId, "America/Chicago");
-} else if (Utilities::isSessionValid()) {
-	$cleanNetworkId = $_SESSION['orgUid'];
 } else {
 	echo("unauthorized");
 	exit(0);
@@ -175,7 +171,7 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
   </head>
   <body>
  	
-		<script>if(<?php echo $showConfirm; ?>) {	alert("Thank you! Your meeting has been submitted.\n\nAn administrator will follow up with you at <?php echo($confirmEmail); ?>"); }</script>
+		<script>if(<?php echo $showConfirm; ?>) {	alert("Thank you! Your meeting has been submitted for approval.\n\nAn administrator will follow up with you at <?php echo($confirmEmail); ?>"); }</script>
   	 	
 		<div style="position:relative;margin:8px;height:460px;">
 			<div id="public-suite-nav" style="position:relative;width:100%;height:42px;background-color:#eeeeee;font-size:110%;">
@@ -191,7 +187,8 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 
 			<?php 
 			// On first page load the session may not be ready as it's being accomplished by async ajax call from head
-			if (!Utilities::isSessionValid()) { ?>
+			// If session is not valid or the context is not PUB
+			if (!Utilities::isSessionValid() || $_SESSION['nexusContext'] != "PUB") { ?>
 				<script> location.reload(); </script>
 			<?php } ?>
 			
