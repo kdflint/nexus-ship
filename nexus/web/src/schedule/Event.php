@@ -274,20 +274,20 @@ class Event {
 		}
 		return $event;
 	}
-	
-	public static function getPendingEvents($groupId, $localTz = "Greenwich", $ssnUser) {	
+
+	public static function getPendingEvents($localTz = "Greenwich") {	
 		$events = array();
 		if (self::isValidTimeZone($localTz)) {
 			$query = "select 
-				extract(day from (select e.start_dttm at time zone $2)) as date, 
-				extract(dow from (select e.start_dttm at time zone $2)) as day, 
-				extract(month from (select e.start_dttm at time zone $2)) as month, 
-				extract(hour from (select e.start_dttm at time zone $2)) as hour, 
-				extract(minute from (select e.start_dttm at time zone $2)) as minute, 
+				extract(day from (select e.start_dttm at time zone $1)) as date, 
+				extract(dow from (select e.start_dttm at time zone $1)) as day, 
+				extract(month from (select e.start_dttm at time zone $1)) as month, 
+				extract(hour from (select e.start_dttm at time zone $1)) as hour, 
+				extract(minute from (select e.start_dttm at time zone $1)) as minute, 
 				extract(epoch from (select e.start_dttm)) as epoch,
-				extract(hour from (select (e.start_dttm + e.duration) at time zone $2)) as hour_end, 
-				extract(minute from (select (e.start_dttm + e.duration) at time zone $2)) as minute_end, 
-				extract(epoch from (select (e.start_dttm + e.duration) at time zone $2)) as epoch_end,
+				extract(hour from (select (e.start_dttm + e.duration) at time zone $1)) as hour_end, 
+				extract(minute from (select (e.start_dttm + e.duration) at time zone $1)) as minute_end, 
+				extract(epoch from (select (e.start_dttm + e.duration) at time zone $1)) as epoch_end,
 				e.tz_name as tzname, 
 				e.duration as duration, 
 				e.name as name, 
@@ -296,21 +296,15 @@ class Event {
 				e.uuid as uuid,
 				e.reserved_user_fk as adder,
 				e.type as meetingtype,
-				e.file as file,
-				u.fname as fname, 
-				u.lname as lname,
-				pg.abbrev as abbrev 
-			from event e, public.user u, event_group eg, pg_timezone_names pg
-			where eg.group_fk = $1		
+				e.file as file
+			from event e,event_group eg
+			where eg.status_fk = '3'
 			and eg.event_fk = e.id
-			and eg.status_fk = '3'
 			and (e.start_dttm + e.duration) > now() 
 			and e.active = true
-			and pg.name = $2
-			and u.id = e.reserved_user_fk 
 			order by e.start_dttm";
 				
-			$cursor = PgDatabase::psExecute($query, array($groupId, $localTz));
+			$cursor = PgDatabase::psExecute($query, array($localTz));
 			$counter = 0;
 			while ($row = pg_fetch_array($cursor)) {
 				$events[$counter]['date'] = $row['date'];

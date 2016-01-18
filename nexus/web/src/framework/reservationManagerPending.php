@@ -11,7 +11,7 @@ require_once(Utilities::getSrcRoot() . "/schedule/Event.php");
 //if (Utilities::is_ajax()) {
 	if (Utilities::isSessionValid()) {
 		// TODO - this will break if user has > 1 group
-		$data = Event::getPendingEvents(array_keys($_SESSION['groups'])[0], $_SESSION['timezone'], $_SESSION['uidpk']);
+		$data = Event::getPendingEvents($_SESSION['timezone']);
 		header('Content-Type: application/json');			
 		echo json_encode($data);
 	} else {
