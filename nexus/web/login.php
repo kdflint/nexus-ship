@@ -77,6 +77,12 @@ if ($cleanNetworkId == 'userdemo') {
 	// TODO - react to existing session or remembered user?
 }
 
+// Toggle on CFCHT in prod, for now
+$pageTitle = "Web Meet";
+if ($cleanNetworkId == 'ed787a92') {
+	$pageTitle = "Advantage";
+}
+
 if(isset($_GET['mid'])) {
 	if (Utilities::validateUuid($_GET['mid']) && Event::isValidFutureEvent($_GET['mid'], $cleanNetworkId)) {
 		Utilities::destroySession();
@@ -194,7 +200,7 @@ $networkName = $row['name'];
        	<img class="banner-image" src="image/nexus4.png" />
        	<span class="banner" style="width:60%">
 					<span class="product-name" style="">Nexus</span><br/>
-					<span id="login-module-name" class="module-name" style="">Web Meet</span>					
+					<span id="login-module-name" class="module-name" style=""><?php echo($pageTitle); ?></span>					
       	</span>  	
   	
       	<span class="controls" style="float:right;padding-bottom:10px;margin-top:30px;">

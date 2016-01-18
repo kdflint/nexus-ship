@@ -8,6 +8,7 @@ session_start();
 //require_once '../control/xmpp-prebind-php/lib/XmppPrebind.php';
 require_once("../control/util.php");
 require_once("../migration/Util.php");
+require_once(dirname(__FILE__) . "/../config/env_config.php");
 
 // Force migration
 //if (!Util::isSessionValid()) {

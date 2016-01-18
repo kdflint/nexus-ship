@@ -5,6 +5,7 @@ require_once("../control/util.php");
 require_once(PHP_ROOT . "/Validate.php");
 require_once(Util::getAppRoot() . "model/pgDb.php");
 require_once("../migration/Util.php");
+require_once(dirname(__FILE__) . "/../config/env_config.php");
 
 $error = "";
 
@@ -39,7 +40,7 @@ if(isset($_GET['network']) && Util::validateNetworkId($_GET['network'])) {
 
 // This forces migration
 session_destroy();
-header("location:" . $login_redirect . $oid_conversion[$cleanNetworkid]);
+header("location:" . $login_redirect . $oid_conversion[$cleanNetworkId]);
 exit(0);
 
 ?>
