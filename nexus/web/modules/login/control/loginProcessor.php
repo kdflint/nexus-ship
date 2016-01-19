@@ -54,6 +54,16 @@ if($isAuthenticated){
 	}
 	Utilities::setLogin($_SESSION['uidpk']);
 	
+	// Temporary migration for some Nexus CFCHT pilot users, allowing to update pending meetings
+	// All EDC users have access under NWM account
+	if ($_SESSION['environment'] == "prod" && $_SESSION['orgUid'] == "ed787a92") {
+		if ($_SESSION['username'] != "testCfcht3" ||
+				$_SESSION['username'] != "kpeachey" ||
+				$_SESSION['username'] != "Olga3075") {
+					returnToLoginWithPilotMessage("Your access to Nexus is temporarily suspended while we migrate to Nexus Advantage.");
+		}
+	}
+				
 	//if ((session_status() === PHP_SESSION_ACTIVE) && isset($_SESSION['nexusContext'])) {
 	header("location:" . Utilities::getHttpPath() . "/nexus.php");
 	//}
@@ -67,5 +77,10 @@ function returnToLoginWithError($errorMessage) {
 	header("location:" . Utilities::getHttpPath() . "/login.php?error=" . $errorMessage);
 	exit(0);
 }
+
+function returnToLoginWithPilotMessage($pilotMessage) {
+	header("location:" . Utilities::getHttpPath() . "/login.php?logout=true&error=" . $pilotMessage);
+	exit(0);
+	}
 
 ?>
