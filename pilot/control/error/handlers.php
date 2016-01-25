@@ -10,7 +10,7 @@ define("LOG_FILE", "/home1/northbr6/errors.log");
 define("DEST_EMAIL", "1");
 define("DEST_LOGFILE", "3");
  
-function my_error_handler($errno, $errstr, $errfile, $errline)
+function my_old_error_handler($errno, $errstr, $errfile, $errline)
 {  
   // This switch should actually be unnecessary since this handler should only be called on E_USER_ERROR
   switch ($errno) {
