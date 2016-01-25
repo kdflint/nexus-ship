@@ -16,4 +16,11 @@ $login_redirect = "http://northbridgetech.org/dev/new_nexus/web/login.php?oid=";
 -- move over login.php and nexus.php in addition to web.tar.gz
 
 
+GRANT SELECT, UPDATE, INSERT, REFERENCES ON TABLE contact TO northbr6_web WITH GRANT OPTION;
+GRANT SELECT, UPDATE, INSERT, REFERENCES ON TABLE topic TO northbr6_web WITH GRANT OPTION;
+GRANT SELECT, UPDATE, INSERT, REFERENCES ON TABLE location TO northbr6_web WITH GRANT OPTION;
+GRANT SELECT, UPDATE, INSERT, REFERENCES ON TABLE organization_contact TO northbr6_web WITH GRANT OPTION;
+GRANT SELECT, UPDATE, INSERT, REFERENCES ON TABLE organization_location TO northbr6_web WITH GRANT OPTION;
+
+
 

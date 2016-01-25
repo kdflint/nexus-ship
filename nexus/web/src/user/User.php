@@ -154,6 +154,11 @@ class User {
 			return PgDatabase::psExecute($query, array($userId, $groupId, $roleId));		
 	}
 	
+	public static function getUserOrgRelationsByUserId($userId) {
+			$query = "select o.name, o.id from user_organization uo, organization o where uo.user_fk = $1 and uo.organization_fk = o.id";
+			return PgDatabase::psExecute($query, array($userId));
+	}
+	
 }
 
 ?>

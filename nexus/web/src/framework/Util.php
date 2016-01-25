@@ -553,6 +553,7 @@ class Utilities {
 			$_SESSION['lname'] = "";
 			$_SESSION['logo'] = $row['logo'];
   		$_SESSION['networkName'] = $row['network'];
+  		$_SESSION['orgId'] = $row['affiliationid'];
 		}
 		
 	}

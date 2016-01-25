@@ -74,6 +74,7 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 			.instruction { font-size: 95%; }
 			.detail { color: #004d62;}
 			.scroll { text-align: right; padding-left: 220px; position:absolute; }
+			.searchQualifier { vertical-align:15px;font-style:italic;margin-right:3px; }
 		</style>
 
    	<script type="text/javascript">
@@ -93,6 +94,7 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
         $( "#schedule-form-country" ).selectmenu({ change: function() { displayTimeZones(); } });
         $( "#schedule-form-countryTimeZones" ).selectmenu();
         $( "#schedule-form-countryTimeZones" ).selectmenu({ change: function() { setTimeZoneDisplay(document.getElementById("schedule-form-countryTimeZones").value); } });
+       	$( "[id^=directory-form-select]").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
       });
     </script>
 	
