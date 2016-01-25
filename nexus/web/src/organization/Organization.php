@@ -97,14 +97,20 @@ class Organization {
 	}
 	
 	public static function getOrganizationsByNetworkId($networkId) {
-			$query = "
-				select 'Organization' as type, o.id as id, o.name as name
-				from organization o, organization_organization oo
-				where o.id = oo.organization_to_fk
-				and oo.organization_from_fk = $1
-				and oo.relationship ='parent'
-				";
-				return PgDatabase::psExecute($query, array($networkId));	
+		$query = "
+			select 'Organization' as type, o.id as id, o.name as name
+			from organization o, organization_organization oo
+			where o.id = oo.organization_to_fk
+			and oo.organization_from_fk = $1
+			and oo.relationship ='parent'
+			";
+		return PgDatabase::psExecute($query, array($networkId));	
+	}
+	
+	public static function getNetworkFromOrgId($orgId) {
+		// TODO - will not accomodate orgs belonging to multiple networks
+		$query = "select organization_from_fk as networkid from organization_organization where organization_to_fk = $1 and relationship = 'parent' limit 1";
+		return PgDatabase::psExecute($query, array($orgId));
 	}
 
 }

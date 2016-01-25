@@ -1,4 +1,4 @@
-<form id="directory-form" class="pure-form" action="<?php echo(Utilities::getHttpPath()); ?>/modules/directory/control/searchProcessor.php" method="post" id="searchForm">
+<form id="directory-form" class="pure-form" action="" method="post" id="searchForm">
 	<!--<input type="hidden" name="action" value="search" />-->
  	<!--<p><a href="#">Search</a><?php echo $stickyCount; ?></p>-->
 	<div style="margin-top:10px;">

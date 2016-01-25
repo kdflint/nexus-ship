@@ -6,13 +6,16 @@ require_once(Utilities::getSrcRoot() . "/organization/Organization.php");
 
 class Catalogue {
 	
-	//public static function getEntries($groupId, $orgId, $inputString, $filters) {
 	public static function getEntries($groupId, $orgId, $inputString, $filters) {
 			
-		// TEMP
 		$results = array();
 		$terms = trim(Utilities::strip2($inputString));
-			
+		$networkId = "";
+		$row = pg_fetch_row(Organization::getNetworkFromOrgId($orgId));
+		if (isset($row) && count($row) > 0) {
+			$networkId = $row[0];
+		}
+					
 		// TODO: Escape apostrophes instead of stripping
 		// TODO: solve for 2 orgs with same name
 		
@@ -36,7 +39,7 @@ class Catalogue {
 				// TODO: Iterating a cursor dismantles a cursor, so we have to make copies 
 				// http://stackoverflow.com/questions/8735192/how-to-rewind-the-pg-fetch-assocresult-null-iterator
 				
-				$cursor = self::freeSearch($searchTerms[$counter], $orgId);
+				$cursor = self::freeSearch($searchTerms[$counter], $networkId);
 				$cursor1 = $cursor2 = $cursor3 = $cursor4 = $cursor5 = $cursor6 = $cursor7 = $cursor;
 				
 				while ($pass1 = pg_fetch_array($cursor1)) { 
@@ -56,7 +59,7 @@ class Catalogue {
 						}		
 					}
 				}
-																				
+																			
 				// This is what is happening below, as pattern for the rest
 				// $pass2 holds all matching data records from the original search, each typed. Here we are pulling out the "Person" record types
 				// For each "Person" record type, we go get the orgs associated with this Person (user_organization table)
@@ -115,7 +118,7 @@ class Catalogue {
 						}
 					}
 				}
-	
+
 				while ($pass3 = pg_fetch_array($cursor3)) { 
 					if (!strcmp($pass3['type'], "Language")) {
 						$innerCursor3 = Organization::getOrganizationByLanguageId($pass3['id']);
@@ -213,7 +216,7 @@ class Catalogue {
 				
 				$counter++;
 			}
-	
+			
 			if (isset($filters['specialty']) && $filters['specialty'] > 0) {
 				foreach ($results as $key=>$val) {
 					$row = pg_fetch_row(Organization::organizationTopicExists($val['OrgId'], $filters['specialty']));
@@ -237,7 +240,7 @@ class Catalogue {
 		// We get here if there are no free search terms. So, run filters against the entire network
 		} else if (isset($filters) && count($filters) > 0) {
 			
-			$cursor = Organization::getOrganizationsByNetworkId($orgId);
+			$cursor = Organization::getOrganizationsByNetworkId($networkId);
 			
 			while ($pass = pg_fetch_array($cursor)) { 
 				if (!strcmp($pass['type'], "Organization")) {
@@ -319,7 +322,7 @@ class Catalogue {
 
 	}
 	
-	private static function freeSearch($term, $orgId) {
+	private static function freeSearch($term, $networkId) {
 		// TODO: use citext index in db instead of lower() function here
 		// http://stackoverflow.com/questions/7005302/postgresql-how-to-make-not-case-sensitive-queries
 		
@@ -414,7 +417,7 @@ class Catalogue {
 			and oo.relationship ='parent'
 			";
 			
-			return PgDatabase::psExecute($query, array($term, $orgId));			
+			return PgDatabase::psExecute($query, array($term, $networkId));			
 			
 	}
 	
