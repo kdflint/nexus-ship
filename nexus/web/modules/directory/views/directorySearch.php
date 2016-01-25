@@ -1,6 +1,4 @@
 <form id="directory-form" class="pure-form" action="" method="post" id="searchForm">
-	<!--<input type="hidden" name="action" value="search" />-->
- 	<!--<p><a href="#">Search</a><?php echo $stickyCount; ?></p>-->
 	<div style="margin-top:10px;">
 		<span class="fa fa-search" style="margin-right:18px;"></span><input type="text" name="keyword" style="width:86%;" placeholder="Keywords (up to three)"/>
 	</div>
