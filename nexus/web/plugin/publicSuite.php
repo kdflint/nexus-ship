@@ -68,6 +68,7 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 			.pure-table td:first-child { width: auto; }
 			.event { width: 80px; padding-right: 8px; }
 			.date { font-size: 130%; }
+			.organization { font-size: 115%; }
 			.meeting { font-size: 90%; padding-left: 8px; }
 			.tod { font-size: 90%; }
 			.period { font-size: 85%; }
