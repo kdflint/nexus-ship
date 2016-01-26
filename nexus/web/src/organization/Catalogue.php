@@ -39,8 +39,15 @@ class Catalogue {
 				// TODO: Iterating a cursor dismantles a cursor, so we have to make copies 
 				// http://stackoverflow.com/questions/8735192/how-to-rewind-the-pg-fetch-assocresult-null-iterator
 				
-				$cursor = self::freeSearch($searchTerms[$counter], $networkId);
-				$cursor1 = $cursor2 = $cursor3 = $cursor4 = $cursor5 = $cursor6 = $cursor7 = $cursor;
+				//$cursor = self::freeSearch($searchTerms[$counter], $networkId);
+				//$cursor1 = $cursor2 = $cursor3 = $cursor4 = $cursor5 = $cursor6 = $cursor7 = $cursor;
+				$cursor1 = self::freeSearch($searchTerms[$counter], $networkId);
+				$cursor2 = self::freeSearch($searchTerms[$counter], $networkId);
+				$cursor3 = self::freeSearch($searchTerms[$counter], $networkId);
+				$cursor4 = self::freeSearch($searchTerms[$counter], $networkId);
+				$cursor5 = self::freeSearch($searchTerms[$counter], $networkId);
+				$cursor6 = self::freeSearch($searchTerms[$counter], $networkId);
+				$cursor7 = self::freeSearch($searchTerms[$counter], $networkId);
 				
 				while ($pass1 = pg_fetch_array($cursor1)) { 
 					if (!strcmp($pass1['type'], "Organization")) {
@@ -291,7 +298,7 @@ class Catalogue {
 		} else {
 			// We get here if we had no free search terms or filter. 
 		}
-		
+				
 		// We do this to be JSON-friendly
 		$indexedResults = array();
 		$counter1 = 0;
@@ -307,7 +314,7 @@ class Catalogue {
 						$indexedResults[$counter1]["content"][$counter2][strtolower($key2)][$counter3] = "";				
 					} else {
 						foreach ($val2 as $key3=>$val3) {					
-							$indexedResults[$counter1][$key1][$counter2][strtolower($key2)][$counter3] = $val3;
+							$indexedResults[$counter1]["content"][$counter2][strtolower($key2)][$counter3] = $val3;
 							$counter3++;
 						}	
 					}
