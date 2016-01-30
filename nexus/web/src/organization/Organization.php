@@ -112,6 +112,70 @@ class Organization {
 		$query = "select organization_from_fk as networkid from organization_organization where organization_to_fk = $1 and relationship = 'parent' limit 1";
 		return PgDatabase::psExecute($query, array($orgId));
 	}
+	
+	public static function getOrganizationDetailById($orgId) {
+		
+		$result0 = PgDatabase::psExecute("select name, type, structure, status_fk as status from organization where id = $1", array($orgId));
+		
+		$result1 = PgDatabase::psExecute("select l.address1 || ', ' || l.address2 as line1, l.municipality || ', ' || l.region2 || '  ' || l.postal_code as line2 
+															from location l, organization_location ol
+															where ol.organization_fk = $1
+															and ol.location_fk = l.id", array($orgId));
+															
+		$result2 = PgDatabase::psExecute("select c.phone as phone, c.email as email, c.url as url, c.name as name, c.fax as fax 
+															from contact c, organization_contact oc
+															where oc.organization_fk = $1
+															and oc.contact_fk = c.id", array($orgId));
+															
+		$result3 = PgDatabase::psExecute("select l.language as language
+															from language l, organization_language ol
+															where ol.organization_fk = $1
+															and ol.language_fk = l.id", array($orgId));
+															
+  	$result4 = PgDatabase::psExecute("select t.name as topic
+															from topic t, organization_topic ot
+															where ot.organization_fk = $1
+															and ot.topic_fk = t.id", array($orgId));
+																															
+		$resultArray = array();							
+		  
+	  $row0 = pg_fetch_array($result0);
+	  $resultArray['orgid'] = $orgId;
+	  $resultArray['oname'] = $row0['name'];
+	  $resultArray['type'] = $row0['type'];
+	  
+	  $counter = 0;
+	  while ($row1 = pg_fetch_array($result1)) {
+	  	$resultArray['location1'] = $row1['line1'];
+	  	$resultArray['location2'] = $row1['line2'];
+	  	$counter++;
+	  }
+	  
+	  $counter = 0;
+	  while ($row2 = pg_fetch_array($result2)) {
+	  	$resultArray['phone'] = Utilities::prettyPrintPhone($row2['phone']);
+	  	$resultArray['email'] = $row2['email'];
+	  	$resultArray['url'] = $row2['url'];
+	  	$resultArray['cname'] = $row2['name'];
+	  	$resultArray['fax'] = Utilities::prettyPrintPhone($row2['fax']);
+	  	$counter++;
+	  }
+	  
+	  $counter = 0;
+	  while ($row3 = pg_fetch_array($result3)) {
+	  	$resultArray['language'] = $row3['language'];
+	  	$counter++;
+	  }
+	  
+	  $counter = 0;
+	  while ($row4 = pg_fetch_array($result4)) {
+	  	$resultArray['topic'] = $row4['topic'];
+	  	$counter++;
+	  }
+	  
+		return $resultArray; 	
+
+	}
 
 }
 

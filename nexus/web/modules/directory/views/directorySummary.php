@@ -13,9 +13,10 @@
 		var xmlhttp = getXmlHttpRequest();
 		xmlhttp.onreadystatechange=function() {
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-				//var testData = '[{"name":"Nexus Training Organization","content":[{"contact":["Kathy"]},{"language":["english","spanish"]},{"topic":["hi"]},{"location":[""]},{"orgid":"330"}]},{"name":"Nexus Training Organization","content":[{"contact":["Kathy"]},{"language":["english","spanish"]},{"topic":["hi"]},{"location":[""]},{"orgid":"330"}]}]';
-			 	//var jsonObj = JSON.parse(testData);
-			 	var jsonObj = JSON.parse(xmlhttp.responseText);	 	
+				//var testData = '[{"name":"Nexus Training Organization","content":[{"contact":[""]},{"language":[""]},{"topic":[""]},{"location":[""]},{"orgid":"43"}]},{"name":"Nexus Web Meet Demonstration","content":[{"contact":[""]},{"language":[""]},{"topic":[""]},{"location":[""]},{"orgid":"331"}]}]';
+				//var jsonObj = JSON.parse(testData);
+			 	var jsonObj = JSON.parse(xmlhttp.responseText);	 
+			 	//alert(xmlhttp.responseText);	
 			 	// put row containers in the directory table, 1 for each event
 			 	var tableRows = "";
 			 	var n = -1;
@@ -31,12 +32,15 @@
 			 	} else {
 			 		for (var i = 0; i < jsonObj.length; i++) { 
 				 		// increment class name every 5 items to faciliate pagination
+				 		// maybe get rid of this and use scrollbar
 			 			n = (i % viewSetSize == 0 ? n + 1 : n); 
 			 			tableRows = tableRows + "<div id='directoryRow" + i + "' class='tr-div viewSet" + n + "' style='position:relative;'></div>";
 			 		}
 			 	}
        	document.getElementById("directoryTable").innerHTML = tableRows;   	
 
+				// Show only those components returned by search.
+				// Ugly as stink - will refactor this object altogether once requirements become more clear -kdf
 		 		for (var i = 0; i < jsonObj.length; i++) {
 		 			var thisContent = "";
 		 			var lineHeightMultiple = 0;
@@ -80,12 +84,11 @@
 	 						lineHeightMultiple++;
 	 					}
 	 				}
-	
 					var lineHeight = 60 + (lineHeightMultiple*20);
 		 			tableItem = 
        			"<div class='td-div'>" +
        				"<div class='detail'>" +
- 					  		"<span class='organization'>" + jsonObj[i].name + "</span>" +
+ 					  		"<a href='javascript:void(0)' onclick='showDirectoryDetail(" + jsonObj[i].content[4].orgid + ")'><span class='organization'>" + jsonObj[i].name + "</span></a>" +
  					  		"<span class='tod'>" + thisContent + "</span>" +
 							"</div>" +
      				"</div>";
@@ -100,9 +103,7 @@
 
 </script>
 	
-	<span class='date detail' style="padding-left:10px;">Search Results</span>
-	<div id="directoryTable" class="table-div" style="border: 0px none !important;width:90%;padding-left:20px;">
-
-	<div style="text-align:center;"></div>
+<span class='date detail' style="padding-left:10px;">Search Results</span>
+<div id="directoryTable" class="table-div" style="border: 0px none !important;width:90%;padding-left:20px;">
 </div>
 	

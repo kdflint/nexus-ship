@@ -21,7 +21,7 @@ if(isset($_GET['context']) && strlen($_GET['context']) > 0) {
 $cleanNetworkId = "";
 if(isset($_GET['oid']) && Organization::validateOrganizationUid($_GET['oid'])) {
  	$cleanNetworkId = $_GET['oid'];	
- 	$addView = "false";	
+ 	//$addView = "false";	
 } else {
 	echo("unauthorized");
 	exit(0);
@@ -59,9 +59,6 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
       label { display: block; margin: 30px 0 0 0; }
       select { width: 170px; }
       .overflow { height: 200px; }
-    </style>
-  
-  	<style>
 	  	table { border: 0px !important; margin-bottom: 0px; width: auto; }
 			body { min-width: 215px; min-height: 440px;}
 			.pure-table td { padding: 10px 0px !important; }
@@ -79,16 +76,7 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 		</style>
 
    	<script type="text/javascript">
-			$(document).ready(function () {
-				toggleDisplay(<?php echo $viewId; ?>);
-			});
-		</script>
-		
-		<script> setPublicSession2("<?php echo $cleanNetworkId; ?>", "", "../");</script>
-
-    <script type="text/javascript">
-      $(function() {
-      	// schedule-form elements
+			$(document).ready(function() {
         $( "[id^=datepicker]" ).datepicker({ changeMonth: true, changeYear: true });
       	$( "[id^=schedule-form-time]").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
         $( "#schedule-form-country" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
@@ -96,21 +84,26 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
         $( "#schedule-form-countryTimeZones" ).selectmenu();
         $( "#schedule-form-countryTimeZones" ).selectmenu({ change: function() { setTimeZoneDisplay(document.getElementById("schedule-form-countryTimeZones").value); } });
        	$( "[id^=directory-form-select]").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
-      });
-    </script>
-	
+				toggleDisplay(<?php echo $viewId; ?>);
+			});
+		</script>
+		
+		<script> setPublicSession2("<?php echo $cleanNetworkId; ?>", "", "../");</script>
+
 		<script>
 			
 			function toggleDisplay(displayId, selectNdx) {
+				// page content
 				document.getElementById("mod_event").style.display='none';
 				document.getElementById("mod_directory").style.display='none';
 				document.getElementById("mod_forum").style.display='none';
-				var list = document.getElementById("navList").getElementsByTagName("li");
 				var show = document.getElementById(displayId);
+				show.style.display='block';
+				// navigation
+				var list = document.getElementById("navList").getElementsByTagName("li");
 				for (var i = 0; i < list.length; i++) {
 					list[i].className = 'pure-menu-item';
 				}
-				show.style.display='block';
 				list[selectNdx].className = 'pure-menu-item pure-menu-selected'; 
 			}			
 		
@@ -124,6 +117,17 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 				document.getElementById("show-add").style.display='block';
 				document.getElementById("show-detail").style.display='none';
 			}
+			
+			function showDirectoryDetail(orgId) {
+				document.getElementById("show-directoryResults").style.display='none';
+				document.getElementById("show-directoryDetail").style.display='block';				
+				getDirectoryDetail(orgId);
+			}	
+			
+			function showDirectoryResults(orgId) {
+				document.getElementById("show-directoryResults").style.display='block';
+				document.getElementById("show-directoryDetail").style.display='none';				
+			}	
 				
 			function scrollEvents(setSize, direction) {
 				if (direction == "forward") {
@@ -144,7 +148,6 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 		      	showRows.push(table.childNodes[i]);
   	  		}
 				}			
-				//var showRows = document.getElementsByClassName("viewSet" + curViewSet);
 				for (i = 0; i < allRows.length; i++) { allRows[i].style.display = "none"; }
 				for (i = 0; i < showRows.length; i++) { showRows[i].style.display = "block"; }
 				// viewSet starts count at 0
