@@ -28,7 +28,7 @@
 						</select>
 					</div>
 					<div style="margin-top:10px;">
-	      		<input type="text" id="datepicker" name="meeting-date" placeholder="Date" style="width:120px;margin-top:-32px;">	
+	      		<input type="text" id="datepicker" name="meeting-date" placeholder="Date" style="width:120px;vertical-align:top;">	
       			<select id="schedule-form-time" name="meeting-time" style="width:135px;vertical-align:middle;">
       				<option selected>Time</option>
 	      			<?php include("meetingTimeOptions.html"); ?>
