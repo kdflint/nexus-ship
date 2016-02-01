@@ -103,7 +103,6 @@
 
 </script>
 	
-<span class='date detail' style="padding-left:10px;">Search Results</span>
-<div id="directoryTable" class="table-div" style="border: 0px none !important;width:90%;padding-left:20px;">
+<span class='date detail' style="position:absolute;padding-top:14px;padding-left:14px;">Search Results</span>
+<div id="directoryTable" class="table-div" style="border: 0px none !important;width:90%;padding-left:20px;padding-top:50px;">
 </div>
-	
