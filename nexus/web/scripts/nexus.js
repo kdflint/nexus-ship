@@ -552,12 +552,12 @@ function eventValidateAndSubmit(thisForm) {
 	pass = true;
 	var eventForm = document.forms[thisForm];
 	var submitButton = document.getElementById(thisForm + "-submit");	
- 
- 	var timeField = eventForm['meeting-time'];
-  var time = timeField.value;
+	var timeZoneOffset = timeZoneOffsets[eventForm['tzone-name'].value];
+	
+  var time = eventForm['meeting-time'].value;
 	var dateField = eventForm['meeting-date'];
 	var date = dateField.value;
-	var timeFieldEnd;
+
   var timeEnd;
 	var dateFieldEnd;
 	var dateEnd;  
@@ -567,7 +567,7 @@ function eventValidateAndSubmit(thisForm) {
   
   setFieldPassStyles(dateField, "Start Date");
 	if (validateDateFormat(dateField)) {
-		if (!validateTimeFuture(dateField, time)) {
+		if (!validateTimeFuture(dateField, time, timeZoneOffset)) {
 			pass = false;
 		}
 	} else {
@@ -584,22 +584,25 @@ function eventValidateAndSubmit(thisForm) {
 		dateFieldEnd = eventForm['meeting-date-end'];
   	setFieldPassStyles(dateFieldEnd, "End Date");
   	if (validateDateFormat(dateFieldEnd)) {
-			if (!validateTimeFuture(dateFieldEnd, timeEnd)) {
-				pass = false;
-			}	
+  		if (Boolean(isTimeEnd)) {
+  			timeEnd = eventForm['meeting-time-end'].value;
+				setFieldPassStyles(document.getElementById(thisForm + "-time-end-button"), "Time End");
+				if (timeEnd == null || timeEnd == "" || timeEnd == "End Time" || !validateTimeFuture(dateFieldEnd, timeEnd, timeZoneOffset)) {
+					setFieldErrorStyles(document.getElementById(thisForm + "-time-end-button"), "End Time");
+					pass = false;
+				}	
+  		}
 		} else {
+			if (Boolean(isTimeEnd)) {
+				timeEnd = eventForm['meeting-time-end'].value;
+				setFieldPassStyles(document.getElementById(thisForm + "-time-end-button"), "Time End");
+				if (timeEnd == null || timeEnd == "" || timeEnd == "End Time") {
+					setFieldErrorStyles(document.getElementById(thisForm + "-time-end-button"), "End Time");
+				}	
+			}				
+			setFieldErrorStyles(eventForm['meeting-date-end'], "mm/dd/yyyy");
 			pass = false;
 		}  
-	}
-
-	if (Boolean(isTimeEnd)) {
-		timeFieldEnd = eventForm['meeting-time-end'];
-  	timeEnd = timeFieldEnd.value;
-		setFieldPassStyles(document.getElementById(thisForm + "-time-end-button"), "Time End");
-  	if (timeEnd == null || timeEnd == "" || timeEnd == "End Time") {
-	   	setFieldErrorStyles(document.getElementById(thisForm + "-time-end-button"), "End Time");
-    	pass = false;
-  	}
 	}
 
   var durationField = eventForm['meeting-duration'];
@@ -749,9 +752,9 @@ function validateDateFormat(dateField) {
   return true;
 }
 
-function validateTimeFuture(dateField, time) {
+function validateTimeFuture(dateField, time, zoneOffset) {
   var nowEpoch = Date.now();
-  var reserveEpoch = Date.parse(createTimeStampString(dateField.value, time));
+  var reserveEpoch = Date.parse(createTimeStampString(dateField.value, time + zoneOffset));
   if (nowEpoch > reserveEpoch) {
   	alert("Your meeting time is in the past.");
   	setFieldErrorStyles(dateField, "mm/dd/yyyy");

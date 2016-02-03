@@ -344,12 +344,20 @@ $zones = array(
 );
 
 foreach ($zones as $key => $value) {
-		$query = "select abbrev from pg_timezone_names where name = $1";
+		$query = "select abbrev, utc_offset from pg_timezone_names where name = $1";
 		$cursor = PgDatabase::psExecute($query, array($key));
 		$count = pg_num_rows($cursor);
-		if ($count != 1) {
-			echo $key . ":" . $count . "\r\n\r\n";
+		$row = pg_fetch_row($cursor);
+		$offset = $row[1];
+		// add a positive indicator if the interval is not indicated negative
+		if (strlen($offset) == 8) {
+			$offset = "+" . $offset;
 		}
+		// format the string (chop the seconds from the interval)
+		$hours = substr($offset, 0, 3);
+		$minutes = substr($offset, 4, 2);
+		echo "\"" . $key . "\":\"" . $hours . $minutes . "\",\r\n";
 }
+echo "\"end\":\"end\"";
 
 ?>
