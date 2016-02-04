@@ -19,7 +19,7 @@ if(isset($_GET['userMessage'])) {
 			<tr><td>&nbsp;</td><td><input type="radio" name="scope" value="group" <?php echo $groupChecked; ?> />Your groups
 		<input type="radio" name="scope" value="network" <?php echo $networkChecked; ?> />Entire network </td></tr>
 			<tr><td><img src="image/mag-glass.jpg" width="25" height="25" /></td><td><input type="text" size="20" name="string" value="<?php echo $stickyString; ?>"/></td></tr>
-			<!--
+
 			<tr><td><i>and</i></td><td>
 				<select name="topic" style="width: 230px">    
 					<option value="0" selected>Specialty is</option>	
@@ -48,9 +48,8 @@ if(isset($_GET['userMessage'])) {
 					<option value="">Faith Based Research</option>
 				</select>
 			</td></tr>
-			-->
 				
-			<tr><td colspan="2"><i>Search is temporarily disabled<br/>while we expand this feature.</i><input type="submit" value="Search" style="float:right;" disabled/></td></tr>
+			<!--<tr><td colspan="2"><i>Search is temporarily disabled<br/>while we expand this feature.</i><input type="submit" value="Search" style="float:right;" disabled/></td></tr>-->
 		</table>
 
 	</form>
@@ -124,6 +123,7 @@ if(isset($_GET['userMessage'])) {
 
 </div> 
 
+<!--
 <div class="lowerLeftQuad">
 	<table cellpadding="2">
 		<tr><td valign="top">To:</td><td><span id="toDisplay" ><?php echo $userMessage; ?></span></tr>
@@ -132,7 +132,7 @@ if(isset($_GET['userMessage'])) {
 		<tr><td><input disabled size="5" value="1000" name="txtLen" id="txtLen"></td><td><input type="submit" id="messageSendSubmit" value="Send Message" style="float:right;" disabled ></td></tr>
 </table>
 </div>
-
+-->
 		<div id="light_userprofile" class="white_content">
 		</div>
 <input type="hidden" name="pageRestore" value="<?php echo(!strcmp($pageMode, "results") ? $searchResultId : $detailResultId); ?>" />

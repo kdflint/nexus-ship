@@ -39,9 +39,9 @@ if(isset($_GET['network']) && Util::validateNetworkId($_GET['network'])) {
 }
 
 // This forces migration
-session_destroy();
-header("location:" . $login_redirect . $oid_conversion[$cleanNetworkId]);
-exit(0);
+//session_destroy();
+//header("location:" . $login_redirect . $oid_conversion[$cleanNetworkId]);
+//exit(0);
 
 ?>
 

@@ -12,8 +12,8 @@ require_once(dirname(__FILE__) . "/../config/env_config.php");
 
 // Force migration
 //if (!Util::isSessionValid()) {
-	header("location:login.php?logout=true");
-	exit(0);	
+	//header("location:login.php?logout=true");
+	//exit(0);	
 //}
 
 require_once($_SESSION['appRoot'] . "control/error/handlers.php");
