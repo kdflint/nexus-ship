@@ -8,7 +8,7 @@
 		 				"<a href='javascript:void(0);' onclick='showDirectoryResults();'><span class='fa fa-chevron-circle-left fa-3x' style='margin-right:10px;'></span></a>" + 
        			"<span class='fname detail'>" + jsonObj.oname + "</span>" +
        			"<div class='detail'>" +
-       					(jsonObj.url ? "<p><span class='tod'><a href='" + jsonObj.url + "' target='_blank'>" + jsonObj.url + "</a></span></p>" : "") +
+       					(jsonObj.url ? "<p><span class='tod'><a href='" + jsonObj.url + "' target='_blank'>" + jsonObj.url + "</a></span></p>" : "<p>&nbsp;</p>") +
        												
 								(jsonObj.cname ? "<span>" + jsonObj.cname + "</span><br/>" : "") +
 								(jsonObj.email ? "<span>Email: " + jsonObj.email + "</span><br/>" : "") +
@@ -30,9 +30,9 @@
 			
 <div id="current_detail_display">	
 	<div id="detailTable" class="table-div" style="border: 0px none !important;">
-		<div id="itemRow" class="tr-div">
+		<div id="itemRow" class="tr-div detail">
 			<a href="javascript:void(0);" onclick="showDirectoryResults();"><span class='fa fa-chevron-circle-left fa-3x' style="margin-right:10px;margin-top:25px;"></span></a>
-			<div style="text-align:center;"><span class='fa fa-spinner fa-spin fa-lg' style="margin-right:10px;margin-top:45px;"></span>Loading detail...</div>	
+			<span class='fa fa-spinner fa-spin fa-lg' style="margin-left:10px;margin-right:10px;"></span>Loading detail...
 		</div>
 	</div>
 </div>
