@@ -114,7 +114,7 @@
 
 <div id="directoryTable" class="table-div" style="border:0px none !important;width:90%;padding-left:20px;padding-top:50px;"></div>
 
-<div id="directoryMapContainer" class="table-div" style="opacity:0;z-index:-1;width:100%;height:82%;border: 0px none !important;position:absolute;top:70px;"></div>
+<div id="directoryMapContainer" class="table-div" style="opacity:0;z-index:-1;filter:alpha(opacity=0);width:100%;height:82%;border: 0px none !important;position:absolute;top:70px;"></div>
 
 <script>
 	

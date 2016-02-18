@@ -136,6 +136,7 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 			
 			function showDirectoryMap() {
     		document.getElementById("directoryMapContainer").style.opacity=1;
+    		document.getElementById("directoryMapContainer").style.filter='alpha(opacity=100)'
     		document.getElementById("directoryMapContainer").style.zIndex=10;
 				document.getElementById("directoryTable").style.display='none';
 				document.getElementById("directory_control").className='fa fa-list fa-2x';
@@ -144,6 +145,7 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 			
 			function showDirectoryList() {
     		document.getElementById("directoryMapContainer").style.opacity=0;
+    		document.getElementById("directoryMapContainer").style.filter='alpha(opacity=0)'
     		document.getElementById("directoryMapContainer").style.zIndex=-1;
 				document.getElementById("directoryTable").style.display='block';
 				document.getElementById("directory_control").className='fa fa-globe fa-3x';
