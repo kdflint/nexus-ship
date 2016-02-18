@@ -1,5 +1,6 @@
 <script>
 	function getDirectoryList(thisForm) {
+		clearAllMarkers();
 		document.getElementById("directoryTable").innerHTML = "<div id='directoryRow0' class='tr-div viewSet0' style='position:relative;'>" +
 		"<div class='td-div'>" +
        "<div class='detail'>" +
@@ -94,6 +95,7 @@
      				"</div>";
     			document.getElementById("directoryRow" + i).innerHTML = tableItem;   
     			document.getElementById("directoryRow" + i).style.height = lineHeight + "px";
+    			addMarker(jsonObj[i].content[4].orgid);
 	   		}  			
 			}
 		}
@@ -102,7 +104,52 @@
 	}
 
 </script>
-	
+
 <span class='date detail' style="position:absolute;padding-top:14px;padding-left:14px;">Search Results</span>
-<div id="directoryTable" class="table-div" style="border: 0px none !important;width:90%;padding-left:20px;padding-top:50px;">
-</div>
+	<div style="margin-top:10px;margin-right:10px;float:right">
+		<a id='map_control' href='#' onclick="initMap();">
+			<span id="directory_control" class='fa fa-globe fa-3x' ></span>
+		</a>	
+  </div>	
+
+<div id="directoryTable" class="table-div" style="border:0px none !important;width:90%;padding-left:20px;padding-top:50px;"></div>
+
+<div id="directoryMapContainer" class="table-div" style="opacity:0;z-index:-1;width:100%;height:82%;border: 0px none !important;position:absolute;top:70px;"></div>
+
+<script>
+	
+	var map;
+	var markers = [];
+	
+  function initMap() {
+  	var mapDiv = document.getElementById('directoryMapContainer');
+    map = new google.maps.Map(mapDiv, {
+    	center: {lat: 41.88, lng: -87.62},
+      zoom: 9
+    });
+    showDirectoryMap();	
+    setMapOnAll(map);
+   }
+
+	function addMarker(orgid) {
+		var orgGeo = geoDataCfcht[orgid][0];
+	  var marker = new google.maps.Marker({
+	    position: {lat: orgGeo['lat'], lng: orgGeo['lng']},
+    	map: map,
+    	title: orgGeo['title']
+  	});
+  	markers.push(marker);
+	}
+	
+	function setMapOnAll(map) {
+  	for (var i = 0; i < markers.length; i++) {
+	    markers[i].setMap(map);
+	  }
+	}
+	
+	function clearAllMarkers() {
+  	setMapOnAll(null);
+  	markers = [];
+	}
+	
+</script>

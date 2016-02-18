@@ -195,3 +195,7 @@ insert into public.user (uuid, username, fname, lname, email, status_fk, create_
 insert into user_group (user_fk, create_dttm, group_fk, role_fk) values (259, now(), 16, 4);
 
 insert into user_organization (user_fk, organization_fk, grantor_fk, create_dttm, role_fk) values (259, 19, 88, now(), 4);
+
+insert into invitation (uuid, email, create_dttm, accept_dttm, network_fk, invitation_dttm, role_fk, expire_dt, issuer_fk, type, organization_fk, group_fk) values ('09afc664-b59a-4a08-a007-1c3bffe379ea', 'c_de_kay@hotmail.com', now(), NULL, NULL, now(), '4', (CURRENT_DATE + interval '31 days'), '88', 'single', 19, 5) returning uuid;
+
+insert into invitation (uuid, email, create_dttm, accept_dttm, network_fk, invitation_dttm, role_fk, expire_dt, issuer_fk, type, organization_fk, group_fk) values ('19ab490c-48d1-4627-88c7-f9968cf4982a', 'dwill313@yahoo.com', now(), NULL, NULL, now(), '4', (CURRENT_DATE + interval '31 days'), '88', 'single', 19, 5) returning uuid;

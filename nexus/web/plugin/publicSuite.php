@@ -50,6 +50,7 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
     
     <script src="../scripts/nexus.js" language="javascript"></script>
   	<script src="../scripts/timeZoneData.js" language="javascript"></script>
+  	<script src="../../config/geoDataCfcht.js" language="javascript"></script>
   	<script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js" language="javascript"></script>
  		<script src="//code.jquery.com/jquery-1.10.2.js" language="javascript"></script>
   	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js" language="javascript"></script>
@@ -73,6 +74,10 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 			.detail { color: #004d62;}
 			.scroll { text-align: right; padding-left: 220px; position:absolute; }
 			.searchQualifier { vertical-align:15px;font-style:italic;margin-right:3px; }
+			.controlCol { position:absolute;left:0px;width:280px;height:400px;margin-top:10px; }
+			.displayCol { position:absolute;left:290px;width:700px;height:400px;margin-top:10px;border: 1px solid #A6C3CE !important;border-radius:10px;overflow:auto; }
+			.displayDetail { font-size:90%;padding-left:10px;padding-right:10px; }
+			
 		</style>
 
    	<script type="text/javascript">
@@ -127,7 +132,23 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 			function showDirectoryResults(orgId) {
 				document.getElementById("show-directoryResults").style.display='block';
 				document.getElementById("show-directoryDetail").style.display='none';				
-			}	
+			}
+			
+			function showDirectoryMap() {
+    		document.getElementById("directoryMapContainer").style.opacity=1;
+    		document.getElementById("directoryMapContainer").style.zIndex=10;
+				document.getElementById("directoryTable").style.display='none';
+				document.getElementById("directory_control").className='fa fa-list fa-2x';
+				document.getElementById("map_control").onclick=function(){showDirectoryList();};
+			}
+			
+			function showDirectoryList() {
+    		document.getElementById("directoryMapContainer").style.opacity=0;
+    		document.getElementById("directoryMapContainer").style.zIndex=-1;
+				document.getElementById("directoryTable").style.display='block';
+				document.getElementById("directory_control").className='fa fa-globe fa-3x';
+				document.getElementById("map_control").onclick=function(){showDirectoryMap();};
+			}
 				
 			function scrollEvents(setSize, direction) {
 				if (direction == "forward") {
@@ -203,6 +224,8 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 			<div id="mod_forum"><?php include(Utilities::getModulesRoot() . "/forum/mod_controller.php"); ?></div>		
 		</div>
 
+		<script src="https://maps.googleapis.com/maps/api/js" async defer></script>
+		
 	</body>
 </html>
 			
