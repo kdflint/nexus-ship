@@ -16,7 +16,7 @@ if (Utilities::isSessionValid()) {
 	if (isset($_GET['type']) && strcmp($_GET['type'], "0")) { $filters['type'] = $_GET['type']; }
 	
 	$data = Catalogue::getEntries(array_keys($_SESSION['groups'])[0], $_SESSION['orgId'], $string, $filters);
-	header('Content-Type: application/json');			
+	header('Content-Type: application/json');		
 	echo json_encode($data);
 } else {
 	header("location:" . Utilities::getHttpPath() . "/nexus.php");

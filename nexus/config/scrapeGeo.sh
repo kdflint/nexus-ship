@@ -1,26 +1,23 @@
 #! /bin/bash
 
+# check integrity of location table data
+
 # addresses.txt is a file generated using this query
 # select translate(l.id || '^https://maps.googleapis.com/maps/api/geocode/json?address=' || l.address1 || ', ' || l.municipality || ', ' || l.region2 || ' ' || l.postal_code || '&key=<<key>>', ' ', '+') from location l;
 # remove quotations marks if necessary
+# substitute <<key>>
 
-# Prior to above, clean data something like this
-#--update location set address1 = address2 where id = 325
-#--update location set address2 = '' where id = 325;
-#--update location set address1 = address2 where id = 464;
-#--update location set address2 = '' where id = 464;
-#--update location set address2 = '' where id = 382;
-
-# Fix Palatine
+# Run this script on addresses.txt to get the location table geo update statements
 
 # After geo data updated, issue this to get static json
 
-#select '"' || o.id || '" : [ {"lat" : ' || l.latitude || ', "lng" : ' || l.longitude || ', "title" : "' || o.name || '" } ]'
-#from organization o, location l, organization_location ol
-#where ol.organization_fk = o.id
-#and ol.location_fk = l.id
+# select '"' || o.id || '" : [ {"lat" : ' || l.latitude || ', "lng" : ' || l.longitude || ', "title" : "' || o.name || '" } ]'
+# from organization o, location l, organization_location ol
+# where ol.organization_fk = o.id
+# and ol.location_fk = l.id
 
-#then tidy up quotes and commas
+# Tidy up quotes and commas
+# Validate at https://jsonformatter.curiousconcept.com/
 
 clear 
 
@@ -31,10 +28,12 @@ counter=0
 
 for CALL in $(cat addresses-prd.txt); do
 		IFS='^' read -ra RECORD <<< "$CALL"
-		#echo "${RECORD[0]}"
-		#echo "${RECORD[1]}"
-		# curl to get geo data from Google (api calls formatted in addesses.txt)
+		# curl to get geo data from Google (api calls pre-formatted in loop input file)
 		# for each address, output an update statement to insert lat and long to location table
+		
+		# Below is susceptible to string "lat" elsewhere in document, such as Palatine - check output
+		# Much better to convert JSON input to a data structure
+		
     CONTENT="$(curl -s "${RECORD[1]}")"
   	x="${CONTENT%%$lat*}"
   	y="${CONTENT%%$lng*}"

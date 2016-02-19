@@ -16,8 +16,8 @@
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 				//var testData = '[{"name":"Nexus Training Organization","content":[{"contact":[""]},{"language":[""]},{"topic":[""]},{"location":[""]},{"orgid":"43"}]},{"name":"Nexus Web Meet Demonstration","content":[{"contact":[""]},{"language":[""]},{"topic":[""]},{"location":[""]},{"orgid":"331"}]}]';
 				//var jsonObj = JSON.parse(testData);
-			 	var jsonObj = JSON.parse(xmlhttp.responseText);	 
-			 	//alert(xmlhttp.responseText);	
+			 	var jsonObj = JSON.parse(xmlhttp.responseText);
+				//alert(xmlhttp.responseText);
 			 	// put row containers in the directory table, 1 for each event
 			 	var tableRows = "";
 			 	var n = -1;
@@ -132,13 +132,15 @@
    }
 
 	function addMarker(orgid) {
-		var orgGeo = geoDataCfcht[orgid][0];
-	  var marker = new google.maps.Marker({
-	    position: {lat: orgGeo['lat'], lng: orgGeo['lng']},
-    	map: map,
-    	title: orgGeo['title']
-  	});
-  	markers.push(marker);
+		if (geoDataCfcht[orgid]) {
+			var orgGeo = geoDataCfcht[orgid][0];
+	  	var marker = new google.maps.Marker({
+		    position: {lat: orgGeo['lat'], lng: orgGeo['lng']},
+    		map: map,
+    		title: orgGeo['title']
+  		});
+  		markers.push(marker);
+  	}
 	}
 	
 	function setMapOnAll(map) {

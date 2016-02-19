@@ -7,7 +7,7 @@ require_once(Utilities::getSrcRoot() . "/organization/Organization.php");
 class Catalogue {
 	
 	public static function getEntries($groupId, $orgId, $inputString, $filters) {
-			
+				
 		$results = array();
 		$terms = trim(Utilities::strip2($inputString));
 		$networkId = "";
@@ -244,9 +244,9 @@ class Catalogue {
 				}	
 			}
 			
-		// We get here if there are no free search terms. So, run filters against the entire network
 		} else if (isset($filters) && count($filters) > 0) {
-			
+		// We get here if there are no free search terms. So, run filters against the entire network
+		
 			$cursor = Organization::getOrganizationsByNetworkId($networkId);
 			
 			while ($pass = pg_fetch_array($cursor)) { 
@@ -266,8 +266,9 @@ class Catalogue {
 					}
 				}
 			}
-		
+				
 			// TODO - extract all this into a function - it is copied code
+			/*
 			if (isset($filters['org']) && count($filters['org']) > 0) {
 				foreach ($results as $key=>$val) {
 					if (!in_array($val['OrgId'], $filters['org'])) {
@@ -275,16 +276,19 @@ class Catalogue {
 					}
 				}
 			}
+			*/
 				
-			if (isset($filters['topic']) && $filters['topic'] > 0) {
+			if (isset($filters['specialty']) && $filters['specialty'] > 0) {
 				foreach ($results as $key=>$val) {
-					$row = pg_fetch_row(Organization::organizationTopicExists($val['OrgId'], $filters['topic']));
+					$row = pg_fetch_row(Organization::organizationTopicExists($val['OrgId'], $filters['specialty']));
 					$topicMatch = $row[0];
 					if (strcmp($topicMatch, "t")) {
 						unset($results[$key]);
 					}
 				}	
 			}
+			
+
 	
 			if (isset($filters['type']) && strcmp($filters['type'], "0")) {
 				foreach ($results as $key=>$val) {
@@ -295,6 +299,7 @@ class Catalogue {
 					}
 				}	
 			}
+						
 		} else {
 			// We get here if we had no free search terms or filter. 
 		}
@@ -324,7 +329,7 @@ class Catalogue {
 			}
 			$counter1++;
 		}
-			
+				
 		return $indexedResults;
 
 	}

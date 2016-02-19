@@ -57,15 +57,17 @@
    }
 
 	function addDetailMarker(orgid) {
-		var orgGeo = geoDataCfcht[orgid][0];
-	  var marker = new google.maps.Marker({
-	    position: {lat: orgGeo['lat'], lng: orgGeo['lng']},
-    	map: detailMap,
-    	title: orgGeo['title']
-  	});
-  	detailMarkers.push(marker);
-  	setDetailMapOnAll(detailMap);
-  	detailMap.setCenter(marker.getPosition());
+		if (geoDataCfcht[orgid]) {
+			var orgGeo = geoDataCfcht[orgid][0];
+	  	var marker = new google.maps.Marker({
+		    position: {lat: orgGeo['lat'], lng: orgGeo['lng']},
+    		map: detailMap,
+    		title: orgGeo['title']
+  		});
+  		detailMarkers.push(marker);
+  		setDetailMapOnAll(detailMap);
+  		detailMap.setCenter(marker.getPosition());
+		}
 	}
 	
 	function setDetailMapOnAll(map) {
