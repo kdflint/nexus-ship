@@ -4,7 +4,7 @@
 
 // Destinations
 define("ADMIN_EMAIL", "kathy.flint@northbridgetech.org");
-define("LOG_FILE", "/home1/northbr6/errors.log");
+define("LOG_FILE", "/home/northbri/errors.log");
  
 // Destination types
 define("DEST_EMAIL", "1");

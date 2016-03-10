@@ -254,7 +254,7 @@
 
 	    			var xhr = getXmlHttpRequest();
 	    			var postSizeInMB = 4;
-          	var url = 'http://northbridgetech.org/dev/nexus/control/uploadSpeedTester.php?cache=' + Math.floor( Math.random() * 10000 ); //random number prevents url caching
+          	var url = 'http://northbridgetech.org/apps/nexus/control/uploadSpeedTester.php?cache=' + Math.floor( Math.random() * 10000 ); //random number prevents url caching
           	// TODO - the below POST to a random jsp page throws an http 500 error. Why? Is this harmful? We should create a POST-able page just for this purpose.
           	// Leaving the resource path to Northbridge web server for now because results seem very comparable, unlike download speed results.
           	//var url = 'http://ec2-50-19-215-104.compute-1.amazonaws.com/demo/demo1.jsp?cache=' + Math.floor( Math.random() * 10000 );

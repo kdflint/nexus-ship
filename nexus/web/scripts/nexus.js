@@ -1,5 +1,7 @@
 var errorBackground = "rgba(247,248,239,0.6) url('') no-repeat right top";
 
+var currentEvents;
+
 function formSubmit(formId) {
  		document.forms[formId].submit();
 }
@@ -144,6 +146,44 @@ function toggleFrameDisplay(frameId) {
 	document.getElementById("menu-reserveList").style.backgroundColor='rgba(210, 123, 75, 1)';
 	showFrame.style.display='block';
 	showButton.style.backgroundColor='rgba(137, 157, 112, 1)';
+}
+
+function toggleAdvFrameDisplay(menuItem) {
+	var menuItems = document.getElementById("advMenu").children;
+	var showButton = document.getElementById(menuItem.id);
+  for (var i=0; i<menuItems.length; i++) {
+		menuItems[i].style.backgroundColor='#dae0bc';
+	}
+	showButton.style.backgroundColor='rgba(137, 157, 112, 1)';
+	//loadAdvPage(menuItem.id);
+}
+
+function loadAdvPage(resource) {
+	// LEFT OFF HERE
+	myHTMLInclude();
+}
+
+function myHTMLInclude() {
+  var z, i, a, file, xhttp;
+  z = document.getElementsByTagName("*");
+  for (i = 0; i < z.length; i++) {
+    if (z[i].getAttribute("w3-include-html")) {
+      a = z[i].cloneNode(false);
+      file = z[i].getAttribute("w3-include-html");
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+          a.removeAttribute("w3-include-html");
+          a.innerHTML = xhttp.responseText;
+          z[i].parentNode.replaceChild(a, z[i]);
+          myHTMLInclude();
+        }
+      }      
+      xhttp.open("GET", file, true);
+      xhttp.send();
+      return;
+    }
+  }
 }
 
 function getLocalTz() {
@@ -546,6 +586,14 @@ function getMaxDaysForFebruary(year) {
     default:
         return 28;
 	} 
+}
+
+function populateEditEventForm(i) {
+	/* currentEvents is a global, established in the ajax processing */
+	var eventForm = document.forms['schedule-form'];	
+	eventForm['meeting-name'].value = currentEvents[i].purpose;
+	// etc.
+	return true;
 }
 	
 function eventValidateAndSubmit(thisForm) {

@@ -3,7 +3,8 @@
 		var xmlhttp = getXmlHttpRequest();
 		xmlhttp.onreadystatechange=function() {
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-			 	var jsonObj = JSON.parse(xmlhttp.responseText);		 	
+			 	var jsonObj = JSON.parse(xmlhttp.responseText);		
+			 	currentEvents = jsonObj; 	
 			 	// put row containers in the reservation table, 1 for each event
 			 	var nextMeetings = undefined;
 			 	var tableRows = "";
@@ -21,13 +22,14 @@
 					tableRow = "<div id='reservationRow0' class='div-tr' style='position:relative;'>" + 
        			"<div class='td-div'>" +
 		      		"<div class='event'>" +		
-	       				"<span class='date'>Future</span><br/>" + 				
+	       				"<span class='date'>Now</span><br/>" + 				
           		"</div>" +
           	"</div>" +
-       			"<div id='nowEventDetail' class='td-div' style='position:absolute;left:140px;top:5px;height:70px;'>" +	  	       				
+       			"<div id='nowEventDetail' class='td-div' style='position:absolute;left:140px;top:5px;height:120px;'>" +	  	       				
 			       	"<div class='meeting'>" +
-          			"<span class='purpose'>Click the calendar icon to add an event.</span>" + 
-          		"</div>" +
+          			"<span class='purpose'>There are no upcoming events on the calendar.</span>" + 
+          			"</p>" +
+          		 "</div>" +
           	"</div>" +
 					"</div>";
 					document.getElementById("reservationTable").innerHTML = tableRow
@@ -51,7 +53,8 @@
           					"<p>reserved by " + 
           					((jsonObj[i].adder == <?php echo(Utilities::getDemoUidpk()); ?>) ? '<?php echo($_SESSION['fname']); ?>' : jsonObj[i].fname) + " " +  
           					((jsonObj[i].adder == <?php echo(Utilities::getDemoUidpk()); ?>) ? '<?php echo($_SESSION['lname']); ?>' : jsonObj[i].lname) + 
-          					((jsonObj[i].adder == jsonObj[i].sessionUser) ? "<br/><a href='<?php echo(Utilities::getHttpPath()); ?>/modules/schedule/control/eventDeleteProcessor.php?id=" + jsonObj[i].uuid + "' onclick='return confirm(\"Please confirm this delete.\");'><span class='fa fa-trash-o' style='color:#d27b4b;'></span></a></p>" : " ") +
+          					//((jsonObj[i].adder == jsonObj[i].sessionUser) ? "<a href='#openModal' onclick='return populateEditEventForm(\"" + i + "\");' title='Edit'><span class='fa fa-pencil' style='color:#d27b4b;margin-left:10px;'></span></a>" : " ") +
+          					((jsonObj[i].adder == jsonObj[i].sessionUser) ? "<a href='<?php echo(Utilities::getHttpPath()); ?>/modules/schedule/control/eventDeleteProcessor.php?id=" + jsonObj[i].uuid + "' onclick='return confirm(\"Please confirm this delete.\");' title='Delete'><span class='fa fa-trash-o' style='color:#d27b4b;margin-left:10px;'></span></a></p>" : " ") +
          					"</span>" +
          				"</div>" +
          			"</div>";
@@ -66,22 +69,11 @@
 		xmlhttp.send();  		
 	}
 </script>
-
-<!--<div style="width:760px;font-size:110%;">-->
-
-	<div id="new_event_display" style="display:none;">
-		<?php include(Utilities::getModulesRoot() . "/event/views/eventAddAdvantage.php"); ?>	
-	</div>
-						
-	<div id="current_schedule_display" style="display:block;">
-		<a id='schedule_control' href='javascript:void(0);' class='level1-control'>
-		<span style='padding:0px;' class='fa fa-calendar-o fa-2x' ></span>
-		<span style='padding-left:2px;' class='fa fa-plus' >	</span>
-		</a>				
+			
+	<div id="current_schedule_display" style="display:block;">		
 		<div id="reservationTable" class="table-div">
 		</div>
 	</div>
 	
 	<script> getEventList(<?php echo (time() + 15*60); ?>); </script>
 	
-<!--</div>-->

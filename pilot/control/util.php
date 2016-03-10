@@ -349,7 +349,7 @@ class Util {
 	}
 	
 	public static function getHome() {
-		return "/home1/northbr6/";
+		return "/home/northbri/";
 	}
 
 	public static function storeSecurePasswordImplA($plaintextPassword, $userId) {

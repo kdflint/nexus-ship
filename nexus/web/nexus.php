@@ -65,6 +65,7 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
 		<!-- TODO - grids-responsive (below) still used? -->
 		<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
     <link rel="stylesheet" href="styles/nexus.css" type="text/css" />
+    <link rel="stylesheet" href="styles/modal.css" type="text/css" />
     
     <script src="scripts/nexus.js" language="javascript"></script>
   	<script src="scripts/timeZoneData.js" language="javascript"></script>

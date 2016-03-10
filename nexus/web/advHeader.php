@@ -1,12 +1,31 @@
-	     	<img class="banner-image" src="image/nexus4.png" />
-       	<span class="banner">
-					<span class="product-name" style="">Nexus</span><br/>
-					<span id="index-module-name" class="module-name" style="">Advantage</span>					
-      	</span>  	
+
+
+	<img class="banner-image" src="image/nexus4.png" />
+	<span class="banner" style="float:right;width:878px;">
+		<div class="topRow">
+			<span class="product-name" style="">Nexus</span>
+			<span style="margin-left:124px;"><img src="<?php echo(Utilities::getPartnerImageRoot()); ?><?php echo $_SESSION['logo']; ?>" width="40" height="40"/></span>
+			<span class="product-name" style="font-size:90%;"><?php echo $_SESSION['networkName']; ?></span>  
+			<span class="controls" style="float:right;padding:10px;">
+				<a href="#" title="Profile"><span class="fa fa-cog fa-2x" style="margin-right:10px;opacity:.8;"></span></a>
+				<a href="javascript:void(0)" onclick="if(typeof Formilla != 'undefined'){Formilla.initFormillaChat();}" title="Help"><span class="fa fa-question fa-2x" style="margin-right:10px;opacity:.8;"></span></a>
+	  		<a href="login.php?oid=<?php echo $_SESSION['orgUid']; ?>&logout=true" style="color:#d27b4b;text-decoration:none;" title="Logout"><span class="fa fa-sign-out fa-2x" style="margin-right:0px;opacity:.8;"></span></a>
+			</span>
+		</div>
+		<div class="bottomRow">
+			<span id="index-module-name" class="module-name">Advantage</span>	
+			<span id="advMenu" class="advMenu" style="">
+				<a id="adv-menu-item2" class="pure-button button-menu-adv" href="javascript:void(0)" onclick="toggleAdvFrameDisplay(this)" style="float:right;background-color:#dae0bc;">ITEM</a> 
+				<a id="adv-menu-item1" class="pure-button button-menu-adv" href="javascript:void(0)" onclick="toggleAdvFrameDisplay(this)" style="float:right;background-color:#dae0bc;margin-right:-7px;">ITEM</a> 
+				<a id="adv-menu-inbox" class="pure-button button-menu-adv" href="javascript:void(0)" onclick="toggleAdvFrameDisplay(this)" style="float:right;background-color:#dae0bc;margin-right:-7px;">INBOX</a> 			
+				<a id="adv-menu-forum" class="pure-button button-menu-adv" href="javascript:void(0)" onclick="toggleAdvFrameDisplay(this)" style="float:right;background-color:#dae0bc;margin-right:-7px;">FORUM</a> 	
+				<a id="adv-menu-people" class="pure-button button-menu-adv" href="javascript:void(0)" onclick="toggleAdvFrameDisplay(this)" style="float:right;background-color:#dae0bc;margin-right:-7px;">PEOPLE</a> 	
+				<a id="adv-menu-event" class="pure-button button-menu-adv" href="javascript:void(0)" onclick="toggleAdvFrameDisplay(this)" style="float:right;background-color:rgba(137, 157, 112, 1);margin-right:-7px;" >EVENTS</a>
+			</span>
+		</div>
+	</span>
+		
+
+	
+	
   	
-      	<span class="controls" style="float:right;padding-bottom:10px;margin-top:30px;">
-					<a href="javascript:void(0)" onclick="if(typeof Formilla != 'undefined'){Formilla.initFormillaChat();}">Problem?</a> | 
-      		<a href="login.php?oid=<?php echo $_SESSION['orgUid']; ?>&logout=true" style="color:#d27b4b;text-decoration:none;">Logout</a>
-      	</span>
-      	<a id="profile_control" href="javascript:void(0);"><span id="profile_control_icon" style="clear:right;float:right;padding-top:4px;margin:0px;color:#d27b4b;" class="" ></span></a>
-				<span style="float:right;padding:10px;">Hello <?php echo $_SESSION['fname']; ?></span> 	
