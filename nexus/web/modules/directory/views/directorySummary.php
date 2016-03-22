@@ -139,6 +139,7 @@
     		map: map,
     		title: orgGeo['title']
   		});
+	  	marker.addListener('click', function() {showDirectoryDetail(orgid);});
   		markers.push(marker);
   	}
 	}

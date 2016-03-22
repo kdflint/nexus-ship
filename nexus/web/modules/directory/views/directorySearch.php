@@ -7,7 +7,7 @@
 	<div style="margin-top:10px;">
 		<span class="searchQualifier">and</span>
 		<select id="directory-form-select-specialty" name="specialty" style="width:86%;">
-			<option value="0" selected>Specialty is</option>	
+			<option value="0" selected>Focus Area is</option>	
 			<option value="0" >------------</option>	
 			<!-- TODO - make this list dynamic by organization -->
 	    <?php include(Utilities::getModulesRoot() . "/directory/views/18.html"); ?>

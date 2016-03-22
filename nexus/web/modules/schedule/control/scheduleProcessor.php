@@ -94,7 +94,7 @@ function validateEvent($input) {
 	
 	// MEETING NAME
 	if (isset($input['meeting-name'])) {
-		if (strlen($input['meeting-name']) <= 50) {
+		if (strlen($input['meeting-name']) <= 100) {
 			$result['clean']['meeting-name'] = Utilities::sanitize($input['meeting-name']);			
 		} else {
 			$result['error']['meeting-name'] = "error";
@@ -168,7 +168,7 @@ function validateEvent($input) {
  	
  	// MEETING DESCR
 	if (isset($input['meeting-descr'])) {
-		if (strlen($input['meeting-descr']) <= 400) {
+		if (strlen($input['meeting-descr']) <= 1500) {
 			$result['clean']['meeting-descr'] = Utilities::sanitize($input['meeting-descr']);			
 		} else {
 			$result['error']['meeting-descr'] = "error";

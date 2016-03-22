@@ -32,7 +32,7 @@
      				"</div>" +
        			"<div class='td-div' style='position:absolute;left:90px;top:5px;height:90px;'>" + 
 	          	"<div class='meeting'>" +
-        				"<a href='javascript:void(0);' onclick='showEventDetail(\"" + jsonObj[i].uuid + "\");'><span class='purpose'>" + jsonObj[i].purpose + "</span></a><br/>" +
+        				"<a href='javascript:void(0);' onclick='showEventDetail(\"" + jsonObj[i].uuid + "\");'><span class='purpose'>" + truncateString(jsonObj[i].purpose) + "</span></a><br/>" +
 								"<span class='tod'>" + jsonObj[i].hour + ":" + jsonObj[i].minute + "</span><span class='period'> " + jsonObj[i].period + " </span> - " +
 								"<span class='tod'>" + jsonObj[i].hour_end + ":" + jsonObj[i].minute_end + "</span><span class='period'> " + jsonObj[i].period_end + " </span>" +
 								"<span class='period'> " + jsonObj[i].abbrev + "</span>" +

@@ -6,6 +6,30 @@ function formSubmit(formId) {
  		document.forms[formId].submit();
 }
 
+function truncateString(str, length, ending) { 
+		// Truncate a string at the last space before the length designate
+		var lastSpace, firstCut, secondCut;
+		var splitChar = " "; 
+    if (length == null) {  
+      length = 50;  
+    }  
+    if (ending == null) {  
+      ending = '...';  
+    }  
+    if (str.length > length) {  
+      firstCut = str.substring(0, length);
+      lastSpace = firstCut.lastIndexOf(splitChar);
+      if (lastSpace > 0) {
+      	lastCut = firstCut.substring(0, lastSpace) + ending;
+      } else {
+      	lastCut = firstCut + ending;
+      }
+    } else {  
+      lastCut = str;  
+    }  
+    return lastCut;
+};  
+
 function isValidEmail(email) {
     var atpos = email.indexOf("@");
     var dotpos = email.lastIndexOf(".");
@@ -684,7 +708,7 @@ function eventValidateAndSubmit(thisForm) {
  	var nameField = eventForm['meeting-name'];
   var name = nameField.value;
 	setFieldPassStyles(nameField, "Meeting Name");
-  if (name == null || name == "" || name.length > 50) {
+  if (name == null || name == "" || name.length > 100) {
   	setFieldErrorStyles(nameField, "Meeting name is required");
     pass = false;
   }
@@ -696,17 +720,7 @@ function eventValidateAndSubmit(thisForm) {
 		showTimeZoneDisplay('tz-select');
 		pass = false;
 	}
-
-	if (eventForm['meeting-descr'] !== undefined) {
- 		var descrField = eventForm['meeting-descr'];
-  	var descr = descrField.value;
-		setFieldPassStyles(descrField, "Description");
-  	if (descr == null || descr == "" || descr.length > 1500) {
-	  	setFieldErrorStyles(descrField, "Meeting description is required");
-    	pass = false;		
-    }
-	}
-  
+ 
 	if (eventForm['meeting-type'] !== undefined) {
   	var typeField = eventForm['meeting-type'];
   	var typeValue = typeField.value;
@@ -731,7 +745,20 @@ function eventValidateAndSubmit(thisForm) {
   	}  	
   }
   
+  var descrField = eventForm['meeting-descr']; 
+	if (eventForm['meeting-descr'] !== undefined) {
+ 		descrField = eventForm['meeting-descr'];
+ 		var descr = descrField.value;
+		setFieldPassStyles(descrField, "Description");
+  	if (descr == null || descr == "" || descr.length > 1500) {
+	  	setFieldErrorStyles(descrField, "Meeting description is required");
+    	pass = false;		
+    }
+	}
+	  
 	if (Boolean(pass)) {
+		// TODO - make this substitution in controller otherwise we see momentary replacement in form field
+		descrField.value = descrField.value.replace(new RegExp( "\\n", "g" ), "~");
  		submitButton.disabled = true;  
  		submitButton.style.opacity = ".6";
  		eventForm.submit();

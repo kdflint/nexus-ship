@@ -2,7 +2,7 @@
 				<fieldset style="position:absolute;width:400px;">
       		<p style="width:100%;font-size:130%;font-weight:bold;line-height:80%;" class='detail'>New Event Submission Form</p>					
       		<div style="margin-top:10px;">
-	      		<input type="text" name="meeting-name" style="width:100%;" maxlength="50" placeholder="Meeting Name" >
+	      		<input type="text" name="meeting-name" style="width:100%;" maxlength="100" placeholder="Meeting Name" >
 					</div>
        		<div style="margin-top:10px;">
 	      		<input type="text" name="meeting-url" style="width:100%" maxlength="100" placeholder="Web Link (http://)" >
