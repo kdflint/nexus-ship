@@ -169,7 +169,7 @@ function validateEvent($input) {
  	// MEETING DESCR
 	if (isset($input['meeting-descr'])) {
 		if (strlen($input['meeting-descr']) <= 1500) {
-			$result['clean']['meeting-descr'] = Utilities::sanitize($input['meeting-descr']);			
+			$result['clean']['meeting-descr'] = str_replace(["\r\n", "\r", "\n"], "~", Utilities::sanitize($input['meeting-descr']));	
 		} else {
 			$result['error']['meeting-descr'] = "error";
 		}

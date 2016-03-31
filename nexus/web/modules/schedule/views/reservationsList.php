@@ -160,7 +160,7 @@
 	</tr>
 </table>
 
-<script> getReservationList(<?php echo (time() + 15*60); ?>); </script>
+<script> getReservationList(<?php echo (time() + 21*60); ?>); </script>
 	
 <a id='tech_check_control' href='javascript:void(0);' style="display:none;"></a>
 	

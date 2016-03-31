@@ -745,9 +745,8 @@ function eventValidateAndSubmit(thisForm) {
   	}  	
   }
   
-  var descrField = eventForm['meeting-descr']; 
 	if (eventForm['meeting-descr'] !== undefined) {
- 		descrField = eventForm['meeting-descr'];
+ 		var descrField = eventForm['meeting-descr'];
  		var descr = descrField.value;
 		setFieldPassStyles(descrField, "Description");
   	if (descr == null || descr == "" || descr.length > 1500) {
@@ -757,8 +756,6 @@ function eventValidateAndSubmit(thisForm) {
 	}
 	  
 	if (Boolean(pass)) {
-		// TODO - make this substitution in controller otherwise we see momentary replacement in form field
-		descrField.value = descrField.value.replace(new RegExp( "\\n", "g" ), "~");
  		submitButton.disabled = true;  
  		submitButton.style.opacity = ".6";
  		eventForm.submit();
