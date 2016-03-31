@@ -350,7 +350,7 @@ td .techCheckCol3 {
 a.tooltip {outline:none; }
 
 a.tooltip span:first-child {
-    z-index:10;display:none; padding:14px 20px;
+    z-index:20;display:none; padding:14px 20px;
     margin-top:-30px; margin-left:28px;
     width:460px; line-height:16px;  
 }
