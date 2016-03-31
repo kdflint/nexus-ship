@@ -92,6 +92,10 @@ class Utilities {
 		return "http://" . ENV_HOST . APP_NAME . self::$config_path;
 	}
 	
+	public static function getPartnerHttpPath() {
+		return "http://" . ENV_HOST . APP_NAME . PTR_STC_ROOT;
+	}
+	
 	public static function getWebRoot() {	return WEB_ROOT; }
 	
 	public static function getModulesRoot() {	return self::getWebRoot() . "/modules"; }
@@ -108,9 +112,9 @@ class Utilities {
 
 	public static function getHttpImagePath() { return self::getHttpPath() . "/image"; }
 	
-	public static function getPartnerImageRoot() { return "http://" . ENV_HOST . APP_NAME . PTR_STC_ROOT . "/"; }
+	public static function getPartnerImageRoot() { return self::getPartnerHttpPath() . "/image/"; }
 	
-	public static function getPartnerFileUrl() { return self::getPartnerImageRoot() . "file"; }
+	public static function getPartnerFileUrl() { return self::getPartnerHttpPath() . "/file"; }
 	
 	public static function getEnvName() { return ENV_NAME; }
 	
