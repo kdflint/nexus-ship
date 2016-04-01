@@ -6,6 +6,7 @@ require_once("../../../src/framework/Util.php");
 require_once(Utilities::getSrcRoot() . "/user/User.php");
 
 $cleanCode = "";
+$success = "false";
 
 // TODO - use this method in enroll
 if (isset($_GET['resetCode']) && Utilities::validateUuid($_GET['resetCode'])) {
@@ -19,12 +20,11 @@ if ($cleanCode) {
 		Utilities::setSession($result['username'], false, "undefined");
 		Utilities::setLogin($_SESSION['uidpk']);
 		User::updateUserPasswordResetActivityById($result['id']);
-		header("location:" . Utilities::getHttpPath() . "/nexus.php?view=profile");
-		exit(0);
+		$success = "true";
 	}
+} else {
+	returnToLoginWithMessage(Utilities::RESET_ERROR);
 }
-
-returnToLoginWithMessage(Utilities::RESET_ERROR);
 
 function returnToLoginWithMessage($message) {
 	header("location:" . Utilities::getHttpPath() . "/login.php?error=" . $message);

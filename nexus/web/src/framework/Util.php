@@ -505,6 +505,12 @@ class Utilities {
 		return false;
 	}
 	
+	public static function setSessionTimezone($zone) {
+		unset($_SESSION['timezone']);
+		$_SESSION['timezone'] = (Event::isValidTimeZone($zone) ? $zone : "undefined");
+		return true;
+	}
+	
 	public static function setSession($username, $remember, $zone = "undefined") {
 
 		session_regenerate_id(TRUE);
@@ -517,7 +523,7 @@ class Utilities {
 		$_SESSION['groups'] = Group::getUserGroupsByUsername($_SESSION['username']);
 		self::setSessionLastActivity();
 		$_SESSION['remember'] = ($remember ? "true" : "false");
-		$_SESSION['timezone'] = (Event::isValidTimeZone($zone) ? $zone : "undefined");
+		self::setSessionTimezone($zone);
 		
 		$cursor = User::getUserSessionByUsername($_SESSION['username']);
 		
@@ -549,7 +555,7 @@ class Utilities {
 		}
 		$row = pg_fetch_row(User::getActiveUserByUsername($_SESSION['username']));
 		$_SESSION['uidpk'] = $row[0];
-		$_SESSION['timezone'] = (Event::isValidTimeZone($zone) ? $zone : "undefined");
+		self::setSessionTimezone($zone);
 		
 		$cursor = User::getUserSessionByUsername($_SESSION['username']);
 		while ($row = pg_fetch_array($cursor)) {

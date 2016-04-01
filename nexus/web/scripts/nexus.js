@@ -64,6 +64,23 @@ function getXmlHttpRequest() {
   return xmlhttp;
 }
 
+function setSessionTimezone(relativePath) {
+	console.log("setting timezone into session");
+	var xmlhttp = getXmlHttpRequest();
+	var tz = getLocalTz();
+	xmlhttp.onreadystatechange=function() {
+		if (xmlhttp.readyState == 4) {
+			if (xmlhttp.status == 200) { 
+				return true; 
+			} else {
+				return false;
+			}
+		}
+	};
+	xmlhttp.open("GET", relativePath + "plugin/setSessionTimezone.php?timezone=" + tz, false);
+	xmlhttp.send();
+}
+
 function setPublicSession(oid, fname, mid, relativePath) {
 	var xmlhttp = getXmlHttpRequest();
 	xmlhttp.onreadystatechange=function() {

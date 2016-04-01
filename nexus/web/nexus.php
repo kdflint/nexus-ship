@@ -81,7 +81,7 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
     <title>Northbridge Nexus</title> 
     
     <script type="text/javascript">
-    	
+
 			<!-- include in this manner instead of in a meta link so that php code inside this file will resolve prior to runtime -->
     	<?php include("scripts/techCheck.js"); ?>
     	  	
