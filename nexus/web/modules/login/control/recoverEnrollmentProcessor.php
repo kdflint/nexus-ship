@@ -28,7 +28,7 @@ if ($clean['email']) {
 		while ($row = pg_fetch_array($cursor)) {
 	  		$usernames = $usernames . $row['username'] . ", ";
 	 	}
-	 	sendEnrollEmail($clean['email'], $env_appRoot, "", $usernames);
+	 	sendEnrollEmail($clean['email'], $usernames);
 		returnToLoginWithMessage("Your enrollment package has been sent to " . $clean['email'] . ".", $clean['network']);
 	}		
 
@@ -41,38 +41,21 @@ function returnToLoginWithMessage($errorMessage, $network) {
 	exit(0);
 }
 
-function sendEnrollEmail($email, $path, $fname, $usernames) {
+function sendEnrollEmail($email, $usernames) {
 	
 	$message = "Welcome!
 		
-The Nexus user ids registered for this email address: " . Utilities::stripTrailingComma($usernames) . "
+The Nexus Web Meet user ids registered for this email address: " . Utilities::stripTrailingComma($usernames) . "
 
-This tool is built by committed volunteers working hard to build web resources for organizations that make a positive difference in our communities.
-
-Nexus is constantly being tweaked and new features added. If you have a suggestion for a feature or find a bug please let us know using the feedback tools on the site. We strive to make Nexus as helpful as possible for you.
-
-Some of our current features:
-
-- Discussion Forum and Calendar
-- Directory of People and Organizations
-- Private Messaging
-- Virtual Conference Room
-
-We are working hard on adding:
-
-- Collaboration Tracking
-- Advanced Mapping functions
-
-You can login to Nexus using this link. You may wish to check the Help document right away for some information about how to use this site.
+You can login to Nexus Web Meet using this link.
 
 " . Utilities::getHttpPath() . "/login.php
 
-Enjoy,
+Sincerely,
 
 The Development Team at
 NorthBridge Technology Alliance
 
-P.S. May we recommend that you visit the Profile tab first to set your messaging settings? Then, you may wish to subscribe to one or more discussions on the Forum tab.
 ";
 
 		mail($email, "[Nexus] Enrollment Confirmation", $message, "From: noreply@northbridgetech.org\r\n");		
