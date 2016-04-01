@@ -44,7 +44,8 @@
        			"<div class='td-div'>" +
 		      		"<div class='event'>" +
 	       				"<span class='date'>" + indicator + "</span><br/>" +
-	       				"<span class='month'>" + nowMeeting.hour + ":" + nowMeeting.minute + "</span><span class='period'> " + nowMeeting.period + " " + nowMeeting.abbrev + "</span>" +
+	       				"<span class='month'>" + nowMeeting.hour + ":" + nowMeeting.minute + "</span><span class='period'> " + nowMeeting.period + " -</span><br/>" +
+	       				"<span class='month'>" + nowMeeting.hour_end + ":" + nowMeeting.minute_end + "</span><span class='period'> " + nowMeeting.period_end + " " + nowMeeting.abbrev + "</span>" +
 							"</div>" +
        			"</div>" +
        			"<div id='nowEventDetail' class='td-div' style='position:absolute;left:140px;top:5px;height:210px;'>" +     				
