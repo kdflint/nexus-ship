@@ -27,7 +27,7 @@ if (isset($result['email']) && isset($result['id'])) {
 	if  (Utilities::validateEmail($result['email'])) {
 		$uuid = Utilities::newUuid();
 		User::insertPasswordResetActivity($result['id'], $uuid);
-		sendResetEmail($result['email'], $env_appRoot, $fname, $uuid);
+		sendResetEmail($result['email'], $fname, $uuid);
 		returnToLoginWithMessage("Your password reset link has been sent to the email address on file.", $clean['network']);	
 	} else {
 		// TODO - or, say contact customer support?
@@ -42,7 +42,7 @@ function returnToLoginWithMessage($message, $network) {
 	exit(0);
 }
 
-function sendResetEmail($email, $path, $fname, $uuid) {
+function sendResetEmail($email, $fname, $uuid) {
 	
 	$message = "Hello " . $fname . ",
 	
