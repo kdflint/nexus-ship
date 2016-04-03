@@ -68,7 +68,7 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
     <link rel="stylesheet" href="styles/modal.css" type="text/css" />
     
     <script src="scripts/nexus.js" language="javascript"></script>
-  	<script src="scripts/timeZoneData.js" language="javascript"></script>
+  	<script src="<?php echo(Utilities::getConfigPath()); ?>/timeZoneData.js" language="javascript"></script>
   	<!-- http://www.featureblend.com/javascript-flash-detection-library.html -->
  		<script src="scripts/lib/flash_detect.js"></script>
  		<script src="//code.jquery.com/jquery-1.10.2.js"></script>

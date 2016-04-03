@@ -1,9 +1,14 @@
+#!/usr/bin/phpssss
+
 <?php
 
 // run this against environment database to make sure js is synched
 
-require_once(dirname(__FILE__) . "/src/framework/PgDb.php");
+// LEFT OFF - craft the path to PgDb
+require_once("../../PgDb.php");
 
+// Note: We are only using the keys from this array, not the values.
+// The current GMT offsets, which change with daylight savings, is what we are recreating with this script.
 $zones = array( 
             "Asia/Kabul" => "(GMT+04:30) Kabul",
             "Europe/Helsinki" => "(GMT+03:00) Helsinki",            
@@ -343,6 +348,18 @@ $zones = array(
             "Africa/Maputo" => "(GMT+02:00) Maputo"
 );
 
+// Make a new version of the timezone offset data, which changes for daylight savings time
+// First delete the previous week's run
+foreach (glob("output/*-timeZoneOffsetData.js") as $filename) {
+   unlink($filename);
+}
+
+// Now, create new
+$fileId = date('d-m-Y-') . "timeZoneOffsetData.js";
+$file = fopen("output/" . $fileId, "w") or die("Unable to open file!");
+fwrite($file, "// This array gives us current timezone offsets, adjusted weekly for time changes\r\n");
+fwrite($file, "var timeZoneOffsets = \r\n{\r\n");
+
 foreach ($zones as $key => $value) {
 		$query = "select abbrev, utc_offset from pg_timezone_names where name = $1";
 		$cursor = PgDatabase::psExecute($query, array($key));
@@ -356,8 +373,19 @@ foreach ($zones as $key => $value) {
 		// format the string (chop the seconds from the interval)
 		$hours = substr($offset, 0, 3);
 		$minutes = substr($offset, 4, 2);
-		echo "\"" . $key . "\":\"" . $hours . $minutes . "\",\r\n";
+		fwrite($file, "\"" . $key . "\":\"" . $hours . $minutes . "\",\r\n");
 }
-echo "\"end\":\"end\"";
+fwrite($file, "\"end\":\"end\"\r\n};");
+fclose($file);
+
+// Concatenate the static time zone name array with the updated timezone offset data (which we just made)
+// This creates a file the web app will consume (script include in the <head> of nexus.php)
+copy("output/timeZoneData.js", "output/archivedon-" . date('d-m-Y-') . "timeZoneData.js");
+$staticContent = file_get_contents("timeZoneData.static.txt");
+$newContent = file_get_contents("output/" . $fileId);
+file_put_contents("output/timeZoneData.js", $staticContent);
+file_put_contents("output/timeZoneData.js", $newContent, FILE_APPEND);
+
+exit(0);
 
 ?>

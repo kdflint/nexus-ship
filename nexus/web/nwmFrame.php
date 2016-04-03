@@ -25,7 +25,7 @@
       	</div>
       	
       	<div class="frameColRight">
-      		<span style="clear:right;float:right;text-align:right;margin-top:20px;"><?php echo $_SESSION['orgName']; ?></span>   
+      		<span style="clear:right;float:right;text-align:right;margin-top:20px;padding-left:10px;"><?php echo $_SESSION['orgName']; ?></span>   
       		<span style="clear:right;float:right;margin-top:20px;"><img src="<?php echo(Utilities::getPartnerImageRoot()); ?><?php echo $_SESSION['logo']; ?>" /></span>   
       		<div id="profile_display" style="display:none;">
 						<?php include("modules/user/views/profile.html"); ?>	

@@ -11,5 +11,16 @@ ls -l | wc -l
 if  counts match
 	rm *.png, etc
 	rm partner.tar.gz
+	
+	
+	
+mkdir timezones/output
+cd output
+mv web/scripts/timeZoneData.js to new output folder
+ln -s ~/batch/dev/nexus/module/timezones/output/timeZoneData.js timeZoneData.js
 
+ln -s ~/public_html/dev/nexus/web/src/framework/PgDb.php PgDb.php
+copy over timezone batch files
+
+add cron job
 
