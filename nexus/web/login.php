@@ -61,7 +61,8 @@ if(isset($_GET['error']) && Utilities::isSafeCharacterSet($_GET['error'])) {
 
 $logo = "";
 $disabled = "";
-$networkLogo = $networkName = $cleanMeetingId = $techCheckInclude = "";		
+$networkLogo = $networkName = $cleanMeetingId = "";	
+$techCheckInclude = "scripts/techCheckDummy.js";
 $cleanNetworkId = "1"; // TODO: create default network in db, that includes default logo?
 $demoSession = $guestPass = "false";
 unset($_SESSION['demo']);
