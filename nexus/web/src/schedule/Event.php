@@ -321,7 +321,7 @@ class Event {
 				$events[$counter]['epoch'] = $row['epoch'];
 				$events[$counter]['period'] = self::getPeriod($row['hour']);
 				$events[$counter]['period_end'] = self::getPeriod($row['hour_end']);
-				$events[$counter]['abbrev'] = $row['abbrev'];
+				$events[$counter]['abbrev'] = "";
 				$events[$counter]['purpose'] = $row['name'];
 				$events[$counter]['descr'] = $row['descr'];
 				$events[$counter]['location'] = $row['location'];
@@ -329,9 +329,9 @@ class Event {
 				$events[$counter]['mtype'] = $row['meetingtype'];
 				$events[$counter]['mtypdisplay'] = self::getMeetingTypeDisplay($row['meetingtype']);
 				$events[$counter]['fileext'] = $row['file'];
-				$events[$counter]['fname'] = $row['fname'];
-				$events[$counter]['lname'] = $row['lname'];
-				$events[$counter]['sessionUser'] = $ssnUser;
+				$events[$counter]['fname'] = "";
+				$events[$counter]['lname'] = "";
+				$events[$counter]['sessionUser'] = "";
 				$events[$counter]['adder'] = $row['adder'];
 				$events[$counter]['contact'] = $row['contact'];
 				$events[$counter]['registration'] = $row['registration'];
