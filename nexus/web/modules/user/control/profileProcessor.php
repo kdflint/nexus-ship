@@ -27,9 +27,9 @@ $input = array('email' => $_POST['email'],
 							'lname' => $_POST['lname'],
 							'password1' => $_POST['password1'],
 							'password2' => $_POST['password2'],
-							'sms' => $_POST['sms'],
-							'phone' => $_POST['phone'],
-							'descr' => $_POST['about']
+							'sms' => "",
+							'phone' => "",
+							'descr' => ""
 							);
 							
 $result = Utilities::validateUserProfile($input, FALSE);
