@@ -10,10 +10,11 @@
 			<form id="now-form" class="pure-form" action="modules/schedule/control/scheduleProcessor.php" method="post">
 				<fieldset>
       		<div>
-	      		<input type="text" name="meeting-name" style="width:97%;" maxlength="50" placeholder="Purpose" >
+	      		<input type="text" name="meeting-name" style="width:97%;" maxlength="50" placeholder="Meeting Name" >
 					</div>
 					<div style="margin-top:10px;">
-      			<select id="now-form-type" name="meeting-type" style="width:232px;vertical-align:middle;">
+						<?php include("meetingTypeTooltip.html"); ?>
+      			<select id="now-form-type" name="meeting-type" style="width:204px;vertical-align:middle;">
 	      			<?php include("meetingTypeOptions.html"); ?>			
       			</select>	 
       			<select id="now-form-duration" name="meeting-duration" style="width:132px;vertical-align:middle;">

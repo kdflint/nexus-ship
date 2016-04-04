@@ -94,3 +94,108 @@ insert into invitation (uuid, email, create_dttm, accept_dttm, network_fk, invit
 
 --http://nexus.northbridgetech.org/web/enroll.php?invitation=13dcf104-6297-43d3-85b1-7e5127548c96
 
+insert into organization (name, create_dttm, activate_dttm, tax_exempt, status_fk, logo, uid) values ('Mansfield Institute for Social Justice and Transformation', now(), now(), true, 1, 'src="image/partners/roosevelt_univ.png" height="40" width="120"', '1db72823') returning id;
+
+insert into organization_organization (organization_from_fk, organization_to_fk, relationship, create_dttm) values (13, 346, 'parent', now());
+
+insert into public.group (name, create_dttm, activate_dttm, logo, uid) values ('Mansfield Institute for Social Justice and Transformation', now(), now(), '', '5204e034') returning id;
+
+insert into invitation (uuid, email, create_dttm, accept_dttm, network_fk, invitation_dttm, role_fk, expire_dt, issuer_fk, type, organization_fk, group_fk) values ('15694699-729a-4cc3-abc1-1d9a19771308', 'lharrington01@roosevelt.edu', now(), NULL, NULL, now(), '4', (CURRENT_DATE + interval '31 days'), '88', 'single', 346, 15) returning uuid;
+
+--http://nexus.northbridgetech.org/web/enroll?invitation=15694699-729a-4cc3-abc1-1d9a19771308
+
+
+insert into organization (name, create_dttm, activate_dttm, tax_exempt, status_fk, logo, uid) values ('Illinois Balanced and Restorative Justice Project', now(), now(), true, 1, 'ibarj.png', '0d3eb152') returning id;
+
+insert into organization_organization (organization_from_fk, organization_to_fk, relationship, create_dttm) values (13, 349, 'parent', now());
+
+insert into organization_account (organization_fk, account_type) values (349, 'NWM');
+
+insert into public.group (name, create_dttm, activate_dttm, logo, uid) values ('Illinois Balanced and Restorative Justice Project', now(), now(), '', 'c80b25e5') returning id;
+
+insert into invitation (uuid, email, create_dttm, accept_dttm, network_fk, invitation_dttm, role_fk, expire_dt, issuer_fk, type, organization_fk, group_fk) values ('7befdea3-56ed-4f6a-899d-f72448821527', 'sarab@ibarj.org', now(), NULL, NULL, now(), '4', (CURRENT_DATE + interval '31 days'), '88', 'single', 349, 17) returning uuid;
+
+insert into public.user (uuid, username, fname, lname, email, status_fk, create_dttm, activate_dttm) values ('e3f1f53e-9bc5-4c1b-90c7-7c14dda0d34a', 'pUser-0d3eb152', 'Public', 'User', '', '1', now(), now()) returning id;
+
+insert into user_group (user_fk, create_dttm, group_fk, role_fk) values (256, now(), 16, 4);
+
+insert into user_organization (user_fk, organization_fk, grantor_fk, create_dttm, role_fk) values (256, 349, 88, now(), 4);
+
+--http://nexus.northbridgetech.org/web/enroll?invitation=7befdea3-56ed-4f6a-899d-f72448821527
+
+
+insert into organization (name, create_dttm, activate_dttm, tax_exempt, status_fk, logo, uid) values ('Northbridge Technology Alliance Board Room', now(), now(), true, 1, 'NB_sidewheel_square_120_rgb.jpg', 'b2c2c38c') returning id;
+
+insert into organization_organization (organization_from_fk, organization_to_fk, relationship, create_dttm) values (13, 350, 'parent', now());
+
+insert into organization_account (organization_fk, account_type) values (350, 'NWM');
+
+insert into public.group (name, create_dttm, activate_dttm, logo, uid) values ('Northbridge Technology Alliance Board Room', now(), now(), '', '27b9f4a2') returning id;
+
+insert into invitation (uuid, email, create_dttm, accept_dttm, network_fk, invitation_dttm, role_fk, expire_dt, issuer_fk, type, organization_fk, group_fk) values ('a45853cd-5dc6-4954-a4a4-dee5dbf05f5a', 'kathy.flint@northbridgetech.org', now(), NULL, NULL, now(), '4', (CURRENT_DATE + interval '31 days'), '88', 'single', 350, 19) returning uuid;
+
+insert into public.user (uuid, username, fname, lname, email, status_fk, create_dttm, activate_dttm) values ('e89c7d13-3509-4bc0-a546-59c67e937fe0', 'pUser-b2c2c38c', 'Public', 'User', '', '1', now(), now()) returning id;
+
+insert into user_group (user_fk, create_dttm, group_fk, role_fk) values (255, now(), 16, 4);
+
+insert into user_organization (user_fk, organization_fk, grantor_fk, create_dttm, role_fk) values (255, 350, 88, now(), 4);
+
+--http://nexus.northbridgetech.org/web/enroll?invitation=a45853cd-5dc6-4954-a4a4-dee5dbf05f5a
+
+
+insert into organization (name, create_dttm, activate_dttm, tax_exempt, status_fk, logo, uid) values ('Crossroads Antiracism Organizing and Training', now(), now(), true, 1, 'crossroads.jpg', '0879ae0f') returning id;
+
+insert into organization_organization (organization_from_fk, organization_to_fk, relationship, create_dttm) values (13, 351, 'parent', now());
+
+insert into organization_account (organization_fk, account_type) values (351, 'NWM');
+
+insert into public.group (name, create_dttm, activate_dttm, logo, uid) values ('Crossroads Antiracism Organizing and Training', now(), now(), '', '04c59c1d') returning id;
+
+insert into invitation (uuid, email, create_dttm, accept_dttm, network_fk, invitation_dttm, role_fk, expire_dt, issuer_fk, type, organization_fk, group_fk) values ('c3fbda92-d3ed-41f8-bb40-0b3e7d2e07d1', 'karen.ziech@croar.org', now(), NULL, NULL, now(), '4', (CURRENT_DATE + interval '31 days'), '88', 'single', 351, 20) returning uuid;
+
+insert into public.user (uuid, username, fname, lname, email, status_fk, create_dttm, activate_dttm) values ('b8869216-3cdc-429f-8fa7-138a5c1391ad', 'pUser-0879ae0f', 'Public', 'User', '', '1', now(), now()) returning id;
+
+insert into user_group (user_fk, create_dttm, group_fk, role_fk) values (257, now(), 16, 4);
+
+insert into user_organization (user_fk, organization_fk, grantor_fk, create_dttm, role_fk) values (257, 351, 88, now(), 4);
+
+--http://nexus.northbridgetech.org/web/enroll?invitation=c3fbda92-d3ed-41f8-bb40-0b3e7d2e07d1
+
+
+insert into organization (name, create_dttm, activate_dttm, tax_exempt, status_fk, logo, uid) values ('Episcopal Diocese of Chicago Hunger Committee', now(), now(), true, 1, 'edc_logo.png', '51fd21a1') returning id;
+
+insert into organization_organization (organization_from_fk, organization_to_fk, relationship, create_dttm) values (13, 352, 'parent', now());
+
+insert into organization_account (organization_fk, account_type) values (352, 'NWM');
+
+insert into public.group (name, create_dttm, activate_dttm, logo, uid) values ('Episcopal Diocese of Chicago Hunger Committee', now(), now(), '', '754e159a') returning id;
+
+insert into invitation (uuid, email, create_dttm, accept_dttm, network_fk, invitation_dttm, role_fk, expire_dt, issuer_fk, type, organization_fk, group_fk) values ('45241c03-2315-4e76-987b-9f2e4831d910', 'ndavis@episcopalchicago.org', now(), NULL, NULL, now(), '4', (CURRENT_DATE + interval '31 days'), '88', 'single', 352, 21) returning uuid;
+
+insert into public.user (uuid, username, fname, lname, email, status_fk, create_dttm, activate_dttm) values ('ba55d95b-fb8b-48a2-8e20-61ca658411d7', 'pUser-51fd21a1', 'Public', 'User', '', '1', now(), now()) returning id;
+
+insert into user_group (user_fk, create_dttm, group_fk, role_fk) values (258, now(), 16, 4);
+
+insert into user_organization (user_fk, organization_fk, grantor_fk, create_dttm, role_fk) values (258, 352, 88, now(), 4);
+
+--http://nexus.northbridgetech.org/web/enroll?invitation=45241c03-2315-4e76-987b-9f2e4831d910
+
+-- CONVERT EDC ANTI-RACISM COMMISSION
+
+change name of org id 19 and add uid = f4470d42
+
+update organization_organization set organization_from_fk = 13 where id = 277
+
+update organization_account set account_type = 'NWM' where id = 301
+
+change name of group where id = 5
+
+insert into public.user (uuid, username, fname, lname, email, status_fk, create_dttm, activate_dttm) values ('836bb228-b718-4172-9108-10380f44ddd1', 'pUser-f4470d42', 'Public', 'User', '', '1', now(), now()) returning id;
+
+insert into user_group (user_fk, create_dttm, group_fk, role_fk) values (259, now(), 16, 4);
+
+insert into user_organization (user_fk, organization_fk, grantor_fk, create_dttm, role_fk) values (259, 19, 88, now(), 4);
+
+insert into invitation (uuid, email, create_dttm, accept_dttm, network_fk, invitation_dttm, role_fk, expire_dt, issuer_fk, type, organization_fk, group_fk) values ('09afc664-b59a-4a08-a007-1c3bffe379ea', 'c_de_kay@hotmail.com', now(), NULL, NULL, now(), '4', (CURRENT_DATE + interval '31 days'), '88', 'single', 19, 5) returning uuid;
+
+insert into invitation (uuid, email, create_dttm, accept_dttm, network_fk, invitation_dttm, role_fk, expire_dt, issuer_fk, type, organization_fk, group_fk) values ('19ab490c-48d1-4627-88c7-f9968cf4982a', 'dwill313@yahoo.com', now(), NULL, NULL, now(), '4', (CURRENT_DATE + interval '31 days'), '88', 'single', 19, 5) returning uuid;

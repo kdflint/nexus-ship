@@ -2,14 +2,17 @@
 
 // PATHS
 
-	define("PHP_ROOT", "/home/kdflint/projects/nexus-community/nexus/web/lib");
+	define("PHP_ROOT", "/home/kdflint/projects/nexus-community/nexus/lib");
 	define("WEB_ROOT", "/home/kdflint/projects/nexus-community/nexus/web");
-	define("TKN_ROOT", "");
+	define("TKN_ROOT", "/home/kdflint/projects/nexus-community/nexus/token");
+	define("LIB_ROOT", "/home/kdflint/projects/nexus-community/nexus/lib");
+	define("PTR_ROOT", "/home/kdflint/projects/nexus-community/nexus/partner");
+	define("PTR_STC_ROOT", "/partner");
 	define("APP_NAME", "/nexus/nexus");
+	define("PILOT_NAME", "/nexus/pilot");
 	define("ENV_NAME", "local");
 	define("ENV_HOST", "localhost");
 	define("SSN_TIMEOUT", "-1"); // in seconds
-
 
 // DATABASE
 
@@ -26,5 +29,9 @@
 	define("DEMO_PASSWORD", "fakepassword295");
 	define("DEMO_EVENT_NOW", "75");
 	define("DEMO_EVENT_FUTURE", "76,77");
+	
+// TEMPORARY
+
+	define("EVENT_APPROVE_LIST", "kathy.flint@northbridgetech.org");
 		
 ?>

@@ -1,0 +1,6 @@
+Before you start using the getJavaInfo.jar applet with PluginDetect to do Java detection,
+please take a look at /source/_ReadMe.txt
+
+It discusses how to customize the applet. This is recommended to reduce the chances 
+of AntiVirus scanners falsely identifying the applet as malware.
+

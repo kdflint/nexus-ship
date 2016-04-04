@@ -1,0 +1,86 @@
+
+/* DATE */
+
+.event, .user {
+  width: 110px;
+  color: rgba(0, 77, 98, 1);
+  text-align: center;
+  padding-right:10px;
+  border-right:1px solid #a6c3ce;
+ }
+ 
+.day, .date, .month, .fname, .lname, .time {
+  padding-top: 5px;
+  }
+ 
+.day, .lname { 
+  font-size: 90%;
+  }
+  
+.date, .fname { 
+  font-size: 150%;
+  }
+  
+ .fname125 { 
+  font-size: 125%;
+  }
+  
+ .fname110 { 
+  font-size: 110%;
+  }
+ 
+.month { 
+	font-size: 90%;
+  }
+  
+.period {
+	font-size: 80%;
+	text-align: bottom;
+} 
+ 
+#schedule-form-country-button, #schedule-form-countryTimeZones-button {
+	vertical-align: middle;
+}
+
+/* TABLES */
+
+.mod_event table {
+    border-collapse: separate !important; /* IE7 and lower */
+    border: 1px solid #a6c3ce !important;
+    margin-bottom: 5px;
+    width: 100%;
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+}
+
+.mod_event td {
+	vertical-align: top;
+}
+
+td, tr {
+	padding: 3px;
+}
+
+.pure-table td:first-child {
+	width: 100px;
+	margin-top: 10px;
+}
+
+.pure-table td {
+	border-left: 0px !important;
+	padding: 1em !important;
+}
+
+.button-menu {
+    border-radius: 6px;
+    text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.2);
+    color: #004D62;
+    font-size: 110%;
+    margin-top: 5px;
+    width: 120px;
+    padding: 0.35em;
+}
+
+.ui-selectmenu-menu {
+	text-align: left;
+}

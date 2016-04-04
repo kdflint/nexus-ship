@@ -1,4 +1,4 @@
-<?
+<?php
 
 //error_reporting(E_ALL);
 //ini_set( 'display_errors','1'); 
@@ -35,8 +35,8 @@ if (!Util::isSessionValid()) {
     		<img style="float:left;vertical-align:top;margin:20px;" <? echo $_SESSION['logo']; ?> border="0" alt=""/>
     	</td>
     	<td>
-    		<p style="text-align:right;color:#c9c9a7;font-size:18px;margin:20px;"><b><? echo($_SESSION['orgName']); ?></b></p>
-    		<p style="text-align:right;margin:20px;color:#4b5b6e"><b>Hello <? echo($_SESSION['fname']); ?></b><br/>
+    		<p style="text-align:right;color:#c9c9a7;font-size:18px;margin:20px;"><b><?php echo($_SESSION['orgName']); ?></b></p>
+    		<p style="text-align:right;margin:20px;color:#4b5b6e"><b>Hello <?php echo($_SESSION['fname']); ?></b><br/>
 			</td>
     	</tr>
     </table>	

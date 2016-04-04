@@ -1,4 +1,4 @@
-<? 
+<?php 
 session_start();
 $error = "";
 
@@ -31,7 +31,7 @@ if(isset($_GET['error'])) {
   
   <body>
     <div class="container">
-   		<img style="float:left;vertical-align:top;margin:20px;" <? echo $_SESSION['logo']; ?>  border="0" alt=""/>
+   		<img style="float:left;vertical-align:top;margin:20px;" <?php echo $_SESSION['logo']; ?>  border="0" alt=""/>
    		
    		<p style="text-align:right;color:#4b5b6e;font-size:34px;margin-right:20px;"><b>Nexus</b><br/>
    		<i><span style="text-align:right;color:#4b5b6e;font-size:16px;margin-right:20px;">Building communities that build communities</span></i></p>
@@ -41,7 +41,7 @@ if(isset($_GET['error'])) {
 				
 				<div class="leftColumn" style="border:0px;background-color:#e6ebf0;padding:10px;height:360px;width:300px;box-shadow: 4px 4px 5px #cccccc;border-radius:15px;top:-30px;">	
 					<p><b>Congratulations!</b></p>
-					<p style="margin:10px;">You have been invited to enroll in the <b><? echo $_SESSION['groupName'] ?></b> hosted by <b><? echo $_SESSION['networkName'] ?></b></p>
+					<p style="margin:10px;">You have been invited to enroll in the <b><?php echo $_SESSION['groupName'] ?></b> hosted by <b><?php echo $_SESSION['networkName'] ?></b></p>
 					<p style="margin:10px;">This is your collaboration space, secure to your community of practice.</p>
 					<p style="margin:10px;">These features will support the work you do every day to strengthen communities.</p>
 					<ul>
@@ -59,20 +59,20 @@ if(isset($_GET['error'])) {
 							<div class="formLogin" style="border:thin solid #4b5b6e;padding:10px;border-radius:15px;">
 								<form action="../control/enrollProcessor.php" method="post" id="enrollForm">
 									<table cellpadding="5">
-								  <tr><td>&nbsp;</td><td style="color:#bf6030;"><? echo $error; ?></td></tr>
-								  	<!--<p>You represent: <? echo $_SESSION['orgName'] ?></p>-->
-										<tr><td><a href="#" class="tooltip" title="7-25 characters. May contain letters, numbers, _">Choose your user name*</td><td><input class="passed" type="text" size="25" name="userid" value="<? echo $stickyUserId; ?>"/></td></tr>
-										<tr><td><a href="#" class="tooltip" title="7-25 characters. Must contain at least 1 digit.">Choose your password*</td><td><input class="passed" type="password" size="25" name="password1" value="<? echo $stickyPassword1; ?>"/></td></tr>
-										<tr><td>Confirm your password*</td><td><input class="passed" type="password" size="25" name="password2" value="<? echo $stickyPassword2; ?>"/></td></tr>
-										<tr><td><a href="#" class="tooltip" title="1-25 characters.  May contain letters, numbers, accents, &apos; or _">Your first name*</td><td><input class="passed" type="text" size="25" name="fname" value="<? echo $stickyFname; ?>"/></td></tr>
-										<tr><td><a href="#" class="tooltip" title="Optional. 1-25 characters.  May contain letters, numbers, accents, &apos; or _">Your last name</td><td><input class="passed" type="text" size="25" name="lname" value="<? echo $stickyLname; ?>"/></td></tr>
-										<tr><td valign="top"><a href="#" class="tooltip" title="2-100 characters. May contain letters, numbers, accents, spaces, &apos; or _">Your organization*</td><td><textarea class="passed"  maxlength="100" rows="4" cols="30" name="orgname" ><? echo $stickyOrgName; ?></textarea></td></tr>
+								  <tr><td>&nbsp;</td><td style="color:#bf6030;"><?php echo $error; ?></td></tr>
+								  	<!--<p>You represent: <?php echo $_SESSION['orgName'] ?></p>-->
+										<tr><td><a href="#" class="tooltip" title="7-25 characters. May contain letters, numbers, _">Choose your user name*</td><td><input class="passed" type="text" size="25" name="userid" value="<?php echo $stickyUserId; ?>"/></td></tr>
+										<tr><td><a href="#" class="tooltip" title="7-25 characters. Must contain at least 1 digit.">Choose your password*</td><td><input class="passed" type="password" size="25" name="password1" value="<?php echo $stickyPassword1; ?>"/></td></tr>
+										<tr><td>Confirm your password*</td><td><input class="passed" type="password" size="25" name="password2" value="<?php echo $stickyPassword2; ?>"/></td></tr>
+										<tr><td><a href="#" class="tooltip" title="1-25 characters.  May contain letters, numbers, accents, &apos; or _">Your first name*</td><td><input class="passed" type="text" size="25" name="fname" value="<?php echo $stickyFname; ?>"/></td></tr>
+										<tr><td><a href="#" class="tooltip" title="Optional. 1-25 characters.  May contain letters, numbers, accents, &apos; or _">Your last name</td><td><input class="passed" type="text" size="25" name="lname" value="<?php echo $stickyLname; ?>"/></td></tr>
+										<tr><td valign="top"><a href="#" class="tooltip" title="2-100 characters. May contain letters, numbers, accents, spaces, &apos; or _">Your organization*</td><td><textarea class="passed"  maxlength="100" rows="4" cols="30" name="orgname" ><?php echo $stickyOrgName; ?></textarea></td></tr>
 										<!-- Some or all of above data may be already completed by the invitation. -->
 										<!-- Even if an invitation sets up all the prior data, a new user has to enter an email for confirmation. -->
-										<tr><td>Your email*</td><td><input class="passed" type="text" size="25" name="email" value="<? echo $stickyEmail; ?>"/></td></tr>
+										<tr><td>Your email*</td><td><input class="passed" type="text" size="25" name="email" value="<?php echo $stickyEmail; ?>"/></td></tr>
 										<tr><td colspan="2"><input type="submit" style="float:right;" value="Enroll"/></td></tr>
 									</table>
-									<input type="hidden" name="invitation" value="<? echo $inviteId; ?>" />
+									<input type="hidden" name="invitation" value="<?php echo $inviteId; ?>" />
 								</form>
 							</div>									
 				</div>

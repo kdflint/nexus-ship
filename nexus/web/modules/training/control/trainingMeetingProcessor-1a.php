@@ -5,8 +5,8 @@ session_start();
 $_SESSION['traineeName'] = $_POST['username'];
 
 require_once("../../../src/framework/Util.php");
-require_once(Util::getModulesRoot() . "/error/handlers.php");
-require_once(Util::getLibRoot() . "/bigbluebutton/bbb-api-php/includes/bbb-api.php"); 
+require_once(Utilities::getModulesRoot() . "/error/handlers.php");
+require_once(Utilities::getLibRoot() . "/bigbluebutton/bbb-api-php/includes/bbb-api.php"); 
 
 $bbb = new BigBlueButton();
 

@@ -1,15 +1,18 @@
 <?php
 
 require_once(dirname(__FILE__) . "/../../../config/config_env.php");
-require_once(PHP_ROOT . "/Validate.php");
-require_once(Util::getSrcRoot() . "/user/User.php");
-require_once(Util::getSrcRoot() . "/schedule/Event.php");
-require_once(Util::getLibRoot() . "/autoload/autoloader.php");
+require_once(Utilities::getModulesRoot() . "/error/handlers.php");
+require_once(Utilities::getPhpRoot() . "/Validate.php");
+require_once(Utilities::getSrcRoot() . "/user/User.php");
+require_once(Utilities::getSrcRoot() . "/group/Group.php");
+require_once(Utilities::getSrcRoot() . "/schedule/Event.php");
+require_once(Utilities::getLibRoot() . "/autoload/autoloader.php");
+require_once(Utilities::getLibRoot() . "/bigbluebutton/bbb-api-php/includes/config.php");
 
 // set config settings
 autoloader(array(array(
       'debug' => false, // turn on debug mode (by default debug mode is off)
-      'basepath' => Util::getLibRoot(), // basepath is used to define where your project is located
+      'basepath' => Utilities::getLibRoot(), // basepath is used to define where your project is located
       'extensions' => array('.php'), // allowed class file extensions
       // 'extensions' => array('.php', '.php4', '.php5'), // example of multiple extensions
 )));
@@ -26,7 +29,7 @@ autoloader(array(
 // print array of class autoload paths:
 // print_r($cached_paths); exit(0);
 
-class Util {
+class Utilities {
 	
 	public static function getDbHost() {
 		return DB_HOST; 
@@ -42,6 +45,11 @@ class Util {
 	
 	public static function getDbName() {
 		return DB_NAME;
+	}
+	
+	// Very Temporary Method
+	public static function getEventApprovalList() {
+		return EVENT_APPROVE_LIST;
 	}
 	
 	public static function getDemoUidpk() {
@@ -72,8 +80,20 @@ class Util {
 		return "http://" . ENV_HOST . APP_NAME . self::$web_path;
 	}
 	
+	public static function getPluginPath() {
+		return self::getHttpPath() . "/plugin";
+	}
+	
+	public static function getPilotPath() {
+		return "http://" . ENV_HOST . PILOT_NAME;
+	}
+	
 	public static function getConfigPath() {
 		return "http://" . ENV_HOST . APP_NAME . self::$config_path;
+	}
+	
+	public static function getPartnerHttpPath() {
+		return "http://" . ENV_HOST . APP_NAME . PTR_STC_ROOT;
 	}
 	
 	public static function getWebRoot() {	return WEB_ROOT; }
@@ -84,13 +104,25 @@ class Util {
 	
 	public static function getSrcRoot() {	return self::getWebRoot() . "/src"; }
 	
-	public static function getLibRoot() {	return self::getWebRoot() . "/lib"; }
+	public static function getLibRoot() {	return LIB_ROOT; }
 	
-	public static function getTokenRoot() { return self::getWebRoot() . "/token"; }
+	public static function getTokenRoot() { return TKN_ROOT; }
+	
+	public static function getPartnerFileRoot() { return PTR_ROOT . "/file"; }
+
+	public static function getHttpImagePath() { return self::getHttpPath() . "/image"; }
+	
+	public static function getPartnerImageRoot() { return self::getPartnerHttpPath() . "/image/"; }
+	
+	public static function getPartnerFileUrl() { return self::getPartnerHttpPath() . "/file"; }
 	
 	public static function getEnvName() { return ENV_NAME; }
 	
+	public static function getBbbDomain() { return CONFIG_SERVER_BASE_URL; }
+	
 	private static function getSessionTimeout() { return SSN_TIMEOUT; }
+	
+	public static function getOpenMeetingMargin() {return time() + 15*60; }
 	
 	public static function getTwitterHandle() {
 		return "NorthbridgeNFP";
@@ -172,7 +204,7 @@ class Util {
 	
 	public static function validateUserId($in) {
 		if(self::validateUserIdFormat($in)) {
-			if (pgDb::userIdExists($in)) {	
+			if (PgDatabase::userIdExists($in)) {	
 				return TRUE;
 			}
 		}
@@ -196,7 +228,7 @@ class Util {
 	public static function validateUsernameFormat($in) {
 		if(Validate::string($in, array(
 				'min_length' => 1, 
-    		'max_length' => Util::USERNAME_MAX) 
+    		'max_length' => Utilities::USERNAME_MAX) 
     	 && !preg_match("/[ ]+/", $in))) {
     		return TRUE;
     }
@@ -244,7 +276,7 @@ class Util {
 			if (Validate::string($input['fname'], array(
     				'min_length' => self::NAME_MIN,
     				'max_length' => self::NAME_MAX))) {
-				$result['good']['fname'] = Util::sanitize($input['fname']);			
+				$result['good']['fname'] = Utilities::sanitize($input['fname']);			
 			} else {
 				$result['error']['fname'] = self::VALIDATION_FNAME_ERROR;
 			}
@@ -258,7 +290,7 @@ class Util {
     				'format' => VALIDATE_EALPHA . VALIDATE_NUM . VALIDATE_SPACE . "'" . "_" . "-",
     				'min_length' => self::NAME_MIN,
     				'max_length' => self::NAME_MAX))) {
-				$result['good']['lname'] = Util::sanitize($input['lname']);			
+				$result['good']['lname'] = Utilities::sanitize($input['lname']);			
 			} else {
 				$result['error']['lname'] = self::VALIDATION_LNAME_ERROR;
 			}
@@ -454,16 +486,29 @@ class Util {
     return $coreAuthenticated;
 	}
 
+	public static function isSessionPublic() {
+		if (strcasecmp($_SESSION['nexusContext'], "PUB") == 0) {
+			return TRUE;
+		}
+		return FALSE;
+	}
+
 	public static function isSessionValid() {
-		if (isset($_SESSION['username']) && 
-				strlen($_SESSION['username']) > 0 && 
-				!self::isSessionExpired() &&
-				isset($_SESSION['fname']) &&
-				strlen($_SESSION['fname']) > 0 &&
-				$_SESSION['role']) {
+		if (isset($_SESSION['nexusContext']) && 
+				strlen($_SESSION['nexusContext']) == 3 && 
+				isset($_SESSION['orgUid']) && 
+				self::validateOrganizationUidFormat($_SESSION['orgUid']) && 
+				isset($_SESSION['username']) &&
+				!self::isSessionExpired() ) {
 			return true;
 		}
 		return false;
+	}
+	
+	public static function setSessionTimezone($zone) {
+		unset($_SESSION['timezone']);
+		$_SESSION['timezone'] = (Event::isValidTimeZone($zone) ? $zone : "undefined");
+		return true;
 	}
 	
 	public static function setSession($username, $remember, $zone = "undefined") {
@@ -475,14 +520,16 @@ class Util {
 		$_SESSION['appRoot'] = self::getWebRoot();
 		$_SESSION['environment'] = self::getEnvName();
 		$_SESSION['username'] = $username;
-		$_SESSION['groups'] = User::getUserGroupsByUsername($_SESSION['username']);
+		$_SESSION['groups'] = Group::getUserGroupsByUsername($_SESSION['username']);
 		self::setSessionLastActivity();
 		$_SESSION['remember'] = ($remember ? "true" : "false");
-		$_SESSION['timezone'] = (Event::isValidTimeZone($zone) ? $zone : "undefined");
+		self::setSessionTimezone($zone);
 		
 		$cursor = User::getUserSessionByUsername($_SESSION['username']);
 		
 		while ($row = pg_fetch_array($cursor)) {
+			// TODO - loading a PUBLIC context will wipe this one out and then screw up Nexus context
+			$_SESSION['nexusContext'] = $row['account'];
 			$_SESSION['fname'] = $row['fname'];
   		$_SESSION['lname'] = $row['lname'];
   		$_SESSION['orgName'] = $row['affiliation'];
@@ -495,6 +542,30 @@ class Util {
   		$_SESSION['email'] = $row['email'];
   		$_SESSION['role'] = self::getRoleName($row['roleid']);
 		} 	
+	}
+	
+	public static function setPublicSession($oid, $zone = "undefined", $fname = "Anonymous", $uuid = false) {
+		$_SESSION['nexusContext'] = "PUB";
+		$_SESSION['orgUid'] = $oid;
+		$_SESSION['username'] = "pUser-" . substr($oid, 0, 8);
+		if (!$uuid) {
+			$_SESSION['groups'] = Group::getUserGroupsByUsername($_SESSION['username']);
+		} else {
+			$_SESSION['groups'] = Group::getGroupByEventUuid($uuid);	
+		}
+		$row = pg_fetch_row(User::getActiveUserByUsername($_SESSION['username']));
+		$_SESSION['uidpk'] = $row[0];
+		self::setSessionTimezone($zone);
+		
+		$cursor = User::getUserSessionByUsername($_SESSION['username']);
+		while ($row = pg_fetch_array($cursor)) {
+			$_SESSION['fname'] = $fname;
+			$_SESSION['lname'] = "";
+			$_SESSION['logo'] = $row['logo'];
+  		$_SESSION['networkName'] = $row['network'];
+  		$_SESSION['orgId'] = $row['affiliationid'];
+		}
+		
 	}
 	
 	public static function setDemoSession($username, $remember, $zone = "undefined") {
@@ -515,7 +586,11 @@ class Util {
 	}
 	
 	public static function isSessionExpired() {
-		if ((isset($_SESSION['remember']) && $_SESSION['remember'] == "true") || Util::getSessionTimeout() == "-1") {
+		if (isset($_SESSION['nexusContext']) && $_SESSION['nexusContext'] != "NWM") {
+			// Nexus Advantage and public sessions don't time out (yet)
+			return false;
+		}
+		if ((isset($_SESSION['remember']) && $_SESSION['remember'] == "true") || Utilities::getSessionTimeout() == "-1") {
 			// don't expire a session if the user has asked to be remembered on login form
 			return false;
 		}
@@ -534,7 +609,7 @@ class Util {
 		|
 		| In login.php we set SESSION variables for different purposes when the page loads, even before a user actually logs in to the app.
 		| This is how we securely inform server processors of certain usage contexts (like this being a demo session, for instance)
-		| We need those SESSION variables to be useful even after a user initiates a logout (which calls this Util::destroySession() method).
+		| We need those SESSION variables to be useful even after a user initiates a logout (which calls this Utilities::destroySession() method).
 		| If we kill the session cookie then we can't use this technique. For instance, if we delete the SESSION cookie when a demo user logs out
 		| then we lose track of the fact that this session context is demo session and a subsequent log in fails. Without the cookie, there is no
 		| place to store this info and communicate it back to the server.

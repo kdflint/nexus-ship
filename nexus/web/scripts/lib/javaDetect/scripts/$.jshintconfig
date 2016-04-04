@@ -1,0 +1,34 @@
+{
+ "es3": true,
+ "maxerr": 1000, 
+ "forin": true,
+ "undef": true, 
+ "unused": true,
+ "asi": true,
+ "browser": true,
+ "devel": true,
+ "predef": [ "PluginDetect" ]
+}
+
+
+/*
+   options for JSHINT
+
+   maxerr - how many errors to display
+
+   es3 - adhere to ECMAScript 3 specification. To be compatible with older browsers
+     such as Internet Explorer 6/7/8/9 and other legacy JavaScript environments.
+
+   asi - This option suppresses warnings about missing semicolons.
+     JSHINT has a tendency to want semicolons before a closing }, which is not needed.
+     
+   browser - This option defines globals exposed by modern browsers: all the way from good old 
+   document and navigator to the HTML5 FileReader and other new developments in the browser world.
+
+   devel - This option defines globals that are usually used for logging poor-man's 
+   debugging: console, alert, etc. It is usually a good idea to not ship them in 
+   production because, for example, console.log breaks in legacy versions of Internet Explorer.
+   
+   predef - tell JSHint about global variable(s).
+
+*/

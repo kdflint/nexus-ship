@@ -11,11 +11,12 @@ require_once(Util::getAppRoot() . "control/error/handlers.php");
 
 $uid = $_POST['uid'];
 $password = $_POST['password'];
+$tz = $_POST['timezone'];
 
 $isAuthenticated = Util::authenticate($uid, $password);
 
 if($isAuthenticated){
-	Util::setSession($uid);
+	Util::setSession($uid, $tz);
 	Util::setLogin($_SESSION['uidpk']);
 	header("location:../view/nexus.php?thisPage=directory");
 	exit(0);	

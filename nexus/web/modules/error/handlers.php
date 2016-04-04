@@ -4,11 +4,18 @@
 
 // Destinations
 define("ADMIN_EMAIL", "kathy.flint@northbridgetech.org");
-define("LOG_FILE", "/home1/northbr6/errors.log");
+define("LOG_FILE", "/home/northbri/errors.log");
  
 // Destination types
 define("DEST_EMAIL", "1");
 define("DEST_LOGFILE", "3");
+
+$userid = isset($_SESSION['uidpk']) ? $_SESSION['uidpk'] : "undefined";
+$email = isset($_SESSION['email']) ? $_SESSION['email'] : "undefined";
+$context = isset($_SESSION['nexusContext']) ? $_SESSION['nexusContext'] : "undefined";
+$orgid = isset($_SESSION['orgUid']) ? $_SESSION['orgId'] : "undefined";
+$first = isset($_SESSION['fname']) ? $_SESSION['fname'] : "undefined";
+$last = isset($_SESSION['lname']) ? $_SESSION['lname'] : "undefined";
 
 // TODO - fix header location and set up for all site
  
@@ -18,9 +25,9 @@ function my_error_handler($errno, $errstr, $errfile, $errline)
   switch ($errno) {
     case E_USER_ERROR:
       // Send an e-mail to the administrator
-      error_log("Error: $errstr \n\nFatal error on line $errline in file $errfile \n\nUser: " . $_SESSION['uidpk'] . ":" . $_SESSION['email'], DEST_EMAIL, ADMIN_EMAIL);
+      error_log("Error: $errstr \n\nFatal error on line $errline in file $errfile \n\nUser: " . $userid . ":" . $email . ":" . $first . ":" . $last . "\nContext: " . $orgid . ":" . $context, DEST_EMAIL, ADMIN_EMAIL);
       // Screen out to user
-      header("location:../../../index.php?view=fatal");
+      header("location:../../nexus/web/nexus.php?view=fatal");
       break;
   }
  

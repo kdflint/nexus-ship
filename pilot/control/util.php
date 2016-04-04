@@ -1,7 +1,10 @@
 <?php
 
 // TODO - solve warning and use local method
-require_once("/home1/northbr6/php/Validate.php");
+require_once("../migration/Util.php");
+require_once(dirname(__FILE__) . "/../config/env_config.php");
+require_once(PHP_ROOT . "/Validate.php");
+require_once(Utilities::getSrcRoot() . "/schedule/Event.php");
 
 class Util {
 	
@@ -310,25 +313,18 @@ class Util {
 		if (pgDb::countActiveUsers($uid, $hash) == 1) {
 			$coreAuthenticated = true;
 		}
-		//Login to Smart PHP Calendar
-    if ($coreAuthenticated) {     
-    	  require_once(self::getAppRoot() . "module/calendar/SpcEngine.php");
-        try {
-            Spc::login($uid);
-        } catch (Exception $e) {
-            echo $e->getMessage();
-        }
-    }
     return $coreAuthenticated;
 	}
 	
-	public static function setSession($username) {
+	public static function setSession($username, $zone = "undefined") {
 
 		session_regenerate_id(TRUE);
 		
 		$_SESSION['appRoot'] = self::getAppRoot();
 		require_once($_SESSION['appRoot'] . "config/env_config.php");
 		$_SESSION['environment'] = $env_name;
+		$_SESSION['nexusContext'] = "ADV";
+		$_SESSION['timezone'] = (Event::isValidTimeZone($zone) ? $zone : "undefined");
 		
 		$_SESSION['username'] = $username;
 		$_SESSION['groups'] = pgDb::getUserGroupsByUsername($_SESSION['username']);
@@ -353,7 +349,7 @@ class Util {
 	}
 	
 	public static function getHome() {
-		return "/home1/northbr6/";
+		return "/home/northbri/";
 	}
 
 	public static function storeSecurePasswordImplA($plaintextPassword, $userId) {
@@ -364,6 +360,8 @@ class Util {
 	}
 	
 	public static function getPasswordHashByUser($userId, $plaintextPassword) {
+		echo $userId;
+		echo $plaintextPassword;
 		$cursor = pgDb::getUserPasswordByUser($userId);
 		$row = pg_fetch_array($cursor, 0);
 		$encrypted = $row['password'];

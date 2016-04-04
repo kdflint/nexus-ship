@@ -7,7 +7,7 @@
 	<body>
 		<?php
 		
-			$status = "open";
+			$status = "closed";
 			if (is_ajax()) {
 				echo $status;
 			} else {

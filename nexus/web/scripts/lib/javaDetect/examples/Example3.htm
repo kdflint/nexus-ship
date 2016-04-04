@@ -1,0 +1,35 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<!-- saved from url=(0014)about:internet -->
+
+<title>PluginDetect Example</title>
+
+<link type="text/css" href="../css/styles.css" rel="stylesheet" media="screen">
+<script type="text/javascript" src="../scripts/PluginDetect_Java.js"></script>
+<script type="text/javascript" src="../scripts/VerifyApplet.js"></script>
+
+</head>
+
+<body>
+<b>PluginDetect Java Example # 3</b><br><br>
+In this example we force Java applets to run in the web page by setting verifyTags = [3, 3, 3].<br>
+Then we query the Java applets directly to get the plugin detection results.<br><br>
+For Internet Explorer, we try to run the Java applets using an &lt;applet&gt; tag, AND an HTML5 compatible &lt;object&gt; tag,
+AND an &lt;object&gt; tag with Oracle's Java ActiveX classid. For all other browsers,
+we try to run the Java applets using an &lt;applet&gt; tag AND an HTML5 compatible &lt;object&gt; tag.<br>
+
+<br><br><br>
+
+<!-- results of detection written to "javaresult" -->
+<div id="javaresult"></div>
+
+<script type="text/javascript" src="../scripts/detectJava_333.js"></script>
+
+
+<br><br><br>
+--------- End of page ---------
+</body>
+
+</html>

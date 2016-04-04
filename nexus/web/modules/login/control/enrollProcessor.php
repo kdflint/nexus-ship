@@ -3,9 +3,9 @@
 session_start();
 
 require_once("../../../src/framework/Util.php");
-require_once(Util::getSrcRoot() . "/user/Invitation.php");
-require_once(Util::getSrcRoot() . "/group/Group.php");
-require_once(Util::getModulesRoot() . "/login/control/MessageEnrollment.php");
+require_once(Utilities::getSrcRoot() . "/user/Invitation.php");
+require_once(Utilities::getSrcRoot() . "/group/Group.php");
+require_once(Utilities::getModulesRoot() . "/login/control/MessageEnrollment.php");
 
 // Cleanse all user input
 
@@ -13,20 +13,20 @@ $dirty = array('username' => $_POST['uid'], 'password1' => $_POST['password1'], 
 $clean = array();
 $validInvitation = false;
 			
-$result = Util::validateUserProfile($dirty, TRUE);
+$result = Utilities::validateUserProfile($dirty, TRUE);
 
-if (isset($_SESSION['invitation']) && Util::validateUuid($_SESSION['invitation'])) {
+if (isset($_SESSION['invitation']) && Utilities::validateUuid($_SESSION['invitation'])) {
 	if (Invitation::isInvitationOpen($_SESSION['invitation'])) {
 		$validInvitation = true;
 	}
 }
 
 if (!$validInvitation || count($result['error']) > 0) {
-	if ($result['error']['username'] == Util::VALIDATION_USERNAME_DUPE_ERROR)  {
+	if ($result['error']['username'] == Utilities::VALIDATION_USERNAME_DUPE_ERROR)  {
 		returnToEnrollWithError($result['error']['username']);
 	} else {
 		echo print_r($result['error']);
-		//header("location:" . Util::getHttpPath() . "/login.php?logout=true");
+		//header("location:" . Utilities::getHttpPath() . "/login.php?logout=true");
 		exit(0);
 	}
 }
@@ -49,7 +49,7 @@ $_SESSION['username'] = $clean['username'];
 $invitation = pg_fetch_array(Invitation::getOpenInvitationByUuid($_SESSION['invitation']));
 
 $uidpk = User::addActiveUser(
-	Util::newUuid(),
+	Utilities::newUuid(),
 	$clean['username'],
 	$clean['fname'],
 	$clean['lname'],
@@ -64,7 +64,7 @@ User::addUserGroupRelation($uidpk, $invitation['groupid'], $invitation['roleid']
 Invitation::consumeInvitationByUuid($_SESSION['invitation']);
 
 $row = pg_fetch_array(Group::getGroupById($invitation['groupid']));
-$groupName = $row['name'];
+$groupName = array_values($row)[0];
 	
 $isAuthenticated = true;
 	
@@ -79,15 +79,15 @@ while ($row = pg_fetch_array($cursor)) {
 sendConfirmationEmail($clean['email'], $clean['fname'], $clean['username'], $usernames, $groupName, $invitation['uid']);
 
 if($isAuthenticated){
-	header("location:" . Util::getHttpPath() . "/login.php");
+	header("location:" . Utilities::getHttpPath() . "/login.php");
 	exit(0);	
 } else {
-	returnToEnrollWithError(Util::ENROLLMENT_ERROR);
+	returnToEnrollWithError(Utilities::ENROLLMENT_ERROR);
 }	
 		
 function returnToEnrollWithError($errorMessage) {
-	//echo Util::getHttpPath() . "/enroll.php?invitation=" . $_SESSION['invitation'] . "&error=" . $errorMessage;
-	header("location:" . Util::getHttpPath() . "/enroll.php?invitation=" . $_SESSION['invitation'] . "&error=" . $errorMessage);
+	//echo Utilities::getHttpPath() . "/enroll.php?invitation=" . $_SESSION['invitation'] . "&error=" . $errorMessage;
+	header("location:" . Utilities::getHttpPath() . "/enroll.php?invitation=" . $_SESSION['invitation'] . "&error=" . $errorMessage);
 	exit(0);
 }
 
@@ -95,9 +95,9 @@ function sendConfirmationEmail($email, $fname, $username, $allUsernames, $groupN
 	
 	$multiples = "";
 	if (strlen($allUsernames) > 3) {
-		$multiples = '\r\n\r\nNote: There are other usernames currently enrolled with this email address: ' . Util::stripTrailingComma($allUsernames);
+		$multiples = '\r\n\r\nNote: There are other usernames currently enrolled with this email address: ' . Utilities::stripTrailingComma($allUsernames);
 	}
-	$messageBody = 'Welcome ' . $fname . '!\r\n\r\nYour Nexus enrollment is complete for username: ' . $username . $multiples . '\r\n\r\nYou are now enabled to collaborate with ' . $groupName . '\r\n\r\nYou can login to Nexus using this link.\r\n\r\n' . Util::getHttpPath() . '/login.php?oid=' . $orgid . '\r\n\r\nSincerely,\r\n\r\nThe Development Team at\r\nNorthBridge Technology Alliance';
+	$messageBody = 'Welcome ' . $fname . '!\r\n\r\nYour Nexus enrollment is complete for username: ' . $username . $multiples . '\r\n\r\nYou are now enabled to collaborate with ' . $groupName . '\r\n\r\nYou can login to Nexus using this link.\r\n\r\n' . Utilities::getHttpPath() . '/login.php?oid=' . $orgid . '\r\n\r\nSincerely,\r\n\r\nThe Development Team at\r\nNorthBridge Technology Alliance';
 	$message = new MessageEnrollment($email, $messageBody);
 	$message->send();
 		

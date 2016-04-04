@@ -1,0 +1,122 @@
+Version History of getJavaInfo.jar
+-----------------------------------
+
+
+
+getJavaInfo.jar v5.2 (12/29/2014)
+----------------------------------
+- Is 1189 bytes.
+- This jar applet now has a manifest. It specifies 'Permissions' header to be 'sandbox'.
+Only the Permissions attribute is required in the customized manifest. We choose
+sandbox because we want the applet to only run in the sandbox. The applet does not
+need access to all the resources on your computer.
+- The applet was compiled using JDK 1.7.0_67.
+However, we used the rt.jar directly from JDK 1.2.2_017 for the compiled Java classes.
+- The applet should work for JRE 1.1+. 
+
+
+getJavaInfo.jar v5.1  (5/15/2013)
+----------------------------------
+- Is 858 bytes.
+- Can be used with PluginDetect v0.8.2 or higher.
+- The jarfile was NOT compressed by any 3rd party compression tools.
+- The jarfile was compiled using jdk 1.6.0_35.
+- The applet now has a red background, and will display the Java version
+and the Java vendor. We did this to supply the user with a visual confirmation
+that Java is indeed running in the browser. If the Java/Javascript bridge is not
+working for some reason, then you will still be able to tell if Java is running or not.
+- We removed the static isPlugin2() method. Its use depended on the Packages keyword,
+but this keyword is no longer supported as of JRE 1,7,0_21+.
+
+
+getJavaInfo.jar v5.0  (12/7/2012)
+----------------------------------
+- Is 624 bytes in size.
+- Can be used with PluginDetect v0.8.0 or higher.
+- The jarfile was NOT compressed by any 3rd party compression tools.
+- The jarfile was compiled using jdk 1.6.0_35.
+- We added a new method: isPlugin2()
+ This method is only intended to be used with the per applet Packages keyword. From
+ Javascript, we call the method like this:
+     appletObject.Packages.A.isPlugin2()
+ If this method runs and returns a result, then Java Plugin2 is installed and enabled.
+ If the method does not run, then Java Plugin2 is not installed or not enabled.
+
+
+getJavaInfo.jar v4  (11/22/2012)
+---------------------------------
+- Is 589 bytes in size.
+- The jarfile was NOT compressed by any 3rd party compression tools.
+- The jarfile was compiled using jdk 1.6.0_35.
+- We only changed the getAppVersion() return result from "3" to "4" in order to change
+ the binary signature of getJavaInfo.jar. This is because v3 of the applet was causing a
+ false positive malware detection in Avira AntiVirus. Interestingly enough, the AntiVirus
+ does not detect anything when the browser runs Java and loads the getJavaInfo.jar applet.
+- From this point forward, I recommend that users customize the getJavaInfo.jar applet
+for themselves to give it a unique binary signature (ie. unique md5 or SHA1 hash, or whatever). 
+This should reduce the chances of a false positive detection in AntiVirus scanners.
+Ways to customize are discussed in the "A.java" source code file.
+
+
+getJavaInfo.jar v3  (8/12/2010)
+--------------------------------
+- Is 587 bytes in size.
+- Does everything that previous versions do.
+- getAppVersion() method has been added. Returns the version of the jarfile itself.
+- The jarfile has NOT been compressed with any 3rd party compression tools.
+We avoid any 3rd party tools to enhance reliability of the jarfile.
+- The jarfile has been compiled using jdk 1.6.0_20.
+
+
+getJavaInfo.jar v2  (1/13/2010)
+--------------------------------
+- Is 485 bytes in size.
+- Does everything that version 1 does.
+- Renamed getInfo() method to getProp()
+- getProp(S) method where S is a string:
+ allows PluginDetect to query the JRE for any additional Java properties that
+ the JRE is willing to reveal. The query is in the format of System.getProperty(S) where S
+ could be 'java.version', 'java.vendor', 'java.vm.name', 'java.vm.specification.name', etc...
+- statusbar(S) method where S is a string:
+ Will try to send the string S to the browser statusbar.
+ We added this feature to allow PluginDetect to try to erase the "Applet A Started" message in the
+ browser statusbar, which occurs in some browsers when the jarfile applet is running.
+ The erase will only work if the browser allows this. The erase occurs from Java via the
+ applet, not purely from Javascript.
+- The jarfile has been compressed with the Java Archive Grinder (jarg.jar), which is a 3rd party
+compression tool.
+
+
+getJavaInfo.jar v2 beta1
+-------------------------
+- We added 2 more methods to the applet:
+    getInfo(String S) - returns value of System.getProperty(S)
+    statusbar() - sets the value of the browser status bar from Java.
+       This only works sometimes depending on the browser, but it could allow you to
+       overwrite the "Applet Started" message in the status bar when an applet starts up.
+- This applet is backwards compatible with any Javascripts that use getJavaInfo.jar v1.
+
+
+getJavaInfo.jar v1  (2/22/2007)
+--------------------------------
+- Is 359 bytes in size.
+- Allows PluginDetect to query the JRE directly to determine the Java version and Java vendor.
+- The jarfile has been compressed with the Java Archive Grinder (jarg.jar), which is a 3rd party
+compression tool.
+- There are 2 public methods:
+  getVersion() method - returns Java version
+  getVendor() method - returns Java vendor
+
+
+
+
+
+
+
+
+
+
+
+
+
+

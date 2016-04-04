@@ -3,7 +3,7 @@
 session_start();
 
 require_once("../../../src/framework/Util.php");
-require_once(Util::getSrcRoot() . "/schedule/Event.php");
+require_once(Utilities::getSrcRoot() . "/schedule/Event.php");
 
 $dirty = array('id' => $_GET['id']);
 $clean = array();
@@ -17,8 +17,8 @@ if (isset($dirty['id'])) {
 
 // TODO - put authorization checker, session checker, error handling, etc. in a central place. These should go at the top of every processor.
 
-if (!Util::isSessionValid()) {
-	header("location:" . Util::getHttpPath() . "/index.php");
+if (!Utilities::isSessionValid()) {
+	header("location:" . Utilities::getHttpPath() . "/nexus.php");
 	exit(0);
 }
 
@@ -32,11 +32,11 @@ Use only clean input beyond this point (i.e. $clean[])
 
 User::deleteUser($clean['id']);
 
-header("location:" . Util::getHttpPath() . "/index.php?view=team");
+header("location:" . Utilities::getHttpPath() . "/nexus.php?view=team");
 exit(0);
 
 function forceLogout() {
-	header("location:" . Util::getHttpPath() . "/login.php?logout=true");
+	header("location:" . Utilities::getHttpPath() . "/login.php?logout=true");
 	exit(0);
 }
 

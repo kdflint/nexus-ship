@@ -58,7 +58,7 @@ if (strlen($message) > 0) {
 			
 		if (isset($_POST['phone']) && strlen($_POST['phone']) > 0) {
 			$subject = "Nexus Test Message";
-		  sendSms($_POST['phone'], $subject, $message);
+		  // sendSms($_POST['phone'], $subject, $message);
 		}	  
 
 		if (isset($_POST['email']) && strlen($_POST['email']) > 0) {

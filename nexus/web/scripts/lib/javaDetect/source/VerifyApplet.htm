@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>Verifying the getJavaInfo.jar Applet</title>
+<!-- saved from url=(0014)about:internet -->
+
+<script type="text/javascript" src="../scripts/PluginDetect_Java.js"></script>
+<script type="text/javascript" src="../scripts/VerifyApplet.js"></script>
+<style type="text/css">
+body {
+  color: #000000;
+  font-size: 20px;
+  background-color: #AAAAAA;
+}
+
+</style>
+
+</head>
+
+<body>
+This page will test the getJavaInfo.jar applet in this folder to see if it works
+and is compatible with the PluginDetect Library...<br/><br/>
+
+In order for this test to work, you will need the following:<br/>
+
+1) Make sure that Java is installed and enabled in your browser.<br/>
+2) Your browser and your version of Java need to communicate via the Javascript/Java bridge.
+Certain combinations of browsers and Java versions may not permit this communication.<br/>
+3) Make sure that your getJavaInfo.jar applet is in this folder.<br/>
+4) This test only needs to work on one browser and one version of Java in order for you to 
+verify the getJavaInfo.jar applet.<br/>
+5) If your browser has deactivated the Java plugin due to security reasons, then you will have
+to activate it (ie. give security approval to run the plugin).<br/>
+6) For Java 7 update 51 and higher, unsigned applets no longer run by default. If the applet you are using is unsigned, 
+then you may have to go into your Java Control Panel and add this web page (or just the domain) 
+to the Exception Site List. As an alternative, you could use a signed applet - but the cost 
+for the certificate is high.<br>
+7) This web page should probably be served by a WEB SERVER to your browser. The reason is that
+some browsers/Java versions/Java security settings may require a WEB SERVER to be used in order for 
+Java to run properly in a web page. (ie. your browser accesses the web page via a server, instead of
+accessing the web page directly from your local disk drive)
+<br/><br/><br/>
+
+<b>TESTING NOW BEGINS...</b><br/><br/>
+
+<b>TEST # 1</b>: We attempt to display several instances of the Java applet in the boxes shown below.<br>
+At least one (but not necessarily all) instance of the applet will appear as a <span style="color:#CC2222;font-weight:bold;">RED</span> rectangle, and will display the Java version and the Java vendor.
+<br><br>
+
+<div id="result1"></div><br/>
+
+<b>TEST # 2</b>: We verify that the Java applet methods can be called from Javascript...<br>
+<div id='result2'></div><br/>
+<div id='result3'></div><br/>
+
+<br/><b>TESTING IS DONE.</b><br/><br/>
+
+<script type="text/javascript" src="../scripts/execVerifyApplet.js"></script>
+</body>
+
+</html>

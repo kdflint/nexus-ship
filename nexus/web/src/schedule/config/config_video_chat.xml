@@ -41,7 +41,7 @@
 		<module name="DeskShareModule" 
 			url="http://ec2-50-19-215-104.compute-1.amazonaws.com/client/DeskShareModule.swf?v=4105" 
 			uri="rtmp://ec2-50-19-215-104.compute-1.amazonaws.com/deskShare"
-			showButton="false"
+			showButton="true"
 			autoStart="false"
 			autoFullScreen="false"
 			baseTabIndex="201"

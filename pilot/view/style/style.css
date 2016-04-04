@@ -4,7 +4,7 @@ html {
 
 body { 
 	//color:#4b5b6e; 
-	font-family:'Helvetica',sans-serif; 
+	font-family:'Oxygen',sans-serif; 
 	text-align:center; 
 	background-color: #ffffff;
 	padding:14px;
@@ -44,9 +44,7 @@ div.projectsContent {
 }
 
 a {
-	font-size:14px;
-	font-weight:bold;
-	color:#bf6030;
+	color:#d27b4b;
 	text-decoration:none;
 }
 

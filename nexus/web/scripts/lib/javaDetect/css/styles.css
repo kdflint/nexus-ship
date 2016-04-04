@@ -1,0 +1,42 @@
+
+body {
+  color: #000000;
+  font-size: 20px; 
+  background-color: #A0B8BE; /* #A0B8B8 */
+}
+
+a{
+  color: #2020A0;
+}
+
+input {
+  border: 0px;
+}
+
+img {
+  border: 0px;
+}
+
+.indent0 {
+  margin-right: 40px; 
+  margin-left: 40px;
+  padding: 8px;
+}
+
+.indent1 {
+  margin-right: 40px; 
+  margin-left: 40px;
+  padding: 8px;
+  background-color: #90A8AE;  /* #C3C0C0; */
+  border: solid 1px #888888;  /* #B0B0B0; */
+}
+
+.indent2 {
+  text-align: left; 
+  text-indent: 20px;
+}
+
+.Title1 {
+  font-weight: bold; 
+  font-size: 30px;
+}

@@ -3,10 +3,10 @@
 session_start();
 
 require_once("../../../src/framework/Util.php");
-require_once(Util::getSrcRoot() . "/schedule/Event.php");
-require_once(Util::getSrcRoot() . "/schedule/BbbMeeting.php");
-require_once(Util::getModulesRoot() . "/error/handlers.php");
-require_once(Util::getLibRoot() . "/bigbluebutton/bbb-api-php/includes/bbb-api.php"); 
+require_once(Utilities::getSrcRoot() . "/schedule/Event.php");
+require_once(Utilities::getSrcRoot() . "/schedule/BbbMeeting.php");
+require_once(Utilities::getModulesRoot() . "/error/handlers.php");
+require_once(Utilities::getLibRoot() . "/bigbluebutton/bbb-api-php/includes/bbb-api.php"); 
 
 $dirty = array('uuid' => $_GET['id'], 'mtype' => $_GET['type']);
 $clean = array();
@@ -24,8 +24,8 @@ if (isset($dirty['mtype']) && Event::isValidMeetingType($dirty['mtype'])) {
 	$clean['mtype'] = 'collaboration';
 }
 
-if (!Util::isSessionValid()) {
-	header("location:" . Util::getHttpPath() . "/index.php");
+if (!Utilities::isSessionValid()) {
+	header("location:" . Utilities::getHttpPath() . "/nexus.php");
 	exit(0);
 }
 
@@ -90,7 +90,7 @@ if ($itsAllGood) {
 }
 
 function forceLogout() {
-	header("location:" . Util::getHttpPath() . "/login.php?logout=true");
+	header("location:" . Utilities::getHttpPath() . "/login.php?logout=true");
 	exit(0);
 }
 
