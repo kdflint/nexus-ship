@@ -13,11 +13,15 @@ if (isset($_SESSION['demo']) && $_SESSION['demo']) {
 
 if (!Utilities::isSessionValid()) {
 	// TODO - this should consume a sessionManager object
+	$orgId="";
+	if (isset($_SESSION['orgUid'])) {
+		$orgId = $_SESSION['orgUid'];
+	}
 	if (Utilities::isSessionExpired()) {
-		header("location:login.php?oid=" . $_SESSION['orgUid'] . "&logout=true&expired=true");
+		header("location:login.php?oid=" . $orgId . "&logout=true&expired=true");
 		exit(0);	
 	} else {
-		header("location:login.php?oid=" . $_SESSION['orgUid'] . "&logout=true");
+		header("location:login.php?oid=" . $orgId . "&logout=true");
 		exit(0);	
 	}
 }
