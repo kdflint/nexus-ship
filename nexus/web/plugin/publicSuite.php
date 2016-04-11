@@ -49,7 +49,7 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
     <link rel="stylesheet" href="../styles/nexus.css" type="text/css" />
     
     <script src="../scripts/nexus.js" language="javascript"></script>
-  	<script src="../scripts/timeZoneData.js" language="javascript"></script>
+  	<script src="<?php echo(Utilities::getConfigPath()); ?>/timeZoneData.js" language="javascript"></script>
   	<script src="../../config/geoDataCfcht.js" language="javascript"></script>
   	<script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js" language="javascript"></script>
  		<script src="//code.jquery.com/jquery-1.10.2.js" language="javascript"></script>

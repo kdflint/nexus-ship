@@ -127,6 +127,25 @@ function clearFileInput(ctrl) {
   toggleFileClear();
 }
 
+function htmlFormatParagraphs(rawText) {
+	var replaced = rawText.replace(new RegExp( '~', 'g' ), '</p><p>');
+	return replaced;
+}
+
+function htmlFormatAnchors(rawText) {
+	var re = new RegExp('(https?:\/\/)(.*?)(\\s|$|<)', 'gm');
+	var replaced = rawText.replace(re, '<a href="$1$2" target="_blank">$1$2</a>$3');
+	return replaced;
+}
+
+function htmlFormatEmail(rawText) {
+	var re = new   RegExp("([\\w\\d\\.\\?\\/\\-!#$%&'*+=^`{|}~]+)@([\\w\\d\\-\\.]+?)\\.(\\S+?)(<|\\s|$)", 'gm');
+	var replaced = rawText.replace(re, '<a href="mailto:$1@$2.$3">$1@$2.$3</a>$4');
+	return replaced;
+}
+
+//<a href="mailto:kathy.flint@northbridgetech.org.<a">kathy.flint@northbridgetech.org.<a</a>
+
 function toggleRememberCheckbox() {
 	var loginRemember = document.getElementById("login-remember");
 	var curState = loginRemember.checked;

@@ -47,7 +47,7 @@
        				"<div id='nowEventDetail' class='td-div' style='position:absolute;left:140px;top:5px;height:210px;'>" + 
 		          	"<div class='meeting'>" +
          					"<span class='purpose'>" + jsonObj[i].purpose + "</span><br/>" +
-         					"<span class='descr' style='font-size:90%;width:90%;padding-right:80px;' ><p>" + jsonObj[i].descr.replace(new RegExp( '~', 'g' ), '</p><p>') + "</p>" + 
+         					"<span class='descr' style='font-size:90%;width:90%;padding-right:80px;' ><p>" + htmlFormatEmail(htmlFormatAnchors(htmlFormatParagraphs(jsonObj[i].descr))), '</p><p>') + "</p>" + 
          					((jsonObj[i].location != null) ? "<span class='fa fa-map-marker'></span> " + jsonObj[i].location : "") +
 		          			//"<p><span style='padding-right:5px;margin:0px;color:#d27b4b;' class='fa fa-envelope' ></span>Reserved by: " + jsonObj[i].fname + " " +  jsonObj[i].lname + "<span id='reserveLname'></span></p>" +
           					"<p>reserved by " + 

@@ -12,7 +12,7 @@
        					"<span class='tod'>" + jsonObj[i].hour + ":" + jsonObj[i].minute + "</span><span class='period'> " + jsonObj[i].period + " </span> - " +
 								"<span class='tod'>" + jsonObj[i].hour_end + ":" + jsonObj[i].minute_end + "</span><span class='period'> " + jsonObj[i].period_end + " </span>" +
 								"<span class='period'> " + jsonObj[i].abbrev + "</span>" +
-								(jsonObj[i].descr ? "<span class=''><p>" + jsonObj[i].descr.replace(new RegExp( '~', 'g' ), '</p><p>') + "</p><span>" : "") + 
+								(jsonObj[i].descr ? "<span class=''><p>" + htmlFormatEmail(htmlFormatAnchors(htmlFormatParagraphs(jsonObj[i].descr))) + "</p><span>" : "") + 
 								(jsonObj[i].url ? "<p><span><a href='http://" + jsonObj[i].url + "' target='_blank'>Web Link</a></span></p>" : "") + 
 								(jsonObj[i].fileext ? "<p><span><a href='<?php echo(Utilities::getPartnerFileUrl()); ?>/event-" + jsonObj[i].uuid + "." + jsonObj[i].fileext + "' target='_blank'>Flyer</a></span></p>" : "") + 
 								(jsonObj[i].registration ? "<p><span class='tod'>" + jsonObj[i].registration + "</span></p>" : "") + 
@@ -25,6 +25,7 @@
 		xmlhttp.open("GET", "<?php echo(Utilities::getHttpPath()); ?>" + "/src/framework/eventDetailManager.php?uuid=" + eventUuid, true);
 		xmlhttp.send();  		
 	}
+		
 </script>
 
 <div style="">
