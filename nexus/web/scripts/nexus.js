@@ -198,14 +198,22 @@ function recordActivity() {
 
 function toggleFrameDisplay(frameId) {
 	var showFrame = document.getElementById(frameId);
+	var userListButton = document.getElementById("menu-userList");
+	var reserveListButton = document.getElementById("menu-reserveList");
 	var showButton = document.getElementById('menu-' + frameId);
+	/* set all to default */
 	document.getElementById("reserveList").style.display='none';
 	document.getElementById("userList").style.display='none';
 	document.getElementById("fatalError").style.display='none';
-	document.getElementById("menu-userList").style.backgroundColor='rgba(210, 123, 75, 1)';
-	document.getElementById("menu-reserveList").style.backgroundColor='rgba(210, 123, 75, 1)';
+	userListButton.style.backgroundColor='rgba(210, 123, 75, 1)';
+	userListButton.className = "pure-button button-menu";
+	reserveListButton.style.backgroundColor='rgba(210, 123, 75, 1)';
+	reserveListButton.className = "pure-button button-menu";
+	
+	/* alter the chosen */
 	showFrame.style.display='block';
 	showButton.style.backgroundColor='rgba(137, 157, 112, 1)';
+	showButton.className = "pure-button button-menu active";
 }
 
 function toggleAdvFrameDisplay(menuItem) {

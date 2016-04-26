@@ -83,7 +83,9 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
   	<!-- http://logomakr.com -->
   	 	
     <title>Northbridge Nexus</title> 
-    
+
+		<script type="text/javascript">(function() {var walkme = document.createElement('script'); walkme.type = 'text/javascript'; walkme.async = true; walkme.src = 'http://cdn.walkme.com/users/ab3d27eee206468794b47885dfc2df46/walkme_ab3d27eee206468794b47885dfc2df46.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(walkme, s); window._walkmeConfig = {smartLoad:true}; })();</script> 
+
     <script type="text/javascript">
 
 			<!-- include in this manner instead of in a meta link so that php code inside this file will resolve prior to runtime -->
@@ -121,7 +123,7 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
 				});
 				$( '#profile_control' ).click(function() {
 	  			$( "#profile_display" ).toggle( "blind" );
-	  			$( "#profile_control_icon" ).toggleClass("fa-caret-down fa-caret-up");
+	  			$( "#profile_control_icon" ).toggleClass("fa-minus-square");
 	  			resetProfileForm();		
 				});
 				if(<?php echo $showProfile; ?>) {
