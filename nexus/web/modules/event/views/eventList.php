@@ -46,9 +46,10 @@
       				"</div>" +
        				"<div id='nowEventDetail' class='td-div' style='position:absolute;left:140px;top:5px;height:210px;'>" + 
 		          	"<div class='meeting'>" +
-         					"<span class='purpose'>" + jsonObj[i].purpose + "</span><br/>" +
-         					"<span class='descr' style='font-size:90%;width:90%;padding-right:80px;' ><p>" + htmlFormatEmail(htmlFormatAnchors(htmlFormatParagraphs(jsonObj[i].descr))), '</p><p>') + "</p>" + 
-         					((jsonObj[i].location != null) ? "<span class='fa fa-map-marker'></span> " + jsonObj[i].location : "") +
+		          		"<a href='#openEventDetail' onclick='getEventDetail(\"" + jsonObj[i].uuid + "\");' '<span style='padding-right:10px;color:#d27b4b;' class='fa fa-plus-square'></span></a>" +
+         					"<span class='purpose'>" + jsonObj[i].purpose + "</span>" +
+         					//"<span class='descr' style='font-size:90%;width:90%;padding-right:80px;' ><p>" + htmlFormatEmail(htmlFormatAnchors(htmlFormatParagraphs(jsonObj[i].descr))) + "</p><p>" + 
+         					((jsonObj[i].location != null) ? "<p><span class='fa fa-map-marker'></span> " + jsonObj[i].location : "</p>") +
 		          			//"<p><span style='padding-right:5px;margin:0px;color:#d27b4b;' class='fa fa-envelope' ></span>Reserved by: " + jsonObj[i].fname + " " +  jsonObj[i].lname + "<span id='reserveLname'></span></p>" +
           					"<p>reserved by " + 
           					((jsonObj[i].adder == <?php echo(Utilities::getDemoUidpk()); ?>) ? '<?php echo($_SESSION['fname']); ?>' : jsonObj[i].fname) + " " +  
@@ -74,6 +75,12 @@
 		<div id="reservationTable" class="table-div">
 		</div>
 	</div>
+	<div id="openEventDetail" class="modalDialog">
+		<div>
+			<a href="#close" title="Close" class="close">X</a>
+			<?php include("modules/event/views/eventDetail.php"); ?>
+		</div>
+	</div>
 	
 	<script> getEventList(<?php echo (time() + 15*60); ?>); </script>
-	
+		
