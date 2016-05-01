@@ -32,6 +32,7 @@
 			
 <div id="current_detail_display">	
 	<div id="detailTable" class="table-div" style="border: 0px none !important;">
+		<!--
 		<div style="margin-top:10px;margin-right:10px;margin-left:20px;float:right">
 			<a id='schedule_control' href='#' onclick="showEventAdd();">
 				<span style='' class='fa fa-calendar-o fa-2x' ></span>
@@ -39,6 +40,7 @@
 				<p style="font-size:90%;">Submit<br/>New Event</p>
 			</a>	
   	</div>
+  	-->
 		<div id="eventRow0" class="tr-div">
 			<div style="text-align:center;"><span class='fa fa-spinner fa-spin fa-lg' style="margin-right:10px;margin-top:45px;"></span>Loading detail...</div>	
 		</div>
