@@ -201,9 +201,13 @@ function toggleFrameDisplay(frameId) {
 	var userListButton = document.getElementById("menu-userList");
 	var reserveListButton = document.getElementById("menu-reserveList");
 	var showButton = document.getElementById('menu-' + frameId);
+	var walkMeAnchor = document.getElementById('walkme-' + frameId);
+	
 	/* set all to default */
 	document.getElementById("reserveList").style.display='none';
 	document.getElementById("userList").style.display='none';
+	document.getElementById("walkme-userList").style.display='none';
+	document.getElementById("walkme-reserveList").style.display='none';
 	document.getElementById("fatalError").style.display='none';
 	userListButton.style.backgroundColor='rgba(210, 123, 75, 1)';
 	userListButton.className = "pure-button button-menu";
@@ -214,6 +218,7 @@ function toggleFrameDisplay(frameId) {
 	showFrame.style.display='block';
 	showButton.style.backgroundColor='rgba(137, 157, 112, 1)';
 	showButton.className = "pure-button button-menu active";
+	walkMeAnchor.style.display='block';
 }
 
 function toggleAdvFrameDisplay(menuItem) {
@@ -657,10 +662,11 @@ function getMaxDaysForFebruary(year) {
 }
 
 function populateEditEventForm(i) {
+	alert("hello");
 	/* currentEvents is a global, established in the ajax processing */
 	var eventForm = document.forms['schedule-form'];	
 	eventForm['meeting-name'].value = currentEvents[i].purpose;
-	// etc.
+	eventForm['meeting-name'].readOnly = true;
 	return true;
 }
 	
