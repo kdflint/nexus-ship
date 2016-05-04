@@ -290,7 +290,7 @@ $networkName = $row['name'];
      		<?php } ?>   			
      		</div>
      		
-     		<div class="loginColRight">
+     		<div id="customization-area" class="loginColRight">
       		<span style="clear:right;float:right;text-align:right;margin-top:20px;"><?php echo $networkName; ?></span>
       		<span style="clear:right;float:right;margin-top:20px;"><img src="<?php echo Utilities::getPartnerImageRoot(); ?><?php echo $networkLogo; ?>" /></span>
      		</div>
