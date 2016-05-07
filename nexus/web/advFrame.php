@@ -1,4 +1,39 @@
+<!--
+  <script>
+  $(function() {
+    var circle = $( "#circle" );
+ 
+    $( "#radius" ).selectmenu({
+      change: function( event, data ) {
+        circle.css({
+          width: data.item.value,
+          height: data.item.value
+        });
+      }
+     });
+ 
+    $( "#color" ).selectmenu({
+       change: function( event, data ) {
+         //circle.css( "background", data.item.value );close
+         alert(data.item.value);
+       }
+     });
+  });
+  </script>
+  -->
+
 					<div class="secondaryControls">
+						<!--
+						<form action="#">
+						  <div id="circle"></div>
+						  Show Me: 
+    						<select name="color" id="color">
+      						<option value="1">Pending</option>
+      						<option value="2">Mine</option>
+      						<option value="3" selected="selected">Public</option>
+      						<option value="3" selected="selected">All</option>
+    						</select>
+						</form>-->
 						<a href='#openModal' title="New Meeting"><span style='padding:0px;' class='fa fa-calendar-o fa-2x' ></span><span style='padding-left:2px;' class='fa fa-plus' ></span></a>
 					</div>
 			  	<noscript>

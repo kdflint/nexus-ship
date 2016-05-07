@@ -67,7 +67,7 @@ if ($isFile) {
 }
 
 if ($meetingStatus == "3") {
-	$headers = "From: noreply@northbridgetech.org";
+	$headers = "From: kathy.flint@northbridgetech.org";
 	$message = "Hello Olga,\r\n\r\nA new event has just been submitted to the Center for Faith and Community Health Transformation Public Calendar.\r\n\r\nPlease approve this event for publication at\r\n\r\nhttp://nexus.northbridgetech.org/web/login?oid=ed787a92\r\n\r\nLet me know if you have any questions!\r\n\r\nKathy Flint\r\nkathy.flint@northbridgetech.org";
 	mail(Utilities::getEventApprovalList(), "[Nexus] Public Calendar Event Approval", $message, $headers);
 }	

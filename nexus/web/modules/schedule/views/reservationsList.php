@@ -55,7 +55,8 @@
           				"<p>" + nowMeeting.mtypdisplay + " reserved by " + reservedBy +
 	        				((nowMeeting.adder == nowMeeting.sessionUser && nowMeeting.sessionUser != <?php echo(Utilities::getDemoUidpk()); ?>) ? "<a href='modules/schedule/control/eventDeleteProcessor.php?id=" + nowMeeting.uuid + "' onclick='return confirm(\"Please confirm this delete.\");'><span class='fa fa-trash-o' style='color:#d27b4b;margin-left:10px;'></span></a></p>" : " ") +
          					"<p>Guest Pass:</p>" +
-         						"<span class='descr'><p><?php echo Utilities::getHttpPath(); ?>/login.php?oid=<?php echo $_SESSION['orgUid']; ?>&mid=" + nowMeeting.uuid + "</p></span>" +
+         						// Flaw! We may have two items with id=='guest-pass0'. This accomodates WalkMe tutorials but not strictly correct :)
+         						"<span id='guest-pass0' class='descr'><p><?php echo Utilities::getHttpPath(); ?>/login.php?oid=<?php echo $_SESSION['orgUid']; ?>&mid=" + nowMeeting.uuid + "</p></span>" +
 	        				"<p><span id='tech_check_summary' style='font-style:italic;' ><span class='fa fa-spinner fa-spin fa-lg'></span> Checking your system compatibility... one moment</span><a href='javascript:void(0);' onclick='document.getElementById(\"tech_check_control\").click();' style='font-size:90%;margin-left:5px;'> Details</a></p>" + 
 	        			"</span>" +
           		"</div>" +
@@ -76,7 +77,7 @@
           	"</div>" +
           	"<div id='futureEventDetail' class='td-div' style='position:absolute;left:140px;top:5px;height:70px;'>" +	       				
 			       	"<div class='meeting'>" +
-          			"<span class='purpose'>Click the calendar to reserve this room for a future date.</span>" + 
+          			"<span id='guest-pass0' class='purpose'>Click the calendar to reserve this room for a future date.</span>" + 
           		"</div>" +
           	"</div>" +
 					"</div>";
@@ -105,7 +106,7 @@
           					((jsonObj[i].adder == jsonObj[i].sessionUser && jsonObj[i].sessionUser != <?php echo(Utilities::getDemoUidpk()); ?>) ? "<a href='modules/schedule/control/eventDeleteProcessor.php?id=" + jsonObj[i].uuid + "' onclick='return confirm(\"Please confirm this delete.\");'><span class='fa fa-trash-o' style='margin-left:10px;color:#d27b4b;'></span></a>" : " ") +
 										"</p>" +
          						"<p>Guest Pass:</p>" +
-         						"<span class='descr'><p><?php echo Utilities::getHttpPath(); ?>/login.php?oid=<?php echo $_SESSION['orgUid']; ?>&mid=" + jsonObj[i].uuid + "</p></span>" +
+         						"<span id='guest-pass" + i + "' class='descr'><p><?php echo Utilities::getHttpPath(); ?>/login.php?oid=<?php echo $_SESSION['orgUid']; ?>&mid=" + jsonObj[i].uuid + "</p></span>" +
          					"</span>" +
          				"</div>" +
          			"</div>";
@@ -153,7 +154,7 @@
 			<div class="meeting">
 				<span class='purpose'>Team Pass:</span><br/>
 				<span class='descr' style='font-size:90%;' >
-					<p><?php echo Utilities::getHttpPath(); ?>/login.php?oid=<?php echo $_SESSION['orgUid']; ?></p>
+					<p id="team-pass"><?php echo Utilities::getHttpPath(); ?>/login.php?oid=<?php echo $_SESSION['orgUid']; ?></p>
 					<p>Your enrolled team members can use that link to schedule and attend any Nexus Web Meet event.</p>
 				</span>
 			</div>

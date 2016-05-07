@@ -180,6 +180,8 @@ $networkName = $row['name'];
 			});
 		</script>
 		
+		<script type="text/javascript">(function() {var walkme = document.createElement('script'); walkme.type = 'text/javascript'; walkme.async = true; walkme.src = 'http://cdn.walkme.com/users/ab3d27eee206468794b47885dfc2df46/walkme_ab3d27eee206468794b47885dfc2df46.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(walkme, s); window._walkmeConfig = {smartLoad:true}; })();</script> 
+		
 		<style>
 			<!-- override some default techCheck.php styles  -->
 			.event {width:auto;}
@@ -204,8 +206,9 @@ $networkName = $row['name'];
 					<span id="login-module-name" class="module-name" style=""><?php echo($pageTitle); ?></span>					
       	</span>  	
   	
-      	<span class="controls" style="float:right;padding-bottom:10px;margin-top:30px;">
-      		<a href="http://northbridgetech.org/downloads/Northbridge_web_conference_center.pdf" style="color:#d27b4b;text-decoration:none;" target="_blank">About</a>
+      	<span id="walkme-login-anchor" class="controls" style="float:right;padding-bottom:10px;margin-top:30px;">
+      		<a href="http://northbridgetech.org/downloads/Northbridge_web_conference_center.pdf" style="color:#d27b4b;text-decoration:none;" target="_blank">About</a> | 
+      		<a href="<?php echo Utilities::getSupportUrl(); ?>" style="color:#d27b4b;text-decoration:none;" target="_blank">Support</a>
       	</span>
       </div>
 
@@ -290,7 +293,7 @@ $networkName = $row['name'];
      		<?php } ?>   			
      		</div>
      		
-     		<div class="loginColRight">
+     		<div id="customization-area" class="loginColRight">
       		<span style="clear:right;float:right;text-align:right;margin-top:20px;"><?php echo $networkName; ?></span>
       		<span style="clear:right;float:right;margin-top:20px;"><img src="<?php echo Utilities::getPartnerImageRoot(); ?><?php echo $networkLogo; ?>" /></span>
      		</div>

@@ -12,7 +12,7 @@
        					"<span class='tod'>" + jsonObj[i].hour + ":" + jsonObj[i].minute + "</span><span class='period'> " + jsonObj[i].period + " </span> - " +
 								"<span class='tod'>" + jsonObj[i].hour_end + ":" + jsonObj[i].minute_end + "</span><span class='period'> " + jsonObj[i].period_end + " </span>" +
 								"<span class='period'> " + jsonObj[i].abbrev + "</span>" +
-								(jsonObj[i].descr ? "<span class=''><p>" + jsonObj[i].descr.replace(new RegExp( '~', 'g' ), '</p><p>') + "</p><span>" : "") + 
+								(jsonObj[i].descr ? "<span class=''><p>" + htmlFormatEmail(htmlFormatAnchors(htmlFormatParagraphs(jsonObj[i].descr))) + "</p><span>" : "") + 
 								(jsonObj[i].url ? "<p><span><a href='http://" + jsonObj[i].url + "' target='_blank'>Web Link</a></span></p>" : "") + 
 								(jsonObj[i].fileext ? "<p><span><a href='<?php echo(Utilities::getPartnerFileUrl()); ?>/event-" + jsonObj[i].uuid + "." + jsonObj[i].fileext + "' target='_blank'>Flyer</a></span></p>" : "") + 
 								(jsonObj[i].registration ? "<p><span class='tod'>" + jsonObj[i].registration + "</span></p>" : "") + 
@@ -25,12 +25,14 @@
 		xmlhttp.open("GET", "<?php echo(Utilities::getHttpPath()); ?>" + "/src/framework/eventDetailManager.php?uuid=" + eventUuid, true);
 		xmlhttp.send();  		
 	}
+		
 </script>
 
 <div style="">
 			
 <div id="current_detail_display">	
 	<div id="detailTable" class="table-div" style="border: 0px none !important;">
+		<!--
 		<div style="margin-top:10px;margin-right:10px;margin-left:20px;float:right">
 			<a id='schedule_control' href='#' onclick="showEventAdd();">
 				<span style='' class='fa fa-calendar-o fa-2x' ></span>
@@ -38,6 +40,7 @@
 				<p style="font-size:90%;">Submit<br/>New Event</p>
 			</a>	
   	</div>
+  	-->
 		<div id="eventRow0" class="tr-div">
 			<div style="text-align:center;"><span class='fa fa-spinner fa-spin fa-lg' style="margin-right:10px;margin-top:45px;"></span>Loading detail...</div>	
 		</div>

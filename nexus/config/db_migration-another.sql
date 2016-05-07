@@ -1,3 +1,5 @@
+define("SUPPORT_URL", "http://northbridgetech.org/dev/support");
+
 Make new folder partner/image
 Move images from partner to partner/image
 
@@ -23,4 +25,6 @@ ln -s ~/public_html/dev/nexus/web/src/framework/PgDb.php PgDb.php
 copy over timezone batch files
 
 add cron job
+
+add dev demo cron job
 
