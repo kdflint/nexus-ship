@@ -116,6 +116,8 @@ class Utilities {
 	
 	public static function getPartnerFileUrl() { return self::getPartnerHttpPath() . "/file"; }
 	
+	public static function getSupportUrl() { return SUPPORT_URL; }
+	
 	public static function getEnvName() { return ENV_NAME; }
 	
 	public static function getBbbDomain() { return CONFIG_SERVER_BASE_URL; }

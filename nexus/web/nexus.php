@@ -211,6 +211,7 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
     </script>
     
   <!-- For Formilla feedback form -->
+	<!-- moved to support site - 5.6.2016 - see theme (docs) head.php for insertion point
   <script type="text/javascript">
     (function () {
         var head = document.getElementsByTagName("head").item(0);
@@ -230,6 +231,7 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
         head.appendChild(script);
     })();
   </script>
+  -->
   
   </head>
   

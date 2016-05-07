@@ -12,7 +12,9 @@
 	define("PILOT_NAME", "/nexus/pilot");
 	define("ENV_NAME", "local");
 	define("ENV_HOST", "localhost");
+	define("SUPPORT_URL", "http://northbridgetech.org/dev/support");
 	define("SSN_TIMEOUT", "-1"); // in seconds
+
 
 // DATABASE
 

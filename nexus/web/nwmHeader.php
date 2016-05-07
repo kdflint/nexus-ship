@@ -18,7 +18,8 @@
       	</span>  	
   	
       	<span class="controls" style="float:right;padding-bottom:10px;margin-top:30px;">
-					<a href="javascript:void(0)" onclick="if(typeof Formilla != 'undefined'){Formilla.initFormillaChat();}">Problem?</a> | 
+					<!--<a href="javascript:void(0)" onclick="if(typeof Formilla != 'undefined'){Formilla.initFormillaChat();}">Problem?</a> | -->
+					<a href="<?php echo Utilities::getSupportUrl(); ?>" target="_blank">Support</a> | 
       		<a href="login.php?oid=<?php echo $_SESSION['orgUid']; ?>&logout=true" style="color:#d27b4b;text-decoration:none;">Logout</a>
       	</span>
       	<a id="profile_control" href="javascript:void(0);"><span id="profile_control_icon" style="clear:right;float:right;padding-top:10px;margin:0px;color:#d27b4b;" class="fa fa-lg fa-plus-square" ></span></a>
