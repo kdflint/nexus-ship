@@ -10,7 +10,6 @@
 *.odt
 *.pdf
 *.docx
-*.png
 bbb-test.sh
 sensitive_config.php
 error_log

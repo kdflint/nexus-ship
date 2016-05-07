@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      #directoryMap {
+        width: 500px;
+        height: 400px;
+      }
+    </style>
+  </head>
+  <body>
+  	
+  	<a id='map_control' href='#' onclick="initMap();">Show Map</a>
+  	
+   	<a id='map_control' href='#' onclick="hideMap();">Hide Map</a>
+  	
+    <div id="directoryMapContainer" style="width:500px;height:400px;"></div>
+   
+
+    <script>
+    	   	   	
+      function initMap() {
+				document.getElementById('directoryMapContainer').innerHTML = '<div id="directoryMap"></div>';
+        var mapDiv = document.getElementById('directoryMap');
+    var map = new google.maps.Map(mapDiv, {
+    	center: {lat: 41.88, lng: -87.62},
+      zoom: 9
+    });
+        //document.getElementById("directoryMapContainer").style.display='block';
+      }
+      
+      function hideMap() {
+      	document.getElementById('directoryMapContainer').innerHTML = '';
+      	//document.getElementById("directoryMapContainer").style.display='none';
+      }
+    </script>
+    
+    <script src="https://maps.googleapis.com/maps/api/js" async defer></script>
+    
+  </body>
+</html>
