@@ -1,7 +1,6 @@
 <?php
 
 // PATHS
-
 	define("PHP_ROOT", "/home/kdflint/projects/nexus-community/nexus/lib");
 	define("WEB_ROOT", "/home/kdflint/projects/nexus-community/nexus/web");
 	define("TKN_ROOT", "/home/kdflint/projects/nexus-community/nexus/token");
@@ -13,7 +12,10 @@
 	define("ENV_NAME", "local");
 	define("ENV_HOST", "localhost");
 	define("SUPPORT_URL", "http://northbridgetech.org/dev/support");
+
+// OTHER
 	define("SSN_TIMEOUT", "-1"); // in seconds
+	define("PUBLIC_GROUP", "7");
 
 
 // DATABASE
