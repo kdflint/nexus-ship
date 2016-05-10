@@ -72,6 +72,10 @@ class Utilities {
 		return DEMO_EVENT_FUTURE;
 	}
 	
+	public static function getPublicGroupId() {
+		return PUBLIC_GROUP;
+	}
+	
 	private static $web_path = "/web";
 	
 	private static $config_path = "/config";

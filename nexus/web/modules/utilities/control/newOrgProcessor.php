@@ -14,7 +14,7 @@ $uuid = Invitation::addInvitation($_POST['email'], $groupId, '4', '88', $result[
 
 $userId = User::addPublicUser('pUser-' . $result[1]);
 
-User::addUserGroupRelation($userId, $groupId, '4');
+User::addUserGroupRelation($userId, Utilities::getPublicGroupId(), '4');
 
 User::addUserOrgRelation($userId, $result[0], '88', '4');
 
