@@ -465,6 +465,10 @@ class Utilities {
     return $guidText;
 	}
 	
+	public static function newId() {
+		return substr(self::newUuid(), 0, 8);
+	}
+	
 	public static function hideInEnvironment() {
 		//if (!strcmp($_SESSION['environment'], "dev")) {
 		//	return true;

@@ -6,6 +6,13 @@ require_once(Utilities::getSrcRoot() . "/user/Invitation.php");
 
 class Group {
 	
+	public static function addGroup($groupName) {
+		$gid = Utilities::newId();
+		$query = "insert into public.group (name, create_dttm, activate_dttm, logo, uid) values ($1, now(), now(), '', $2) returning id";
+		$row = pg_fetch_row(PgDatabase::psExecute($query, array($groupName, $gid)));
+		return $row[0];
+	}
+	
 	public static function getGroupById($groupId) {
 		$query = "select id, name, descr, logo from public.group where id = $1";	
 		$cursor = PgDatabase::psExecute($query, array($groupId));

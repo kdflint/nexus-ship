@@ -8,6 +8,23 @@ class Organization {
 	// get valid values for org type
 	// select * from pg_enum e where enumtypid = '1569578'
 	
+	public static function addOrganization_NWM($orgName, $logoFileName, $parentOrg = '13') {
+		// 13 == Northbridge Technology Alliance in prod and dev :)
+		// This method is written to serve NWM accounts, where group == org and org parent is 13
+		$oid = Utilities::newId();
+		$query = "insert into organization (name, create_dttm, activate_dttm, tax_exempt, status_fk, logo, uid) values ($1, now(), now(), true, 1, $2, $3) returning id";
+		$row = pg_fetch_row(PgDatabase::psExecute($query, array($orgName, $logoFileName, $oid)));
+		$orgId = $row[0];
+		
+		$query = "insert into organization_organization (organization_from_fk, organization_to_fk, relationship, create_dttm) values ($1, $2, 'parent', now())";
+		pg_fetch_row(PgDatabase::psExecute($query, array($parentOrg, $orgId)));		
+		
+		$query = "insert into organization_account (organization_fk, account_type) values ($1, 'NWM')";
+		pg_fetch_row(PgDatabase::psExecute($query, array($orgId)));	
+		
+		return array($orgId, $oid);	
+	}
+	
 	public static function getOrganizationById($orgId) {
 		$query = "select name, type, structure, logo, status_fk as status from organization where id = $1";
 		return PgDatabase::psExecute($query, array($orgId));
