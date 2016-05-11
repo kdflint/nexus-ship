@@ -661,12 +661,27 @@ function getMaxDaysForFebruary(year) {
 	} 
 }
 
-function populateEditEventForm(i) {
-	alert("hello");
-	/* currentEvents is a global, established in the ajax processing */
+function populateEventForm(i) {
+	/* currentEvents is a global, initialized in the ajax processing */
 	var eventForm = document.forms['schedule-form'];	
 	eventForm['meeting-name'].value = currentEvents[i].purpose;
-	eventForm['meeting-name'].readOnly = true;
+	return true;
+}
+
+function resetEventForm() {
+	var scheduleForm = document.forms['schedule-form'].reset();
+	// must extend resetScheduleForm above!
+	setFieldPassStyles(scheduleForm['meeting-name'], "Meeting Name");
+	setFieldPassStyles(scheduleForm['meeting-url'], "Web Link (http://)");
+	setFieldPassStyles(scheduleForm['meeting-descr'], "Description");
+	setFieldPassStyles(scheduleForm['meeting-registr'], "Registration Information");
+	setFieldPassStyles(scheduleForm['registration-url'], "Registration Link (http://)");
+	setFieldPassStyles(scheduleForm['meeting-loc'], "Location");
+	
+	setFieldPassStyles(scheduleForm['meeting-date'], "Start Date");
+	setFieldPassStyles(document.getElementById("schedule-form-time-button"), "Start Time");
+	$( "#schedule-form-time" ).selectmenu( "refresh" );
+	showTimeZoneDisplay("tz-static");
 	return true;
 }
 	
