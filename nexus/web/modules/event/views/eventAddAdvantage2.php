@@ -58,5 +58,6 @@
 		      	<a href="#close" style="float:right;margin-right:20px;">Cancel</a>
 		    	</div>
 		    	<input id="schedule-form-isBbb" name="isBbbMeeting" type="checkbox" style="visibility:hidden;"/>
+      		<input type="hidden" name="meeting-uuid" value="" />
 				</fieldset>
 			</form>     

@@ -21,6 +21,14 @@ class Event {
 		return "undefined";
 	}
 	
+	private static function getMonthNum($in) {
+		if (0 <= $in && $in < 10) {
+			return "0" . $in;
+		} else {
+			return $in;
+		}
+	}
+	
 	private static function getHour($in) {
 		$hourMap = array("12", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11");
 		if (1 <= $in && $in < 13) {
@@ -147,9 +155,13 @@ class Event {
 				extract(month from (select e.start_dttm at time zone $2)) as month, 
 				extract(hour from (select e.start_dttm at time zone $2)) as hour, 
 				extract(minute from (select e.start_dttm at time zone $2)) as minute, 
+				extract(year from (select e.start_dttm at time zone $2)) as year,
 				extract(epoch from (select e.start_dttm)) as epoch,
+				extract(day from (select (e.start_dttm + e.duration) at time zone $2)) as date_end,
+				extract(month from (select (e.start_dttm + e.duration) at time zone $2)) as month_end,
 				extract(hour from (select (e.start_dttm + e.duration) at time zone $2)) as hour_end, 
 				extract(minute from (select (e.start_dttm + e.duration) at time zone $2)) as minute_end, 
+				extract(year from (select (e.start_dttm + e.duration) at time zone $2)) as year_end,
 				extract(epoch from (select (e.start_dttm + e.duration) at time zone $2)) as epoch_end,
 				e.tz_name as tzname, 
 				e.duration as duration, 
@@ -162,7 +174,8 @@ class Event {
 				e.file as file,
 				u.fname as fname, 
 				u.lname as lname,
-				pg.abbrev as abbrev 
+				pg.abbrev as abbrev,
+				pg.name as tz_extract_name 
 			from event e, public.user u, event_group eg, pg_timezone_names pg
 			where eg.group_fk = $1		
 			and eg.event_fk = e.id
@@ -179,14 +192,24 @@ class Event {
 				$events[$counter]['date'] = $row['date'];
 				$events[$counter]['day'] = self::getDay($row['day']);
 				$events[$counter]['month'] = self::getMonth($row['month']-1);
+				$events[$counter]['month_num'] = self::getMonthNum($row['month']);
 				$events[$counter]['hour'] = self::getHour($row['hour']);
+				$events[$counter]['hour_24'] = $row['hour'];
 				$events[$counter]['minute'] = self::getMinute($row['minute']);
 				$events[$counter]['hour_end'] = self::getHour($row['hour_end']);
+				$events[$counter]['hour_end_24'] = $row['hour_end'];
 				$events[$counter]['minute_end'] = self::getMinute($row['minute_end']);
+				$events[$counter]['year'] = $row['year'];
 				$events[$counter]['epoch'] = $row['epoch'];
 				$events[$counter]['period'] = self::getPeriod($row['hour']);
+				$events[$counter]['date_end'] = $row['date_end'];
+				$events[$counter]['month_end'] = self::getMonth($row['month_end']-1);
+				$events[$counter]['month_num_end'] = self::getMonthNum($row['month_end']);
+				$events[$counter]['year_end'] = $row['year_end'];
 				$events[$counter]['period_end'] = self::getPeriod($row['hour_end']);
+				$events[$counter]['tzname'] = $row['tzname'];
 				$events[$counter]['abbrev'] = $row['abbrev'];
+				$events[$counter]['tz_extract_name'] = $row['tz_extract_name'];
 				$events[$counter]['purpose'] = $row['name'];
 				$events[$counter]['descr'] = $row['descr'];
 				$events[$counter]['location'] = $row['location'];
@@ -342,12 +365,20 @@ class Event {
 		}
 		return $events;
 	}
+	
+	public static function updateEvent($uuid) {
+		
+	}
 
-	public static function addEvent($dttm, $duration, $name, $reservedUserId, $groupId, $tzName, $type, $descr, $loc, $isBbb, $fileExt, $status, $url, $regUrl, $registr, $contact) {
+	public static function addEvent($dttm, $duration, $name, $reservedUserId, $groupId, $tzName, $type, $descr, $loc, $isBbb, $fileExt, $status, $url, $regUrl, $registr, $contact, $uuid) {
 		$query = "select abbrev from pg_timezone_names where name = $1";
 		$row = pg_fetch_row(PgDatabase::psExecute($query, array($tzName)));
 		$tzAbbrev = $row[0];
-		$uuid = Utilities:: newUuid();
+		if (!Utilities::validateUuid($uuid)) { 
+			$uuid = Utilities:: newUuid(); 
+		} else {
+			self::deleteEvent($uuid);
+		}
 		$query = "insert into event (uuid, start_dttm, duration, name, descr, reserved_user_fk, tz_name, tz_abbrev, type, location, isBbbMeet, file, url, registration_url, registration, contact) values ($1, $2, $3, $4, $8, $5, $6, $7, $9, $10, $11, $12, $13, $14, $15, $16) returning id";
 		$row = pg_fetch_row(PgDatabase::psExecute($query, array($uuid, $dttm, $duration, $name, $reservedUserId, $tzName, $tzAbbrev, $descr, $type, $loc, $isBbb, $fileExt, $url, $regUrl, $registr, $contact)));
 		$eventId = $row[0];

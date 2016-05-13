@@ -547,7 +547,10 @@ function resetProfileForm() {
 }
 		
 function resetScheduleForm() {
-	document.getElementById('schedule_control').click();
+	var formControl = document.getElementById('schedule_control');
+	if (formControl) {
+		formControl.click();
+	}
 	var scheduleForm = document.forms['schedule-form'];
 	scheduleForm.reset();
 	setFieldPassStyles(scheduleForm['meeting-name'], "Meeting Name");
@@ -559,6 +562,26 @@ function resetScheduleForm() {
 	$( "#schedule-form-duration" ).selectmenu( "refresh" );
 	$( "#schedule-form-type" ).selectmenu( "refresh" );
 	showTimeZoneDisplay("tz-static");
+}
+
+function resetEventForm() {
+	var scheduleForm = document.forms['schedule-form'];
+	resetScheduleForm();
+	// overrides
+	setFieldPassStyles(scheduleForm['meeting-date'], "Start Date");
+	setFieldPassStyles(document.getElementById("schedule-form-time-button"), "Start Time");
+	setFieldPassStyles(document.getElementById("schedule-form-time-end-button"), "End Time");
+	// additional fields
+	setFieldPassStyles(scheduleForm['meeting-url'], "Web Link (http://)");
+	setFieldPassStyles(scheduleForm['meeting-descr'], "Description");
+	setFieldPassStyles(scheduleForm['meeting-registr'], "Registration Information");
+	setFieldPassStyles(scheduleForm['registration-url'], "Registration Link (http://)");
+	setFieldPassStyles(scheduleForm['meeting-loc'], "Location");
+	setFieldPassStyles(scheduleForm['meeting-date-end'], "End Date");
+	clearFileInput(document.getElementById('fileToUpload'));
+	document.getElementById('schedule-form-submit').innerHTML = "Add";
+	// TODO - timezone value is not resetting - why? Also affects NWM (that is, form cancel does not reset tx value/display)
+	return true;
 }
 
 function resetNowForm() {
@@ -664,24 +687,29 @@ function getMaxDaysForFebruary(year) {
 function populateEventForm(i) {
 	/* currentEvents is a global, initialized in the ajax processing */
 	var eventForm = document.forms['schedule-form'];	
-	eventForm['meeting-name'].value = currentEvents[i].purpose;
-	return true;
-}
+  if (currentEvents[i].purpose) { eventForm['meeting-name'].value = currentEvents[i].purpose; }
+	if (currentEvents[i].url) { eventForm['meeting-url'].value = currentEvents[i].url; }
+	if (currentEvents[i].descr) { eventForm['meeting-descr'].value = currentEvents[i].descr.replace(new RegExp( '~', 'g' ), '\r\n'); }
+	if (currentEvents[i].regr_url) { eventForm['meeting-registr'].value = currentEvents[i].regr_url; }
+	if (currentEvents[i].registration) { eventForm['registration-url'].value = currentEvents[i].registration; }
+	if (currentEvents[i].location) { eventForm['meeting-loc'].value = currentEvents[i].location; }
+	if (currentEvents[i].tz_extract_name) { eventForm['tzone-name'].value = currentEvents[i].tz_extract_name; }
+	// TODO - what about tzone-change value?
+	var startTime = currentEvents[i].hour_24 + ":" + currentEvents[i].minute + ":00";
+	setFieldPassStyles(document.getElementById("schedule-form-time-button"), startTime);
+	eventForm['meeting-time'].value = startTime;
+	//document.getElementById['schedule-form-time-button'].placeholder = "10:00 AM";
 
-function resetEventForm() {
-	var scheduleForm = document.forms['schedule-form'].reset();
-	// must extend resetScheduleForm above!
-	setFieldPassStyles(scheduleForm['meeting-name'], "Meeting Name");
-	setFieldPassStyles(scheduleForm['meeting-url'], "Web Link (http://)");
-	setFieldPassStyles(scheduleForm['meeting-descr'], "Description");
-	setFieldPassStyles(scheduleForm['meeting-registr'], "Registration Information");
-	setFieldPassStyles(scheduleForm['registration-url'], "Registration Link (http://)");
-	setFieldPassStyles(scheduleForm['meeting-loc'], "Location");
+	var endTime = currentEvents[i].hour_end_24 + ":" + currentEvents[i].minute_end + ":00";
+	setFieldPassStyles(document.getElementById("schedule-form-time-end-button"), endTime);
+	eventForm['meeting-time-end'].value = endTime;
 	
-	setFieldPassStyles(scheduleForm['meeting-date'], "Start Date");
-	setFieldPassStyles(document.getElementById("schedule-form-time-button"), "Start Time");
-	$( "#schedule-form-time" ).selectmenu( "refresh" );
-	showTimeZoneDisplay("tz-static");
+	var startDate = currentEvents[i].month_num + "/" + currentEvents[i].date + "/" + currentEvents[i].year;
+	var endDate = currentEvents[i].month_num_end + "/" + currentEvents[i].date_end + "/" + currentEvents[i].year_end;
+	eventForm['meeting-date'].value = startDate;
+	eventForm['meeting-date-end'].value = endDate;
+	document.getElementById('schedule-form-submit').innerHTML = "Update";
+	eventForm['meeting-uuid'].value = currentEvents[i].uuid;
 	return true;
 }
 	
@@ -723,7 +751,7 @@ function eventValidateAndSubmit(thisForm) {
   	if (validateDateFormat(dateFieldEnd)) {
   		if (Boolean(isTimeEnd)) {
   			timeEnd = eventForm['meeting-time-end'].value;
-				setFieldPassStyles(document.getElementById(thisForm + "-time-end-button"), "Time End");
+				setFieldPassStyles(document.getElementById(thisForm + "-time-end-button"), "End Time");
 				if (timeEnd == null || timeEnd == "" || timeEnd == "End Time" || !validateTimeFuture(dateFieldEnd, timeEnd, timeZoneOffset)) {
 					setFieldErrorStyles(document.getElementById(thisForm + "-time-end-button"), "End Time");
 					pass = false;
@@ -732,7 +760,7 @@ function eventValidateAndSubmit(thisForm) {
 		} else {
 			if (Boolean(isTimeEnd)) {
 				timeEnd = eventForm['meeting-time-end'].value;
-				setFieldPassStyles(document.getElementById(thisForm + "-time-end-button"), "Time End");
+				setFieldPassStyles(document.getElementById(thisForm + "-time-end-button"), "End Time");
 				if (timeEnd == null || timeEnd == "" || timeEnd == "End Time") {
 					setFieldErrorStyles(document.getElementById(thisForm + "-time-end-button"), "End Time");
 				}	
