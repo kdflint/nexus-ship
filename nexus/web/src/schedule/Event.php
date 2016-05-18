@@ -42,6 +42,14 @@ class Event {
 		}
 	}
 	
+	private static function getHour_24($in) {
+		if (0 <= $in && $in < 10) {
+			return "0" . $in;
+		} else {
+			return $in;
+		}
+	}		
+	
 	private static function getMinute($in) {
 		if (0 <= $in && $in < 10) {
 			return "0" . $in;
@@ -194,10 +202,10 @@ class Event {
 				$events[$counter]['month'] = self::getMonth($row['month']-1);
 				$events[$counter]['month_num'] = self::getMonthNum($row['month']);
 				$events[$counter]['hour'] = self::getHour($row['hour']);
-				$events[$counter]['hour_24'] = $row['hour'];
+				$events[$counter]['hour_24'] = self::getHour_24($row['hour']);
 				$events[$counter]['minute'] = self::getMinute($row['minute']);
 				$events[$counter]['hour_end'] = self::getHour($row['hour_end']);
-				$events[$counter]['hour_end_24'] = $row['hour_end'];
+				$events[$counter]['hour_end_24'] = self::getHour_24($row['hour_end']);
 				$events[$counter]['minute_end'] = self::getMinute($row['minute_end']);
 				$events[$counter]['year'] = $row['year'];
 				$events[$counter]['epoch'] = $row['epoch'];

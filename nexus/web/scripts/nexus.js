@@ -694,22 +694,40 @@ function populateEventForm(i) {
 	if (currentEvents[i].registration) { eventForm['registration-url'].value = currentEvents[i].registration; }
 	if (currentEvents[i].location) { eventForm['meeting-loc'].value = currentEvents[i].location; }
 	if (currentEvents[i].tz_extract_name) { eventForm['tzone-name'].value = currentEvents[i].tz_extract_name; }
-	// TODO - what about tzone-change value?
-	var startTime = currentEvents[i].hour_24 + ":" + currentEvents[i].minute + ":00";
-	setFieldPassStyles(document.getElementById("schedule-form-time-button"), startTime);
-	eventForm['meeting-time'].value = startTime;
-	//document.getElementById['schedule-form-time-button'].placeholder = "10:00 AM";
 
+	var startTime = currentEvents[i].hour_24 + ":" + currentEvents[i].minute + ":00";
+	var startOptions = eventForm['meeting-time'];
+	var startTimeIndex = "0";
+
+	for (m = 0; m < startOptions.length; m++) {
+		if (startOptions.options[m].value == startTime) { 
+			startTimeIndex = startOptions.options[m].index; 
+			break;
+    }
+    //txt = txt + "\n" + startOptions.options[m].text + " has index: " + startOptions.options[m].index + " and value: " + startOptions[m].value;
+  }
+	startOptions.selectedIndex = startTimeIndex;
+	$( "#schedule-form-time" ).selectmenu( "refresh" );
+		
 	var endTime = currentEvents[i].hour_end_24 + ":" + currentEvents[i].minute_end + ":00";
-	setFieldPassStyles(document.getElementById("schedule-form-time-end-button"), endTime);
-	eventForm['meeting-time-end'].value = endTime;
-	
+	var endOptions = eventForm['meeting-time-end'];
+	var endTimeIndex = "0";
+	for (m = 0; m < endOptions.length; m++) {
+		if (endOptions.options[m].value == endTime) { 
+			endTimeIndex = endOptions.options[m].index; 
+			break;
+    }
+  }
+	endOptions.selectedIndex = endTimeIndex;  
+	$( "#schedule-form-time-end" ).selectmenu( "refresh" );
+		
 	var startDate = currentEvents[i].month_num + "/" + currentEvents[i].date + "/" + currentEvents[i].year;
 	var endDate = currentEvents[i].month_num_end + "/" + currentEvents[i].date_end + "/" + currentEvents[i].year_end;
 	eventForm['meeting-date'].value = startDate;
 	eventForm['meeting-date-end'].value = endDate;
 	document.getElementById('schedule-form-submit').innerHTML = "Update";
 	eventForm['meeting-uuid'].value = currentEvents[i].uuid;
+		
 	return true;
 }
 	
@@ -722,7 +740,7 @@ function eventValidateAndSubmit(thisForm) {
   var time = eventForm['meeting-time'].value;
 	var dateField = eventForm['meeting-date'];
 	var date = dateField.value;
-
+	
   var timeEnd;
 	var dateFieldEnd;
 	var dateEnd;  
