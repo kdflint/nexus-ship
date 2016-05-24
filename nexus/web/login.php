@@ -165,6 +165,7 @@ $networkName = $row['name'];
 				}
 				if (<?php echo $demoSession; ?>) {
 					loginForm.elements['password'].disabled = true;
+					loginForm.elements['password'].placeholder = "demo";
 					document.getElementById("username-field-label").innerHTML = "Your Name";
 					document.getElementById("username-instruction-field-label").innerHTML = "";
 					document.getElementById("login-form-submit").innerHTML = "View Demo";
