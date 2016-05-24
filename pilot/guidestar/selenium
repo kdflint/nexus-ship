@@ -20,13 +20,18 @@
 </tr>
 <tr>
 	<td>store</td>
-	<td>1455501400</td>
+	<td>1457478634</td>
 	<td>subDir</td>
 </tr>
 <tr>
 	<td>store</td>
-	<td>125</td>
+	<td>362</td>
 	<td>numFilesToProcess</td>
+</tr>
+<tr>
+	<td>store</td>
+	<td>1</td>
+	<td>internalCode</td>
 </tr>
 <tr>
 	<td>while</td>
@@ -101,7 +106,7 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>INSERT INTO PROSPECTS (id, keywords, name) values (${subDir}${fileIterate}, ~@~${keywords}~@~, ~@~${orgname}~@~);</td>
+	<td>INSERT INTO PROSPECTS (id, keywords, name, create_dttm) values (${subDir}${fileIterate}, ~@~${keywords}~@~, ~@~${orgname}~@~, now());</td>
 	<td></td>
 </tr>
 <!--=== Iterate through the possible sections in div[4] and react to the content as appropriate ===-->
@@ -284,7 +289,7 @@
 </tr>
 <tr>
 	<td>while</td>
-	<td>${codeIterate} &lt;= 11</td>
+	<td>${codeIterate} &lt;= 5</td>
 	<td></td>
 </tr>
 <tr>
@@ -360,6 +365,11 @@
 </tr>
 <tr>
 	<td>echo</td>
+	<td>UPDATE PROSPECTS SET internal_code = ${internalCode} where id = ${subDir}${fileIterate};</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
 	<td>UPDATE PROSPECTS SET cname = ~@~${nameValue}~@~ where id = ${subDir}${fileIterate};</td>
 	<td></td>
 </tr>
@@ -380,7 +390,7 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>UPDATE&nbsp;&nbsp;PROSPECTS SET cemail =&nbsp;&nbsp;~@~${emailValue}~@~ where id = ${subDir}${fileIterate};</td>
+	<td>UPDATE&nbsp;&nbsp;PROSPECTS SET cemail = ~@~${emailValue}~@~ where id = ${subDir}${fileIterate};</td>
 	<td></td>
 </tr>
 <tr>
@@ -398,11 +408,7 @@
 	<td>//div[@id='summary']/div[4]/section[${sectionIterate}]/p[4]</td>
 	<td>titleValue</td>
 </tr>
-<tr>
-	<td>echo</td>
-	<td>UPDATE PROSPECTS SET ctitle = ~@~${titleValue}~@~ where id = ${subDir}${fileIterate};</td>
-	<td></td>
-</tr>
+<!--removed echo UPDATE PROSPECTS SET ctitle = ~@~${titleValue}~@~ where id = ${subDir}${fileIterate};-->
 <tr>
 	<td>gotoLabel</td>
 	<td>resumeContactAtTel</td>
@@ -428,11 +434,7 @@
 	<td>'${isTel}'=='true'</td>
 	<td>resumeContactAtUrl</td>
 </tr>
-<tr>
-	<td>echo</td>
-	<td>UPDATE PROSPECTS SET url = ~@~${telValue}~@~ where id = ${subDir}${fileIterate};</td>
-	<td></td>
-</tr>
+<!--removed echo UPDATE PROSPECTS SET url = ~@~${telValue}~@~ where id = ${subDir}${fileIterate};-->
 <tr>
 	<td>gotoLabel</td>
 	<td>resumeContactAtDone</td>
@@ -448,11 +450,7 @@
 	<td>//div[@id='summary']/div[4]/section[${sectionIterate}]/p[6]</td>
 	<td>urlValue</td>
 </tr>
-<tr>
-	<td>echo</td>
-	<td>UPDATE PROSPECTS SET url = ~@~${urlValue}~@~ where id = ${subDir}${fileIterate};</td>
-	<td></td>
-</tr>
+<!--removed echo UPDATE PROSPECTS SET url = ~@~${urlValue}~@~ where id = ${subDir}${fileIterate};-->
 <tr>
 	<td>gotoLabel</td>
 	<td>resumeContactAtDone</td>

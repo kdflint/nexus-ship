@@ -270,8 +270,10 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
 				?>
       </div>
       
+      <!--
       <div class="footer">
 				<?php 
+				/*
       		if ((session_status() === PHP_SESSION_ACTIVE) && isset($_SESSION['nexusContext'])) {
  						switch($_SESSION['nexusContext']) {
  							case "NWM":
@@ -282,9 +284,11 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
 	 							break;
  							default: 			
  						}
-					} 
+					}
+				*/ 
 				?>
 			</div>
+			-->
 
     </div><!-- container -->       
 	</body>
