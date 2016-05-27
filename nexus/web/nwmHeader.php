@@ -4,7 +4,8 @@
 
 	     	<img class="banner-image" src="image/nexus4.png" />
        	<span class="banner">
-					<span class="product-name" style="">Nexus</span><br/>
+					<span class="product-name" style="">Nexus</span>
+					<span id="get-nexus-link" style="float:right;margin-top:20px;"></span><br/>
 					<span id="index-module-name" class="module-name" style="">Web Meet</span>					
 					<a id="menu-userList" class="pure-button button-menu" href="javascript:void(0)" onclick="toggleFrameDisplay('userList')" style="float:right;background-color:rgba(210, 123, 75, 1);" >TEAM</a>
 					<a id="menu-reserveList" class="pure-button button-menu active" href="javascript:void(0)" onclick="toggleFrameDisplay('reserveList')" style="float:right;background-color:rgba(137, 157, 112, 1);margin-right:-7px;">ROOM</a> 

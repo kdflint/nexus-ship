@@ -140,6 +140,7 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
 					document.getElementById("schedule-form-submit").onclick = "";
 					document.getElementById("invite-form-submit").onclick = "";
 					document.getElementById("index-module-name").innerHTML = "Web Meet Demo";
+					document.getElementById("get-nexus-link").innerHTML = "<a href='http://northbridgetech.org/apps/waterwheel/module/core/index.php?view=apply' target='_blank'>Get Nexus</a>";
 				}		
 			});
 			
