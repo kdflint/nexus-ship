@@ -2,8 +2,24 @@ var errorBackground = "rgba(247,248,239,0.6) url('') no-repeat right top";
 
 var currentEvents;
 
+var MEETING_INFO_NEXT_REFRESH = "60000";
+
+var NEXT_MEETING_START;
+
 function formSubmit(formId) {
  		document.forms[formId].submit();
+}
+
+function countdownTimer() {
+	NEXT_MEETING_START--;
+	document.getElementById("countdown").innerHTML = NEXT_MEETING_START;
+}
+
+/**
+ * @param {string} filename The name of the file WITHOUT ending
+ */
+function playSound(filename){   
+   document.getElementById("notification").innerHTML='<audio autoplay="autoplay"><source src="audio/' + filename + '.mp3" type="audio/mpeg" /><source src="' + filename + '.ogg" type="audio/ogg" /><embed hidden="true" autostart="true" loop="false" src="audio/' + filename +'.mp3" /></audio>';
 }
 
 function truncateString(str, length, ending) { 
@@ -975,6 +991,17 @@ function millisecondsToHms(ms) {
 	//var s = Math.floor(d % 3600 % 60);
 	var s = "00";
 	return ((h > 0 ? h + ":" : "00:") + (m > 0 ? (h > 0 && m < 10 ? "0" : "") + m + ":" : "00:") + s); 
+}
+
+// LEFT OFF writing this method
+function millisecondsToFriendlyTime(ms) {
+	var msNum = Number(ms);
+	var dayEquiv = 24*60*60*1000;
+	if (msNum < dayEquiv) {
+		return millisecondsToHms(ms);
+	}
+	var d = Math.floor(ms/1000);
+	return (d + " days"); 
 }
 
 function validateTimeFormat(t) {
