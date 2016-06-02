@@ -48,10 +48,10 @@
          					"<span class='purpose'>" + jsonObj[i].purpose + "</span><br/>" +
          					"<span class='descr' style='font-size:90%;width:90%;padding-right:80px;' >" + jsonObj[i].descr + 
          						((jsonObj[i].location != null) ? "<br/><span class='fa fa-map-marker'></span> " + jsonObj[i].location : "") +
-										(jsonObj[i].url ? "<p><span><a href='http://" + jsonObj[i].url + "' target='_blank'>Web Link</a></span></p>" : "") +
+										(jsonObj[i].url ? "<p><span><a href='" + jsonObj[i].url + "' target='_blank'>Web Link</a></span></p>" : "") +
 										(jsonObj[i].fileext ? "<p><span><a href='<?php echo(Utilities::getPartnerFileUrl()); ?>/event-" + jsonObj[i].uuid + "." + jsonObj[i].fileext + "' target='_blank'>Flyer</a></span></p>" : "") + 
 										(jsonObj[i].registration ? "<p><span class='tod'>" + jsonObj[i].registration + "</span></p>" : "") + 
-										(jsonObj[i].regr_url ? "<p><span><a href='http://" + jsonObj[i].regr_url + "' target='_blank'>Registration Link</a></span></p>" : "") + 
+										(jsonObj[i].regr_url ? "<p><span><a href='" + jsonObj[i].regr_url + "' target='_blank'>Registration Link</a></span></p>" : "") + 
 										(jsonObj[i].contact ? "<p><span>Follow up with: " + jsonObj[i].contact + "</span></p>" : "") +
 										
           					"<p><a href='<?php echo(Utilities::getHttpPath()); ?>/modules/schedule/control/eventApproveProcessor.php?id=" + jsonObj[i].uuid + "'><b>Approve for Public Calendar</b></a> | " +
