@@ -596,6 +596,9 @@ function resetEventForm() {
 	setFieldPassStyles(scheduleForm['meeting-date-end'], "End Date");
 	clearFileInput(document.getElementById('fileToUpload'));
 	document.getElementById('schedule-form-submit').innerHTML = "Add";
+	scheduleForm['meeting-descr'].innerHTML = "";
+	scheduleForm['meeting-registr'].innerHTML = "";
+	scheduleForm['meeting-uuid'].value = "";
 	// TODO - timezone value is not resetting - why? Also affects NWM (that is, form cancel does not reset tx value/display)
 	return true;
 }
@@ -705,9 +708,9 @@ function populateEventForm(i) {
 	var eventForm = document.forms['schedule-form'];	
   if (currentEvents[i].purpose) { eventForm['meeting-name'].value = currentEvents[i].purpose; }
 	if (currentEvents[i].url) { eventForm['meeting-url'].value = currentEvents[i].url; }
-	if (currentEvents[i].descr) { eventForm['meeting-descr'].value = currentEvents[i].descr.replace(new RegExp( '~', 'g' ), '\r\n'); }
-	if (currentEvents[i].regr_url) { eventForm['meeting-registr'].value = currentEvents[i].regr_url; }
-	if (currentEvents[i].registration) { eventForm['registration-url'].value = currentEvents[i].registration; }
+	if (currentEvents[i].descr) { eventForm['meeting-descr'].innerHTML = currentEvents[i].descr.replace(new RegExp( '~', 'g' ), '\r\n'); }
+	if (currentEvents[i].registration) { eventForm['meeting-registr'].innerHTML = currentEvents[i].registration; }
+	if (currentEvents[i].regr_url) { eventForm['registration-url'].value = currentEvents[i].regr_url; }
 	if (currentEvents[i].location) { eventForm['meeting-loc'].value = currentEvents[i].location; }
 	if (currentEvents[i].tz_extract_name) { eventForm['tzone-name'].value = currentEvents[i].tz_extract_name; }
 

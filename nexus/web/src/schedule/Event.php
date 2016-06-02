@@ -180,6 +180,9 @@ class Event {
 				e.reserved_user_fk as adder,
 				e.type as meetingtype,
 				e.file as file,
+				e.registration as registration,
+				e.url as url,
+				e.registration_url as regr_url,
 				u.fname as fname, 
 				u.lname as lname,
 				pg.abbrev as abbrev,
@@ -229,6 +232,9 @@ class Event {
 				$events[$counter]['lname'] = $row['lname'];
 				$events[$counter]['sessionUser'] = $ssnUser;
 				$events[$counter]['adder'] = $row['adder'];
+				$events[$counter]['registration'] = $row['registration'];
+				$events[$counter]['url'] = $row['url'];
+				$events[$counter]['regr_url'] = $row['regr_url'];
 				$counter++;
 			}
 		}
