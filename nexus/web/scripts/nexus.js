@@ -19,7 +19,7 @@ function countdownTimer() {
  * @param {string} filename The name of the file WITHOUT ending
  */
 function playSound(filename){   
-   document.getElementById("notification").innerHTML='<audio autoplay="autoplay"><source src="audio/' + filename + '.mp3" type="audio/mpeg" /><source src="' + filename + '.ogg" type="audio/ogg" /><embed hidden="true" autostart="true" loop="false" src="audio/' + filename +'.mp3" /></audio>';
+   document.getElementById("notification").innerHTML='<audio autoplay="autoplay"><source src="audio/' + filename + '.mp3" type="audio/mpeg" /><source src="audio/' + filename + '.ogg" type="audio/ogg" /><embed hidden="true" autostart="true" loop="false" src="audio/' + filename +'.mp3" /></audio>';
 }
 
 function truncateString(str, length, ending) { 

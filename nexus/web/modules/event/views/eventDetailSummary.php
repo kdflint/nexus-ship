@@ -24,8 +24,9 @@
 					var i = 0;
 					var d = new Date();
 					var now = Math.ceil(d.getTime()/1000);
-					console.log(jsonObj[i].epoch);
-					console.log(now);
+					console.log("Meeting refreshing...");
+					console.log("Meeting epoch = " + jsonObj[i].epoch);
+					console.log("Now epoch = " + now);
 		 			tableEvent = 
        						"<span class='date'>" + jsonObj[i].purpose + "</span>" +
   					  		"<p><span>" + jsonObj[i].day + ", " + jsonObj[i].month + " " + jsonObj[i].date + "</span><br/>" +
@@ -38,12 +39,13 @@
     			if (jsonObj[i].running == "true") {
 	        	buttonLabel = "Join This Meeting";
         		document.getElementById("login-form-submit").className = "pure-button pure-button-primary";
+        		// TODO - if a meeting is running, we do no more refreshes. Probably we should continue to check...?
         		MEETING_INFO_NEXT_REFRESH = 0;
         		playSound('demonstrative');
      			} else {
 	     			//buttonLabel = "Not Started <span id='countdown'></span>";
 	     			buttonLabel = "Not Started";
-	     			MEETING_INFO_NEXT_REFRESH = (jsonObj[i].epoch > now+(60*60)) ? "300000" : "60000";
+	     			MEETING_INFO_NEXT_REFRESH = (jsonObj[i].epoch > now+(70*60)) ? "300000" : "60000";
 	     			playSound('gets-in-the-way');
 	     			//NEXT_MEETING_START = jsonObj[i].epoch;
 	     			//window.setInterval(countdownTimer, 1000);

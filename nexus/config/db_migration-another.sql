@@ -14,3 +14,5 @@ update event set url = 'http://' || url where url is not null and url != '' and 
 
 select count(*) from event where registration_url is not null and registration_url != '' and registration_url not like 'http%'
 update event set registration_url = 'http://' || registration_url where registration_url is not null and registration_url != '' and registration_url not like 'http%'
+
+-- ALL ABOVE ARE COMPLETE IN PROD
