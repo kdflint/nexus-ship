@@ -203,8 +203,14 @@ function validateEvent($input) {
 	
 	// MEETING REGISTRATION
 	if (isset($input['meeting-registr'])) {
-		// TODO - proper validation and compare to javascript
-		$result['clean']['meeting-registr'] = $input['meeting-registr'];
+		if (strlen($input['meeting-registr']) <= 200) {
+			// TODO - proper validation and compare to javascript
+			$result['clean']['meeting-registr'] = str_replace(["\r\n", "\r", "\n"], "~", Utilities::sanitize($input['meeting-registr']));;
+		} else {
+			$result['error']['meeting-registr'] = "error";
+		}	else {
+			$result['clean']['meeting-registr'] = "";
+		}
 	}	
 	
 	// MEETING CONTACT

@@ -210,30 +210,7 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
 				activityFlag = 0;
 			}
     </script>
-    
-  <!-- For Formilla feedback form -->
-	<!-- moved to support site - 5.6.2016 - see theme (docs) head.php for insertion point
-  <script type="text/javascript">
-    (function () {
-        var head = document.getElementsByTagName("head").item(0);
-        var script = document.createElement("script");
-        var src = (document.location.protocol == 'https:' ? 'https://www.formilla.com/scripts/feedback.js' : 'http://www.formilla.com/scripts/feedback.js');
-        script.setAttribute("type", "text/javascript"); script.setAttribute("src", src); script.setAttribute("async", true);
-        var complete = false;
-
-        script.onload = script.onreadystatechange = function () {
-            if (!complete && (!this.readyState || this.readyState == 'loaded' || this.readyState == 'complete')) {
-                complete = true;
-                Formilla.guid = 'd94fe060-648d-45c5-9698-2e43d5817798';
-                Formilla.loadFormillaChatButton();
-            }
-        };
-
-        head.appendChild(script);
-    })();
-  </script>
-  -->
-  
+     
   </head>
   
   <body>
