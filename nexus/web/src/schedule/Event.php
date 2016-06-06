@@ -154,7 +154,7 @@ class Event {
 	}
 	
 	// TODO - this only returns actives - rename method?
-	public static function getFutureEvents($groupId, $localTz = "Greenwich", $ssnUser) {	
+	public static function getFutureEvents($groupId, $localTz = "Greenwich", $ssnUser, $status = "1") {	
 		$events = array();
 		if (self::isValidTimeZone($localTz)) {
 			$query = "select 
@@ -183,6 +183,7 @@ class Event {
 				e.registration as registration,
 				e.url as url,
 				e.registration_url as regr_url,
+				e.contact as contact,
 				u.fname as fname, 
 				u.lname as lname,
 				pg.abbrev as abbrev,
@@ -190,14 +191,14 @@ class Event {
 			from event e, public.user u, event_group eg, pg_timezone_names pg
 			where eg.group_fk = $1		
 			and eg.event_fk = e.id
-			and eg.status_fk = '1'
+			and eg.status_fk = $3
 			and (e.start_dttm + e.duration) > now() 
 			and e.active = true
 			and pg.name = $2
 			and u.id = e.reserved_user_fk 
 			order by e.start_dttm";
 				
-			$cursor = PgDatabase::psExecute($query, array($groupId, $localTz));
+			$cursor = PgDatabase::psExecute($query, array($groupId, $localTz, $status));
 			$counter = 0;
 			while ($row = pg_fetch_array($cursor)) {
 				$events[$counter]['date'] = $row['date'];
@@ -230,6 +231,7 @@ class Event {
 				$events[$counter]['fileext'] = $row['file'];
 				$events[$counter]['fname'] = $row['fname'];
 				$events[$counter]['lname'] = $row['lname'];
+				$events[$counter]['contact'] = $row['contact'];
 				$events[$counter]['sessionUser'] = $ssnUser;
 				$events[$counter]['adder'] = $row['adder'];
 				$events[$counter]['registration'] = $row['registration'];
@@ -312,6 +314,7 @@ class Event {
 		return $event;
 	}
 
+/*
 	public static function getPendingEvents($localTz = "Greenwich") {	
 		$events = array();
 		if (self::isValidTimeZone($localTz)) {
@@ -379,6 +382,7 @@ class Event {
 		}
 		return $events;
 	}
+*/
 	
 	public static function updateEvent($uuid) {
 		
