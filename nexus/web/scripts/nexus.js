@@ -99,15 +99,20 @@ function setSessionTimezone(relativePath) {
 
 function setPublicSession(oid, fname, mid, relativePath) {
 	var xmlhttp = getXmlHttpRequest();
+	var returnStatus;
 	xmlhttp.onreadystatechange=function() {
+		console.log(xmlhttp.readyState);
 		if (xmlhttp.readyState == 4) {
-			if (xmlhttp.status != 200) { return true; }
-		} else {
-			return false;
+			if (xmlhttp.status != 200) { 
+				returnStatus = false;
+			} else {
+			 	returnStatus = true;
+			}
 		}
 	};
-	xmlhttp.open("GET", relativePath + "plugin/setPublicSession.php?oid=" + oid + "&timezone=" + getLocalTz() + "&fname=" + fname + "&uuid=" + mid);
+	xmlhttp.open("GET", relativePath + "plugin/setPublicSession.php?oid=" + oid + "&timezone=" + getLocalTz() + "&fname=" + fname + "&uuid=" + mid, false);
 	xmlhttp.send();
+	return returnStatus;
 }
 
 function setPublicSession2(oid, fname, relativePath) {
@@ -393,8 +398,13 @@ function guestValidateAndSubmit(oid, mid) {
   }
 	
  	if (Boolean(pass)) {	
- 		setPublicSession(oid, username, mid, '');
- 		document.getElementById('public-meeting-join').click();
+ 		if (setPublicSession(oid, username, mid, '')) {
+ 			document.getElementById('public-meeting-join').click();
+ 		} else {
+ 			usernameField.value = emailField.value = null;
+ 			setFieldErrorStyles(usernameField, "Our bad, something goofed :(");
+ 			setFieldErrorStyles(emailField, "Please try again.");
+ 		}
 	}
 }
 
@@ -744,7 +754,8 @@ function populateEventForm(i) {
 	var endDate = currentEvents[i].month_num_end + "/" + currentEvents[i].date_end + "/" + currentEvents[i].year_end;
 	eventForm['meeting-date'].value = startDate;
 	eventForm['meeting-date-end'].value = endDate;
-	document.getElementById('schedule-form-submit').innerHTML = "Update";
+	//document.getElementById('schedule-form-submit').innerHTML = "Update";
+	document.getElementById('schedule-form-submit').innerHTML = "Approve";
 	eventForm['meeting-uuid'].value = currentEvents[i].uuid;
 		
 	return true;
