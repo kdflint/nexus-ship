@@ -3,10 +3,9 @@
 		var xmlhttp = getXmlHttpRequest();
 		xmlhttp.onreadystatechange=function() {
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-			 	var jsonObj = JSON.parse(xmlhttp.responseText);		
-			 		
+			 	var jsonObj = JSON.parse(xmlhttp.responseText);	
 			 	// put row container in the now, 1 row always
-			 	var nowMeeting = undefined;		 	
+			 	var nowMeeting = undefined;	
 			 	if (jsonObj.length > 0 && jsonObj[0].epoch < referenceTime) {
 			 		nowMeeting = jsonObj.shift();
 			 		techCheck();
@@ -25,6 +24,7 @@
        	// write the current meeting into its row container, or default content if none
 				nowEvent = "";
 				if (nowMeeting === undefined) {
+					IS_NOW = false;
        		nowEvent =  
        			"<div class='td-div'>" +
 		      		"<div class='event'>" +
@@ -37,6 +37,10 @@
           		"</div>" +
           	"</div>";	 
        	}	else {
+       		if (!IS_NOW) {
+       			playSound('demonstrative');
+       			IS_NOW = true;
+					}
 					indicator = (Math.floor(new Date()/1000) < nowMeeting.epoch ) ? "Soon" : "Now";
 					// If this is a demo session, show the session user name as the now meeting reserver instead of the placeholder name that is in the database
 					reservedBy = nowMeeting.adder == <?php echo(Utilities::getDemoUidpk()); ?> ? '<?php echo($_SESSION['fname'] . " " . $_SESSION['lname']); ?>' : nowMeeting.fname + " " + nowMeeting.lname;
@@ -162,7 +166,25 @@
 	</tr>
 </table>
 
-<script> getReservationList(<?php echo (time() + 21*60); ?>); </script>
-	
+<script> 
+	// Set the refresh interval to the default for the first refresh
+	window.setTimeout(refreshEventList, MEETING_INFO_NEXT_REFRESH);
+	// Load the event list (based on server time)
+	getReservationList(<?php echo (time() + 21*60); ?>);
+	console.log("refreshing on: " + <?php echo (time() + 21*60); ?>);
+	function refreshEventList() {
+		if(MEETING_INFO_NEXT_REFRESH) {
+			// Refresh the event list (based on client time) and set the next refresh interval
+			var d = new Date();
+			var now = Math.ceil(d.getTime()/1000);
+			console.log("refreshing on: " + now+21*60);
+			getReservationList(now+21*60);
+			window.setTimeout(refreshEventList, MEETING_INFO_NEXT_REFRESH);
+		}
+  }
+</script> 
+
+		
 <a id='tech_check_control' href='javascript:void(0);' style="display:none;"></a>
-	
+
+<div id="notification"></div>	

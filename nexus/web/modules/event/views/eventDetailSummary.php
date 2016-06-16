@@ -24,9 +24,9 @@
 					var i = 0;
 					var d = new Date();
 					var now = Math.ceil(d.getTime()/1000);
-					console.log("Meeting refreshing...");
-					console.log("Meeting epoch = " + jsonObj[i].epoch);
-					console.log("Now epoch = " + now);
+					//console.log("Meeting refreshing...");
+					//console.log("Meeting epoch = " + jsonObj[i].epoch);
+					//console.log("Now epoch = " + now);
 		 			tableEvent = 
        						"<span class='date'>" + jsonObj[i].purpose + "</span>" +
   					  		"<p><span>" + jsonObj[i].day + ", " + jsonObj[i].month + " " + jsonObj[i].date + "</span><br/>" +
@@ -46,7 +46,7 @@
 	     			//buttonLabel = "Not Started <span id='countdown'></span>";
 	     			buttonLabel = "Not Started";
 	     			MEETING_INFO_NEXT_REFRESH = (jsonObj[i].epoch > now+(70*60)) ? "300000" : "60000";
-	     			playSound('gets-in-the-way');
+	     			//playSound('gets-in-the-way');
 	     			//NEXT_MEETING_START = jsonObj[i].epoch;
 	     			//window.setInterval(countdownTimer, 1000);
      			}
