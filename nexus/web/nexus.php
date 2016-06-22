@@ -139,6 +139,8 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
 					document.getElementById("profile_control_icon").className = "";
 					document.getElementById("schedule-form-submit").onclick = "";
 					document.getElementById("invite-form-submit").onclick = "";
+					document.getElementById("training-register1").href = "javascript:void(0)";
+					document.getElementById("training-register2").href = "javascript:void(0)";
 					document.getElementById("index-module-name").innerHTML = "Web Meet Demo";
 					document.getElementById("get-nexus-link").innerHTML = "<a href='http://northbridgetech.org/apps/waterwheel/module/core/index.php?view=apply' target='_blank'>Get Nexus</a>";
 				}		
@@ -192,14 +194,13 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
     </script> 
        
     <script>  	
-    	var activityFlag = 1;
-			document.onmousemove = function() { activityFlag = 1; };
-			document.onkeyup = function() { activityFlag = 1; };
-			document.onclick = function() { activityFlag = 1; };
+			document.onmousemove = function() { ACTIVITY_FLAG = 1; };
+			document.onkeyup = function() { ACTIVITY_FLAG = 1; };
+			document.onclick = function() { ACTIVITY_FLAG = 1; };
 			window.setInterval(recordActivity, 60000);
 			// every 60 seconds, if there has been user activity then send a request to update the session activity timestamp		
 			function recordActivity() {
-				if(activityFlag) {
+				if(ACTIVITY_FLAG) {
 					var xmlhttp = getXmlHttpRequest();
 					xmlhttp.onreadystatechange=function() {
 	  				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {	}
@@ -207,7 +208,7 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
 					xmlhttp.open("GET","src/framework/sessionManager.php");
 					xmlhttp.send();  					
 				}
-				activityFlag = 0;
+				ACTIVITY_FLAG = 0;
 			}
     </script>
      

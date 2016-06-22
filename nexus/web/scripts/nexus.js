@@ -6,7 +6,9 @@ var MEETING_INFO_NEXT_REFRESH = "60000";
 
 var NEXT_MEETING_START;
 
-var IS_NOW = false;
+var IS_NOW = true;
+
+var ACTIVITY_FLAG = 1;
 
 function formSubmit(formId) {
  		document.forms[formId].submit();

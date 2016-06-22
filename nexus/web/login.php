@@ -300,7 +300,6 @@ $networkName = $row['name'];
 									// Refresh the event view and set the next refresh interval
 									getEventDetail("<?php echo $cleanMeetingId; ?>");
 									window.setTimeout(refreshEvents, MEETING_INFO_NEXT_REFRESH);
-									//console.log(MEETING_INFO_NEXT_REFRESH)
 								}
      					}
      				</script>     		  		     		

@@ -20,8 +20,18 @@
   	
       	<span class="controls" style="float:right;padding-bottom:10px;margin-top:30px;">
 					<!--<a href="javascript:void(0)" onclick="if(typeof Formilla != 'undefined'){Formilla.initFormillaChat();}">Problem?</a> | -->
-					<a href="<?php echo Utilities::getSupportUrl(); ?>" target="_blank">Support</a> | 
-      		<a href="login.php?oid=<?php echo $_SESSION['orgUid']; ?>&logout=true" style="color:#d27b4b;text-decoration:none;">Logout</a>
+					<a href="#openTrainModal" onclick=""><span class="fa fa-graduation-cap fa-2x" style="margin-left:8px;" title="Training"></span></a>
+					<a href="<?php echo Utilities::getSupportUrl(); ?>" target="_blank"><span class="fa fa-question-circle fa-2x" style="margin-left:8px;" title="Support"></span></a>
+      		<a href="login.php?oid=<?php echo $_SESSION['orgUid']; ?>&logout=true" style="color:#d27b4b;text-decoration:none;" title="Logout"><span class="fa fa-sign-out fa-2x" style="margin-left:8px;"></span></a>
       	</span>
       	<a id="profile_control" href="javascript:void(0);"><span id="profile_control_icon" style="clear:right;float:right;padding-top:10px;margin:0px;color:#d27b4b;" class="fa fa-lg fa-plus-square" ></span></a>
 				<span style="float:right;padding:10px;">Hello <?php echo $_SESSION['fname']; ?></span> 	
+				
+				<div id="openTrainModal" class="modalDialog">
+					<div>
+						<a href="#close" title="Close" class="close">X</a>
+						<p>Be a meeting MVP! These training sessions will enable you to make the most out of Nexus Web Meet.</p>
+						<p style="margin-top:10px;margin-bottom:30px;font-size:90%;margin-left:10px;">Introduction to Virtual Collaboration<a id="training-register1" class="pure-button button-menu" href="https://www.eventbrite.com/e/introduction-to-virtual-collaboration-tickets-25983638763" target="_blank" style="float:right;background-color:#d27b4b;width:70px;font-size:90%;color:#e6e6e6;margin-bottom:0px;" <?php echo($disabled); ?>>Register</a></p>
+						<p style="margin-top:10px;margin-bottom:30px;font-size:90%;margin-left:10px;">Leading Meetings with Nexus Web Meet<a id="training-register2" class="pure-button button-menu" href="https://www.eventbrite.com/e/leading-meetings-with-nexus-web-meet-tickets-26206738059" target="_blank" style="float:right;background-color:#d27b4b;width:70px;font-size:90%;color:#e6e6e6;margin-bottom:0px;" <?php echo($disabled); ?>>Register</a></p>
+					</div>
+				</div>
