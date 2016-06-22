@@ -2,8 +2,28 @@ var errorBackground = "rgba(247,248,239,0.6) url('') no-repeat right top";
 
 var currentEvents;
 
+var MEETING_INFO_NEXT_REFRESH = "60000";
+
+var NEXT_MEETING_START;
+
+var IS_NOW = true;
+
+var ACTIVITY_FLAG = 1;
+
 function formSubmit(formId) {
  		document.forms[formId].submit();
+}
+
+function countdownTimer() {
+	NEXT_MEETING_START--;
+	document.getElementById("countdown").innerHTML = NEXT_MEETING_START;
+}
+
+/**
+ * @param {string} filename The name of the file WITHOUT ending
+ */
+function playSound(filename){   
+   document.getElementById("notification").innerHTML='<audio autoplay="autoplay"><source src="audio/' + filename + '.mp3" type="audio/mpeg" /><source src="audio/' + filename + '.ogg" type="audio/ogg" /><embed hidden="true" autostart="true" loop="false" src="audio/' + filename +'.mp3" /></audio>';
 }
 
 function truncateString(str, length, ending) { 
@@ -83,15 +103,20 @@ function setSessionTimezone(relativePath) {
 
 function setPublicSession(oid, fname, mid, relativePath) {
 	var xmlhttp = getXmlHttpRequest();
+	var returnStatus;
 	xmlhttp.onreadystatechange=function() {
+		console.log(xmlhttp.readyState);
 		if (xmlhttp.readyState == 4) {
-			if (xmlhttp.status != 200) { return true; }
-		} else {
-			return false;
+			if (xmlhttp.status != 200) { 
+				returnStatus = false;
+			} else {
+			 	returnStatus = true;
+			}
 		}
 	};
-	xmlhttp.open("GET", relativePath + "plugin/setPublicSession.php?oid=" + oid + "&timezone=" + getLocalTz() + "&fname=" + fname + "&uuid=" + mid);
+	xmlhttp.open("GET", relativePath + "plugin/setPublicSession.php?oid=" + oid + "&timezone=" + getLocalTz() + "&fname=" + fname + "&uuid=" + mid, false);
 	xmlhttp.send();
+	return returnStatus;
 }
 
 function setPublicSession2(oid, fname, relativePath) {
@@ -377,8 +402,13 @@ function guestValidateAndSubmit(oid, mid) {
   }
 	
  	if (Boolean(pass)) {	
- 		setPublicSession(oid, username, mid, '');
- 		document.getElementById('public-meeting-join').click();
+ 		if (setPublicSession(oid, username, mid, '')) {
+ 			document.getElementById('public-meeting-join').click();
+ 		} else {
+ 			usernameField.value = emailField.value = null;
+ 			setFieldErrorStyles(usernameField, "Our bad, something goofed :(");
+ 			setFieldErrorStyles(emailField, "Please try again.");
+ 		}
 	}
 }
 
@@ -547,7 +577,10 @@ function resetProfileForm() {
 }
 		
 function resetScheduleForm() {
-	document.getElementById('schedule_control').click();
+	var formControl = document.getElementById('schedule_control');
+	if (formControl) {
+		formControl.click();
+	}
 	var scheduleForm = document.forms['schedule-form'];
 	scheduleForm.reset();
 	setFieldPassStyles(scheduleForm['meeting-name'], "Meeting Name");
@@ -559,6 +592,29 @@ function resetScheduleForm() {
 	$( "#schedule-form-duration" ).selectmenu( "refresh" );
 	$( "#schedule-form-type" ).selectmenu( "refresh" );
 	showTimeZoneDisplay("tz-static");
+}
+
+function resetEventForm() {
+	var scheduleForm = document.forms['schedule-form'];
+	resetScheduleForm();
+	// overrides
+	setFieldPassStyles(scheduleForm['meeting-date'], "Start Date");
+	setFieldPassStyles(document.getElementById("schedule-form-time-button"), "Start Time");
+	setFieldPassStyles(document.getElementById("schedule-form-time-end-button"), "End Time");
+	// additional fields
+	setFieldPassStyles(scheduleForm['meeting-url'], "Web Link (http://)");
+	setFieldPassStyles(scheduleForm['meeting-descr'], "Description");
+	setFieldPassStyles(scheduleForm['meeting-registr'], "Registration Information");
+	setFieldPassStyles(scheduleForm['registration-url'], "Registration Link (http://)");
+	setFieldPassStyles(scheduleForm['meeting-loc'], "Location");
+	setFieldPassStyles(scheduleForm['meeting-date-end'], "End Date");
+	clearFileInput(document.getElementById('fileToUpload'));
+	document.getElementById('schedule-form-submit').innerHTML = "Add";
+	scheduleForm['meeting-descr'].innerHTML = "";
+	scheduleForm['meeting-registr'].innerHTML = "";
+	scheduleForm['meeting-uuid'].value = "";
+	// TODO - timezone value is not resetting - why? Also affects NWM (that is, form cancel does not reset tx value/display)
+	return true;
 }
 
 function resetNowForm() {
@@ -661,12 +717,51 @@ function getMaxDaysForFebruary(year) {
 	} 
 }
 
-function populateEditEventForm(i) {
-	alert("hello");
-	/* currentEvents is a global, established in the ajax processing */
+function populateEventForm(i) {
+	/* currentEvents is a global, initialized in the ajax processing */
 	var eventForm = document.forms['schedule-form'];	
-	eventForm['meeting-name'].value = currentEvents[i].purpose;
-	eventForm['meeting-name'].readOnly = true;
+  if (currentEvents[i].purpose) { eventForm['meeting-name'].value = currentEvents[i].purpose; }
+	if (currentEvents[i].url) { eventForm['meeting-url'].value = currentEvents[i].url; }
+	if (currentEvents[i].descr) { eventForm['meeting-descr'].innerHTML = currentEvents[i].descr.replace(new RegExp( '~', 'g' ), '\r\n'); }
+	if (currentEvents[i].registration) { eventForm['meeting-registr'].innerHTML = currentEvents[i].registration; }
+	if (currentEvents[i].regr_url) { eventForm['registration-url'].value = currentEvents[i].regr_url; }
+	if (currentEvents[i].location) { eventForm['meeting-loc'].value = currentEvents[i].location; }
+	if (currentEvents[i].tz_extract_name) { eventForm['tzone-name'].value = currentEvents[i].tz_extract_name; }
+
+	var startTime = currentEvents[i].hour_24 + ":" + currentEvents[i].minute + ":00";
+	var startOptions = eventForm['meeting-time'];
+	var startTimeIndex = "0";
+
+	for (m = 0; m < startOptions.length; m++) {
+		if (startOptions.options[m].value == startTime) { 
+			startTimeIndex = startOptions.options[m].index; 
+			break;
+    }
+    //txt = txt + "\n" + startOptions.options[m].text + " has index: " + startOptions.options[m].index + " and value: " + startOptions[m].value;
+  }
+	startOptions.selectedIndex = startTimeIndex;
+	$( "#schedule-form-time" ).selectmenu( "refresh" );
+		
+	var endTime = currentEvents[i].hour_end_24 + ":" + currentEvents[i].minute_end + ":00";
+	var endOptions = eventForm['meeting-time-end'];
+	var endTimeIndex = "0";
+	for (m = 0; m < endOptions.length; m++) {
+		if (endOptions.options[m].value == endTime) { 
+			endTimeIndex = endOptions.options[m].index; 
+			break;
+    }
+  }
+	endOptions.selectedIndex = endTimeIndex;  
+	$( "#schedule-form-time-end" ).selectmenu( "refresh" );
+		
+	var startDate = currentEvents[i].month_num + "/" + currentEvents[i].date + "/" + currentEvents[i].year;
+	var endDate = currentEvents[i].month_num_end + "/" + currentEvents[i].date_end + "/" + currentEvents[i].year_end;
+	eventForm['meeting-date'].value = startDate;
+	eventForm['meeting-date-end'].value = endDate;
+	//document.getElementById('schedule-form-submit').innerHTML = "Update";
+	document.getElementById('schedule-form-submit').innerHTML = "Approve";
+	eventForm['meeting-uuid'].value = currentEvents[i].uuid;
+		
 	return true;
 }
 	
@@ -679,7 +774,7 @@ function eventValidateAndSubmit(thisForm) {
   var time = eventForm['meeting-time'].value;
 	var dateField = eventForm['meeting-date'];
 	var date = dateField.value;
-
+	
   var timeEnd;
 	var dateFieldEnd;
 	var dateEnd;  
@@ -708,7 +803,7 @@ function eventValidateAndSubmit(thisForm) {
   	if (validateDateFormat(dateFieldEnd)) {
   		if (Boolean(isTimeEnd)) {
   			timeEnd = eventForm['meeting-time-end'].value;
-				setFieldPassStyles(document.getElementById(thisForm + "-time-end-button"), "Time End");
+				setFieldPassStyles(document.getElementById(thisForm + "-time-end-button"), "End Time");
 				if (timeEnd == null || timeEnd == "" || timeEnd == "End Time" || !validateTimeFuture(dateFieldEnd, timeEnd, timeZoneOffset)) {
 					setFieldErrorStyles(document.getElementById(thisForm + "-time-end-button"), "End Time");
 					pass = false;
@@ -717,7 +812,7 @@ function eventValidateAndSubmit(thisForm) {
 		} else {
 			if (Boolean(isTimeEnd)) {
 				timeEnd = eventForm['meeting-time-end'].value;
-				setFieldPassStyles(document.getElementById(thisForm + "-time-end-button"), "Time End");
+				setFieldPassStyles(document.getElementById(thisForm + "-time-end-button"), "End Time");
 				if (timeEnd == null || timeEnd == "" || timeEnd == "End Time") {
 					setFieldErrorStyles(document.getElementById(thisForm + "-time-end-button"), "End Time");
 				}	
@@ -914,6 +1009,17 @@ function millisecondsToHms(ms) {
 	//var s = Math.floor(d % 3600 % 60);
 	var s = "00";
 	return ((h > 0 ? h + ":" : "00:") + (m > 0 ? (h > 0 && m < 10 ? "0" : "") + m + ":" : "00:") + s); 
+}
+
+// LEFT OFF writing this method
+function millisecondsToFriendlyTime(ms) {
+	var msNum = Number(ms);
+	var dayEquiv = 24*60*60*1000;
+	if (msNum < dayEquiv) {
+		return millisecondsToHms(ms);
+	}
+	var d = Math.floor(ms/1000);
+	return (d + " days"); 
 }
 
 function validateTimeFormat(t) {

@@ -1,30 +1,18 @@
-define("SUPPORT_URL", "http://northbridgetech.org/dev/support");
+UPDATE pg_attribute SET atttypmod = 604
+WHERE attrelid = 'public.event'::regclass
+AND attname = 'url';
 
-Make new folder partner/image
-Move images from partner to partner/image
+UPDATE pg_attribute SET atttypmod = 604
+WHERE attrelid = 'public.event'::regclass
+AND attname = 'registration_url';
 
-from public_html/<env>/nexus
-tar czvf partner.tar.gz partner/
-cd partner
-mkdir image
-cp *.png image (etc)
+-- No permission to do above at A2
+-- So, use phpPgAdmin
 
-ls -l | wc -l
-if  counts match
-	rm *.png, etc
-	rm partner.tar.gz
-	
-	
-	
-mkdir timezones/output
-cd output
-mv web/scripts/timeZoneData.js to new output folder
-ln -s ~/batch/dev/nexus/module/timezones/output/timeZoneData.js timeZoneData.js
+select count(*) from event where url is not null and url != '' and url not like 'http%'
+update event set url = 'http://' || url where url is not null and url != '' and url not like 'http%'
 
-ln -s ~/public_html/dev/nexus/web/src/framework/PgDb.php PgDb.php
-copy over timezone batch files
+select count(*) from event where registration_url is not null and registration_url != '' and registration_url not like 'http%'
+update event set registration_url = 'http://' || registration_url where registration_url is not null and registration_url != '' and registration_url not like 'http%'
 
-add cron job
-
-add dev demo cron job
-
+-- ALL ABOVE ARE COMPLETE IN PROD

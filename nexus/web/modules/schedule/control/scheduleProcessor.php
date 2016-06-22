@@ -27,7 +27,8 @@ $dirty = array('meeting-name' => $_POST['meeting-name'],
 							'registration-url' => $_POST['registration-url'],
 							'meeting-date-end' => $_POST['meeting-date-end'],
 							'meeting-time-end' => $_POST['meeting-time-end'],
-							'meeting-contact' => $_POST['meeting-contact']
+							'meeting-contact' => $_POST['meeting-contact'],
+							'meeting-uuid' => $_POST['meeting-uuid']
 							);
 											
 $result = validateEvent($dirty);
@@ -55,7 +56,7 @@ if (isset($_FILES) && isset($_FILES["fileToUpload"]["name"]) && strlen($_FILES["
 	$targetExt = pathinfo($inputFile,PATHINFO_EXTENSION);
 }
 
-$eventUid = Event::addEvent($timestamp, $result['clean']['meeting-duration'], $result['clean']['meeting-name'], $_SESSION['uidpk'], array_keys($_SESSION['groups'])[0], $result['clean']['tzone-name'], $meetingType[$result['clean']['meeting-type']], $result['clean']['meeting-descr'], $result['clean']['meeting-loc'], $result['clean']['isBbbMeeting'], $targetExt, $meetingStatus, $result['clean']['meeting-url'], $result['clean']['registration-url'], $result['clean']['meeting-registr'], $result['clean']['meeting-contact']);
+$eventUid = Event::addEvent($timestamp, $result['clean']['meeting-duration'], $result['clean']['meeting-name'], $_SESSION['uidpk'], array_keys($_SESSION['groups'])[0], $result['clean']['tzone-name'], $meetingType[$result['clean']['meeting-type']], $result['clean']['meeting-descr'], $result['clean']['meeting-loc'], $result['clean']['isBbbMeeting'], $targetExt, $meetingStatus, $result['clean']['meeting-url'], $result['clean']['registration-url'], $result['clean']['meeting-registr'], $result['clean']['meeting-contact'], $result['clean']['meeting-uuid']);
 
 if ($isFile) {
 	$targetFile = Utilities::getPartnerFileRoot() . "/event-" . $eventUid . "." . $targetExt;
@@ -191,27 +192,40 @@ function validateEvent($input) {
 	// MEETING URL
 	if (isset($input['meeting-url'])) {
 		// TODO - proper validation and compare to javascript
-		$result['clean']['meeting-url'] = str_replace("http://", "", $input['meeting-url']);
+		$result['clean']['meeting-url'] = $input['meeting-url'];
 	}
 	
 	// MEETING REGISTRATION URL
 	if (isset($input['registration-url'])) {
 		// TODO - proper validation and compare to javascript
-		$result['clean']['registration-url'] = str_replace("http://", "", $input['registration-url']);
+		$result['clean']['registration-url'] = $input['registration-url'];
 	}
 	
 	// MEETING REGISTRATION
 	if (isset($input['meeting-registr'])) {
-		// TODO - proper validation and compare to javascript
-		$result['clean']['meeting-registr'] = $input['meeting-registr'];
-	}	
+		if (strlen($input['meeting-registr']) <= 200) {
+			// TODO - proper validation and compare to javascript
+			$result['clean']['meeting-registr'] = str_replace(["\r\n", "\r", "\n"], "~", Utilities::sanitize($input['meeting-registr']));;
+		} else {
+			$result['error']['meeting-registr'] = "error";
+		}
+	} else {
+			$result['clean']['meeting-registr'] = "";
+	}
 	
 	// MEETING CONTACT
 	if (isset($input['meeting-contact'])) {
 		// TODO - proper validation and compare to javascript
 		$result['clean']['meeting-contact'] = $input['meeting-contact'];
 	}	
-
+	
+	// MEETING UUID
+	if (isset($input['meeting-uuid']) && Utilities::validateUuid($input['meeting-uuid'])) {
+		$result['clean']['meeting-uuid'] = $input['meeting-uuid'];
+	} else {
+		$result['clean']['meeting-uuid'] = "";
+	}
+	
  	return $result;
 }
 

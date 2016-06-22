@@ -34,7 +34,7 @@
       						<option value="3" selected="selected">All</option>
     						</select>
 						</form>-->
-						<a href='#openModal' title="New Meeting"><span style='padding:0px;' class='fa fa-calendar-o fa-2x' ></span><span style='padding-left:2px;' class='fa fa-plus' ></span></a>
+						<a href='#openModal' onclick="return resetEventForm();" title="New Meeting"><span style='padding:0px;' class='fa fa-calendar-o fa-2x' ></span><span style='padding-left:2px;' class='fa fa-plus' ></span></a>
 					</div>
 			  	<noscript>
 			  		<p><span class="fa fa-exclamation-triangle fa-2x" style="color:#d27b4b;float:left;margin-right:5px;"></span>To use Nexus it is necessary to enable JavaScript.</p>

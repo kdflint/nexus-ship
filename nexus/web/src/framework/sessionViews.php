@@ -21,7 +21,7 @@ session_start();
     			}
     		?>
   			</table>
-  			<?php print_r($_SESSION['groups']); ?>		  	 	
+  			<?php print_r($_SESSION['groups']); ?>			 	
   </body>
 
 </html>

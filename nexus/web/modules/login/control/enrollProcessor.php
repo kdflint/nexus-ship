@@ -64,7 +64,7 @@ User::addUserGroupRelation($uidpk, $invitation['groupid'], $invitation['roleid']
 Invitation::consumeInvitationByUuid($_SESSION['invitation']);
 
 $row = pg_fetch_array(Group::getGroupById($invitation['groupid']));
-$groupName = array_values($row)[0];
+$groupName = array_values($row)[1];
 	
 $isAuthenticated = true;
 	
@@ -97,7 +97,7 @@ function sendConfirmationEmail($email, $fname, $username, $allUsernames, $groupN
 	if (strlen($allUsernames) > 3) {
 		$multiples = '\r\n\r\nNote: There are other usernames currently enrolled with this email address: ' . Utilities::stripTrailingComma($allUsernames);
 	}
-	$messageBody = 'Welcome ' . $fname . '!\r\n\r\nYour Nexus enrollment is complete for username: ' . $username . $multiples . '\r\n\r\nYou are now enabled to collaborate with ' . $groupName . '\r\n\r\nYou can login to Nexus using this link.\r\n\r\n' . Utilities::getHttpPath() . '/login.php?oid=' . $orgid . '\r\n\r\nSincerely,\r\n\r\nThe Development Team at\r\nNorthBridge Technology Alliance';
+	$messageBody = 'Welcome ' . $fname . '!\r\n\r\nYour Nexus enrollment is complete for username: ' . $username . $multiples . '\r\n\r\nYou are now enabled to collaborate with your team.\r\n\r\nYou can login to Nexus using this link.\r\n\r\n' . Utilities::getHttpPath() . '/login.php?oid=' . $orgid . '\r\n\r\nSincerely,\r\n\r\nThe Development Team at\r\nNorthBridge Technology Alliance';
 	$message = new MessageEnrollment($email, $messageBody);
 	$message->send();
 		

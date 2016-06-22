@@ -165,6 +165,7 @@ $networkName = $row['name'];
 				}
 				if (<?php echo $demoSession; ?>) {
 					loginForm.elements['password'].disabled = true;
+					loginForm.elements['password'].placeholder = "demo";
 					document.getElementById("username-field-label").innerHTML = "Your Name";
 					document.getElementById("username-instruction-field-label").innerHTML = "";
 					document.getElementById("login-form-submit").innerHTML = "View Demo";
@@ -178,6 +179,7 @@ $networkName = $row['name'];
 					techCheck();  
 				}
 			});
+
 		</script>
 		
 		<script type="text/javascript">(function() {var walkme = document.createElement('script'); walkme.type = 'text/javascript'; walkme.async = true; walkme.src = 'http://cdn.walkme.com/users/ab3d27eee206468794b47885dfc2df46/walkme_ab3d27eee206468794b47885dfc2df46.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(walkme, s); window._walkmeConfig = {smartLoad:true}; })();</script> 
@@ -286,9 +288,20 @@ $networkName = $row['name'];
       			<a id='tech_check_control' href='javascript:void(0);' style="display:none;"></a>
 						<div id="tech_check_display" style="display:none;width:560px;">
 							<?php include("modules/schedule/views/techCheck.php"); ?>	
-						</div>	
+						</div>
+						<div id="notification"></div>	
      				<script> 
+     					// Set the refresh interval to the default for the first refresh
+     					window.setTimeout(refreshEvents, MEETING_INFO_NEXT_REFRESH);
+     					// Load the guest pass event
      					getEventDetail("<?php echo $cleanMeetingId; ?>");
+     					function refreshEvents() {
+								if(MEETING_INFO_NEXT_REFRESH) {
+									// Refresh the event view and set the next refresh interval
+									getEventDetail("<?php echo $cleanMeetingId; ?>");
+									window.setTimeout(refreshEvents, MEETING_INFO_NEXT_REFRESH);
+								}
+     					}
      				</script>     		  		     		
      		<?php } ?>   			
      		</div>
