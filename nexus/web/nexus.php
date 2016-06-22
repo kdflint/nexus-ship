@@ -141,6 +141,8 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
 					document.getElementById("invite-form-submit").onclick = "";
 					document.getElementById("training-register1").href = "javascript:void(0)";
 					document.getElementById("training-register2").href = "javascript:void(0)";
+					document.getElementById("training-register1").setAttribute("target", "");
+					document.getElementById("training-register2").setAttribute("target", "");
 					document.getElementById("index-module-name").innerHTML = "Web Meet Demo";
 					document.getElementById("get-nexus-link").innerHTML = "<a href='http://northbridgetech.org/apps/waterwheel/module/core/index.php?view=apply' target='_blank'>Get Nexus</a>";
 				}		
