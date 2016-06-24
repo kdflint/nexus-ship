@@ -95,7 +95,7 @@ if(isset($_GET['mid'])) {
  		$techCheckInclude = "scripts/techCheck.js";
  		// TODO - react to remembered user?
  	} else {
- 		$cleanMessage = "Your meeting has expired.";
+ 		$cleanMessage = "Your meeting is over.";
  		$cleanIcon = "fa fa-info-circle fa-2x";
  	}
 }
@@ -279,8 +279,8 @@ $networkName = $row['name'];
         				<input class="form-input" name="uid" value="" maxlength="25" style="width:100%;margin-bottom:10px !important;" autofocus>
         				<span id="username-email-label">Email</span>
      						<input class="form-input" type="email" name="email" maxlength="50" style="width:100%;margin-bottom:10px !important;">
-     						<p><span id='tech_check_summary' class='descr' style='font-style:italic;' ><span class='fa fa-spinner fa-spin fa-lg'></span> Checking your system compatibility...</span><a href='javascript:void(0);' onclick='document.getElementById("tech_check_control").click();' style='font-size:90%;margin-left:5px;'> Details</a></p>
-        				<a id="login-form-submit" class="pure-button pure-button-primary pure-button-disabled" style="width:100%;border-radius:6px;" href="javascript:void(0);" onclick="guestValidateAndSubmit('<?php echo $cleanNetworkId; ?>', '<?php echo $cleanMeetingId; ?>');" >Fetching...</a>  
+     						<p style="min-height:40px;"><span id='tech_check_summary' class='descr' style='font-style:italic;' ><span class='fa fa-spinner fa-spin fa-lg'></span> Checking your system compatibility...</span><a href='javascript:void(0);' onclick='document.getElementById("tech_check_control").click();' style='font-size:90%;margin-left:5px;'> Details</a></p>
+        				<a id="login-form-submit" class="pure-button pure-button-primary pure-button-disabled" style="width:100%;border-radius:6px;min-height:38px;" href="javascript:void(0);" onclick="guestValidateAndSubmit('<?php echo $cleanNetworkId; ?>', '<?php echo $cleanMeetingId; ?>');" >Fetching...</a>  
         				<input id="localTz" name="timezone" type="hidden" value="">     		
              		<?php include(Utilities::getModulesRoot() . "/event/views/eventDetailSummary.php"); ?>	
      					</fieldset>

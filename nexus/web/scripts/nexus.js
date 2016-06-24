@@ -8,6 +8,8 @@ var NEXT_MEETING_START;
 
 var IS_NOW = true;
 
+var IS_TIMER_INIT = false;
+
 var ACTIVITY_FLAG = 1;
 
 function formSubmit(formId) {
@@ -16,7 +18,7 @@ function formSubmit(formId) {
 
 function countdownTimer() {
 	NEXT_MEETING_START--;
-	document.getElementById("countdown").innerHTML = NEXT_MEETING_START;
+	document.getElementById("countdown").innerHTML = secondsToFriendlyTime(NEXT_MEETING_START);
 }
 
 /**
@@ -85,7 +87,6 @@ function getXmlHttpRequest() {
 }
 
 function setSessionTimezone(relativePath) {
-	console.log("setting timezone into session");
 	var xmlhttp = getXmlHttpRequest();
 	var tz = getLocalTz();
 	xmlhttp.onreadystatechange=function() {
@@ -105,7 +106,6 @@ function setPublicSession(oid, fname, mid, relativePath) {
 	var xmlhttp = getXmlHttpRequest();
 	var returnStatus;
 	xmlhttp.onreadystatechange=function() {
-		console.log(xmlhttp.readyState);
 		if (xmlhttp.readyState == 4) {
 			if (xmlhttp.status != 200) { 
 				returnStatus = false;
@@ -1012,14 +1012,30 @@ function millisecondsToHms(ms) {
 }
 
 // LEFT OFF writing this method
-function millisecondsToFriendlyTime(ms) {
-	var msNum = Number(ms);
-	var dayEquiv = 24*60*60*1000;
-	if (msNum < dayEquiv) {
-		return millisecondsToHms(ms);
+function secondsToFriendlyTime(s) {
+	var sNum = Number(s);
+	var sign = "";
+	if (sNum < 0) {
+		sNum = Math.abs(sNum);
+		sign = "-";
 	}
-	var d = Math.floor(ms/1000);
-	return (d + " days"); 
+	var dayEquiv = 24*60*60;
+	var hourEquiv = 60*60;
+	if (sNum < hourEquiv*6) {
+		// less than six hours in future
+		var h = Math.floor(sNum / hourEquiv);
+		var m = Math.floor(sNum % hourEquiv / 60);
+		var s = Math.floor(sNum % hourEquiv % 60);
+		return (sign + (h > 0 ? h + ":" : "00:") + (m > 0 ? (h > 0 && m < 10 ? "0" : "") + m + ":" : "00:") + (s > 0 ? (m > 0 && s < 10 ? "0" : "") + s + "" : "00"));
+	} else if (sNum < dayEquiv) {
+		// between 6 and 24 hours in future
+		var h = Math.floor(sNum/hourEquiv);
+		return (sign + h + " hours");;
+	} else {
+		// greater than 24 hours in future
+		var d = Math.floor(sNum/dayEquiv);
+		return (sign + d + " days"); 
+	}
 }
 
 function validateTimeFormat(t) {
