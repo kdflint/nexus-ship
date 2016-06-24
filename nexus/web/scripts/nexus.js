@@ -17,8 +17,11 @@ function formSubmit(formId) {
 }
 
 function countdownTimer() {
+	var timerDisplay = document.getElementById("countdown");
 	NEXT_MEETING_START--;
-	document.getElementById("countdown").innerHTML = secondsToFriendlyTime(NEXT_MEETING_START);
+	if (timerDisplay) {
+		timerDisplay.innerHTML = secondsToFriendlyTime(NEXT_MEETING_START);
+	}
 }
 
 /**
