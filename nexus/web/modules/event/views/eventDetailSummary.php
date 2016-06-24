@@ -24,11 +24,9 @@
 					var i = 0;
 					var d = new Date();
 					var now = Math.ceil(d.getTime()/1000);
-					//console.log("Meeting refreshing...");
-					//console.log("Meeting epoch = " + jsonObj[i].epoch);
-					//console.log("Now epoch = " + now);
 		 			tableEvent = 
-       						"<span class='date'>" + jsonObj[i].purpose + "</span>" +
+       						//"<p><span class='date'>" + jsonObj[i].purpose + "</span><a href='#'><span class='fa fa-refresh fa-lg' style='margin-left:10px;float:right;'></span></a></p>" +
+       						"<span class='date'>" + jsonObj[i].purpose + "</span>" +  					  		
   					  		"<p><span>" + jsonObj[i].day + ", " + jsonObj[i].month + " " + jsonObj[i].date + "</span><br/>" +
        						"<span class='tod'>" + jsonObj[i].hour + ":" + jsonObj[i].minute + "</span><span class='period'> " + jsonObj[i].period + " </span> -" +
 									"<span class='tod'>" + jsonObj[i].hour_end + ":" + jsonObj[i].minute_end + "</span><span class='period'> " + jsonObj[i].period_end + " </span>" +
@@ -39,16 +37,25 @@
     			if (jsonObj[i].running == "true") {
 	        	buttonLabel = "Join This Meeting";
         		document.getElementById("login-form-submit").className = "pure-button pure-button-primary";
-        		// TODO - if a meeting is running, we do no more refreshes. Probably we should continue to check...?
-        		MEETING_INFO_NEXT_REFRESH = 0;
-        		playSound('demonstrative');
+        		MEETING_INFO_NEXT_REFRESH = "60000";
+        		if (!IS_NOW) {
+	        		playSound('demonstrative');
+	       			IS_NOW = true;
+						}
      			} else {
-	     			//buttonLabel = "Not Started <span id='countdown'></span>";
-	     			buttonLabel = "Not Started";
 	     			MEETING_INFO_NEXT_REFRESH = (jsonObj[i].epoch > now+(70*60)) ? "300000" : "60000";
-	     			//playSound('gets-in-the-way');
-	     			//NEXT_MEETING_START = jsonObj[i].epoch;
-	     			//window.setInterval(countdownTimer, 1000);
+	     			NEXT_MEETING_START = jsonObj[i].epoch-now;
+	     			IS_NOW = false;
+	     			var waitMessage = "Please wait for host";
+	     			if (NEXT_MEETING_START < 0) {
+	     				waitMessage = "Please wait for host";
+	     			}
+	     			buttonLabel = "<span id='not-started-message' style='position:absolute;left:20px;font-size:110%;'>" + waitMessage + "</span><span id='countdown' style='margin-left:240px;margin-top:2px;float:left;'></span>";
+	     			document.getElementById("login-form-submit").className = "pure-button pure-button-primary pure-button-disabled";
+	     			if (!IS_TIMER_INIT) {
+	     				window.setInterval(countdownTimer, 1000);
+ 							IS_TIMER_INIT = true;
+	     			}
      			}
      		} else {
      			MEETING_INFO_NEXT_REFRESH = "15000";

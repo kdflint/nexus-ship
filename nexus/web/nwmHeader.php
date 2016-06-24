@@ -30,7 +30,7 @@
 				<div id="openTrainModal" class="modalDialog">
 					<div>
 						<a href="#close" title="Close" class="close">X</a>
-						<p>Be a meeting MVP! These training sessions will enable you to make the most out of Nexus Web Meet.</p>
+						<p>These training sessions will enable you to make the most out of Nexus Web Meet.</p>
 						<p style="margin-top:10px;margin-bottom:30px;font-size:90%;margin-left:10px;">Introduction to Virtual Collaboration<a id="training-register1" class="pure-button button-menu" href="https://www.eventbrite.com/e/introduction-to-virtual-collaboration-tickets-25983638763" target="_blank" style="float:right;background-color:#d27b4b;width:70px;font-size:90%;color:#e6e6e6;margin-bottom:0px;" <?php echo($disabled); ?>>Register</a></p>
 						<p style="margin-top:10px;margin-bottom:30px;font-size:90%;margin-left:10px;">Leading Meetings with Nexus Web Meet<a id="training-register2" class="pure-button button-menu" href="https://www.eventbrite.com/e/leading-meetings-with-nexus-web-meet-tickets-26206738059" target="_blank" style="float:right;background-color:#d27b4b;width:70px;font-size:90%;color:#e6e6e6;margin-bottom:0px;" <?php echo($disabled); ?>>Register</a></p>
 					</div>
