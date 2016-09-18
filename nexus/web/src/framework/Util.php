@@ -495,6 +495,25 @@ class Utilities {
 		}
     return $coreAuthenticated;
 	}
+	
+	public static function getUserLangagePreference() {
+		$supportedLangs = array('en', 'es');
+		$languages = explode(',',$_SERVER['HTTP_ACCEPT_LANGUAGE']);
+		foreach($languages as $lang) {
+			$languageSlice = substr($lang, 0, 2);
+			// If English is supported, cause and English implementation
+			if ($languageSlice == 'en') { break; }
+    	if(in_array($languageSlice, $supportedLangs)) {
+        // Return the first supported language found (that is not English)
+        //return $languageSlice;
+        if (self::getEnvName() != 'prod') {
+        	header("location:https://www.google.com/search?client=ubuntu&channel=fs&q=learn+spanish&ie=utf-8&oe=utf-8");
+        	exit(0);
+        }
+			}
+		}
+		return "en";
+	}
 
 	public static function isSessionPublic() {
 		if (strcasecmp($_SESSION['nexusContext'], "PUB") == 0) {
@@ -534,6 +553,7 @@ class Utilities {
 		self::setSessionLastActivity();
 		$_SESSION['remember'] = ($remember ? "true" : "false");
 		self::setSessionTimezone($zone);
+		$_SESSION['language'] = self::getUserLangagePreference();
 		
 		$cursor = User::getUserSessionByUsername($_SESSION['username']);
 		
