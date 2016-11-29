@@ -9,11 +9,7 @@ if (isset($_SESSION['nexusContext'])) {
  			// unused right now
  			break;
  		case "ADV":
- 			if (Utilities::getEnvName() == "prod") {
- 				include(dirname(__FILE__) . "/views/eventListPending.php");
- 			} else {
- 				include(dirname(__FILE__) . "/views/eventList.php");
- 			}
+ 			// unused right now
  			break;
  		case "PUB":
  			include(dirname(__FILE__) . "/mod_publicEvents.php");

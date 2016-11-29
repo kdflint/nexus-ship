@@ -50,6 +50,8 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
     
     <script src="../scripts/nexus.js" language="javascript"></script>
   	<script src="<?php echo(Utilities::getConfigPath()); ?>/timeZoneData.js" language="javascript"></script>
+  	<!-- Following is temporary - remove when directory refresh is done. Also remove from directoryDetail view -->
+  	<script src="<?php echo(Utilities::getConfigPath()); ?>/cfchtOrgEditLinks.js" language="javascript"></script>
   	<script src="../../config/geoDataCfcht.js" language="javascript"></script>
   	<script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js" language="javascript"></script>
  		<script src="//code.jquery.com/jquery-1.10.2.js" language="javascript"></script>
@@ -77,6 +79,7 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 			.controlCol { position:absolute;left:0px;width:280px;height:400px;margin-top:10px; }
 			.displayCol { position:absolute;left:290px;width:700px;height:400px;margin-top:10px;border: 1px solid #A6C3CE !important;border-radius:10px;overflow:auto; }
 			.displayDetail { font-size:90%;padding-left:10px;padding-right:10px; }
+}
 			
 		</style>
 
@@ -84,11 +87,15 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 			$(document).ready(function() {
         $( "[id^=datepicker]" ).datepicker({ changeMonth: true, changeYear: true });
       	$( "[id^=schedule-form-time]").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
+        $( "#schedule-form-duration" ).selectmenu();
         $( "#schedule-form-country" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
         $( "#schedule-form-country" ).selectmenu({ change: function() { displayTimeZones(); } });
         $( "#schedule-form-countryTimeZones" ).selectmenu();
         $( "#schedule-form-countryTimeZones" ).selectmenu({ change: function() { setTimeZoneDisplay(document.getElementById("schedule-form-countryTimeZones").value); } });
-       	$( "[id^=directory-form-select]").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
+       	//$( "[id^=directory-form-select]").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
+       	// The above does not assign overflow class to both elements in id set - why??
+       	$( "#directory-form-select-specialty").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
+       	$( "#directory-form-select-type").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
 				toggleDisplay(<?php echo $viewId; ?>);
 			});
 		</script>
@@ -96,7 +103,7 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 		<script> setPublicSession2("<?php echo $cleanNetworkId; ?>", "", "../");</script>
 
 		<script>
-			
+							
 			function toggleDisplay(displayId, selectNdx) {
 				// page content
 				document.getElementById("mod_event").style.display='none';
@@ -130,11 +137,12 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 				getDirectoryDetail(orgId);
 			}	
 			
-			function showDirectoryResults(orgId) {
+			function showDirectoryResults() {
 				document.getElementById("show-directoryResults").style.display='block';
-				document.getElementById("show-directoryDetail").style.display='none';				
+				document.getElementById("show-directoryDetail").style.display='none';	
+				document.getElementById("show-directoryEdit").style.display='none';			
 			}
-			
+					
 			function showDirectoryMap() {
     		document.getElementById("directoryMapContainer").style.opacity=1;
     		document.getElementById("directoryMapContainer").style.filter='alpha(opacity=100)'

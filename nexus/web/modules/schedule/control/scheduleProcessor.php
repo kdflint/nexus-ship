@@ -28,7 +28,8 @@ $dirty = array('meeting-name' => $_POST['meeting-name'],
 							'meeting-date-end' => $_POST['meeting-date-end'],
 							'meeting-time-end' => $_POST['meeting-time-end'],
 							'meeting-contact' => $_POST['meeting-contact'],
-							'meeting-uuid' => $_POST['meeting-uuid']
+							'meeting-uuid' => $_POST['meeting-uuid'],
+							'meeting-group' => $_POST['orig-group-assoc']
 							);
 											
 $result = validateEvent($dirty);
@@ -56,7 +57,7 @@ if (isset($_FILES) && isset($_FILES["fileToUpload"]["name"]) && strlen($_FILES["
 	$targetExt = pathinfo($inputFile,PATHINFO_EXTENSION);
 }
 
-$eventUid = Event::addEvent($timestamp, $result['clean']['meeting-duration'], $result['clean']['meeting-name'], $_SESSION['uidpk'], array_keys($_SESSION['groups'])[0], $result['clean']['tzone-name'], $meetingType[$result['clean']['meeting-type']], $result['clean']['meeting-descr'], $result['clean']['meeting-loc'], $result['clean']['isBbbMeeting'], $targetExt, $meetingStatus, $result['clean']['meeting-url'], $result['clean']['registration-url'], $result['clean']['meeting-registr'], $result['clean']['meeting-contact'], $result['clean']['meeting-uuid']);
+$eventUid = Event::addEvent($timestamp, $result['clean']['meeting-duration'], $result['clean']['meeting-name'], $_SESSION['uidpk'], $result['clean']['meeting-group'], $result['clean']['tzone-name'], $meetingType[$result['clean']['meeting-type']], $result['clean']['meeting-descr'], $result['clean']['meeting-loc'], $result['clean']['isBbbMeeting'], $targetExt, $meetingStatus, $result['clean']['meeting-url'], $result['clean']['registration-url'], $result['clean']['meeting-registr'], $result['clean']['meeting-contact'], $result['clean']['meeting-uuid']);
 
 if ($isFile) {
 	$targetFile = Utilities::getPartnerFileRoot() . "/event-" . $eventUid . "." . $targetExt;
@@ -225,6 +226,13 @@ function validateEvent($input) {
 	} else {
 		$result['clean']['meeting-uuid'] = "";
 	}
+	
+	// MEETING GROUP
+	if (isset($input['meeting-group']) && Utilities::validateGroupId($input['meeting-group'])) {
+		$result['clean']['meeting-group'] = $input['meeting-group'];
+	} else {
+		$result['clean']['meeting-group'] = array_keys($_SESSION['groups'])[0];
+	}	
 	
  	return $result;
 }

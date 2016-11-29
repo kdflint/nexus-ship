@@ -25,7 +25,10 @@
       		<a href="login.php?oid=<?php echo $_SESSION['orgUid']; ?>&logout=true" style="color:#d27b4b;text-decoration:none;" title="Logout"><span class="fa fa-sign-out fa-2x" style="margin-left:8px;"></span></a>
       	</span>
       	<a id="profile_control" href="javascript:void(0);"><span id="profile_control_icon" style="clear:right;float:right;padding-top:10px;margin:0px;color:#d27b4b;" class="fa fa-lg fa-plus-square" ></span></a>
-				<span style="float:right;padding:10px;">Hello <?php echo $_SESSION['fname']; ?></span> 	
+				<span style="float:right;padding:10px;">
+					Hello <?php echo $_SESSION['fname']; ?>
+					<!--<?php echo(Utilities::getHelloString($_SESSION['language'])); ?> <?php echo $_SESSION['fname']; ?>-->
+				</span>
 				
 				<div id="openTrainModal" class="modalDialog">
 					<div>

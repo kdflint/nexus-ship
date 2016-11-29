@@ -1,9 +1,10 @@
 <script>
-	function getEventList(referenceTime) {
+	function getEventListPending(referenceTime) {
 		var xmlhttp = getXmlHttpRequest();
 		xmlhttp.onreadystatechange=function() {
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 			 	var jsonObj = JSON.parse(xmlhttp.responseText);		 	
+			 	currentEvents = jsonObj;
 			 	// put row containers in the reservation table, 1 for each event
 			 	var nextMeetings = undefined;
 			 	var tableRows = "";
@@ -32,8 +33,8 @@
 					"</div>";
 					document.getElementById("reservationTable").innerHTML = tableRow
 				} else {
-			 		//for (var i = 0; i < jsonObj.length; i++) {
-			 		for (var i = 0; i < 1; i++) {
+			 		for (var i = 0; i < jsonObj.length; i++) {
+			 		//for (var i = 0; i < 1; i++) {
 			 			tableEvent = 
        				"<div class='td-div'>" +
 	       				"<div class='event'>" +
@@ -45,24 +46,19 @@
       				"</div>" +
        				"<div id='nowEventDetail' class='td-div' style='position:absolute;left:140px;top:5px;height:210px;'>" + 
 		          	"<div class='meeting'>" +
-         					"<span class='purpose'>" + jsonObj[i].purpose + "</span><br/>" +
-         					"<span class='descr' style='font-size:90%;width:90%;padding-right:80px;' >" + jsonObj[i].descr + 
-         						((jsonObj[i].location != null) ? "<br/><span class='fa fa-map-marker'></span> " + jsonObj[i].location : "") +
-										(jsonObj[i].url ? "<p><span><a href='" + jsonObj[i].url + "' target='_blank'>Web Link</a></span></p>" : "") +
-										(jsonObj[i].fileext ? "<p><span><a href='<?php echo(Utilities::getPartnerFileUrl()); ?>/event-" + jsonObj[i].uuid + "." + jsonObj[i].fileext + "' target='_blank'>Flyer</a></span></p>" : "") + 
-										(jsonObj[i].registration ? "<p><span class='tod'>" + jsonObj[i].registration + "</span></p>" : "") + 
-										(jsonObj[i].regr_url ? "<p><span><a href='" + jsonObj[i].regr_url + "' target='_blank'>Registration Link</a></span></p>" : "") + 
+         					"<span class='purpose'>" + jsonObj[i].purpose + "</span>" +
+         						((jsonObj[i].location != null) ? "<p><span class='fa fa-map-marker'></span> " + jsonObj[i].location : "</p>") +
 										(jsonObj[i].contact ? "<p><span>Follow up with: " + jsonObj[i].contact + "</span></p>" : "") +
-										
-          					"<p><a href='<?php echo(Utilities::getHttpPath()); ?>/modules/schedule/control/eventApproveProcessor.php?id=" + jsonObj[i].uuid + "'><b>Approve for Public Calendar</b></a> | " +
-										"<a href='<?php echo(Utilities::getHttpPath()); ?>/modules/schedule/control/eventDeleteProcessor.php?id=" + jsonObj[i].uuid + "' onclick='return confirm(\"Please confirm this delete.\");'><b>Delete</b></a></p>" +
+          					((true) ? "<a href='#openEventEdit' onclick='return populateEventForm(\"" + i + "\");' title='Approve'><p><b>Approve for Public Calendar</b></a>" : " ") +
+          					((true) ? "<a href='<?php echo(Utilities::getHttpPath()); ?>/modules/schedule/control/eventDeleteProcessor.php?id=" + jsonObj[i].uuid + "' onclick='return confirm(\"Please confirm this delete.\");' title='Delete'><span class='fa fa-trash-o' style='color:#d27b4b;margin-left:10px;'></span></a></p>" : " ") +								
+          					/*"<p><a href='<?php echo(Utilities::getHttpPath()); ?>/modules/schedule/control/eventApproveProcessor.php?id=" + jsonObj[i].uuid + "'><b>Approve for Public Calendar</b></a> | " +*/
          					"</span>" +
          				"</div>" +
          			"</div>"; 
      				document.getElementById("reservationRow" + i).innerHTML = tableEvent; 
-     				document.getElementById("reservationRow" + i).style.height = "200px";
+     				document.getElementById("reservationRow" + i).style.height = "180px";
      			}
-     			document.getElementById('reservationTable').style.height = (200 * jsonObj.length) + "px";
+     			document.getElementById('reservationTable').style.height = (180 * jsonObj.length) + "px";
      		}
 			}
 		}
@@ -70,24 +66,16 @@
 		xmlhttp.send();  		
 	}
 </script>
-
-<!--<div style="width:760px;font-size:110%;">-->
-
-	<div id="new_event_display" style="display:none;">
-		<?php include(Utilities::getModulesRoot() . "/event/views/eventAddAdvantage.php"); ?>	
+					
+<div id="current_schedule_display" style="display:block;">
+	<div id="reservationTable" class="table-div"></div>
+</div>
+<div id="openEventEdit" class="modalDialog">
+	<div>
+		<a href="#close" title="Close" class="close">X</a>
+		<?php include("modules/event/views/eventAddAdvantage2.php"); ?>
 	</div>
-						
-	<div id="current_schedule_display" style="display:block;">
-		<!--
-		<a id='schedule_control' href='javascript:void(0);' class='level1-control'>
-		<span style='padding:0px;' class='fa fa-calendar-o fa-2x' ></span>
-		<span style='padding-left:2px;' class='fa fa-plus' >	</span>
-		</a>	
-		-->			
-		<div id="reservationTable" class="table-div" style="border:0px !important;">
-		</div>
-	</div>
+</div>
+
+<script> getEventListPending(<?php echo (time() + 15*60); ?>); </script>
 	
-	<script> getEventList(<?php echo (time() + 15*60); ?>); </script>
-	
-<!--</div>-->

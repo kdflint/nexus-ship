@@ -49,7 +49,7 @@
       			<input type="hidden" name="meeting-duration" value="false" />
 		    	</div>
 					<div style="margin-top:10px;">
-						<p style="font-size:90%;line-height:240%;"><b>Attach a file</b> (optional)</p>
+						<p id="attachment-label" style="font-size:90%;line-height:240%;"><b>Attach a file</b> (optional)</p>
 						<input type="file" name="fileToUpload" id="fileToUpload" style="width:90%;" onchange="toggleFileClear();">
 						<a id="fileClearControl" href="javascript:void(0)" onclick="clearFileInput(document.getElementById('fileToUpload'));" style="display:none;"><span class="fa fa-times" style="margin-left:10px;"></span></a>
 					</div>
@@ -58,6 +58,10 @@
 		      	<a href="#close" style="float:right;margin-right:20px;">Cancel</a>
 		    	</div>
 		    	<input id="schedule-form-isBbb" name="isBbbMeeting" type="checkbox" style="visibility:hidden;"/>
-      		<input type="hidden" name="meeting-uuid" value="" />
+		    	<input type="hidden" name="meeting-uuid" value="" />
+      		<input type="hidden" name="old-meeting-uuid" value="" />
+      		<input type="hidden" name="old-file-ext" value="" />
+      		<input type="hidden" name="meeting-contact" value="" />
+      		<input type="hidden" name="orig-group-assoc" value="" />
 				</fieldset>
 			</form>     

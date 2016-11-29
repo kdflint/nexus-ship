@@ -3,14 +3,19 @@ var errorBackground = "rgba(247,248,239,0.6) url('') no-repeat right top";
 var currentEvents;
 
 var MEETING_INFO_NEXT_REFRESH = "60000";
-
 var NEXT_MEETING_START;
-
 var IS_NOW = true;
-
 var IS_TIMER_INIT = false;
-
 var ACTIVITY_FLAG = 1;
+
+/*
+Would like to avoid initializing these and force the including php page to do so, but that might break something right now. 
+So, we've got redundand code for the moment
+See login.php:142
+*/
+var USERNAME_REQUIRED = "Username is required";
+var PASSWORD_REQUIRED = "Password is required";
+var EMAIL_REQUIRED = "Valid email is required";
 
 function formSubmit(formId) {
  		document.forms[formId].submit();
@@ -89,6 +94,25 @@ function getXmlHttpRequest() {
   return xmlhttp;
 }
 
+function resetSessionLanguage(lang) {
+	if (lang != 'xx') {
+		var x = document.getElementById("fname");
+		var xmlhttp = getXmlHttpRequest();
+		xmlhttp.onreadystatechange=function() {
+			if (xmlhttp.readyState == 4) {
+				if (xmlhttp.status == 200) { 
+					location.reload(true); 
+				} else {
+					return false;
+					
+				}
+			}
+		};
+		xmlhttp.open("GET", "src/framework/setSessionLanguage.php?language=" + lang);
+		xmlhttp.send();
+	}
+}	
+
 function setSessionTimezone(relativePath) {
 	var xmlhttp = getXmlHttpRequest();
 	var tz = getLocalTz();
@@ -140,6 +164,7 @@ function toggleFileClear() {
 	var fileClear = document.getElementById('fileClearControl');
 	if (fieldValue) {
 		fileClear.style.display = 'inline';
+		document.getElementById("attachment-label").innerHTML = "<b>Attach a file</b> (optional)";
 	} else {
 		fileClear.style.display = 'none';
 	}
@@ -363,7 +388,7 @@ function loginValidateAndSubmit() {
   var username = usernameField.value;
   setFieldPassStyles(usernameField, "");
   if (username == null || username == "") {
-    setFieldErrorStyles(usernameField, "Username is required.");
+    setFieldErrorStyles(usernameField, USERNAME_REQUIRED);
     pass = false;
   }
   
@@ -371,7 +396,7 @@ function loginValidateAndSubmit() {
   var password = passwordField.value;
   setFieldPassStyles(passwordField, "");
   if (password == null || password == "") {
-    setFieldErrorStyles(passwordField, "Password is required.");
+    setFieldErrorStyles(passwordField, PASSWORD_REQUIRED);
     pass = false;
   }
 
@@ -399,7 +424,7 @@ function guestValidateAndSubmit(oid, mid) {
 	var emailField = joinForm["email"];
 	setFieldPassStyles(emailField, "");
   if (!isValidEmail(emailField.value)) {
-  	setFieldErrorStyles(emailField, "Valid email is required.");
+  	setFieldErrorStyles(emailField, EMAIL_REQUIRED);
   	emailField.value = "";
   	pass = false;
   }
@@ -466,7 +491,7 @@ function passwordValidateAndSubmit() {
   var username = usernameField.value;
   setFieldPassStyles(usernameField, "");
   if (username == null || username == "") {
-    setFieldErrorStyles(usernameField, "Username is required.");
+    setFieldErrorStyles(usernameField, USERNAME_REQUIRED);
     pass = false;
   }
   
@@ -497,7 +522,6 @@ function inviteValidateAndSubmit() {
 }
 
 function enrollValidateAndSubmit() {
-
 	pass = true;
 	var enrollForm = document.forms["enroll-form"];
 	var submitButton = document.getElementById("enroll-form-submit");
@@ -507,7 +531,7 @@ function enrollValidateAndSubmit() {
 	var emailField = enrollForm["email"];
 	setFieldPassStyles(emailField, "");
   if (!isValidEmail(emailField.value)) {
-  	setFieldErrorStyles(emailField, "Valid email is required.");
+  	setFieldErrorStyles(emailField, EMAIL_REQUIRED);
   	emailField.value = "";
   	pass = false;
   }
@@ -562,7 +586,7 @@ function validateEmail(emailField) {
     setFieldErrorStyles(emailField, "Email is required.");
     return false;
   } else if (!isValidEmail(email)) {
-    setFieldErrorStyles(emailField, "Valid email is required.");
+    setFieldErrorStyles(emailField, EMAIL_REQUIRED);
     emailField.value = "";
   	return false;
   }
@@ -730,6 +754,16 @@ function populateEventForm(i) {
 	if (currentEvents[i].regr_url) { eventForm['registration-url'].value = currentEvents[i].regr_url; }
 	if (currentEvents[i].location) { eventForm['meeting-loc'].value = currentEvents[i].location; }
 	if (currentEvents[i].tz_extract_name) { eventForm['tzone-name'].value = currentEvents[i].tz_extract_name; }
+	if (currentEvents[i].uuid) { eventForm['old-meeting-uuid'].value = currentEvents[i].uuid; }	
+	if (currentEvents[i].contact) { eventForm['meeting-contact'].value = currentEvents[i].contact; }
+	if (currentEvents[i].group_assoc) { eventForm['orig-group-assoc'].value = currentEvents[i].group_assoc; }
+		
+	if (currentEvents[i].fileext) {
+		// TODO - put the whole file path into db
+		eventForm['old-file-ext'].value = currentEvents[i].fileext;
+		document.getElementById("attachment-label").innerHTML = 
+		"<b>Attached file: </b> <a href='http://northbridgetech.org/apps/nexus/partner/file/event-" + currentEvents[i].uuid + "." + currentEvents[i].fileext + "' target='_blank'>View</a>";
+	}
 
 	var startTime = currentEvents[i].hour_24 + ":" + currentEvents[i].minute + ":00";
 	var startOptions = eventForm['meeting-time'];
@@ -769,11 +803,12 @@ function populateEventForm(i) {
 }
 	
 function eventValidateAndSubmit(thisForm) {
+
 	pass = true;
 	var eventForm = document.forms[thisForm];
 	var submitButton = document.getElementById(thisForm + "-submit");	
 	var timeZoneOffset = timeZoneOffsets[eventForm['tzone-name'].value];
-	
+
   var time = eventForm['meeting-time'].value;
 	var dateField = eventForm['meeting-date'];
 	var date = dateField.value;
@@ -887,12 +922,12 @@ function eventValidateAndSubmit(thisForm) {
   	contact = contactField.value;
   	setFieldPassStyles(contactField, "Contact Email");
   	if (!isValidEmail(contact)) {
-  		setFieldErrorStyles(contactField, "Valid email is required.");
+  		setFieldErrorStyles(contactField, EMAIL_REQUIRED);
   		contactField.value = "";
   		pass = false;
   	}  	
   }
-  
+   
 	if (eventForm['meeting-descr'] !== undefined) {
  		var descrField = eventForm['meeting-descr'];
  		var descr = descrField.value;
@@ -902,7 +937,7 @@ function eventValidateAndSubmit(thisForm) {
     	pass = false;		
     }
 	}
-	  
+	 
 	if (Boolean(pass)) {
  		submitButton.disabled = true;  
  		submitButton.style.opacity = ".6";

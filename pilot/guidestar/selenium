@@ -25,12 +25,12 @@
 </tr>
 <tr>
 	<td>store</td>
-	<td>362</td>
+	<td>176</td>
 	<td>numFilesToProcess</td>
 </tr>
 <tr>
 	<td>store</td>
-	<td>1</td>
+	<td>2</td>
 	<td>internalCode</td>
 </tr>
 <tr>
@@ -70,7 +70,7 @@
 </tr>
 <tr>
 	<td>open</td>
-	<td>${subDir}/${fileIterate}.html</td>
+	<td>${fileIterate}.html</td>
 	<td></td>
 </tr>
 <!--=== Create the base PROSPECT row ===-->

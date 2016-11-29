@@ -12,7 +12,7 @@
 	 	<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Oswald:400,300|Open+Sans|Oxygen|Swanky+and+Moo+Moo">
 	 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 		<link rel="stylesheet" href="//yui.yahooapis.com/pure/0.6.0/pure-min.css">
-	  <link rel="stylesheet" href="nexus.css" type="text/css" />
+	  <link rel="stylesheet" href="http://northbridgetech.org/dev/nexus/web/styles/nexus.css" type="text/css" />
 	  <link rel="stylesheet" href="webinar.css" type="text/css" />
 	  <title>Northbridge Nexus | Community Room</title> 
 	  	
@@ -46,7 +46,7 @@
 
     	<div class="header" style="margin-top:20px;">
     		
-    		<img class="banner-image" src="http://northbridgetech.org/dev/new_nexus/web/image/nexus4.png" />
+    		<img class="banner-image" src="http://northbridgetech.org/dev/nexus/web/image/nexus4.png" />
        	<span class="banner" style="width:60%">
 					<span class="product-name" style="">Nexus</span><br/>
 					<span class="module-name" style="">Web Meet</span>					

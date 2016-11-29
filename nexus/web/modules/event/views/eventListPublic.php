@@ -1,10 +1,10 @@
 <script>
-	function getEventList(referenceTime) {
+	function getEventListPublic(referenceTime) {
 		var xmlhttp = getXmlHttpRequest();
 		xmlhttp.onreadystatechange=function() {
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-			 	var jsonObj = JSON.parse(xmlhttp.responseText);		
-			 	currentEvents = jsonObj; 	
+			 	var jsonObj = JSON.parse(xmlhttp.responseText);		 	
+			 	currentEvents = jsonObj;
 			 	// put row containers in the reservation table, 1 for each event
 			 	var nextMeetings = undefined;
 			 	var tableRows = "";
@@ -22,19 +22,19 @@
 					tableRow = "<div id='reservationRow0' class='div-tr' style='position:relative;'>" + 
        			"<div class='td-div'>" +
 		      		"<div class='event'>" +		
-	       				"<span class='date'>Now</span><br/>" + 				
+	       				"<span class='date'>Upcoming</span><br/>" + 				
           		"</div>" +
           	"</div>" +
-       			"<div id='nowEventDetail' class='td-div' style='position:absolute;left:140px;top:5px;height:120px;'>" +	  	       				
+       			"<div id='nowEventDetail' class='td-div' style='position:absolute;left:140px;top:5px;height:70px;'>" +	  	       				
 			       	"<div class='meeting'>" +
-          			"<span class='purpose'>There are no upcoming events on the calendar.</span>" + 
-          			"</p>" +
-          		 "</div>" +
+          			"<span class='purpose'>There are no upcoming events on the public calendar.</span>" + 
+          		"</div>" +
           	"</div>" +
 					"</div>";
 					document.getElementById("reservationTable").innerHTML = tableRow
 				} else {
 			 		for (var i = 0; i < jsonObj.length; i++) {
+			 		//for (var i = 0; i < 1; i++) {
 			 			tableEvent = 
        				"<div class='td-div'>" +
 	       				"<div class='event'>" +
@@ -46,17 +46,16 @@
       				"</div>" +
        				"<div id='nowEventDetail' class='td-div' style='position:absolute;left:140px;top:5px;height:210px;'>" + 
 		          	"<div class='meeting'>" +
-		          		//"<a href='#openEventDetail' onclick='getEventDetail(\"" + jsonObj[i].uuid + "\");' '<span style='padding-right:10px;color:#d27b4b;' class='fa fa-plus-square'></span></a>" +
+       			      "<a href='#openEventDetail' onclick='getEventDetail(\"" + jsonObj[i].uuid + "\");' '<span style='padding-right:10px;color:#d27b4b;' class='fa fa-plus-square'></span></a>" +
          					"<span class='purpose'>" + jsonObj[i].purpose + "</span>" +
-         					((jsonObj[i].location != null) ? "<p><span class='fa fa-map-marker'></span> " + jsonObj[i].location : "</p>") +
-          					"<p>reserved by " + 
-          					((jsonObj[i].adder == <?php echo(Utilities::getDemoUidpk()); ?>) ? '<?php echo($_SESSION['fname']); ?>' : jsonObj[i].fname) + " " +  
-          					((jsonObj[i].adder == <?php echo(Utilities::getDemoUidpk()); ?>) ? '<?php echo($_SESSION['lname']); ?>' : jsonObj[i].lname) + 
-           					((jsonObj[i].adder == jsonObj[i].sessionUser) ? "<a href='#openEventDetail' onclick='return populateEventForm(\"" + i + "\");' title='Edit'><span class='fa fa-pencil' style='color:#d27b4b;margin-left:10px;'></span></a>" : " ") +
-          					((jsonObj[i].adder == jsonObj[i].sessionUser) ? "<a href='<?php echo(Utilities::getHttpPath()); ?>/modules/schedule/control/eventDeleteProcessor.php?id=" + jsonObj[i].uuid + "' onclick='return confirm(\"Please confirm this delete.\");' title='Delete'><span class='fa fa-trash-o' style='color:#d27b4b;margin-left:10px;'></span></a></p>" : " ") +
+         						((jsonObj[i].location != null) ? "<p><span class='fa fa-map-marker'></span> " + jsonObj[i].location : "</p>") +
+										(jsonObj[i].contact ? "<p><span>Original submission by public user: " + jsonObj[i].contact + "</span></p>" : "") +
+										"<p><span>Approved by: " + jsonObj[i].fname + " " + jsonObj[i].lname + "</span>" +
+										((true) ? "<a href='#openEventEdit' onclick='return populateEventForm(\"" + i + "\");' title='Edit'><span class='fa fa-pencil' style='color:#d27b4b;margin-left:10px;'></span></a>" : "") + 
+										((true) ? "<a href='<?php echo(Utilities::getHttpPath()); ?>/modules/schedule/control/eventDeleteProcessor.php?id=" + jsonObj[i].uuid + "' onclick='return confirm(\"Please confirm this delete.\");' title='Delete''><span class='fa fa-trash-o' style='color:#d27b4b;margin-left:10px;'></span></a></p>" : "") +
          					"</span>" +
          				"</div>" +
-         			"</div>";
+         			"</div>"; 
      				document.getElementById("reservationRow" + i).innerHTML = tableEvent; 
      				document.getElementById("reservationRow" + i).style.height = "180px";
      			}
@@ -64,20 +63,19 @@
      		}
 			}
 		}
-		xmlhttp.open("GET", "<?php echo(Utilities::getHttpPath()); ?>" + "/src/framework/reservationManager.php");
+		xmlhttp.open("GET", "<?php echo(Utilities::getHttpPath()); ?>" + "/src/framework/reservationManagerPublic.php");
 		xmlhttp.send();  		
 	}
 </script>
-			
-<div id="current_schedule_display" style="display:block;">		
+					
+<div id="current_schedule_display" style="display:block;">
 	<div id="reservationTable" class="table-div"></div>
 </div>
 <div id="openEventDetail" class="modalDialog">
 	<div>
 		<a href="#close" title="Close" class="close">X</a>
-		<?php include("modules/event/views/eventAddAdvantage2.php"); ?>
+		<?php include("modules/event/views/eventDetail.php"); ?>
 	</div>
 </div>
 
-<script> getEventList(<?php echo (time() + 15*60); ?>); </script>
-		
+	

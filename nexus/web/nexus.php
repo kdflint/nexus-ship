@@ -91,7 +91,6 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
     	  	
 			$(document).ready(function () {
 				$( '#schedule_control' ).click(function() {
-					//alert("test");
 	  			toggleNewEventDisplay();
 	  			if (document.getElementById('join_display').style.display != 'none') {
 	  				toggleJoinDisplay();

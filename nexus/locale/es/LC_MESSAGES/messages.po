@@ -1,0 +1,58 @@
+msgid "Username"
+msgstr "Nombre de usuario"
+
+msgid "Password"
+msgstr "Contrase&ntilde;a"
+
+msgid "Email"
+msgstr "Correo electr&oacute;nico"
+
+msgid "I forgot"
+msgstr "Olvide"
+
+msgid "Sign In"
+msgstr "Ingresar"
+
+msgid "Remember Me"
+msgstr "Recu&eacute;rdeme"
+
+msgid "About"
+msgstr "Acerca de"
+
+msgid "Support"
+msgstr "Apoyo"
+
+msgid "Recover Username"
+msgstr "Recuperar nombre de usuario"
+
+msgid "Password Reset"
+msgstr "Restablecer la contrase&ntilde;a"
+
+msgid "Reset Password"
+msgstr "Restablecer la contrase&ntilde;a"
+
+msgid "Return to Login"
+msgstr "Volver a inicio"
+
+msgid "Username is required"
+msgstr "Se requiere el nombre de usuario"
+
+msgid "Password is required"
+msgstr "Se require la contrase&ntilde;a"
+
+msgid "Valid email is required"
+msgstr "Valid email is required"
+
+msgid "Your account is not located."
+msgstr "Su cuenta no se encuentra."
+
+msgid "Please enter your email address and we will resend your username."
+msgstr ""
+"Por favor, introduzca su direcci&oacute;n de correo electr&oacute;nico y "
+"vamos a volver a enviar su nombre de usuario."
+
+msgid "Please enter your user id so we can email you a password reset link."
+msgstr ""
+"Por favor, introduzca su identidad de usuario para que podemos enviar por "
+"correo electr&oacute;nico con un enlace de restablecimiento de "
+"contrase&ntilde;a."
