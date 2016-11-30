@@ -4,7 +4,8 @@
 	<span class="banner" style="float:right;width:878px;">
 		<div class="topRow">
 			<span class="product-name" style="">Nexus</span>
-			<span style="margin-left:124px;"><img src="<?php echo(Utilities::getPartnerImageRoot()); ?><?php echo $_SESSION['logo']; ?>" width="40" height="40"/></span>
+			<!-- TODO - make sure logo size as uploaded to file system works in all contexts -->
+			<span style="margin-left:124px;"><img src="<?php echo(Utilities::getPartnerImageRoot()); ?><?php echo $_SESSION['logo']; ?>"/></span>
 			<span class="product-name" style="font-size:90%;"><?php echo $_SESSION['networkName']; ?></span>  
 			<span class="controls" style="float:right;padding:10px;">
 				<a href="#" title="Profile"><span class="fa fa-cog fa-2x" style="margin-right:10px;opacity:.8;"></span></a>
@@ -15,12 +16,13 @@
 		<div class="bottomRow">
 			<span id="index-module-name" class="module-name">Advantage</span>	
 			<span id="advMenu" class="advMenu" style="">
-				<a id="adv-menu-item2" class="pure-button button-menu-adv" href="javascript:void(0)" onclick="toggleAdvFrameDisplay(this)" style="float:right;background-color:#dae0bc;">ITEM</a> 
-				<a id="adv-menu-item1" class="pure-button button-menu-adv" href="javascript:void(0)" onclick="toggleAdvFrameDisplay(this)" style="float:right;background-color:#dae0bc;margin-right:-7px;">ITEM</a> 
+				<a id="adv-menu-item1" class="pure-button button-menu-adv" href="javascript:void(0)" onclick="toggleAdvFrameDisplay(this)" style="float:right;background-color:#dae0bc;margin-right:-7px;">LIBRARY</a> 
 				<a id="adv-menu-inbox" class="pure-button button-menu-adv" href="javascript:void(0)" onclick="toggleAdvFrameDisplay(this)" style="float:right;background-color:#dae0bc;margin-right:-7px;">INBOX</a> 			
 				<a id="adv-menu-forum" class="pure-button button-menu-adv" href="javascript:void(0)" onclick="toggleAdvFrameDisplay(this)" style="float:right;background-color:#dae0bc;margin-right:-7px;">FORUM</a> 	
-				<a id="adv-menu-people" class="pure-button button-menu-adv" href="javascript:void(0)" onclick="toggleAdvFrameDisplay(this)" style="float:right;background-color:#dae0bc;margin-right:-7px;">PEOPLE</a> 	
+				<a id="adv-menu-people" class="pure-button button-menu-adv" href="javascript:void(0)" onclick="toggleAdvFrameDisplay(this)" style="float:right;background-color:#dae0bc;margin-right:-7px;">NETWORK</a> 	
 				<a id="adv-menu-event" class="pure-button button-menu-adv" href="javascript:void(0)" onclick="toggleAdvFrameDisplay(this)" style="float:right;background-color:rgba(137, 157, 112, 1);margin-right:-7px;" >EVENTS</a>
+				<a id="adv-menu-forum" class="pure-button button-menu-adv" href="javascript:void(0)" onclick="toggleAdvFrameDisplay(this)" style="float:right;background-color:#dae0bc;margin-right:-7px;">360&deg;</a> 	
+				
 			</span>
 		</div>
 	</span>

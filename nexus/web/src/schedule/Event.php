@@ -237,6 +237,7 @@ class Event {
 				$events[$counter]['registration'] = $row['registration'];
 				$events[$counter]['url'] = $row['url'];
 				$events[$counter]['regr_url'] = $row['regr_url'];
+				$events[$counter]['group_assoc'] = $groupId;
 				$counter++;
 			}
 		}

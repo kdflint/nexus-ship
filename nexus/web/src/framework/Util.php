@@ -102,6 +102,8 @@ class Utilities {
 	
 	public static function getWebRoot() {	return WEB_ROOT; }
 	
+	public static function getLocaleRoot() { return LCL_ROOT; }
+	
 	public static function getModulesRoot() {	return self::getWebRoot() . "/modules"; }
 	
 	public static function getPhpRoot() {	return PHP_ROOT; }
@@ -133,7 +135,8 @@ class Utilities {
 	public static function getTwitterHandle() {
 		return "NorthbridgeNFP";
 	}
-		
+	
+	private static $supportedLangs = array('en' => 'en_US.utf8','es' => 'es_ES.utf8');
 	
 	const VALIDATION_FNAME_ERROR = "Please enter a valid first name."; 
 	const VALIDATION_LNAME_ERROR = "Please enter a valid last name (or none)."; 
@@ -161,6 +164,11 @@ class Utilities {
 	const DESCR_MIN = 0;
 	const DESCR_MAX = 250;
 	
+	public static function getHelloString($lang) {
+		$LANGUAGE_MAP = array('en' => 'Hello',	'es' => 'Hola');
+		return $LANGUAGE_MAP[$lang];
+	}
+
 	public static function validateEmail($in) {
 		if (filter_var($in, FILTER_VALIDATE_EMAIL)) {
 			return true;
@@ -211,6 +219,15 @@ class Utilities {
 	public static function validateUserId($in) {
 		if(self::validateUserIdFormat($in)) {
 			if (PgDatabase::userIdExists($in)) {	
+				return TRUE;
+			}
+		}
+		return FALSE;
+	}
+	
+	public static function validateGroupId($in) {
+		if(self::validateUserIdFormat($in)) {
+			if (Group::groupIdExists($in)) {	
 				return TRUE;
 			}
 		}
@@ -495,6 +512,39 @@ class Utilities {
 		}
     return $coreAuthenticated;
 	}
+	
+	public static function getUserLangagePreference() {
+		$languages = explode(',',$_SERVER['HTTP_ACCEPT_LANGUAGE']);
+		foreach($languages as $lang) {
+			$languageSlice = substr($lang, 0, 2);
+			// If English is supported at all, cause an English implementation
+			// TODO - take browser priority settings
+			if ($languageSlice == 'en') { break; }
+    	if(array_key_exists($languageSlice, self::$supportedLangs)) {
+        // Return the first supported language found (that is not English)
+        return $languageSlice;
+			}
+		}
+		return "en";
+	}
+	
+	public static function setUserLanguageEnv() {
+		$displayLang = Utilities::getUserLangagePreference();
+		$domain = "messages";
+		putenv("LANGUAGE=" . $displayLang);
+		$results = setlocale(LC_ALL, self::$supportedLangs[$displayLang]);
+		if (!$results) {
+			// TODO - log proper, and trigger error
+			echo "setlocale() failed: locale function is not available on this platform, or the given local does not exist in this environment</br>";
+			echo "Tip: run 'locale -a' on the runtime machine, It must contain your locale value</br>";
+		}
+		bindtextdomain($domain, Utilities::getLocaleRoot());
+		textdomain($domain);
+	} 
+	
+	public static function setUserLanguagePreference($lang) {
+		$_SESSION['language'] = $lang;
+	}
 
 	public static function isSessionPublic() {
 		if (strcasecmp($_SESSION['nexusContext'], "PUB") == 0) {
@@ -534,9 +584,9 @@ class Utilities {
 		self::setSessionLastActivity();
 		$_SESSION['remember'] = ($remember ? "true" : "false");
 		self::setSessionTimezone($zone);
+		$_SESSION['language'] = self::getUserLangagePreference();
 		
 		$cursor = User::getUserSessionByUsername($_SESSION['username']);
-		
 		while ($row = pg_fetch_array($cursor)) {
 			// TODO - loading a PUBLIC context will wipe this one out and then screw up Nexus context
 			$_SESSION['nexusContext'] = $row['account'];
@@ -551,7 +601,9 @@ class Utilities {
   		$_SESSION['logo'] = $row['logo'];
   		$_SESSION['email'] = $row['email'];
   		$_SESSION['role'] = self::getRoleName($row['roleid']);
-		} 	
+		}
+		
+		$_SESSION['pgpk'] = Group::getPublicGroupByOrgId($_SESSION['orgUid']);
 	}
 	
 	public static function setPublicSession($oid, $zone = "undefined", $fname = "Anonymous", $uuid = false) {
@@ -563,6 +615,7 @@ class Utilities {
 		} else {
 			$_SESSION['groups'] = Group::getGroupByEventUuid($uuid);	
 		}
+		$_SESSION['pgpk'] = array_keys($_SESSION['groups'])[0];
 		$row = pg_fetch_row(User::getActiveUserByUsername($_SESSION['username']));
 		$_SESSION['uidpk'] = $row[0];
 		self::setSessionTimezone($zone);

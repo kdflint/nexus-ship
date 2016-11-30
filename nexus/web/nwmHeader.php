@@ -25,13 +25,16 @@
       		<a href="login.php?oid=<?php echo $_SESSION['orgUid']; ?>&logout=true" style="color:#d27b4b;text-decoration:none;" title="Logout"><span class="fa fa-sign-out fa-2x" style="margin-left:8px;"></span></a>
       	</span>
       	<a id="profile_control" href="javascript:void(0);"><span id="profile_control_icon" style="clear:right;float:right;padding-top:10px;margin:0px;color:#d27b4b;" class="fa fa-lg fa-plus-square" ></span></a>
-				<span style="float:right;padding:10px;">Hello <?php echo $_SESSION['fname']; ?></span> 	
+				<span style="float:right;padding:10px;">
+					Hello <?php echo $_SESSION['fname']; ?>
+					<!--<?php echo(Utilities::getHelloString($_SESSION['language'])); ?> <?php echo $_SESSION['fname']; ?>-->
+				</span>
 				
 				<div id="openTrainModal" class="modalDialog">
 					<div>
 						<a href="#close" title="Close" class="close">X</a>
 						<p>These training sessions will enable you to make the most out of Nexus Web Meet.</p>
-						<p style="margin-top:10px;margin-bottom:30px;font-size:90%;margin-left:10px;">Introduction to Virtual Collaboration<a id="training-register1" class="pure-button button-menu" href="https://www.eventbrite.com/e/introduction-to-virtual-collaboration-tickets-25983638763" target="_blank" style="float:right;background-color:#d27b4b;width:70px;font-size:90%;color:#e6e6e6;margin-bottom:0px;" <?php echo($disabled); ?>>Register</a></p>
-						<p style="margin-top:10px;margin-bottom:30px;font-size:90%;margin-left:10px;">Leading Meetings with Nexus Web Meet<a id="training-register2" class="pure-button button-menu" href="https://www.eventbrite.com/e/leading-meetings-with-nexus-web-meet-tickets-26206738059" target="_blank" style="float:right;background-color:#d27b4b;width:70px;font-size:90%;color:#e6e6e6;margin-bottom:0px;" <?php echo($disabled); ?>>Register</a></p>
+						<p style="margin-top:10px;margin-bottom:30px;font-size:90%;margin-left:10px;">Virtual Collaboration for Social Nonprofits<a id="training-register1" class="pure-button button-menu" href="http://northbridge-training-01.eventbrite.com" target="_blank" style="float:right;background-color:#d27b4b;width:70px;font-size:90%;color:#e6e6e6;margin-bottom:0px;" <?php echo($disabled); ?>>Register</a></p>
+						<p style="margin-top:10px;margin-bottom:30px;font-size:90%;margin-left:10px;">Leading Meetings with Nexus Web Meet<a id="training-register2" class="pure-button button-menu" href="http://northbridge-training-02.eventbrite.com" target="_blank" style="float:right;background-color:#d27b4b;width:70px;font-size:90%;color:#e6e6e6;margin-bottom:0px;" <?php echo($disabled); ?>>Register</a></p>
 					</div>
 				</div>

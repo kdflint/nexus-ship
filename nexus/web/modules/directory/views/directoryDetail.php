@@ -5,10 +5,11 @@
 		var xmlhttp = getXmlHttpRequest();
 		xmlhttp.onreadystatechange=function() {
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-			 	var jsonObj = JSON.parse(xmlhttp.responseText);		 	
+			 	var jsonObj = JSON.parse(xmlhttp.responseText);		
 		 		tableItem = 
 		 				"<a href='javascript:void(0);' onclick='showDirectoryResults();'><span class='fa fa-chevron-circle-left fa-3x' style='margin-right:10px;'></span></a>" + 
        			"<span class='fname detail'>" + jsonObj.oname + "</span>" +
+       			(orgEditLinkData[orgId] ? "<a href='" + orgEditLinkData[orgId] + "' target='_blank' style='margin-left:20px;' >Edit this Listing</a>" : "") +
        			"<div class='detail'>" +
        					(jsonObj.url ? "<p><span class='tod'><a href='" + jsonObj.url + "' target='_blank'>" + jsonObj.url + "</a></span></p>" : "<p>&nbsp;</p>") +
        												

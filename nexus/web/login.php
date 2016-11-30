@@ -105,6 +105,8 @@ $row = pg_fetch_array($cursor);
 $networkLogo = $row['logo'];
 $networkName = $row['name'];
 
+Utilities::setUserLanguageEnv();
+
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
@@ -125,6 +127,7 @@ $networkName = $row['name'];
 		<link rel="stylesheet" href="//yui.yahooapis.com/pure/0.6.0/pure-min.css">
     <link rel="stylesheet" href="styles/nexus.css" type="text/css" />
     <script src="scripts/nexus.js" language="javascript"></script>
+    <script src="scripts/js_lang.php" type="text/javascript"></script>
   	<!-- http://www.featureblend.com/javascript-flash-detection-library.html -->
  		<script src="scripts/lib/flash_detect.js"></script>
  		<script src="//code.jquery.com/jquery-1.10.2.js"></script>
@@ -134,7 +137,13 @@ $networkName = $row['name'];
   	<script type="text/javascript" src="scripts/lib/javaDetect/scripts/PluginDetect_Java_Simple.js"></script>
     <link rel="icon" href="images/NB_icon.png" />
     <title>Northbridge Nexus | Login</title> 
-   
+    
+    <script>
+    	USERNAME_REQUIRED = "<?php echo _("Username is required"); ?>";
+    	PASSWORD_REQUIRED = "<?php echo _("Password is required"); ?>";
+    	EMAIL_REQUIRED = "<?php echo _("Valid email is required"); ?>";
+    </script>
+ 
    	<script> 
    		
    		<!-- include in this manner instead of in a meta link so that php code inside this file will resolve prior to runtime -->
@@ -193,8 +202,6 @@ $networkName = $row['name'];
 			.move-it-up {margin-top:-50px;}
 		</style>
 		
-
-		
   </head>
   
   <body>
@@ -209,8 +216,8 @@ $networkName = $row['name'];
       	</span>  	
   	
       	<span id="walkme-login-anchor" class="controls" style="float:right;padding-bottom:10px;margin-top:30px;">
-      		<a href="http://northbridgetech.org/downloads/Northbridge_web_conference_center.pdf" style="color:#d27b4b;text-decoration:none;" target="_blank">About</a> | 
-      		<a href="<?php echo Utilities::getSupportUrl(); ?>" style="color:#d27b4b;text-decoration:none;" target="_blank">Support</a>
+      		<a href="http://northbridgetech.org/downloads/Northbridge_web_conference_center.pdf" style="color:#d27b4b;text-decoration:none;" target="_blank"><?php echo _("About"); ?></a> | 
+      		<a href="<?php echo Utilities::getSupportUrl(); ?>" style="color:#d27b4b;text-decoration:none;" target="_blank"><?php echo _("Support"); ?></a>
       	</span>
       </div>
 
@@ -222,42 +229,43 @@ $networkName = $row['name'];
 			  		<p><span class="fa fa-exclamation-triangle fa-2x" style="color:#d27b4b;float:left;margin-right:5px;"></span>To use Nexus it is necessary to enable JavaScript.</p>
 			  		<p>Here are the <a href="http://www.enable-javascript.com" target="_blank"> instructions how to enable JavaScript in your web browser</a></p>
 			  	</noscript>
-			  	<p id="login-user-message" class="confirmation"><span class="<?php echo $cleanIcon; ?>" style="color:#007582;float:left;margin-right:5px;"></span><?php echo $cleanMessage; ?></p>
+			  	<p id="login-user-message" class="confirmation"><span class="<?php echo $cleanIcon; ?>" style="color:#007582;float:left;margin-right:5px;"></span><?php echo _($cleanMessage); ?></p>
 
 					<!-- This is a standard login, possibly in demo mode -->
 					<?php if ($guestPass === "false") { ?>
 
 						<form id="login-form" class="pure-form pure-form-stacked" action="modules/login/control/loginProcessor.php" method="post">
 		    			<fieldset>
-	    					<span id="username-field-label">Username</span><span class="instruction form-instruction"><a href="javascript:void(0)" onclick="toggleFormDisplay('recover-username-form')"><span id="username-instruction-field-label">I forgot</span></a></span>
+	    					<span id="username-field-label"><?php echo(_("Username")); ?></span><span class="instruction form-instruction"><a href="javascript:void(0)" onclick="toggleFormDisplay('recover-username-form')"><span id="username-instruction-field-label"><?php echo _("I forgot"); ?></span></a></span>
+	    					
         				<input class="form-input" name="uid" value="" maxlength="25" autofocus>	        		
-        				Password<span class="instruction form-instruction"><a href="javascript:void(0)" onclick="toggleFormDisplay('recover-password-form')">I forgot</a></span>
+        				<?php echo(_("Password")); ?><span class="instruction form-instruction"><a href="javascript:void(0)" onclick="toggleFormDisplay('recover-password-form')"><?php echo _("I forgot"); ?></a></span>
         				<input class="form-input" type="password" name="password" value="" maxlength="25"/>	
         				<input id="localTz" name="timezone" type="hidden" value="">
-        				<a id="login-form-submit" type="submit" class="pure-button pure-button-primary" style="width:45%;" href="javascript:void(0);" onclick="loginValidateAndSubmit();">Sign In</a>
-        				<a id="remember-me-toggle" class="pure-button pure-button-secondary" onclick="toggleRememberCheckbox();" style="width:45%;" <?php echo($disabled);?> ><span id="fakeCheckBox" class="fa fa-square-o" style="color:#004d62;padding-right:4px;"></span> Remember me</a>
+        				<a id="login-form-submit" type="submit" class="pure-button pure-button-primary" style="width:45%;" href="javascript:void(0);" onclick="loginValidateAndSubmit();"><?php echo _("Sign In"); ?></a>
+        				<a id="remember-me-toggle" class="pure-button pure-button-secondary" onclick="toggleRememberCheckbox();" style="width:45%;" <?php echo($disabled);?> ><span id="fakeCheckBox" class="fa fa-square-o" style="color:#004d62;padding-right:4px;"></span> <?php echo _("Remember Me"); ?></a>
         				<input id="login-remember" name="login-remember" type="checkbox" style="visibility:hidden;"/>        			
      					</fieldset>
      				</form>   			
      				<form id="recover-username-form" class="pure-form pure-form-stacked" style="display:none;" autocomplete="off" action="modules/login/control/recoverEnrollmentProcessor.php" method="post">
 	     				<fieldset>
-	     					Recover Username
-     						<p style="font-size:90%;">Please enter your email address and we will resend your username.</p>
-     						Email
+	     					<?php echo _("Recover Username"); ?>
+     						<p style="font-size:90%;"><?php echo _("Please enter your email address and we will resend your username."); ?></p>
+     						<?php echo _("Email"); ?>
      						<input class="form-input" type="email" name="email" value="">
-     						<a id="username-form-submit" type="submit" class="pure-button pure-button-primary" style="width:45%;" href="javascript:void(0);" onclick="usernameValidateAndSubmit();" <?php echo($disabled);?> >Recover Username</a>
-     						<a class="form-instruction" href="javascript:void(0)" onclick="toggleFormDisplay('login-form')">Return to Login</a>
+     						<a id="username-form-submit" type="submit" class="pure-button pure-button-primary" style="width:45%;" href="javascript:void(0);" onclick="usernameValidateAndSubmit();" <?php echo($disabled);?> ><?php echo _("Recover Username"); ?></a>
+     						<a class="form-instruction" href="javascript:void(0)" onclick="toggleFormDisplay('login-form')"><?php echo _("Return to Login"); ?></a>
      						<input type="hidden" name="network" value="<?php echo $cleanNetworkId; ?>">
      					</fieldset>
      				</form>
      				<form id="recover-password-form" class="pure-form pure-form-stacked" style="display:none;" autocomplete="off" action="modules/login/control/recoverPasswordProcessor.php" method="post">
 	     				<fieldset>
-	     					Password Reset
-     						<p class="instruction">Please enter your user id so we can email you a password reset link.</p>
-     						Username<span class="instruction form-instruction"><a href="javascript:void(0)" onclick="toggleFormDisplay('recover-username-form')">I forgot</a></span>
+	     					<?php echo _("Password Reset"); ?>
+     						<p class="instruction"><?php echo _("Please enter your user id so we can email you a password reset link."); ?></p>
+     						<?php echo(_("Username")); ?><span class="instruction form-instruction"><a href="javascript:void(0)" onclick="toggleFormDisplay('recover-username-form')"><?php echo _("I forgot"); ?></a></span>
      						<input class="form-input" type="text" name="uid" value="" maxlength="25">
-     						<a id="password-form-submit" type="submit" class="pure-button pure-button-primary" style="width:45%;" href="javascript:void(0);" onclick="passwordValidateAndSubmit();" <?php echo($disabled);?> >Reset Password</a>
-     						<a class="form-instruction" href="javascript:void(0)" onclick="toggleFormDisplay('login-form')">Return to Login</a>
+     						<a id="password-form-submit" type="submit" class="pure-button pure-button-primary" style="width:45%;" href="javascript:void(0);" onclick="passwordValidateAndSubmit();" <?php echo($disabled);?> ><?php echo _("Reset Password"); ?></a>
+     						<a class="form-instruction" href="javascript:void(0)" onclick="toggleFormDisplay('login-form')"><?php echo _("Return to Login"); ?></a>
      						<input type="hidden" name="network" value="<?php echo $cleanNetworkId; ?>">
      					</fieldset>
      				</form>  

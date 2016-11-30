@@ -100,6 +100,15 @@ class Group {
 	  return $resultArray;
 	}
 	
+	public static function getPublicGroupByOrgId($uid) {
+		$query = "select ug.group_fk as id from public.user u, user_group ug where u.username = $1 and u.id = ug.user_fk";
+		$row = pg_fetch_row(PgDatabase::psExecute($query, array('pUser-' . $uid)));
+		if ($row) {
+			return $row[0];
+		} else {
+			return "";
+		}
+	}
 	
 	/*
 	public static function getPublicUserGroupByOrgId($oid) {
@@ -110,11 +119,11 @@ class Group {
 		} else {
 			return array();
 		}
-	}
-	*/		
+	}		
+	*/
 	
-	private static function groupIdExists($id) {
-		$query = "select exists (select true from public.group where uid = $1)";
+	public static function groupIdExists($id) {
+		$query = "select exists (select true from public.group where id = $1)";
 		$row = pg_fetch_row(PgDatabase::psExecute($query, array($id)));
 		if (!strcmp($row[0], "t")) {
 			return TRUE;

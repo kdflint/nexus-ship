@@ -6,6 +6,7 @@
 	define("TKN_ROOT", "/home/kdflint/projects/nexus-community/nexus/token");
 	define("LIB_ROOT", "/home/kdflint/projects/nexus-community/nexus/lib");
 	define("PTR_ROOT", "/home/kdflint/projects/nexus-community/nexus/partner");
+	define("LCL_ROOT", "/home/kdflint/projects/nexus-community/nexus/locale");
 	define("PTR_STC_ROOT", "/partner");
 	define("APP_NAME", "/nexus/nexus");
 	define("PILOT_NAME", "/nexus/pilot");

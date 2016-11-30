@@ -1,4 +1,4 @@
-#!/usr/bin/phpssss
+#!/usr/bin/php
 
 <?php
 

@@ -10,10 +10,13 @@
 *.odt
 *.pdf
 *.docx
+*.ico
+*.mo
 bbb-test.sh
 sensitive_config.php
 error_log
 pilot/view/include/scrapToggleCode.php
+pilot/guidestar/*
 new_nexus
 nexus/lib/Validate.php
 nexus/lib/rememberme/*
@@ -26,3 +29,4 @@ pilot/model/test/*
 pilot/batch/messageQueue/recover*
 pilot/migration/Util.php
 flash_scripts/*
+database_models/*
