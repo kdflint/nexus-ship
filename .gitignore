@@ -15,6 +15,7 @@
 bbb-test.sh
 sensitive_config.php
 error_log
+timeZoneData.js
 pilot/view/include/scrapToggleCode.php
 pilot/guidestar/*
 new_nexus

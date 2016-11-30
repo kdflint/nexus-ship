@@ -795,8 +795,12 @@ function populateEventForm(i) {
 	var endDate = currentEvents[i].month_num_end + "/" + currentEvents[i].date_end + "/" + currentEvents[i].year_end;
 	eventForm['meeting-date'].value = startDate;
 	eventForm['meeting-date-end'].value = endDate;
-	//document.getElementById('schedule-form-submit').innerHTML = "Update";
-	document.getElementById('schedule-form-submit').innerHTML = "Approve";
+	document.getElementById('schedule-form-submit').innerHTML = "Update";
+	// Very kludgy! Using the existence of a contact email address to tell us if this event originated from the public site and awaits approval
+	// in order to set the correct label on the submit button. 
+	if (eventForm['meeting-contact'] !== undefined && eventForm['meeting-contact'].value.length > 0) {
+		document.getElementById('schedule-form-submit').innerHTML = "Approve";
+	}
 	eventForm['meeting-uuid'].value = currentEvents[i].uuid;
 		
 	return true;
@@ -914,6 +918,7 @@ function eventValidateAndSubmit(thisForm) {
   	}
   }
   
+	// TODO -review this
   var forApproval = false;
   var contact = "";
   if (eventForm['meeting-contact'] !== undefined) {
