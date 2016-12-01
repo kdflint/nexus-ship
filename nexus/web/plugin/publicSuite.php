@@ -86,7 +86,8 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
    	<script type="text/javascript">
 			$(document).ready(function() {
         $( "[id^=datepicker]" ).datepicker({ changeMonth: true, changeYear: true });
-      	$( "[id^=schedule-form-time]").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
+      	$( "#schedule-form-time").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
+      	$( "#schedule-form-time-end").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
         $( "#schedule-form-duration" ).selectmenu();
         $( "#schedule-form-country" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
         $( "#schedule-form-country" ).selectmenu({ change: function() { displayTimeZones(); } });
