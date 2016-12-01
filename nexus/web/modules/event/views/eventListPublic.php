@@ -47,9 +47,9 @@
        				"<div id='nowEventDetail' class='td-div' style='position:absolute;left:140px;top:5px;height:210px;'>" + 
 		          	"<div class='meeting'>" +
        			      "<a href='#openEventDetail' onclick='getEventDetail(\"" + jsonObj[i].uuid + "\");' '<span style='padding-right:10px;color:#d27b4b;' class='fa fa-plus-square'></span></a>" +
-         					"<span class='purpose'>" + jsonObj[i].purpose + "</span>" +
+         					"<span class='purpose'>" + truncateString(jsonObj[i].purpose, '70') + "</span>" +
          						((jsonObj[i].location != null) ? "<p><span class='fa fa-map-marker'></span> " + jsonObj[i].location : "</p>") +
-										(jsonObj[i].contact ? "<p><span>Original submission by public user: " + jsonObj[i].contact + "</span></p>" : "") +
+										//(jsonObj[i].contact ? "<p><span>Original submission by public user: " + jsonObj[i].contact + "</span></p>" : "") +
 										"<p><span>Approved by: " + jsonObj[i].fname + " " + jsonObj[i].lname + "</span>" +
 										((true) ? "<a href='#openEventEdit' onclick='return populateEventForm(\"" + i + "\");' title='Edit'><span class='fa fa-pencil' style='color:#d27b4b;margin-left:10px;'></span></a>" : "") + 
 										((true) ? "<a href='<?php echo(Utilities::getHttpPath()); ?>/modules/schedule/control/eventDeleteProcessor.php?id=" + jsonObj[i].uuid + "' onclick='return confirm(\"Please confirm this delete.\");' title='Delete''><span class='fa fa-trash-o' style='color:#d27b4b;margin-left:10px;'></span></a></p>" : "") +
