@@ -1,0 +1,7 @@
+This folder contains a style specification for phpBB3.
+
+It is incorporated into the phpBB /styles folder application by means of a soft link inside that project folder.
+
+example, from phpBB /styles directory
+
+ln -s ~/public_html/dev/nexus/web/modules/forum/styles/nexus nexus
