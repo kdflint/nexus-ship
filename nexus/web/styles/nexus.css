@@ -29,19 +29,18 @@ body {
 .banner {
 	position:absolute;
 	width:78%;
-	//height: 106px;
 	height: 96px;
 	padding:0px;
 	margin-top:10px;
 	border-bottom-right-radius: 6px;
-	background: #edf0de; /* Old browsers */
-	background: -moz-linear-gradient(top,  #ffffff 45%, #edf0de 70%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(45%,#ffffff), color-stop(70%,#edf0de)); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top,  #ffffff 45%,#edf0de 70%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top,  #ffffff 45%,#edf0de 70%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top,  #ffffff 45%,#edf0de 70%); /* IE10+ */
-	background: linear-gradient(to bottom,  #ffffff 45%,#edf0de 70%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#edf0de',GradientType=0 ); /* IE6-9 */
+	background: #ffffff; /* Old browsers */
+	background: -moz-linear-gradient(top,  #ffffff 45%, #ffffff 70%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(45%,#ffffff), color-stop(70%,#ffffff)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #ffffff 45%,#ffffff 70%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #ffffff 45%,#ffffff 70%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #ffffff 45%,#ffffff 70%); /* IE10+ */
+	background: linear-gradient(to bottom,  #ffffff 45%,#ffffff 70%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
 }
 
 .banner-image {
@@ -56,7 +55,7 @@ body {
 .frame {
 	clear: both;
 	padding-bottom: 60px;   /* Height of the footer */
-	padding-top: 10px;
+	padding-top: 5px;
 }
 
 .footer {
@@ -112,15 +111,16 @@ body {
 
 .product-name {
 	font-family:Oswald;
-	font-size:220%;
+	font-size:230%;
 	margin-left: 10px;
-	color: #004d62;
+	color: #486326;
+	opacity: .5;
 }
 
 .module-name {
-	font-size:150%;
+	font-size:170%;
 	margin-left: 30px;
-	color: #899d70;
+	color: #004d62;
 	font-weight: bold;
 	position: absolute;
 	padding-top: 5px;

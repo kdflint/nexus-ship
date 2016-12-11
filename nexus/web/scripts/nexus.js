@@ -7,6 +7,10 @@ var NEXT_MEETING_START;
 var IS_NOW = true;
 var IS_TIMER_INIT = false;
 var ACTIVITY_FLAG = 1;
+var DEFAULT_FORUM;
+var HTTP_WEB_PATH;
+var HTTP_PHPBB_WEB_PATH;
+
 
 /*
 Would like to avoid initializing these and force the including php page to do so, but that might break something right now. 
@@ -281,12 +285,20 @@ function toggleAdvFrameDisplay(menuItem) {
 		menuItems[i].style.backgroundColor='#dae0bc';
 	}
 	showButton.style.backgroundColor='rgba(137, 157, 112, 1)';
-	//loadAdvPage(menuItem.id);
+	loadAdvPage(menuItem.id);
 }
 
 function loadAdvPage(resource) {
-	// LEFT OFF HERE
-	myHTMLInclude();
+	var frameId = "adv-frame";
+		switch(resource) {
+    	case "adv-menu-forum":
+    		// Ajax call to validate BB forum session
+    		document.getElementById(frameId).src = HTTP_PHPBB_WEB_PATH + "/viewforum.php?f=" + DEFAULT_FORUM;
+    		break;
+    	default:
+       	document.getElementById(frameId).src = HTTP_WEB_PATH + "/development_placeholder.html";
+        break;
+		} 
 }
 
 function myHTMLInclude() {

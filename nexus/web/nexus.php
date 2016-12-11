@@ -70,7 +70,7 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
 		<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
     <link rel="stylesheet" href="styles/nexus.css" type="text/css" />
     <link rel="stylesheet" href="styles/modal.css" type="text/css" />
-    
+       
     <script src="scripts/nexus.js" language="javascript"></script>
   	<script src="<?php echo(Utilities::getConfigPath()); ?>/timeZoneData.js" language="javascript"></script>
   	<!-- http://www.featureblend.com/javascript-flash-detection-library.html -->
@@ -85,6 +85,11 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
     <title>Northbridge Nexus</title> 
 
     <script type="text/javascript">
+		
+    	// TODO - create a global js init script - can format this as a php file that parses into javascript, look for example...
+			DEFAULT_FORUM = <?php echo $_SESSION['defaultForumId']; ?>;
+			HTTP_WEB_PATH = "<?php echo Utilities::getHttpPath(); ?>";
+			HTTP_PHPBB_WEB_PATH = "<?php echo Utilities::getHttpPhpBbPath(); ?>";
 
 			<!-- include in this manner instead of in a meta link so that php code inside this file will resolve prior to runtime -->
     	<?php include("scripts/techCheck.js"); ?>
@@ -217,6 +222,7 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
   
   <body>
     <div class="container">
+    	
       <div class="header">
       	<?php    	
       		if ((session_status() === PHP_SESSION_ACTIVE) && isset($_SESSION['nexusContext'])) {
@@ -231,7 +237,6 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
  						}
 					} 
 				?>			     	
-
       </div>
 
 			<div class="frame" >
@@ -250,25 +255,8 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
 				?>
       </div>
       
-      <!--
       <div class="footer">
-				<?php 
-				/*
-      		if ((session_status() === PHP_SESSION_ACTIVE) && isset($_SESSION['nexusContext'])) {
- 						switch($_SESSION['nexusContext']) {
- 							case "NWM":
- 								include("nwmFooter.php");
- 	 							break;
-				 			case "ADV":
-				 			 	include("nwmFooter.php");
-	 							break;
- 							default: 			
- 						}
-					}
-				*/ 
-				?>
-			</div>
-			-->
+      </div>
 
     </div><!-- container -->       
 	</body>

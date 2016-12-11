@@ -4,16 +4,16 @@ Colours and backgrounds for common.css
 -------------------------------------------------------------- */
 
 html, body {
-	color: #536482;
-	background-color: #F5F7FA;
+	color: #333333;
+	background-color: #FFFFFF;
 }
 
 h1 {
-	color: #FFFFFF;
+	color: #004D62;
 }
 
 h2 {
-	color: #28313F;
+	color: #004D62;
 }
 
 h3 {
@@ -43,8 +43,8 @@ hr {
 /* Round cornered boxes and backgrounds
 ---------------------------------------- */
 #wrap {
-	background-color: #FFF;
-	border-color: #E6E9ED;
+	background-color: #FFFFFF;
+	border-color: #004D62;
 }
 
 .headerbar {
@@ -54,21 +54,21 @@ hr {
 }
 
 .navbar {
-	background-color: #cadceb;
+	background-color: #FFFFFF;
 }
 
 .forabg {
-	background-color: #0076b1;
-	background-image: url("./images/bg_list.gif");
+	background-color: #FCB040;
+	background-image: url("./images/oeLef5.png");
 }
 
 .forumbg {
-	background-color: #12A3EB;
-	background-image: url("./images/bg_header.gif");
+	background-color: #DAE0BC;
+	background-image: url("./images/ftYK77.png");
 }
 
 .panel {
-	background-color: #ECF1F3;
+	background-color: #DDE4E6;
 	color: #28313F;
 }
 
@@ -81,7 +81,7 @@ hr {
 }
 
 .bg1 {
-	background-color: #ECF3F7;
+	background-color: #F7F8EF;
 }
 
 table.zebra-list tr:nth-child(odd) td, ul.zebra-list li:nth-child(odd) {
@@ -89,7 +89,7 @@ table.zebra-list tr:nth-child(odd) td, ul.zebra-list li:nth-child(odd) {
 }
 
 .bg2 {
-	background-color: #e1ebf2;
+	background-color: #EDF0DE;
 }
 
 table.zebra-list tr:nth-child(even) td, ul.zebra-list li:nth-child(even) {
@@ -97,7 +97,7 @@ table.zebra-list tr:nth-child(even) td, ul.zebra-list li:nth-child(even) {
 }
 
 .bg3	{
-	background-color: #cadceb;
+	background-color: #ABC3CE;
 }
 
 .ucprowbg {
@@ -247,7 +247,10 @@ Colours and backgrounds for links.css
 -------------------------------------------------------------- */
 
 a { color: #105289; }
+//a { color: #D27B4B; }
 a:hover	{ color: #D31141; }
+
+a.username-coloured { color:#486326 !important; }
 
 /* Links on gradient backgrounds */
 .forumbg .header a, .forabg .header a, th a {
@@ -316,8 +319,8 @@ Colours and backgrounds for content.css
 -------------------------------------------------------------- */
 
 ul.forums {
-	background-color: #eef5f9;
-	background-image: url("./images/gradient.gif");
+	background-color: #ffffff;
+	background-image: url("./images/g51oWa.png");
 }
 
 ul.topiclist li {
@@ -411,7 +414,7 @@ dl.faq dt {
 ----------------------------------------*/
 /* Quote block */
 blockquote {
-	background-color: #EBEADD;
+	background-color: #F7F8EF;
 	background-image: url("./images/quote.gif");
 	border-color:#DBDBCE;
 }
@@ -608,7 +611,7 @@ Colours and backgrounds for buttons.css
 	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#FFFFFF', EndColorStr='#E9E9E9')";
 	box-shadow: 0 0 0 1px #FFFFFF inset;
 	-webkit-box-shadow: 0 0 0 1px #FFFFFF inset;
-	color: #D31141;
+	color: #D27B4B;
 }
 
 .dropdown-select {
@@ -763,7 +766,7 @@ ul.cplist {
 /* CP tabbed menu
 ----------------------------------------*/
 #tabs .tab > a {
-	background: #BACCD9;
+	background: #DDE4E6;
 	color: #536482;
 }
 
@@ -772,6 +775,22 @@ ul.cplist {
 	color: #D31141;
 }
 
+#tabs .activetab > a,
+#tabs .activetab > a:hover {
+	background: #ABC3CE;
+	background: -moz-linear-gradient(top, #DDE4E6 0%, #ABC3CE 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #DDE4E6), color-stop(100%, #ABC3CE));
+	background: -webkit-linear-gradient(top, #DDE4E6 0%, #ABC3CE 100%);
+	background: -o-linear-gradient(top, #DDE4E6 0%, #ABC3CE 100%);
+	background: -ms-linear-gradient(top, #EDDE4E6 0%, #ABC3CE 100%);
+	background: linear-gradient(to bottom, #DDE4E6 0%, #ABC3CE 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#DDE4E6', endColorstr='#ABC3CE', GradientType=0 );
+	border-color: #ABC3CE;
+	box-shadow: 0 1px 1px #F2F9FF inset;
+	color: #333333;
+}
+
+/*
 #tabs .activetab > a,
 #tabs .activetab > a:hover {
 	background: #CADCEB;
@@ -786,6 +805,7 @@ ul.cplist {
 	box-shadow: 0 1px 1px #F2F9FF inset;
 	color: #333333;
 }
+*/
 
 #tabs .activetab > a:hover {
 	color: #000000;

@@ -29,6 +29,9 @@ autoloader(array(
 // print array of class autoload paths:
 // print_r($cached_paths); exit(0);
 
+/* Support phpBB3 session integration */
+//$request->enable_super_globals();
+
 class Utilities {
 	
 	public static function getDbHost() {
@@ -108,6 +111,8 @@ class Utilities {
 	
 	public static function getPhpRoot() {	return PHP_ROOT; }
 	
+	public static function getPhpBbRoot() { return PHPBB3_ROOT . "/";	}
+
 	public static function getSrcRoot() {	return self::getWebRoot() . "/src"; }
 	
 	public static function getLibRoot() {	return LIB_ROOT; }
@@ -118,6 +123,8 @@ class Utilities {
 
 	public static function getHttpImagePath() { return self::getHttpPath() . "/image"; }
 	
+	public static function getHttpPhpBbPath() { return "http://" . ENV_HOST . "/phpBB3"; }
+
 	public static function getPartnerImageRoot() { return self::getPartnerHttpPath() . "/image/"; }
 	
 	public static function getPartnerFileUrl() { return self::getPartnerHttpPath() . "/file"; }
@@ -132,9 +139,7 @@ class Utilities {
 	
 	public static function getOpenMeetingMargin() {return time() + 15*60; }
 	
-	public static function getTwitterHandle() {
-		return "NorthbridgeNFP";
-	}
+	public static function getTwitterHandle() {	return "NorthbridgeNFP"; }
 	
 	private static $supportedLangs = array('en' => 'en_US.utf8','es' => 'es_ES.utf8');
 	
@@ -598,6 +603,7 @@ class Utilities {
   		$_SESSION['uidpk'] = $row['id'];
   		$_SESSION['networkName'] = $row['network'];
   		$_SESSION['networkId'] = $row['networkid'];
+  		$_SESSION['defaultForumId'] = $row['forumid'];
   		$_SESSION['logo'] = $row['logo'];
   		$_SESSION['email'] = $row['email'];
   		$_SESSION['role'] = self::getRoleName($row['roleid']);
