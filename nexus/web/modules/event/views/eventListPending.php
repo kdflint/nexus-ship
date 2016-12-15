@@ -67,15 +67,4 @@
 	}
 </script>
 					
-<div id="current_schedule_display" style="display:block;">
-	<div id="reservationTable" class="table-div"></div>
-</div>
-<div id="openEventEdit" class="modalDialog">
-	<div>
-		<a href="#close" title="Close" class="close">X</a>
-		<?php include("modules/event/views/eventAddAdvantage2.php"); ?>
-	</div>
-</div>
-
-<script> getEventListPending(<?php echo (time() + 15*60); ?>); </script>
 	

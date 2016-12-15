@@ -123,7 +123,7 @@ class Utilities {
 
 	public static function getHttpImagePath() { return self::getHttpPath() . "/image"; }
 	
-	public static function getHttpPhpBbPath() { return "http://" . ENV_HOST . "/phpBB3"; }
+	public static function getForumHttpPath() { return FORUM_URL; }
 
 	public static function getPartnerImageRoot() { return self::getPartnerHttpPath() . "/image/"; }
 	
@@ -576,7 +576,7 @@ class Utilities {
 		return true;
 	}
 	
-	public static function setSession($username, $remember, $zone = "undefined") {
+	public static function setSession($username, $remember, $zone = "undefined", $password = "undefined") {
 
 		session_regenerate_id(TRUE);
 		
@@ -607,6 +607,7 @@ class Utilities {
   		$_SESSION['logo'] = $row['logo'];
   		$_SESSION['email'] = $row['email'];
   		$_SESSION['role'] = self::getRoleName($row['roleid']);
+  		$_SESSION['password'] = $password;
 		}
 		
 		$_SESSION['pgpk'] = Group::getPublicGroupByOrgId($_SESSION['orgUid']);

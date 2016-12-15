@@ -68,14 +68,5 @@
 	}
 </script>
 					
-<div id="current_schedule_display" style="display:block;">
-	<div id="reservationTable" class="table-div"></div>
-</div>
-<div id="openEventDetail" class="modalDialog">
-	<div>
-		<a href="#close" title="Close" class="close">X</a>
-		<?php include("modules/event/views/eventDetail.php"); ?>
-	</div>
-</div>
 
 	

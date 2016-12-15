@@ -9,7 +9,7 @@ var IS_TIMER_INIT = false;
 var ACTIVITY_FLAG = 1;
 var DEFAULT_FORUM;
 var HTTP_WEB_PATH;
-var HTTP_PHPBB_WEB_PATH;
+var HTTP_FORUM_PATH ;
 
 
 /*
@@ -231,6 +231,16 @@ function toggleAdminCheckbox() {
 		document.getElementById("fakeCheckBox2").style = "color:#004d62;padding-right:4px;";
  	}
 }
+
+function toggleTertiary() {
+	var tertiaryContainer = document.getElementById("event-tertiary");
+	var curState = tertiaryContainer.style.display;
+	tertiaryContainer.style.display = "none";
+	if (curState === "none") {
+		tertiaryContainer.style.display = "block";
+	}
+}
+
     	
 function toggleFormDisplay(formId) {
 	var showForm = document.getElementById(formId);
@@ -289,14 +299,23 @@ function toggleAdvFrameDisplay(menuItem) {
 }
 
 function loadAdvPage(resource) {
+	var divDisplayId = document.getElementById("adv_div_display");
+	var frameDisplayId = document.getElementById("adv_frame_display");
+	divDisplayId.style.display = "none";
+	frameDisplayId.style.display = "none";
+		
 	var frameId = "adv-frame";
 		switch(resource) {
     	case "adv-menu-forum":
-    		// Ajax call to validate BB forum session
-    		document.getElementById(frameId).src = HTTP_PHPBB_WEB_PATH + "/viewforum.php?f=" + DEFAULT_FORUM;
+    		document.getElementById(frameId).src = HTTP_FORUM_PATH  + "/viewforum.php?f=" + DEFAULT_FORUM;
+    		frameDisplayId.style.display ="block";
+    		break;
+    	case "adv-menu-event":
+    		divDisplayId.style.display ="block";
     		break;
     	default:
        	document.getElementById(frameId).src = HTTP_WEB_PATH + "/development_placeholder.html";
+       	frameDisplayId.style.display ="block";
         break;
 		} 
 }

@@ -46,24 +46,11 @@ if (isset($_SESSION['remembered']) && $_SESSION['remembered']) {
 	$isAuthenticated = Utilities::authenticate($clean['username'], $clean['password']);
 }
 
-$forumAuthenticated = false;
-if($isAuthenticated) {
-	require_once(Utilities::getModulesRoot() . "/forum/forum_integration.php");
-	$user->session_begin();
-	$result = $auth->login($clean['username'], $clean['password']);
-	$auth->acl($user->data);
-	$user->setup();	
-	$user->data['user_timezone'] = $clean['tz'];
-	if ($result['status'] == LOGIN_SUCCESS && $user->data['username'] === $clean['username']) {
-		$forumAuthenticated = true;
-	}
-}
-
-if($isAuthenticated && $forumAuthenticated){
+if($isAuthenticated){
 	if (isset($_SESSION['demo']) && $_SESSION['demo']) {
 		Utilities::setDemoSession($clean['username'], $clean['remember'], $clean['tz']);
 	} else {
-		Utilities::setSession($clean['username'], $clean['remember'], $clean['tz']);
+		Utilities::setSession($clean['username'], $clean['remember'], $clean['tz'], $clean['password']);
 	}
 	Utilities::setLogin($_SESSION['uidpk']);
 	

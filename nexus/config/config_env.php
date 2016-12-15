@@ -14,6 +14,7 @@
 	define("ENV_NAME", "local");
 	define("ENV_HOST", "localhost");
 	define("SUPPORT_URL", "http://northbridgetech.org/dev/support");
+	define("FORUM_URL", "http://localhost/phpBB3");
 
 // OTHER
 	define("SSN_TIMEOUT", "-1"); // in seconds

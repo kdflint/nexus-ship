@@ -1,4 +1,5 @@
 <?php 
+
 session_start();
 
 require_once("src/framework/Util.php");
@@ -29,8 +30,20 @@ if (!Utilities::isSessionValid()) {
 if ($_SESSION['nexusContext'] == "PUB") {
 	header("location:login.php?oid=" . $_SESSION['orgUid']);
 	exit(0);	
-}	
+}
 
+if ($_SESSION['nexusContext'] == "ADV") {
+	require_once(Utilities::getModulesRoot() . "/forum/forum_integration.php");
+	$user->session_begin();
+	// Login the user to the forum if there is not already a forum session matching this username
+	if ($user->data['username'] !== $_SESSION['username']) {
+		$result = $auth->login($_SESSION['username'], $_SESSION['password']);
+		$auth->acl($user->data);
+		$user->setup();	
+		$user->data['user_timezone'] = $clean['tz'];
+	}
+}	
+	
 Utilities::setSessionLastActivity();
 
 $showProfile = "false";
@@ -81,7 +94,7 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
   	<!-- http://www.pinlady.net/PluginDetect/ -->
   	<script type="text/javascript" src="scripts/lib/javaDetect/scripts/PluginDetect_Java_Simple.js"></script>
   	<!-- http://logomakr.com -->
-  	 	
+  	 	 	
     <title>Northbridge Nexus</title> 
 
     <script type="text/javascript">
@@ -89,7 +102,7 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
     	// TODO - create a global js init script - can format this as a php file that parses into javascript, look for example...
 			DEFAULT_FORUM = <?php echo $_SESSION['defaultForumId']; ?>;
 			HTTP_WEB_PATH = "<?php echo Utilities::getHttpPath(); ?>";
-			HTTP_PHPBB_WEB_PATH = "<?php echo Utilities::getHttpPhpBbPath(); ?>";
+			HTTP_FORUM_PATH = "<?php echo Utilities::getForumHttpPath(); ?>";
 
 			<!-- include in this manner instead of in a meta link so that php code inside this file will resolve prior to runtime -->
     	<?php include("scripts/techCheck.js"); ?>
@@ -150,6 +163,8 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
 					document.getElementById("index-module-name").innerHTML = "Web Meet Demo";
 					document.getElementById("get-nexus-link").innerHTML = "<a href='http://northbridgetech.org/apps/waterwheel/module/core/index.php?view=apply' target='_blank'>Get Nexus</a>";
 				}		
+
+
 			});
 			
 			function toggleJoinDisplay() {
@@ -257,8 +272,18 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
       
       <div class="footer">
       </div>
-
     </div><!-- container -->       
+
+  <?php 
+  	if ((session_status() === PHP_SESSION_ACTIVE) && isset($_SESSION['nexusContext'])) {
+ 			switch($_SESSION['nexusContext']) {
+				case "ADV":
+				 	include("advModals.php");
+	 				break;
+ 				default: 			
+ 				}
+			} 				
+	?>
 	</body>
 	
 </html>
