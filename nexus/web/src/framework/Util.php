@@ -590,6 +590,7 @@ class Utilities {
 		$_SESSION['remember'] = ($remember ? "true" : "false");
 		self::setSessionTimezone($zone);
 		$_SESSION['language'] = self::getUserLangagePreference();
+		$_SESSION['defaultSearchId'] = self::newUuid();
 		
 		$cursor = User::getUserSessionByUsername($_SESSION['username']);
 		while ($row = pg_fetch_array($cursor)) {

@@ -163,6 +163,59 @@ function setPublicSession2(oid, fname, relativePath) {
 	xmlhttp.send();
 }
 
+function toggleRecurFormElements(override) {
+	var curValue = document.getElementById('repeat-check').checked;
+	var repeatBlock = document.getElementById("repeat-block");
+  var locationBlock = document.getElementById("location-block");
+  var repeatSpan = document.getElementById("repeat-span");
+  var repeatEdit = document.getElementById('repeat-edit');
+  var submitButton = document.getElementById("schedule-form-submit");
+  if(!curValue) {
+ 		repeatBlock.style.display = "none";
+		locationBlock.style.display = "block";
+		repeatSpan.style.visibility = "hidden";
+		repeatEdit.style.visibility = "hidden";
+ 		submitButton.style.visibility = "visible";
+ 	} else if (Boolean(override)) {
+ 		repeatBlock.style.display = "none";
+		locationBlock.style.display = "block";
+		repeatSpan.style.visibility = "visible";
+		repeatEdit.style.visibility = "visible";
+ 		submitButton.style.visibility = "visible";
+ 	} else {
+  	repeatBlock.style.display = "block";
+  	locationBlock.style.display = "none";
+  	updateRepeatDescr(document.getElementById('repeat-interval'));
+  	updateRepeatFreq(document.getElementById('repeat-freq'));
+  	repeatSpan.style.visibility = "visible";
+  	repeatEdit.style.visibility = "hidden";
+ 		submitButton.style.visibility = "hidden";
+ 	}
+}
+
+function updateRepeatDescr(element) {
+	var labels = [];
+	var x = parseInt(element.value);
+	labels[0] = "days";
+	labels[1] = "days";
+	labels[2] = "weeks";
+	labels[3] = "daily";
+	labels[4] = "weekdays";
+	labels[5] = "weekly";
+	
+	document.getElementById("repeat-descr").innerHTML = labels[x+3];
+	
+	var unitlabels = document.getElementsByClassName("repeat-unit");
+	for (var i = 0; i < unitlabels.length; i += 1) {
+	  unitlabels[i].innerHTML = labels[x];
+	}
+
+}
+
+function updateRepeatFreq(element) {
+	document.getElementById("repeat-quantity").innerHTML = element.value;
+}
+
 function toggleFileClear() {
 	var fieldValue = document.getElementById('fileToUpload').value;
 	var fileClear = document.getElementById('fileClearControl');
@@ -299,23 +352,32 @@ function toggleAdvFrameDisplay(menuItem) {
 }
 
 function loadAdvPage(resource) {
-	var divDisplayId = document.getElementById("adv_div_display");
-	var frameDisplayId = document.getElementById("adv_frame_display");
-	divDisplayId.style.display = "none";
-	frameDisplayId.style.display = "none";
-		
+	var frameDisplay = document.getElementById("adv_frame_display");
+	frameDisplay.style.display = "none";
+	
+	var divDisplay = document.getElementById("adv_div_display");
+	divDisplay.style.display = "none";
+	var divDisplays = divDisplay.getElementsByClassName('div-display');
+	for (var i = 0; i < divDisplays.length; i += 1) {
+	  divDisplays[i].style.display = "none";
+	}
 	var frameId = "adv-frame";
 		switch(resource) {
     	case "adv-menu-forum":
     		document.getElementById(frameId).src = HTTP_FORUM_PATH  + "/viewforum.php?f=" + DEFAULT_FORUM;
-    		frameDisplayId.style.display ="block";
+    		frameDisplay.style.display ="block";
     		break;
     	case "adv-menu-event":
-    		divDisplayId.style.display ="block";
+    		document.getElementById("event_display").style.display ="block";
+    		divDisplay.style.display ="block";
+    		break;
+    	case "adv-menu-network":
+    		document.getElementById("network_display").style.display ="block";
+    		divDisplay.style.display ="block";
     		break;
     	default:
        	document.getElementById(frameId).src = HTTP_WEB_PATH + "/development_placeholder.html";
-       	frameDisplayId.style.display ="block";
+       	frameDisplay.style.display ="block";
         break;
 		} 
 }

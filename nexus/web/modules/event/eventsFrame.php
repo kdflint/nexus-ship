@@ -47,7 +47,7 @@
 		</div>
 	</div>
 	<!-- TODO - move this div id out to advFrame.php? -->
-	<div id="adv_frame_display">
+	<div id="event-frame">
 		<div id="current_schedule_display" style="display:block;">
 			<div id="reservationTable" class=""></div>
 		</div>
