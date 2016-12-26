@@ -103,6 +103,7 @@
     			<a href="<?php echo(Utilities::getPluginPath()); ?>/publicSuite.php?oid=<?php echo($_SESSION['orgUid']); ?>&amp;context=calendar" style="float:right;margin-right:20px;margin-top:28px;"><span id="cancel_link">Cancel</span></a>
 				</fieldset>
 				<input type="hidden" name="meeting-edit" value="false" />
+				<input type="hidden" name="meeting-recur-duration" value="false" />
 			</form>     
 			
 <?php if (!isset($_SESSION['timezone']) || $_SESSION['timezone'] == "undefined") { ?>

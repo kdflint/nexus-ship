@@ -635,6 +635,7 @@ class Utilities {
 			$_SESSION['logo'] = $row['logo'];
   		$_SESSION['networkName'] = $row['network'];
   		$_SESSION['orgId'] = $row['affiliationid'];
+ 			$_SESSION['publicForumId'] = $row['publicforumid'];
 		}
 		
 	}

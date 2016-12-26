@@ -984,7 +984,7 @@ function eventValidateAndSubmit(thisForm) {
  			}
 		}
 	}
-	
+
   var duration = durationField.value;
 	setFieldPassStyles(document.getElementById(thisForm + "-duration-button"), "Duration");
   if (duration == null || duration == "" || duration == "Duration") {
@@ -994,7 +994,17 @@ function eventValidateAndSubmit(thisForm) {
  		alert("Bad duration: " + duration);
  		pass = false;
 	}
-	  
+  
+	if (eventForm['repeat-check'].checked) {
+			// TODO - validate repeat-freq and repeat-interval
+  		var eventEndEpoch = Date.parse(createTimeStampString(eventForm['meeting-date-end'].value, eventForm['meeting-time-end'].value));
+  		var numRealDaysToPass = getDaysPassing(eventForm['repeat-freq'].value, eventForm['repeat-interval'].value, eventForm['meeting-date-end'].value);
+  		var epochSpan = numRealDaysToPass*24*60*60*1000;
+  		eventForm['meeting-recur-duration'].value = millisecondsToFormat("#MM#/#DD#/#YYYY# #hh#:#mm#:#ss#", eventEndEpoch+epochSpan);
+	} else {
+		eventForm['meeting-recur-duration'].value = 0;
+	}
+	
  	var nameField = eventForm['meeting-name'];
   var name = nameField.value;
 	setFieldPassStyles(nameField, "Meeting Name");
@@ -1188,3 +1198,47 @@ function validateTimeFormat(t) {
 	// TODO - complete this
 	return true;
 }
+
+function getDaysPassing(num, freq, start) {
+	var curDate = new Date(start);
+	switch(parseInt(freq)) {
+		case 0:
+			return parseInt(num);
+		case 2:
+			return parseInt(num * 7);
+		case 1:
+			var loopCount = 0;
+			var weekdayCount = 0;
+  	  while (weekdayCount < num) {
+        curDate.setDate(curDate.getDate() + 1);
+        var dayOfWeek = curDate.getDay();
+        if ((dayOfWeek > 0) && (dayOfWeek < 6)) {
+           weekdayCount++;
+         }
+        loopCount++;
+    	}
+    	return loopCount;
+	}
+	return 1;
+}
+
+function millisecondsToFormat(formatString, ms){
+	var thisDate = new Date(ms);
+  var YYYY,YY,MMMM,MMM,MM,M,DDDD,DDD,DD,D,hhhh,hhh,hh,h,mm,m,ss,s,ampm,AMPM,dMod,th;
+  YY = ((YYYY=thisDate.getFullYear())+"").slice(-2);
+  MM = (M=thisDate.getMonth()+1)<10?('0'+M):M;
+  MMM = (MMMM=["January","February","March","April","May","June","July","August","September","October","November","December"][M-1]).substring(0,3);
+  DD = (D=thisDate.getDate())<10?('0'+D):D;
+  DDD = (DDDD=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][thisDate.getDay()]).substring(0,3);
+  th=(D>=10&&D<=20)?'th':((dMod=D%10)==1)?'st':(dMod==2)?'nd':(dMod==3)?'rd':'th';
+  formatString = formatString.replace("#YYYY#",YYYY).replace("#YY#",YY).replace("#MMMM#",MMMM).replace("#MMM#",MMM).replace("#MM#",MM).replace("#M#",M).replace("#DDDD#",DDDD).replace("#DDD#",DDD).replace("#DD#",DD).replace("#D#",D).replace("#th#",th);
+  h=(hhh=thisDate.getHours());
+  if (h==0) h=24;
+  if (h>12) h-=12;
+  hh = h<10?('0'+h):h;
+  hhhh = hhh<10?('0'+hhh):hhh;
+  AMPM=(ampm=hhh<12?'am':'pm').toUpperCase();
+  mm=(m=thisDate.getMinutes())<10?('0'+m):m;
+  ss=(s=thisDate.getSeconds())<10?('0'+s):s;
+  return formatString.replace("#hhhh#",hhhh).replace("#hhh#",hhh).replace("#hh#",hh).replace("#h#",h).replace("#mm#",mm).replace("#m#",m).replace("#ss#",ss).replace("#s#",s).replace("#ampm#",ampm).replace("#AMPM#",AMPM);
+};
