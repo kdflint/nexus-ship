@@ -189,14 +189,19 @@ class Event {
 				u.lname as lname,
 				pg.abbrev as abbrev,
 				pg.name as tz_extract_name 
-			from event e, public.user u, event_group eg, pg_timezone_names pg
-			where eg.group_fk = $1		
-			and eg.event_fk = e.id
-			and eg.status_fk = $3
-			and (e.start_dttm + e.duration) > now() 
-			and e.active = true
-			and pg.name = $2
-			and u.id = e.reserved_user_fk 
+			from event e
+				left outer join event_recur er on e.recur_fk = er.id
+				join public.user u on u.id = e.reserved_user_fk
+				join event_group eg on eg.event_fk = e.id
+				join pg_timezone_names pg on pg.name = $2
+				where eg.group_fk = $1		
+				and eg.status_fk = $3
+				and e.active = true
+				and (
+					((e.start_dttm + e.duration) > now())
+					or
+					((COALESCE(er.end_dttm,now()) > now()))
+				)
 			order by e.start_dttm";
 				
 			$cursor = PgDatabase::psExecute($query, array($groupId, $localTz, $status));
@@ -287,8 +292,8 @@ class Event {
 				pg.abbrev as abbrev 
 				from event e
 				left outer join event_recur er on e.recur_fk = er.id
-				left outer join public.user u on u.id = e.reserved_user_fk
-				left outer join pg_timezone_names pg on pg.name = $2
+				join public.user u on u.id = e.reserved_user_fk
+				join pg_timezone_names pg on pg.name = $2
 				where e.active = true
 				and e.uuid = $1";
 						
