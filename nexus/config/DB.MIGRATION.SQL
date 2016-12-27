@@ -8,9 +8,9 @@ CREATE SEQUENCE event_recur_id_seq
   START 221
   CACHE 1;
 ALTER TABLE event_recur_id_seq
-  OWNER TO northbr6_devnexus;
-GRANT ALL ON TABLE event_recur_id_seq TO northbr6_devnexus;
-GRANT SELECT, UPDATE ON TABLE event_recur_id_seq TO northbr6_web;
+  OWNER TO northbri_devnexus;
+GRANT ALL ON TABLE event_recur_id_seq TO northbri_devnexus;
+GRANT SELECT, UPDATE ON TABLE event_recur_id_seq TO northbri_web;
 
 CREATE TABLE event_recur
 (
@@ -24,9 +24,9 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE event_recur
-  OWNER TO northbr6_devnexus;
-GRANT ALL ON TABLE event_recur TO northbr6_devnexus;
-GRANT SELECT, UPDATE, INSERT ON TABLE event_recur TO northbr6_web;
+  OWNER TO northbri_devnexus;
+GRANT ALL ON TABLE event_recur TO northbri_devnexus;
+GRANT SELECT, UPDATE, INSERT ON TABLE event_recur TO northbri_web;
 
 ALTER TABLE event
    ADD COLUMN recur_fk integer;

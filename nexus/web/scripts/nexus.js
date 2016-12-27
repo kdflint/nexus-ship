@@ -905,7 +905,7 @@ function populateEventForm(i) {
 	//document.getElementById('schedule-form-submit').innerHTML = "Update";
 	document.getElementById('schedule-form-submit').innerHTML = "Approve";
 	eventForm['meeting-uuid'].value = currentEvents[i].uuid;
-		
+			
 	return true;
 }
 	
