@@ -995,14 +995,16 @@ function eventValidateAndSubmit(thisForm) {
  		pass = false;
 	}
   
-	if (eventForm['repeat-check'].checked) {
+	if (eventForm['repeat-check'] !== undefined) {
+		if (eventForm['repeat-check'].checked) {
 			// TODO - validate repeat-freq and repeat-interval
   		var eventEndEpoch = Date.parse(createTimeStampString(eventForm['meeting-date-end'].value, eventForm['meeting-time-end'].value));
   		var numRealDaysToPass = getDaysPassing(eventForm['repeat-freq'].value, eventForm['repeat-interval'].value, eventForm['meeting-date-end'].value);
   		var epochSpan = numRealDaysToPass*24*60*60*1000;
   		eventForm['meeting-recur-duration'].value = millisecondsToFormat("#MM#/#DD#/#YYYY# #hh#:#mm#:#ss#", eventEndEpoch+epochSpan);
-	} else {
-		eventForm['meeting-recur-duration'].value = 0;
+		} else {
+			eventForm['meeting-recur-duration'].value = 0;
+		}
 	}
 	
  	var nameField = eventForm['meeting-name'];

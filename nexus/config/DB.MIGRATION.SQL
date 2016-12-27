@@ -8,8 +8,8 @@ CREATE SEQUENCE event_recur_id_seq
   START 221
   CACHE 1;
 ALTER TABLE event_recur_id_seq
-  OWNER TO northbri_devnexus;
-GRANT ALL ON TABLE event_recur_id_seq TO northbri_devnexus;
+  OWNER TO northbri_nbnexus;
+GRANT ALL ON TABLE event_recur_id_seq TO northbri_nbnexus;
 GRANT SELECT, UPDATE ON TABLE event_recur_id_seq TO northbri_web;
 
 CREATE TABLE event_recur
@@ -24,8 +24,8 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE event_recur
-  OWNER TO northbri_devnexus;
-GRANT ALL ON TABLE event_recur TO northbri_devnexus;
+  OWNER TO northbri_nbnexus;
+GRANT ALL ON TABLE event_recur TO northbri_nbnexus;
 GRANT SELECT, UPDATE, INSERT ON TABLE event_recur TO northbri_web;
 
 ALTER TABLE event

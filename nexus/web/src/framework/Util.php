@@ -604,7 +604,7 @@ class Utilities {
   		$_SESSION['uidpk'] = $row['id'];
   		$_SESSION['networkName'] = $row['network'];
   		$_SESSION['networkId'] = $row['networkid'];
-  		$_SESSION['defaultForumId'] = $row['forumid'];
+  		$_SESSION['defaultForumId'] = $row['forumid'] ? $row['forumid'] : "0";
   		$_SESSION['logo'] = $row['logo'];
   		$_SESSION['email'] = $row['email'];
   		$_SESSION['role'] = self::getRoleName($row['roleid']);
