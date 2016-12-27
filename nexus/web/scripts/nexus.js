@@ -372,9 +372,9 @@ function loadAdvPage(resource) {
     		divDisplay.style.display ="block";
     		break;
     	case "adv-menu-network":
-    		document.getElementById("network_display").style.display ="block";
-    		divDisplay.style.display ="block";
-    		break;
+    		//document.getElementById("network_display").style.display ="block";
+    		//divDisplay.style.display ="block";
+    		//break;
     	default:
        	document.getElementById(frameId).src = HTTP_WEB_PATH + "/development_placeholder.html";
        	frameDisplay.style.display ="block";
