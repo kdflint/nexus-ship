@@ -7,6 +7,10 @@ var NEXT_MEETING_START;
 var IS_NOW = true;
 var IS_TIMER_INIT = false;
 var ACTIVITY_FLAG = 1;
+var DEFAULT_FORUM;
+var HTTP_WEB_PATH;
+var HTTP_FORUM_PATH ;
+
 
 /*
 Would like to avoid initializing these and force the including php page to do so, but that might break something right now. 
@@ -159,6 +163,59 @@ function setPublicSession2(oid, fname, relativePath) {
 	xmlhttp.send();
 }
 
+function toggleRecurFormElements(override) {
+	var curValue = document.getElementById('repeat-check').checked;
+	var repeatBlock = document.getElementById("repeat-block");
+  var locationBlock = document.getElementById("location-block");
+  var repeatSpan = document.getElementById("repeat-span");
+  var repeatEdit = document.getElementById('repeat-edit');
+  var submitButton = document.getElementById("schedule-form-submit");
+  if(!curValue) {
+ 		repeatBlock.style.display = "none";
+		locationBlock.style.display = "block";
+		repeatSpan.style.visibility = "hidden";
+		repeatEdit.style.visibility = "hidden";
+ 		submitButton.style.visibility = "visible";
+ 	} else if (Boolean(override)) {
+ 		repeatBlock.style.display = "none";
+		locationBlock.style.display = "block";
+		repeatSpan.style.visibility = "visible";
+		repeatEdit.style.visibility = "visible";
+ 		submitButton.style.visibility = "visible";
+ 	} else {
+  	repeatBlock.style.display = "block";
+  	locationBlock.style.display = "none";
+  	updateRepeatDescr(document.getElementById('repeat-interval'));
+  	updateRepeatFreq(document.getElementById('repeat-freq'));
+  	repeatSpan.style.visibility = "visible";
+  	repeatEdit.style.visibility = "hidden";
+ 		submitButton.style.visibility = "hidden";
+ 	}
+}
+
+function updateRepeatDescr(element) {
+	var labels = [];
+	var x = parseInt(element.value);
+	labels[0] = "days";
+	labels[1] = "days";
+	labels[2] = "weeks";
+	labels[3] = "daily";
+	labels[4] = "weekdays";
+	labels[5] = "weekly";
+	
+	document.getElementById("repeat-descr").innerHTML = labels[x+3];
+	
+	var unitlabels = document.getElementsByClassName("repeat-unit");
+	for (var i = 0; i < unitlabels.length; i += 1) {
+	  unitlabels[i].innerHTML = labels[x];
+	}
+
+}
+
+function updateRepeatFreq(element) {
+	document.getElementById("repeat-quantity").innerHTML = element.value;
+}
+
 function toggleFileClear() {
 	var fieldValue = document.getElementById('fileToUpload').value;
 	var fileClear = document.getElementById('fileClearControl');
@@ -227,6 +284,16 @@ function toggleAdminCheckbox() {
 		document.getElementById("fakeCheckBox2").style = "color:#004d62;padding-right:4px;";
  	}
 }
+
+function toggleTertiary(menu) {
+	var tertiaryContainer = document.getElementById(menu);
+	var curState = tertiaryContainer.style.display;
+	tertiaryContainer.style.display = "none";
+	if (curState === "none") {
+		tertiaryContainer.style.display = "block";
+	}
+}
+
     	
 function toggleFormDisplay(formId) {
 	var showForm = document.getElementById(formId);
@@ -281,12 +348,72 @@ function toggleAdvFrameDisplay(menuItem) {
 		menuItems[i].style.backgroundColor='#dae0bc';
 	}
 	showButton.style.backgroundColor='rgba(137, 157, 112, 1)';
-	//loadAdvPage(menuItem.id);
+	loadAdvPage(menuItem.id);
 }
 
 function loadAdvPage(resource) {
-	// LEFT OFF HERE
-	myHTMLInclude();
+	var frameDisplay = document.getElementById("adv_frame_display");
+	frameDisplay.style.display = "none";
+	
+	var divDisplay = document.getElementById("adv_div_display");
+	divDisplay.style.display = "none";
+	var divDisplays = divDisplay.getElementsByClassName('div-display');
+	for (var i = 0; i < divDisplays.length; i += 1) {
+	  divDisplays[i].style.display = "none";
+	}
+	var frameId = "adv-frame";
+	
+		switch(resource) {
+    	case "adv-menu-forum":
+    		var iframeSrc = HTTP_FORUM_PATH  + "/viewforum.php?f=" + DEFAULT_FORUM;
+    		var iframe = document.getElementById(frameId);
+    		iframe.src = iframeSrc;
+    		var content = iframe.contentWindow || iframe.contentDocument;
+    		if (content.document && content.document.getElementById('wrap')) { 
+    			// If other tab contents come from resourcing this iframe, then id 'wrap' will come up null sometimes.
+    			// Must wait until frame is loaded before continuing
+					var rawFrameHtml = content.document.getElementById('wrap').innerHTML;
+    			if (rawFrameHtml.includes("Password:")) {
+    			//if (rawFrameHtml.includes("Community")) {
+    				//alert("Your forum session as expired.");
+    				// Frame source has delivered a login screen. This will happen if phpbb session expires
+    				if (false) {
+    					// LEFT OFF - implement the ajax login loginForum()
+    					// Login, then reload frame
+    					iframe.src = iframeSrc;
+    				}
+    			}
+    		}
+    		// Also, in addition to above, should wait until src is loaded to set display to block
+    		frameDisplay.style.display ="block";
+    		break;
+    	case "adv-menu-event":
+    		document.getElementById("event_display").style.display ="block";
+    		divDisplay.style.display ="block";
+    		break;
+    	case "adv-menu-network":
+    		document.getElementById("network_display").style.display ="block";
+    		divDisplay.style.display ="block";
+    		break;
+    	default:
+       	document.getElementById(frameId).src = HTTP_WEB_PATH + "/development_placeholder.html";
+       	frameDisplay.style.display ="block";
+        break;
+		} 
+}
+
+function loginForum() {
+	return true;
+	var xmlhttp = getXmlHttpRequest();
+	xmlhttp.onreadystatechange=function() {
+		if (xmlhttp.readyState == 4) {
+			if (xmlhttp.status != 200) { return true; }
+		} else {
+			return false;
+		}
+	};
+	xmlhttp.open("GET", "http://localhost/nexus/nexus/web/src/framework/loginForum.php", false);
+	xmlhttp.send();
 }
 
 function myHTMLInclude() {
@@ -375,6 +502,38 @@ function toggleTooltip(tip) {
 	}
 }
 
+function showDirectoryDetail(orgId) {
+	document.getElementById("show-directoryResults").style.display='none';
+	document.getElementById("show-directoryDetail").style.display='block';				
+	getDirectoryDetail(orgId);
+}	
+			
+function showDirectoryResults() {
+	document.getElementById("show-directoryResults").style.display='block';
+	document.getElementById("show-directoryDetail").style.display='none';	
+}
+					
+function showDirectoryMap() {
+	document.getElementById("directoryMapContainer").style.opacity=1;
+	document.getElementById("directoryMapContainer").style.filter='alpha(opacity=100)'
+	document.getElementById("directoryMapContainer").style.zIndex=10;
+	document.getElementById("directoryTable").style.display='none';
+	document.getElementById("directory_control").className='fa fa-list fa-' + getDirectoryIconSize();
+	document.getElementById("map_control").onclick=function(){showDirectoryList();};
+}
+
+function getDirectoryIconSize() {
+	return "lg";
+}
+			
+function showDirectoryList() {
+	document.getElementById("directoryMapContainer").style.opacity=0;
+	document.getElementById("directoryMapContainer").style.filter='alpha(opacity=0)'
+	document.getElementById("directoryMapContainer").style.zIndex=-1;
+	document.getElementById("directoryTable").style.display='block';
+	document.getElementById("directory_control").className='fa fa-globe fa-' + getDirectoryIconSize();
+	document.getElementById("map_control").onclick=function(){showDirectoryMap();};
+}
 
 // TODO - refactor these front validations scripts - way too redundant!
 
@@ -644,6 +803,10 @@ function resetEventForm() {
 	return true;
 }
 
+function resetDirectoryForm() {
+	return true;
+}
+
 function resetNowForm() {
 	document.getElementById('join_control').click();
 	var nowForm = document.forms['now-form'];
@@ -757,6 +920,17 @@ function populateEventForm(i) {
 	if (currentEvents[i].uuid) { eventForm['old-meeting-uuid'].value = currentEvents[i].uuid; }	
 	if (currentEvents[i].contact) { eventForm['meeting-contact'].value = currentEvents[i].contact; }
 	if (currentEvents[i].group_assoc) { eventForm['orig-group-assoc'].value = currentEvents[i].group_assoc; }
+	if (currentEvents[i].recur) { 
+		var intervals = {daily:"0", weekly:"2", weekdays:"1"}; 
+		var pattern = currentEvents[i].recur_pattern;
+		eventForm['repeat-check'].checked = true; 
+		eventForm['repeat-interval'].value = intervals[pattern];
+		eventForm['repeat-freq'].value = currentEvents[i].recur_num;
+		updateRepeatDescr(eventForm['repeat-interval']);
+		updateRepeatFreq(eventForm['repeat-freq']);
+		document.getElementById("repeat-span").style.visibility = "visible";
+		document.getElementById('repeat-edit').style.visibility = "visible";
+	}
 		
 	if (currentEvents[i].fileext) {
 		// TODO - put the whole file path into db
@@ -812,7 +986,7 @@ function populateEventForm(i) {
 	//document.getElementById('schedule-form-submit').innerHTML = "Update";
 	document.getElementById('schedule-form-submit').innerHTML = "Approve";
 	eventForm['meeting-uuid'].value = currentEvents[i].uuid;
-		
+			
 	return true;
 }
 	
@@ -891,7 +1065,7 @@ function eventValidateAndSubmit(thisForm) {
  			}
 		}
 	}
-	
+
   var duration = durationField.value;
 	setFieldPassStyles(document.getElementById(thisForm + "-duration-button"), "Duration");
   if (duration == null || duration == "" || duration == "Duration") {
@@ -901,7 +1075,19 @@ function eventValidateAndSubmit(thisForm) {
  		alert("Bad duration: " + duration);
  		pass = false;
 	}
-	  
+  
+	if (eventForm['repeat-check'] !== undefined) {
+		if (eventForm['repeat-check'].checked) {
+			// TODO - validate repeat-freq and repeat-interval
+  		var eventEndEpoch = Date.parse(createTimeStampString(eventForm['meeting-date-end'].value, eventForm['meeting-time-end'].value));
+  		var numRealDaysToPass = getDaysPassing(eventForm['repeat-freq'].value, eventForm['repeat-interval'].value, eventForm['meeting-date-end'].value);
+  		var epochSpan = numRealDaysToPass*24*60*60*1000;
+  		eventForm['meeting-recur-duration'].value = millisecondsToFormat("#MM#/#DD#/#YYYY# #hh#:#mm#:#ss#", eventEndEpoch+epochSpan);
+		} else {
+			eventForm['meeting-recur-duration'].value = 0;
+		}
+	}
+	
  	var nameField = eventForm['meeting-name'];
   var name = nameField.value;
 	setFieldPassStyles(nameField, "Meeting Name");
@@ -1095,3 +1281,47 @@ function validateTimeFormat(t) {
 	// TODO - complete this
 	return true;
 }
+
+function getDaysPassing(num, freq, start) {
+	var curDate = new Date(start);
+	switch(parseInt(freq)) {
+		case 0:
+			return parseInt(num);
+		case 2:
+			return parseInt(num * 7);
+		case 1:
+			var loopCount = 0;
+			var weekdayCount = 0;
+  	  while (weekdayCount < num) {
+        curDate.setDate(curDate.getDate() + 1);
+        var dayOfWeek = curDate.getDay();
+        if ((dayOfWeek > 0) && (dayOfWeek < 6)) {
+           weekdayCount++;
+         }
+        loopCount++;
+    	}
+    	return loopCount;
+	}
+	return 1;
+}
+
+function millisecondsToFormat(formatString, ms){
+	var thisDate = new Date(ms);
+  var YYYY,YY,MMMM,MMM,MM,M,DDDD,DDD,DD,D,hhhh,hhh,hh,h,mm,m,ss,s,ampm,AMPM,dMod,th;
+  YY = ((YYYY=thisDate.getFullYear())+"").slice(-2);
+  MM = (M=thisDate.getMonth()+1)<10?('0'+M):M;
+  MMM = (MMMM=["January","February","March","April","May","June","July","August","September","October","November","December"][M-1]).substring(0,3);
+  DD = (D=thisDate.getDate())<10?('0'+D):D;
+  DDD = (DDDD=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][thisDate.getDay()]).substring(0,3);
+  th=(D>=10&&D<=20)?'th':((dMod=D%10)==1)?'st':(dMod==2)?'nd':(dMod==3)?'rd':'th';
+  formatString = formatString.replace("#YYYY#",YYYY).replace("#YY#",YY).replace("#MMMM#",MMMM).replace("#MMM#",MMM).replace("#MM#",MM).replace("#M#",M).replace("#DDDD#",DDDD).replace("#DDD#",DDD).replace("#DD#",DD).replace("#D#",D).replace("#th#",th);
+  h=(hhh=thisDate.getHours());
+  if (h==0) h=24;
+  if (h>12) h-=12;
+  hh = h<10?('0'+h):h;
+  hhhh = hhh<10?('0'+hhh):hhh;
+  AMPM=(ampm=hhh<12?'am':'pm').toUpperCase();
+  mm=(m=thisDate.getMinutes())<10?('0'+m):m;
+  ss=(s=thisDate.getSeconds())<10?('0'+s):s;
+  return formatString.replace("#hhhh#",hhhh).replace("#hhh#",hhh).replace("#hh#",hh).replace("#h#",h).replace("#mm#",mm).replace("#m#",m).replace("#ss#",ss).replace("#s#",s).replace("#ampm#",ampm).replace("#AMPM#",AMPM);
+};

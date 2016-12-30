@@ -76,9 +76,9 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 			.detail { color: #004d62;}
 			.scroll { text-align: right; padding-left: 220px; position:absolute; }
 			.searchQualifier { vertical-align:15px;font-style:italic;margin-right:3px; }
-			.controlCol { position:absolute;left:0px;width:280px;height:400px;margin-top:10px; }
-			.displayCol { position:absolute;left:290px;width:700px;height:400px;margin-top:10px;border: 1px solid #A6C3CE !important;border-radius:10px;overflow:auto; }
-			.displayDetail { font-size:90%;padding-left:10px;padding-right:10px; }
+			/*controlCol { position:absolute;left:0px;width:280px;height:400px;margin-top:10px; }*/
+			/*.displayCol { position:absolute;left:290px;width:700px;height:400px;margin-top:10px;border: 1px solid #A6C3CE !important;border-radius:10px;overflow:auto; } */
+			/* .displayDetail { font-size:90%;padding-left:10px;padding-right:10px; } */
 }
 			
 		</style>
@@ -132,35 +132,6 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 				toggleDisplay('mod_event', '0');
 			}
 			
-			function showDirectoryDetail(orgId) {
-				document.getElementById("show-directoryResults").style.display='none';
-				document.getElementById("show-directoryDetail").style.display='block';				
-				getDirectoryDetail(orgId);
-			}	
-			
-			function showDirectoryResults() {
-				document.getElementById("show-directoryResults").style.display='block';
-				document.getElementById("show-directoryDetail").style.display='none';	
-				document.getElementById("show-directoryEdit").style.display='none';			
-			}
-					
-			function showDirectoryMap() {
-    		document.getElementById("directoryMapContainer").style.opacity=1;
-    		document.getElementById("directoryMapContainer").style.filter='alpha(opacity=100)'
-    		document.getElementById("directoryMapContainer").style.zIndex=10;
-				document.getElementById("directoryTable").style.display='none';
-				document.getElementById("directory_control").className='fa fa-list fa-2x';
-				document.getElementById("map_control").onclick=function(){showDirectoryList();};
-			}
-			
-			function showDirectoryList() {
-    		document.getElementById("directoryMapContainer").style.opacity=0;
-    		document.getElementById("directoryMapContainer").style.filter='alpha(opacity=0)'
-    		document.getElementById("directoryMapContainer").style.zIndex=-1;
-				document.getElementById("directoryTable").style.display='block';
-				document.getElementById("directory_control").className='fa fa-globe fa-3x';
-				document.getElementById("map_control").onclick=function(){showDirectoryMap();};
-			}
 				
 			function scrollEvents(setSize, direction) {
 				if (direction == "forward") {
@@ -205,6 +176,10 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 				document.getElementById("eventDownControl").style.display = downDisplayValue;
 			}
 				
+			function getDirectoryIconSize() {
+				return "3x";
+			}
+
 		</script>
 		
   </head>
@@ -237,7 +212,7 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 			<div id="mod_forum"><?php include(Utilities::getModulesRoot() . "/forum/mod_controller.php"); ?></div>		
 		</div>
 
-		<script src="https://maps.googleapis.com/maps/api/js" async defer></script>
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-tLX5TYQhwxQQNx5-UF0VajixUwGGkJQ" async defer></script>
 		
 	</body>
 </html>

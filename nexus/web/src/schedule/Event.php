@@ -94,7 +94,7 @@ class Event {
 		}
 		return FALSE;
 	}
-	
+
 	public static function isValidTimeZone($in) {
 		$query = "select exists (select name from pg_timezone_names where name = $1)";		
 		$row = pg_fetch_row(PgDatabase::psExecute($query, array($in)));
@@ -184,18 +184,26 @@ class Event {
 				e.url as url,
 				e.registration_url as regr_url,
 				e.contact as contact,
+				e.recur_fk as recur,
+				er.pattern as pattern,
+				er.num_occur as num,
 				u.fname as fname, 
 				u.lname as lname,
 				pg.abbrev as abbrev,
 				pg.name as tz_extract_name 
-			from event e, public.user u, event_group eg, pg_timezone_names pg
-			where eg.group_fk = $1		
-			and eg.event_fk = e.id
-			and eg.status_fk = $3
-			and (e.start_dttm + e.duration) > now() 
-			and e.active = true
-			and pg.name = $2
-			and u.id = e.reserved_user_fk 
+			from event e
+				left outer join event_recur er on e.recur_fk = er.id
+				join public.user u on u.id = e.reserved_user_fk
+				join event_group eg on eg.event_fk = e.id
+				join pg_timezone_names pg on pg.name = $2
+				where eg.group_fk = $1		
+				and eg.status_fk = $3
+				and e.active = true
+				and (
+					((e.start_dttm + e.duration) > now())
+					or
+					((COALESCE(er.end_dttm,now()) > now()))
+				)
 			order by e.start_dttm";
 				
 			$cursor = PgDatabase::psExecute($query, array($groupId, $localTz, $status));
@@ -232,6 +240,9 @@ class Event {
 				$events[$counter]['fname'] = $row['fname'];
 				$events[$counter]['lname'] = $row['lname'];
 				$events[$counter]['contact'] = $row['contact'];
+				$events[$counter]['recur'] = strlen($row['recur']) > 0 ? true : false;
+				$events[$counter]['recur_pattern'] = $row['pattern'];
+				$events[$counter]['recur_num'] = $row['num'];
 				$events[$counter]['sessionUser'] = $ssnUser;
 				$events[$counter]['adder'] = $row['adder'];
 				$events[$counter]['registration'] = $row['registration'];
@@ -252,6 +263,7 @@ class Event {
 				extract(dow from (select e.start_dttm at time zone $2)) as day, 
 				extract(month from (select e.start_dttm at time zone $2)) as month, 
 				extract(hour from (select e.start_dttm at time zone $2)) as hour, 
+				extract(year from (select e.start_dttm at time zone $2)) as year, 
 				extract(minute from (select e.start_dttm at time zone $2)) as minute, 
 				extract(epoch from (select e.start_dttm)) as epoch,
 				extract(hour from (select (e.start_dttm + e.duration) at time zone $2)) as hour_end, 
@@ -266,25 +278,36 @@ class Event {
 				e.reserved_user_fk as adder,
 				e.type as meetingtype,
 				e.contact as contact,
+				e.recur_fk as recur,
 				e.registration as registration,
 				e.url as url,
 				e.registration_url as regr_url,
 				e.file as file,
+				e.recur_fk as recur,
+				er.pattern as pattern,
+				er.num_occur as num,
+				er.end_dttm as recur_end,
+				extract(dow from (select er.end_dttm at time zone $2)) as day_end,
+				extract(day from (select er.end_dttm at time zone $2)) as date_end, 
+				extract(month from (select er.end_dttm at time zone $2)) as month_end,  
+				extract(year from (select er.end_dttm at time zone $2)) as year_end,
 				u.fname as fname, 
 				u.lname as lname,
 				pg.abbrev as abbrev 
-			from event e, public.user u, pg_timezone_names pg
-			where e.active = true			
-			and pg.name = $2
-			and u.id = e.reserved_user_fk
-			and e.uuid = $1";
-			
+				from event e
+				left outer join event_recur er on e.recur_fk = er.id
+				join public.user u on u.id = e.reserved_user_fk
+				join pg_timezone_names pg on pg.name = $2
+				where e.active = true
+				and e.uuid = $1";
+						
 			$cursor = PgDatabase::psExecute($query, array($uuid, $localTz));
 			$counter = 0;
 			while ($row = pg_fetch_array($cursor)) {
 				$event[$counter]['date'] = $row['date'];
 				$event[$counter]['day'] = self::getDay($row['day']);
 				$event[$counter]['month'] = self::getMonth($row['month']-1);
+				$event[$counter]['year'] = $row['year'];
 				$event[$counter]['hour'] = self::getHour($row['hour']);
 				$event[$counter]['minute'] = self::getMinute($row['minute']);
 				$event[$counter]['hour_end'] = self::getHour($row['hour_end']);
@@ -309,87 +332,17 @@ class Event {
 				$event[$counter]['sessionUser'] = $ssnUser;
 				$event[$counter]['adder'] = $row['adder'];
 				$event[$counter]['running'] = var_export(self::isBbbEventRunning($uuid), true);
+				$event[$counter]['recur'] = strlen($row['recur']) > 0 ? true : false;
+				$event[$counter]['recur_pattern'] = $row['pattern'];
+				$event[$counter]['recur_num'] = $row['num'];
+				$event[$counter]['recur_end_phrase'] = self::getDay($row['day_end']) . ", " . self::getMonth($row['month_end']) . " " . $row['date_end'] . " " . $row['year_end'];
 				$counter++;
 			}
 		}
 		return $event;
 	}
 
-/*
-	public static function getPendingEvents($localTz = "Greenwich") {	
-		$events = array();
-		if (self::isValidTimeZone($localTz)) {
-			$query = "select 
-				extract(day from (select e.start_dttm at time zone $1)) as date, 
-				extract(dow from (select e.start_dttm at time zone $1)) as day, 
-				extract(month from (select e.start_dttm at time zone $1)) as month, 
-				extract(hour from (select e.start_dttm at time zone $1)) as hour, 
-				extract(minute from (select e.start_dttm at time zone $1)) as minute, 
-				extract(epoch from (select e.start_dttm)) as epoch,
-				extract(hour from (select (e.start_dttm + e.duration) at time zone $1)) as hour_end, 
-				extract(minute from (select (e.start_dttm + e.duration) at time zone $1)) as minute_end, 
-				extract(epoch from (select (e.start_dttm + e.duration) at time zone $1)) as epoch_end,
-				e.tz_name as tzname, 
-				e.duration as duration, 
-				e.name as name, 
-				e.descr as descr, 
-				e.location as location,
-				e.uuid as uuid,
-				e.reserved_user_fk as adder,
-				e.type as meetingtype,
-				e.file as file,
-				e.contact as contact,
-				e.registration as registration,
-				e.url as url,
-				e.registration_url as regr_url
-			from event e,event_group eg
-			where eg.status_fk = '3'
-			and eg.event_fk = e.id
-			and (e.start_dttm + e.duration) > now() 
-			and e.active = true
-			order by e.start_dttm";
-				
-			$cursor = PgDatabase::psExecute($query, array($localTz));
-			$counter = 0;
-			while ($row = pg_fetch_array($cursor)) {
-				$events[$counter]['date'] = $row['date'];
-				$events[$counter]['day'] = self::getDay($row['day']);
-				$events[$counter]['month'] = self::getMonth($row['month']-1);
-				$events[$counter]['hour'] = self::getHour($row['hour']);
-				$events[$counter]['minute'] = self::getMinute($row['minute']);
-				$events[$counter]['hour_end'] = self::getHour($row['hour_end']);
-				$events[$counter]['minute_end'] = self::getMinute($row['minute_end']);
-				$events[$counter]['epoch'] = $row['epoch'];
-				$events[$counter]['period'] = self::getPeriod($row['hour']);
-				$events[$counter]['period_end'] = self::getPeriod($row['hour_end']);
-				$events[$counter]['abbrev'] = "";
-				$events[$counter]['purpose'] = $row['name'];
-				$events[$counter]['descr'] = $row['descr'];
-				$events[$counter]['location'] = $row['location'];
-				$events[$counter]['uuid'] = $row['uuid'];
-				$events[$counter]['mtype'] = $row['meetingtype'];
-				$events[$counter]['mtypdisplay'] = self::getMeetingTypeDisplay($row['meetingtype']);
-				$events[$counter]['fileext'] = $row['file'];
-				$events[$counter]['fname'] = "";
-				$events[$counter]['lname'] = "";
-				$events[$counter]['sessionUser'] = "";
-				$events[$counter]['adder'] = $row['adder'];
-				$events[$counter]['contact'] = $row['contact'];
-				$events[$counter]['registration'] = $row['registration'];
-				$events[$counter]['url'] = $row['url'];
-				$events[$counter]['regr_url'] = $row['regr_url'];
-				$counter++;
-			}
-		}
-		return $events;
-	}
-*/
-	
-	public static function updateEvent($uuid) {
-		
-	}
-
-	public static function addEvent($dttm, $duration, $name, $reservedUserId, $groupId, $tzName, $type, $descr, $loc, $isBbb, $fileExt, $status, $url, $regUrl, $registr, $contact, $uuid) {
+	public static function addEvent($dttm, $duration, $name, $reservedUserId, $groupId, $tzName, $type, $descr, $loc, $isBbb, $fileExt, $status, $url, $regUrl, $registr, $contact, $uuid, $recurId = null) {
 		$query = "select abbrev from pg_timezone_names where name = $1";
 		$row = pg_fetch_row(PgDatabase::psExecute($query, array($tzName)));
 		$tzAbbrev = $row[0];
@@ -398,8 +351,8 @@ class Event {
 		} else {
 			self::deleteEvent($uuid);
 		}
-		$query = "insert into event (uuid, start_dttm, duration, name, descr, reserved_user_fk, tz_name, tz_abbrev, type, location, isBbbMeet, file, url, registration_url, registration, contact) values ($1, $2, $3, $4, $8, $5, $6, $7, $9, $10, $11, $12, $13, $14, $15, $16) returning id";
-		$row = pg_fetch_row(PgDatabase::psExecute($query, array($uuid, $dttm, $duration, $name, $reservedUserId, $tzName, $tzAbbrev, $descr, $type, $loc, $isBbb, $fileExt, $url, $regUrl, $registr, $contact)));
+		$query = "insert into event (uuid, start_dttm, duration, name, descr, reserved_user_fk, tz_name, tz_abbrev, type, location, isBbbMeet, file, url, registration_url, registration, contact, recur_fk) values ($1, $2, $3, $4, $8, $5, $6, $7, $9, $10, $11, $12, $13, $14, $15, $16, $17) returning id";
+		$row = pg_fetch_row(PgDatabase::psExecute($query, array($uuid, $dttm, $duration, $name, $reservedUserId, $tzName, $tzAbbrev, $descr, $type, $loc, $isBbb, $fileExt, $url, $regUrl, $registr, $contact, $recurId)));
 		$eventId = $row[0];
 		$query = "insert into event_group (event_fk, group_fk, status_fk) values ($1, $2, $3)";
 		PgDatabase::psExecute($query, array($eventId, $groupId, $status));
@@ -416,6 +369,12 @@ class Event {
 		$query = "update event_group set status_fk = 1 where event_fk = (select id from event where uuid = $1)";
 		PgDatabase::psExecute($query, array($uuid));
 		return;
+	}
+	
+	public static function addEventRecurrence($pattern, $numOccur, $end) {
+		$query = "insert into event_recur (pattern, num_occur, end_dttm) values ($1, $2, $3) returning id";
+		$row = pg_fetch_row(PgDatabase::psExecute($query, array($pattern, $numOccur, $end)));
+		return $row[0];
 	}
 	
 	public static function updateDemoNowEvent() {

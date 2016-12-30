@@ -47,7 +47,8 @@
        				"<div id='nowEventDetail' class='td-div' style='position:absolute;left:140px;top:5px;height:210px;'>" + 
 		          	"<div class='meeting'>" +
          					"<span class='purpose'>" + jsonObj[i].purpose + "</span>" +
-         						((jsonObj[i].location != null) ? "<p><span class='fa fa-map-marker'></span> " + jsonObj[i].location : "</p>") +
+         				  	(jsonObj[i].recur ? "<p style='background-color:#dddddd;padding:4px;border-radius:5px;margin-top:3px;'>This is a multi-day event.</p>" : "") + 
+         						//((jsonObj[i].location != null) ? "<p><span class='fa fa-map-marker'></span> " + jsonObj[i].location : "</p>") +
 										(jsonObj[i].contact ? "<p><span>Follow up with: " + jsonObj[i].contact + "</span></p>" : "") +
           					((true) ? "<a href='#openEventEdit' onclick='return populateEventForm(\"" + i + "\");' title='Approve'><p><b>Approve for Public Calendar</b></a>" : " ") +
           					((true) ? "<a href='<?php echo(Utilities::getHttpPath()); ?>/modules/schedule/control/eventDeleteProcessor.php?id=" + jsonObj[i].uuid + "' onclick='return confirm(\"Please confirm this delete.\");' title='Delete'><span class='fa fa-trash-o' style='color:#d27b4b;margin-left:10px;'></span></a></p>" : " ") +								
@@ -67,15 +68,4 @@
 	}
 </script>
 					
-<div id="current_schedule_display" style="display:block;">
-	<div id="reservationTable" class="table-div"></div>
-</div>
-<div id="openEventEdit" class="modalDialog">
-	<div>
-		<a href="#close" title="Close" class="close">X</a>
-		<?php include("modules/event/views/eventAddAdvantage2.php"); ?>
-	</div>
-</div>
-
-<script> getEventListPending(<?php echo (time() + 15*60); ?>); </script>
 	

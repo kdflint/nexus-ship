@@ -27,7 +27,7 @@ img, .noprint, #sub-header, #sub-footer, .navbar, .box1, .divider, .signature { 
 
 /* Container for the main body */
 #wrap {
-	margin: 0 2em;
+	margin: 2em;
 }
 
 p { font-size: 85%; }

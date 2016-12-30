@@ -18,11 +18,14 @@ $storage = new Rememberme\Storage\File($storagePath);
 $rememberMe = new Rememberme\Authenticator($storage);
 
 if(isset($_GET['logout'])) {
+	require_once(Utilities::getModulesRoot() . "/forum/forum_integration.php");
+	$user->session_kill();
 	$rememberMe->clearCookie(isset($_SESSION['username']) ? $_SESSION['username'] : '');
 	Utilities::destroySession();
 	session_start();
 }
 
+// The following method is not actually invoked. Stubbed for future use...
 if(isset($_GET['logoutAll'])) {
   $storage->cleanAllTriplets($_SESSION['username']);
 	Utilities::destroySession();
