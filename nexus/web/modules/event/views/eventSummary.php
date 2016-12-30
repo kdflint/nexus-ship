@@ -33,9 +33,15 @@
        			"<div class='td-div' style='position:absolute;left:90px;top:5px;height:90px;'>" + 
 	          	"<div class='meeting'>" +
         				"<a href='javascript:void(0);' onclick='showEventDetail(\"" + jsonObj[i].uuid + "\");'><span class='purpose'>" + truncateString(jsonObj[i].purpose) + "</span></a><br/>" +
-								"<span class='tod'>" + jsonObj[i].hour + ":" + jsonObj[i].minute + "</span><span class='period'> " + jsonObj[i].period + " </span> - " +
-								"<span class='tod'>" + jsonObj[i].hour_end + ":" + jsonObj[i].minute_end + "</span><span class='period'> " + jsonObj[i].period_end + " </span>" +
-								"<span class='period'> " + jsonObj[i].abbrev + "</span>" +
+        				(
+        					jsonObj[i].recur 
+        					?
+        					"<span class='tod' style='background-color:#dddddd;position:absolute;width:120px;padding:4px;border-radius:5px;margin-top:3px;'>multi-day event</span>"
+        					: 
+									"<span class='tod'>" + jsonObj[i].hour + ":" + jsonObj[i].minute + "</span><span class='period'> " + jsonObj[i].period + " </span> - " +
+									"<span class='tod'>" + jsonObj[i].hour_end + ":" + jsonObj[i].minute_end + "</span><span class='period'> " + jsonObj[i].period_end + " </span>" +
+									"<span class='period'> " + jsonObj[i].abbrev + "</span>"
+									) +
         			"</div>" +
         		"</div>";
     			document.getElementById("reservationRow" + i).innerHTML = tableEvent;   

@@ -29,9 +29,13 @@ $dirty = array('meeting-name' => $_POST['meeting-name'],
 							'meeting-time-end' => $_POST['meeting-time-end'],
 							'meeting-contact' => $_POST['meeting-contact'],
 							'meeting-uuid' => $_POST['meeting-uuid'],
-							'meeting-group' => $_POST['orig-group-assoc']
+							'meeting-group' => $_POST['orig-group-assoc'],
+							'meeting-recur' => $_POST['repeat-check'],
+							'meeting-interval' => $_POST['repeat-interval'],
+							'meeting-num-occur' => $_POST['repeat-freq'],
+							'meeting-recur-dttm' => $_POST['meeting-recur-duration']
 							);
-											
+										
 $result = validateEvent($dirty);
 
 if (count($result['error']) > 0) {
@@ -45,6 +49,8 @@ Use only clean input beyond this point (i.e. $clean[])
 
 ======================================================= */
 
+$meetingRecurPattern = array("0" => "daily", "1" => "weekdays", "2" => "weekly");
+
 $meetingType = array("1" => "video chat", "2" => "collaboration", "3" => "webinar", "4" => "video tether");
 $meetingStatus = ($_SESSION['nexusContext'] == "PUB" ? 3 : 1);
 $timestamp = $result['clean']['meeting-date'] . " " . $result['clean']['meeting-time'] . " " . $result['clean']['tzone-name'];
@@ -57,7 +63,14 @@ if (isset($_FILES) && isset($_FILES["fileToUpload"]["name"]) && strlen($_FILES["
 	$targetExt = pathinfo($inputFile,PATHINFO_EXTENSION);
 }
 
-$eventUid = Event::addEvent($timestamp, $result['clean']['meeting-duration'], $result['clean']['meeting-name'], $_SESSION['uidpk'], $result['clean']['meeting-group'], $result['clean']['tzone-name'], $meetingType[$result['clean']['meeting-type']], $result['clean']['meeting-descr'], $result['clean']['meeting-loc'], $result['clean']['isBbbMeeting'], $targetExt, $meetingStatus, $result['clean']['meeting-url'], $result['clean']['registration-url'], $result['clean']['meeting-registr'], $result['clean']['meeting-contact'], $result['clean']['meeting-uuid']);
+$recurId = null;
+if ($result['clean']['meeting-recur']) {
+	$recurEndTimestamp = $result['clean']['meeting-recur-dttm'] . " " . $result['clean']['tzone-name'];
+	$recurId = Event::addEventRecurrence($meetingRecurPattern[$result['clean']['meeting-interval']], $result['clean']['meeting-num-occur'], $recurEndTimestamp);
+}
+
+// TODO - if this new event is result of edit, do we preserve original adder?
+$eventUid = Event::addEvent($timestamp, $result['clean']['meeting-duration'], $result['clean']['meeting-name'], $_SESSION['uidpk'], $result['clean']['meeting-group'], $result['clean']['tzone-name'], $meetingType[$result['clean']['meeting-type']], $result['clean']['meeting-descr'], $result['clean']['meeting-loc'], $result['clean']['isBbbMeeting'], $targetExt, $meetingStatus, $result['clean']['meeting-url'], $result['clean']['registration-url'], $result['clean']['meeting-registr'], $result['clean']['meeting-contact'], $result['clean']['meeting-uuid'], $recurId);
 
 if ($isFile) {
 	$targetFile = Utilities::getPartnerFileRoot() . "/event-" . $eventUid . "." . $targetExt;
@@ -88,8 +101,6 @@ if ((session_status() === PHP_SESSION_ACTIVE) && isset($_SESSION['nexusContext']
  		default: 			
  	}
 }
-
-exit(0);
 
 function validateEvent($input) {
 	$result = array('clean' => array(), 'error' => array());
@@ -234,6 +245,33 @@ function validateEvent($input) {
 		$result['clean']['meeting-group'] = array_keys($_SESSION['groups'])[0];
 	}	
 	
+	// MEETING RECURRENCE
+	if (isset($input['meeting-recur'])) {
+		$result['clean']['meeting-recur'] = true;
+		$result['clean']['meeting-recur-dttm'] = $input['meeting-recur-dttm'];
+		if (isset($input['meeting-interval']) && Validate::number(
+																								$input['meeting-interval'], array(
+																								'min' => 0,
+																								'max' => 2))) {
+			$result['clean']['meeting-interval'] = $input['meeting-interval'];
+		} else {
+			$result['error']['meeting-interval'] = "error";
+		}
+		if (isset($input['meeting-num-occur']) && Validate::number(
+																									$input['meeting-num-occur'], array(
+																									'min' => 2,
+																									'max' => 10))) {
+			$result['clean']['meeting-num-occur'] = $input['meeting-num-occur'];
+		} else {
+			$result['error']['meeting-num-occur'] = "error";
+		}
+	} else {
+		$result['clean']['meeting-recur'] = false;
+		$result['clean']['meeting-interval'] = "daily";
+		$result['clean']['meeting-num-occur'] = 1;
+		$result['clean']['meeting-recur-dttm'] = "";
+	}
+
  	return $result;
 }
 

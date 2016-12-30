@@ -1,46 +1,37 @@
+alter table public.organization add column forum_id varchar(4);
+alter table public.organization add column public_forum_id varchar(4);
 
-SET statement_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = off;
-SET check_function_bodies = false;
-SET client_min_messages = warning;
-SET escape_string_warning = off;
+CREATE SEQUENCE event_recur_id_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 221
+  CACHE 1;
+ALTER TABLE event_recur_id_seq
+  OWNER TO northbri_nbnexus;
+GRANT ALL ON TABLE event_recur_id_seq TO northbri_nbnexus;
+GRANT SELECT, UPDATE ON TABLE event_recur_id_seq TO northbri_web;
 
-SET search_path = public, pg_catalog;
-
-SET default_tablespace = '';
-
-SET default_with_oids = false;
-
-CREATE TABLE public.group_new (
-    id integer NOT NULL,
-    name character varying(100) NOT NULL,
-    descr character varying(200),
-    create_dttm timestamp with time zone DEFAULT now() NOT NULL,
-    update_dttm timestamp with time zone,
-    activate_dttm timestamp with time zone,
-    suspend_dttm timestamp with time zone,
-    logo character varying(100) DEFAULT ''::character varying,
-    uid character(8) NOT NULL
+CREATE TABLE event_recur
+(
+  id integer NOT NULL DEFAULT nextval('event_recur_id_seq'::regclass),
+  pattern character varying(12),
+  num_occur numeric,
+  end_dttm timestamp with time zone,
+  CONSTRAINT event_recur_pkey PRIMARY KEY (id)
+)
+WITH (
+  OIDS=FALSE
 );
+ALTER TABLE event_recur
+  OWNER TO northbri_nbnexus;
+GRANT ALL ON TABLE event_recur TO northbri_nbnexus;
+GRANT SELECT, UPDATE, INSERT ON TABLE event_recur TO northbri_web;
 
--- from current group table
-INSERT INTO public.group_new (id, name, descr, uid) VALUES (2, 'Nexus Pilot User Group', 'Ths group is formed to evaluate the Nexus product for widespread use in the Episcopal Diocese of Chicago.', 11111111);
-INSERT INTO public.group_new (id, name, descr, uid) VALUES (5, 'Antiracism Committee', 'Ths group is formed to evaluate the Nexus product for use by the Antiracism Committee.', 22222222);
-INSERT INTO public.group_new (id, name, descr, uid) VALUES (1, 'Demo Workgroup', 'This group seeks to test the hell out of Nexus.', 33333333);
-
-ALTER TABLE public.group_new OWNER TO northbr6;
-
-ALTER TABLE public.group_new ADD CONSTRAINT group_new_pkey PRIMARY KEY (id);
-    
-ALTER TABLE public.group ALTER COLUMN id SET DEFAULT nextval('group_id_seq'::regclass);
-
-REVOKE ALL ON TABLE public.group FROM PUBLIC;
-REVOKE ALL ON TABLE public.group FROM northbr6_devnexus;
-GRANT ALL ON TABLE public.group TO northbr6_devnexus;
-GRANT ALL ON TABLE public.group TO northbr6_nbnexus;
-GRANT SELECT,INSERT,REFERENCES,UPDATE ON TABLE public.group TO northbr6_web WITH GRANT OPTION;
-
-
--- TODO - make this not nullable (need a migration script)
-alter table public.organization add column uid character(8) unique;
+ALTER TABLE event
+   ADD COLUMN recur_fk integer;
+   
+ALTER TABLE event
+  ADD CONSTRAINT event_recur_fk_fkey FOREIGN KEY (recur_fk)
+      REFERENCES "event_recur" (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION;

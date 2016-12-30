@@ -7,12 +7,14 @@
 	define("LIB_ROOT", "/home/kdflint/projects/nexus-community/nexus/lib");
 	define("PTR_ROOT", "/home/kdflint/projects/nexus-community/nexus/partner");
 	define("LCL_ROOT", "/home/kdflint/projects/nexus-community/nexus/locale");
+	define("PHPBB3_ROOT", "/home/kdflint/phpBB3");
 	define("PTR_STC_ROOT", "/partner");
 	define("APP_NAME", "/nexus/nexus");
 	define("PILOT_NAME", "/nexus/pilot");
 	define("ENV_NAME", "local");
 	define("ENV_HOST", "localhost");
 	define("SUPPORT_URL", "http://northbridgetech.org/dev/support");
+	define("FORUM_URL", "http://localhost/phpBB3");
 
 // OTHER
 	define("SSN_TIMEOUT", "-1"); // in seconds

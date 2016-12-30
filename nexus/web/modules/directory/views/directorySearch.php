@@ -1,6 +1,6 @@
 <form id="directory-form" class="pure-form" action="" method="post" id="searchForm">
 	<div style="margin-top:10px;">
-		<p>Search our directory using up to three keywords and other filters.</p>
+		<p>Search the directory using up to three keywords and other filters.</p>
 		<p>A keyword may be part of an organization's name, person's name, address, program language or program content.</p>
 		<span class="fa fa-search" style="margin-right:18px;"></span><input type="text" name="keyword" style="width:86%;" placeholder="Keywords (up to three)"/>
 	</div>

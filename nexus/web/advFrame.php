@@ -1,46 +1,25 @@
 
-  <script>
-  $(function() {
-    var circle = $( "#circle" );
- 
- 		// TODO - rename these variable
-    $( "#color" ).selectmenu({
-       change: function( event, data ) {
-         var eventBlock = data.item.value;
-         if (eventBlock == "event-list-pending") {
-         	getEventListPending(<?php echo (time() + 15*60); ?>);
-        } else {
-         	getEventListPublic(<?php echo (time() + 15*60); ?>);
-        }
-       }
-     });
-  });
-  </script>
 
-					<div class="secondaryControls">
-						<form action="#">
-						  <div id="circle"></div>
-    						<select name="color" id="color">
-      						<option value="event-list-pending" selected>Pending</option>
-      						<option value="event-list-public">Public</option>
-    						</select>
-						</form>
-						<!--<a href='#openModal' onclick="return resetEventForm();" title="New Meeting" style="float:right;"><span style='padding:0px;' class='fa fa-calendar-o fa-2x' ></span><span style='padding-left:2px;' class='fa fa-plus' ></span></a>-->
-					</div>
-			  	<noscript>
-			  		<p><span class="fa fa-exclamation-triangle fa-2x" style="color:#d27b4b;float:left;margin-right:5px;"></span>To use Nexus it is necessary to enable JavaScript.</p>
-			  		<p>Here are the <a href="http://www.enable-javascript.com" target="_blank"> instructions how to enable JavaScript in your web browser</a></p>
-			  	</noscript>	
+<?php
+require_once("scripts/noscript.php");
+?>	
 
-						<div id="adv_frame_display">
-								 <?php 
-								 	include("modules/event/views/eventListPending.php");
-								 	include("modules/event/views/eventListPublic.php"); 
-								 ?>
-						</div>
-						<div id="openModal" class="modalDialog">
-							<div>
-								<a href="#close" title="Close" class="close">X</a>
-								<?php include("modules/event/views/eventAddAdvantage2.php"); ?>
-							</div>
-						</div>
+<!-- TODO - make this div same class as below to inherit border style? -->
+<!-- 
+TODO - recalculate frame borders based on height of rendered content. See
+https://www.jsnippet.net/snippet/536/Sidebar-pin-to-left-with-dynamic-tabs
+-->
+<div id="adv_frame_display" style="display:none;">
+	<iframe id="adv-frame" src="production_placeholder.html" style="width:100%;border:0;margin:0;padding:0;height:5000px;overflow:hidden;" scrolling="no"></iframe>
+</div>
+
+<div class="adv-frame-contents" id="adv_div_display" style="display:block;">
+	<div id="event_display" class="div-display" style="display:block;">
+		<?php require_once("modules/event/eventsFrame.php"); ?>
+	</div>
+	<div id="network_display" class="div-display" style="display:none;">
+		<?php require_once("modules/directory/networkFrame.php"); ?>
+	</div>
+</div>
+
+

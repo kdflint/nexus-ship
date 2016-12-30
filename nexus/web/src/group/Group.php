@@ -53,8 +53,11 @@ class Group {
 		$cursor = Invitation::getOpenGroupInvitations($id);
 		$counter = 0;		
 		while ($row = pg_fetch_array($cursor)) {
+			$users[$counter]['id'] = "0";
 			$users[$counter]['fname'] = "Pending";
 			$users[$counter]['lname'] = "Enrollment";
+			$users[$counter]['title'] = "";
+			$users[$counter]['descr'] = "";
 			$users[$counter]['email'] = $row['email'];
 			$users[$counter]['sessionUser'] = $ssnUser;
 			$users[$counter]['uidpk'] = $row['uuid'];
@@ -63,7 +66,7 @@ class Group {
 			$counter++;
 		}
 
-		$query = "select u.id, u.fname, u.lname, u.email, ug.role_fk as roleid, o.name as oname
+		$query = "select u.id as id, u.fname, u.lname, u.email, ug.role_fk as roleid, o.name as oname
 			from public.user u, user_group ug, organization o, user_organization uo
 			where u.id = ug.user_fk
 			and u.suspend_dttm is NULL
@@ -74,6 +77,7 @@ class Group {
 			";			
 			$cursor = PgDatabase::psExecute($query, array($id));
 			while ($row = pg_fetch_array($cursor)) {
+				$users[$counter]['id'] = $row['id'];
 				$users[$counter]['fname'] = $row['fname'];
 				$users[$counter]['lname'] = $row['lname'];
 				$users[$counter]['title'] = "";

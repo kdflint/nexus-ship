@@ -50,7 +50,7 @@ if($isAuthenticated){
 	if (isset($_SESSION['demo']) && $_SESSION['demo']) {
 		Utilities::setDemoSession($clean['username'], $clean['remember'], $clean['tz']);
 	} else {
-		Utilities::setSession($clean['username'], $clean['remember'], $clean['tz']);
+		Utilities::setSession($clean['username'], $clean['remember'], $clean['tz'], $clean['password']);
 	}
 	Utilities::setLogin($_SESSION['uidpk']);
 	

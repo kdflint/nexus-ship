@@ -19,6 +19,7 @@ time, mark, audio, video {
 	font-size: 100%;
 	font: inherit;
 	vertical-align: baseline;
+	border-radius: 6px;
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
@@ -56,11 +57,12 @@ html {
 }
 
 body {
-	font-family: Verdana, Helvetica, Arial, sans-serif;
+	//font-family: Verdana, Helvetica, Arial, sans-serif;
+	font-family:'Oxygen',sans-serif; 
 	font-size: 10px;
 	line-height: normal;
 	margin: 0;
-	padding: 12px 0;
+	//padding: 12px 0;
 	word-wrap: break-word;
 	-webkit-print-color-adjust: exact;
 }
@@ -79,7 +81,7 @@ h2 {
 	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
 	font-weight: normal;
 	font-size: 2em;
-	margin: 0.8em 0 0.2em 0;
+	margin: -0.5em 0 0.5em 0;
 }
 
 h2.solo {
@@ -182,11 +184,12 @@ ol ol ul, ol ul ul, ul ol ul, ul ul ul {
 	max-width: 1152px;
 	min-width: 625px;
 	padding: 15px;
+	padding-top: 5px;
 }
 
 @media only screen and (max-width: 1220px), only screen and (max-device-width: 1220px) {
 	#wrap {
-		margin: 0 12px;
+		//margin: 0 12px;
 	}
 }
 

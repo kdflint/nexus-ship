@@ -29,6 +29,9 @@ autoloader(array(
 // print array of class autoload paths:
 // print_r($cached_paths); exit(0);
 
+/* Support phpBB3 session integration */
+//$request->enable_super_globals();
+
 class Utilities {
 	
 	public static function getDbHost() {
@@ -108,6 +111,8 @@ class Utilities {
 	
 	public static function getPhpRoot() {	return PHP_ROOT; }
 	
+	public static function getPhpBbRoot() { return PHPBB3_ROOT . "/";	}
+
 	public static function getSrcRoot() {	return self::getWebRoot() . "/src"; }
 	
 	public static function getLibRoot() {	return LIB_ROOT; }
@@ -118,6 +123,8 @@ class Utilities {
 
 	public static function getHttpImagePath() { return self::getHttpPath() . "/image"; }
 	
+	public static function getForumHttpPath() { return FORUM_URL; }
+
 	public static function getPartnerImageRoot() { return self::getPartnerHttpPath() . "/image/"; }
 	
 	public static function getPartnerFileUrl() { return self::getPartnerHttpPath() . "/file"; }
@@ -132,9 +139,7 @@ class Utilities {
 	
 	public static function getOpenMeetingMargin() {return time() + 15*60; }
 	
-	public static function getTwitterHandle() {
-		return "NorthbridgeNFP";
-	}
+	public static function getTwitterHandle() {	return "NorthbridgeNFP"; }
 	
 	private static $supportedLangs = array('en' => 'en_US.utf8','es' => 'es_ES.utf8');
 	
@@ -571,7 +576,7 @@ class Utilities {
 		return true;
 	}
 	
-	public static function setSession($username, $remember, $zone = "undefined") {
+	public static function setSession($username, $remember, $zone = "undefined", $password = "undefined") {
 
 		session_regenerate_id(TRUE);
 		
@@ -585,6 +590,7 @@ class Utilities {
 		$_SESSION['remember'] = ($remember ? "true" : "false");
 		self::setSessionTimezone($zone);
 		$_SESSION['language'] = self::getUserLangagePreference();
+		$_SESSION['defaultSearchId'] = self::newUuid();
 		
 		$cursor = User::getUserSessionByUsername($_SESSION['username']);
 		while ($row = pg_fetch_array($cursor)) {
@@ -598,9 +604,11 @@ class Utilities {
   		$_SESSION['uidpk'] = $row['id'];
   		$_SESSION['networkName'] = $row['network'];
   		$_SESSION['networkId'] = $row['networkid'];
+  		$_SESSION['defaultForumId'] = $row['forumid'] ? $row['forumid'] : "0";
   		$_SESSION['logo'] = $row['logo'];
   		$_SESSION['email'] = $row['email'];
   		$_SESSION['role'] = self::getRoleName($row['roleid']);
+  		$_SESSION['password'] = $password;
 		}
 		
 		$_SESSION['pgpk'] = Group::getPublicGroupByOrgId($_SESSION['orgUid']);
@@ -627,6 +635,7 @@ class Utilities {
 			$_SESSION['logo'] = $row['logo'];
   		$_SESSION['networkName'] = $row['network'];
   		$_SESSION['orgId'] = $row['affiliationid'];
+ 			$_SESSION['publicForumId'] = $row['publicforumid'];
 		}
 		
 	}
@@ -661,6 +670,21 @@ class Utilities {
 			return true;
 		}
 		return false;
+	}
+	
+	public static function loginForum($user, $auth) {
+			// Login the session user to the forum if there is not already a forum session matching this username
+			if ($user->data['username'] !== $_SESSION['username']) {
+				// TODO - how to manage existing and unknown passwords in prod? must auto-enroll at login...
+				$forumPassword = ($_SESSION['environment'] === "prod") ? $_SESSION['username'] : $_SESSION['password'];
+				$result = $auth->login($_SESSION['username'], $forumPassword);
+				$auth->acl($user->data);
+				$user->setup();	
+				// TODO - why isn't this timezone transfer working? Thought I saw it working once...
+				if (Event::isValidTimeZone($_SESSION['timezone'])) {
+					$user->data['user_timezone'] = $_SESSION['timezone'];
+				}
+			}
 	}
 	
 	public static function destroySession() {
