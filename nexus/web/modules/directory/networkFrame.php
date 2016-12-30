@@ -21,7 +21,7 @@ if(isset($_GET['userMessage'])) {
 </div>
 
 <div id="network-frame" style="height:420px;">
-	<div class="controlCol" style="left:10px;">
+	<div class="controlCol" style="left:15px;">
 		<?php //echo "Sticky count " . $stickyCount; ?>
 		<?php //echo "Search string " . $stickyString; ?>
 		<?php include(Utilities::getModulesRoot() . "/directory/views/directorySearch.php"); ?>

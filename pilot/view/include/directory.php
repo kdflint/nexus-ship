@@ -19,7 +19,7 @@ if(isset($_GET['userMessage'])) {
 			<tr><td>&nbsp;</td><td><input type="radio" name="scope" value="group" <? echo $groupChecked; ?> />Your groups
 		<input type="radio" name="scope" value="network" <? echo $networkChecked; ?> />Entire network </td></tr>
 			<tr><td><img src="image/mag-glass.jpg" width="25" height="25" /></td><td><input type="text" size="20" name="string" value="<? echo $stickyString; ?>"/></td></tr>
-			<!--
+			
 			<tr><td><i>and</i></td><td>
 				<select name="topic" style="width: 230px">    
 					<option value="0" selected>Specialty is</option>	
@@ -27,7 +27,7 @@ if(isset($_GET['userMessage'])) {
 					<? include($_SESSION['appRoot'] . "view/include/tmpSpecialty/" . $_SESSION['networkId'] . ".html"); ?>
 				</select>
 				</td></tr>	
-							
+				
 				<tr><td><i>and</i></td><td>
 				<select name="type" style="width: 230px">    
 					<option value="0" selected>Organization Type is</option>
@@ -48,7 +48,7 @@ if(isset($_GET['userMessage'])) {
 					<option value="">Faith Based Research</option>
 				</select>
 			</td></tr>
-			-->
+			
 				
 			<tr><td colspan="2"><i>Search is temporarily disabled<br/>while we expand this feature.</i><input type="submit" value="Search" style="float:right;" disabled/></td></tr>
 		</table>
