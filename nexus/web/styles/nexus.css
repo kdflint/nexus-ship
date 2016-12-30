@@ -58,6 +58,12 @@ body {
 	padding-top: 5px;
 }
 
+.adv-frame-contents {
+	border: 1px solid #004d62 !important;
+	width:100%;
+	border-radius:10px;
+}
+
 .footer {
   position: absolute;
   bottom: 20px;
@@ -90,22 +96,23 @@ body {
 }
 
 .secondaryControlContainer {
-	height: 40px;
-	padding: 10px;
+	padding-top: 10px;
+	padding-right: 10px;
 	position: relative;
 }	
 
 .secondaryControl {
 	position: relative;
 	float: right;
-	margin-left: 15px;
+	margin-left: 20px;
+	z-index: 10;
 }
 
 /* patterned from phpBB .dropdownContainer */
 .tertiaryControlContainer {
 	clear:both;
 	float:right;
-	font-size: 90%;
+	font-size: 80%;
 	position:relative;
 	background: #ffffff;
 	border-color: #dae0bc;
@@ -119,11 +126,36 @@ body {
 	padding: 5px;
 	position: relative;
 	//min-width: 40px;
-	width: 120px;
+	width: 160px;
 	max-height: 300px;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
+}
+
+.controlCol { 
+	position:absolute;
+	left:0px;
+	width:280px;
+	height:400px;
+	margin-top:10px; 
+}
+
+.displayCol { 
+	position:absolute;
+	left:290px;
+	width:700px;
+	height:400px;
+	margin-top:10px;
+	border: 1px solid #A6C3CE !important;
+	border-radius:10px;
+	overflow:auto; 
+}
+
+.displayDetail { 
+	font-size:90%;
+	padding-left:10px;
+	padding-right:10px; 
 }
 
 
@@ -193,7 +225,6 @@ form {
 }
 
 .pure-button:hover {
-	border-right:3px solid #d27b4b;
 }
 
 .button-schedule,
@@ -234,6 +265,10 @@ form {
 
 .button-menu-adv {
 	width:115px;
+}
+
+.button-menu-adv:hover {
+	border-right:3px solid #d27b4b;
 }
 
 /* DATE */

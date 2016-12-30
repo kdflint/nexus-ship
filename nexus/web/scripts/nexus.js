@@ -285,8 +285,8 @@ function toggleAdminCheckbox() {
  	}
 }
 
-function toggleTertiary() {
-	var tertiaryContainer = document.getElementById("event-tertiary");
+function toggleTertiary(menu) {
+	var tertiaryContainer = document.getElementById(menu);
 	var curState = tertiaryContainer.style.display;
 	tertiaryContainer.style.display = "none";
 	if (curState === "none") {
@@ -362,9 +362,29 @@ function loadAdvPage(resource) {
 	  divDisplays[i].style.display = "none";
 	}
 	var frameId = "adv-frame";
+	
 		switch(resource) {
     	case "adv-menu-forum":
-    		document.getElementById(frameId).src = HTTP_FORUM_PATH  + "/viewforum.php?f=" + DEFAULT_FORUM;
+    		var iframeSrc = HTTP_FORUM_PATH  + "/viewforum.php?f=" + DEFAULT_FORUM;
+    		var iframe = document.getElementById(frameId);
+    		iframe.src = iframeSrc;
+    		var content = iframe.contentWindow || iframe.contentDocument;
+    		if (content.document && content.document.getElementById('wrap')) { 
+    			// If other tab contents come from resourcing this iframe, then id 'wrap' will come up null sometimes.
+    			// Must wait until frame is loaded before continuing
+					var rawFrameHtml = content.document.getElementById('wrap').innerHTML;
+    			if (rawFrameHtml.includes("Password:")) {
+    			//if (rawFrameHtml.includes("Community")) {
+    				//alert("Your forum session as expired.");
+    				// Frame source has delivered a login screen. This will happen if phpbb session expires
+    				if (false) {
+    					// LEFT OFF - implement the ajax login loginForum()
+    					// Login, then reload frame
+    					iframe.src = iframeSrc;
+    				}
+    			}
+    		}
+    		// Also, in addition to above, should wait until src is loaded to set display to block
     		frameDisplay.style.display ="block";
     		break;
     	case "adv-menu-event":
@@ -372,14 +392,28 @@ function loadAdvPage(resource) {
     		divDisplay.style.display ="block";
     		break;
     	case "adv-menu-network":
-    		//document.getElementById("network_display").style.display ="block";
-    		//divDisplay.style.display ="block";
-    		//break;
+    		document.getElementById("network_display").style.display ="block";
+    		divDisplay.style.display ="block";
+    		break;
     	default:
        	document.getElementById(frameId).src = HTTP_WEB_PATH + "/development_placeholder.html";
        	frameDisplay.style.display ="block";
         break;
 		} 
+}
+
+function loginForum() {
+	return true;
+	var xmlhttp = getXmlHttpRequest();
+	xmlhttp.onreadystatechange=function() {
+		if (xmlhttp.readyState == 4) {
+			if (xmlhttp.status != 200) { return true; }
+		} else {
+			return false;
+		}
+	};
+	xmlhttp.open("GET", "http://localhost/nexus/nexus/web/src/framework/loginForum.php", false);
+	xmlhttp.send();
 }
 
 function myHTMLInclude() {
@@ -468,6 +502,38 @@ function toggleTooltip(tip) {
 	}
 }
 
+function showDirectoryDetail(orgId) {
+	document.getElementById("show-directoryResults").style.display='none';
+	document.getElementById("show-directoryDetail").style.display='block';				
+	getDirectoryDetail(orgId);
+}	
+			
+function showDirectoryResults() {
+	document.getElementById("show-directoryResults").style.display='block';
+	document.getElementById("show-directoryDetail").style.display='none';	
+}
+					
+function showDirectoryMap() {
+	document.getElementById("directoryMapContainer").style.opacity=1;
+	document.getElementById("directoryMapContainer").style.filter='alpha(opacity=100)'
+	document.getElementById("directoryMapContainer").style.zIndex=10;
+	document.getElementById("directoryTable").style.display='none';
+	document.getElementById("directory_control").className='fa fa-list fa-' + getDirectoryIconSize();
+	document.getElementById("map_control").onclick=function(){showDirectoryList();};
+}
+
+function getDirectoryIconSize() {
+	return "lg";
+}
+			
+function showDirectoryList() {
+	document.getElementById("directoryMapContainer").style.opacity=0;
+	document.getElementById("directoryMapContainer").style.filter='alpha(opacity=0)'
+	document.getElementById("directoryMapContainer").style.zIndex=-1;
+	document.getElementById("directoryTable").style.display='block';
+	document.getElementById("directory_control").className='fa fa-globe fa-' + getDirectoryIconSize();
+	document.getElementById("map_control").onclick=function(){showDirectoryMap();};
+}
 
 // TODO - refactor these front validations scripts - way too redundant!
 
@@ -737,6 +803,10 @@ function resetEventForm() {
 	return true;
 }
 
+function resetDirectoryForm() {
+	return true;
+}
+
 function resetNowForm() {
 	document.getElementById('join_control').click();
 	var nowForm = document.forms['now-form'];
@@ -850,6 +920,17 @@ function populateEventForm(i) {
 	if (currentEvents[i].uuid) { eventForm['old-meeting-uuid'].value = currentEvents[i].uuid; }	
 	if (currentEvents[i].contact) { eventForm['meeting-contact'].value = currentEvents[i].contact; }
 	if (currentEvents[i].group_assoc) { eventForm['orig-group-assoc'].value = currentEvents[i].group_assoc; }
+	if (currentEvents[i].recur) { 
+		var intervals = {daily:"0", weekly:"2", weekdays:"1"}; 
+		var pattern = currentEvents[i].recur_pattern;
+		eventForm['repeat-check'].checked = true; 
+		eventForm['repeat-interval'].value = intervals[pattern];
+		eventForm['repeat-freq'].value = currentEvents[i].recur_num;
+		updateRepeatDescr(eventForm['repeat-interval']);
+		updateRepeatFreq(eventForm['repeat-freq']);
+		document.getElementById("repeat-span").style.visibility = "visible";
+		document.getElementById('repeat-edit').style.visibility = "visible";
+	}
 		
 	if (currentEvents[i].fileext) {
 		// TODO - put the whole file path into db

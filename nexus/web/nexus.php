@@ -35,13 +35,18 @@ if ($_SESSION['nexusContext'] == "PUB") {
 if ($_SESSION['nexusContext'] == "ADV") {
 	require_once(Utilities::getModulesRoot() . "/forum/forum_integration.php");
 	$user->session_begin();
+	Utilities::loginForum($user, $auth);
 	// Login the user to the forum if there is not already a forum session matching this username
+	/*
 	if ($user->data['username'] !== $_SESSION['username']) {
-		$result = $auth->login($_SESSION['username'], $_SESSION['password']);
+		// TODO - how to manage existing and unknown passwords in prod? must auto-enroll at login...
+		$forumPassword = ($_SESSION['environment'] === "prod") ? $_SESSION['username'] : $_SESSION['password'];
+		$result = $auth->login($_SESSION['username'], $forumPassword);
 		$auth->acl($user->data);
 		$user->setup();	
 		$user->data['user_timezone'] = $clean['tz'];
 	}
+	*/
 }	
 	
 Utilities::setSessionLastActivity();
@@ -76,7 +81,7 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
 	  <link rel="icon" href="images/NB_icon.png" />
   		
   	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Oswald:400,300|Open+Sans|Oxygen|Swanky+and+Moo+Moo">
-  	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 		<link rel="stylesheet" href="//yui.yahooapis.com/pure/0.6.0/pure-min.css">
 		<!-- TODO - grids-responsive (below) still used? -->
@@ -84,8 +89,11 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
     <link rel="stylesheet" href="styles/nexus.css" type="text/css" />
     <link rel="stylesheet" href="styles/modal.css" type="text/css" />
        
+    <!-- New way to include font awesome - why?? -->
+    <!--<script src="https://use.fontawesome.com/2eef5e944e.js"></script>-->
     <script src="scripts/nexus.js" language="javascript"></script>
   	<script src="<?php echo(Utilities::getConfigPath()); ?>/timeZoneData.js" language="javascript"></script>
+  	<script src="<?php echo(Utilities::getConfigPath()); ?>/geoDataCfcht.js" language="javascript"></script>
   	<!-- http://www.featureblend.com/javascript-flash-detection-library.html -->
  		<script src="scripts/lib/flash_detect.js"></script>
  		<script src="//code.jquery.com/jquery-1.10.2.js"></script>
@@ -100,7 +108,7 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
     <script type="text/javascript">
 		
     	// TODO - create a global js init script - can format this as a php file that parses into javascript, look for example...
-			DEFAULT_FORUM = <?php echo $_SESSION['defaultForumId']; ?>;
+			DEFAULT_FORUM = "<?php echo $_SESSION['defaultForumId']; ?>";
 			HTTP_WEB_PATH = "<?php echo Utilities::getHttpPath(); ?>";
 			HTTP_FORUM_PATH = "<?php echo Utilities::getForumHttpPath(); ?>";
 
@@ -208,9 +216,11 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
         $( "#schedule-form-country" ).selectmenu({ change: function() { displayTimeZones(); } });
         $( "#schedule-form-countryTimeZones" ).selectmenu();
         $( "#schedule-form-countryTimeZones" ).selectmenu({ change: function() { setTimeZoneDisplay(document.getElementById("schedule-form-countryTimeZones").value); } });
-        // now-form elements
         $( "#now-form-duration" ).selectmenu();
         $( "#now-form-type" ).selectmenu();
+        $( "#directory-form-select-specialty").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
+       	$( "#directory-form-select-type").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
+
       });
     </script> 
        
@@ -284,6 +294,9 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
  				}
 			} 				
 	?>
+
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-tLX5TYQhwxQQNx5-UF0VajixUwGGkJQ" async defer></script>
+
 	</body>
 	
 </html>

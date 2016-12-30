@@ -23,6 +23,7 @@ nexus/lib/Validate.php
 nexus/lib/rememberme/*
 nexus/lib/bigbluebutton/*
 nexus/web/vendor/*
+nexus/web/modules/directory/views/include/*
 nexus/partner/*
 pilot/view/include/tmpResults/*
 pilot/view/include/download/tmpResults/*

@@ -6,26 +6,12 @@
 		<!-- EVENT overall_header_breadcrumbs_before -->
 		<li class="small-icon icon-home breadcrumbs">
 			<!-- IF U_SITE_HOME --><span class="crumb"{$MICRODATA}><a href="{U_SITE_HOME}" data-navbar-reference="home" itemprop="url"><span itemprop="title">{L_SITE_HOME}</span></a></span><!-- ENDIF -->
-
-			<!-- EVENT overall_header_breadcrumb_prepend -->
-			
-			<!-- CUSTOM DEVELOPMENT NOTE - this is where we hide the  Board Index link from the breadcrumb menu -->
+			<!-- EVENT overall_header_breadcrumb_prepend -->	
 			<!--<span class="crumb"{$MICRODATA}><a href="{U_INDEX}" accesskey="h" data-navbar-reference="index" itemprop="url"><span itemprop="title">{L_INDEX}</span></a></span>-->
-
 			<!-- BEGIN navlinks -->
 				<!-- EVENT overall_header_navlink_prepend -->
-				
-				<!-- {navlinks.FORUM_NAME} -->
-
-				<!-- LEFT OFF: Trying to figure out a way to display "All Forums" instead of the forum name in the Breadcrumbs trail. Best idea so far is to have a standard string beginning to Root forum categories and compare the string, substitute when matches. Having trouble understanding what my runtime options are here - how to reference in php the value represented by {navlinks.FORUM_NAME} ???-->
-				<!-- PHP -->
-				if(navlinks.FORUM_NAME === 'Northbridge Technology Alliance') { 
-				echo("match"); 
-				}
-				<!-- ENDPHP -->
-				
+				<!-- The root category forum for every network is named "All Forums", with the forum description field designating the network name. Maybe this is good enough. Maybe we should figure out a better string substitution here in the template. Dont' really want to alter the php., buy that's possible too. See https://wiki.phpbb.com/Tutorial.Template_syntax -->		
 				<span class="crumb"{$MICRODATA}<!-- IF navlinks.MICRODATA --> {navlinks.MICRODATA}<!-- ENDIF -->><a href="{navlinks.U_VIEW_FORUM}" itemprop="url"><span itemprop="title">{navlinks.FORUM_NAME}</span></a></span>
-				
 				<!-- EVENT overall_header_navlink_append -->
 			<!-- END navlinks -->
 			<!-- EVENT overall_header_breadcrumb_append -->

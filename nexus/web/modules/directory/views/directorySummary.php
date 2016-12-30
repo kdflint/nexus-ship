@@ -34,8 +34,9 @@
 			 		for (var i = 0; i < jsonObj.length; i++) { 
 				 		// increment class name every 5 items to faciliate pagination
 				 		// maybe get rid of this and use scrollbar
-			 			n = (i % viewSetSize == 0 ? n + 1 : n); 
-			 			tableRows = tableRows + "<div id='directoryRow" + i + "' class='tr-div viewSet" + n + "' style='position:relative;'></div>";
+			 			//n = (i % viewSetSize == 0 ? n + 1 : n); 
+			 			//tableRows = tableRows + "<div id='directoryRow" + i + "' class='tr-div viewSet" + n + "' style='position:relative;'></div>";
+			 			tableRows = tableRows + "<div id='directoryRow" + i + "' class='tr-div' style='position:relative;'></div>";
 			 		}
 			 	}
        	document.getElementById("directoryTable").innerHTML = tableRows;   	
@@ -106,11 +107,13 @@
 </script>
 
 <span class='date detail' style="position:absolute;padding-top:14px;padding-left:14px;">Search Results</span>
+	<?php if ($_SESSION['nexusContext'] === "PUB") { ?>
 	<div style="margin-top:10px;margin-right:10px;float:right">
 		<a id='map_control' href='#' onclick="initMap();">
 			<span id="directory_control" class='fa fa-globe fa-3x' ></span>
 		</a>	
   </div>	
+	<?php } ?>
 
 <div id="directoryTable" class="table-div" style="border:0px none !important;width:90%;padding-left:20px;padding-top:50px;"></div>
 

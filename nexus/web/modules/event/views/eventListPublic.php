@@ -48,7 +48,8 @@
 		          	"<div class='meeting'>" +
        			      "<a href='#openEventDetail' onclick='getEventDetail(\"" + jsonObj[i].uuid + "\");' '<span style='padding-right:10px;color:#d27b4b;' class='fa fa-plus-square'></span></a>" +
          					"<span class='purpose'>" + truncateString(jsonObj[i].purpose, '70') + "</span>" +
-         						((jsonObj[i].location != null) ? "<p><span class='fa fa-map-marker'></span> " + jsonObj[i].location : "</p>") +
+         						(jsonObj[i].recur ? "<p style='background-color:#dddddd;padding:4px;border-radius:5px;margin-top:3px;'>This is a multi-day event.</p>" : "") + 
+         						//((jsonObj[i].location != null) ? "<p><span class='fa fa-map-marker'></span> " + jsonObj[i].location : "</p>") +
 										//(jsonObj[i].contact ? "<p><span>Original submission by public user: " + jsonObj[i].contact + "</span></p>" : "") +
 										"<p><span>Approved by: " + jsonObj[i].fname + " " + jsonObj[i].lname + "</span>" +
 										((true) ? "<a href='#openEventEdit' onclick='return populateEventForm(\"" + i + "\");' title='Edit'><span class='fa fa-pencil' style='color:#d27b4b;margin-left:10px;'></span></a>" : "") + 

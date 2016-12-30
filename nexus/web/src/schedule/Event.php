@@ -185,6 +185,8 @@ class Event {
 				e.registration_url as regr_url,
 				e.contact as contact,
 				e.recur_fk as recur,
+				er.pattern as pattern,
+				er.num_occur as num,
 				u.fname as fname, 
 				u.lname as lname,
 				pg.abbrev as abbrev,
@@ -239,6 +241,8 @@ class Event {
 				$events[$counter]['lname'] = $row['lname'];
 				$events[$counter]['contact'] = $row['contact'];
 				$events[$counter]['recur'] = strlen($row['recur']) > 0 ? true : false;
+				$events[$counter]['recur_pattern'] = $row['pattern'];
+				$events[$counter]['recur_num'] = $row['num'];
 				$events[$counter]['sessionUser'] = $ssnUser;
 				$events[$counter]['adder'] = $row['adder'];
 				$events[$counter]['registration'] = $row['registration'];

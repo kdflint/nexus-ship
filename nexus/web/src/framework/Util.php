@@ -672,6 +672,21 @@ class Utilities {
 		return false;
 	}
 	
+	public static function loginForum($user, $auth) {
+			// Login the session user to the forum if there is not already a forum session matching this username
+			if ($user->data['username'] !== $_SESSION['username']) {
+				// TODO - how to manage existing and unknown passwords in prod? must auto-enroll at login...
+				$forumPassword = ($_SESSION['environment'] === "prod") ? $_SESSION['username'] : $_SESSION['password'];
+				$result = $auth->login($_SESSION['username'], $forumPassword);
+				$auth->acl($user->data);
+				$user->setup();	
+				// TODO - why isn't this timezone transfer working? Thought I saw it working once...
+				if (Event::isValidTimeZone($_SESSION['timezone'])) {
+					$user->data['user_timezone'] = $_SESSION['timezone'];
+				}
+			}
+	}
+	
 	public static function destroySession() {
 		$_SESSION = array();
 		/* ====================================================================================================================================

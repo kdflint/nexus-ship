@@ -69,6 +69,7 @@ if ($result['clean']['meeting-recur']) {
 	$recurId = Event::addEventRecurrence($meetingRecurPattern[$result['clean']['meeting-interval']], $result['clean']['meeting-num-occur'], $recurEndTimestamp);
 }
 
+// TODO - if this new event is result of edit, do we preserve original adder?
 $eventUid = Event::addEvent($timestamp, $result['clean']['meeting-duration'], $result['clean']['meeting-name'], $_SESSION['uidpk'], $result['clean']['meeting-group'], $result['clean']['tzone-name'], $meetingType[$result['clean']['meeting-type']], $result['clean']['meeting-descr'], $result['clean']['meeting-loc'], $result['clean']['isBbbMeeting'], $targetExt, $meetingStatus, $result['clean']['meeting-url'], $result['clean']['registration-url'], $result['clean']['meeting-registr'], $result['clean']['meeting-contact'], $result['clean']['meeting-uuid'], $recurId);
 
 if ($isFile) {
