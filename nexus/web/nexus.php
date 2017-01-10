@@ -54,12 +54,22 @@ Utilities::setSessionLastActivity();
 $showProfile = "false";
 $showTeam = "false";
 $showFatal = "false";
+$showOrganizationDetail = "false";
+$showOrgDetailId = "";
 
-if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
+// TODO - add the NWM/ADV check to these
+if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharacterSet($_GET['view'])) {
 	switch($_GET['view']) {
 		case "profile": $showProfile = "true"; break;
 		case "team": $showTeam = "true"; break;
 		case "fatal": $showFatal = "true"; break;
+		// We have ensured that $_GET['view'] will evaluate to true, that's why below works
+		case "orgid":
+			echo $_GET['view'];
+			echo strpos($_GET['view'], 'orgid-') === 0 ? "true" : "false";
+			exit(0);
+		case (strpos($_GET['view'], 'orgid-') === 0 ? true : false):
+			$showOrganizationDetail = "true"; $showOrgDetailId = substr($_GET['view'], 6);
 	}
 }
 
@@ -94,6 +104,7 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
     <script src="scripts/nexus.js" language="javascript"></script>
   	<script src="<?php echo(Utilities::getConfigPath()); ?>/timeZoneData.js" language="javascript"></script>
   	<script src="<?php echo(Utilities::getConfigPath()); ?>/geoDataCfcht.js" language="javascript"></script>
+  	<script src="<?php echo(Utilities::getConfigPath()); ?>/stateData.js" language="javascript"></script>
   	<!-- http://www.featureblend.com/javascript-flash-detection-library.html -->
  		<script src="scripts/lib/flash_detect.js"></script>
  		<script src="//code.jquery.com/jquery-1.10.2.js"></script>
@@ -171,7 +182,11 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
 					document.getElementById("index-module-name").innerHTML = "Web Meet Demo";
 					document.getElementById("get-nexus-link").innerHTML = "<a href='http://northbridgetech.org/apps/waterwheel/module/core/index.php?view=apply' target='_blank'>Get Nexus</a>";
 				}		
-
+				
+				if(<?php echo $showOrganizationDetail; ?>) {
+					$( "#adv-menu-network" ).click();
+					showDirectoryDetail("<?php echo $showOrgDetailId; ?>");	
+				}
 
 			});
 			
@@ -220,6 +235,10 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
         $( "#now-form-type" ).selectmenu();
         $( "#directory-form-select-specialty").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
        	$( "#directory-form-select-type").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
+       	$( "#organization-form-country" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
+        $( "#organization-form-country" ).selectmenu({ change: function() { displayStates(); } });
+        $( "#organization-form-countryStates" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
+
 
       });
     </script> 
@@ -297,6 +316,11 @@ if(isset($_GET['view']) && Utilities::isSafeCharacterSet($_GET['view'])) {
 
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-tLX5TYQhwxQQNx5-UF0VajixUwGGkJQ" async defer></script>
 
+	<script>
+		var stateObj = { foo: "bar" };
+		history.pushState(stateObj, "", "nexus.php#close");
+	</script>
+	
 	</body>
 	
 </html>

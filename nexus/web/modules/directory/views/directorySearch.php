@@ -6,7 +6,7 @@
 	</div>
 	<div style="margin-top:10px;">
 		<span class="searchQualifier">and</span>
-		<select id="directory-form-select-specialty" name="specialty" style="width:86%;">
+		<select id="directory-form-select-specialty" name="specialty" style="width:228px;">
 			<option value="0" selected>Focus Area is</option>	
 			<option value="0" >------------</option>	
 			<!-- TODO - make this list dynamic by organization -->
@@ -15,7 +15,7 @@
 	</div>
 	<div style="margin-top:10px;">
 		<span class="searchQualifier">and</span>
-		<select id="directory-form-select-type" name="type" style="width:86%;">
+		<select id="directory-form-select-type" name="type" style="width:228px;">
 			<option value="0" selected>Organization Type is</option>
 			<option value="0" >------------</option>
 			<option value="Academic">Academic</option>

@@ -1,6 +1,7 @@
 var errorBackground = "rgba(247,248,239,0.6) url('') no-repeat right top";
 
 var currentEvents;
+var geoDataOrgSearch;
 
 var MEETING_INFO_NEXT_REFRESH = "60000";
 var NEXT_MEETING_START;
@@ -493,6 +494,34 @@ function displayTimeZones() {
   }
 }
 
+// LEFT OFF - create data file with states identifed to countries, like time zone one
+function displayStates() {
+	var state = document.getElementById("organization-form-countryStates");
+	var countryCode = document.getElementById("organization-form-country").value;
+	// TODO - this line clears previous selections - how does it work?
+	for (a in state.options) { state.options.remove(0); }
+  var countryStates = stateData[countryCode];
+  var option = document.createElement("option");
+  option.text = "State";
+  option.selected = true;
+  state.add(option);
+  if (countryStates === undefined) {
+  	// leave the options list unpopulated
+  	$( "#organization-form-countryStates" ).selectmenu( "refresh" );
+  //} else if (countryStates.length == 1) {
+  	// update display and form to show this one option
+  	//setStateDisplay(Object.getOwnPropertyNames(countryStates[0]));
+  } else {
+  	// add the state options to the state options list
+  	for (var i=0; i<countryStates.length; i++) {
+	  	var optionNew = document.createElement("option");
+  		optionNew.text = countryStates[i];
+  		state.add(optionNew);
+		}
+    $( "#organization-form-countryStates" ).selectmenu( "refresh" );
+  }
+}
+
 function toggleTooltip(tip) {
 	var curState = document.getElementById(tip).className;
 	if (curState == "tooltip-hover") {
@@ -504,13 +533,30 @@ function toggleTooltip(tip) {
 
 function showDirectoryDetail(orgId) {
 	document.getElementById("show-directoryResults").style.display='none';
-	document.getElementById("show-directoryDetail").style.display='block';				
+	document.getElementById("show-directoryDetail").style.display='block';	
+	var secondaryFilterIcon = document.getElementById("secondary-network-filter");
+	if (secondaryFilterIcon) {
+		secondaryFilterIcon.className = "secondaryControlDisabled";
+	}
+	var secondaryOrgEditIcon = document.getElementById("secondary-network-edit");
+	if (secondaryOrgEditIcon) {
+		secondaryOrgEditIcon.style.display = "block";
+	}
 	getDirectoryDetail(orgId);
 }	
 			
 function showDirectoryResults() {
 	document.getElementById("show-directoryResults").style.display='block';
 	document.getElementById("show-directoryDetail").style.display='none';	
+	var secondaryFilterIcon = document.getElementById("secondary-network-filter");
+	if (secondaryFilterIcon) {
+		secondaryFilterIcon.className = "secondaryControl";
+	}
+	var secondaryOrgEditIcon = document.getElementById("secondary-network-edit");
+	if (secondaryOrgEditIcon) {
+		secondaryOrgEditIcon.style.display = "none";
+	}
+
 }
 					
 function showDirectoryMap() {
@@ -884,6 +930,86 @@ function profileValidateAndSubmit() {
  	}
 }
 
+function organizationBasicValidateAndSubmit(thisForm) {
+	
+	var organizationBasicForm = document.forms[thisForm];
+	var submitButton = document.getElementById(thisForm + "-submit");
+	var pass = true;	
+	
+	var nameField = organizationBasicForm['org-name'];
+	var urlField = organizationBasicForm['org-url'];
+	var contactNameField  = organizationBasicForm['org-contact-name'];
+	var contactTitleField = organizationBasicForm['org-contact-title'];
+	var contactEmailField = organizationBasicForm['org-contact-email'];
+	var contactPhoneField = organizationBasicForm['org-contact-phone'];
+	var streetField = organizationBasicForm['org-street'];
+	var cityField = organizationBasicForm['org-city'];
+	var countryField = document.getElementById("organization-form-country");
+	var stateField = document.getElementById("organization-form-countryStates");
+
+  var name = nameField.value;
+	setFieldPassStyles(nameField, "Organization Name");
+  if (isEmptyOrLong(name, 100)) {
+  	setFieldErrorStyles(nameField, "Organization name is required");
+    pass = false;
+  }
+  
+  // TODO - validate url, also in event form
+  var url = urlField.value;
+	setFieldPassStyles(urlField, "Organization Web Site (http://)");
+  if (isEmptyOrLong(url, 100)) {
+  	setFieldErrorStyles(urlField, "Organization web site is required");
+    pass = false;
+  }  
+  
+  var email = contactEmailField.value;
+	setFieldPassStyles(contactEmailField, "Email");
+  if (!isValidEmail(email)) {
+  	setFieldErrorStyles(contactEmailField, EMAIL_REQUIRED);
+  	contactEmailField.value = "";
+  	pass = false;
+  }
+  
+	var street = streetField.value;
+	setFieldPassStyles(streetField, "Street Address");
+	if (isEmptyOrLong(street, 50)) {
+		setFieldErrorStyles(streetField, "Street address is required");
+		streetField.value = "";
+		pass = false;
+	}
+	
+	var city = cityField.value;
+	setFieldPassStyles(cityField, "City");
+	if (isEmptyOrLong(city, 50)) {
+		setFieldErrorStyles(cityField, "City is required");
+		cityField.value = "";
+		pass = false;
+	}
+
+	var country = countryField.value;
+	setFieldPassStyles(document.getElementById("organization-form-country-button", "Country"))
+	if (country === "AA") {
+		setFieldErrorStyles(document.getElementById("organization-form-country-button", "Country"));
+		pass = false;
+	}
+
+	// TODO - not all countries have states so must revise when we open up country list. Also, could be province.
+	// http://www.columbia.edu/~fdc/postal/
+	var state = stateField.value;
+	setFieldPassStyles(document.getElementById("organization-form-countryStates-button", "States"));
+	if (state === "State") {
+		setFieldErrorStyles(document.getElementById("organization-form-countryStates-button", "States"));
+		pass = false;
+	}
+	
+ 	if (Boolean(pass)) {
+ 		submitButton.disabled = true;  
+ 		submitButton.innerHTML = "One Moment"; 
+ 		submitButton.style.opacity = ".6";
+ 		organizationBasicForm.submit();
+ 	}
+}
+
 function getMaxDaysForMonth(month) {
 	switch(month) {
     case 4:
@@ -985,6 +1111,7 @@ function populateEventForm(i) {
 	eventForm['meeting-date-end'].value = endDate;
 	//document.getElementById('schedule-form-submit').innerHTML = "Update";
 	document.getElementById('schedule-form-submit').innerHTML = "Approve";
+	document.getElementById('schedule-form-submit').disabled = false;
 	eventForm['meeting-uuid'].value = currentEvents[i].uuid;
 			
 	return true;
@@ -1162,6 +1289,13 @@ function setFieldErrorStyles(formField, placeholder) {
   formField.style.borderWidth = "2px";
 }	
 
+function isEmptyOrLong(value, maxLength) {
+	if (value == null || value == "" || value.length > maxLength) {
+		return true;
+	}
+	return false;
+}
+
 function validateDateFormat(dateField) {
 	var date = dateField.value;
 	var re = /\d{2}\/\d{2}\/\d{4}/;
@@ -1284,11 +1418,12 @@ function validateTimeFormat(t) {
 
 function getDaysPassing(num, freq, start) {
 	var curDate = new Date(start);
+	// Note: Subtract 1 from each calculation to remove the first event date from the days passed calculation
 	switch(parseInt(freq)) {
 		case 0:
-			return parseInt(num);
+			return parseInt(num) - 1;
 		case 2:
-			return parseInt(num * 7);
+			return parseInt(num * 7) - 1;
 		case 1:
 			var loopCount = 0;
 			var weekdayCount = 0;
@@ -1300,7 +1435,7 @@ function getDaysPassing(num, freq, start) {
          }
         loopCount++;
     	}
-    	return loopCount;
+    	return loopCount - 1;
 	}
 	return 1;
 }

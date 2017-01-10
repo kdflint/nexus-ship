@@ -99,14 +99,21 @@ body {
 	padding-top: 10px;
 	padding-right: 10px;
 	position: relative;
+	margin-bottom: 22px;
 }	
 
-.secondaryControl {
+.secondaryControl, .secondaryControlDisabled {
 	position: relative;
 	float: right;
 	margin-left: 20px;
 	z-index: 10;
 }
+
+.secondaryControlDisabled {
+	opacity: .5;
+	pointer-events: none;
+}
+
 
 /* patterned from phpBB .dropdownContainer */
 .tertiaryControlContainer {
@@ -210,6 +217,11 @@ form {
 .form-input {
 	width:95%;
 	margin-bottom:20px !important;
+}
+
+.form-field {
+	margin-top:10px;
+	margin-left:15px;
 }
 
 /* BUTTONS */
