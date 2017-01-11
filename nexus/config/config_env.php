@@ -22,11 +22,11 @@
 
 
 // DATABASE
-
-	//define("DB_HOST", "50.87.120.82"); 
 	define("DB_HOST", "localhost"); 
 	define("DB_USER", "northbr6_web"); 
 	define("DB_NAME", "localnexus");	
+
+// SENSITIVE
 	require_once("sensitive_config.php");
 	
 // DEMO

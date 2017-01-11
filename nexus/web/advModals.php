@@ -15,6 +15,6 @@
 	<div id="openDirectoryEdit" class="modalDialog">
 		<div>
 			<a href="#close" title="Close" class="close">X</a>
-			Add/Edit directory function soon
+			<?php include("modules/directory/views/organizationAdd.php"); ?>
 		</div>
 	</div>

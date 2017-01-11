@@ -52,14 +52,14 @@
       				<input id="repeat-check" name="repeat-check" onchange="toggleRecurFormElements(0);" type="checkbox"> <b>Repeat</b>
       			</span>
       			<span id="repeat-span" style="margin-left:5px;font-size:90%;visibility:hidden;">
-      				Repeats <span id="repeat-descr">daily</span> for <span id="repeat-quantity">2</span> <span class="repeat-unit">days</span>
+      				Occurs <span id="repeat-descr">daily</span> for <span id="repeat-quantity">2</span> <span class="repeat-unit">days</span>
       				<span id="repeat-edit" style="margin-left:10px;"><a href="javascript:void(0);" onclick="toggleRecurFormElements(0);">Change</a></span>
       			</span>
 		    	</div>
 					<div style="min-height:160px;">
 						<div id="repeat-block" style="display:none;">
       				<p style="margin-top:10px;">
-	      				Repeats <select id="repeat-interval" name="repeat-interval" onchange="updateRepeatDescr(this);" style="position:absolute;left:70px;width:208px;height: 2.5em;">
+	      				Occurs <select id="repeat-interval" name="repeat-interval" onchange="updateRepeatDescr(this);" style="position:absolute;left:70px;width:208px;height: 2.5em;">
 	      					<option value="0" selected>Daily</option>
       						<option value="1">Weekdays</option>
       						<option value="2">Weekly</option>
@@ -93,7 +93,7 @@
 							<a id="fileClearControl" href="javascript:void(0)" onclick="clearFileInput(document.getElementById('fileToUpload'));" style="display:none;"><span class="fa fa-times" style="margin-left:10px;"></span></a>
 						</div>
 						<div style="margin-top:25px;">
-		      		<a id="schedule-form-submit" class="pure-button button-menu" href="javascript:void(0)" onclick="eventValidateAndSubmit('schedule-form');" style="float:right;background-color:#d27b4b;width:70px;font-size:90%;margin-top:-10px;color:#e6e6e6" <?php echo($disabled); ?> >Add</a>
+		      		<a id="schedule-form-submit" class="pure-button button-menu" href="javascript:void(0)" onclick="eventValidateAndSubmit('schedule-form');" style="float:right;background-color:#d27b4b;width:70px;font-size:90%;margin-top:-10px;color:#e6e6e6" >Add</a>
 		      		<a href="#close" style="float:right;margin-right:20px;">Cancel</a>
 		    		</div>
 		    	</div>

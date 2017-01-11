@@ -50,6 +50,10 @@ class Utilities {
 		return DB_NAME;
 	}
 	
+	public static function getGoogleApiKey() {
+		return GOOGLE_API_KEY;
+	}
+	
 	// Very Temporary Method
 	public static function getEventApprovalList() {
 		return EVENT_APPROVE_LIST;
@@ -205,7 +209,7 @@ class Utilities {
 		if(Validate::string($in, array(
 			'format' => VALIDATE_NUM, 
 			'min_length' => 1, 
-			'max_length' => 3))) {
+			'max_length' => 8))) {
 				return TRUE;
 		}
 		return FALSE;

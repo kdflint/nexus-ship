@@ -306,6 +306,7 @@ class Catalogue {
 				
 		// We do this to be JSON-friendly
 		$indexedResults = array();
+		$orgIdList = array();
 		$counter1 = 0;
 		foreach ($results as $key1=>$val1) {
 			$indexedResults[$counter1]["name"] = $key1;
@@ -313,6 +314,7 @@ class Catalogue {
 			foreach ($val1 as $key2=>$val2) {
 				if ($counter2 == 4) {
 					$indexedResults[$counter1]["content"][$counter2][strtolower($key2)] = $val2;
+					array_push($orgIdList, $val2);
 				} else {
 					$counter3 = 0;
 					if (count($val2) == 0) {
@@ -330,7 +332,21 @@ class Catalogue {
 			$counter1++;
 		}
 				
-		return $indexedResults;
+		/* Yes, this code keeps getting more and more awesome... */
+		
+		$result = Organization::getGeoByOrgIds($orgIdList);
+
+		while ($row = pg_fetch_array($result)) {
+			$orgId = $row['oid'];
+			$geoResults[$orgId]['lat'] = $row['lat'];
+			$geoResults[$orgId]['lng'] = $row['long'];
+			$geoResults[$orgId]['title'] = $row['name'];
+		}
+
+		$multiObjectResults = array();		
+		$multiObjectResults['orgEntry'] = $indexedResults;
+		$multiObjectResults['geoEntry'] = $geoResults;
+		return $multiObjectResults;
 
 	}
 	

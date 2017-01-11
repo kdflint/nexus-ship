@@ -335,7 +335,7 @@ class Event {
 				$event[$counter]['recur'] = strlen($row['recur']) > 0 ? true : false;
 				$event[$counter]['recur_pattern'] = $row['pattern'];
 				$event[$counter]['recur_num'] = $row['num'];
-				$event[$counter]['recur_end_phrase'] = self::getDay($row['day_end']) . ", " . self::getMonth($row['month_end']) . " " . $row['date_end'] . " " . $row['year_end'];
+				$event[$counter]['recur_end_phrase'] = self::getDay($row['day_end']) . ", " . self::getMonth($row['month_end']-1) . " " . $row['date_end'] . " " . $row['year_end'];
 				$counter++;
 			}
 		}

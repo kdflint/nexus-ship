@@ -33,7 +33,8 @@ $dirty = array('meeting-name' => $_POST['meeting-name'],
 							'meeting-recur' => $_POST['repeat-check'],
 							'meeting-interval' => $_POST['repeat-interval'],
 							'meeting-num-occur' => $_POST['repeat-freq'],
-							'meeting-recur-dttm' => $_POST['meeting-recur-duration']
+							'meeting-recur-dttm' => $_POST['meeting-recur-duration'],
+							'old-file-ext' => $_POST['old-file-ext']
 							);
 										
 $result = validateEvent($dirty);
@@ -61,6 +62,8 @@ if (isset($_FILES) && isset($_FILES["fileToUpload"]["name"]) && strlen($_FILES["
 	$isFile = true;
 	$inputFile = basename($_FILES["fileToUpload"]["name"]);
 	$targetExt = pathinfo($inputFile,PATHINFO_EXTENSION);
+} else if (isset($result['clean']['file-ext'])) {
+	$targetExt = $result['clean']['file-ext'];
 }
 
 $recurId = null;
@@ -236,6 +239,11 @@ function validateEvent($input) {
 		$result['clean']['meeting-uuid'] = $input['meeting-uuid'];
 	} else {
 		$result['clean']['meeting-uuid'] = "";
+	}
+
+	// MEETING FILE
+	if (isset($input['old-file-ext']) && strlen($input['old-file-ext']) > 0 ) {
+		$result['clean']['file-ext'] = $input['old-file-ext'];
 	}
 	
 	// MEETING GROUP

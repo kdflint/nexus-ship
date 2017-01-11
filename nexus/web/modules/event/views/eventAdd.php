@@ -54,14 +54,14 @@
       				<input id="repeat-check" name="repeat-check" onchange="toggleRecurFormElements(0);" type="checkbox"> <b>Repeat</b>
       			</span>
       			<span id="repeat-span" style="margin-left:5px;font-size:90%;visibility:hidden;">
-      				Repeats <span id="repeat-descr">daily</span> for <span id="repeat-quantity">2</span> <span class="repeat-unit">days</span>
+      				Occurs <span id="repeat-descr">daily</span> for <span id="repeat-quantity">2</span> <span class="repeat-unit">days</span>
       				<span id="repeat-edit" style="margin-left:10px;"><a href="#" onclick="toggleRecurFormElements(0);">Change</a></span>
       			</span>
 		    	</div>
 					<div style="min-height:160px;">
 						<div id="repeat-block" style="display:none;">
       				<p style="margin-top:10px;">
-	      				Repeats <select id="repeat-interval" name="repeat-interval" onchange="updateRepeatDescr(this);" style="position:absolute;left:70px;width:208px;height: 2.5em;">
+	      				Occurs <select id="repeat-interval" name="repeat-interval" onchange="updateRepeatDescr(this);" style="position:absolute;left:70px;width:208px;height: 2.5em;">
 	      					<option value="0" selected>Daily</option>
       						<option value="1">Weekdays</option>
       						<option value="2">Weekly</option>
