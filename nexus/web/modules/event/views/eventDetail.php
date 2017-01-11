@@ -10,10 +10,10 @@
        					"<span class='date'>" + jsonObj[i].purpose + "</span><br/>" +
        					"<span class='tod'>" + jsonObj[i].location + "</span><br/>" + 
        					"<span class='tod'>" + jsonObj[i].day + ", " + jsonObj[i].month + " " + jsonObj[i].date + " " + jsonObj[i].year + " </span></br>" +
-     						"<span class='tod'>" + jsonObj[i].hour + ":" + jsonObj[i].minute + "</span><span class='period'> " + jsonObj[i].period + " </span>" +
+     						"<span class='tod'>" + jsonObj[i].hour + ":" + jsonObj[i].minute + "</span><span class='period'> " + jsonObj[i].period + " </span> - " +
 								"<span class='tod'>" + jsonObj[i].hour_end + ":" + jsonObj[i].minute_end + "</span><span class='period'> " + jsonObj[i].period_end + " </span>" +
 								"<span class='period'> " + jsonObj[i].abbrev + "</span>" +
-								(jsonObj[i].recur ? "<p style='background-color:#dddddd;padding:4px;border-radius:5px;margin-top:3px;'>Repeats " + jsonObj[i].recur_pattern + " through " + jsonObj[i].recur_end_phrase + "</p>" : "") + 
+								(jsonObj[i].recur ? "<p style='background-color:#dddddd;padding:4px;border-radius:5px;margin-top:3px;'>Occurs " + jsonObj[i].recur_pattern + " through " + jsonObj[i].recur_end_phrase + "</p>" : "") + 
 								(jsonObj[i].descr ? "<span class=''><p>" + htmlFormatEmail(htmlFormatAnchors(htmlFormatParagraphs(jsonObj[i].descr))) + "</p><span>" : "") + 
 								(jsonObj[i].url ? "<p><span><a href='" + jsonObj[i].url + "' target='_blank'>Web Link</a></span></p>" : "") + 
 								(jsonObj[i].fileext ? "<p><span><a href='<?php echo(Utilities::getPartnerFileUrl()); ?>/event-" + jsonObj[i].uuid + "." + jsonObj[i].fileext + "' target='_blank'>Flyer</a></span></p>" : "") + 

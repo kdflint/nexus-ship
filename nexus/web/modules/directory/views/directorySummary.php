@@ -14,14 +14,16 @@
 		var xmlhttp = getXmlHttpRequest();
 		xmlhttp.onreadystatechange=function() {
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-				//var testData = '[{"name":"Nexus Training Organization","content":[{"contact":[""]},{"language":[""]},{"topic":[""]},{"location":[""]},{"orgid":"43"}]},{"name":"Nexus Web Meet Demonstration","content":[{"contact":[""]},{"language":[""]},{"topic":[""]},{"location":[""]},{"orgid":"331"}]}]';
-				//var jsonObj = JSON.parse(testData);
-			 	var jsonObj = JSON.parse(xmlhttp.responseText);
-				//alert(xmlhttp.responseText);
+				var stringToParse = xmlhttp.responseText;
+				//var stringToParse = '{"name":"Nexus Training Organization","content":[{"contact":[""]},{"language":[""]},{"topic":[""]},{"location":[""]},{"orgid":"330"}]}';//,{"name":"Nexus Web Meet Demonstration","content":[{"contact":[""]},{"language":[""]},{"topic":[""]},{"location":[""]},{"orgid":"331"}]}';
+			 	var jsonObj = JSON.parse(stringToParse);
+			 	var geoData = jsonObj.geoEntry;
+			 	//console.log(stringToParse);
+	   		addMarkers(geoData);  	
 			 	// put row containers in the directory table, 1 for each event
 			 	var tableRows = "";
 			 	var n = -1;
-			 	if (jsonObj.length == 0) {
+			 	if (jsonObj.orgEntry.length == 0) {
 			 		tableRows = tableRows + 
 			 		"<div id='directoryRow0' class='tr-div viewSet0' style='position:relative;'>" +
 			 			"<div class='td-div'>" +
@@ -31,7 +33,7 @@
      				"</div>" +
      			"</div>";
 			 	} else {
-			 		for (var i = 0; i < jsonObj.length; i++) { 
+			 		for (var i = 0; i < jsonObj.orgEntry.length; i++) { 
 				 		// increment class name every 5 items to faciliate pagination
 				 		// maybe get rid of this and use scrollbar
 			 			//n = (i % viewSetSize == 0 ? n + 1 : n); 
@@ -39,50 +41,50 @@
 			 			tableRows = tableRows + "<div id='directoryRow" + i + "' class='tr-div' style='position:relative;'></div>";
 			 		}
 			 	}
-       	document.getElementById("directoryTable").innerHTML = tableRows;   	
+       	document.getElementById("directoryTable").innerHTML = tableRows; 
 
 				// Show only those components returned by search.
 				// Ugly as stink - will refactor this object altogether once requirements become more clear -kdf
-		 		for (var i = 0; i < jsonObj.length; i++) {
+		 		for (var i = 0; i < jsonObj.orgEntry.length; i++) {
 		 			var thisContent = "";
 		 			var lineHeightMultiple = 0;
-	 				for (var j = 0; j < jsonObj[i].content[0].contact.length; j++) {
-	 					if (jsonObj[i].content[0].contact[j].length > 0) {
+	 				for (var j = 0; j < jsonObj.orgEntry[i].content[0].contact.length; j++) {
+	 					if (jsonObj.orgEntry[i].content[0].contact[j].length > 0) {
 	 						if (j == 0) {
 	 							thisContent = thisContent + "<br/>Contact: ";
 	 						}
-	 						thisContent = thisContent + jsonObj[i].content[0].contact[j];
-	 						if (j < jsonObj[i].content[0].contact.length-1) {thisContent = thisContent + ", ";}
+	 						thisContent = thisContent + jsonObj.orgEntry[i].content[0].contact[j];
+	 						if (j < jsonObj.orgEntry[i].content[0].contact.length-1) {thisContent = thisContent + ", ";}
 	 						lineHeightMultiple++;
 	 					}
 	 				}
-	 				for (var j = 0; j < jsonObj[i].content[1].language.length; j++) {
-	 					if (jsonObj[i].content[1].language[j].length > 0) {
+	 				for (var j = 0; j < jsonObj.orgEntry[i].content[1].language.length; j++) {
+	 					if (jsonObj.orgEntry[i].content[1].language[j].length > 0) {
 	 						if (j == 0) {
 	 							thisContent = thisContent + "<br/>Language: ";
 	 						}
-		 					thisContent = thisContent + jsonObj[i].content[1].language[j];
-		 					if (j < jsonObj[i].content[1].language.length-1) {thisContent = thisContent + ", ";}
+		 					thisContent = thisContent + jsonObj.orgEntry[i].content[1].language[j];
+		 					if (j < jsonObj.orgEntry[i].content[1].language.length-1) {thisContent = thisContent + ", ";}
 	 						lineHeightMultiple++;
 		 				}
 	 				}
-	 				for (var j = 0; j < jsonObj[i].content[2].topic.length; j++) {
-	 					if (jsonObj[i].content[2].topic[j].length > 0) {
+	 				for (var j = 0; j < jsonObj.orgEntry[i].content[2].topic.length; j++) {
+	 					if (jsonObj.orgEntry[i].content[2].topic[j].length > 0) {
 	 						if (j == 0) {
 	 							thisContent = thisContent + "<br/>Topic: ";
 	 						}
-	 						thisContent = thisContent + jsonObj[i].content[2].topic[j];
-	 						if (j < jsonObj[i].content[2].topic.length-1) {thisContent = thisContent + ", ";}
+	 						thisContent = thisContent + jsonObj.orgEntry[i].content[2].topic[j];
+	 						if (j < jsonObj.orgEntry[i].content[2].topic.length-1) {thisContent = thisContent + ", ";}
 	 						lineHeightMultiple++;
 	 					}
 	 				}
-	 				for (var j = 0; j < jsonObj[i].content[3].location.length; j++) {
-	 					if (jsonObj[i].content[3].location[j].length > 0) {
+	 				for (var j = 0; j < jsonObj.orgEntry[i].content[3].location.length; j++) {
+	 					if (jsonObj.orgEntry[i].content[3].location[j].length > 0) {
 	 						if (j == 0) {
 	 							thisContent = thisContent + "<br/>Location: ";
 	 						}
-	 						thisContent = thisContent + jsonObj[i].content[3].location[j];
-	 						if (j < jsonObj[i].content[3].location.length-1) {thisContent = thisContent + ", ";}
+	 						thisContent = thisContent + jsonObj.orgEntry[i].content[3].location[j];
+	 						if (j < jsonObj.orgEntry[i].content[3].location.length-1) {thisContent = thisContent + ", ";}
 	 						lineHeightMultiple++;
 	 					}
 	 				}
@@ -90,14 +92,13 @@
 		 			tableItem = 
        			"<div class='td-div'>" +
        				"<div class='detail'>" +
- 					  		"<a href='javascript:void(0)' onclick='showDirectoryDetail(" + jsonObj[i].content[4].orgid + ")'><span class='organization'>" + jsonObj[i].name + "</span></a>" +
+ 					  		"<a href='javascript:void(0)' onclick='showDirectoryDetail(" + jsonObj.orgEntry[i].content[4].orgid + ")'><span class='organization'>" + jsonObj.orgEntry[i].name + "</span></a>" +
  					  		"<span class='tod'>" + thisContent + "</span>" +
 							"</div>" +
      				"</div>";
     			document.getElementById("directoryRow" + i).innerHTML = tableItem;   
     			document.getElementById("directoryRow" + i).style.height = lineHeight + "px";
-    			addMarker(jsonObj[i].content[4].orgid);
-	   		}  			
+	   		}
 			}
 		}
 		xmlhttp.open("GET", "<?php echo(Utilities::getHttpPath()); ?>" + "/src/framework/directoryManager.php?string=" + searchString + "&specialty=" + searchSpecialty + "&type=" + searchType, true);
@@ -134,6 +135,7 @@
     setMapOnAll(map);
    }
 
+	/*
 	function addMarker(orgid) {
 		if (geoDataCfcht[orgid]) {
 			var orgGeo = geoDataCfcht[orgid][0];
@@ -146,7 +148,27 @@
   		markers.push(marker);
   	}
 	}
+	*/
+
+	function addMarkers(geoData) {
+		if (geoData) {
+  		for (var org in geoData) {
+  			//console.log(org);	
+  			//console.log(parseFloat(geoData[org]['lat']));	
+  			//console.log(parseFloat(geoData[org]['lng']));
+  			//console.log(geoData[org]['title']);
+		  	var marker = new google.maps.Marker({
+		    	position: {lat: parseFloat(geoData[org]['lat']), lng: parseFloat(geoData[org]['lng'])},
+    			map: map,
+    			title: geoData[org]['title']
+  			});
+	  		marker.addListener('click', function() {showDirectoryDetail(org);});
+  			markers.push(marker);
+  		}
+  	}
+	}
 	
+
 	function setMapOnAll(map) {
   	for (var i = 0; i < markers.length; i++) {
 	    markers[i].setMap(map);
