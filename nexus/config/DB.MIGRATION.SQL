@@ -9,3 +9,10 @@ alter table public.location add column g_formatted_address varchar(200);
 alter table public.location add column neighborhood varchar(100);
 
 --config file changes
+-- define("GOOGLE_API_KEY", "AIzaSyD-tLX5TYQhwxQQNx5-UF0VajixUwGGkJQ");
+
+-- move states.js over to config folder
+
+-- copy over directory/views/include from last deploy - this is a defect
+	
+	
