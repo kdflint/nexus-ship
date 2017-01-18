@@ -260,6 +260,18 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 				}
 				ACTIVITY_FLAG = 0;
 			}
+			
+			window.setInterval(refreshForumSession, 600000);
+			// every 10 minutes, send a renew to update the forum session		
+			function refreshForumSession() {
+				var xmlhttp = getXmlHttpRequest();
+				xmlhttp.onreadystatechange=function() {
+  				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {	}
+ 				}
+ 				console.log("refreshing forum");
+				xmlhttp.open("GET","src/framework/sessionManager.php?forum=1");
+				xmlhttp.send();  					
+			}
     </script>
      
   </head>
