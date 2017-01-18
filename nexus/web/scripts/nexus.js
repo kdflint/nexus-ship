@@ -352,10 +352,30 @@ function toggleAdvFrameDisplay(menuItem) {
 	loadAdvPage(menuItem.id);
 }
 
+function checkGoodForumSession(thisFrame) {
+	if (thisFrame.src.includes(HTTP_FORUM_PATH)) {
+ 		var content = thisFrame.contentWindow || thisFrame.contentDocument;
+ 		if (content.document && content.document.getElementById('wrap')) { 
+			var rawFrameHtml = content.document.getElementById('wrap').innerHTML;
+			// TODO - pick more foolproof string
+   		if (rawFrameHtml.includes("Password:")) {
+   			thisFrame.src = HTTP_WEB_PATH + "/loading_placeholder.html";
+   			console.log("Forum session expired. Attempting refresh.");
+   			// TODO - catch the return value on this method?
+   			refreshForumSession();
+   			console.log("Return");
+				document.getElementById('adv-menu-forum').click();
+   		} else {
+   			console.log("Forum session valid.");
+   		}
+   	}
+	}
+}
+
 function loadAdvPage(resource) {
 	var frameDisplay = document.getElementById("adv_frame_display");
 	frameDisplay.style.display = "none";
-	
+
 	var divDisplay = document.getElementById("adv_div_display");
 	divDisplay.style.display = "none";
 	var divDisplays = divDisplay.getElementsByClassName('div-display');
@@ -369,23 +389,6 @@ function loadAdvPage(resource) {
     		var iframeSrc = HTTP_FORUM_PATH  + "/viewforum.php?f=" + DEFAULT_FORUM;
     		var iframe = document.getElementById(frameId);
     		iframe.src = iframeSrc;
-    		var content = iframe.contentWindow || iframe.contentDocument;
-    		if (content.document && content.document.getElementById('wrap')) { 
-    			// If other tab contents come from resourcing this iframe, then id 'wrap' will come up null sometimes.
-    			// Must wait until frame is loaded before continuing
-					var rawFrameHtml = content.document.getElementById('wrap').innerHTML;
-    			if (rawFrameHtml.includes("Password:")) {
-    			//if (rawFrameHtml.includes("Community")) {
-    				//alert("Your forum session as expired.");
-    				// Frame source has delivered a login screen. This will happen if phpbb session expires
-    				if (false) {
-    					// LEFT OFF - implement the ajax login loginForum()
-    					// Login, then reload frame
-    					iframe.src = iframeSrc;
-    				}
-    			}
-    		}
-    		// Also, in addition to above, should wait until src is loaded to set display to block
     		frameDisplay.style.display ="block";
     		break;
     	case "adv-menu-event":
@@ -403,18 +406,15 @@ function loadAdvPage(resource) {
 		} 
 }
 
-function loginForum() {
-	return true;
+function refreshForumSession() {
 	var xmlhttp = getXmlHttpRequest();
 	xmlhttp.onreadystatechange=function() {
-		if (xmlhttp.readyState == 4) {
-			if (xmlhttp.status != 200) { return true; }
-		} else {
-			return false;
-		}
-	};
-	xmlhttp.open("GET", "http://localhost/nexus/nexus/web/src/framework/loginForum.php", false);
-	xmlhttp.send();
+		console.log(xmlhttp.readyState);
+  	if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {  }
+ 	}
+ 	console.log("refreshing forum");
+	xmlhttp.open("GET","src/framework/sessionManager.php?forum=1", false); // synchronous call
+	xmlhttp.send();  					
 }
 
 function myHTMLInclude() {
