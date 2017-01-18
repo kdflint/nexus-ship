@@ -9,8 +9,8 @@ require_once("scripts/noscript.php");
 TODO - recalculate frame borders based on height of rendered content. See
 https://www.jsnippet.net/snippet/536/Sidebar-pin-to-left-with-dynamic-tabs
 -->
-<div id="adv_frame_display" style="display:none;">
-	<iframe id="adv-frame" src="production_placeholder.html" style="width:100%;border:0;margin:0;padding:0;position:relative;height:5000px;overflow:hidden;" scrolling="no"></iframe>
+<div id="adv_frame_display" style="display:none;position:relative">
+	<iframe id="adv-frame" src="loading_placeholder.html" style="width:100%;border:0;margin:0;padding:0;position:absolute;top:0;height:5000px;overflow:hidden;" scrolling="no"></iframe>
 </div>
 
 <div class="adv-frame-contents" id="adv_div_display" style="display:block;">

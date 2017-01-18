@@ -397,7 +397,7 @@ function loadAdvPage(resource) {
     		divDisplay.style.display ="block";
     		break;
     	default:
-       	document.getElementById(frameId).src = HTTP_WEB_PATH + "/development_placeholder.html";
+       	document.getElementById(frameId).src = HTTP_WEB_PATH + "/production_placeholder.html";
        	frameDisplay.style.display ="block";
         break;
 		} 
