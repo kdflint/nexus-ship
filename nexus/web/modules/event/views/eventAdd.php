@@ -87,7 +87,7 @@
  						</div>
 						<div id="location-block" style="display:block;">
 	      			<div style="margin-top:5px;">
-	      				<input type="text" name="meeting-loc" style="width:100%;" maxlength="200" placeholder="Location"></textarea>
+	      				<input type="text" name="meeting-loc" style="width:100%;" maxlength="200" placeholder="Location">
 							</div>
       				<div style="margin-top:10px;">
 		      			<input type="text" name="meeting-contact" style="width:100%" maxlength="50" placeholder="Contact Email" >

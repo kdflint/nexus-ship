@@ -1038,8 +1038,15 @@ function populateEventForm(i) {
 	var eventForm = document.forms['schedule-form'];	
   if (currentEvents[i].purpose) { eventForm['meeting-name'].value = currentEvents[i].purpose; }
 	if (currentEvents[i].url) { eventForm['meeting-url'].value = currentEvents[i].url; }
-	if (currentEvents[i].descr) { eventForm['meeting-descr'].innerHTML = currentEvents[i].descr.replace(new RegExp( '~', 'g' ), '\r\n'); }
-	if (currentEvents[i].registration) { eventForm['meeting-registr'].innerHTML = currentEvents[i].registration; }
+	if (currentEvents[i].descr) { 
+		var descrString = currentEvents[i].descr.replace(new RegExp( '~', 'g' ), '\r\n');
+		eventForm['meeting-descr'].innerHTML = descrString;
+		eventForm['meeting-descr'].value = descrString;
+	}
+	if (currentEvents[i].registration) { 
+		eventForm['meeting-registr'].innerHTML = currentEvents[i].registration; 
+		eventForm['meeting-registr'].value = currentEvents[i].registration;
+	}
 	if (currentEvents[i].regr_url) { eventForm['registration-url'].value = currentEvents[i].regr_url; }
 	if (currentEvents[i].location) { eventForm['meeting-loc'].value = currentEvents[i].location; }
 	if (currentEvents[i].tz_extract_name) { eventForm['tzone-name'].value = currentEvents[i].tz_extract_name; }
@@ -1113,7 +1120,7 @@ function populateEventForm(i) {
 	document.getElementById('schedule-form-submit').innerHTML = "Approve";
 	document.getElementById('schedule-form-submit').disabled = false;
 	eventForm['meeting-uuid'].value = currentEvents[i].uuid;
-			
+
 	return true;
 }
 	
