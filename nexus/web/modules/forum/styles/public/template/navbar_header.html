@@ -11,7 +11,8 @@
 
 			<!-- BEGIN navlinks -->
 				<!-- EVENT overall_header_navlink_prepend -->
-				
+				<!-- The root category forum for every network is named "All Forums", with the forum description field designating the network name. Maybe this is good enough. Maybe we should figure out a better string substitution here in the template. Dont' really want to alter the php., buy that's possible too. See https://wiki.phpbb.com/Tutorial.Template_syntax -->		
+				<span class="crumb"{$MICRODATA}<!-- IF navlinks.MICRODATA --> {navlinks.MICRODATA}<!-- ENDIF -->><a href="{navlinks.U_VIEW_FORUM}" itemprop="url"><span itemprop="title">{navlinks.FORUM_NAME}</span></a></span>
 				<!-- EVENT overall_header_navlink_append -->
 			<!-- END navlinks -->
 			<!-- EVENT overall_header_breadcrumb_append -->
