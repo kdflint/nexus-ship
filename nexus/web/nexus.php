@@ -259,11 +259,7 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 				ACTIVITY_FLAG = 0;
 			}
 	   </script>
-	   
-	   <script type="text/javascript">
-
-</script>
-     
+	       
   </head>
   
   <body>
