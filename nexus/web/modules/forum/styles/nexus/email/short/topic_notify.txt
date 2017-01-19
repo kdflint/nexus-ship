@@ -1,0 +1,13 @@
+Subject: Topic reply notification - "{TOPIC_TITLE}"
+
+Hello {USERNAME},
+
+You are receiving this notification because you are watching the topic "{TOPIC_TITLE}" at Nexus Advantage.
+
+This topic has received a reply<!-- IF AUTHOR_NAME != '' --> by {AUTHOR_NAME}<!-- ENDIF --> since your last visit. You can use the following link to view the replies made. No more notifications will be sent until you visit the topic.
+
+http://www.faithhealthtransformation.org/forum/
+
+If you no longer wish to watch this topic, please reply to this email with "unsubscribe" in the Subject line.
+
+{EMAIL_SIG}

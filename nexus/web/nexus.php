@@ -238,8 +238,6 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
        	$( "#organization-form-country" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
         $( "#organization-form-country" ).selectmenu({ change: function() { displayStates(); } });
         $( "#organization-form-countryStates" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
-
-
       });
     </script> 
        
@@ -260,8 +258,8 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 				}
 				ACTIVITY_FLAG = 0;
 			}
-    </script>
-     
+	   </script>
+	       
   </head>
   
   <body>
