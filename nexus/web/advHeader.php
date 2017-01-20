@@ -8,7 +8,7 @@
 			<span style="margin-left:124px;"><img src="<?php echo(Utilities::getPartnerImageRoot()); ?><?php echo $_SESSION['logo']; ?>" height="40"/></span>
 			<span class="product-name" style="font-size:90%;color:#004d62;opacity:1;"><?php echo $_SESSION['networkName']; ?></span>  
 			<span class="controls" style="float:right;padding:10px;padding-right:0px;">
-				<a href="#" title="Profile"><span class="fa fa-cog fa-2x" style="margin-right:10px;"></span></a>
+				<a href="<?php echo(Utilities::getHttpPath()); ?>/nexus.php?view=profileuser-<?php echo $_SESSION['username']; ?>" title="Profile"><span class="fa fa-cog fa-2x" style="margin-right:10px;"></span></a>
 				<a href="javascript:void(0)" onclick="if(typeof Formilla != 'undefined'){Formilla.initFormillaChat();}" title="Help"><span class="fa fa-question fa-2x" style="margin-right:10px;"></span></a>
 	  		<a href="login.php?oid=<?php echo $_SESSION['orgUid']; ?>&logout=true" style="color:#d27b4b;text-decoration:none;" title="Logout"><span class="fa fa-sign-out fa-2x" style="margin-right:0px;"></span></a>
 			</span>
@@ -22,7 +22,6 @@
 				<a id="adv-menu-network" class="pure-button button-menu-adv" href="javascript:void(0)" onclick="toggleAdvFrameDisplay(this)" style="float:right;background-color:#dae0bc;margin-right:-7px;">NETWORK</a> 	
 				<a id="adv-menu-event" class="pure-button button-menu-adv" href="javascript:void(0)" onclick="toggleAdvFrameDisplay(this)" style="float:right;background-color:rgba(137, 157, 112, 1);margin-right:-7px;" >EVENTS</a>
 				<a id="adv-menu-360" class="pure-button button-menu-adv" href="javascript:void(0)" onclick="toggleAdvFrameDisplay(this)" style="float:right;background-color:#dae0bc;margin-right:-7px;">360&deg;</a> 	
-				
 			</span>
 		</div>
 	</span>
