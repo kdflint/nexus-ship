@@ -1,0 +1,141 @@
+<!-- INCLUDE overall_header_profile.html -->
+
+<!-- 
+
+**********  MASSIVE TODO ************
+In time crunch, I created a new file overall_header_profile.html that is exactly like
+overall_header.html except it leaves out the navbar include around line 95.
+
+Pretty sure I should use the preceding event to filter out the unwanted contents in the navbar
+
+Or something, just not this!
+
+-->
+
+<h2 class="memberlist-title">{PAGE_TITLE}</h2>
+
+<!-- EVENT memberlist_view_content_prepend -->
+
+<form method="post" action="{S_PROFILE_ACTION}" id="viewprofile">
+<div class="panel bg1<!-- IF S_ONLINE --> online<!-- ENDIF -->">
+	<div class="inner">
+
+	<!-- IF AVATAR_IMG -->
+		<dl class="left-box">
+			<dt class="profile-avatar">{AVATAR_IMG}</dt>
+			<!-- EVENT memberlist_view_rank_avatar_before -->
+			<!-- IF RANK_TITLE --><dd style="text-align: center;">{RANK_TITLE}</dd><!-- ENDIF -->
+			<!-- IF RANK_IMG --><dd style="text-align: center;">{RANK_IMG}</dd><!-- ENDIF -->
+			<!-- EVENT memberlist_view_rank_avatar_after -->
+		</dl>
+	<!-- ENDIF -->
+
+	<dl class="left-box details profile-details">
+		<dt>{L_USERNAME}{L_COLON}</dt>
+		<dd>
+			<!-- IF USER_COLOR --><span style="color: {USER_COLOR}; font-weight: bold;"><!-- ELSE --><span><!-- ENDIF -->{USERNAME}</span>
+		</dd>
+		<!-- IF not AVATAR_IMG -->
+			<!-- EVENT memberlist_view_rank_no_avatar_before -->
+			<!-- IF RANK_TITLE --><dt>{L_RANK}{L_COLON}</dt> <dd>{RANK_TITLE}</dd><!-- ENDIF -->
+			<!-- IF RANK_IMG --><dt><!-- IF RANK_TITLE -->&nbsp;<!-- ELSE -->{L_RANK}{L_COLON}<!-- ENDIF --></dt> <dd>{RANK_IMG}</dd><!-- ENDIF -->
+			<!-- EVENT memberlist_view_rank_no_avatar_after -->
+		<!-- ENDIF -->
+		<!-- IF S_USER_INACTIVE --><dt>{L_USER_IS_INACTIVE}{L_COLON}</dt> <dd>{USER_INACTIVE_REASON}</dd><!-- ENDIF -->
+		<!-- IF AGE !== '' --><dt>{L_AGE}{L_COLON}</dt> <dd>{AGE}</dd><!-- ENDIF -->
+		<!-- EVENT memberlist_view_non_contact_custom_fields_before -->
+		<!-- BEGIN custom_fields -->
+			<!-- IF not custom_fields.S_PROFILE_CONTACT -->
+				<dt>{custom_fields.PROFILE_FIELD_NAME}{L_COLON}</dt> <dd>{custom_fields.PROFILE_FIELD_VALUE}</dd>
+			<!-- ENDIF -->
+		<!-- END custom_fields -->
+		<!-- EVENT memberlist_view_non_contact_custom_fields_after -->
+		<!-- EVENT memberlist_view_zebra_before -->
+		<!-- IF S_USER_LOGGED_IN and S_ZEBRA -->
+			<!-- IF U_REMOVE_FRIEND -->
+				<dt>&nbsp;</dt> <dd class="zebra"><a href="{U_REMOVE_FRIEND}" data-ajax="zebra"><strong>{L_REMOVE_FRIEND}</strong></a></dd>
+			<!-- ELSEIF U_REMOVE_FOE -->
+				<dt>&nbsp;</dt> <dd class="zebra"><a href="{U_REMOVE_FOE}" data-ajax="zebra"><strong>{L_REMOVE_FOE}</strong></a></dd>
+			<!-- ELSE -->
+				<!-- IF U_ADD_FRIEND -->
+					<dt>&nbsp;</dt> <dd class="zebra"><a href="{U_ADD_FRIEND}" data-ajax="zebra"><strong>{L_ADD_FRIEND}</strong></a></dd>
+				<!-- ENDIF -->
+				<!-- IF U_ADD_FOE -->
+					<dt>&nbsp;</dt> <dd class="zebra"><a href="{U_ADD_FOE}" data-ajax="zebra"><strong>{L_ADD_FOE}</strong></a></dd>
+				<!-- ENDIF -->
+			<!-- ENDIF -->
+		<!-- ENDIF -->
+		<!-- EVENT memberlist_view_zebra_after -->
+	</dl>
+
+	</div>
+</div>
+
+<!-- EVENT memberlist_view_contact_before -->
+<div class="panel bg2">
+	<div class="inner">
+
+	<div class="column1">
+		<h3>{L_CONTACT_USER}</h3>
+
+		<dl class="details">
+		<!-- IF U_EMAIL --><dt>{L_EMAIL_ADDRESS}{L_COLON}</dt> <dd><a href="{U_EMAIL}">{L_SEND_EMAIL_USER}</a></dd><!-- ENDIF -->
+		<!-- IF U_PM --><dt>{L_PM}{L_COLON}</dt> <dd><a href="{U_PM}">{L_SEND_PRIVATE_MESSAGE}</a></dd><!-- ENDIF -->
+		<!-- IF U_JABBER and S_JABBER_ENABLED --><dt>{L_JABBER}{L_COLON}</dt> <dd><a href="{U_JABBER}" onclick="popup(this.href, 750, 320); return false;">{L_SEND_JABBER_MESSAGE}</a></dd><!-- ELSEIF USER_JABBER --><dt>{L_JABBER}{L_COLON}</dt> <dd>{USER_JABBER}</dd><!-- ENDIF -->
+		<!-- EVENT memberlist_view_contact_custom_fields_before -->
+		<!-- BEGIN custom_fields -->
+			<!-- IF custom_fields.S_PROFILE_CONTACT -->
+				<dt>{custom_fields.PROFILE_FIELD_NAME}{L_COLON}</dt>
+				<!-- IF custom_fields.PROFILE_FIELD_CONTACT -->
+					<dd><a href="{custom_fields.PROFILE_FIELD_CONTACT}">{custom_fields.PROFILE_FIELD_DESC}</a></dd>
+				<!-- ELSE -->
+					<dd>{custom_fields.PROFILE_FIELD_VALUE}</dd>
+				<!-- ENDIF -->
+			<!-- ENDIF -->
+		<!-- END custom_fields -->
+		<!-- EVENT memberlist_view_contact_custom_fields_after -->
+		<!-- IF S_PROFILE_FIELD1 -->
+			<!-- NOTE: Use a construct like this to include admin defined profile fields. Replace FIELD1 with the name of your field. -->
+			<dt>{PROFILE_FIELD1_NAME}{L_COLON}</dt> <dd>{PROFILE_FIELD1_VALUE}</dd>
+		<!-- ENDIF -->
+		</dl>
+	</div>
+
+	<div class="column2">
+		<h3>USER PROFILE</h3>
+		<dl class="details">
+			<!-- EVENT memberlist_view_user_statistics_before -->
+			<dt>{L_JOINED}{L_COLON}</dt> <dd>{JOINED}</dd>
+			<dt>{L_LAST_ACTIVE}{L_COLON}</dt> <dd>{LAST_ACTIVE}</dd>
+			<!-- IF S_WARNINGS -->
+			<dt>{L_WARNINGS}{L_COLON} </dt>
+			<dd><strong>{WARNINGS}</strong><!-- IF U_NOTES or U_WARN --> [ <!-- IF U_NOTES --><a href="{U_NOTES}">{L_VIEW_NOTES}</a><!-- ENDIF --> <!-- IF U_WARN --><!-- IF U_NOTES --> | <!-- ENDIF --><a href="{U_WARN}">{L_WARN_USER}</a><!-- ENDIF --> ]<!-- ENDIF --></dd>
+			<!-- ENDIF -->
+			<!-- IF S_SHOW_ACTIVITY and POSTS -->
+				<dt>{L_ACTIVE_IN_FORUM}{L_COLON}</dt> <dd><!-- IF ACTIVE_FORUM != '' --><strong>{ACTIVE_FORUM}</strong><br />({ACTIVE_FORUM_POSTS} / {ACTIVE_FORUM_PCT})<!-- ELSE --> - <!-- ENDIF --></dd>
+			<!-- ENDIF -->
+			<!-- EVENT memberlist_view_user_statistics_after -->
+		</dl>
+	</div>
+
+	</div>
+</div>
+<!-- EVENT memberlist_view_contact_after -->
+
+<!-- IF SIGNATURE -->
+<div class="panel bg1">
+	<div class="inner">
+
+		<h3>{L_SIGNATURE}</h3>
+
+		<div class="postbody"><div class="signature standalone">{SIGNATURE}</div></div>
+
+	</div>
+</div>
+<!-- ENDIF -->
+
+</form>
+
+<!-- EVENT memberlist_view_content_append -->
+
+<!-- INCLUDE overall_footer.html -->

@@ -36,40 +36,36 @@ if ($_SESSION['nexusContext'] == "ADV") {
 	require_once(Utilities::getModulesRoot() . "/forum/forum_integration.php");
 	$user->session_begin();
 	Utilities::loginForum($user, $auth);
-	// Login the user to the forum if there is not already a forum session matching this username
-	/*
-	if ($user->data['username'] !== $_SESSION['username']) {
-		// TODO - how to manage existing and unknown passwords in prod? must auto-enroll at login...
-		$forumPassword = ($_SESSION['environment'] === "prod") ? $_SESSION['username'] : $_SESSION['password'];
-		$result = $auth->login($_SESSION['username'], $forumPassword);
-		$auth->acl($user->data);
-		$user->setup();	
-		$user->data['user_timezone'] = $clean['tz'];
-	}
-	*/
 }	
 	
 Utilities::setSessionLastActivity();
 
 $showProfile = "false";
+$showProfileAdv = "false";
 $showTeam = "false";
 $showFatal = "false";
 $showOrganizationDetail = "false";
+$showNwmProfile = "false";
 $showOrgDetailId = "";
+$showNwmProfileUsername = "";
 
 // TODO - add the NWM/ADV check to these
 if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharacterSet($_GET['view'])) {
 	switch($_GET['view']) {
-		case "profile": $showProfile = "true"; break;
+		case "profile": 
+			if ($_SESSION['nexusContext'] == "ADV") {
+				$showAdvProfile = "true";
+			} else {
+				$showProfile = "true"; 
+			}
+			break;
 		case "team": $showTeam = "true"; break;
 		case "fatal": $showFatal = "true"; break;
-		// We have ensured that $_GET['view'] will evaluate to true, that's why below works
-		case "orgid":
-			echo $_GET['view'];
-			echo strpos($_GET['view'], 'orgid-') === 0 ? "true" : "false";
-			exit(0);
+		// We have ensured that $_GET['view'] will evaluate to true, that's why below is viable
 		case (strpos($_GET['view'], 'orgid-') === 0 ? true : false):
 			$showOrganizationDetail = "true"; $showOrgDetailId = substr($_GET['view'], 6);
+		case (strpos($_GET['view'], 'profileuser-') === 0 ? true : false):
+			$showNwmProfile = "true"; $showNwmProfileUsername = substr($_GET['view'], 12);		
 	}
 }
 
@@ -162,6 +158,8 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 				});
 				if(<?php echo $showProfile; ?>) {
 					$( "#profile_control" ).click();
+				} else if (<?php echo $showProfileAdv; ?>) {
+	    			window.location.assign("http://localhost/nexus/nexus/web/nexus.php#openSecurityProfile");
 				}
 				if(<?php echo $showTeam; ?>) {
 					$( "#menu-userList" ).click();
@@ -181,13 +179,17 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 					document.getElementById("training-register2").setAttribute("target", "");
 					document.getElementById("index-module-name").innerHTML = "Web Meet Demo";
 					document.getElementById("get-nexus-link").innerHTML = "<a href='http://northbridgetech.org/apps/waterwheel/module/core/index.php?view=apply' target='_blank'>Get Nexus</a>";
-				}		
-				
+				}					
 				if(<?php echo $showOrganizationDetail; ?>) {
 					$( "#adv-menu-network" ).click();
 					showDirectoryDetail("<?php echo $showOrgDetailId; ?>");	
 				}
-
+				if(<?php echo $showNwmProfile; ?>) {
+					var iframeSrc = HTTP_FORUM_PATH  + "/memberlist.php?mode=viewprofile&un=<?php echo($showNwmProfileUsername); ?>";
+    			var iframe = document.getElementById("adv-profile-frame");
+    			iframe.src = iframeSrc;
+    			window.location.assign("http://localhost/nexus/nexus/web/nexus.php#openProfile");
+				}
 			});
 			
 			function toggleJoinDisplay() {
@@ -238,8 +240,6 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
        	$( "#organization-form-country" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
         $( "#organization-form-country" ).selectmenu({ change: function() { displayStates(); } });
         $( "#organization-form-countryStates" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
-
-
       });
     </script> 
        
@@ -260,8 +260,8 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 				}
 				ACTIVITY_FLAG = 0;
 			}
-    </script>
-     
+	   </script>
+	       
   </head>
   
   <body>

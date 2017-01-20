@@ -11,14 +11,22 @@ if(isset($_GET['userMessage'])) {
 ?>
 
 <div id="network-secondary" class="secondaryControlContainer">
-	<a href='#openDirectoryEdit' onclick="return resetDirectoryForm();" class="secondaryControl" title="Add New Organization"><span class='fa fa-address-card-o fa-lg' ></span><span style='padding-left:2px;' class='fa fa-plus' ></span></a>
+	<?php if (Utilities::isSessionAdmin()) { ?>
+		<a href='#openDirectoryEdit' onclick="return resetDirectoryForm();" class="secondaryControl" title="Add New Organization"><span class='fa fa-address-card-o fa-lg' ></span><span style='padding-left:2px;' class='fa fa-plus' ></span></a>
+	<?php } ?>
 	<!-- TODO - move js controls from public to nexus.js -->
 	<a id='map_control' href="#" onclick="initMap();" class="secondaryControl" title="Map View"><span id="directory_control" class='fa fa-globe fa-lg'></span></a>
 	<a id="secondary-network-filter"class="secondaryControl" href="#" onclick="toggleTertiary('network-tertiary');" title="Change Filter"><span class='fa fa-filter fa-lg' ></span></a>
 	<!--<a id="secondary-network-edit" class="secondaryControl" href="#openDirectoryEdit" onclick="return populateDirectoryForm();" title="Edit Organization" style="display:none;"><span class='fa fa-pencil fa-lg' ></span></a>-->
-	<a id="secondary-network-edit" class="secondaryControl" href="#" onclick="alert('Edit functionality on the way...')" title="Edit Organization" style="display:none;"><span class='fa fa-pencil fa-lg' ></span></a>
+	<?php if (Utilities::isSessionAdmin()) { ?>
+		<a id="secondary-network-edit" class="secondaryControl" href="#" onclick="alert('Edit functionality on the way...')" title="Edit Organization" style="display:none;"><span class='fa fa-pencil fa-lg' ></span></a>
+	<?php } ?>
 	<div id="network-tertiary" class="tertiaryControlContainer" style="display:none;">
-		Filter by group menu
+			<form action="#" class="pure-form">
+				<p>Limit search to these groups:</p>
+					<input type="radio" name="event-state-filter" value="event-list-pending" checked>&nbsp;Show all</br>
+					<input type="radio" name="event-state-filter" value="event-list-community" disabled>&nbsp;FBCEnRN</br>
+			</form>
 	</div>
 </div>
 

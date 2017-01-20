@@ -561,6 +561,13 @@ class Utilities {
 		}
 		return FALSE;
 	}
+	
+	public static function isSessionAdmin() {
+		if ($_SESSION['role'] === 'user') {
+			return FALSE;
+		}
+		return TRUE;
+	}		
 
 	public static function isSessionValid() {
 		if (isset($_SESSION['nexusContext']) && 
