@@ -159,7 +159,7 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 				if(<?php echo $showProfile; ?>) {
 					$( "#profile_control" ).click();
 				} else if (<?php echo $showProfileAdv; ?>) {
-	    			window.location.assign("http://localhost/nexus/nexus/web/nexus.php#openSecurityProfile");
+	    			window.location.assign(HTTP_WEB_PATH + "/nexus.php#openSecurityProfile");
 				}
 				if(<?php echo $showTeam; ?>) {
 					$( "#menu-userList" ).click();
@@ -188,7 +188,7 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 					var iframeSrc = HTTP_FORUM_PATH  + "/memberlist.php?mode=viewprofile&un=<?php echo($showNwmProfileUsername); ?>";
     			var iframe = document.getElementById("adv-profile-frame");
     			iframe.src = iframeSrc;
-    			window.location.assign("http://localhost/nexus/nexus/web/nexus.php#openProfile");
+    			window.location.assign(HTTP_WEB_PATH + "/nexus.php#openProfile");
 				}
 			});
 			
