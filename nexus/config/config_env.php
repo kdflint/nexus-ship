@@ -8,7 +8,6 @@
 	define("PTR_ROOT", "/home/kdflint/projects/nexus-community/nexus/partner");
 	define("LCL_ROOT", "/home/kdflint/projects/nexus-community/nexus/locale");
 	define("PHPBB3_ROOT", "/home/kdflint/phpBB3");
-	define("ENV_ROOT", "/home/kdflint");
 	define("PTR_STC_ROOT", "/partner");
 	define("APP_NAME", "/nexus/nexus");
 	define("PILOT_NAME", "/nexus/pilot");
@@ -20,7 +19,6 @@
 // OTHER
 	define("SSN_TIMEOUT", "-1"); // in seconds
 	define("PUBLIC_GROUP", "7");
-
 
 // DATABASE
 	define("DB_HOST", "localhost"); 
@@ -34,7 +32,6 @@
 	require_once("sensitive_config.php");
 	
 // DEMO
-
 	define("DEMO_UIDPK", "287");
 	define("DEMO_USERNAME", "userdemo");
 	define("DEMO_PASSWORD", "fakepassword295");
@@ -42,7 +39,6 @@
 	define("DEMO_EVENT_FUTURE", "76,77");
 	
 // TEMPORARY
-
 	define("EVENT_APPROVE_LIST", "kathy.flint@northbridgetech.org");
 		
 ?>
