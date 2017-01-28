@@ -36,4 +36,8 @@ deploy build
 
 ==
 
+schedule forum_cron
+
+==
+
 -- copy over directory/views/include from last deploy - this is a defect

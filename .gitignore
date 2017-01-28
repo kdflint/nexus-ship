@@ -20,6 +20,7 @@ pilot/view/include/scrapToggleCode.php
 pilot/guidestar/*
 new_nexus
 nexus/lib/Validate.php
+nexus/lib/Log.php
 nexus/lib/rememberme/*
 nexus/lib/bigbluebutton/*
 nexus/web/vendor/*
