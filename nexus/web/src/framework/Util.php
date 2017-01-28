@@ -1,8 +1,7 @@
 <?php
 
 require_once(dirname(__FILE__) . "/../../../config/config_env.php");
-//TODO - fix this path
-require_once(ENV_ROOT . "/php/Log-1.13.1/Log-1.13.1/Log.php");
+require_once(PHP_ROOT . "/Log.php");
 require_once(PHPBB3_ROOT . "/config.php");
 require_once(Utilities::getModulesRoot() . "/error/handlers.php");
 require_once(Utilities::getPhpRoot() . "/Validate.php");
