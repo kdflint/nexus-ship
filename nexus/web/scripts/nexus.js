@@ -399,6 +399,10 @@ function loadAdvPage(resource) {
     		document.getElementById("network_display").style.display ="block";
     		divDisplay.style.display ="block";
     		break;
+    	case "adv-menu-profile":
+    		document.getElementById("profile_display").style.display ="block";
+    		divDisplay.style.display ="block";
+    		break;
     	default:
        	document.getElementById(frameId).src = HTTP_WEB_PATH + "/production_placeholder.html";
        	frameDisplay.style.display ="block";

@@ -1,16 +1,26 @@
+DROP TABLE forum_poll;
+
+CREATE TABLE forum_poll
+(
+  forum_last_poll_dttm timestamp with time zone,
+  topic_last_poll_dttm timestamp with time zone
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE forum_poll
+  OWNER TO northbr6_devnexus;
+GRANT ALL ON TABLE forum_poll TO northbr6_devnexus;
+GRANT ALL ON TABLE forum_poll TO northbr6_nbnexus;
+GRANT SELECT, UPDATE, INSERT, REFERENCES ON TABLE forum_poll TO northbr6_web WITH GRANT OPTION;
+
+insert into forum_poll (forum_last_poll_dttm, topic_last_poll_dttm) values (now(), now());
+
 
 -- copy over directory/views/include from last deploy - this is a defect
 
--- put soft link to newtopic_notify.txt
-~/phpBB3/language/en/email/short$ mv newtopic_notify.txt newtopic_notify_overridden.txt
+ln -s /home/northbri/public_html/dev/nexus/web/src/framework/Util.php Util.php
+ln -s /home/northbri/public_html/dev/nexus/web/src/framework/PgDb.php PgDb.php
 
-ln -s ~/projects/nexus-community/nexus/web/modules/forum/styles/nexus/email/short/newtopic_notify.txt newtopic_notify.txt
-
-~/public_html/dev/forum/language/en/email/short$ mv topic_notify.txt topic_notify_overridden.txt
-
-
-ln -s ~/public_html/dev/nexus/web/modules/forum/styles/nexus/email/short/topic_notify.txt topic_notify.txt
-
-
-	
-	
+--updates to config, sensitive config
+--forum db connection, password

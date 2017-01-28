@@ -27,8 +27,8 @@ $input = array('email' => $_POST['email'],
 							'lname' => $_POST['lname'],
 							'password1' => $_POST['password1'],
 							'password2' => $_POST['password2'],
-							'sms' => "",
-							'phone' => "",
+							'sms' => $_POST['sms'],
+							'phone' => $_POST['phone'],
 							'descr' => ""
 							);
 							
@@ -49,7 +49,7 @@ Recently the email address was updated on your Nexus Web Meet account.
 If you did not request this change, please contact our support team at support@northbridgetech.org.
 
 The Support Team at
-NorthBridge Technology Alliance";
+Northbridge Technology Alliance";
 
 	mail($_SESSION['email'], "[Nexus] Profile Update", $message, "From: noreply@northbridgetech.org\r\nCc: " . $result['good']['email']);
 }
@@ -77,7 +77,7 @@ Recently the password was updated on your Nexus Web Meet account.
 If you did not request this change, please contact our support team at support@northbridgetech.org.
 
 The Support Team at
-NorthBridge Technology Alliance";
+Northbridge Technology Alliance";
 
 	mail($_SESSION['email'], "[Nexus] Profile Update", $message, "From: noreply@northbridgetech.org\r\nCc: " . $result['good']['email']);
 }
@@ -88,8 +88,8 @@ $_SESSION['email'] = $_SESSION['fname'] = $_SESSION['lname'] = ""; // = $_SESSIO
 
 while ($row = pg_fetch_array($cursor)) {
 	$_SESSION['email'] = $row['email'];
-  //$_SESSION['sms'] = Utilities::prettyPrintPhone($row['cell']);
-  //$_SESSION['phone'] = Utilities::prettyPrintPhone($row['phone']);
+  $_SESSION['sms'] = Utilities::prettyPrintPhone($row['cell']);
+  $_SESSION['phone'] = Utilities::prettyPrintPhone($row['phone']);
   $_SESSION['fname'] = $row['first']; 
   $_SESSION['lname'] = $row['last'];
 }

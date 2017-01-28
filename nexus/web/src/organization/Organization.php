@@ -66,10 +66,16 @@ class Organization {
 	
 	public static function getOrganizationsByGroupId($groupIdList) {
 			$query = "select uo.organization_fk as oid from user_organization uo, user_group ug where ug.group_fk in ($1) and ug.user_fk = uo.user_fk";
-			return pgDb::psExecute($query, array($groupIdList));
+			return PgDatabase::psExecute($query, array($groupIdList));
 	}
 	
 	// LEFT OFF - move over all methods from pilot pgDb to Organization (ones that are referenced in searchProcessor.php)
+
+	public static function countOrgsInNetworkById($networkId) {
+		$query = "select id from organization_organization where organization_from_fk=$1 and relationship='parent'";
+		$count = pg_num_rows(PgDatabase::psExecute($query, array($networkId)));
+		return $count;
+	}
 
 	public static function validateNetworkId($in) {
 		if(Utilities::validateNetworkIdFormat($in)) {

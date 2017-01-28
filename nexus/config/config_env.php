@@ -8,6 +8,7 @@
 	define("PTR_ROOT", "/home/kdflint/projects/nexus-community/nexus/partner");
 	define("LCL_ROOT", "/home/kdflint/projects/nexus-community/nexus/locale");
 	define("PHPBB3_ROOT", "/home/kdflint/phpBB3");
+	define("ENV_ROOT", "/home/kdflint");
 	define("PTR_STC_ROOT", "/partner");
 	define("APP_NAME", "/nexus/nexus");
 	define("PILOT_NAME", "/nexus/pilot");
@@ -25,7 +26,10 @@
 	define("DB_HOST", "localhost"); 
 	define("DB_USER", "northbr6_web"); 
 	define("DB_NAME", "localnexus");	
-
+	define("FORUM_HOST", "localhost");
+	define("FORUM_USER", "postgres");
+	define("FORUM_NAME", "localphpbb");
+	
 // SENSITIVE
 	require_once("sensitive_config.php");
 	

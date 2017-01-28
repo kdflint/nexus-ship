@@ -1,6 +1,9 @@
 <?php
 
 require_once(dirname(__FILE__) . "/../../../config/config_env.php");
+//TODO - fix this path
+require_once(ENV_ROOT . "/php/Log-1.13.1/Log-1.13.1/Log.php");
+require_once(PHPBB3_ROOT . "/config.php");
 require_once(Utilities::getModulesRoot() . "/error/handlers.php");
 require_once(Utilities::getPhpRoot() . "/Validate.php");
 require_once(Utilities::getSrcRoot() . "/user/User.php");
@@ -45,10 +48,19 @@ class Utilities {
 	public static function getDbPassword() {
 		return DB_PASSWORD; 
 	}
-	
+
 	public static function getDbName() {
 		return DB_NAME;
 	}
+	
+	// TODO - namespace below	variables read from phpbb internal config file
+	public static function getForumHost() { return FORUM_HOST; }
+
+	public static function getForumUser() { return FORUM_USER; }
+	
+	public static function getForumPassword() { return FORUM_PASSWORD; }
+	
+	public static function getForumName() { return FORUM_NAME; }
 	
 	public static function getGoogleApiKey() {
 		return GOOGLE_API_KEY;
