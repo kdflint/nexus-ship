@@ -8,6 +8,7 @@
 	define("PTR_ROOT", "/home/kdflint/projects/nexus-community/nexus/partner");
 	define("LCL_ROOT", "/home/kdflint/projects/nexus-community/nexus/locale");
 	define("PHPBB3_ROOT", "/home/kdflint/phpBB3");
+	define("LOG_ROOT", "/home/kdflint/projects/nexus-community/nexus/log");
 	define("PTR_STC_ROOT", "/partner");
 	define("APP_NAME", "/nexus/nexus");
 	define("PILOT_NAME", "/nexus/pilot");
@@ -19,6 +20,7 @@
 // OTHER
 	define("SSN_TIMEOUT", "-1"); // in seconds
 	define("PUBLIC_GROUP", "7");
+	define("SMS_SERVICE_USER", "kdflint");
 
 // DATABASE
 	define("DB_HOST", "localhost"); 

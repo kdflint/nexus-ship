@@ -165,6 +165,69 @@ body {
 	padding-right:10px; 
 }
 
+.profileBlock1 {
+	position:absolute;
+	left:15px;
+	width:420px;
+	height:400px;
+	margin-top: -10px;
+}	
+
+.profileBlock2 {
+	position:absolute;
+	left:460px;
+	height:400px;
+	margin-top: -10px;
+}	
+
+.profileBlock3 {
+	position:absolute;
+	left:10px;
+	width:96%;
+	top:420px; 
+	height: 230px;
+	padding-left: 5px;
+  border: 1px solid #a6c3ce !important;
+  border-radius: 10px;
+  -moz-border-radius: 10px;
+}
+
+.profileFormRow {
+	margin-top:5px;
+	position: relative;
+}
+
+.profileCol1 {
+	position:absolute;
+	left: 15px;
+	width: 160px;
+}
+
+.profileCol2 {
+	position:absolute;
+	left: 170px;
+}
+
+.messageCol1 {
+	position:absolute;
+	left: 15px;
+	width: 160px;
+}
+
+.messageCol2 {
+	position:absolute;
+	left: 170px;
+}
+
+.messageCol3 {
+	position:absolute;
+	left: 460px;
+}
+
+.messageCol4 {
+	position:absolute;
+	left: 540px;
+}
 
 /* TEXT */
 

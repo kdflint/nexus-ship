@@ -61,6 +61,13 @@ User::addUserOrgRelation($uidpk, $invitation['orgid'], $invitation['grantorid'],
 	
 User::addUserGroupRelation($uidpk, $invitation['groupid'], $invitation['roleid']);
 
+/*
+
+$forumGroupId = Group::getForumGroupIdByGroupId($invitation['groupid']);
+Forum::enrollUser($clean['username'], $forumGroupId);
+
+*/
+
 Invitation::consumeInvitationByUuid($_SESSION['invitation']);
 
 $row = pg_fetch_array(Group::getGroupById($invitation['groupid']));

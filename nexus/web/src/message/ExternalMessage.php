@@ -84,6 +84,23 @@ class ExternalMessage {
 		return $topicNotifications;
 	}
 
+	public static function insertMessage($uidpk, $subject, $message, $replyTo) {
+		$query = "insert into message (sender_fk, subject, message, reply_to_fk, create_dttm) values ($1, $2, $3, $4, now()) returning id";
+		$result = PgDatabase::psExecute($query, array($uidpk, $subject, $message, $replyTo));
+		$row = pg_fetch_row($result);
+		return $row[0];
+	}
+
+	public static function insertMessageRecipient($messageId, $recipientId, $uuid, $status) {
+		$query = "select exists (select true from message_recipient where message_fk = $1 and recipient_fk = $2)";
+		$row = pg_fetch_row(PgDb::psExecute($query, array($messageId, $recipientId)));
+		if (strcmp($row[0], "t")) {
+			$query = "insert into message_recipient (message_fk, recipient_fk, uuid, status) values ($1, $2, $3, $4)";
+			return PgDb::psExecute($query, array($messageId, $recipientId, $uuid, $status));
+		}
+		return FALSE;
+	}		
+
 }
 
 ?>

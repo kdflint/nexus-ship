@@ -16,6 +16,9 @@ GRANT SELECT, UPDATE, INSERT, REFERENCES ON TABLE forum_poll TO northbri_web WIT
 
 insert into forum_poll (forum_last_poll_dttm, topic_last_poll_dttm) values (now(), now());
 
+ALTER TABLE "group"
+   ADD COLUMN forum_group_id integer DEFAULT NULL;
+
 ==
 
 ~/batch/dev/nexus]# ln -s /home/northbri/public_html/dev/nexus/web/src/framework/Util.php Util.php
@@ -24,6 +27,8 @@ insert into forum_poll (forum_last_poll_dttm, topic_last_poll_dttm) values (now(
 ==
 
 updates to config, sensitive config w/ forum db connection info
+update to config: add log root and folder
+update to config and sensitive: set sms service credentials
 
 ==
 

@@ -52,6 +52,10 @@ class Utilities {
 		return DB_NAME;
 	}
 	
+	public static function getSmsServiceUsername() { return SMS_SERVICE_USER; }
+	
+	public static function getSmsServicePassword() { return SMS_SERVICE_PASSWORD; }
+	
 	// TODO - namespace below	variables read from phpbb internal config file
 	public static function getForumHost() { return FORUM_HOST; }
 
@@ -64,6 +68,8 @@ class Utilities {
 	public static function getGoogleApiKey() {
 		return GOOGLE_API_KEY;
 	}
+	
+	public static function getLogRoot() { return LOG_ROOT; }
 	
 	// Very Temporary Method
 	public static function getEventApprovalList() {

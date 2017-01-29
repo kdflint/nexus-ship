@@ -164,6 +164,13 @@ function setPublicSession2(oid, fname, relativePath) {
 	xmlhttp.send();
 }
 
+function disableTestMessageLink() {
+   var link=document.getElementById("testMessageLink");
+   link.style.color="#c9c9a7";
+   link.setAttribute("href", "#");
+   link.innerHTML = 'To test, save your changes';
+}
+
 function toggleRecurFormElements(override) {
 	var curValue = document.getElementById('repeat-check').checked;
 	var repeatBlock = document.getElementById("repeat-block");

@@ -152,8 +152,7 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 				});
 				if(<?php echo $showProfile; ?>) {
 					$( "#profile_control" ).click();
-				} else if (<?php echo $showProfileAdv; ?>) {
-	    			window.location.assign(HTTP_WEB_PATH + "/nexus.php#openSecurityProfile");
+    			$( "#adv-menu-profile" ).click();
 				}
 				if(<?php echo $showTeam; ?>) {
 					$( "#menu-userList" ).click();
