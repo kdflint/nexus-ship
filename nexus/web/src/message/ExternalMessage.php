@@ -83,7 +83,12 @@ class ExternalMessage {
 	
 		return $topicNotifications;
 	}
-
+	
+	public static function addForumSubscription($userId, $forumId) {
+		$query = "insert into phpbb_forums_watch fw (forum_id, user_id, notify_status) values ($2, $1, $3)";
+		ForumDatabase::psExecute($query, array($userId, $forumId, "0"));
+	}
+	
 	public static function insertMessage($uidpk, $subject, $message, $replyTo) {
 		$query = "insert into message (sender_fk, subject, message, reply_to_fk, create_dttm) values ($1, $2, $3, $4, now()) returning id";
 		$result = PgDatabase::psExecute($query, array($uidpk, $subject, $message, $replyTo));

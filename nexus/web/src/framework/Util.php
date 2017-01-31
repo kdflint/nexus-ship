@@ -59,6 +59,10 @@ class Utilities {
 	
 	public static function getForumRegisteredUserGroup() { return FORUM_REGISTERED_USER_GROUP; }
 	
+	public static function getForumNetworkUserGroup() { return CFCHT_FORUM_USER_GROUP; }
+	
+	public static function getNewCfchtForum() { return CFCHT_NEW_GROUP; }
+	
 	public static function getGoogleApiKey() { return GOOGLE_API_KEY;	}
 	
 	public static function getLogRoot() { return LOG_ROOT; }

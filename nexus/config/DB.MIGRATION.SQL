@@ -29,11 +29,12 @@ ALTER TABLE "group"
 updates to config, sensitive config w/ forum db connection info
 update to config: add log root and folder, check permissions
 update to config and sensitive: set sms service credentials
-update to config: set FORUM_REGISTERED_USER_GROUP
+update to config: set FORUM_REGISTERED_USER_GROUP, FORUM_NETWORK_USER_GROUP, CFCHT_NEW_GROUP
 
 ==
 
-shut down forum emails
+shut down forum emails?
+update max login attempts to 0
 purge forum cache
 
 ==

@@ -21,7 +21,7 @@
 	define("SSN_TIMEOUT", "-1"); // in seconds
 	define("PUBLIC_GROUP", "7");
 	define("SMS_SERVICE_USER", "kdflint");
-	define("FORUM_REGISTERED_USER_GROUP", "8");;
+	define("FORUM_REGISTERED_USER_GROUP", "8");
 
 // DATABASE
 	define("DB_HOST", "localhost"); 
@@ -43,5 +43,7 @@
 	
 // TEMPORARY
 	define("EVENT_APPROVE_LIST", "kathy.flint@northbridgetech.org");
+	define("CFCHT_FORUM_USER_GROUP", "8");
+	define("CFCHT_NEW_GROUP", "14");
 		
 ?>
