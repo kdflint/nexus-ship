@@ -10,7 +10,8 @@ var IS_TIMER_INIT = false;
 var ACTIVITY_FLAG = 1;
 var DEFAULT_FORUM;
 var HTTP_WEB_PATH;
-var HTTP_FORUM_PATH ;
+var HTTP_FORUM_PATH;
+var FORUM_SESSION_REFRESH_COUNTER = 0;
 
 
 /*
@@ -169,6 +170,21 @@ function disableTestMessageLink() {
    link.style.color="#c9c9a7";
    link.setAttribute("href", "#");
    link.innerHTML = 'To test, save your changes';
+}
+
+function post(to, p) {
+  var myForm = document.createElement("form");
+  myForm.method="post" ;
+  myForm.action = to ;
+  for (var k in p) {
+    var myInput = document.createElement("input") ;
+    myInput.setAttribute("name", k) ;
+    myInput.setAttribute("value", p[k]);
+    myForm.appendChild(myInput) ;
+  }
+  document.body.appendChild(myForm) ;
+  myForm.submit() ;
+  document.body.removeChild(myForm) ;
 }
 
 function toggleRecurFormElements(override) {
@@ -369,11 +385,17 @@ function checkGoodForumSession(thisFrame) {
    			thisFrame.src = HTTP_WEB_PATH + "/loading_placeholder.html";
    			console.log("Forum session expired. Attempting refresh.");
    			// TODO - catch the return value on this method?
-   			refreshForumSession();
-   			console.log("Return");
-				document.getElementById('adv-menu-forum').click();
+				if (FORUM_SESSION_REFRESH_COUNTER < 2) {
+   				refreshForumSession();
+   				console.log("Return on attempt " + FORUM_SESSION_REFRESH_COUNTER);
+   				FORUM_SESSION_REFRESH_COUNTER++;
+					document.getElementById('adv-menu-forum').click();
+				} else {
+					thisFrame.src = HTTP_WEB_PATH + "/service_unavailable.html";
+				}
    		} else {
    			console.log("Forum session valid.");
+   			FORUM_SESSION_REFRESH_COUNTER = 0;
    		}
    	}
 	}
@@ -421,7 +443,7 @@ function refreshForumSession() {
 	var xmlhttp = getXmlHttpRequest();
 	xmlhttp.onreadystatechange=function() {
 		console.log(xmlhttp.readyState);
-  	if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {  }
+  	if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { return true;  }
  	}
  	console.log("refreshing forum");
 	xmlhttp.open("GET","src/framework/sessionManager.php?forum=1", false); // synchronous call

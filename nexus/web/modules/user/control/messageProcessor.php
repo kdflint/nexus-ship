@@ -2,7 +2,7 @@
 
 session_start();
 
-require_once("util.php");require_once("../../../src/framework/Util.php");
+require_once("../../../src/framework/Util.php");
 require_once(Utilities::getSrcRoot() . "/message/ExternalMessage.php");
 require_once(Utilities::getSrcRoot() . "/user/User.php");
 

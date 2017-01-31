@@ -112,7 +112,8 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 			DEFAULT_FORUM = "<?php echo $_SESSION['defaultForumId']; ?>";
 			HTTP_WEB_PATH = "<?php echo Utilities::getHttpPath(); ?>";
 			HTTP_FORUM_PATH = "<?php echo Utilities::getForumHttpPath(); ?>";
-
+			FORUM_SESSION_REFRESH_COUNTER = 0;
+			
 			<!-- include in this manner instead of in a meta link so that php code inside this file will resolve prior to runtime -->
     	<?php include("scripts/techCheck.js"); ?>
     	  	

@@ -21,6 +21,7 @@
 	define("SSN_TIMEOUT", "-1"); // in seconds
 	define("PUBLIC_GROUP", "7");
 	define("SMS_SERVICE_USER", "kdflint");
+	define("FORUM_REGISTERED_USER_GROUP", "8");;
 
 // DATABASE
 	define("DB_HOST", "localhost"); 

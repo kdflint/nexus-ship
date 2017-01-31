@@ -71,7 +71,7 @@ if (!strcmp($email_status, "checked")) {
 	</div>
 
 	<div class="profileBlock3">
-			<p><b>Your Messaging</b> | <a id="testMessageLink" href="javascript:post('<?php echo(Utilities::getModulesRoot()); ?>/user/control/messageProcessor.php',{testMessage:'true',phone:'<?php echo($testSms); ?>',email:'<?php echo($testEmail); ?>'})">Send yourself a test message</a></p>
+			<p><b>Your Messaging</b> | <a id="testMessageLink" href="javascript:post('<?php echo(Utilities::getHttpPath()); ?>/modules//user/control/messageProcessor.php',{testMessage:'true',phone:'<?php echo($testSms); ?>',email:'<?php echo($testEmail); ?>'})">Send yourself a test message</a></p>
 
 			<div class="profileFormRow" style="top:0px;">
 				<span class="messageCol3"><a href="#" class="tooltip" title="Nexus users may send messages to this private number or address.">Enabled?</a></span>

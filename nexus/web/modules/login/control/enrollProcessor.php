@@ -61,12 +61,18 @@ User::addUserOrgRelation($uidpk, $invitation['orgid'], $invitation['grantorid'],
 	
 User::addUserGroupRelation($uidpk, $invitation['groupid'], $invitation['roleid']);
 
-/*
-
-$forumGroupId = Group::getForumGroupIdByGroupId($invitation['groupid']);
-Forum::enrollUser($clean['username'], $forumGroupId);
-
-*/
+$addedUserId = Forum::enrollUser($clean['username'], $clean['username']);
+if ($addedUserId) {
+	// TODO - loop this for each group they are reuqired to add. This code just adds them to Registered Users, which works for public groups.
+	$groupId = Utilities::getForumRegisteredUserGroup();
+	$groupResult = Forum::addUserToGroupById($addedUserId, $groupId);
+	if (!$groupResult) {
+	} else {
+		$logger->log("Fail on add user " . $addedUserId . " to group " . $groupId, PEAR_LOG_INFO);
+	}
+} else {
+	$logger->log("Fail on add user " . $addedUserId . " to REGISTERED group ", PEAR_LOG_INFO);
+}
 
 Invitation::consumeInvitationByUuid($_SESSION['invitation']);
 

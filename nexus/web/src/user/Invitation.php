@@ -41,8 +41,12 @@ class Invitation {
 	}
 	
 	public static function consumeInvitationByUuid($uuid) {
-		$query = "update invitation set accept_dttm = now() where uuid = $1";
-		return PgDatabase::psExecute($query, array($uuid));
+		$row = pg_fetch_row(self::getOpenInvitationByUuid($uuid));
+		if ($row['type'] === 'single') {
+			$query = "update invitation set accept_dttm = now() where uuid = $1";
+			return PgDatabase::psExecute($query, array($uuid));
+		}
+		return true;
 	}
 	
 	public static function expireInvitationByUUid($uuid) {

@@ -34,7 +34,7 @@ $orgId = ""; // fill in
 $inviteUuid = Invitation:addGlobalInvitation("", $groupId, "5", $issuerId, $orgId);
 
 // TODO - can this get simpler?
-echo("http://nexus.northbridgetech.org/web/enroll?invitation=" . $inviteUuid);
+echo("http://northbridgetech.org/apps/nexus/web/enroll?invitation=" . $inviteUuid);
 
 function validateGroup($input) {
 	$result = array('clean' => array(), 'error' => array());
