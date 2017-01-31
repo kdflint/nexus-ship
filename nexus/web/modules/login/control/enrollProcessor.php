@@ -5,6 +5,7 @@ session_start();
 require_once("../../../src/framework/Util.php");
 require_once(Utilities::getSrcRoot() . "/user/Invitation.php");
 require_once(Utilities::getSrcRoot() . "/group/Group.php");
+require_once(Utilities::getSrcRoot() . "/message/ExternalMessage.php");
 require_once(Utilities::getModulesRoot() . "/login/control/MessageEnrollment.php");
 require_once(Utilities::getPhpRoot() . "/Log.php");
 

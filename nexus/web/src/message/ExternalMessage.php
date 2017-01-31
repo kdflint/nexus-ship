@@ -85,8 +85,8 @@ class ExternalMessage {
 	}
 	
 	public static function addForumSubscription($userId, $forumId) {
-		$query = "insert into phpbb_forums_watch fw (forum_id, user_id, notify_status) values ($2, $1, $3)";
-		ForumDatabase::psExecute($query, array($userId, $forumId, "0"));
+		$query = "insert into phpbb_forums_watch (forum_id, user_id) values ($2, $1)";
+		ForumDatabase::psExecute($query, array($userId, $forumId));
 	}
 	
 	public static function insertMessage($uidpk, $subject, $message, $replyTo) {

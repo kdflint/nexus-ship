@@ -33,7 +33,6 @@ update to config: set FORUM_REGISTERED_USER_GROUP, FORUM_NETWORK_USER_GROUP, CFC
 
 ==
 
-shut down forum emails?
 update max login attempts to 0
 purge forum cache
 
