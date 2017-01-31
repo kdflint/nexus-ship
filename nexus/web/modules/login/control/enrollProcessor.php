@@ -71,6 +71,7 @@ if ($invitation['type'] === 'single') {
 
 require_once(Utilities::getSrcRoot() . "/group/Forum.php");
 
+// NOTE - this also Forum-enrolls all Nexus Web Meet enrollees. Think this through...
 $addedUserId = Forum::enrollUser($clean['username'], $clean['username']);
 if ($addedUserId) {
 	// TODO - loop this properly
