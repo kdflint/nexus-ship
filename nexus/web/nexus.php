@@ -52,13 +52,7 @@ $showNwmProfileUsername = "";
 // TODO - add the NWM/ADV check to these
 if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharacterSet($_GET['view'])) {
 	switch($_GET['view']) {
-		case "profile": 
-			if ($_SESSION['nexusContext'] == "ADV") {
-				$showAdvProfile = "true";
-			} else {
-				$showProfile = "true"; 
-			}
-			break;
+		case "profile": $showProfile = "true"; break;
 		case "team": $showTeam = "true"; break;
 		case "fatal": $showFatal = "true"; break;
 		// We have ensured that $_GET['view'] will evaluate to true, that's why below is viable
@@ -118,7 +112,8 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 			DEFAULT_FORUM = "<?php echo $_SESSION['defaultForumId']; ?>";
 			HTTP_WEB_PATH = "<?php echo Utilities::getHttpPath(); ?>";
 			HTTP_FORUM_PATH = "<?php echo Utilities::getForumHttpPath(); ?>";
-
+			FORUM_SESSION_REFRESH_COUNTER = 0;
+			
 			<!-- include in this manner instead of in a meta link so that php code inside this file will resolve prior to runtime -->
     	<?php include("scripts/techCheck.js"); ?>
     	  	
@@ -158,8 +153,7 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 				});
 				if(<?php echo $showProfile; ?>) {
 					$( "#profile_control" ).click();
-				} else if (<?php echo $showProfileAdv; ?>) {
-	    			window.location.assign(HTTP_WEB_PATH + "/nexus.php#openSecurityProfile");
+    			$( "#adv-menu-profile" ).click();
 				}
 				if(<?php echo $showTeam; ?>) {
 					$( "#menu-userList" ).click();

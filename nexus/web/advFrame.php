@@ -22,6 +22,11 @@ https://www.jsnippet.net/snippet/536/Sidebar-pin-to-left-with-dynamic-tabs
 	<div id="network_display" class="div-display" style="display:none;">
 		<?php require_once("modules/directory/networkFrame.php"); ?>
 	</div>
+	<div id="profile_display" class="div-display" style="display:none;">
+		<?php require_once("modules/user/profileFrame.php"); ?>
+	</div>
 </div>
+
+
 
 

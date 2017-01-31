@@ -1,6 +1,8 @@
 <?php
 
 require_once(dirname(__FILE__) . "/../../../config/config_env.php");
+require_once(PHP_ROOT . "/Log.php");
+require_once(PHPBB3_ROOT . "/config.php");
 require_once(Utilities::getModulesRoot() . "/error/handlers.php");
 require_once(Utilities::getPhpRoot() . "/Validate.php");
 require_once(Utilities::getSrcRoot() . "/user/User.php");
@@ -34,78 +36,65 @@ autoloader(array(
 
 class Utilities {
 	
-	public static function getDbHost() {
-		return DB_HOST; 
-	}
+	public static function getDbHost() { return DB_HOST; }
 	
-	public static function getDbUser() {
-		return DB_USER;  
-	}
+	public static function getDbUser() { return DB_USER; }
 	
-	public static function getDbPassword() {
-		return DB_PASSWORD; 
-	}
+	public static function getDbPassword() { return DB_PASSWORD; }
+
+	public static function getDbName() { return DB_NAME; }
 	
-	public static function getDbName() {
-		return DB_NAME;
-	}
+	public static function getSmsServiceUsername() { return SMS_SERVICE_USER; }
 	
-	public static function getGoogleApiKey() {
-		return GOOGLE_API_KEY;
-	}
+	public static function getSmsServicePassword() { return SMS_SERVICE_PASSWORD; }
+	
+	// TODO - namespace below	variables read from phpbb internal config file
+	public static function getForumHost() { return FORUM_HOST; }
+
+	public static function getForumUser() { return FORUM_USER; }
+	
+	public static function getForumPassword() { return FORUM_PASSWORD; }
+	
+	public static function getForumName() { return FORUM_NAME; }
+	
+	public static function getForumRegisteredUserGroup() { return FORUM_REGISTERED_USER_GROUP; }
+	
+	public static function getForumNetworkUserGroup() { return CFCHT_FORUM_USER_GROUP; }
+	
+	public static function getNewCfchtForum() { return CFCHT_NEW_GROUP; }
+	
+	public static function getGoogleApiKey() { return GOOGLE_API_KEY;	}
+	
+	public static function getLogRoot() { return LOG_ROOT; }
 	
 	// Very Temporary Method
-	public static function getEventApprovalList() {
-		return EVENT_APPROVE_LIST;
-	}
+	public static function getEventApprovalList() { return EVENT_APPROVE_LIST; }
 	
-	public static function getDemoUidpk() {
-		return DEMO_UIDPK;
-	}		
+	public static function getDemoUidpk() { return DEMO_UIDPK; }		
 	
-	public static function getDemoPassword() {
-		return DEMO_PASSWORD;
-	}	
+	public static function getDemoPassword() { return DEMO_PASSWORD; }	
 	
-	private static function getDemoUsername() {
-		return DEMO_USERNAME;
-	}
+	private static function getDemoUsername() { return DEMO_USERNAME; }
 	
-	public static function getDemoNowEvent() {
-		return DEMO_EVENT_NOW;
-	}
+	public static function getDemoNowEvent() { return DEMO_EVENT_NOW; }
 	
-	public static function getDemoFutureEvent() {
-		return DEMO_EVENT_FUTURE;
-	}
+	public static function getDemoFutureEvent() { return DEMO_EVENT_FUTURE; }
 	
-	public static function getPublicGroupId() {
-		return PUBLIC_GROUP;
-	}
+	public static function getPublicGroupId() { return PUBLIC_GROUP; }
 	
 	private static $web_path = "/web";
 	
 	private static $config_path = "/config";
 	
-	public static function getHttpPath() {
-		return "http://" . ENV_HOST . APP_NAME . self::$web_path;
-	}
+	public static function getHttpPath() { return "http://" . ENV_HOST . APP_NAME . self::$web_path; }
 	
-	public static function getPluginPath() {
-		return self::getHttpPath() . "/plugin";
-	}
+	public static function getPluginPath() { return self::getHttpPath() . "/plugin"; }
 	
-	public static function getPilotPath() {
-		return "http://" . ENV_HOST . PILOT_NAME;
-	}
+	public static function getPilotPath() { return "http://" . ENV_HOST . PILOT_NAME; }
 	
-	public static function getConfigPath() {
-		return "http://" . ENV_HOST . APP_NAME . self::$config_path;
-	}
+	public static function getConfigPath() { return "http://" . ENV_HOST . APP_NAME . self::$config_path; }
 	
-	public static function getPartnerHttpPath() {
-		return "http://" . ENV_HOST . APP_NAME . PTR_STC_ROOT;
-	}
+	public static function getPartnerHttpPath() { return "http://" . ENV_HOST . APP_NAME . PTR_STC_ROOT; }
 	
 	public static function getWebRoot() {	return WEB_ROOT; }
 	

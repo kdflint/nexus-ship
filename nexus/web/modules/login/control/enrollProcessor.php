@@ -5,7 +5,12 @@ session_start();
 require_once("../../../src/framework/Util.php");
 require_once(Utilities::getSrcRoot() . "/user/Invitation.php");
 require_once(Utilities::getSrcRoot() . "/group/Group.php");
+require_once(Utilities::getSrcRoot() . "/message/ExternalMessage.php");
 require_once(Utilities::getModulesRoot() . "/login/control/MessageEnrollment.php");
+require_once(Utilities::getPhpRoot() . "/Log.php");
+
+$conf = array('append' => true, 'mode' => 0644, 'timeFormat' => '%X %x');
+$logger = Log::singleton("file", Utilities::getLogRoot() . "/forum_activity.log", "", $conf, PEAR_LOG_INFO);
 
 // Cleanse all user input
 
@@ -61,8 +66,37 @@ User::addUserOrgRelation($uidpk, $invitation['orgid'], $invitation['grantorid'],
 	
 User::addUserGroupRelation($uidpk, $invitation['groupid'], $invitation['roleid']);
 
-Invitation::consumeInvitationByUuid($_SESSION['invitation']);
+if ($invitation['type'] === 'single') {
+	Invitation::consumeInvitationByUuid($_SESSION['invitation']);
+}
 
+require_once(Utilities::getSrcRoot() . "/group/Forum.php");
+
+// NOTE - this also Forum-enrolls all Nexus Web Meet enrollees. Think this through...
+$addedUserId = Forum::enrollUser($clean['username'], $clean['username']);
+if ($addedUserId) {
+	// TODO - loop this properly
+	$groupId = Utilities::getForumRegisteredUserGroup();
+	$groupResult = Forum::addUserToGroupById($addedUserId, $groupId);
+	if (!$groupResult) {
+	} else {
+		$logger->log("Fail on add user " . $addedUserId . ":" . $clean['username'] . " to REGISTERED group ", PEAR_LOG_INFO);
+	}
+	
+	$groupId = Utilities::getForumNetworkUserGroup();
+	$groupResult = Forum::addUserToGroupById($addedUserId, $groupId);
+	if (!$groupResult) {
+	} else {
+		$logger->log("Fail on add user " . $addedUserId . ":" . $clean['username'] . " to NETWORK group ", PEAR_LOG_INFO);
+	}		
+	
+	// TODO - this must be generalizable
+	ExternalMessage::addForumSubscription($addedUserId, Utilities::getNewCfchtForum());	
+	
+} else {
+	$logger->log("Fail on add user " . $addedUserId . ":" . $clean['username'], PEAR_LOG_INFO);
+}
+	
 $row = pg_fetch_array(Group::getGroupById($invitation['groupid']));
 $groupName = array_values($row)[1];
 	

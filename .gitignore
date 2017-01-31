@@ -20,11 +20,15 @@ pilot/view/include/scrapToggleCode.php
 pilot/guidestar/*
 new_nexus
 nexus/lib/Validate.php
+nexus/lib/Log.php
 nexus/lib/rememberme/*
 nexus/lib/bigbluebutton/*
 nexus/web/vendor/*
 nexus/web/modules/directory/views/include/*
 nexus/partner/*
+nexus/batch/PgDb.php
+nexus/batch/Util.php
+nexus/batch/module/messaging/*.log
 pilot/view/include/tmpResults/*
 pilot/view/include/download/tmpResults/*
 pilot/model/test/*

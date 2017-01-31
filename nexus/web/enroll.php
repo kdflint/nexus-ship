@@ -111,7 +111,7 @@ if(isset($_GET['error']) && Utilities::isSafeCharacterSet($_GET['error'])) {
        	<img class="banner-image" src="image/nexus4.png" />
        	<span class="banner" style="width:60%">
 					<span class="product-name" style="">Nexus</span><br/>
-					<span class="module-name" style="">Web Meet</span>					
+					<span class="module-name" style="">Advantage</span>					
       	</span>  	
   	
       	<span class="controls" style="float:right;padding-bottom:10px;margin-top:30px;">

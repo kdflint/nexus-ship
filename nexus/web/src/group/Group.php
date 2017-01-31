@@ -13,8 +13,18 @@ class Group {
 		return $row[0];
 	}
 	
+	public static function getForumGroupIdByGroupId($groupId) {
+		$query = "select forum_group_id from public.group where id = $1 limit 1";
+		$row = pg_fetch_row(gDatabase::psExecute($query, array($groupId)));
+		if ($row) {
+			return $row[0];
+		}
+		return false;
+	}			
+		
+	
 	public static function getGroupById($groupId) {
-		$query = "select id, name, descr, logo from public.group where id = $1";	
+		$query = "select id, name, descr, logo, forum_group_id from public.group where id = $1";	
 		$cursor = PgDatabase::psExecute($query, array($groupId));
 	  $resultArray = array();
 	  while ($row = pg_fetch_array($cursor)) {
