@@ -16,7 +16,7 @@ insert into phpbb_profile_fields
   field_show_on_pm,
   field_is_contact)
 values
-  ("nexus_email","profilefields.type.string","nexus_email","100","0","100",".*",1,16,0,0,1);
+  ('nexus_email','profilefields.type.string','nexus_email','100','0','100','.*',1,16,0,0,1);
   
  insert into phpbb_profile_fields 
   (field_name,
@@ -32,7 +32,7 @@ values
   field_show_on_pm,
   field_is_contact)
 values
-  ("nexus_sms","profilefields.type.string","nexus_text","20","0","20","","",".*",1,17,0,0,1);
+  ('nexus_sms','profilefields.type.string','nexus_sms','20','0','20','.*',1,17,0,0,1);
   
  insert into phpbb_profile_fields 
   (field_name,
@@ -48,7 +48,7 @@ values
   field_show_on_pm,
   field_is_contact)
 values
-  ("nexus_phone","profilefields.type.string","nexus_phone","20","0","20","","",".*",1,18,0,0,1);
+  ('nexus_phone','profilefields.type.string','nexus_phone','20','0','20','.*',1,18,0,0,1);
   
  insert into phpbb_profile_fields 
   (field_name,
@@ -64,7 +64,7 @@ values
   field_show_on_pm,
   field_is_contact)
 values
-  ("nexus_fname","profilefields.type.string","nexus_fname","20","0","20","","",".*",1,14,1,1,0);
+  ('nexus_fname','profilefields.type.string','nexus_fname','20','0','20','.*',1,14,1,1,0);
   
  insert into phpbb_profile_fields 
   (field_name,
@@ -80,7 +80,7 @@ values
   field_show_on_pm,
   field_is_contact)
 values
-  ("nexus_lname","profilefields.type.string","nexus_lname","20","0","20","","",".*",1,15,1,1,0);
+  ('nexus_lname','profilefields.type.string','nexus_lname','20','0','20','.*',1,15,1,1,0);
   
  ALTER TABLE phpbb_profile_fields_data
    ADD COLUMN pf_nexus_fname character varying(255) DEFAULT '';
@@ -96,32 +96,32 @@ values
 insert into phpbb_profile_lang
 	(field_id,
   lang_id,
-  option_id)
- values (18,1,"First");
+  lang_name)
+ values (18,1,'First');
 
 insert into phpbb_profile_lang
 	(field_id,
   lang_id,
-  option_id)
- values (19,1,"Last");
+  lang_name)
+ values (19,1,'Last');
  
 insert into phpbb_profile_lang
 	(field_id,
   lang_id,
-  option_id)
- values (24,1,"Email");
+  lang_name)
+ values (24,1,'Email');
  
 insert into phpbb_profile_lang
 	(field_id,
   lang_id,
-  option_id)
- values (25,1,"Cell/Text Number");
+  lang_name)
+ values (25,1,'Cell/Text Number');
 
 insert into phpbb_profile_lang
 	(field_id,
   lang_id,
-  option_id)
- values (26,1,"Other Phone");
+  lang_name)
+ values (26,1,'Other Phone');
 
 
 --PM settings

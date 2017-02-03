@@ -98,9 +98,9 @@ while ($row = pg_fetch_array($cursor)) {
 
 // This is jacked up. We should bundle this functionality into User::updateUserProfile. But phpBB restriction on global access makes us push to down here, after all our globals are accessed. There is no time now to refactor. Eventually we will and organize these methods properly into classes.
 
-$forumSms = ($smsPublic ? $_SESSION['sms'] : "");
-$forumPhone = ($phonePublic ? $_SESSION['phone'] : "");
-$forumEmail = ($emailPublic ? $_SESSION['email'] : "");
+$forumSms = ($smsPublic === 'true' ? $_SESSION['sms'] : "");
+$forumPhone = ($phonePublic === 'true' ? $_SESSION['phone'] : "");
+$forumEmail = ($emailPublic === 'true' ? $_SESSION['email'] : "");
 $forumFname = $_SESSION['fname'];
 $forumLname = $_SESSION['lname'];
 
