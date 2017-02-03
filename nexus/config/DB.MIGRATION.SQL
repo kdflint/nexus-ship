@@ -39,11 +39,13 @@ purge forum cache
 ==
 
 deploy build
+deploy batch
+
+==
+
+-- copy over directory/views/include from last deploy - this is a defect
 
 ==
 
 schedule forum_cron
 
-==
-
--- copy over directory/views/include from last deploy - this is a defect

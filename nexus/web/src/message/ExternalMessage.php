@@ -26,15 +26,16 @@ class ExternalMessage {
 			$thisRun = $results[0]['now'];
 			foreach($results as $row) {
 				// Get the users watching this topic
-				$query = "select u.username from phpbb_forums_watch fw, phpbb_users u where u.user_id = fw.user_id and fw.forum_id = $1 limit 1"; 	
-				$thisUser = pg_fetch_array(ForumDatabase::psExecute($query, array($row['forum_id'])));
-				if ($thisUser) {
-					// Get the email address for the user
-					$query = "select u.email from public.user u where u.username = $1";
-					$thisEmail = pg_fetch_array(PgDatabase::psExecute($query, array($thisUser[0])));
-					if ($thisEmail) {
-						array_push($forumNotifications, array($thisUser[0], $thisEmail[0], 'topic', $row['topic_id'], $row['topic_title'], $row['forum_id'], $row['forum_name']));		
-					}
+				$query = "select u.username from phpbb_forums_watch fw, phpbb_users u where u.user_id = fw.user_id and fw.forum_id = $1"; 	
+				$watchers = pg_fetch_array(ForumDatabase::psExecute($query, array($row['forum_id'])));
+				if ($watchers) {
+					foreach($watchers as $row) {
+						// Get the email address for the forum watcher
+						$query = "select u.email from public.user u where u.username = $1";
+						$thisEmail = pg_fetch_array(PgDatabase::psExecute($query, array($row[0])));
+						if ($thisEmail) {
+							array_push($forumNotifications, array($thisUser[0], $thisEmail[0], 'topic', $row['topic_id'], $row['topic_title'], $row['forum_id'], $row['forum_name']));		
+						}
 				}
 			}
 			$query = "update forum_poll set forum_last_poll_dttm = $1";
@@ -66,14 +67,16 @@ class ExternalMessage {
 			$thisRun = $results[0]['now'];
 			foreach($results as $row) {
 				// Get the users watching this topic
-				$query = "select u.username from phpbb_topics_watch tw, phpbb_users u where u.user_id = tw.user_id and tw.topic_id = $1 limit 1"; 	
-				$thisUser = pg_fetch_array(ForumDatabase::psExecute($query, array($row['topic_id'])));
-				if ($thisUser) {
-					// Get the email address for the user
-					$query = "select u.email from public.user u where u.username = $1";
-					$thisEmail = pg_fetch_array(PgDatabase::psExecute($query, array($thisUser[0])));
-					if ($thisEmail) {
-						array_push($topicNotifications, array($thisUser[0], $thisEmail[0], 'post', $row['post_id'], $row['post_subject'], $row['topic_id'], $row['topic_title'], $row['forum_id'], $row['forum_name']));		
+				$query = "select u.username from phpbb_topics_watch tw, phpbb_users u where u.user_id = tw.user_id and tw.topic_id = $1"; 	
+				$watchers = pg_fetch_array(ForumDatabase::psExecute($query, array($row['topic_id'])));
+				if ($watchers) {
+					foreach($watchers as $row) {					
+						// Get the email address for the user
+						$query = "select u.email from public.user u where u.username = $1";
+						$thisEmail = pg_fetch_array(PgDatabase::psExecute($query, array($row[0])));
+						if ($thisEmail) {
+							array_push($topicNotifications, array($thisUser[0], $thisEmail[0], 'post', $row['post_id'], $row['post_subject'], $row['topic_id'], $row['topic_title'], $row['forum_id'], $row['forum_name']));		
+						}
 					}
 				}
 			}

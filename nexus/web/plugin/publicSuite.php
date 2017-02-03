@@ -195,6 +195,7 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
         		<li class="pure-menu-item"><a href="#" onclick="toggleDisplay('mod_directory', '1')" class="pure-menu-link">Directory</a></li>
         		<li class="pure-menu-item"><a href="#" onclick="toggleDisplay('mod_forum', '2')" class="pure-menu-link">Forum</a></li>
         		<li class="pure-menu-item"><a id="schedule_control" href="#" onclick="showEventAdd();" class="pure-menu-link">Submit New Event</a></li>
+        		<li class="pure-menu-item"><a id="schedule_control" href="https://goo.gl/forms/NInSncEodzNEMo2G3" class="pure-menu-link" target="_blank">Submit New Organization</a></li>
         		<!--<div style="cursor:not-allowed;"></div>-->			
     			</ul>
 				</div>

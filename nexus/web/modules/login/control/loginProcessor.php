@@ -60,7 +60,7 @@ if($isAuthenticated){
 		if ($_SESSION['username'] != "testCfcht3" &&
 				$_SESSION['username'] != "kpeachey" &&
 				$_SESSION['username'] != "Olga3075") {
-					returnToLoginWithPilotMessage("Your access to Nexus is temporarily suspended while we migrate to Nexus Advantage.");
+					//returnToLoginWithPilotMessage("Your access to Nexus is temporarily suspended while we migrate to Nexus Advantage.");
 		}
 	}
 				

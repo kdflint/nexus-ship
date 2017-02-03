@@ -20,7 +20,7 @@
 	</div>
 	
 	<div id="openProfile" class="modalDialog">
-		<div>
+		<div style="background:#ffffff;">
 			<a href="#close" title="Close" class="close">X</a>
 			<div id="securityProfile" style="display:none;">
 				<?php 
