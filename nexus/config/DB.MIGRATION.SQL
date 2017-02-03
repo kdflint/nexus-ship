@@ -1,51 +1,128 @@
---DROP TABLE forum_poll;
+== PHPBB
 
-CREATE TABLE forum_poll
-(
-  forum_last_poll_dttm timestamp with time zone,
-  topic_last_poll_dttm timestamp with time zone
-)
-WITH (
-  OIDS=FALSE
-);
-ALTER TABLE forum_poll
-  OWNER TO northbri_devnexus;
-GRANT ALL ON TABLE forum_poll TO northbri_devnexus;
-GRANT ALL ON TABLE forum_poll TO northbri_nbnexus;
-GRANT SELECT, UPDATE, INSERT, REFERENCES ON TABLE forum_poll TO northbri_web WITH GRANT OPTION;
+--Add custom profile fields
 
-insert into forum_poll (forum_last_poll_dttm, topic_last_poll_dttm) values (now(), now());
+insert into phpbb_profile_fields 
+  (field_name,
+  field_type,
+  field_ident,
+  field_length,
+  field_minlen,
+  field_maxlen,
+  field_validation,
+  field_active,  
+  field_order,
+  field_show_on_vt,
+  field_show_on_pm,
+  field_is_contact)
+values
+  ("nexus_email","profilefields.type.string","nexus_email","100","0","100",".*",1,16,0,0,1);
+  
+ insert into phpbb_profile_fields 
+  (field_name,
+  field_type,
+  field_ident,
+  field_length,
+  field_minlen,
+  field_maxlen,
+  field_validation,
+  field_active,  
+  field_order,
+  field_show_on_vt,
+  field_show_on_pm,
+  field_is_contact)
+values
+  ("nexus_sms","profilefields.type.string","nexus_text","20","0","20","","",".*",1,17,0,0,1);
+  
+ insert into phpbb_profile_fields 
+  (field_name,
+  field_type,
+  field_ident,
+  field_length,
+  field_minlen,
+  field_maxlen,
+  field_validation,
+  field_active,  
+  field_order,
+  field_show_on_vt,
+  field_show_on_pm,
+  field_is_contact)
+values
+  ("nexus_phone","profilefields.type.string","nexus_phone","20","0","20","","",".*",1,18,0,0,1);
+  
+ insert into phpbb_profile_fields 
+  (field_name,
+  field_type,
+  field_ident,
+  field_length,
+  field_minlen,
+  field_maxlen,
+  field_validation,
+  field_active,  
+  field_order,
+  field_show_on_vt,
+  field_show_on_pm,
+  field_is_contact)
+values
+  ("nexus_fname","profilefields.type.string","nexus_fname","20","0","20","","",".*",1,14,1,1,0);
+  
+ insert into phpbb_profile_fields 
+  (field_name,
+  field_type,
+  field_ident,
+  field_length,
+  field_minlen,
+  field_maxlen,
+  field_validation,
+  field_active,  
+  field_order,
+  field_show_on_vt,
+  field_show_on_pm,
+  field_is_contact)
+values
+  ("nexus_lname","profilefields.type.string","nexus_lname","20","0","20","","",".*",1,15,1,1,0);
+  
+ ALTER TABLE phpbb_profile_fields_data
+   ADD COLUMN pf_nexus_fname character varying(255) DEFAULT '';
+ ALTER TABLE phpbb_profile_fields_data
+   ADD COLUMN pf_nexus_lname character varying(255) DEFAULT '';
+ ALTER TABLE phpbb_profile_fields_data
+   ADD COLUMN pf_nexus_email character varying(255) DEFAULT '';
+ ALTER TABLE phpbb_profile_fields_data
+   ADD COLUMN pf_nexus_phone character varying(255) DEFAULT '';
+ ALTER TABLE phpbb_profile_fields_data
+   ADD COLUMN pf_nexus_sms character varying(255) DEFAULT '';
 
-ALTER TABLE "group"
-   ADD COLUMN forum_group_id integer DEFAULT NULL;
+insert into phpbb_profile_lang
+	(field_id,
+  lang_id,
+  option_id)
+ values (18,1,"First");
 
-==
+insert into phpbb_profile_lang
+	(field_id,
+  lang_id,
+  option_id)
+ values (19,1,"Last");
+ 
+insert into phpbb_profile_lang
+	(field_id,
+  lang_id,
+  option_id)
+ values (24,1,"Email");
+ 
+insert into phpbb_profile_lang
+	(field_id,
+  lang_id,
+  option_id)
+ values (25,1,"Cell/Text Number");
 
-~/batch/dev/nexus]# ln -s /home/northbri/public_html/dev/nexus/web/src/framework/Util.php Util.php
-~/batch/dev/nexus]# ln -s /home/northbri/public_html/dev/nexus/web/src/framework/PgDb.php PgDb.php
+insert into phpbb_profile_lang
+	(field_id,
+  lang_id,
+  option_id)
+ values (26,1,"Other Phone");
 
-==
 
-updates to config, sensitive config w/ forum db connection info
-update to config: add log root and folder, check permissions
-update to config and sensitive: set sms service credentials
-update to config: set FORUM_REGISTERED_USER_GROUP, FORUM_NETWORK_USER_GROUP, CFCHT_NEW_GROUP
-
-==
-
-update max login attempts to 0
-purge forum cache
-
-==
-
-deploy build
-deploy batch
-
-==
-
--- copy over directory/views/include from last deploy - this is a defect
-
-==
-
-schedule forum_cron
-
+--PM settings
+--import existing profile values

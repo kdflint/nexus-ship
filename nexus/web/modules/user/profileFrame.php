@@ -95,7 +95,8 @@ if (!strcmp($email_status, "checked")) {
 			<div class="profileFormRow" style="top:135px;">
 				<span class="messageCol1">Phone:</span>
  				<span class="messageCol2"><input type="text" size="22" name="phone" value="<?php echo($_SESSION['phone']);?>" /></span>
- 				<span class="messageCol3"><input type="checkbox" name="phone_public" <?php echo($phone_publish); ?> /></span>
+ 				<span class="messageCol3"><input type="checkbox" name="phone_status" disabled/></span>
+ 				<span class="messageCol4"><input type="checkbox" name="phone_public" <?php echo($phone_publish); ?> /></span>
 				<p style="margin-right:40px;"><input style="float:right" type="submit" value="Update Your Profile"/></p>
  			</div>
  			

@@ -53,7 +53,7 @@ Northbridge Technology Alliance";
 	mail($_SESSION['email'], "[Nexus] Profile Update", $message, "From: noreply@northbridgetech.org\r\nCc: " . $result['good']['email']);
 }
 
-User::updateUserById($_SESSION['uidpk'], 
+$forumUpdateGo = User::updateUserById($_SESSION['uidpk'], 
 											$result['good']['fname'], 
 											$result['good']['lname'], 
 											$result['good']['sms'], 
@@ -66,8 +66,11 @@ User::updateUserById($_SESSION['uidpk'],
 											$result['good']['phone'],
 											$phonePublic);
 
+$forumPasswordGo = false;
+$forumUsername = $_SESSION['username'];
+
 if (isset($result['good']['password']) && strlen($result['good']['password']) > 0) {
-	Utilities::storeSecurePasswordImplA($result['good']['password'], $_SESSION['uidpk']);
+	$forumPasswordGo = Utilities::storeSecurePasswordImplA($result['good']['password'], $_SESSION['uidpk']);
 	
 	$message = "Hello " . $result['good']['fname'] . ",
 	
@@ -92,6 +95,28 @@ while ($row = pg_fetch_array($cursor)) {
   $_SESSION['fname'] = $row['first']; 
   $_SESSION['lname'] = $row['last'];
 }
+
+// This is jacked up. We should bundle this functionality into User::updateUserProfile. But phpBB restriction on global access makes us push to down here, after all our globals are accessed. There is no time now to refactor. Eventually we will and organize these methods properly into classes.
+
+$forumSms = ($smsPublic ? $_SESSION['sms'] : "");
+$forumPhone = ($phonePublic ? $_SESSION['phone'] : "");
+$forumEmail = ($emailPublic ? $_SESSION['email'] : "");
+$forumFname = $_SESSION['fname'];
+$forumLname = $_SESSION['lname'];
+
+if ($forumUpdateGo) {
+	require_once(Utilities::getSrcRoot() . "/group/Forum.php");	
+	Forum::updateUserProfile($forumUsername, $forumFname, $forumLname, $forumSms, $forumEmail, $forumPhone);
+}
+
+/*
+if ($forumPasswordGo) {
+	$result = Forum::updateUserPasword($forumUsername, $result['good']['password']);
+	if (!$result) {
+		trigger_error("Fail to update user " . $forumUsername " forum password to " . $result['good']['password'], E_USER_ERROR);
+	}		
+}
+*/
 
 header("location:" . Utilities::getHttpPath() . "/nexus.php?view=profile");
 exit(0);
