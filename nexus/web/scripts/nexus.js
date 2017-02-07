@@ -414,6 +414,12 @@ function loadAdvPage(resource) {
 	var frameId = "adv-frame";
 	
 		switch(resource) {
+			case "adv-menu-inbox":
+				var iframeSrc = HTTP_FORUM_PATH  + "/ucp.php?i=pm&folder=inbox";
+    		var iframe = document.getElementById(frameId);
+    		iframe.src = iframeSrc;
+    		frameDisplay.style.display ="block";
+    		break;
     	case "adv-menu-forum":
     		var iframeSrc = HTTP_FORUM_PATH  + "/viewforum.php?f=" + DEFAULT_FORUM;
     		var iframe = document.getElementById(frameId);

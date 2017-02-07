@@ -80,7 +80,11 @@ class User {
 			publish_phone = $11
 			where id = $12
 			";
-		return PgDatabase::psExecute($query, array($fname, $lname, $sms, $email, $emailEnabled, $smsEnabled, $emailPublic, $smsPublic, $descr, $phone, $phonePublic, $userId));
+		$result = PgDatabase::psExecute($query, array($fname, $lname, $sms, $email, $emailEnabled, $smsEnabled, $emailPublic, $smsPublic, $descr, $phone, $phonePublic, $userId));
+		if ($result) {
+			return true;
+		}
+		return false; 
 	}
 	
 	public static function getUserById($userId) {

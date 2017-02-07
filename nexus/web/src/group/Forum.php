@@ -57,6 +57,22 @@ class Forum {
 		}
 		return $result;
 	}
+		
+	// TODO - move Forum db interactions from ExternalMessage to here
+
+	public static function updateUserProfile($username, $fname, $lname, $sms, $email, $phone) {
+		$query = "update phpbb_profile_fields_data 
+			set pf_nexus_fname = $1,
+			pf_nexus_lname = $2,
+			pf_nexus_sms  = $3,
+			pf_nexus_email = $4,
+			pf_nexus_phone = $5 
+			where user_id = (select user_id from phpbb_users where username = $6)";
+		return ForumDatabase::psExecute($query, array($fname, $lname, $sms, $email, $phone, $username));
+	}
+	
+	public static function updateUserPassword($username, $password) {
+	}
 
 }
 

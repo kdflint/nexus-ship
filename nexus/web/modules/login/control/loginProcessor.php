@@ -15,7 +15,7 @@ if (isset($_SESSION['demo']) && $_SESSION['demo'] && isset($dirty['username'])) 
 	$clean['username'] = $dirty['username'];
 } else {
 	returnToLoginWithError(Utilities::AUTHENTICATION_ERROR);
-}  
+}
 
 if (isset($dirty['password']) && Utilities::isValidPassword($dirty['password'])) {
 	$clean['password'] = $dirty['password'];
@@ -53,22 +53,7 @@ if($isAuthenticated){
 		Utilities::setSession($clean['username'], $clean['remember'], $clean['tz'], $clean['password']);
 	}
 	Utilities::setLogin($_SESSION['uidpk']);
-	
-	// Temporary migration for some Nexus CFCHT pilot users, allowing to update pending meetings
-	// All EDC users have access under NWM account
-	if ($_SESSION['environment'] == "prod" && $_SESSION['orgUid'] == "ed787a92") {
-		if ($_SESSION['username'] != "testCfcht3" &&
-				$_SESSION['username'] != "kpeachey" &&
-				$_SESSION['username'] != "Olga3075") {
-					returnToLoginWithPilotMessage("Your access to Nexus is temporarily suspended while we migrate to Nexus Advantage.");
-		}
-	}
-				
-	//if ((session_status() === PHP_SESSION_ACTIVE) && isset($_SESSION['nexusContext'])) {
 	header("location:" . Utilities::getHttpPath() . "/nexus.php");
-	//}
-	//} else {
-	//}
 } else {
 	returnToLoginWithError(Utilities::AUTHENTICATION_ERROR);
 }

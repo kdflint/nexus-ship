@@ -19,7 +19,7 @@
 				<a id="adv-menu-profile" class="pure-button button-menu-adv" href="javascript:void(0)" onclick="toggleAdvFrameDisplay(this)" style="float:right;background-color:#dae0bc;margin-right:0px;">PROFILE</a> 
 				<a id="adv-menu-inbox" class="pure-button button-menu-adv" href="javascript:void(0)" onclick="toggleAdvFrameDisplay(this)" style="float:right;background-color:#dae0bc;margin-right:-7px;">INBOX</a> 			
 				<a id="adv-menu-forum" class="pure-button button-menu-adv" href="javascript:void(0)" onclick="toggleAdvFrameDisplay(this)" style="float:right;background-color:#dae0bc;margin-right:-7px;">FORUM</a> 	
-				<a id="adv-menu-network" class="pure-button button-menu-adv" href="javascript:void(0)" onclick="toggleAdvFrameDisplay(this)" style="float:right;background-color:#dae0bc;margin-right:-7px;">NETWORK</a> 	
+				<a id="adv-menu-network" class="pure-button button-menu-adv" href="javascript:void(0)" onclick="toggleAdvFrameDisplay(this)" style="float:right;background-color:#dae0bc;margin-right:-7px;">DIRECTORY</a> 	
 				<a id="adv-menu-event" class="pure-button button-menu-adv" href="javascript:void(0)" onclick="toggleAdvFrameDisplay(this)" style="float:right;background-color:rgba(137, 157, 112, 1);margin-right:-7px;" >EVENTS</a>
 				<a id="adv-menu-360" class="pure-button button-menu-adv" href="javascript:void(0)" onclick="toggleAdvFrameDisplay(this)" style="float:right;background-color:#dae0bc;margin-right:-7px;">360&deg;</a> 	
 			</span>

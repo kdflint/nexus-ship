@@ -720,8 +720,7 @@ class Utilities {
 	public static function storeSecurePasswordImplA($plaintextPassword, $userId) {
 		$salt = self::generateRandomString(32);
 		$securePassword = self::systemHashImplA($salt . $plaintextPassword);
-		User::setSecurePasswordImplA($userId, '[[ENC]]' . $securePassword, $salt);
-		return;
+		return User::setSecurePasswordImplA($userId, '[[ENC]]' . $securePassword, $salt);
 	}
 	
 	public static function getPasswordHashByUser($userId, $plaintextPassword) {

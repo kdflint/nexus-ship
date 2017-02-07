@@ -14,6 +14,12 @@
 #cp-main {
 	float: left;
 	width: 81%;
+	margin-top: 12px;
+	border-top: 2px solid #486326;
+}
+
+#cp-main h2 {
+	display: none;
 }
 
 #cp-main .content {
@@ -219,7 +225,6 @@ ul.cplist {
 /* Container for sub-navigation list */
 #navigation {
 	width: 100%;
-	padding-top: 36px;
 }
 
 #navigation ul {
@@ -256,7 +261,7 @@ ul.cplist {
 
 /* Friends list */
 .cp-mini {
-	margin: 10px 15px 10px 5px;
+	margin-top: 10px;
 	max-height: 200px;
 	overflow-y: auto;
 	padding: 5px 10px;
@@ -338,7 +343,7 @@ ol.def-rules li {
 }
 
 /* Responsive *CP navigation
-----------------------------------------*/
+----------------------------------------
 @media only screen and (max-width: 900px), only screen and (max-device-width: 900px)
 {
 	.nojs #tabs a span, .nojs #minitabs a span {
@@ -374,3 +379,4 @@ ol.def-rules li {
 		border-bottom-right-radius: 5px;
 	}
 }
+----------------------------------------*/
