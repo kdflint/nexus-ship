@@ -130,7 +130,6 @@ insert into phpbb_profile_lang
 
 --purge forum cache
 
-
 select 'update phpbb_profile_fields_data set pf_nexus_fname = ''' || fname || ''' where user_id = (select user_id from phpbb_users where username = ''' || username || ''');'
 from public.user
 where username not like 'pUser%'
@@ -262,3 +261,70 @@ update phpbb_profile_fields_data set pf_nexus_fname = 'Kathy-e6' where user_id =
 update phpbb_profile_fields_data set pf_nexus_fname = 'Kenneth' where user_id = (select user_id from phpbb_users where username = 'kgctest1');
 update phpbb_profile_fields_data set pf_nexus_fname = 'Lou' where user_id = (select user_id from phpbb_users where username = 'lou1234');
 update phpbb_profile_fields_data set pf_nexus_fname = 'Gretchen' where user_id = (select user_id from phpbb_users where username = 'gesaylor');
+
+
+===============
+
+select 'insert into phpbb_forums_watch (forum_id,user_id) values (12,''' || user_id || ''');' from phpbb_users where username in 
+('testCfchtT1','StaycieF');
+
+insert into phpbb_forums_watch (forum_id,user_id) values (12,'106');
+insert into phpbb_forums_watch (forum_id,user_id) values (12,'105');
+
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'53');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'54');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'93');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'84');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'56');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'99');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'69');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'70');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'63');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'94');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'57');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'77');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'61');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'67');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'66');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'72');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'81');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'95');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'86');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'91');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'88');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'104');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'78');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'75');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'68');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'55');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'79');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'80');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'49');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'73');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'71');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'52');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'101');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'62');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'87');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'58');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'83');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'100');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'98');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'82');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'2');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'50');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'51');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'103');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'76');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'64');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'60');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'90');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'92');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'74');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'89');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'59');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'65');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'85');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'96');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'97');
+insert into phpbb_forums_watch (forum_id,user_id) values (11,'102');

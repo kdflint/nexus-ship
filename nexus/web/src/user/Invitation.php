@@ -22,7 +22,7 @@ class Invitation {
 	}
 
 	public static function isInvitationOpen($uuid) {
-		$query = "select exists (select true from invitation where uuid = $1 and accept_dttm is NULL and expire_dt > now())";
+		$query = "select exists (select true from invitation where uuid = $1 and accept_dttm is NULL and (expire_dt > now() or expire_dt is NULL))";
 		$row = pg_fetch_row(PgDatabase::psExecute($query, array($uuid)));
 		if (!strcmp($row[0], "t")) {
 			return TRUE;
@@ -31,11 +31,11 @@ class Invitation {
 	}
 	
 	public static function getOpenGroupInvitations($groupId) {
-		$query = "select email, role_fk as roleid, uuid as uuid from invitation where group_fk = $1 and accept_dttm is NULL and expire_dt > now() and type = 'single' order by email";
+		$query = "select email, role_fk as roleid, uuid as uuid from invitation where group_fk = $1 and accept_dttm is NULL and (expire_dt > now() or expire_dt is NULL) and type = 'single' order by email";
 		return PgDatabase::psExecute($query, array($groupId));
 	}
 
-	public static function getOpenInvitationByUuid($uuid) {
+	public static function getInvitationByUuid($uuid) {
 		$query = "select i.network_fk as networkid, i.organization_fk as orgid, i.issuer_fk as grantorid, i.type as type, i.role_fk as roleid, i.group_fk as groupid, o.uid as uid from invitation i, organization o where i.uuid=$1 and i.organization_fk = o.id order by i.create_dttm desc limit 1";
 		return PgDatabase::psExecute($query, array($uuid));
 	}
@@ -49,6 +49,18 @@ class Invitation {
 		$query = "update invitation set expire_dt = DATE 'yesterday' where uuid = $1";
 		return PgDatabase::psExecute($query, array($uuid));
 	}
+	
+	/*
+	
+	Business rules (tmp doc until this can be codified)
+	Global network, meant for public facing link
+		network_fk = n
+		type = 'global'
+		role_fk = 5
+		expire_dt = NULL
+	
+	
+	*/
 
 }
 

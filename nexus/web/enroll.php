@@ -8,6 +8,8 @@ require_once(Utilities::getSrcRoot() . "/organization/Organization.php");
 
 $inviteId = $networkName = $networkLogo = $cleanMessage = $cleanIcon = "";
 $validInvitation = false;
+$showGroupEnroll = false;
+
 
 if (Utilities::validateUuid($_GET['invitation'])) {
 	if (Invitation::isInvitationOpen($_GET['invitation'])) {
@@ -20,8 +22,14 @@ if ($validInvitation) {
 	
 	$_SESSION['invitation'] = $inviteId;
 	
-	$row1 = pg_fetch_array(Invitation::getOpenInvitationByUuid($inviteId));
+	$row1 = pg_fetch_array(Invitation::getInvitationByUuid($inviteId));
 	
+	// Use this logic to indicate whether the group checkboxes should be shown
+	// because this is a global network-level invite
+	if ($row1['type'] === 'global' && $row1['orgid'] === $row1['networkid'] && !$row1['groupid'] && $row1['roleid'] == 5) {
+		$showGroupEnroll = true;
+	}
+
 	$row2 = pg_fetch_array(Organization::getOrganizationById($row1['orgid']));
 	
 	$networkLogo = $row2['logo'];
@@ -115,7 +123,9 @@ if(isset($_GET['error']) && Utilities::isSafeCharacterSet($_GET['error'])) {
       	</span>  	
   	
       	<span class="controls" style="float:right;padding-bottom:10px;margin-top:30px;">
-      		<a href="http://northbridgetech.org/downloads/Northbridge_web_conference_center.pdf" style="color:#d27b4b;text-decoration:none;" target="_blank">About</a>
+      <b>Already have<br/>an account?<br/></b>
+      <!-- TODO - make this oid dynamic -->
+      		<a href="<?php echo Utilities::getHttpPath(); ?>/login.php?oid=ed787a92" style="color:#d27b4b;text-decoration:none;">Login</a>
       	</span>
       </div>
 
@@ -129,6 +139,15 @@ if(isset($_GET['error']) && Utilities::isSafeCharacterSet($_GET['error'])) {
 			  	<p id="enroll-user-message" class="confirmation"><span class="<?php echo $cleanIcon; ?>" style="color:#007582;float:left;margin-right:5px;"></span><?php echo $cleanMessage; ?></p>
 					<form id="enroll-form" class="pure-form pure-form-stacked" autocomplete="off" action="modules/login/control/enrollProcessor.php" method="post">
 	    			<fieldset>
+							<?php if($showGroupEnroll) { ?>
+							<p>Which group(s) would you like to join?</p>
+ 								<p style="font-size:90%;">
+ 									<input type="checkbox" name="group-enroll[]" value="FBCERN" />Faith Based Community Engaged Research Network<br/>
+              		<input type="checkbox" name="group-enroll[]" value="TICN" />Trauma Informed Congregations Network<br />
+              	</p>
+              	<hr/>
+							<?php } ?>
+
 							Choose your username*
 							<input class="form-input" type="text" name="uid"  maxlength="25" title="7-25 characters. May not contain spaces"/>
 										
