@@ -63,16 +63,22 @@ $uidpk = User::addActiveUser(
 	);
 
 User::addUserOrgRelation($uidpk, $invitation['orgid'], $invitation['grantorid'], $invitation['roleid']);
+$forumEnrollments = array();
 
+// This condition can only be met in PROD right now, with CFCHT's global invite
+// Obviously must be generalized
 if (isset($_POST['group-enroll'])) {
 	if(in_array('FBCERN', $_POST['group-enroll'])){
 	  User::addUserGroupRelation($uidpk, 1, $invitation['roleid']);
+	  array_push($forumEnrollments,11);
 	}
 	if(in_array('TICN', $_POST['group-enroll'])){
 	  User::addUserGroupRelation($uidpk, 25, $invitation['roleid']);
+	  array_push($forumEnrollments,12);
 	}
 } else if (isset($invitation['groupid'])) {
 	User::addUserGroupRelation($uidpk, $invitation['groupid'], $invitation['roleid']);
+	array_push($forumEnrollments,Utilities::getNewCfchtForum());
 }
 	
 if ($invitation['type'] === 'single') {
@@ -102,7 +108,9 @@ if ($addedUserId) {
 	}		
 	
 	// TODO - this must be generalizable
-	ExternalMessage::addForumSubscription($addedUserId, Utilities::getNewCfchtForum());	
+	foreach ($forumEnrollments as $forumId) {
+		ExternalMessage::addForumSubscription($addedUserId, $forumId);	
+	}
 	
 } else {
 	$logger->log("Fail on add user " . $addedUserId . ":" . $clean['username'], PEAR_LOG_INFO);
