@@ -7,7 +7,12 @@ require_once(dirname(__FILE__) . "/../framework/Util.php");
 class ExternalMessage {
 	
 	public static function readForumMessagesDue() {
-		
+
+		$conf = array('append' => true, 'mode' => 0644, 'timeFormat' => '%X %x');	
+		$logger = Log::singleton("file", "/home/northbri/batch/dev/nexus/module/messaging/forum_message.log", "", $conf, PEAR_LOG_DEBUG);
+	
+		$logger->log("Hello from readForumMessagesDue", PEAR_LOG_DEBUG);
+	
 		$forumNotifications= array();
 		
 		$query = "select floor(extract('epoch' from forum_last_poll_dttm)) from forum_poll";
@@ -15,27 +20,32 @@ class ExternalMessage {
 		$lastRun = $row[0];
 		
 		// Get the topics that are new since last poll
+		$logger->log("Searching since time epoch " . $lastRun, PEAR_LOG_DEBUG);
 		$query = "select CURRENT_TIMESTAMP as now, t.topic_id, t.forum_id, t.topic_title, f.forum_name, u.username
 			from phpbb_topics t, phpbb_users u, phpbb_forums f
 			where t.topic_time >=  $1
 			and u.user_id = t.topic_poster
 			and f.forum_id = t.forum_id";		
 		$results = pg_fetch_all(ForumDatabase::psExecute($query, array($lastRun)));	
-		
 		if ($results && isset($results[0]['now'])) {
+			$logger->log("Hello from results", PEAR_LOG_DEBUG);
 			$thisRun = $results[0]['now'];
 			foreach($results as $row) {
-				// Get the users watching this topic
+				// Get the users watching this forum
+				$logger->log("Hello from result iterate", PEAR_LOG_DEBUG);
+				$logger->log(print_r($row,true), PEAR_LOG_DEBUG);
 				$query = "select u.username from phpbb_forums_watch fw, phpbb_users u where u.user_id = fw.user_id and fw.forum_id = $1"; 	
-				$watchers = pg_fetch_array(ForumDatabase::psExecute($query, array($row['forum_id'])));
-				if ($watchers) {
-					foreach($watchers as $row) {
-						// Get the email address for the forum watcher
-						$query = "select u.email from public.user u where u.username = $1";
-						$thisEmail = pg_fetch_array(PgDatabase::psExecute($query, array($row[0])));
-						if ($thisEmail) {
-							array_push($forumNotifications, array($thisUser[0], $thisEmail[0], 'topic', $row['topic_id'], $row['topic_title'], $row['forum_id'], $row['forum_name']));		
-						}
+				$watchers = pg_fetch_all(ForumDatabase::psExecute($query, array($row['forum_id'])));
+				foreach ($watchers as $watcher) {								
+					$logger->log($watcher['username'], PEAR_LOG_DEBUG);
+					// Get the email address for the forum watcher
+					$query = "select u.email from public.user u where u.username = $1";
+					$watcherEmails = pg_fetch_all(PgDatabase::psExecute($query, array($watcher['username'])));	
+					foreach ($watcherEmails as $email) {
+						$logger->log($email['email'], PEAR_LOG_DEBUG);	
+						array_push($forumNotifications, array($watcher['username'], $email['email'], 'topic', $row['topic_id'], $row['topic_title'], $row['forum_id'], $row['forum_name']));	
+						$logger->log(print_r($forumNotifications,true), PEAR_LOG_DEBUG);				
+					}
 				}
 			}
 			$query = "update forum_poll set forum_last_poll_dttm = $1";
