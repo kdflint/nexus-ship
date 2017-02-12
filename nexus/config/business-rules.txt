@@ -1,0 +1,79 @@
+god is an organization whose parent is themself
+
+every org hierarchy ends with a god
+
+ADV accounts must belong to orgs whose parent is a god
+NWM accounts must belong to orgs whose parent is a god
+
+an organization is a constituent of Nexus if they have an ancestor that is god
+
+To find all parent organizations: 
+
+	select id, name from organization where id in (select distinct organization_from_fk from organization_organization where relationship = 'parent')
+	
+To find god
+
+	select id, name from organization where id in (select organization_from_fk from organization_organization where organization_from_fk = organization_to_fk and relationship = 'parent')
+	
+===============
+	
+organization constrained tables:
+	
+organization_account
+user_organization
+organization_organization
+invitation
+organization_contact
+
+===============
+
+Every ADV account is tied to an organization that has a uid
+
+Every ADV account is tied to an organization that has a pUser-nnnnnnnn tied to a group named "Public Group"
+
+Every ADV account should have a logo
+
+Every ADV account may have 1 network-global invitation
+
+===============
+
+Every valid Nexus user must have a valid password and be tied to 
+ 1. an organization whose ancestor (or self) has a Nexus account, or
+ 2. a valid group
+ 
+===============
+
+Every valid Nexus group must
+ 1. have an admin tied to an organization whose ancestor has a Nexus account
+
+For a group to be public-read, the pUser-nnnnnnn for the ADV account must be tied to that group
+
+===============
+
+Every valid Nexus organization must
+ 1. have an ancestor
+
+===============
+
+Every valid Nexus session must contain
+ 1. a user
+ 2. an account-holding org
+ 3. a context, determined by the account of the account holder (PUB|NWM|ADV)
+
+Valid Nexus sessions may contain
+ 1. one or more groups
+ 2. one or more child orgs who have as an ancestor the account-holding org
+    note: if there are no child orgs (for the network admin, for instance) let the child org == account holding org
+ 
+===============
+
+There are three kinds of valid invitation
+ 1. network-global - Enrollment page shows a list of all public groups for the enrollee to select. Does not expire.
+    select * from invitation where type = 'global' and network_fk = organization_fk and expire_dt is NULL and group_fk is NULL and role_fk = 5 and email is NULL
+ 2. group-global - Expire optional. Group shown on enrollment form as read-only.
+ 		select * from invitation where type = 'global' and group_fk is not NULL and email is NULL
+ 3. group-personal - Expire 1 month. Group shown on enrollment form as read-only.
+ 		select * from invitation where type = 'single' and group_fk is not NULL and expire_dt is not NULL
+ 
+ ===============
+ 

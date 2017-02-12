@@ -5,6 +5,7 @@ session_start();
 require_once("../../../src/framework/Util.php");
 require_once(Utilities::getSrcRoot() . "/user/Invitation.php");
 require_once(Utilities::getSrcRoot() . "/group/Group.php");
+require_once(Utilities::getSrcRoot() . "/organization/Organization.php");
 require_once(Utilities::getSrcRoot() . "/message/ExternalMessage.php");
 require_once(Utilities::getModulesRoot() . "/login/control/MessageEnrollment.php");
 require_once(Utilities::getPhpRoot() . "/Log.php");
@@ -23,20 +24,29 @@ $result = Utilities::validateUserProfile($dirty, TRUE);
 if (isset($_SESSION['invitation']) && Utilities::validateUuid($_SESSION['invitation'])) {
 	if (Invitation::isInvitationOpen($_SESSION['invitation'])) {
 		$validInvitation = true;
+	} else {
 	}
 }
 
 if (!$validInvitation || count($result['error']) > 0) {
 	if ($result['error']['username'] == Utilities::VALIDATION_USERNAME_DUPE_ERROR)  {
-		returnToEnrollWithError($result['error']['username']);
+		echo(Utilities::VALIDATION_USERNAME_DUPE_ERROR);
 	} else {
-		echo print_r($result['error']);
+		print_r($result['error']);
 		//header("location:" . Utilities::getHttpPath() . "/login.php?logout=true");
 		exit(0);
 	}
 }
 
 $clean = $result['good'];
+$clean['group-enroll'] = array();
+
+if (isset($_POST['group-enroll'])) {
+	foreach($_POST['group-enroll'] as $groupid) {
+		// check for valid value and assign to $clean['group-enroll']]
+		array_push($clean['group-enroll'],$groupid);
+	}
+}
 
 /* ====================================================
 
@@ -44,7 +54,7 @@ Use only clean input beyond this point (i.e. $clean[])
 
 ======================================================= */
 
-	
+
 	// TODO: make sure username is unique inside network
 	// TODO: activate only on confirmed email code
 	// TODO: insert other user values into db
@@ -65,20 +75,15 @@ $uidpk = User::addActiveUser(
 User::addUserOrgRelation($uidpk, $invitation['orgid'], $invitation['grantorid'], $invitation['roleid']);
 $forumEnrollments = array();
 
-// This condition can only be met in PROD right now, with CFCHT's global invite
-// Obviously must be generalized
-if (isset($_POST['group-enroll'])) {
-	if(in_array('FBCERN', $_POST['group-enroll'])){
-	  User::addUserGroupRelation($uidpk, 1, $invitation['roleid']);
-	  array_push($forumEnrollments,11);
-	}
-	if(in_array('TICN', $_POST['group-enroll'])){
-	  User::addUserGroupRelation($uidpk, 25, $invitation['roleid']);
-	  array_push($forumEnrollments,12);
+if (isset($clean['group-enroll'])) {
+	foreach ($clean['group-enroll'] as $groupId) {
+		User::addUserGroupRelation($uidpk, $groupId, $invitation['roleid']);
+		// TODO - put this in User class
+		array_push($forumEnrollments, Group::getForumGroupIdByGroupId($groupId));
 	}
 } else if (isset($invitation['groupid'])) {
 	User::addUserGroupRelation($uidpk, $invitation['groupid'], $invitation['roleid']);
-	array_push($forumEnrollments,Utilities::getNewCfchtForum());
+	array_push($forumEnrollments, Group::getForumGroupIdByGroupId($invitation['groupid']));
 }
 	
 if ($invitation['type'] === 'single') {
@@ -88,10 +93,11 @@ if ($invitation['type'] === 'single') {
 
 require_once(Utilities::getSrcRoot() . "/group/Forum.php");
 
-// NOTE - this also Forum-enrolls all Nexus Web Meet enrollees! Think this through...
+// NOTE - this also Forum-enrolls all Nexus Web Meet enrollees! Correct??
 $addedUserId = Forum::enrollUser($clean['username'], $clean['username']);
 if ($addedUserId) {
 	// TODO - loop this properly
+	// This group is global for everyone (REGISTERED group in phpBB3)
 	$groupId = Utilities::getForumRegisteredUserGroup();
 	$groupResult = Forum::addUserToGroupById($addedUserId, $groupId);
 	if (!$groupResult) {
@@ -100,14 +106,16 @@ if ($addedUserId) {
 	}
 	
 	// TODO - this should be an array pre-populated
-	$groupId = Utilities::getForumNetworkUserGroup();
+	// This is the network-specific forum group, 1 per network
+	$groupId = Organization::getForumUserGroupByOrgId($invitation['orgid']);
 	$groupResult = Forum::addUserToGroupById($addedUserId, $groupId);
 	if (!$groupResult) {
 	} else {
 		$logger->log("Fail on add user " . $addedUserId . ":" . $clean['username'] . " to NETWORK group ", PEAR_LOG_INFO);
-	}		
+	}	
 	
-	// TODO - this must be generalizable
+	Forum::updateUserProfile($clean['username'], $clean['fname'], $clean['lname'], "", $clean['email'], "");
+	
 	foreach ($forumEnrollments as $forumId) {
 		ExternalMessage::addForumSubscription($addedUserId, $forumId);	
 	}
@@ -116,8 +124,8 @@ if ($addedUserId) {
 	$logger->log("Fail on add user " . $addedUserId . ":" . $clean['username'], PEAR_LOG_INFO);
 }
 	
-$row = pg_fetch_array(Group::getGroupById($invitation['groupid']));
-$groupName = array_values($row)[1];
+$group = Group::getGroupById($invitation['groupid']);
+$groupName = $group[0]['name'];
 	
 $isAuthenticated = true;
 	

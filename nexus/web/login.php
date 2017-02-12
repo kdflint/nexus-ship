@@ -36,8 +36,11 @@ $remembered = $enrolled = "false";
 $cleanMessage = "";
 $cleanIcon = "";
 
-$enrolled = (isset($_SESSION['invitation']) && isset($_SESSION['username'])) ? "true" : "false"; 
-$enrolledUsername = (isset($_SESSION['invitation']) && isset($_SESSION['username'])) ? $_SESSION['username'] : false; 
+// TODO - this is definitely not right. Need to not let in a public session user that others passes these tests.
+if (isset($_SESSION['username']) && substr($_SESSION['username'], 0, 6 ) !== "pUser-") {
+	$enrolled = (isset($_SESSION['invitation']) && (isset($_SESSION['username'])) ? "true" : "false");
+	$enrolledUsername = (isset($_SESSION['invitation']) && (isset($_SESSION['username'])) ? $_SESSION['username'] : false);
+}
 
 $rememberedUsername = ($rememberMe->login()) ? $rememberMe->login() : false;
 

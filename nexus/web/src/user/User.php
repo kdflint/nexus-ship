@@ -45,7 +45,7 @@ class User {
 		// TODO: fix up network id determination (parent, god, etc)
 		// TODO - this will fail if user in > 1 group
 		$query = "
-			select u.id as id, u.fname as fname, u.lname as lname, u.password as password, u.conference_link as link, u.email as email, ug.role_fk as roleid, o1.name as affiliation, o1.id as affiliationid, o1.uid as affiliationuid, o1.logo as logo, o2.name as network, o2.id as networkid, o2.forum_id as forumid, o2.public_forum_id as publicforumid, uo.role_fk as role, oa.account_type as account
+			select u.id as id, u.fname as fname, u.lname as lname, u.password as password, u.conference_link as link, u.email as email, ug.role_fk as roleid, o1.name as affiliation, o1.id as affiliationid, o1.uid as affiliationuid, o2.logo as logo, o2.name as network, o2.id as networkid, o2.forum_id as forumid, o2.public_forum_id as publicforumid, uo.role_fk as role, oa.account_type as account
 			from public.user u, user_organization uo, user_group ug, organization o1, organization o2, organization_organization oo, organization_account oa
 			where u.username = $1
 			and uo.user_fk = u.id
@@ -164,7 +164,7 @@ class User {
 	
 	public static function addUserGroupRelation($userId, $groupId, $roleId) {
 			$query = "insert into user_group (user_fk, group_fk, role_fk, create_dttm) values ($1, $2, $3, now())";
-			return PgDatabase::psExecute($query, array($userId, $groupId, $roleId));		
+			return PgDatabase::psExecute($query, array($userId, $groupId, $roleId));	
 	}
 	
 	public static function getUserOrgRelationsByUserId($userId) {

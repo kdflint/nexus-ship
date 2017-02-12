@@ -35,6 +35,12 @@ class Organization {
 		return $orgId;
 	}
 	
+	public static function addAdvAccountToOrganization($orgId) {
+		$query = "insert into organization_account (organization_fk, account_type) values ($1, 'ADV')";
+		$result = PgDatabase::psExecute($query, array($orgId));	
+		return $result;
+	}		
+	
 	public static function addOrganizationContact($orgfk, $name, $title, $email, $phone, $url) {
 		//print_r(array($name, $title, $email, $phone, $url)); exit(0);
 		$query = "insert into contact (name, title, email, phone, url) values ($1, $2, $3, $4, $5) returning id";
@@ -55,7 +61,7 @@ class Organization {
 	}
 	
 	public static function getOrganizationById($orgId) {
-		$query = "select name, type, structure, logo, status_fk as status from organization where id = $1";
+		$query = "select name, type, structure, logo, status_fk as status, uid from organization where id = $1";
 		return PgDatabase::psExecute($query, array($orgId));
 	}
 	
@@ -71,6 +77,12 @@ class Organization {
 	
 	// LEFT OFF - move over all methods from pilot pgDb to Organization (ones that are referenced in searchProcessor.php)
 
+	public static function getForumUserGroupByOrgId($orgid) {
+		$query = "select forum_user_group from organization where id = $1";
+		$row = pg_fetch_row(PgDatabase::psExecute($query, array($orgid)));
+		return $row[0];
+	}
+	
 	public static function countOrgsInNetworkById($networkId) {
 		$query = "select id from organization_organization where organization_from_fk=$1 and relationship='parent'";
 		$count = pg_num_rows(PgDatabase::psExecute($query, array($networkId)));
@@ -177,10 +189,31 @@ class Organization {
 		return PgDatabase::psExecute($query, array($networkId));	
 	}
 	
-	public static function getNetworkFromOrgId($orgId) {
+	public static function getNetworkByOrgId($orgId) {
 		// TODO - will not accomodate orgs belonging to multiple networks
-		$query = "select organization_from_fk as networkid from organization_organization where organization_to_fk = $1 and relationship = 'parent' limit 1";
+		$query = "select 
+			oo.organization_from_fk as networkid, oa.account_type, o.name, o.forum_id as forumid, o.uid, o.logo
+			from organization_organization oo, organization o, organization_account oa 
+			where oo.organization_to_fk = $1 
+			and oo.organization_from_fk = o.id
+			and oa.organization_fk = o.id
+			and relationship = 'parent' 
+			limit 1";
 		return PgDatabase::psExecute($query, array($orgId));
+	}
+
+	public static function getOrganizationsByUsername($username) {
+		// TODO - remove limit 1
+		$query = "select o.id, o.name, uo.role_fk from organization o, user_organization uo, public.user u
+			where u.username = $1
+			and u.id = uo.user_fk
+			and uo.organization_fk = o.id
+			limit 1";
+			return PgDatabase::psExecute($query, array($username));
+	}
+	
+	public static function getNetworksByUsername($username) {
+		//LEFT OFF HERE
 	}
 	
 	public static function getOrganizationDetailById($orgId) {

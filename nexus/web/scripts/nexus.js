@@ -456,6 +456,27 @@ function refreshForumSession() {
 	xmlhttp.send();  					
 }
 
+function usernameValidCheck(input) {
+	var xmlhttp = getXmlHttpRequest();
+	var status;
+	xmlhttp.onreadystatechange=function() {
+  	if (xmlhttp.readyState == 4) {
+  		if (xmlhttp.status == 200) { 
+  			console.log(xmlhttp.responseText);
+  			jsonObj = JSON.parse(xmlhttp.responseText);	
+  			status = jsonObj['username-status'];
+  		} else {
+  			status = "undefined";
+  		}
+ 		}
+ 	}
+	xmlhttp.open("GET","src/framework/usernameLookup.php?username=" + input , false); // synchronous call
+	xmlhttp.send();
+	console.log(status);
+	return status;  					
+}
+
+
 function myHTMLInclude() {
   var z, i, a, file, xhttp;
   z = document.getElementsByTagName("*");
@@ -783,11 +804,22 @@ function enrollValidateAndSubmit() {
   var usernameField = enrollForm["uid"];
   var username = usernameField.value;
   setFieldPassStyles(usernameField, "");
-  if (username == null || username == "" || username.length < 7 || username.length > 25 || re2.test(username)) {
-    setFieldErrorStyles(usernameField, "Valid username is required.");
-    usernameField.value = "";
-    pass = false;
-  }		
+	var result = usernameValidCheck(username);
+	switch(result) {
+		case "invalid":
+		case "undefined":
+    	setFieldErrorStyles(usernameField, "Valid username is required.");
+    	usernameField.value = "";
+    	pass = false;		
+    	break;
+    case "dupe":
+    	setFieldErrorStyles(usernameField, "This username is already taken: " + username);
+    	usernameField.value = "";
+    	pass = false;		
+    	break;  
+    default:
+    	break  
+	}
 	
   var passwordField = enrollForm["password1"];
   var password = passwordField.value;
@@ -813,8 +845,8 @@ function enrollValidateAndSubmit() {
   if (fname == null || fname == "" || fname.length > 25) {
     setFieldErrorStyles(fnameField, "Valid first name is required.");
     pass = false;
-  }	
-  	
+  }
+    	
  	if (Boolean(pass)) {
  		submitButton.disabled = true;  
  		submitButton.innerHTML = "One Moment";

@@ -66,8 +66,7 @@ if (!strcmp($email_status, "checked")) {
     				echo $val . "</br>";
     	}
   	?> 
-  	<p>	
-		<p style="margin-top:20px;"><b>Your Collaborations</b><p>
+	  </p>	
 	</div>
 
 	<div class="profileBlock3">

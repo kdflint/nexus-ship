@@ -241,6 +241,12 @@ body {
 	width:90%;
 }
 
+.required {
+	color: #f68620;
+	font-weight: bold;
+	vertical-align: top;	
+}
+
 .product-name {
 	font-family:Oswald;
 	font-size:230%;

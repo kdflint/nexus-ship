@@ -24,8 +24,8 @@ $user->session_begin();
     			echo "<tr><td>" . $key . "</td><td>" . $val ."</td></tr>";
     		}
     	?>
+    	<tr><td>Groups Detail: </td><td><?php print_r($_SESSION['groups']); ?></td></tr>
   		</table>
-  		<?php print_r($_SESSION['groups']); ?>	
   	</div>
   			
 		<div style="width:350px;position:absolute;left:400px;">

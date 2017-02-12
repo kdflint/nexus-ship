@@ -24,11 +24,11 @@ class Group {
 		
 	
 	public static function getGroupById($groupId) {
-		$query = "select id, name, descr, logo, forum_group_id from public.group where id = $1";	
+		$query = "select id, name, descr, logo, forum_group_id from public.group where id = $1 limit 1";	
 		$cursor = PgDatabase::psExecute($query, array($groupId));
 	  $resultArray = array();
 	  while ($row = pg_fetch_array($cursor)) {
-	  	$resultArray[$row['id']] = $row['name'];
+	  	array_push($resultArray, array("id" => $row['id'], "name" => $row['name'], "forum" => $row['forumid']));
 	  }		
 	  return $resultArray;
 	}
@@ -105,37 +105,27 @@ class Group {
 	
 	
 	public static function getUserGroupsByUsername($username) {
-		$query = "select g.id as id, g.name as name from public.group g, public.user u, user_group ug where u.username = $1 and ug.user_fk = u.id and ug.group_fk = g.id";
+		$query = "select g.id as id, g.name as name, g.forum_group_id as forumid from public.group g, public.user u, user_group ug where u.username = $1 and ug.user_fk = u.id and ug.group_fk = g.id";
 		$cursor = PgDatabase::psExecute($query, array($username));
 	  $resultArray = array();
 	  while ($row = pg_fetch_array($cursor)) {
-	  	$resultArray[$row['id']] = $row['name'];
+	  	// LEFT OFF - add forumid to this data structure
+	  	array_push($resultArray, array("id" => $row['id'], "name" => $row['name'], "forum" => $row['forumid']));
+	  	//$resultArray[$row['id']] = $row['name'];
 	  }		
 	  return $resultArray;
 	}
 	
-	public static function getPublicGroupByOrgId($uid) {
-		$query = "select ug.group_fk as id from public.user u, user_group ug where u.username = $1 and u.id = ug.user_fk";
-		$row = pg_fetch_row(PgDatabase::psExecute($query, array('pUser-' . $uid)));
-		if ($row) {
-			return $row[0];
+	public static function getPublicGroupByOrgId($id) {
+		$query = "select uid from organization where id = $1";
+		$uidRow = pg_fetch_row(PgDatabase::psExecute($query, array($id)));		
+		if ($uidRow) {
+			return self::getUserGroupsByUsername('pUser-' . $uidRow[0]);
 		} else {
-			return "";
+			return false;
 		}
 	}
-	
-	/*
-	public static function getPublicUserGroupByOrgId($oid) {
-		$query = "select u.username from public.user u, user_organization uo, organization o where u.id = uo.user_fk and u.suspend_dttm is NULL and u.username like 'pUser%' and uo.organization_fk = o.id and o.uid = $1 limit 1";
-		$row = pg_fetch_row(PgDatabase::psExecute($query, array($oid)));
-		if ($row) {
-			return self::getUserGroupsByUsername($row[0]);
-		} else {
-			return array();
-		}
-	}		
-	*/
-	
+
 	public static function groupIdExists($id) {
 		$query = "select exists (select true from public.group where id = $1)";
 		$row = pg_fetch_row(PgDatabase::psExecute($query, array($id)));
