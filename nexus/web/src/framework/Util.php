@@ -134,6 +134,14 @@ class Utilities {
 	
 	public static function getTwitterHandle() {	return "NorthbridgeNFP"; }
 	
+	public static function isUaSession() {
+		if (ENV_NAME === "dev" && isset($_SESSION['networkId']) && ($_SESSION['networkId'] = UAT_NETWORKS)) {
+			return TRUE;
+		} else {
+			return FALSE;
+		}
+	}
+	
 	private static $supportedLangs = array('en' => 'en_US.utf8','es' => 'es_ES.utf8');
 	
 	const VALIDATION_FNAME_ERROR = "Please enter a valid first name."; 

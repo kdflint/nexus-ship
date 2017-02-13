@@ -11,7 +11,7 @@ $validInvitation = false;
 $showGroupEnrollWrite = $showGroupEnrollRead = false;
 $publicGroups = array();
 $enrollGroup = array();
-
+$accountTypes = array("ADV" => "Advantage", "NWM" => "Web Meet");
 
 if (Utilities::validateUuid($_GET['invitation'])) {
 	if (Invitation::isInvitationOpen($_GET['invitation'])) {
@@ -25,6 +25,8 @@ if ($validInvitation) {
 	$_SESSION['invitation'] = $inviteId;
 	
 	$row1 = pg_fetch_array(Invitation::getInvitationByUuid($inviteId));
+
+	$accountType = $accountTypes[$row1['account_type']];
 	
 	// Use this logic to indicate whether the group checkboxes should be shown
 	// because this is a network-global invite
@@ -100,7 +102,7 @@ if(isset($_GET['error']) && Utilities::isSafeCharacterSet($_GET['error'])) {
        	<img class="banner-image" src="image/nexus4.png" />
        	<span class="banner" style="width:60%">
 					<span class="product-name">Nexus</span><br/>
-					<span class="module-name">Advantage Enrollment</span>					
+					<span class="module-name"><?php echo($accountType); ?> Enrollment</span>					
       	</span>  	
       	<span class="controls" style="float:right;padding-bottom:10px;margin-top:30px;">
       		<b>Already have<br/>an account?<br/></b>
@@ -119,7 +121,7 @@ if(isset($_GET['error']) && Utilities::isSafeCharacterSet($_GET['error'])) {
 					<form id="enroll-form" class="pure-form" autocomplete="off" action="modules/login/control/enrollProcessor.php" method="post">
 	    			<fieldset>
 							<?php if($showGroupEnrollWrite && count($publicGroups) > 1) { ?>
-							<!-- TODO - This is very bad! Assumes that there will always be one public group named "Public Group" -->
+							<!-- TODO - This is very bad! Assumes that there will *always* be one public group named "Public Group" -->
 								<div style="margin-bottom:20px">
 									<p>Which group(s) would you like to join?</p>
 	 								<span style="font-size:90%;">

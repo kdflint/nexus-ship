@@ -19,7 +19,7 @@ if (isset($_POST['password']) && $_POST['password'] === "mockingbird") {
 	User::addUserOrgRelation($puserId, $newOrgId, '296', '5');
 	$invitationId = Invitation::addInvitation($_POST['org-email'], null, 1, 296, $newOrgId);
 	
-	header("location:" . "http://localhost/nexus/nexus/config//onboard.php?invitation=" . $invitationId);
+	header("location:" . "http://localhost/nexus/nexus/config/onboard.php?invitation=" . $invitationId);
 	
 } else {
 	echo("unauthorized");

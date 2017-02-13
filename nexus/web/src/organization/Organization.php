@@ -198,6 +198,7 @@ class Organization {
 			and oo.organization_from_fk = o.id
 			and oa.organization_fk = o.id
 			and relationship = 'parent' 
+			order by networkid desc
 			limit 1";
 		return PgDatabase::psExecute($query, array($orgId));
 	}
