@@ -15,7 +15,7 @@ class Group {
 	
 	public static function getForumGroupIdByGroupId($groupId) {
 		$query = "select forum_group_id from public.group where id = $1 limit 1";
-		$row = pg_fetch_row(gDatabase::psExecute($query, array($groupId)));
+		$row = pg_fetch_row(PgDatabase::psExecute($query, array($groupId)));
 		if ($row) {
 			return $row[0];
 		}
@@ -103,24 +103,43 @@ class Group {
 			return $users;
 	}	
 	
-	
 	public static function getUserGroupsByUsername($username) {
 		$query = "select g.id as id, g.name as name, g.forum_group_id as forumid from public.group g, public.user u, user_group ug where u.username = $1 and ug.user_fk = u.id and ug.group_fk = g.id";
 		$cursor = PgDatabase::psExecute($query, array($username));
 	  $resultArray = array();
 	  while ($row = pg_fetch_array($cursor)) {
-	  	// LEFT OFF - add forumid to this data structure
 	  	array_push($resultArray, array("id" => $row['id'], "name" => $row['name'], "forum" => $row['forumid']));
-	  	//$resultArray[$row['id']] = $row['name'];
 	  }		
 	  return $resultArray;
 	}
 	
-	public static function getPublicGroupByOrgId($id) {
+	public static function getPublicEnrollableGroupsByOrgId($id) {
 		$query = "select uid from organization where id = $1";
 		$uidRow = pg_fetch_row(PgDatabase::psExecute($query, array($id)));		
 		if ($uidRow) {
-			return self::getUserGroupsByUsername('pUser-' . $uidRow[0]);
+			$enrollableGroups = array();
+			$allPublicGroups = self::getUserGroupsByUsername('pUser-' . $uidRow[0]);
+			foreach ($allPublicGroups as $group) {
+				if ($group['name'] != "Public Group") {
+					array_push($enrollableGroups, $group);
+				}
+			}
+			return $enrollableGroups;		
+		} else {
+			return false;
+		}
+	}
+	
+	public static function getPublicSystemGroupByOrgId($id) {
+		$query = "select uid from organization where id = $1";
+		$uidRow = pg_fetch_row(PgDatabase::psExecute($query, array($id)));		
+		if ($uidRow) {
+			$allPublicGroups = self::getUserGroupsByUsername('pUser-' . $uidRow[0]);
+			foreach ($allPublicGroups as $group) {
+				if ($group['name'] === "Public Group") {
+					return $group;
+				}
+			}		
 		} else {
 			return false;
 		}

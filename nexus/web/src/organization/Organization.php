@@ -25,10 +25,10 @@ class Organization {
 		return array($orgId, $oid);	
 	}
 	
-	public static function addOrganization($orgName, $parentOrgId) {
+	public static function addOrganization($orgName, $parentOrgId, $logoFileName = "") {
 		$oid = Utilities::newId();
-		$query = "insert into organization (name, create_dttm, activate_dttm, status_fk, uid) values ($1, now(), now(), 1, $2) returning id";
-		$row = pg_fetch_row(PgDatabase::psExecute($query, array($orgName, $oid)));
+		$query = "insert into organization (name, create_dttm, activate_dttm, status_fk, uid, logo) values ($1, now(), now(), 1, $2, $3) returning id";
+		$row = pg_fetch_row(PgDatabase::psExecute($query, array($orgName, $oid, $logoFileName)));
 		$orgId = $row[0];
 		$query = "insert into organization_organization (organization_from_fk, organization_to_fk, relationship) values ($1, $2, 'parent')";
 		PgDatabase::psExecute($query, array($parentOrgId, $orgId));

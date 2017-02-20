@@ -26,22 +26,21 @@ if ($validInvitation) {
 	
 	$row1 = pg_fetch_array(Invitation::getInvitationByUuid($inviteId));
 
-	$accountType = $accountTypes[$row1['account_type']];
+	$accountType = isset($accountTypes[$row1['account_type']]) ? $accountTypes[$row1['account_type']] : "";
 	
-	// Use this logic to indicate whether the group checkboxes should be shown
-	// because this is a network-global invite
-	if ($row1['type'] === 'global' && $row1['orgid'] === $row1['networkid'] && !$row1['groupid'] && $row1['roleid'] == 5) {
+	// This tests for a network-global, network-personal invite
+	if ($row1['orgid'] === $row1['networkid'] && !$row1['groupid'] && $row1['roleid'] == 5) {
 		$showGroupEnrollWrite = true;
-		$publicGroups = Group::getPublicGroupByOrgId($row1['networkid']);
+		$publicGroups = Group::getPublicEnrollableGroupsByOrgId($row1['networkid']);
 	}
 	
-	// group-global, group-personal
+	// This tests for group-global, group-personal
 	if ($row1['groupid']) {
 		$showGroupEnrollRead = true;
 		$enrollGroup = Group::getGroupById($row1['groupid']);
 	}
 	
-	$row2 = pg_fetch_array(Organization::getOrganizationById($row1['orgid']));
+	$row2 = pg_fetch_array(Organization::getOrganizationById($row1['networkid']));
 	$networkLogo = $row2['logo'];
 	$networkName = $row2['name'];
 	$networkOid = $row2['uid'];
@@ -125,11 +124,9 @@ if(isset($_GET['error']) && Utilities::isSafeCharacterSet($_GET['error'])) {
 								<div style="margin-bottom:20px">
 									<p>Which group(s) would you like to join?</p>
 	 								<span style="font-size:90%;">
-									<?php foreach($publicGroups as $group) { 
-									  	if($group['name'] != "Public Group") { ?>
- 												<input type="checkbox" name="group-enroll[]" value="<?php echo($group['id']); ?>" /> <?php echo($group['name']); ?><br/>
-              		<?php }
-              			} ?>
+									<?php foreach($publicGroups as $group) { ?>
+ 											<input type="checkbox" name="group-enroll[]" value="<?php echo($group['id']); ?>" /> <?php echo($group['name']); ?><br/>
+              		<?php } ?>
               		</span>
               	</div>
 							<?php } ?>

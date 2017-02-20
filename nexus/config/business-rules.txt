@@ -1,19 +1,19 @@
-god is an organization whose parent is themself
+every org hierarchy ends with northbridge
 
-every org hierarchy ends with a god
+ADV accounts must belong to orgs whose parent is northbridge
+NWM accounts must belong to orgs whose parent is northbridge
 
-ADV accounts must belong to orgs whose parent is a god
-NWM accounts must belong to orgs whose parent is a god
+ADV account holders must have themselves as a parent, in addition to northbridge
 
-an organization is a constituent of Nexus if they have an ancestor that is god
+an organization is a constituent of Nexus if they have an ancestor that is northbridge
 
 To find all parent organizations: 
 
 	select id, name from organization where id in (select distinct organization_from_fk from organization_organization where relationship = 'parent')
 	
-To find god
+To find northbridge
 
-	select id, name from organization where id in (select organization_from_fk from organization_organization where organization_from_fk = organization_to_fk and relationship = 'parent')
+	select * from organiation where name = "Northbridge Technology Alliance"
 	
 ===============
 	
@@ -38,8 +38,8 @@ Every ADV account may have 1 network-global invitation
 ===============
 
 Every valid Nexus user must have a valid password and be tied to 
- 1. an organization whose ancestor (or self) has a Nexus account, or
- 2. a valid group
+ 1. an organization whose ancestor (or self) has a Nexus account, or? and?
+ 2. one valid group, global to the Nexus account holder
  
 ===============
 
@@ -47,6 +47,14 @@ Every valid Nexus group must
  1. have an admin tied to an organization whose ancestor has a Nexus account
 
 For a group to be public-read, the pUser-nnnnnnn for the ADV account must be tied to that group
+
+===============
+
+Every event must be tied to a group.
+
+Events tied to public-read groups are visible to the public and to all Nexus users
+
+Events tied to the default community group are visible to Nexus all users
 
 ===============
 
@@ -67,13 +75,41 @@ Valid Nexus sessions may contain
  
 ===============
 
-There are three kinds of valid invitation
- 1. network-global - Enrollment page shows a list of all public groups for the enrollee to select. Does not expire.
+There are four kinds of valid invitation
+ 1. network-global - Does not expire. Enrollment page shows a list of all public groups for the enrollee to select.  
     select * from invitation where type = 'global' and network_fk = organization_fk and expire_dt is NULL and group_fk is NULL and role_fk = 5 and email is NULL
  2. group-global - Expire optional. Group shown on enrollment form as read-only.
  		select * from invitation where type = 'global' and group_fk is not NULL and email is NULL
+ 3. network-personal - Expire 1 month. Enrollment page shows a list of all public groups for the enrollee to select.  
+    select * from invitation where type = 'single' and network_fk = organization_fk and group_fk is NULL and role_fk = 5 and email is not NULL
  3. group-personal - Expire 1 month. Group shown on enrollment form as read-only.
- 		select * from invitation where type = 'single' and group_fk is not NULL and expire_dt is not NULL
+ 		select * from invitation where type = 'single' and group_fk is not NULL and expire_dt is not NULL and email is not NULL
+ 
+ network-global responders are automatically enrolled 
+ 	1. in the community default group. 
+ 	2. in the enrollable public groups that they select
+ 	
+ 	network-global issuer must be a network admin
+ 
+ group-global responders are automatically enrolled
+  1. in the community default group.
+  2. in the group that corresponds to the invitation
+  
+  group-global issuer must be a network admin
+ 
+ network-personal responders are automatically enrolled
+ 	1. in the community default group
+ 	2. in the enrollable public groups that they select
+ 	
+ 	network-personal issuer must be a network admin
+  
+ group-personal responders are automatically enrolled
+  1. in the community default group.
+  2. in the group that corresponds to the invitation 
+  
+  group-personal issure must be network or group admin
+  
+  
  
  ===============
  

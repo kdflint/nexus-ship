@@ -320,7 +320,7 @@ class Utilities {
 		// LAST NAME
 		if (isset($input['lname']) && strlen($input['lname']) > 0) {
 			if (Validate::string($input['lname'], array(
-    				'format' => VALIDATE_EALPHA . VALIDATE_NUM . VALIDATE_SPACE . "'" . "_" . "-",
+    				//'format' => VALIDATE_EALPHA . VALIDATE_NUM . VALIDATE_SPACE . "'" . "_" . "-",
     				'min_length' => self::NAME_MIN,
     				'max_length' => self::NAME_MAX))) {
 				$result['good']['lname'] = Utilities::sanitize($input['lname']);			
@@ -573,8 +573,8 @@ class Utilities {
 	public static function isSessionValid() {
 		if (isset($_SESSION['nexusContext']) && 
 				strlen($_SESSION['nexusContext']) == 3 && 
-				//isset($_SESSION['orgUid']) && 
-				//self::validateOrganizationUidFormat($_SESSION['orgUid']) && 
+				isset($_SESSION['orgUid']) && 
+				self::validateOrganizationUidFormat($_SESSION['orgUid']) && 
 				isset($_SESSION['username']) &&
 				!self::isSessionExpired() ) {
 			return true;
@@ -637,7 +637,9 @@ class Utilities {
 		
 		$_SESSION['groups'] = Group::getUserGroupsByUsername($_SESSION['username']);
 
-		$returnArray = Group::getPublicGroupByOrgId($_SESSION['networkId']);
+		// LEFT OFF check these two reworked methods
+		// Also, check public setSession()
+		$returnArray = Group::getPublicSystemGroupByOrgId($_SESSION['networkId']);
 		$_SESSION['pgpk'] = $returnArray[0]['id'];
 	}
 	

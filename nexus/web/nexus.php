@@ -45,9 +45,9 @@ $showProfileAdv = "false";
 $showTeam = "false";
 $showFatal = "false";
 $showOrganizationDetail = "false";
-$showNwmProfile = "false";
+$showAdvProfile = "false";
 $showOrgDetailId = "";
-$showNwmProfileUsername = "";
+$showAdvProfileUsername = "";
 
 // TODO - add the NWM/ADV check to these
 if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharacterSet($_GET['view'])) {
@@ -59,7 +59,7 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 		case (strpos($_GET['view'], 'orgid-') === 0 ? true : false):
 			$showOrganizationDetail = "true"; $showOrgDetailId = substr($_GET['view'], 6);
 		case (strpos($_GET['view'], 'profileuser-') === 0 ? true : false):
-			$showNwmProfile = "true"; $showNwmProfileUsername = substr($_GET['view'], 12);		
+			$showAdvProfile = "true"; $showAdvProfileUsername = substr($_GET['view'], 12);		
 	}
 }
 
@@ -178,8 +178,8 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 					$( "#adv-menu-network" ).click();
 					showDirectoryDetail("<?php echo $showOrgDetailId; ?>");	
 				}
-				if(<?php echo $showNwmProfile; ?>) {
-					var iframeSrc = HTTP_FORUM_PATH  + "/memberlist.php?mode=viewprofile&un=<?php echo($showNwmProfileUsername); ?>";
+				if(<?php echo $showAdvProfile; ?>) {
+					var iframeSrc = HTTP_FORUM_PATH  + "/memberlist.php?mode=viewprofile&un=<?php echo($showAdvProfileUsername); ?>";
     			var iframe = document.getElementById("adv-profile-frame");
     			iframe.src = iframeSrc;
     			window.location.assign(HTTP_WEB_PATH + "/nexus.php#openProfile");
@@ -199,6 +199,16 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 	  	function toggleTechCheckDisplay() {
 	  		$( "#tech_check_display" ).toggle( "blind" );
 	  	}
+	  	
+		  $(function() {
+    		var tooltips = $( "#profile-form :input" ).tooltip({
+      		position: {
+        		my: "left top",
+        		at: "right+5 top-5"
+      		},
+      		effect: "fade"
+    		});    
+  		});
 	  		  	
 		</script>
     

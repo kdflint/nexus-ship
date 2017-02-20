@@ -21,6 +21,8 @@ $validInvitation = false;
 			
 $result = Utilities::validateUserProfile($dirty, TRUE);
 
+// TODO - add check on issuer_fk according to business rules
+
 if (isset($_SESSION['invitation']) && Utilities::validateUuid($_SESSION['invitation'])) {
 	if (Invitation::isInvitationOpen($_SESSION['invitation'])) {
 		$validInvitation = true;

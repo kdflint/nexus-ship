@@ -165,14 +165,14 @@ function setPublicSession2(oid, fname, relativePath) {
 	xmlhttp.send();
 }
 
-function disableTestMessageLink() {
-   var link=document.getElementById("testMessageLink");
-   link.style.color="#c9c9a7";
+function disableTestMessageLink(linkId) {
+   var link=document.getElementById(linkId);
+   link.style.color="#899d70";
    link.setAttribute("href", "#");
    link.innerHTML = 'To test, save your changes';
 }
 
-function post(to, p) {
+function post(uiContext, to, p) {
   var myForm = document.createElement("form");
   myForm.method="post" ;
   myForm.action = to ;
@@ -185,6 +185,9 @@ function post(to, p) {
   document.body.appendChild(myForm) ;
   myForm.submit() ;
   document.body.removeChild(myForm) ;
+	disableTestMessageLink(uiContext);
+	document.getElementById(uiContext).innerHTML = "A test message has been sent!";
+
 }
 
 function toggleRecurFormElements(override) {
@@ -869,6 +872,10 @@ function validateEmail(emailField) {
   return true;
 }
 
+function validatePhone(phone) {
+	return /^[0-9()-. ]+$/.test(phone);
+}
+
 function resetProfileForm() {
 	var profileForm = document.forms['profile-form'];
 	profileForm.reset();
@@ -981,16 +988,38 @@ function profileValidateAndSubmit() {
   var fnameField = profileForm["fname"];
   var fname = fnameField.value;
   setFieldPassStyles(fnameField, "First Name");
-  if (fname == null || fname == "") {
+  if (fname == null || fname == "" || fname.length < 1) {
     setFieldErrorStyles(fnameField, "First name is required.");
     pass = false;
-  }	  
-  
+  }
+
   var emailField = profileForm["email"];
   var email = emailField.value;
   setFieldPassStyles(emailField, "Email");
 	if (!validateEmail(emailField)) {
 		pass = false;
+	}
+	
+	if (profileForm["sms"] !== undefined) {
+  	var smsField = profileForm["sms"];
+  	var sms = smsField.value;
+  	setFieldPassStyles(smsField, "");
+		if (sms != null && !validatePhone(sms)) {
+			smsField.value = "";
+			setFieldErrorStyles(smsField, "Please enter a valid cell number.");
+			pass = false;
+		}		
+	}
+	
+	if (profileForm["phone"] !== undefined) {
+  	var phoneField = profileForm["phone"];
+  	var phone = phoneField.value;
+  	setFieldPassStyles(phoneField, "");
+ 		if (phone != null && phone.length > 0 && !validatePhone(phone)) {
+ 			phoneField.value = "";
+			setFieldErrorStyles(phoneField, "Please enter a valid phone number.");
+			pass = false;
+		}		
 	}
   
  	if (Boolean(pass)) {
