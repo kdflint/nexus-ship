@@ -640,7 +640,6 @@ class Utilities {
 		}
 		
 		$_SESSION['groups'] = Group::getUserGroupsByUsername($_SESSION['username']);
-		// array_push($resultArray, array("id" => $row['id'], "name" => $row['name'], "forum" => $row['forumid']));
 
 		// LEFT OFF check these two reworked methods
 		// Also, check public setSession()

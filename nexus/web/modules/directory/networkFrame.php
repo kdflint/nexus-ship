@@ -31,17 +31,23 @@ if(isset($_GET['userMessage'])) {
 </div>
 
 <div id="network-frame" style="height:420px;">
-	<div class="controlCol" style="left:15px;border-right: 1px solid #eeeeee;">
-		<?php //echo "Sticky count " . $stickyCount; ?>
-		<?php //echo "Search string " . $stickyString; ?>
-		<?php include(Utilities::getModulesRoot() . "/directory/views/directorySearch.php"); ?>
-	</div>
-	<div id="show-directoryResults" class="displayCol" style="border:0px !important;width:600px;margin-left:5px;margin-top:-10px;">
-		<?php include(Utilities::getModulesRoot() . "/directory/views/directorySummary.php"); ?>
-	</div>
-	<div id="show-directoryDetail" class="displayCol displayDetail" style="display:none;border:0px !important;margin-left:5px;margin-top:-10px;">
-		<?php include(Utilities::getModulesRoot() . "/directory/views/directoryDetail.php"); ?>
-	</div>
+	<?php if (false) { ?>
+		<div class="controlCol" style="left:15px;border-right: 1px solid #eeeeee;">
+			<?php //echo "Sticky count " . $stickyCount; ?>
+			<?php //echo "Search string " . $stickyString; ?>
+			<?php include(Utilities::getModulesRoot() . "/directory/views/directorySearch.php"); ?>
+		</div>
+		<div id="show-directoryResults" class="displayCol" style="border:0px !important;width:600px;margin-left:5px;margin-top:-10px;">
+			<?php include(Utilities::getModulesRoot() . "/directory/views/directorySummary.php"); ?>
+		</div>
+		<div id="show-directoryDetail" class="displayCol displayDetail" style="display:none;border:0px !important;margin-left:5px;margin-top:-10px;">
+			<?php include(Utilities::getModulesRoot() . "/directory/views/directoryDetail.php"); ?>
+		</div>
+	<?php } else { ?>
+			<div style="font-size:12px;height:460px;overflow:auto;">
+			<?php include($includePath . $_SESSION['defaultSearchId'] . ".php"); ?>
+		</div>
+	<?php } ?>
 </div>
 
 

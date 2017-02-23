@@ -103,15 +103,32 @@ class Group {
 			return $users;
 	}	
 
-	public static function getNetworkMemberbyNetworkId($id) {
-		$query = "select u.fname, u.lname from public.user u, user_organization uo
+	public static function getNetworkMembersbyNetworkId($id, $ssnUser) {
+		$query = "select u.id as id, u.fname, u.lname, u.email, uo.role_fk as roleid
+			from public.user u, user_organization uo
 			where u.id = uo.user_fk
+			and u.suspend_dttm is NULL
 			and u.username not like 'nUser-%'
 			and u.username not like 'pUser-%'
 			and uo.organization_fk in
-				(select distinct organization_to_fk from organization_organization where organization_from_fk = $1 and relationship = 'parent')";
+				(select distinct organization_to_fk from organization_organization where organization_from_fk = $1 and relationship = 'parent')
+			order by u.fname, u.lname";
 		$cursor = PgDatabase::psExecute($query, array($id));
-		return pg_fetch_all($cursor);
+		while ($row = pg_fetch_array($cursor)) {
+			$users[$counter]['id'] = $row['id'];
+			$users[$counter]['fname'] = $row['fname'];
+			$users[$counter]['lname'] = $row['lname'];
+			$users[$counter]['title'] = "";
+			$users[$counter]['descr'] = "";
+			$users[$counter]['email'] = $row['email'];
+			$users[$counter]['sessionUser'] = $ssnUser;
+			$users[$counter]['uidpk'] = $row['id'];
+			$users[$counter]['role'] = Utilities::getRoleName($row['roleid']);
+			$users[$counter]['status'] = "active";
+			$counter++;
+		}
+		
+		return $users;
 	}
 
 	
