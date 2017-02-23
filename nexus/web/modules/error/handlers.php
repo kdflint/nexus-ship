@@ -1,5 +1,7 @@
 <?php
 
+require_once(dirname(__FILE__) . "/../../src/framework/Util.php");
+
 // https://web.stanford.edu/dept/its/communications/webservices/wiki/index.php/How_to_perform_error_handling_in_PHP
 
 // Destinations
@@ -25,9 +27,11 @@ function my_error_handler($errno, $errstr, $errfile, $errline)
   switch ($errno) {
     case E_USER_ERROR:
       // Send an e-mail to the administrator
-      error_log("Error: $errstr \n\nFatal error on line $errline in file $errfile \n\nUser: " . $userid . ":" . $email . ":" . $first . ":" . $last . "\nContext: " . $orgid . ":" . $context, DEST_EMAIL, ADMIN_EMAIL);
+      if (isset($_SESSION['environment']) && $_SESSION['environment'] != "local") {
+      	error_log("Error: $errstr \n\nFatal error on line $errline in file $errfile \n\nUser: " . $userid . ":" . $email . ":" . $first . ":" . $last . "\nContext: " . $orgid . ":" . $context, DEST_EMAIL, ADMIN_EMAIL);
+      }
       // Screen out to user
-      header("location:../../nexus/web/nexus.php?view=fatal");
+      header("location:" . Utilities::getHttpPath() . "/nexus.php?view=fatal");
       break;
   }
  
