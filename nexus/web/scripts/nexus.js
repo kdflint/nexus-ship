@@ -192,6 +192,13 @@ function post(uiContext, to, p) {
 
 }
 
+function showAdvProfile(username) {
+	var iframeSrc = HTTP_FORUM_PATH  + "/memberlist.php?mode=viewprofile&un=" + username;
+  var iframe = document.getElementById("adv-profile-frame");
+  iframe.src = iframeSrc;
+  window.location.assign(HTTP_WEB_PATH + "/nexus.php#openProfile");
+}
+
 function toggleRecurFormElements(override) {
 	var curValue = document.getElementById('repeat-check').checked;
 	var repeatBlock = document.getElementById("repeat-block");

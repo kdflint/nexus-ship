@@ -94,6 +94,10 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 		<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
     <link rel="stylesheet" href="styles/nexus.css" type="text/css" />
     <link rel="stylesheet" href="styles/modal.css" type="text/css" />
+    <!--<link rel="stylesheet" href="//cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" type="text/css" />-->
+    <!-- LEFT OFF - lost arrows - I think they are white -->
+    <link rel="stylesheet" href="styles/datatables.css" type="text/css" />
+
        
     <!-- New way to include font awesome - why?? -->
     <!--<script src="https://use.fontawesome.com/2eef5e944e.js"></script>-->
@@ -103,12 +107,15 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
   	<script src="<?php echo(Utilities::getConfigPath()); ?>/stateData.js" language="javascript"></script>
   	<!-- http://www.featureblend.com/javascript-flash-detection-library.html -->
  		<script src="scripts/lib/flash_detect.js"></script>
- 		<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+ 		<!--<script src="//code.jquery.com/jquery-1.10.2.js"></script>-->
+ 		<script src="//code.jquery.com/jquery-1.12.4.js"></script>
   	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
   	<script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js"></script>
   	<!-- http://www.pinlady.net/PluginDetect/ -->
   	<script type="text/javascript" src="scripts/lib/javaDetect/scripts/PluginDetect_Java_Simple.js"></script>
   	<!-- http://logomakr.com -->
+  	<!-- https://datatables.net -->
+		<script type="text/javascript" src="//cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js" charset="utf8"></script>
   	 	 	
     <title>Northbridge Nexus</title> 
 
@@ -124,7 +131,17 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 			<!-- include in this manner instead of in a meta link so that php code inside this file will resolve prior to runtime -->
     	<?php include("scripts/techCheck.js"); ?>
     	  	
-			$(document).ready(function () {
+			$(document).ready(function () {	
+				$('#member-directory').DataTable( {
+						"order": [[2, 'asc']],
+						"columns": [
+    					{ "orderable": false },
+    					{ "orderable": false },
+    					null,
+    					null,
+							null
+						]
+				} );
 				$( '#schedule_control' ).click(function() {
 	  			toggleNewEventDisplay();
 	  			if (document.getElementById('join_display').style.display != 'none') {
@@ -186,10 +203,7 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 					showDirectoryDetail("<?php echo $showOrgDetailId; ?>");	
 				}
 				if(<?php echo $showAdvProfile; ?>) {
-					var iframeSrc = HTTP_FORUM_PATH  + "/memberlist.php?mode=viewprofile&un=<?php echo($showAdvProfileUsername); ?>";
-    			var iframe = document.getElementById("adv-profile-frame");
-    			iframe.src = iframeSrc;
-    			window.location.assign(HTTP_WEB_PATH + "/nexus.php#openProfile");
+					showAdvProfile("<?php echo($showAdvProfileUsername); ?>");
 				}
 				if(<?php echo $showAdvIm; ?>) {
 					INBOX_FOCUS = "/ucp.php?i=pm&mode=compose&username=<?php echo($showAdvImUsername); ?>";
