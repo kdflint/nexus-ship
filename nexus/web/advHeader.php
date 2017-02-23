@@ -1,4 +1,8 @@
 
+	<?php 
+		// Special network tab label for CFCHT, for now :)
+		$networkTabLabel =  $_SESSION['environment'] === "prod" && $_SESSION['networkId'] === "18" ? "DIRECTORY" : "NETWORK";
+	?>
 
 	<img class="banner-image" src="image/nexus4.png" />
 	<span class="banner" style="float:right;width:878px;">
@@ -19,7 +23,7 @@
 				<a id="adv-menu-profile" class="pure-button button-menu-adv" href="javascript:void(0)" onclick="toggleAdvFrameDisplay(this)" style="float:right;background-color:#dae0bc;margin-right:0px;">PROFILE</a> 
 				<a id="adv-menu-inbox" class="pure-button button-menu-adv" href="javascript:void(0)" onclick="toggleAdvFrameDisplay(this)" style="float:right;background-color:#dae0bc;margin-right:-7px;">INBOX</a> 			
 				<a id="adv-menu-forum" class="pure-button button-menu-adv" href="javascript:void(0)" onclick="toggleAdvFrameDisplay(this)" style="float:right;background-color:#dae0bc;margin-right:-7px;">FORUM</a> 	
-				<a id="adv-menu-network" class="pure-button button-menu-adv" href="javascript:void(0)" onclick="toggleAdvFrameDisplay(this)" style="float:right;background-color:#dae0bc;margin-right:-7px;">DIRECTORY</a> 	
+				<a id="adv-menu-network" class="pure-button button-menu-adv" href="javascript:void(0)" onclick="toggleAdvFrameDisplay(this)" style="float:right;background-color:#dae0bc;margin-right:-7px;"><?php echo($networkTabLabel); ?></a> 	
 				<a id="adv-menu-event" class="pure-button button-menu-adv" href="javascript:void(0)" onclick="toggleAdvFrameDisplay(this)" style="float:right;background-color:rgba(137, 157, 112, 1);margin-right:-7px;" >EVENTS</a>
 				<a id="adv-menu-360" class="pure-button button-menu-adv" href="javascript:void(0)" onclick="toggleAdvFrameDisplay(this)" style="float:right;background-color:#dae0bc;margin-right:-7px;">360&deg;</a> 	
 			</span>

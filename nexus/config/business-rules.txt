@@ -76,7 +76,7 @@ Valid Nexus sessions may contain
 ===============
 
 There are four kinds of valid invitation
- 1. network-global - Does not expire. Enrollment page shows a list of all public groups for the enrollee to select.  
+ 1. network-global - Does not expire. Enrollment page shows a list of all public groups for the enrollee to select. Enrollment auto-adds responder to network-default group 
     select * from invitation where type = 'global' and network_fk = organization_fk and expire_dt is NULL and group_fk is NULL and role_fk = 5 and email is NULL
  2. group-global - Expire optional. Group shown on enrollment form as read-only.
  		select * from invitation where type = 'global' and group_fk is not NULL and email is NULL

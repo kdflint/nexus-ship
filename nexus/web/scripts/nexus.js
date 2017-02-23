@@ -12,6 +12,8 @@ var DEFAULT_FORUM;
 var HTTP_WEB_PATH;
 var HTTP_FORUM_PATH;
 var FORUM_SESSION_REFRESH_COUNTER = 0;
+DEFAULT_INBOX_FOCUS = "/ucp.php?i=pm&folder=inbox";
+var INBOX_FOCUS = "";
 
 
 /*
@@ -418,11 +420,12 @@ function loadAdvPage(resource) {
 	
 		switch(resource) {
 			case "adv-menu-inbox":
-				var iframeSrc = HTTP_FORUM_PATH  + "/ucp.php?i=pm&folder=inbox";
+				var iframeSrc = HTTP_FORUM_PATH  + INBOX_FOCUS; //"/ucp.php?i=pm&folder=inbox";
     		var iframe = document.getElementById(frameId);
     		iframe.src = iframeSrc;
     		frameDisplay.style.display ="block";
-    		break;
+    		INBOX_FOCUS = DEFAULT_INBOX_FOCUS;
+    		break;    		
     	case "adv-menu-forum":
     		var iframeSrc = HTTP_FORUM_PATH  + "/viewforum.php?f=" + DEFAULT_FORUM;
     		var iframe = document.getElementById(frameId);

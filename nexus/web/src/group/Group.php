@@ -102,6 +102,18 @@ class Group {
 			
 			return $users;
 	}	
+
+	public static function getNetworkMemberbyNetworkId($id) {
+		$query = "select u.fname, u.lname from public.user u, user_organization uo
+			where u.id = uo.user_fk
+			and u.username not like 'nUser-%'
+			and u.username not like 'pUser-%'
+			and uo.organization_fk in
+				(select distinct organization_to_fk from organization_organization where organization_from_fk = $1 and relationship = 'parent')";
+		$cursor = PgDatabase::psExecute($query, array($id));
+		return pg_fetch_all($cursor);
+	}
+
 	
 	public static function getUserGroupsByUsername($username) {
 		$query = "select g.id as id, g.name as name, g.forum_group_id as forumid from public.group g, public.user u, user_group ug where u.username = $1 and ug.user_fk = u.id and ug.group_fk = g.id";
@@ -134,12 +146,17 @@ class Group {
 		$query = "select uid from organization where id = $1";
 		$uidRow = pg_fetch_row(PgDatabase::psExecute($query, array($id)));		
 		if ($uidRow) {
-			$allPublicGroups = self::getUserGroupsByUsername('pUser-' . $uidRow[0]);
-			foreach ($allPublicGroups as $group) {
-				if ($group['name'] === "Public Group") {
-					return $group;
-				}
-			}		
+			return self::getUserGroupsByUsername('pUser-' . $uidRow[0]);
+		} else {
+			return false;
+		}
+	}
+	
+	public static function getNetworkSystemGroupByOrgId($id) {
+		$query = "select uid from organization where id = $1";
+		$uidRow = pg_fetch_row(PgDatabase::psExecute($query, array($id)));		
+		if ($uidRow) {
+			return self::getUserGroupsByUsername('nUser-' . $uidRow[0]);
 		} else {
 			return false;
 		}

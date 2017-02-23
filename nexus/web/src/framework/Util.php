@@ -86,6 +86,8 @@ class Utilities {
 	
 	private static $config_path = "/config";
 	
+	private static $include_path = "/include";
+	
 	public static function getHttpPath() { return "http://" . ENV_HOST . APP_NAME . self::$web_path; }
 	
 	public static function getPluginPath() { return self::getHttpPath() . "/plugin"; }
@@ -101,6 +103,8 @@ class Utilities {
 	public static function getLocaleRoot() { return LCL_ROOT; }
 	
 	public static function getModulesRoot() {	return self::getWebRoot() . "/modules"; }
+	
+	public static function getIncludeRoot() { return INC_ROOT; }
 	
 	public static function getPhpRoot() {	return PHP_ROOT; }
 	
@@ -636,11 +640,15 @@ class Utilities {
 		}
 		
 		$_SESSION['groups'] = Group::getUserGroupsByUsername($_SESSION['username']);
+		// array_push($resultArray, array("id" => $row['id'], "name" => $row['name'], "forum" => $row['forumid']));
 
 		// LEFT OFF check these two reworked methods
 		// Also, check public setSession()
 		$returnArray = Group::getPublicSystemGroupByOrgId($_SESSION['networkId']);
 		$_SESSION['pgpk'] = $returnArray[0]['id'];
+		
+		$returnArray = Group::getNetworkSystemGroupByOrgId($_SESSION['networkId']);
+		$_SESSION['ngpk'] = $returnArray[0]['id'];
 	}
 	
 	public static function setPublicSession($oid, $zone = "undefined", $fname = "Anonymous", $uuid = false) {

@@ -155,7 +155,13 @@ class User {
 			$row = pg_fetch_row(PgDatabase::psExecute($query, array($uuid, $username)));
 			return $row[0];
 	}
-
+	
+	public static function addNetworkUser($username) {
+			$uuid = Utilities::newUuid();
+			$query = "insert into public.user (uuid, username, fname, lname, email, status_fk, create_dttm, activate_dttm) values ($1, $2, 'Network', 'User', '', '1', now(), now()) returning id"; 
+			$row = pg_fetch_row(PgDatabase::psExecute($query, array($uuid, $username)));
+			return $row[0];
+	}
 	
 	public static function addUserOrgRelation($userId, $orgId, $grantorId, $roleId) {
 			$query = "insert into user_organization (user_fk, organization_fk, grantor_fk, role_fk, create_dttm) values ($1, $2, $3, $4, now()) returning id";

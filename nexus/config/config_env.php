@@ -7,6 +7,7 @@
 	define("LIB_ROOT", "/home/kdflint/projects/nexus-community/nexus/lib");
 	define("PTR_ROOT", "/home/kdflint/projects/nexus-community/nexus/partner");
 	define("LCL_ROOT", "/home/kdflint/projects/nexus-community/nexus/locale");
+	define("INC_ROOT", "/home/kdflint/projects/nexus-community/nexus/include");
 	define("PHPBB3_ROOT", "/home/kdflint/phpBB3");
 	define("LOG_ROOT", "/home/kdflint/projects/nexus-community/nexus/log");
 	define("PTR_STC_ROOT", "/partner");

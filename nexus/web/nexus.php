@@ -1,8 +1,10 @@
 <?php 
 
-session_start();
-
 require_once("src/framework/Util.php");
+require_once(Utilities::getModulesRoot() . "/forum/forum_integration.php");
+
+session_start();
+$user->session_begin();
 
 $demoSession = "false";
 $disabled = "";
@@ -46,8 +48,10 @@ $showTeam = "false";
 $showFatal = "false";
 $showOrganizationDetail = "false";
 $showAdvProfile = "false";
+$showAdvIm = "false";
 $showOrgDetailId = "";
 $showAdvProfileUsername = "";
+$showAdvImUsername = "";
 
 // TODO - add the NWM/ADV check to these
 if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharacterSet($_GET['view'])) {
@@ -60,6 +64,8 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 			$showOrganizationDetail = "true"; $showOrgDetailId = substr($_GET['view'], 6);
 		case (strpos($_GET['view'], 'profileuser-') === 0 ? true : false):
 			$showAdvProfile = "true"; $showAdvProfileUsername = substr($_GET['view'], 12);		
+		case (strpos($_GET['view'], 'imuser-') === 0 ? true : false):
+			$showAdvIm = "true"; $showAdvImUsername = substr($_GET['view'], 7);		
 	}
 }
 
@@ -113,6 +119,7 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 			HTTP_WEB_PATH = "<?php echo Utilities::getHttpPath(); ?>";
 			HTTP_FORUM_PATH = "<?php echo Utilities::getForumHttpPath(); ?>";
 			FORUM_SESSION_REFRESH_COUNTER = 0;
+			INBOX_FOCUS = DEFAULT_INBOX_FOCUS;
 			
 			<!-- include in this manner instead of in a meta link so that php code inside this file will resolve prior to runtime -->
     	<?php include("scripts/techCheck.js"); ?>
@@ -183,6 +190,10 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
     			var iframe = document.getElementById("adv-profile-frame");
     			iframe.src = iframeSrc;
     			window.location.assign(HTTP_WEB_PATH + "/nexus.php#openProfile");
+				}
+				if(<?php echo $showAdvIm; ?>) {
+					INBOX_FOCUS = "/ucp.php?i=pm&mode=compose&username=<?php echo($showAdvImUsername); ?>";
+					$( "#adv-menu-inbox" ).click();					
 				}
 			});
 			

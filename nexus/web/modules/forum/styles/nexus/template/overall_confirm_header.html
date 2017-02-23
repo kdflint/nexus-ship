@@ -41,17 +41,6 @@ function breakoutProfile(username) {
   	window.top.location = "http://" + window.location.hostname + environ + "/nexus/web/nexus.php?view=profileuser-" + username;
 	}
 }
-
-function breakinUserMessage(username) {
-	var environ = "/apps";
-	var path = window.location.pathname;
-	if (window.top != window.self) {
-		if (path.startsWith("/phpBB3")) { environ = "/nexus"; }
-		if (path.startsWith("/dev")) { environ = "/dev"; }
-		alert("http://" + window.location.hostname + environ + "/nexus/web/nexus.php?view=imuser-" + username);
-  	window.top.location = "http://" + window.location.hostname + environ + "/nexus/web/nexus.php?view=imuser-" + username;
-	}
-}
 </script>
 
 <!-- IF S_ALLOW_CDN -->
@@ -99,22 +88,11 @@ function breakinUserMessage(username) {
 
 <!-- EVENT overall_header_body_before -->
 
-<div id="wrap" style="padding:0px;padding-top:0px;">
+<div id="wrap">
 	<a id="top" class="anchor" accesskey="t"></a>
 	<div id="page-header">
 		<!-- EVENT overall_header_navbar_before -->
 	</div>
 
-	<!-- EVENT overall_header_page_body_before -->
-
 	<a id="start_here" class="anchor"></a>
 	<div id="page-body" role="main">
-		<!-- IF S_BOARD_DISABLED and S_USER_LOGGED_IN and (U_MCP or U_ACP) -->
-		<div id="information" class="rules">
-			<div class="inner">
-				<strong>{L_INFORMATION}{L_COLON}</strong> {L_BOARD_DISABLED}
-			</div>
-		</div>
-		<!-- ENDIF -->
-
-		<!-- EVENT overall_header_content_before -->

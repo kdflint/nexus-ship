@@ -45,14 +45,10 @@ $testEmail = $_SESSION['email'];
 	 			<textarea maxlength="250" rows="4" cols="30" name="about" title="Optional, 1-250 characters. May contain accents and sentence punctuation."><?php echo $descr; ?></textarea>
 	 		</div>
 	</div>
-	<div class="profileBlock2">
-		<div style="margin-top:10px;">
-			<?php if (false) { ?>
-				<img src="" width="" />
-			<?php } else { ?>
-				<p id="attachment-label" style="font-size:90%;line-height:240%;"><b>Upload your avatar</b> (optional)</p>
-				<input type="file" name="fileToUpload" id="fileToUpload" style="width:90%;" onchange="toggleFileClear();"><a id="fileClearControl" href="javascript:void(0)" onclick="clearFileInput(document.getElementById('fileToUpload'));" style="display:none;"><span class="fa fa-times" style="margin-left:10px;"></span></a>
-			<?php } ?>
+	<div class="profileBlock2" style="margin-top:40px;">
+		<span class="profileCol1">Your Avatar</span>
+		<div style="margin-top:20px;">
+			<iframe id="avatar-frame" src="<?php echo(Utilities::getForumHttpPath()); ?>/ucp.php?i=ucp_profile&mode=avatar" style="width:400px;border:0;margin:0;padding:0;position:absolute;top:20;height:400px;overflow:hidden;" scrolling="no"></iframe>
 		</div>
 	
 	<div style="display:none;">
