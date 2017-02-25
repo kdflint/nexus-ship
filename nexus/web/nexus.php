@@ -46,6 +46,7 @@ $showProfile = "false";
 $showProfileAdv = "false";
 $showTeam = "false";
 $showFatal = "false";
+$showNetwork = "false";
 $showOrganizationDetail = "false";
 $showAdvProfile = "false";
 $showAdvIm = "false";
@@ -59,6 +60,7 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 		case "profile": $showProfile = "true"; break;
 		case "team": $showTeam = "true"; break;
 		case "fatal": $showFatal = "true"; break;
+		case "network": $showNetwork = "true"; break;
 		// We have ensured that $_GET['view'] will evaluate to true, that's why below is viable
 		case (strpos($_GET['view'], 'orgid-') === 0 ? true : false):
 			$showOrganizationDetail = "true"; $showOrgDetailId = substr($_GET['view'], 6);
@@ -186,6 +188,9 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 					document.getElementById("reserveList").style.display='none';
 					document.getElementById("userList").style.display='none';
 					document.getElementById("fatalError").style.display='block';
+				}	
+				if(<?php echo $showNetwork; ?>) {
+					$( "#adv-menu-network" ).click();
 				}	
 				if(<?php echo $demoSession; ?>) {
 					document.getElementById("profile_control_icon").className = "";

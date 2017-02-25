@@ -12,8 +12,9 @@ var DEFAULT_FORUM;
 var HTTP_WEB_PATH;
 var HTTP_FORUM_PATH;
 var FORUM_SESSION_REFRESH_COUNTER = 0;
-DEFAULT_INBOX_FOCUS = "/ucp.php?i=pm&folder=inbox";
+var DEFAULT_INBOX_FOCUS = "/ucp.php?i=pm&folder=inbox";
 var INBOX_FOCUS = "";
+var RECIPIENT_LIST = [];
 
 
 /*
@@ -192,6 +193,27 @@ function post(uiContext, to, p) {
 
 }
 
+function updatePmRecipientList(username, fullname) {
+	var curList = document.getElementById("pmRecipientList");
+	var item = document.getElementById(username);
+	if (!item || item === "undefined") {
+		var newRecipient = document.createElement("span");
+		newRecipient.id = username;	
+		newRecipient.innerHTML = fullname;
+		curList.appendChild(newRecipient);
+		var dto = new Object();
+		dto.username = username;
+		dto.fullname = fullname;	
+		RECIPIENT_LIST.push(dto);	
+	} else {
+		item.parentNode.removeChild(item);
+		for( i=RECIPIENT_LIST.length-1; i>=0; i--) {
+    	if( RECIPIENT_LIST[i].username === username) RECIPIENT_LIST.splice(i,1);
+		}	
+	}
+	document.getElementById("recipient-dto").innerHTML = JSON.stringify(RECIPIENT_LIST);
+}
+
 function showAdvProfile(username) {
 	var iframeSrc = HTTP_FORUM_PATH  + "/memberlist.php?mode=viewprofile&un=" + username;
   var iframe = document.getElementById("adv-profile-frame");
@@ -289,8 +311,6 @@ function htmlFormatEmail(rawText) {
 	var replaced = rawText.replace(re, '<a href="mailto:$1@$2.$3">$1@$2.$3</a>$4');
 	return replaced;
 }
-
-//<a href="mailto:kathy.flint@northbridgetech.org.<a">kathy.flint@northbridgetech.org.<a</a>
 
 function toggleRememberCheckbox() {
 	var loginRemember = document.getElementById("login-remember");

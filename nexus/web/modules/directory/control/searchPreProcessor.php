@@ -49,9 +49,10 @@ if (true) {
 		fwrite($file, "</table>"); 	
 	// else if session user is not in a group, show all network members
 	} else {
-		$result = Group::getNetworkMembersbyNetworkId($_SESSION['networkId'], $_SESSION['uidpk']);	
+		$result = Group::getNetworkMembersbyNetworkId($_SESSION['networkId'], $_SESSION['uidpk']);
+		fwrite($file, "<form id=\"member-directory-form\" action=\"#\" method=\"post\">");	
 		fwrite($file, "<table id=\"member-directory\" class=\"display\" width=\"100%\" cellspacing=\"0\">");
-		fwrite($file, "<thead><tr><th>Select for Message</th><th>Show Details</th><th>First</th><th>Last</th><th>Organization</th></tr></thead>");	
+		fwrite($file, "<thead><tr><th>Select for Message</th><th>Details</th><th>First</th><th>Last</th><th>Organization</th></tr></thead>");	
 		fwrite($file, "<tbody>");
 		//fwrite($file, "<tr><td colspan=\"3\" valign=\"top\"><a href=#>" . $val . "</a></td></tr>");	
 		//fwrite($file, "<tr><td><b>Message</b></td><td>&nbsp;<input type=\"button\" name=\"CheckAll\" value=\"Broadcast\" onclick=\"checkAll('nameGroup" . $key . "')\"></td><td><input type=\"button\" name=\"CheckAll\" value=\"Uncheck All\" onclick=\"uncheckAll('nameGroup" . $key . "')\"></td></tr>");
@@ -64,7 +65,7 @@ if (true) {
 				$disabled = "";
 			}
 			fwrite($file, "<tr>
-			<td><input type=\"checkbox\" name=\"names[]\" value=\"" . $user['id'] . "::" . $user['fname'] . " " . $user['lname'] . "\" onchange=\"messageToFill()\" " . $disabled . " \></td>
+			<td><input type=\"checkbox\" name=\"names[]\" value=\"" . $user['id'] . "::" . $user['fname'] . " " . $user['lname'] . "\" onchange=\"updatePmRecipientList('" . $user['username'] . "', '" . $user['fname'] . " " . $user['lname'] . "')\" " . $disabled . " \></td>
 			<td>
  			<a href=\"javascript:void(0)\" style=\"font-size:12px;font-weight:normal;\" onclick=\"showAdvProfile('" . $user['username'] . "');\"><span class=\"fa fa-plus\"></span></a></td>			
 			<td>" . $user['fname'] . "</td>
@@ -74,6 +75,7 @@ if (true) {
 		}		
 		fwrite($file, "</tbody>");
 		fwrite($file, "</table>");
+		fwrite($file, "</form>");
 	}
 	
 }
