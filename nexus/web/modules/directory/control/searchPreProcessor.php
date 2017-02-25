@@ -58,14 +58,16 @@ if (true) {
 		//fwrite($file, "<tr><td><b>Message</b></td><td>&nbsp;<input type=\"button\" name=\"CheckAll\" value=\"Broadcast\" onclick=\"checkAll('nameGroup" . $key . "')\"></td><td><input type=\"button\" name=\"CheckAll\" value=\"Uncheck All\" onclick=\"uncheckAll('nameGroup" . $key . "')\"></td></tr>");
 		
 		//http://" + window.location.hostname + environ + "/nexus/web/nexus.php?view=profileuser-" + username
+		//<td><input type=\"checkbox\" name=\"names[]\" value=\"" . $user['id'] . "::" . $user['fname'] . " " . $user['lname'] . "\" onchange=\"updatePmRecipientList('" . $user['username'] . "', '" . $user['fname'] . " " . $user['lname'] . "')\" " . $disabled . " \></td>
 		
 		foreach ($result as $user) {
-			$disabled = "disabled";
-			if (User::isUserMessageEnabled($user['id'])) {
-				$disabled = "";
-			}
+			//$disabled = "disabled";
+			//if (User::isUserMessageEnabled($user['id'])) {
+			//	$disabled = "";
+			//}
+			$disabled = "";
 			fwrite($file, "<tr>
-			<td><input type=\"checkbox\" name=\"names[]\" value=\"" . $user['id'] . "::" . $user['fname'] . " " . $user['lname'] . "\" onchange=\"updatePmRecipientList('" . $user['username'] . "', '" . $user['fname'] . " " . $user['lname'] . "')\" " . $disabled . " \></td>
+			<td><input type=\"checkbox\" name=\"names[]\" value=\"" . $user['username'] . "::" . $user['fname'] . " " . $user['lname'] . "\" " . $disabled . " \></td>
 			<td>
  			<a href=\"javascript:void(0)\" style=\"font-size:12px;font-weight:normal;\" onclick=\"showAdvProfile('" . $user['username'] . "');\"><span class=\"fa fa-plus\"></span></a></td>			
 			<td>" . $user['fname'] . "</td>
@@ -75,6 +77,7 @@ if (true) {
 		}		
 		fwrite($file, "</tbody>");
 		fwrite($file, "</table>");
+		fwrite($file, "<input type=\"hidden\" name=\"togglestate\" value=\"0\">");
 		fwrite($file, "</form>");
 	}
 	

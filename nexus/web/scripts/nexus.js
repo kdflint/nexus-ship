@@ -14,7 +14,7 @@ var HTTP_FORUM_PATH;
 var FORUM_SESSION_REFRESH_COUNTER = 0;
 var DEFAULT_INBOX_FOCUS = "/ucp.php?i=pm&folder=inbox";
 var INBOX_FOCUS = "";
-var RECIPIENT_LIST = [];
+//var RECIPIENT_LIST = [];
 
 
 /*
@@ -213,6 +213,41 @@ function updatePmRecipientList(username, fullname) {
 	}
 	document.getElementById("recipient-dto").innerHTML = JSON.stringify(RECIPIENT_LIST);
 }
+
+function fillRecipients() {
+	var recipientlist = [];
+	var names = document.forms['member-directory-form'].elements['names[]'];
+	for (var i=0; i<names.length; i++) {
+		if (names[i].checked) {
+			var keyval = names[i].value.split("::");
+			if (keyval.length == 2) {
+				var dto = new Object();	
+				dto.username = keyval[0];	
+				dto.fullname = keyval[1];	
+				recipientlist.push(dto);	
+	  	}
+	  }
+	}
+	document.getElementById("recipient-dto").innerHTML = JSON.stringify(recipientlist);
+	console.log(document.getElementById("recipient-dto").innerHTML = JSON.stringify(recipientlist));
+	goToInboxCompose();
+}
+
+function checkAll(formname) {
+	var curState = document.forms['member-directory-form']['togglestate'].value;
+  var checkboxes = document.forms[formname].elements['names[]']; 
+  if (curState == "0") {
+  	for (var i=0; i<checkboxes.length; i++)  {
+	    if (checkboxes[i].type == 'checkbox')   { checkboxes[i].checked = false; }	
+    }
+    document.forms['member-directory-form']['togglestate'].value = "1";
+  } else if (curState == "1") {
+  	for (var i=0; i<checkboxes.length; i++)  {
+	    if (checkboxes[i].type == 'checkbox')   { checkboxes[i].checked = true; }
+	  }	
+   	document.forms['member-directory-form']['togglestate'].value = "0";
+	}
+}	
 
 function showAdvProfile(username) {
 	var iframeSrc = HTTP_FORUM_PATH  + "/memberlist.php?mode=viewprofile&un=" + username;
