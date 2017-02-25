@@ -15,15 +15,10 @@ if(isset($_GET['userMessage'])) {
 <span id="recipient-dto" style="visibility:hidden;"></span>
 
 <script>
-	function goToInboxCompose() {
-		fillRecipients();
-		document.getElementById("inbox-mode").innerHTML = "compose";
-		$( "#adv-menu-inbox" ).click();	
-	}
 </script>
 
 <div id="network-secondary" class="secondaryControlContainer">
-	<a class="pure-button pure-button-primary" href="javascript:void(0);" onclick="fillRecipients();" style="font-size:90%;margin-left:40px;" >Compose Message</a>
+	<a class="pure-button pure-button-primary" href="javascript:void(0);" onclick="goToInboxCompose();" style="font-size:90%;margin-left:40px;" >Compose Message</a>
 	<a href="#" onclick="checkAll('member-directory-form')" style="border-left:20px;">Select All</a> 
 	<?php if (Utilities::isSessionAdmin()) { ?>
 		<a href='#openDirectoryEdit' onclick="return resetDirectoryForm();" class="secondaryControl" title="Add New Organization"><span class='fa fa-address-card-o fa-lg' ></span><span style='padding-left:2px;' class='fa fa-plus' ></span></a>

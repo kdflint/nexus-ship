@@ -193,27 +193,6 @@ function post(uiContext, to, p) {
 
 }
 
-function updatePmRecipientList(username, fullname) {
-	var curList = document.getElementById("pmRecipientList");
-	var item = document.getElementById(username);
-	if (!item || item === "undefined") {
-		var newRecipient = document.createElement("span");
-		newRecipient.id = username;	
-		newRecipient.innerHTML = fullname;
-		curList.appendChild(newRecipient);
-		var dto = new Object();
-		dto.username = username;
-		dto.fullname = fullname;	
-		RECIPIENT_LIST.push(dto);	
-	} else {
-		item.parentNode.removeChild(item);
-		for( i=RECIPIENT_LIST.length-1; i>=0; i--) {
-    	if( RECIPIENT_LIST[i].username === username) RECIPIENT_LIST.splice(i,1);
-		}	
-	}
-	document.getElementById("recipient-dto").innerHTML = JSON.stringify(RECIPIENT_LIST);
-}
-
 function fillRecipients() {
 	var recipientlist = [];
 	var names = document.forms['member-directory-form'].elements['names[]'];
@@ -229,8 +208,12 @@ function fillRecipients() {
 	  }
 	}
 	document.getElementById("recipient-dto").innerHTML = JSON.stringify(recipientlist);
-	console.log(document.getElementById("recipient-dto").innerHTML = JSON.stringify(recipientlist));
-	goToInboxCompose();
+}
+
+function goToInboxCompose() {
+	fillRecipients();
+	document.getElementById("inbox-mode").innerHTML = "compose";
+	$( "#adv-menu-inbox" ).click();	
 }
 
 function checkAll(formname) {
