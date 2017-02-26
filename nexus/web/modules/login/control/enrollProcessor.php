@@ -93,37 +93,38 @@ if ($invitation['type'] === 'single') {
 	Invitation::consumeInvitationByUuid($_SESSION['invitation']);
 }
 
-require_once(Utilities::getSrcRoot() . "/group/Forum.php");
-
-// NOTE - this also Forum-enrolls all Nexus Web Meet enrollees! Correct??
-$addedUserId = Forum::enrollUser($clean['username'], $clean['username']);
-if ($addedUserId) {
-	// TODO - loop this properly
-	// This group is global for everyone (REGISTERED group in phpBB3)
-	$groupId = Utilities::getForumRegisteredUserGroup();
-	$groupResult = Forum::addUserToGroupById($addedUserId, $groupId);
-	if (!$groupResult) {
+if (isset($invitation['account_type']) && $invitation['account_type'] === "ADV") {
+	require_once(Utilities::getSrcRoot() . "/group/Forum.php");
+	
+	$addedUserId = Forum::enrollUser($clean['username'], $clean['username']);
+	if ($addedUserId) {
+		// TODO - loop this properly
+		// This group is global for everyone (REGISTERED group in phpBB3)
+		$groupId = Utilities::getForumRegisteredUserGroup();
+		$groupResult = Forum::addUserToGroupById($addedUserId, $groupId);
+		if (!$groupResult) {
+		} else {
+			$logger->log("Fail on add user " . $addedUserId . ":" . $clean['username'] . " to REGISTERED group ", PEAR_LOG_INFO);
+		}
+		
+		// TODO - this should be an array pre-populated
+		// This is the network-specific forum group, 1 per network
+		$groupId = Organization::getForumUserGroupByOrgId($invitation['orgid']);
+		$groupResult = Forum::addUserToGroupById($addedUserId, $groupId);
+		if (!$groupResult) {
+		} else {
+			$logger->log("Fail on add user " . $addedUserId . ":" . $clean['username'] . " to NETWORK group ", PEAR_LOG_INFO);
+		}	
+		
+		Forum::updateUserProfile($clean['username'], $clean['fname'], $clean['lname'], "", $clean['email'], "");
+		
+		foreach ($forumEnrollments as $forumId) {
+			ExternalMessage::addForumSubscription($addedUserId, $forumId);	
+		}
+		
 	} else {
-		$logger->log("Fail on add user " . $addedUserId . ":" . $clean['username'] . " to REGISTERED group ", PEAR_LOG_INFO);
+		$logger->log("Fail on add user " . $addedUserId . ":" . $clean['username'], PEAR_LOG_INFO);
 	}
-	
-	// TODO - this should be an array pre-populated
-	// This is the network-specific forum group, 1 per network
-	$groupId = Organization::getForumUserGroupByOrgId($invitation['orgid']);
-	$groupResult = Forum::addUserToGroupById($addedUserId, $groupId);
-	if (!$groupResult) {
-	} else {
-		$logger->log("Fail on add user " . $addedUserId . ":" . $clean['username'] . " to NETWORK group ", PEAR_LOG_INFO);
-	}	
-	
-	Forum::updateUserProfile($clean['username'], $clean['fname'], $clean['lname'], "", $clean['email'], "");
-	
-	foreach ($forumEnrollments as $forumId) {
-		ExternalMessage::addForumSubscription($addedUserId, $forumId);	
-	}
-	
-} else {
-	$logger->log("Fail on add user " . $addedUserId . ":" . $clean['username'], PEAR_LOG_INFO);
 }
 	
 $group = Group::getGroupById($invitation['groupid']);
