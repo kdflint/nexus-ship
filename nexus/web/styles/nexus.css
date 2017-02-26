@@ -289,6 +289,12 @@ form {
 
 /* BUTTONS */
 
+#compose_pm {
+	font-size: 90%;
+	margin-left: 40px;
+	float:left;
+}
+
 .pure-button-primary {
 	background: rgba(0, 77, 98, 1) !important;
 	margin-right: 10px;

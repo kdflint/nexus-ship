@@ -211,8 +211,9 @@ table.dataTable td {
   clear: both;
   *zoom: 1;
   zoom: 1;
-  width: 85%;
-  margin-left: 40px; }
+  width: 90%;
+  margin-left: 40px; 
+  margin-right: 40px;}
   .dataTables_wrapper .dataTables_length {
     float: left; }
   .dataTables_wrapper .dataTables_filter {
