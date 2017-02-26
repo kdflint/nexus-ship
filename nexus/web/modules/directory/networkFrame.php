@@ -2,52 +2,15 @@
 
 require_once("control/searchPreProcessor.php");
 
-$userMessage = "Select recipients from right";
-
-if(isset($_GET['userMessage'])) {
-	$userMessage = $_GET['userMessage'];
-}
-
 ?>
 
-<script>
-	function switchToOrganizationView() {
-		document.getElementById('member_view_control').style.display = "block";
-		document.getElementById('directory_view_control').style.display = "none";
-		document.getElementById('map_control').style.display = "block";
-		document.getElementById('compose_pm').style.display = "none";
-		document.getElementById('mark_all').style.display = "none";
-		document.getElementById("organizational_directory").style.display = "block";
-		document.getElementById("member_directory").style.display = "none";
-		var addNewOrg = document.getElementById('add_new_org');
-		var addNewMember = document.getElementById('add_new_member');
-		if (addNewOrg && addNewMember) {
-			addNewOrg.style.display = "block";
-			addNewMember.style.display = "none";
-		}
-	}
-	
-	function switchToMemberView() {
-		document.getElementById('member_view_control').style.display = "none";
-		document.getElementById('directory_view_control').style.display = "block";
-		document.getElementById('map_control').style.display = "none";
-		document.getElementById('compose_pm').style.display = "block";
-		document.getElementById('mark_all').style.display = "block";
-		document.getElementById("organizational_directory").style.display = "none";
-		document.getElementById("member_directory").style.display = "block";
-		var addNewOrg = document.getElementById('add_new_org');
-		var addNewMember = document.getElementById('add_new_member');
-		if (addNewOrg && addNewMember) {
-			addNewOrg.style.display = "none";
-			addNewMember.style.display = "block";
-		}
-	}
-</script>
-
 <div id="network-secondary" class="secondaryControlContainer">
-	<a id="compose_pm" class="pure-button pure-button-primary" href="javascript:void(0);" onclick="goToInboxCompose();" >Compose Message</a>
-	<a id="mark_all" href="#" onclick="checkAll('member-directory-form')" style="border-left:20px;">Select All</a> 
+<span style="float:left;">
+	<a id="compose_pm" class="pure-button pure-button-primary" href="javascript:void(0);" onclick="goToInboxCompose();" style="float:left;" >Compose Message</a>
+	<a id="mark_all" href="#" onclick="checkAll('member-directory-form')" style="border-left:20px;float:left;">Select All</a> 
 	<?php if (Utilities::isSessionAdmin()) { ?>
+</span>
+<span style="float:right;">
 		<a id="add_new_org" href='#openDirectoryEdit' onclick="return resetDirectoryForm();" class="secondaryControl" title="Add New Organization" style="display:none;"><span class='fa fa-university fa-lg' ></span><span class='fa fa-plus' ></span></a>
 		<a id="add_new_member" href='#' onclick="" class="secondaryControl" title="Invite New Member"><span class='fa fa-user-plus fa-lg' ></span></a>
 	<?php } ?>
@@ -65,9 +28,10 @@ if(isset($_GET['userMessage'])) {
 				<p>Group filter coming soon...</p>
 			</form>
 	</div>
+</span>
 </div>
 
-<div id="network-frame" style="height:420px;">
+<div id="network-frame" style="height:420px;clear:left;">
 	<div id="organizational_directory" style="display:none;">
 		<div class="controlCol" style="left:15px;border-right: 1px solid #eeeeee;">
 			<?php //echo "Sticky count " . $stickyCount; ?>

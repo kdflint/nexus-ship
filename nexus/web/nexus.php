@@ -135,6 +135,8 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
     	  	
 			$(document).ready(function () {	
 				$('#member-directory').DataTable( {
+						"pageLength": 10,
+						"lengthChange": false,
 						"order": [[2, 'asc']],
 						"columns": [
     					{ "orderable": false },
@@ -295,6 +297,36 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 				ACTIVITY_FLAG = 0;
 			}
 	   </script>
+
+                            
+<script type="text/javascript">
+    (function () {
+        var head = document.getElementsByTagName("head").item(0);
+        var script = document.createElement("script");
+        
+        var src = (document.location.protocol == 'https:' 
+            ? 'https://www.formilla.com/scripts/feedback.js' 
+            : 'http://www.formilla.com/scripts/feedback.js');
+        
+        script.setAttribute("type", "text/javascript"); 
+        script.setAttribute("src", src); script.setAttribute("async", true);        
+
+        var complete = false;
+        
+        script.onload = script.onreadystatechange = function () {
+            if (!complete && (!this.readyState 
+                    || this.readyState == 'loaded' 
+                    || this.readyState == 'complete')) {
+                complete = true;
+                Formilla.guid = 'd94fe060-648d-45c5-9698-2e43d5817798';
+                Formilla.loadFormillaChatButton();                
+            }
+        };
+
+        head.appendChild(script);
+    })();
+</script>
+                                    
 	       
   </head>
   

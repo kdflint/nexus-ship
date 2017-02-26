@@ -1181,6 +1181,38 @@ function getMaxDaysForFebruary(year) {
 	} 
 }
 
+function switchToOrganizationView() {
+	document.getElementById('member_view_control').style.display = "block";
+	document.getElementById('directory_view_control').style.display = "none";
+	document.getElementById('map_control').style.display = "block";
+	document.getElementById('compose_pm').style.display = "none";
+	document.getElementById('mark_all').style.display = "none";
+	document.getElementById("organizational_directory").style.display = "block";
+	document.getElementById("member_directory").style.display = "none";
+	var addNewOrg = document.getElementById('add_new_org');
+	var addNewMember = document.getElementById('add_new_member');
+	if (addNewOrg && addNewMember) {
+		addNewOrg.style.display = "block";
+		addNewMember.style.display = "none";
+	}
+}
+	
+function switchToMemberView() {
+	document.getElementById('member_view_control').style.display = "none";
+	document.getElementById('directory_view_control').style.display = "block";
+	document.getElementById('map_control').style.display = "none";
+	document.getElementById('compose_pm').style.display = "block";
+	document.getElementById('mark_all').style.display = "block";
+	document.getElementById("organizational_directory").style.display = "none";
+	document.getElementById("member_directory").style.display = "block";
+	var addNewOrg = document.getElementById('add_new_org');
+	var addNewMember = document.getElementById('add_new_member');
+	if (addNewOrg && addNewMember) {
+		addNewOrg.style.display = "none";
+		addNewMember.style.display = "block";
+	}
+}
+
 function populateEventForm(i) {
 	/* currentEvents is a global, initialized in the ajax processing */
 	var eventForm = document.forms['schedule-form'];	
