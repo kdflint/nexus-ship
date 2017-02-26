@@ -1052,7 +1052,7 @@ function profileValidateAndSubmit() {
   	var smsField = profileForm["sms"];
   	var sms = smsField.value;
   	setFieldPassStyles(smsField, "");
-		if (sms != null && !validatePhone(sms)) {
+		if (sms != null && sms.length > 0 && !validatePhone(sms)) {
 			smsField.value = "";
 			setFieldErrorStyles(smsField, "Please enter a valid cell number.");
 			pass = false;
