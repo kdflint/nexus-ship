@@ -614,6 +614,7 @@ class Utilities {
   		$_SESSION['email'] = $row['email'];
 		}
 
+		$orgUid = "";
 		$cursor = Organization::getOrganizationsByUsername($_SESSION['username']);
 		//  TODO - this query currently puts limit 1, so multiple organizations are not reported
 		// Currently global network invites put users tied to network org, so this works
@@ -622,6 +623,7 @@ class Utilities {
   		$_SESSION['orgName'] = $row['name'];
   		$_SESSION['orgId'] = $row['id'];
   		$_SESSION['role'] = self::getRoleName($row['role_fk']);
+  		$orgUid = $row['uid'];
 		}
 
 		// NWM accounts have their own row. ADV account sessions are pulled from the parent
@@ -632,12 +634,13 @@ class Utilities {
 		while ($row = pg_fetch_array($cursor)) {
 			if ($accountType) {
 				$_SESSION['nexusContext'] = $accountType;
+				$_SESSION['orgUid'] = $orgUid;
 			} else {
 				$_SESSION['nexusContext'] = $row['account_type'];
+				$_SESSION['orgUid'] = $row['uid'];
 			}
 	  	$_SESSION['networkName'] = $row['name'];
   		$_SESSION['networkId'] = $row['networkid'];
-  		$_SESSION['orgUid'] = $row['uid'];
   		$_SESSION['defaultForumId'] = $row['forumid'] ? $row['forumid'] : "0";
   		$_SESSION['logo'] = $row['logo'];				
 		}
@@ -662,7 +665,7 @@ class Utilities {
 		} else {
 			$_SESSION['groups'] = Group::getGroupByEventUuid($uuid);	
 		}
-		$_SESSION['pgpk'] = array_keys($_SESSION['groups'])[0];
+		$_SESSION['pgpk'] = $_SESSION['groups'][0]['id'];
 		$row = pg_fetch_row(User::getActiveUserByUsername($_SESSION['username']));
 		$_SESSION['uidpk'] = $row[0];
 		self::setSessionTimezone($zone);

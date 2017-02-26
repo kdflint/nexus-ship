@@ -205,7 +205,7 @@ class Organization {
 
 	public static function getOrganizationsByUsername($username) {
 		// TODO - remove limit 1
-		$query = "select o.id, o.name, uo.role_fk from organization o, user_organization uo, public.user u
+		$query = "select o.id, o.name, o.uid, uo.role_fk from organization o, user_organization uo, public.user u
 			where u.username = $1
 			and u.id = uo.user_fk
 			and uo.organization_fk = o.id

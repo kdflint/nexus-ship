@@ -250,7 +250,7 @@ function validateEvent($input) {
 	if (isset($input['meeting-group']) && Utilities::validateGroupId($input['meeting-group'])) {
 		$result['clean']['meeting-group'] = $input['meeting-group'];
 	} else {
-		$result['clean']['meeting-group'] = array_keys($_SESSION['groups'])[0];
+	$result['clean']['meeting-group'] = $_SESSION['groups'][0]['id'];
 	}	
 	
 	// MEETING RECURRENCE

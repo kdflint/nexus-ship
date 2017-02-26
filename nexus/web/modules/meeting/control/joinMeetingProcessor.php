@@ -30,7 +30,7 @@ if (!Utilities::isSessionValid()) {
 }
 
 $bbbApi = new BigBlueButton();
-$bbbMeeting = new BbbMeeting($clean['uuid'], array_values($_SESSION['groups'])[0] . " Conference Room", $clean['mtype']);
+$bbbMeeting = new BbbMeeting($clean['uuid'], $_SESSION['groups'][0]['name'] . " Conference Room", $clean['mtype']);
 
 $itsAllGood = TRUE;
 $joinerPassword = "mp";
