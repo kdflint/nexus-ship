@@ -1439,7 +1439,7 @@ function eventValidateAndSubmit(thisForm) {
   	if (!isValidEmail(contact)) {
   		setFieldErrorStyles(contactField, EMAIL_REQUIRED);
   		contactField.value = "";
-  		pass = false;
+  		//pass = false;
   	}  	
   }
    

@@ -8,9 +8,9 @@ require_once("control/searchPreProcessor.php");
 <span style="float:left;">
 	<a id="compose_pm" class="pure-button pure-button-primary" href="javascript:void(0);" onclick="goToInboxCompose();" style="float:left;" >Compose Message</a>
 	<a id="mark_all" href="#" onclick="checkAll('member-directory-form')" style="border-left:20px;float:left;">Select All</a> 
-	<?php if (Utilities::isSessionAdmin()) { ?>
 </span>
 <span style="float:right;">
+	<?php if (Utilities::isSessionAdmin()) { ?>
 		<a id="add_new_org" href='#openDirectoryEdit' onclick="return resetDirectoryForm();" class="secondaryControl" title="Add New Organization" style="display:none;"><span class='fa fa-university fa-lg' ></span><span class='fa fa-plus' ></span></a>
 		<a id="add_new_member" href='#' onclick="" class="secondaryControl" title="Invite New Member"><span class='fa fa-user-plus fa-lg' ></span></a>
 	<?php } ?>
