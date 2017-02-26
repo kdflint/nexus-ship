@@ -623,11 +623,18 @@ class Utilities {
   		$_SESSION['orgId'] = $row['id'];
   		$_SESSION['role'] = self::getRoleName($row['role_fk']);
 		}
-		
+
+		// NWM accounts have their own row. ADV account sessions are pulled from the parent
+		$accountType = Organization::getOrganizationsAccountTypeByOrgId($_SESSION['orgId']);
+
 		$cursor = Organization::getNetworkByOrgId($_SESSION['orgId']);
 		//  TODO - this query currently puts limit 1, so multiple organizations are not reported
 		while ($row = pg_fetch_array($cursor)) {
-			$_SESSION['nexusContext'] = $row['account_type'];
+			if ($accountType) {
+				$_SESSION['nexusContext'] = $accountType;
+			} else {
+				$_SESSION['nexusContext'] = $row['account_type'];
+			}
 	  	$_SESSION['networkName'] = $row['name'];
   		$_SESSION['networkId'] = $row['networkid'];
   		$_SESSION['orgUid'] = $row['uid'];

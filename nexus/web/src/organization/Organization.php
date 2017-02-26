@@ -213,6 +213,18 @@ class Organization {
 			return PgDatabase::psExecute($query, array($username));
 	}
 	
+	public static function getOrganizationsAccountTypeByOrgId($id) {
+		$query = "select exists (select account_type from organization_account where organization_fk = $1)";
+		$row = pg_fetch_row(PgDatabase::psExecute($query, array($id)));
+		if ($row[0] === "t") {
+			$query = "select account_type from organization_account where organization_fk = $1";
+			$row = pg_fetch_row(PgDatabase::psExecute($query, array($id)));
+			return $row[0];
+		} else {
+			return FALSE;
+		}
+	}
+	
 	public static function getNetworksByUsername($username) {
 		//LEFT OFF HERE
 	}
