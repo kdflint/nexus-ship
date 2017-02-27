@@ -214,7 +214,7 @@ class Organization {
 			return PgDatabase::psExecute($query, array($username));
 	}
 	
-	public static function getOrganizationsAccountTypeByOrgId($id) {
+	public static function getOrganizationAccountTypeByOrgId($id) {
 		$query = "select exists (select account_type from organization_account where organization_fk = $1)";
 		$row = pg_fetch_row(PgDatabase::psExecute($query, array($id)));
 		if ($row[0] === "t") {
