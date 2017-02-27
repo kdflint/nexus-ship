@@ -39,8 +39,6 @@
 					<input type="radio" name="event-state-filter" value="event-list-pending" checked>&nbsp;Pending</br>
 				<?php } ?>
 				<input type="radio" name="event-state-filter" value="event-list-public" <?php if(!Utilities::isSessionAdmin()) { ?>checked<?php } ?>>&nbsp;Public</br>
-				<input type="radio" name="event-state-filter" value="event-list-community" disabled>&nbsp;FBCEnRN</br>
-
 				<!--	
     		<select name="event-state-filter" id="event-state-filter">
     			<option value="event-list-pending" selected>Pending</option>

@@ -592,6 +592,8 @@ class Utilities {
 
 		// TODO - loading a PUBLIC context will wipe this one out and then screw up Nexus context
 		
+		// TODO - Session password is not updating on profile update because not sure what we are doing with the forum password yet
+		
 		session_regenerate_id(TRUE);
 		
 		unset($_SESSION['invitation']);

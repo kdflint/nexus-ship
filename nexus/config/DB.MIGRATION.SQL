@@ -48,4 +48,7 @@ insert into user_group (user_fk, group_fk, role_fk, create_dttm) values (347, 23
 
 insert into user_organization (user_fk, organization_fk, grantor_fk, role_fk, create_dttm) values (347, 339, 88, 5, now()) returning id
 
+-- to northbridge org, add uid = '99999999'
+update organization set uid = '99999999' where id = 13
+
 -- purge forum cache after deploy

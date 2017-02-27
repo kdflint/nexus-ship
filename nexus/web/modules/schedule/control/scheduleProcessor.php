@@ -249,9 +249,12 @@ function validateEvent($input) {
 	// MEETING GROUP
 	if (isset($input['meeting-group']) && Utilities::validateGroupId($input['meeting-group'])) {
 		$result['clean']['meeting-group'] = $input['meeting-group'];
-	} else {
-	$result['clean']['meeting-group'] = $_SESSION['groups'][0]['id'];
-	}	
+	} else if ($_SESSION['nexusContext'] === "ADV"){
+		// For now, all ADV events go to public
+		$result['clean']['meeting-group'] = $_SESSION['pgpk'];
+	} else {			
+		$result['clean']['meeting-group'] = $_SESSION['groups'][0]['id'];
+	}
 	
 	// MEETING RECURRENCE
 	if (isset($input['meeting-recur'])) {

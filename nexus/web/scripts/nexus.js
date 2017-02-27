@@ -1428,10 +1428,10 @@ function eventValidateAndSubmit(thisForm) {
   	}
   }
   
-	// TODO -review this
+	// Find a better way to do this. Why am I doing this? It's a hidden field...
   var forApproval = false;
   var contact = "";
-  if (eventForm['meeting-contact'] !== undefined) {
+  if (eventForm['meeting-contact'] !== undefined && eventForm['meeting-contact'].value.length > 0) {
   	forApproval = true;
   	var contactField = eventForm['meeting-contact'];
   	contact = contactField.value;
@@ -1439,7 +1439,7 @@ function eventValidateAndSubmit(thisForm) {
   	if (!isValidEmail(contact)) {
   		setFieldErrorStyles(contactField, EMAIL_REQUIRED);
   		contactField.value = "";
-  		//pass = false;
+  		pass = false;
   	}  	
   }
    
