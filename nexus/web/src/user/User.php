@@ -45,7 +45,7 @@ class User {
 		// TODO: fix up network id determination (parent, god, etc)
 		// TODO - this will fail if user in > 1 group
 		$query = "
-			select u.id as id, u.fname as fname, u.lname as lname, u.password as password, u.conference_link as link, u.email as email, ug.role_fk as roleid, o1.name as affiliation, o1.id as affiliationid, o1.uid as affiliationuid, o2.logo as logo, o2.name as network, o2.id as networkid, o2.forum_id as forumid, o2.public_forum_id as publicforumid, uo.role_fk as role, oa.account_type as account
+			select distinct u.id as id, u.fname as fname, u.lname as lname, u.password as password, u.conference_link as link, u.email as email, ug.role_fk as roleid, o1.name as affiliation, o1.id as affiliationid, o1.uid as affiliationuid, o2.logo as logo, o2.name as network, o2.id as networkid, o2.forum_id as forumid, o2.public_forum_id as publicforumid, uo.role_fk as role, oa.account_type as account
 			from public.user u, user_organization uo, user_group ug, organization o1, organization o2, organization_organization oo, organization_account oa
 			where u.username = $1
 			and uo.user_fk = u.id
@@ -54,6 +54,7 @@ class User {
 			and oa.organization_fk = o1.id
 			and oo.organization_to_fk = o1.id 
 			and oo.organization_from_fk = o2.id
+			and o2.uid != '99999999'
 			and oo.relationship in ('parent', 'god')
 			";
 		return PgDatabase::psExecute($query, array($uid));	

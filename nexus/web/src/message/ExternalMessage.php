@@ -9,7 +9,7 @@ class ExternalMessage {
 	public static function readForumMessagesDue() {
 
 		$conf = array('append' => true, 'mode' => 0644, 'timeFormat' => '%X %x');	
-		$logger = Log::singleton("file", "/home/northbri/batch/dev/nexus/module/messaging/forum_message.log", "", $conf, PEAR_LOG_DEBUG);
+		$logger = Log::singleton("file", Utilities::getLogRoot() ."/forum_message.log", "", $conf, PEAR_LOG_DEBUG);
 	
 		$logger->log("Hello from readForumMessagesDue", PEAR_LOG_DEBUG);
 	
@@ -96,6 +96,49 @@ class ExternalMessage {
 	
 		return $topicNotifications;
 	}
+	
+	public static function readPmMessagesDue() {
+		
+		$conf = array('append' => true, 'mode' => 0644, 'timeFormat' => '%X %x');	
+		$logger = Log::singleton("file", Utilities::getLogRoot() . "/pm_message.log", "", $conf, PEAR_LOG_INFO);
+	
+		$logger->log("Hello from readPmMessagesDue", PEAR_LOG_DEBUG);
+
+		$pmNotifications= array();
+		
+		$query = "select floor(extract('epoch' from pm_last_poll_dttm)) from forum_poll";
+		$row = pg_fetch_row(PgDatabase::psExecute($query, array()));
+		$lastRun = $row[0];
+		$logger->log("Searching since time epoch " . $lastRun, PEAR_LOG_DEBUG);
+
+		$query = "select CURRENT_TIMESTAMP as now, m.msg_id, m.author_id, m.message_text, m.message_subject, m.to_address, u.username
+			from phpbb_privmsgs m, phpbb_users u
+			where m.message_time >= $1
+			and u.user_id = m.author_id";		
+		$results = pg_fetch_all(ForumDatabase::psExecute($query, array($lastRun)));	
+		if ($results && isset($results[0]['now'])) {
+			$logger->log("Hello from results", PEAR_LOG_DEBUG);
+			$thisRun = $results[0]['now'];
+			foreach($results as $message) {
+				$recipients = explode(':', $message['to_address']);
+				foreach($recipients as $recipient) {
+					$query = "select username from phpbb_users where user_id = $1";
+					$row = pg_fetch_row(ForumDatabase::psExecute($query, array(substr($recipient,2))));
+					$query = "select email, fname, lname from public.user where username = $1";
+					$to = pg_fetch_array(PgDatabase::psExecute($query, array($row[0])));
+					$query = "select (fname || ' ' || lname) as name from public.user where username = $1";
+					$from = pg_fetch_array(PgDatabase::psExecute($query, array($message['username'])));
+					$query = "";
+					$network = pg_fetch_array(PgDatabase::psExecute($query, array($message['username'])))
+					array_push($pmNotifications, array($to['email'], $to['fname'], 'private message', $from['name'], $message['message_subject']));
+				}
+			}
+			$query = "update forum_poll set pm_last_poll_dttm = $1";
+			PgDatabase::psExecute($query, array($thisRun));	
+		}
+		return $pmNotifications;
+	}
+	
 	
 	public static function addForumSubscription($userId, $forumId) {
 		$query = "insert into phpbb_forums_watch (forum_id, user_id) values ($2, $1)";
