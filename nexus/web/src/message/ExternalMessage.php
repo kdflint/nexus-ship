@@ -128,8 +128,8 @@ class ExternalMessage {
 					$to = pg_fetch_array(PgDatabase::psExecute($query, array($row[0])));
 					$query = "select (fname || ' ' || lname) as name from public.user where username = $1";
 					$from = pg_fetch_array(PgDatabase::psExecute($query, array($message['username'])));
-					$query = "";
-					$network = pg_fetch_array(PgDatabase::psExecute($query, array($message['username'])))
+					//$query = "";
+					//$network = pg_fetch_array(PgDatabase::psExecute($query, array($message['username'])))
 					array_push($pmNotifications, array($to['email'], $to['fname'], 'private message', $from['name'], $message['message_subject']));
 				}
 			}

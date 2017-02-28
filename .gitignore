@@ -25,6 +25,7 @@ nexus/lib/rememberme/*
 nexus/lib/bigbluebutton/*
 nexus/web/vendor/*
 nexus/web/modules/directory/views/include/*
+nexus/log/*
 nexus/partner/*
 nexus/include/*
 nexus/batch/PgDb.php
