@@ -75,7 +75,8 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 			.instruction { font-size: 95%; }
 			.detail { color: #004d62;}
 			.scroll { text-align: right; padding-left: 220px; position:absolute; }
-			.searchQualifier { vertical-align:15px;font-style:italic;margin-right:3px; }
+			.searchQualifier { vertical-align: 15px; font-style: italic; margin-right: 3px; }
+			.pure-menu-link { padding: .5em .8em; };
 			/*controlCol { position:absolute;left:0px;width:280px;height:400px;margin-top:10px; }*/
 			/*.displayCol { position:absolute;left:290px;width:700px;height:400px;margin-top:10px;border: 1px solid #A6C3CE !important;border-radius:10px;overflow:auto; } */
 			/* .displayDetail { font-size:90%;padding-left:10px;padding-right:10px; } */
@@ -196,6 +197,9 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
         		<li class="pure-menu-item"><a href="#" onclick="toggleDisplay('mod_forum', '2')" class="pure-menu-link">Forum</a></li>
         		<li class="pure-menu-item"><a id="schedule_control" href="#" onclick="showEventAdd();" class="pure-menu-link">Submit New Event</a></li>
         		<li class="pure-menu-item"><a id="schedule_control" href="https://goo.gl/forms/NInSncEodzNEMo2G3" class="pure-menu-link" target="_blank">Submit New Organization</a></li>
+						<!-- TODO - hardcoded! -->
+						<li class="pure-menu-item"><a id="schedule_control" href="http://nexus.northbridgetech.org/web/enroll?invitation=66662d1f-24c3-4c89-b974-3afaa2494eb4" class="pure-menu-link" target="_blank" style="color:#d27b4b;">Enroll in Nexus</a></li>
+						<li class="pure-menu-item"><a id="schedule_control" href="http://northbridgetech.org/apps/nexus/web/login.php?oid=ed787a92" class="pure-menu-link" target="_blank" style="color:#d27b4b;">Login to Nexus</a></li>
         		<!--<div style="cursor:not-allowed;"></div>-->			
     			</ul>
 				</div>

@@ -12,6 +12,9 @@ var DEFAULT_FORUM;
 var HTTP_WEB_PATH;
 var HTTP_FORUM_PATH;
 var FORUM_SESSION_REFRESH_COUNTER = 0;
+var DEFAULT_INBOX_FOCUS = "/ucp.php?i=pm&folder=inbox";
+var INBOX_FOCUS = "";
+//var RECIPIENT_LIST = [];
 
 
 /*
@@ -165,14 +168,14 @@ function setPublicSession2(oid, fname, relativePath) {
 	xmlhttp.send();
 }
 
-function disableTestMessageLink() {
-   var link=document.getElementById("testMessageLink");
-   link.style.color="#c9c9a7";
+function disableTestMessageLink(linkId) {
+   var link=document.getElementById(linkId);
+   link.style.color="#899d70";
    link.setAttribute("href", "#");
    link.innerHTML = 'To test, save your changes';
 }
 
-function post(to, p) {
+function post(uiContext, to, p) {
   var myForm = document.createElement("form");
   myForm.method="post" ;
   myForm.action = to ;
@@ -185,6 +188,58 @@ function post(to, p) {
   document.body.appendChild(myForm) ;
   myForm.submit() ;
   document.body.removeChild(myForm) ;
+	disableTestMessageLink(uiContext);
+	document.getElementById(uiContext).innerHTML = "A test message has been sent!";
+
+}
+
+function fillRecipients() {
+	var recipientlist = [];
+	var names = document.forms['member-directory-form'].elements['names[]'];
+	for (var i=0; i<names.length; i++) {
+		if (names[i].checked) {
+			var keyval = names[i].value.split("::");
+			if (keyval.length == 2) {
+				var dto = new Object();	
+				dto.username = keyval[0]; //.replace(/ /g, '&nbsp;');	
+				dto.fullname = keyval[1];	
+				recipientlist.push(dto);	
+	  	}
+	  }
+	}
+	document.getElementById("recipient-dto").innerHTML = JSON.stringify(recipientlist);
+}
+
+function goToInboxCompose() {
+	fillRecipients();
+	document.getElementById("inbox-mode").innerHTML = "compose";
+	$( "#adv-menu-inbox" ).click();	
+}
+
+function checkAll(formname) {
+	var curState = document.forms['member-directory-form']['togglestate'].value;
+  var checkboxes = document.forms[formname].elements['names[]']; 
+  var indicator = document.getElementById("mark_all");
+  if (curState == "0") {
+  	for (var i=0; i<checkboxes.length; i++)  {
+	    if (checkboxes[i].type == 'checkbox')   { checkboxes[i].checked = true; }	
+    }
+    document.forms['member-directory-form']['togglestate'].value = "1";
+    indicator.innerHTML = "Unselect all";
+  } else if (curState == "1") {
+  	for (var i=0; i<checkboxes.length; i++)  {
+	    if (checkboxes[i].type == 'checkbox')   { checkboxes[i].checked = false; }
+	  }	
+   	document.forms['member-directory-form']['togglestate'].value = "0";
+   	indicator.innerHTML = "Select all";
+	}
+}	
+
+function showAdvProfile(username) {
+	var iframeSrc = HTTP_FORUM_PATH  + "/memberlist.php?mode=viewprofile&un=" + username;
+  var iframe = document.getElementById("adv-profile-frame");
+  iframe.src = iframeSrc;
+  window.location.assign(HTTP_WEB_PATH + "/nexus.php#openProfile");
 }
 
 function toggleRecurFormElements(override) {
@@ -277,8 +332,6 @@ function htmlFormatEmail(rawText) {
 	var replaced = rawText.replace(re, '<a href="mailto:$1@$2.$3">$1@$2.$3</a>$4');
 	return replaced;
 }
-
-//<a href="mailto:kathy.flint@northbridgetech.org.<a">kathy.flint@northbridgetech.org.<a</a>
 
 function toggleRememberCheckbox() {
 	var loginRemember = document.getElementById("login-remember");
@@ -415,11 +468,12 @@ function loadAdvPage(resource) {
 	
 		switch(resource) {
 			case "adv-menu-inbox":
-				var iframeSrc = HTTP_FORUM_PATH  + "/ucp.php?i=pm&folder=inbox";
+				var iframeSrc = HTTP_FORUM_PATH  + INBOX_FOCUS; //"/ucp.php?i=pm&folder=inbox";
     		var iframe = document.getElementById(frameId);
     		iframe.src = iframeSrc;
     		frameDisplay.style.display ="block";
-    		break;
+    		INBOX_FOCUS = DEFAULT_INBOX_FOCUS;
+    		break;    		
     	case "adv-menu-forum":
     		var iframeSrc = HTTP_FORUM_PATH  + "/viewforum.php?f=" + DEFAULT_FORUM;
     		var iframe = document.getElementById(frameId);
@@ -455,6 +509,27 @@ function refreshForumSession() {
 	xmlhttp.open("GET","src/framework/sessionManager.php?forum=1", false); // synchronous call
 	xmlhttp.send();  					
 }
+
+function usernameValidCheck(input) {
+	var xmlhttp = getXmlHttpRequest();
+	var status;
+	xmlhttp.onreadystatechange=function() {
+  	if (xmlhttp.readyState == 4) {
+  		if (xmlhttp.status == 200) { 
+  			console.log(xmlhttp.responseText);
+  			jsonObj = JSON.parse(xmlhttp.responseText);	
+  			status = jsonObj['username-status'];
+  		} else {
+  			status = "undefined";
+  		}
+ 		}
+ 	}
+	xmlhttp.open("GET","src/framework/usernameLookup.php?username=" + input , false); // synchronous call
+	xmlhttp.send();
+	console.log(status);
+	return status;  					
+}
+
 
 function myHTMLInclude() {
   var z, i, a, file, xhttp;
@@ -783,11 +858,22 @@ function enrollValidateAndSubmit() {
   var usernameField = enrollForm["uid"];
   var username = usernameField.value;
   setFieldPassStyles(usernameField, "");
-  if (username == null || username == "" || username.length < 7 || username.length > 25 || re2.test(username)) {
-    setFieldErrorStyles(usernameField, "Valid username is required.");
-    usernameField.value = "";
-    pass = false;
-  }		
+	var result = usernameValidCheck(username);
+	switch(result) {
+		case "invalid":
+		case "undefined":
+    	setFieldErrorStyles(usernameField, "Valid username is required.");
+    	usernameField.value = "";
+    	pass = false;		
+    	break;
+    case "dupe":
+    	setFieldErrorStyles(usernameField, "This username is already taken: " + username);
+    	usernameField.value = "";
+    	pass = false;		
+    	break;  
+    default:
+    	break  
+	}
 	
   var passwordField = enrollForm["password1"];
   var password = passwordField.value;
@@ -813,8 +899,8 @@ function enrollValidateAndSubmit() {
   if (fname == null || fname == "" || fname.length > 25) {
     setFieldErrorStyles(fnameField, "Valid first name is required.");
     pass = false;
-  }	
-  	
+  }
+    	
  	if (Boolean(pass)) {
  		submitButton.disabled = true;  
  		submitButton.innerHTML = "One Moment";
@@ -835,6 +921,10 @@ function validateEmail(emailField) {
   	return false;
   }
   return true;
+}
+
+function validatePhone(phone) {
+	return /^[0-9()-. ]+$/.test(phone);
 }
 
 function resetProfileForm() {
@@ -949,16 +1039,38 @@ function profileValidateAndSubmit() {
   var fnameField = profileForm["fname"];
   var fname = fnameField.value;
   setFieldPassStyles(fnameField, "First Name");
-  if (fname == null || fname == "") {
+  if (fname == null || fname == "" || fname.length < 1) {
     setFieldErrorStyles(fnameField, "First name is required.");
     pass = false;
-  }	  
-  
+  }
+
   var emailField = profileForm["email"];
   var email = emailField.value;
   setFieldPassStyles(emailField, "Email");
 	if (!validateEmail(emailField)) {
 		pass = false;
+	}
+	
+	if (profileForm["sms"] !== undefined) {
+  	var smsField = profileForm["sms"];
+  	var sms = smsField.value;
+  	setFieldPassStyles(smsField, "");
+		if (sms != null && sms.length > 0 && !validatePhone(sms)) {
+			smsField.value = "";
+			setFieldErrorStyles(smsField, "Please enter a valid cell number.");
+			pass = false;
+		}		
+	}
+	
+	if (profileForm["phone"] !== undefined) {
+  	var phoneField = profileForm["phone"];
+  	var phone = phoneField.value;
+  	setFieldPassStyles(phoneField, "");
+ 		if (phone != null && phone.length > 0 && !validatePhone(phone)) {
+ 			phoneField.value = "";
+			setFieldErrorStyles(phoneField, "Please enter a valid phone number.");
+			pass = false;
+		}		
 	}
   
  	if (Boolean(pass)) {
@@ -1070,6 +1182,38 @@ function getMaxDaysForFebruary(year) {
     default:
         return 28;
 	} 
+}
+
+function switchToOrganizationView() {
+	document.getElementById('member_view_control').style.display = "block";
+	document.getElementById('directory_view_control').style.display = "none";
+	document.getElementById('map_control').style.display = "block";
+	document.getElementById('compose_pm').style.display = "none";
+	document.getElementById('mark_all').style.display = "none";
+	document.getElementById("organizational_directory").style.display = "block";
+	document.getElementById("member_directory").style.display = "none";
+	var addNewOrg = document.getElementById('add_new_org');
+	var addNewMember = document.getElementById('add_new_member');
+	if (addNewOrg && addNewMember) {
+		addNewOrg.style.display = "block";
+		addNewMember.style.display = "none";
+	}
+}
+	
+function switchToMemberView() {
+	document.getElementById('member_view_control').style.display = "none";
+	document.getElementById('directory_view_control').style.display = "block";
+	document.getElementById('map_control').style.display = "none";
+	document.getElementById('compose_pm').style.display = "block";
+	document.getElementById('mark_all').style.display = "block";
+	document.getElementById("organizational_directory").style.display = "none";
+	document.getElementById("member_directory").style.display = "block";
+	var addNewOrg = document.getElementById('add_new_org');
+	var addNewMember = document.getElementById('add_new_member');
+	if (addNewOrg && addNewMember) {
+		addNewOrg.style.display = "none";
+		addNewMember.style.display = "block";
+	}
 }
 
 function populateEventForm(i) {
@@ -1287,10 +1431,10 @@ function eventValidateAndSubmit(thisForm) {
   	}
   }
   
-	// TODO -review this
+	// Find a better way to do this. Why am I doing this? It's a hidden field...
   var forApproval = false;
   var contact = "";
-  if (eventForm['meeting-contact'] !== undefined) {
+  if (eventForm['meeting-contact'] !== undefined && eventForm['meeting-contact'].value.length > 0) {
   	forApproval = true;
   	var contactField = eventForm['meeting-contact'];
   	contact = contactField.value;

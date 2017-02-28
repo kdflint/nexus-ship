@@ -17,10 +17,20 @@ https://www.jsnippet.net/snippet/536/Sidebar-pin-to-left-with-dynamic-tabs
 
 <div class="adv-frame-contents" id="adv_div_display" style="display:block;">
 	<div id="event_display" class="div-display" style="display:block;">
-		<?php require_once("modules/event/eventsFrame.php"); ?>
+		<?php if (!Utilities::isUaSession()) { 
+				require_once("modules/event/eventsFrame.php"); 
+			} else { 
+				require_once("production_placeholder.html"); 
+			}
+		?>
 	</div>
 	<div id="network_display" class="div-display" style="display:none;">
-		<?php require_once("modules/directory/networkFrame.php"); ?>
+		<?php if (!Utilities::isUaSession()) { 
+				require_once("modules/directory/networkFrame.php"); 
+			} else { 
+				include("production_placeholder.html"); 
+			}
+		?>
 	</div>
 	<div id="profile_display" class="div-display" style="display:none;">
 		<?php require_once("modules/user/profileFrame.php"); ?>

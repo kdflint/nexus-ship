@@ -41,6 +41,16 @@ function breakoutProfile(username) {
   	window.top.location = "http://" + window.location.hostname + environ + "/nexus/web/nexus.php?view=profileuser-" + username;
 	}
 }
+
+function breakinUserMessage(username) {
+	var environ = "/apps";
+	var path = window.location.pathname;
+	if (window.top != window.self) {
+		if (path.startsWith("/phpBB3")) { environ = "/nexus"; }
+		if (path.startsWith("/dev")) { environ = "/dev"; }
+  	window.top.location = "http://" + window.location.hostname + environ + "/nexus/web/nexus.php?view=imuser-" + username;
+	}
+}
 </script>
 
 <!-- IF S_ALLOW_CDN -->

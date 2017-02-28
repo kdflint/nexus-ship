@@ -182,14 +182,8 @@ body {
 
 .profileBlock3 {
 	position:absolute;
-	left:10px;
 	width:96%;
-	top:420px; 
-	height: 230px;
-	padding-left: 5px;
-  border: 1px solid #a6c3ce !important;
-  border-radius: 10px;
-  -moz-border-radius: 10px;
+	top:430px; 
 }
 
 .profileFormRow {
@@ -241,6 +235,12 @@ body {
 	width:90%;
 }
 
+.required {
+	color: #f68620;
+	font-weight: bold;
+	vertical-align: top;	
+}
+
 .product-name {
 	font-family:Oswald;
 	font-size:230%;
@@ -288,6 +288,12 @@ form {
 }
 
 /* BUTTONS */
+
+#compose_pm {
+	font-size: 90%;
+	margin-left: 40px;
+	float:left;
+}
 
 .pure-button-primary {
 	background: rgba(0, 77, 98, 1) !important;

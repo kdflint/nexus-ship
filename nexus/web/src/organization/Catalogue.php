@@ -11,7 +11,7 @@ class Catalogue {
 		$results = array();
 		$terms = trim(Utilities::strip2($inputString));
 		$networkId = "";
-		$row = pg_fetch_row(Organization::getNetworkFromOrgId($orgId));
+		$row = pg_fetch_row(Organization::getNetworkByOrgId($orgId));
 		if (isset($row) && count($row) > 0) {
 			$networkId = $row[0];
 		}

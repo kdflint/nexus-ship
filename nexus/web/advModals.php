@@ -19,13 +19,14 @@
 		</div>
 	</div>
 	
+	<!-- Pretty sure below are deprecated altogether -->
 	<div id="openProfile" class="modalDialog">
 		<div style="background:#ffffff;">
 			<a href="#close" title="Close" class="close">X</a>
 			<div id="securityProfile" style="display:none;">
 				<?php 
-					if ($showNwmProfileUsername === $_SESSION['username']) {
-						include("modules/user/views/securityProfileAdv.html");
+					if ($showAdvProfileUsername === $_SESSION['username']) {
+						//include("modules/user/views/securityProfileAdv.html");
 					} 
 				?>	
 			</div>
@@ -36,8 +37,7 @@
 	<div id="openSecurityProfile" class="modalDialog">
 		<div>
 			<a href="#close" title="Close" class="close">X</a>
-			<?php include("modules/user/views/profile.html"); ?>	
+			<?php //include("modules/user/views/profile.html"); ?>	
 		</div>	
 	</div>	
-
 	

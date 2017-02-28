@@ -7,6 +7,7 @@ require_once(Utilities::getModulesRoot() . "/error/handlers.php");
 require_once(Utilities::getPhpRoot() . "/Validate.php");
 require_once(Utilities::getSrcRoot() . "/user/User.php");
 require_once(Utilities::getSrcRoot() . "/group/Group.php");
+require_once(Utilities::getSrcRoot() . "/organization/Organization.php");
 require_once(Utilities::getSrcRoot() . "/schedule/Event.php");
 require_once(Utilities::getLibRoot() . "/autoload/autoloader.php");
 require_once(Utilities::getLibRoot() . "/bigbluebutton/bbb-api-php/includes/config.php");
@@ -57,9 +58,8 @@ class Utilities {
 	
 	public static function getForumName() { return FORUM_NAME; }
 	
+	// Global group id for the phpBB REGISTERED USER group
 	public static function getForumRegisteredUserGroup() { return FORUM_REGISTERED_USER_GROUP; }
-	
-	public static function getForumNetworkUserGroup() { return CFCHT_FORUM_USER_GROUP; }
 	
 	public static function getNewCfchtForum() { return CFCHT_NEW_GROUP; }
 	
@@ -86,6 +86,8 @@ class Utilities {
 	
 	private static $config_path = "/config";
 	
+	private static $include_path = "/include";
+	
 	public static function getHttpPath() { return "http://" . ENV_HOST . APP_NAME . self::$web_path; }
 	
 	public static function getPluginPath() { return self::getHttpPath() . "/plugin"; }
@@ -101,6 +103,8 @@ class Utilities {
 	public static function getLocaleRoot() { return LCL_ROOT; }
 	
 	public static function getModulesRoot() {	return self::getWebRoot() . "/modules"; }
+	
+	public static function getIncludeRoot() { return INC_ROOT; }
 	
 	public static function getPhpRoot() {	return PHP_ROOT; }
 	
@@ -133,6 +137,10 @@ class Utilities {
 	public static function getOpenMeetingMargin() {return time() + 15*60; }
 	
 	public static function getTwitterHandle() {	return "NorthbridgeNFP"; }
+	
+	public static function isUaSession() {
+			return FALSE;
+	}
 	
 	private static $supportedLangs = array('en' => 'en_US.utf8','es' => 'es_ES.utf8');
 	
@@ -243,17 +251,21 @@ class Utilities {
 	}	
 	
 	public static function getRoleName($in) {
+		if(!isset($in)) return "user";
 		return (($in < 5) ? "admin" : "user");	
 	}
 		
+	// TODO - check for change impact
 	public static function validateUsernameFormat($in) {
-		if(Validate::string($in, array(
-				'min_length' => 1, 
-    		'max_length' => Utilities::USERNAME_MAX) 
-    	 && !preg_match("/[ ]+/", $in))) {
-    		return TRUE;
+		 
+		if (preg_match("/[ ]+/", $in)) { 
+			return FALSE; 
+		}
+		if(isset($in) && strlen($in) >= 7 && strlen($in) <= 25) { 
+    	return TRUE;
+    } else {
+    	return FALSE;
     }
-    return FALSE;
   }
   
 	public static function isValidPassword($in) {
@@ -308,7 +320,7 @@ class Utilities {
 		// LAST NAME
 		if (isset($input['lname']) && strlen($input['lname']) > 0) {
 			if (Validate::string($input['lname'], array(
-    				'format' => VALIDATE_EALPHA . VALIDATE_NUM . VALIDATE_SPACE . "'" . "_" . "-",
+    				//'format' => VALIDATE_EALPHA . VALIDATE_NUM . VALIDATE_SPACE . "'" . "_" . "-",
     				'min_length' => self::NAME_MIN,
     				'max_length' => self::NAME_MAX))) {
 				$result['good']['lname'] = Utilities::sanitize($input['lname']);			
@@ -578,6 +590,10 @@ class Utilities {
 	
 	public static function setSession($username, $remember, $zone = "undefined", $password = "undefined") {
 
+		// TODO - loading a PUBLIC context will wipe this one out and then screw up Nexus context
+		
+		// TODO - Session password is not updating on profile update because not sure what we are doing with the forum password yet
+		
 		session_regenerate_id(TRUE);
 		
 		unset($_SESSION['invitation']);
@@ -585,33 +601,63 @@ class Utilities {
 		$_SESSION['appRoot'] = self::getWebRoot();
 		$_SESSION['environment'] = self::getEnvName();
 		$_SESSION['username'] = $username;
-		$_SESSION['groups'] = Group::getUserGroupsByUsername($_SESSION['username']);
 		self::setSessionLastActivity();
 		$_SESSION['remember'] = ($remember ? "true" : "false");
 		self::setSessionTimezone($zone);
 		$_SESSION['language'] = self::getUserLangagePreference();
 		$_SESSION['defaultSearchId'] = self::newUuid();
+ 		$_SESSION['password'] = $password;
 		
-		$cursor = User::getUserSessionByUsername($_SESSION['username']);
+		$cursor = User::getActiveUserByUsername($_SESSION['username']);
 		while ($row = pg_fetch_array($cursor)) {
-			// TODO - loading a PUBLIC context will wipe this one out and then screw up Nexus context
-			$_SESSION['nexusContext'] = $row['account'];
+  		$_SESSION['uidpk'] = $row['id'];
 			$_SESSION['fname'] = $row['fname'];
   		$_SESSION['lname'] = $row['lname'];
-  		$_SESSION['orgName'] = $row['affiliation'];
-  		$_SESSION['orgUid'] = $row['affiliationuid'];
-  		$_SESSION['orgId'] = $row['affiliationid'];
-  		$_SESSION['uidpk'] = $row['id'];
-  		$_SESSION['networkName'] = $row['network'];
-  		$_SESSION['networkId'] = $row['networkid'];
-  		$_SESSION['defaultForumId'] = $row['forumid'] ? $row['forumid'] : "0";
-  		$_SESSION['logo'] = $row['logo'];
   		$_SESSION['email'] = $row['email'];
-  		$_SESSION['role'] = self::getRoleName($row['roleid']);
-  		$_SESSION['password'] = $password;
+		}
+
+		$orgUid = "";
+		$cursor = Organization::getOrganizationsByUsername($_SESSION['username']);
+		//  TODO - this query currently puts limit 1, so multiple organizations are not reported
+		// Currently global network invites put users tied to network org, so this works
+		// when we add organization selection to enrollment, this will change
+		while ($row = pg_fetch_array($cursor)) {
+  		$_SESSION['orgName'] = $row['name'];
+  		$_SESSION['orgId'] = $row['id'];
+  		$_SESSION['role'] = self::getRoleName($row['role_fk']);
+  		$orgUid = $row['uid'];
 		}
 		
-		$_SESSION['pgpk'] = Group::getPublicGroupByOrgId($_SESSION['orgUid']);
+
+		// NWM accounts have their own row. ADV account sessions are pulled from the parent
+		$accountType = Organization::getOrganizationAccountTypeByOrgId($_SESSION['orgId']);
+		if ($accountType) {
+			$_SESSION['nexusContext'] = $accountType;
+			$_SESSION['orgUid'] = $orgUid;
+		}
+
+		$cursor = Organization::getNetworkByOrgId($_SESSION['orgId']);
+		//  TODO - this query currently puts limit 1, so multiple organizations are not reported
+		while ($row = pg_fetch_array($cursor)) {
+			if (!$accountType) {
+				$_SESSION['nexusContext'] = $row['account_type'];
+				$_SESSION['orgUid'] = $row['uid'];
+			}
+	  	$_SESSION['networkName'] = $row['name'];
+  		$_SESSION['networkId'] = $row['networkid'];
+  		$_SESSION['defaultForumId'] = $row['forumid'] ? $row['forumid'] : "0";
+  		$_SESSION['logo'] = $row['logo'];				
+		}
+		
+		$_SESSION['groups'] = Group::getUserGroupsByUsername($_SESSION['username']);
+
+		// LEFT OFF check these two reworked methods
+		// Also, check public setSession()
+		$returnArray = Group::getPublicSystemGroupByOrgId($_SESSION['networkId']);
+		$_SESSION['pgpk'] = $returnArray[0]['id'];
+		
+		$returnArray = Group::getNetworkSystemGroupByOrgId($_SESSION['networkId']);
+		$_SESSION['ngpk'] = $returnArray[0]['id'];
 	}
 	
 	public static function setPublicSession($oid, $zone = "undefined", $fname = "Anonymous", $uuid = false) {
@@ -623,7 +669,7 @@ class Utilities {
 		} else {
 			$_SESSION['groups'] = Group::getGroupByEventUuid($uuid);	
 		}
-		$_SESSION['pgpk'] = array_keys($_SESSION['groups'])[0];
+		$_SESSION['pgpk'] = $_SESSION['groups'][0]['id'];
 		$row = pg_fetch_row(User::getActiveUserByUsername($_SESSION['username']));
 		$_SESSION['uidpk'] = $row[0];
 		self::setSessionTimezone($zone);
@@ -676,7 +722,8 @@ class Utilities {
 			// Login the session user to the forum if there is not already a forum session matching this username
 			if ($user->data['username'] !== $_SESSION['username']) {
 				// TODO - how to manage existing and unknown passwords in prod? must auto-enroll at login...
-				$forumPassword = ($_SESSION['environment'] === "prod") ? $_SESSION['username'] : $_SESSION['password'];
+				//$forumPassword = ($_SESSION['environment'] === "prod") ? $_SESSION['username'] : $_SESSION['password'];
+				$forumPassword = $_SESSION['username'];
 				$result = $auth->login($_SESSION['username'], $forumPassword);
 				$auth->acl($user->data);
 				$user->setup();	

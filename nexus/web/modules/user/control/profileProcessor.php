@@ -104,7 +104,7 @@ $forumEmail = ($emailPublic === 'true' ? $_SESSION['email'] : "");
 $forumFname = $_SESSION['fname'];
 $forumLname = $_SESSION['lname'];
 
-if ($forumUpdateGo) {
+if ($forumUpdateGo && $_SESSION['nexusContext'] === "ADV") {
 	require_once(Utilities::getSrcRoot() . "/group/Forum.php");	
 	Forum::updateUserProfile($forumUsername, $forumFname, $forumLname, $forumSms, $forumEmail, $forumPhone);
 }

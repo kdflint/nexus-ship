@@ -61,14 +61,26 @@ class Forum {
 	// TODO - move Forum db interactions from ExternalMessage to here
 
 	public static function updateUserProfile($username, $fname, $lname, $sms, $email, $phone) {
+		
+		$query = "select user_id from phpbb_users where username = $1";
+		$userid = pg_fetch_row(ForumDatabase::psExecute($query, array($username)));
+		
+		$query = "select exists (select true from phpbb_profile_fields_data where user_id = $1)";
+		$profileExists = pg_fetch_row(ForumDatabase::psExecute($query, array($userid[0])));		
+		
+		if ($profileExists[0] === "f") {
+			$query = "insert into phpbb_profile_fields_data (user_id) values ($1)";
+			ForumDatabase::psExecute($query, array($userid[0]));
+		}
+		
 		$query = "update phpbb_profile_fields_data 
 			set pf_nexus_fname = $1,
 			pf_nexus_lname = $2,
 			pf_nexus_sms  = $3,
 			pf_nexus_email = $4,
 			pf_nexus_phone = $5 
-			where user_id = (select user_id from phpbb_users where username = $6)";
-		return ForumDatabase::psExecute($query, array($fname, $lname, $sms, $email, $phone, $username));
+			where user_id = $6";
+		return ForumDatabase::psExecute($query, array($fname, $lname, $sms, $email, $phone, $userid[0]));
 	}
 	
 	public static function updateUserPassword($username, $password) {

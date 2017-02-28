@@ -1,5 +1,5 @@
 
-<div id="show-directorySearch" class="controlCol" style="left:10px;height:420px;overflow:auto;">
+<div id="show-directorySearch" class="controlCol" style="left:10px;height:420px;overflow:visible;">
 	<?php include(Utilities::getModulesRoot() . "/directory/views/directorySearch.php"); ?>
 </div>
 

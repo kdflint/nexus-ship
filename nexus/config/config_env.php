@@ -7,6 +7,7 @@
 	define("LIB_ROOT", "/home/kdflint/projects/nexus-community/nexus/lib");
 	define("PTR_ROOT", "/home/kdflint/projects/nexus-community/nexus/partner");
 	define("LCL_ROOT", "/home/kdflint/projects/nexus-community/nexus/locale");
+	define("INC_ROOT", "/home/kdflint/projects/nexus-community/nexus/include");
 	define("PHPBB3_ROOT", "/home/kdflint/phpBB3");
 	define("LOG_ROOT", "/home/kdflint/projects/nexus-community/nexus/log");
 	define("PTR_STC_ROOT", "/partner");
@@ -19,9 +20,9 @@
 
 // OTHER
 	define("SSN_TIMEOUT", "-1"); // in seconds
-	define("PUBLIC_GROUP", "7");
+	define("PUBLIC_GROUP", "1"); // was 7
 	define("SMS_SERVICE_USER", "kdflint");
-	define("FORUM_REGISTERED_USER_GROUP", "8");
+	define("FORUM_REGISTERED_USER_GROUP", "2"); // was 8
 
 // DATABASE
 	define("DB_HOST", "localhost"); 
@@ -43,7 +44,6 @@
 	
 // TEMPORARY
 	define("EVENT_APPROVE_LIST", "kathy.flint@northbridgetech.org");
-	define("CFCHT_FORUM_USER_GROUP", "8");
 	define("CFCHT_NEW_GROUP", "14");
 		
 ?>

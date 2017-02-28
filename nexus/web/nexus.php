@@ -1,8 +1,10 @@
 <?php 
 
-session_start();
-
 require_once("src/framework/Util.php");
+require_once(Utilities::getModulesRoot() . "/forum/forum_integration.php");
+
+session_start();
+$user->session_begin();
 
 $demoSession = "false";
 $disabled = "";
@@ -44,10 +46,13 @@ $showProfile = "false";
 $showProfileAdv = "false";
 $showTeam = "false";
 $showFatal = "false";
+$showNetwork = "false";
 $showOrganizationDetail = "false";
-$showNwmProfile = "false";
+$showAdvProfile = "false";
+$showAdvIm = "false";
 $showOrgDetailId = "";
-$showNwmProfileUsername = "";
+$showAdvProfileUsername = "";
+$showAdvImUsername = "";
 
 // TODO - add the NWM/ADV check to these
 if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharacterSet($_GET['view'])) {
@@ -55,11 +60,14 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 		case "profile": $showProfile = "true"; break;
 		case "team": $showTeam = "true"; break;
 		case "fatal": $showFatal = "true"; break;
+		case "network": $showNetwork = "true"; break;
 		// We have ensured that $_GET['view'] will evaluate to true, that's why below is viable
 		case (strpos($_GET['view'], 'orgid-') === 0 ? true : false):
 			$showOrganizationDetail = "true"; $showOrgDetailId = substr($_GET['view'], 6);
 		case (strpos($_GET['view'], 'profileuser-') === 0 ? true : false):
-			$showNwmProfile = "true"; $showNwmProfileUsername = substr($_GET['view'], 12);		
+			$showAdvProfile = "true"; $showAdvProfileUsername = substr($_GET['view'], 12);		
+		case (strpos($_GET['view'], 'imuser-') === 0 ? true : false):
+			$showAdvIm = "true"; $showAdvImUsername = substr($_GET['view'], 7);		
 	}
 }
 
@@ -88,6 +96,10 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 		<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
     <link rel="stylesheet" href="styles/nexus.css" type="text/css" />
     <link rel="stylesheet" href="styles/modal.css" type="text/css" />
+    <!--<link rel="stylesheet" href="//cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" type="text/css" />-->
+    <!-- LEFT OFF - lost arrows - I think they are white -->
+    <link rel="stylesheet" href="styles/datatables.css" type="text/css" />
+
        
     <!-- New way to include font awesome - why?? -->
     <!--<script src="https://use.fontawesome.com/2eef5e944e.js"></script>-->
@@ -97,12 +109,15 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
   	<script src="<?php echo(Utilities::getConfigPath()); ?>/stateData.js" language="javascript"></script>
   	<!-- http://www.featureblend.com/javascript-flash-detection-library.html -->
  		<script src="scripts/lib/flash_detect.js"></script>
- 		<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+ 		<!--<script src="//code.jquery.com/jquery-1.10.2.js"></script>-->
+ 		<script src="//code.jquery.com/jquery-1.12.4.js"></script>
   	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
   	<script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js"></script>
   	<!-- http://www.pinlady.net/PluginDetect/ -->
   	<script type="text/javascript" src="scripts/lib/javaDetect/scripts/PluginDetect_Java_Simple.js"></script>
   	<!-- http://logomakr.com -->
+  	<!-- https://datatables.net -->
+		<script type="text/javascript" src="//cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js" charset="utf8"></script>
   	 	 	
     <title>Northbridge Nexus</title> 
 
@@ -113,11 +128,24 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 			HTTP_WEB_PATH = "<?php echo Utilities::getHttpPath(); ?>";
 			HTTP_FORUM_PATH = "<?php echo Utilities::getForumHttpPath(); ?>";
 			FORUM_SESSION_REFRESH_COUNTER = 0;
+			INBOX_FOCUS = DEFAULT_INBOX_FOCUS;
 			
 			<!-- include in this manner instead of in a meta link so that php code inside this file will resolve prior to runtime -->
     	<?php include("scripts/techCheck.js"); ?>
     	  	
-			$(document).ready(function () {
+			$(document).ready(function () {	
+				$('#member-directory').DataTable( {
+						"pageLength": 10,
+						"lengthChange": false,
+						"order": [[2, 'asc']],
+						"columns": [
+    					{ "orderable": false },
+    					{ "orderable": false },
+    					null,
+    					null,
+							null
+						]
+				} );
 				$( '#schedule_control' ).click(function() {
 	  			toggleNewEventDisplay();
 	  			if (document.getElementById('join_display').style.display != 'none') {
@@ -163,6 +191,9 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 					document.getElementById("userList").style.display='none';
 					document.getElementById("fatalError").style.display='block';
 				}	
+				if(<?php echo $showNetwork; ?>) {
+					$( "#adv-menu-network" ).click();
+				}	
 				if(<?php echo $demoSession; ?>) {
 					document.getElementById("profile_control_icon").className = "";
 					document.getElementById("schedule-form-submit").onclick = "";
@@ -178,11 +209,12 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 					$( "#adv-menu-network" ).click();
 					showDirectoryDetail("<?php echo $showOrgDetailId; ?>");	
 				}
-				if(<?php echo $showNwmProfile; ?>) {
-					var iframeSrc = HTTP_FORUM_PATH  + "/memberlist.php?mode=viewprofile&un=<?php echo($showNwmProfileUsername); ?>";
-    			var iframe = document.getElementById("adv-profile-frame");
-    			iframe.src = iframeSrc;
-    			window.location.assign(HTTP_WEB_PATH + "/nexus.php#openProfile");
+				if(<?php echo $showAdvProfile; ?>) {
+					showAdvProfile("<?php echo($showAdvProfileUsername); ?>");
+				}
+				if(<?php echo $showAdvIm; ?>) {
+					INBOX_FOCUS = "/ucp.php?i=pm&mode=compose&username=<?php echo($showAdvImUsername); ?>";
+					$( "#adv-menu-inbox" ).click();					
 				}
 			});
 			
@@ -199,6 +231,16 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 	  	function toggleTechCheckDisplay() {
 	  		$( "#tech_check_display" ).toggle( "blind" );
 	  	}
+	  	
+		  $(function() {
+    		var tooltips = $( "#profile-form :input" ).tooltip({
+      		position: {
+        		my: "left top",
+        		at: "right+5 top-5"
+      		},
+      		effect: "fade"
+    		});    
+  		});
 	  		  	
 		</script>
     
@@ -255,6 +297,36 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 				ACTIVITY_FLAG = 0;
 			}
 	   </script>
+
+                            
+<script type="text/javascript">
+    (function () {
+        var head = document.getElementsByTagName("head").item(0);
+        var script = document.createElement("script");
+        
+        var src = (document.location.protocol == 'https:' 
+            ? 'https://www.formilla.com/scripts/feedback.js' 
+            : 'http://www.formilla.com/scripts/feedback.js');
+        
+        script.setAttribute("type", "text/javascript"); 
+        script.setAttribute("src", src); script.setAttribute("async", true);        
+
+        var complete = false;
+        
+        script.onload = script.onreadystatechange = function () {
+            if (!complete && (!this.readyState 
+                    || this.readyState == 'loaded' 
+                    || this.readyState == 'complete')) {
+                complete = true;
+                Formilla.guid = 'd94fe060-648d-45c5-9698-2e43d5817798';
+                Formilla.loadFormillaChatButton();                
+            }
+        };
+
+        head.appendChild(script);
+    })();
+</script>
+                                    
 	       
   </head>
   
