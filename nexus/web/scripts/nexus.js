@@ -201,7 +201,7 @@ function fillRecipients() {
 			var keyval = names[i].value.split("::");
 			if (keyval.length == 2) {
 				var dto = new Object();	
-				dto.username = keyval[0];	
+				dto.username = keyval[0]; //.replace(/ /g, '&nbsp;');	
 				dto.fullname = keyval[1];	
 				recipientlist.push(dto);	
 	  	}
@@ -219,16 +219,19 @@ function goToInboxCompose() {
 function checkAll(formname) {
 	var curState = document.forms['member-directory-form']['togglestate'].value;
   var checkboxes = document.forms[formname].elements['names[]']; 
+  var indicator = document.getElementById("mark_all");
   if (curState == "0") {
   	for (var i=0; i<checkboxes.length; i++)  {
-	    if (checkboxes[i].type == 'checkbox')   { checkboxes[i].checked = false; }	
+	    if (checkboxes[i].type == 'checkbox')   { checkboxes[i].checked = true; }	
     }
     document.forms['member-directory-form']['togglestate'].value = "1";
+    indicator.innerHTML = "Unselect all";
   } else if (curState == "1") {
   	for (var i=0; i<checkboxes.length; i++)  {
-	    if (checkboxes[i].type == 'checkbox')   { checkboxes[i].checked = true; }
+	    if (checkboxes[i].type == 'checkbox')   { checkboxes[i].checked = false; }
 	  }	
    	document.forms['member-directory-form']['togglestate'].value = "0";
+   	indicator.innerHTML = "Select all";
 	}
 }	
 

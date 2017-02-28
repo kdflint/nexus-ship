@@ -45,6 +45,5 @@
 // TEMPORARY
 	define("EVENT_APPROVE_LIST", "kathy.flint@northbridgetech.org");
 	define("CFCHT_NEW_GROUP", "14");
-	define("UAT_NETWORKS", "");
 		
 ?>
