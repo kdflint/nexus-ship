@@ -3,8 +3,9 @@ group = 9
 public forums = 15
 community forums = 14
 
+--- above is for IDRA onboarding
 
--- in PROD, tie groups 1, 25 to pUser???
+--- below for pm messaging
 
-
--- purge forum cache after deploy
+ALTER TABLE forum_poll
+   ADD COLUMN pm_last_poll_dttm timestamp with time zone;

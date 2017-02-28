@@ -6,8 +6,9 @@ require_once("control/searchPreProcessor.php");
 
 <div id="network-secondary" class="secondaryControlContainer">
 <span style="float:left;">
-	<a id="compose_pm" class="pure-button pure-button-primary" href="javascript:void(0);" onclick="goToInboxCompose();" style="float:left;" >Compose Message</a>
-	<a id="mark_all" href="#" onclick="checkAll('member-directory-form')" style="border-left:20px;float:left;">Select All</a> 
+	<a id="compose_pm" class="pure-button pure-button-primary" href="javascript:void(0);" style="float:left;" >Compose Message</a>
+	<!--<a id="compose_pm" class="pure-button pure-button-primary" href="javascript:void(0);" onclick="goToInboxCompose();" style="float:left;" >Compose Message</a>-->
+	<!--<a id="mark_all" href="#" onclick="checkAll('member-directory-form')" style="border-left:20px;float:left;">Select All</a> -->
 </span>
 <span style="float:right;">
 	<?php if (Utilities::isSessionAdmin()) { ?>

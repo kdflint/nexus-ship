@@ -98,6 +98,8 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
     <link rel="stylesheet" href="styles/modal.css" type="text/css" />
     <!--<link rel="stylesheet" href="//cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" type="text/css" />-->
     <!-- LEFT OFF - lost arrows - I think they are white -->
+		<!--<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.13/r-2.1.1/rr-1.2.0/datatables.min.css"/>		-->
+
     <link rel="stylesheet" href="styles/datatables.css" type="text/css" />
 
        
@@ -117,7 +119,10 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
   	<script type="text/javascript" src="scripts/lib/javaDetect/scripts/PluginDetect_Java_Simple.js"></script>
   	<!-- http://logomakr.com -->
   	<!-- https://datatables.net -->
-		<script type="text/javascript" src="//cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js" charset="utf8"></script>
+		<!--<script type="text/javascript" src="//cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js" charset="utf8"></script>-->
+		<!--<script type="text/javascript" src="//cdn.datatables.net/v/dt/dt-1.10.13/b-1.2.4/datatables.min.js"></script>-->
+		<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.13/b-1.2.4/se-1.2.0/datatables.min.js"></script>
+
   	 	 	
     <title>Northbridge Nexus</title> 
 
@@ -134,7 +139,7 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
     	<?php include("scripts/techCheck.js"); ?>
     	  	
 			$(document).ready(function () {	
-				$('#member-directory').DataTable( {
+				var table = $('#member-directory').DataTable( {
 						"pageLength": 10,
 						"lengthChange": false,
 						"order": [[2, 'asc']],
@@ -144,8 +149,63 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
     					null,
     					null,
 							null
-						]
+						]/*,
+						dom: 'Bfrtip',
+				    buttons: [
+    		    	'selectAll',
+        			'selectNone'
+    				],
+    				language: {
+        			buttons: {
+            		selectAll: "Select all",
+            		selectNone: "Unselect all"
+        			}
+    				}
+    				*/
 				} );
+
+				var recipientlist = [];  
+
+				$('#member-directory tbody').on( 'click', 'tr', function (event) {
+    			if (event.target.type !== 'checkbox') {
+    				$(':checkbox', this).trigger('click');
+    			} else if ($(':checkbox', this).prop('checked')==true) {
+						var keyval = $(':checkbox', this).val().split("::");
+						if (keyval.length == 2) {
+							var dto = new Object();	
+							dto.username = keyval[0];
+							dto.fullname = keyval[1];	
+							recipientlist.push(dto);	
+	  				}    	
+			    } else {
+						var keyval = $(':checkbox', this).val().split("::");
+						if (keyval.length == 2) {
+				    	recipientlist.splice( recipientlist.indexOf(keyval[0]), 1 );
+			    	}
+		    	} 
+    			//$(this).toggleClass('selected');
+    			//console.log(JSON.stringify(recipientlist));
+				} );
+				
+			
+				$('#compose_pm').click( function() {
+        	//$('#member-directory').find('input[type="checkbox"]:checked').each(function () {
+					//	console.log("==>" + $(this).val());
+					//	var keyval = $(this).val().split("::");
+					//		if (keyval.length == 2) {
+					//			var dto = new Object();	
+					//			dto.username = keyval[0];
+					//			dto.fullname = keyval[1];	
+					//			recipientlist.push(dto);	
+	  			//		}
+        	//} );	  					
+        	console.log(JSON.stringify(recipientlist));
+        	document.getElementById("recipient-dto").innerHTML = JSON.stringify(recipientlist);
+        	//goToInboxCompose();
+        	document.getElementById("inbox-mode").innerHTML = "compose";
+					$( "#adv-menu-inbox" ).click();	
+    		} );
+				
 				$( '#schedule_control' ).click(function() {
 	  			toggleNewEventDisplay();
 	  			if (document.getElementById('join_display').style.display != 'none') {
