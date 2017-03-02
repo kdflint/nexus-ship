@@ -23,7 +23,7 @@ foreach($pmNotificationsDue as $row) {
 }
 
 
-function getNewPmMessage($toName, $fromName, $subject, $oid = "ed787a92", $networkName = "The Center for Faith and Community Health Transformation") {
+function getNewPmMessage($toName, $fromName, $subject, $oid = "", $networkName = "Your Community") {
 	$messageString = "Hello " . $toName . ",
 
 You have received a private message from your colleague " . $fromName . ".
@@ -34,7 +34,7 @@ Please log in to your network at Nexus Advantage in order to view and respond to
 
 " . Utilities::getHttpPath() . "/login.php?oid=" . $oid . " 
 
-You are receiving this notification because you are subscribed to private message notifications from your community at " . $networkName . "
+You are receiving this notification because you are subscribed to private message notifications from your community.
 
 If you no longer wish to receive private message notifications, please reply to this email with \"unsubscribe\" in the message body or subject line.
 

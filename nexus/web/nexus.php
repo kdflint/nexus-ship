@@ -139,6 +139,8 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
     	<?php include("scripts/techCheck.js"); ?>
     	  	
 			$(document).ready(function () {	
+				$( '#adv-menu-profile' ).click();
+				
 				var table = $('#member-directory').DataTable( {
 						"pageLength": 10,
 						"lengthChange": false,
@@ -276,6 +278,7 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 					INBOX_FOCUS = "/ucp.php?i=pm&mode=compose&username=<?php echo($showAdvImUsername); ?>";
 					$( "#adv-menu-inbox" ).click();					
 				}
+				
 			});
 			
 			function toggleJoinDisplay() {

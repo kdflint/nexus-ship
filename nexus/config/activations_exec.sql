@@ -199,3 +199,30 @@ insert into user_organization (user_fk, organization_fk, grantor_fk, create_dttm
 insert into invitation (uuid, email, create_dttm, accept_dttm, network_fk, invitation_dttm, role_fk, expire_dt, issuer_fk, type, organization_fk, group_fk) values ('09afc664-b59a-4a08-a007-1c3bffe379ea', 'c_de_kay@hotmail.com', now(), NULL, NULL, now(), '4', (CURRENT_DATE + interval '31 days'), '88', 'single', 19, 5) returning uuid;
 
 insert into invitation (uuid, email, create_dttm, accept_dttm, network_fk, invitation_dttm, role_fk, expire_dt, issuer_fk, type, organization_fk, group_fk) values ('19ab490c-48d1-4627-88c7-f9968cf4982a', 'dwill313@yahoo.com', now(), NULL, NULL, now(), '4', (CURRENT_DATE + interval '31 days'), '88', 'single', 19, 5) returning uuid;
+
+
+-- Grace Center Ministries
+
+insert into organization (name, create_dttm, activate_dttm, tax_exempt, status_fk, logo, uid) values ('Grace Center Ministries', now(), now(), true, 1, 'gcm.png', 'd4d67ae2') returning id;
+
+insert into organization_organization (organization_from_fk, organization_to_fk, relationship, create_dttm) values (13, 359, 'parent', now());
+
+insert into organization_organization (organization_from_fk, organization_to_fk, relationship) values (359,359,'parent')
+
+insert into organization_account (organization_fk, account_type) values (359, 'NWM');
+
+insert into public.group (name, create_dttm, activate_dttm, logo, uid) values ('Grace Center Ministries', now(), now(), '', '21084a0d') returning id;
+
+insert into invitation (uuid, email, create_dttm, accept_dttm, network_fk, invitation_dttm, role_fk, expire_dt, issuer_fk, type, organization_fk, group_fk) values ('1afb70fa-2108-4a0d-beb5-7648e48c83e1', 'revbawilson@gmail.com', now(), NULL, 359, now(), '4', (CURRENT_DATE + interval '31 days'), '88', 'single', 359, 30) returning uuid;
+
+
+--http://nexus.northbridgetech.org/web/enroll?invitation=1afb70fa-2108-4a0d-beb5-7648e48c83e1
+
+
+-- need A PUBLIC USER FOR NWM ACCOUNT??
+insert into public.user (uuid, username, fname, lname, email, status_fk, create_dttm, activate_dttm) values ('8c8139e6-73e4-470d-b60d-f20a8d80925e', 'pUser-d4d67ae2', 'Public', 'User', '', '1', now(), now()) returning id;
+
+insert into user_group (user_fk, create_dttm, group_fk, role_fk) values (256, now(), 30, 4);
+
+insert into user_organization (user_fk, organization_fk, grantor_fk, create_dttm, role_fk) values (256, 349, 88, now(), 4);
+--

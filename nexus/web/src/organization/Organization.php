@@ -35,6 +35,18 @@ class Organization {
 		return $orgId;
 	}
 	
+	public static function addOrganizationParent($from, $to) {
+		$query = "insert into organization_organization (organization_from_fk, organization_to_fk, relationship) values ($1, $2, 'parent')";
+		$result = PgDatabase::psExecute($query, array($from, $to));
+		return $result; 
+	}
+
+	public static function addNwmAccountToOrganization($orgId) {
+		$query = "insert into organization_account (organization_fk, account_type) values ($1, 'NWM')";
+		$result = PgDatabase::psExecute($query, array($orgId));	
+		return $result;
+	}		
+
 	public static function addAdvAccountToOrganization($orgId) {
 		$query = "insert into organization_account (organization_fk, account_type) values ($1, 'ADV')";
 		$result = PgDatabase::psExecute($query, array($orgId));	
