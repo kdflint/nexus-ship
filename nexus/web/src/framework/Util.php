@@ -138,9 +138,9 @@ class Utilities {
 	
 	public static function getTwitterHandle() {	return "NorthbridgeNFP"; }
 	
-	public static function isUaSession() {
-			return FALSE;
-	}
+	public static function isUaSession() { return FALSE; }
+	
+	public static function getAdminPassword() { return ADMIN_PASSWORD; }
 	
 	private static $supportedLangs = array('en' => 'en_US.utf8','es' => 'es_ES.utf8');
 	

@@ -197,21 +197,23 @@ function fillRecipients() {
 	var recipientlist = [];
 	var names = document.forms['member-directory-form'].elements['names[]'];
 	for (var i=0; i<names.length; i++) {
+		console;log("hi");
 		if (names[i].checked) {
 			var keyval = names[i].value.split("::");
 			if (keyval.length == 2) {
 				var dto = new Object();	
-				dto.username = keyval[0]; //.replace(/ /g, '&nbsp;');	
+				dto.username = keyval[0];
 				dto.fullname = keyval[1];	
 				recipientlist.push(dto);	
 	  	}
 	  }
 	}
 	document.getElementById("recipient-dto").innerHTML = JSON.stringify(recipientlist);
+	console.log(JSON.stringify(recipientlist));
 }
 
 function goToInboxCompose() {
-	fillRecipients();
+	//fillRecipients();
 	document.getElementById("inbox-mode").innerHTML = "compose";
 	$( "#adv-menu-inbox" ).click();	
 }
@@ -1189,7 +1191,6 @@ function switchToOrganizationView() {
 	document.getElementById('directory_view_control').style.display = "none";
 	document.getElementById('map_control').style.display = "block";
 	document.getElementById('compose_pm').style.display = "none";
-	document.getElementById('mark_all').style.display = "none";
 	document.getElementById("organizational_directory").style.display = "block";
 	document.getElementById("member_directory").style.display = "none";
 	var addNewOrg = document.getElementById('add_new_org');
@@ -1205,7 +1206,6 @@ function switchToMemberView() {
 	document.getElementById('directory_view_control').style.display = "block";
 	document.getElementById('map_control').style.display = "none";
 	document.getElementById('compose_pm').style.display = "block";
-	document.getElementById('mark_all').style.display = "block";
 	document.getElementById("organizational_directory").style.display = "none";
 	document.getElementById("member_directory").style.display = "block";
 	var addNewOrg = document.getElementById('add_new_org');

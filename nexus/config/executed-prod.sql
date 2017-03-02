@@ -13,6 +13,8 @@ delete from organization_account where account_type = 'ADV' and organization_fk 
 insert into organization_organization (organization_from_fk, organization_to_fk, relationship) values (13,18,'parent');
 insert into organization_organization (organization_from_fk, organization_to_fk, relationship) values (13,1,'parent');
 
+-- in PROD, tie groups 1, 25 to pUser
+
 
 -- make new directory, sibling of config nexus/include/directory/group-tables
 -- define("INCL_ROOT"

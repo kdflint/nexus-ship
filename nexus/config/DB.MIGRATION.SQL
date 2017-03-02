@@ -3,8 +3,5 @@ group = 9
 public forums = 15
 community forums = 14
 
+--- above is for IDRA onboarding
 
--- in PROD, tie groups 1, 25 to pUser???
-
-
--- purge forum cache after deploy

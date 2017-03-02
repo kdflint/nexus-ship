@@ -16,7 +16,7 @@ https://www.jsnippet.net/snippet/536/Sidebar-pin-to-left-with-dynamic-tabs
 </div>
 
 <div class="adv-frame-contents" id="adv_div_display" style="display:block;">
-	<div id="event_display" class="div-display" style="display:block;">
+	<div id="event_display" class="div-display" style="display:none;">
 		<?php if (!Utilities::isUaSession()) { 
 				require_once("modules/event/eventsFrame.php"); 
 			} else { 
@@ -32,7 +32,7 @@ https://www.jsnippet.net/snippet/536/Sidebar-pin-to-left-with-dynamic-tabs
 			}
 		?>
 	</div>
-	<div id="profile_display" class="div-display" style="display:none;">
+	<div id="profile_display" class="div-display" style="display:block;">
 		<?php require_once("modules/user/profileFrame.php"); ?>
 	</div>
 </div>
