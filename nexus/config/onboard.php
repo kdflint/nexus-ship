@@ -1,11 +1,17 @@
+<?php
+
+require_once(dirname(__FILE__) . "/../web/src/framework/Util.php");
+
+?>
+
 <html>
 	<head>
 	</head>
 	<body>
-		<?php if (!isset($_GET['invitation'])) { ?>
-		<form action="http://localhost/nexus/nexus/config/onboard-processor.php" method="post">
-		  <input type="radio" name="account-type" value="adv"> ADV<br>
-  		<input type="radio" name="account-type" value="nwm" disabled> NWM
+		<?php if (true) { //if (!isset($_GET['invitation'])) { ?>
+		<form action="<?php echo(Utilities::getConfigPath()); ?>/onboard-processor.php" method="post">
+		  <input type="radio" name="account-type" value="ADV"> ADV<br>
+  		<input type="radio" name="account-type" value="NWM"> NWM
   		<p>Parent org id: <input type="text" name="org-parent" width="10" value="13" required></p>
   		<p>Network name: <input type="text" name="org-name" width="100" required></p>
   		<p>Logo file name: <input type="text" name="org-logo" width="100" required></p>
@@ -15,7 +21,7 @@
 		<form>
 		<?php } else { ?>
 		<p>Enroll link</p>
-		<p><a href="<?php echo(Utilities::getHttpPath()); ?>/enroll.php?invitation=<?php echo($_GET['invitation']); ?>"><?php echo(Utilities::getHttpPath()); ?>/enroll.php?invitation=<?php echo($_GET['invitation']); ?></a></p>
+		<p><?php echo(Utilities::getHttpPath()); ?>/enroll.php?invitation=<?php echo($_GET['invitation']); ?></p>
 	<?php } ?>
 	</body>
 </html>
