@@ -79,7 +79,7 @@ $forumEnrollments = array();
 
 $defaultNetworkForumId = Organization::getNetworkForumByOrgId($invitation['orgid']);
 if ($defaultNetworkForumId) {
-	array_push($forumEnrollments, $defaultNetworkForumId)
+	array_push($forumEnrollments, $defaultNetworkForumId);
 }
 if (isset($clean['group-enroll'])) {
 	foreach ($clean['group-enroll'] as $groupId) {
