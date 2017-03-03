@@ -77,6 +77,16 @@ class Organization {
 		return PgDatabase::psExecute($query, array($orgId));
 	}
 	
+	public static function getNetworkForumByOrgId($orgId) {
+		$query = "select network_forum_id from organization where id = $1";
+		$row = pg_fetch_row(PgDatabase::psExecute($query, array($orgId)));
+		if ($row[0] === "NULL") {
+			return FALSE;
+		} else {
+			return $row[0];
+		}
+	}
+	
 	public static function getOrganizationByUid($orgUid) {
 		$query = "select id, name, type, structure, logo, status_fk as status from organization where uid = $1";
 		return PgDatabase::psExecute($query, array($orgUid));
