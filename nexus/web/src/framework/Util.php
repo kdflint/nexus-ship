@@ -673,11 +673,11 @@ class Utilities {
 		$row = pg_fetch_row(User::getActiveUserByUsername($_SESSION['username']));
 		$_SESSION['uidpk'] = $row[0];
 		self::setSessionTimezone($zone);
+		$_SESSION['fname'] = $fname;
+		$_SESSION['lname'] = "";
 		
 		$cursor = User::getUserSessionByUsername($_SESSION['username']);
 		while ($row = pg_fetch_array($cursor)) {
-			$_SESSION['fname'] = $fname;
-			$_SESSION['lname'] = "";
 			$_SESSION['logo'] = $row['logo'];
   		$_SESSION['networkName'] = $row['network'];
   		$_SESSION['orgId'] = $row['affiliationid'];
