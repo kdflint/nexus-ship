@@ -43,7 +43,6 @@
 	define("DEMO_EVENT_FUTURE", "76,77");
 	
 // TEMPORARY
-	define("EVENT_APPROVE_LIST", "kathy.flint@northbridgetech.org");
 	define("CFCHT_NEW_GROUP", "14");
 		
 ?>

@@ -67,8 +67,14 @@ class Utilities {
 	
 	public static function getLogRoot() { return LOG_ROOT; }
 	
-	// Very Temporary Method
-	public static function getEventApprovalList() { return EVENT_APPROVE_LIST; }
+	public static function getEventApprovalList() { 
+		$emailList = Organization::getNetworkAdminEmailByOrgId($_SESSION['orgId']); 
+		$listString = "";
+		foreach ($emailList as $address) {
+			$listString .= $address . ", ";
+		}
+		return stripTrailingComma($listString);
+	}
 	
 	public static function getDemoUidpk() { return DEMO_UIDPK; }		
 	
@@ -682,6 +688,11 @@ class Utilities {
   		$_SESSION['networkName'] = $row['network'];
   		$_SESSION['orgId'] = $row['affiliationid'];
  			$_SESSION['publicForumId'] = $row['publicforumid'];
+		}
+		
+		$enrollUuid = Organization::getPublicEnrollUuidByOrgUid($_SESSION['orgUid']);
+		if ($enrollUuid) {
+			$_SESSION['publicEnrollUuid'] = $enrollUuid;
 		}
 		
 	}

@@ -38,7 +38,7 @@ The " . $forumName . " has received a new topic: \"" . $topicName . "\"
 
 Use this link to view the topic body:   
 
-" . Utilities::getForumHttpPath() . "/viewtopic.php?f=" . $forumId . "&t=" . $topicId . " 
+" . Utilities::getPluginPath() . "/publicForumRead.php?forumid=" . $forumId . "&topicid=" . $topicId . " 
 
 You are receiving this notification because you are watching the forum \"". $forumName . "\". 
 
@@ -59,7 +59,7 @@ You are receiving this notification because you are watching the topic \"" . $to
 
 Use this link to view the topic:   
 
-" . Utilities::getForumHttpPath() . "/viewtopic.php?f=" . $forumId . "&t=" . $topicId . "
+" . Utilities::getPluginPath() . "/publicForumRead.php?forumid=" . $forumId . "&topicid=" . $topicId . "
 
 If you no longer wish to watch this topic, please reply to this email with \"unsubscribe\" in the message body or subject line.
 
