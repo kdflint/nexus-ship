@@ -67,8 +67,14 @@ class Utilities {
 	
 	public static function getLogRoot() { return LOG_ROOT; }
 	
-	// Very Temporary Method
-	public static function getEventApprovalList() { return EVENT_APPROVE_LIST; }
+	public static function getEventApprovalList() { 
+		$emailList = Organization::getNetworkAdminEmailByOrgId($_SESSION['orgId']); 
+		$listString = "";
+		foreach ($emailList as $address) {
+			$listString .= $address . ", ";
+		}
+		return stripTrailingComma($listString);
+	}
 	
 	public static function getDemoUidpk() { return DEMO_UIDPK; }		
 	
@@ -673,15 +679,20 @@ class Utilities {
 		$row = pg_fetch_row(User::getActiveUserByUsername($_SESSION['username']));
 		$_SESSION['uidpk'] = $row[0];
 		self::setSessionTimezone($zone);
+		$_SESSION['fname'] = $fname;
+		$_SESSION['lname'] = "";
 		
 		$cursor = User::getUserSessionByUsername($_SESSION['username']);
 		while ($row = pg_fetch_array($cursor)) {
-			$_SESSION['fname'] = $fname;
-			$_SESSION['lname'] = "";
 			$_SESSION['logo'] = $row['logo'];
   		$_SESSION['networkName'] = $row['network'];
   		$_SESSION['orgId'] = $row['affiliationid'];
  			$_SESSION['publicForumId'] = $row['publicforumid'];
+		}
+		
+		$enrollUuid = Organization::getPublicEnrollUuidByOrgUid($_SESSION['orgUid']);
+		if ($enrollUuid) {
+			$_SESSION['publicEnrollUuid'] = $enrollUuid;
 		}
 		
 	}

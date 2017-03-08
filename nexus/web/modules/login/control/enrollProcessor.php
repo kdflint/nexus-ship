@@ -77,6 +77,10 @@ $uidpk = User::addActiveUser(
 User::addUserOrgRelation($uidpk, $invitation['orgid'], $invitation['grantorid'], $invitation['roleid']);
 $forumEnrollments = array();
 
+$defaultNetworkForumId = Organization::getNetworkForumByOrgId($invitation['orgid']);
+if ($defaultNetworkForumId) {
+	array_push($forumEnrollments, $defaultNetworkForumId);
+}
 if (isset($clean['group-enroll'])) {
 	foreach ($clean['group-enroll'] as $groupId) {
 		User::addUserGroupRelation($uidpk, $groupId, $invitation['roleid']);
@@ -97,13 +101,12 @@ if (isset($invitation['account_type']) && $invitation['account_type'] === "ADV")
 	require_once(Utilities::getSrcRoot() . "/group/Forum.php");
 	
 	$addedUserId = Forum::enrollUser($clean['username'], $clean['username']);
-	if ($addedUserId) {
+	if ($addedUserId) {		
 		// TODO - loop this properly
 		// This group is global for everyone (REGISTERED group in phpBB3)
 		$groupId = Utilities::getForumRegisteredUserGroup();
 		$groupResult = Forum::addUserToGroupById($addedUserId, $groupId);
 		if (!$groupResult) {
-		} else {
 			$logger->log("Fail on add user " . $addedUserId . ":" . $clean['username'] . " to REGISTERED group ", PEAR_LOG_INFO);
 		}
 		
@@ -112,9 +115,8 @@ if (isset($invitation['account_type']) && $invitation['account_type'] === "ADV")
 		$groupId = Organization::getForumUserGroupByOrgId($invitation['orgid']);
 		$groupResult = Forum::addUserToGroupById($addedUserId, $groupId);
 		if (!$groupResult) {
-		} else {
 			$logger->log("Fail on add user " . $addedUserId . ":" . $clean['username'] . " to NETWORK group ", PEAR_LOG_INFO);
-		}	
+		}
 		
 		Forum::updateUserProfile($clean['username'], $clean['fname'], $clean['lname'], "", $clean['email'], "");
 		

@@ -16,9 +16,11 @@
 
 				// TODO - this will break if not displayed with a view that implements showEventDetail()
 				
+				// TODO - will document certainly be loaded with this method? Not liking these two views coupled like this...
 				if (jsonObj.length > 0) {
-					/// TODO - will document certainly be loaded with this method? Not liking these two views coupled like this...
 					showEventDetail(jsonObj[0].uuid);
+				} else {
+					document.getElementById("eventRow0").innerHTML = "<div style='text-align:center;margin-right:10px;margin-top:45px;'>There are currently no events on this calendar.<div>";
 				}
 
 		 		for (var i = 0; i < jsonObj.length; i++) {

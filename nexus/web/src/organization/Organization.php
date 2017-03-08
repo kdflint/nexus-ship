@@ -77,6 +77,36 @@ class Organization {
 		return PgDatabase::psExecute($query, array($orgId));
 	}
 	
+	public static function getNetworkForumByOrgId($orgId) {
+		$query = "select network_forum_id from organization where id = $1";
+		$row = pg_fetch_row(PgDatabase::psExecute($query, array($orgId)));
+		if ($row[0] === "NULL") {
+			return FALSE;
+		} else {
+			return $row[0];
+		}
+	}
+	
+	public static function getNetworkAdminEmailByOrgId($orgId) {
+		$email = array();
+		$query = "select u.email from public.user u, user_organization uo where uo.role_fk = 1 and uo.user_fk = u.id and uo.organization_fk = 3$1";
+		$cursor = PgDatabase::psExecute($query, array($orgId));
+	  while ($row = pg_fetch_array($cursor)) {
+	  	array_push($email, $row['email']);
+	  }		
+	  return $email;
+	}	
+	
+	public static function getPublicEnrollUuidByOrgUid($orgUid) {
+		$query = "select i.uuid from organization o, invitation i where i.id = o.public_global_invite_fk and o.uid = $1";
+		$row = pg_fetch_row(PgDatabase::psExecute($query, array($orgUid)));
+		if (!$row) {
+			return FALSE;
+		} else {
+			return $row[0];
+		}
+	}
+	
 	public static function getOrganizationByUid($orgUid) {
 		$query = "select id, name, type, structure, logo, status_fk as status from organization where uid = $1";
 		return PgDatabase::psExecute($query, array($orgUid));
