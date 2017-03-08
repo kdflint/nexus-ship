@@ -92,7 +92,7 @@ A new event has just been submitted to the " . $_SESSION['networkName'] . " Publ
 
 You may approve this event for publication at
 
-http://nexus.northbridgetech.org/web/login?oid=" . $_SESSION['orgUid'] . "
+" . Utilities::getHttpPath() . "/login.php?oid=" . $_SESSION['orgUid'] . "
 
 Sincerely,
 

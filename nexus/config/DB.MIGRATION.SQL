@@ -10,5 +10,7 @@ ALTER TABLE organization
 
 -- remove definition of EVENT_APPROVE_LIST
 
--- shut down Guest search (Action on all forums that Guest can see) - DONE
+-- shut down Guest group search permission (Action on all forums that Guest can see) - DONE ALL
+
+-- turn off announcement permission for Network groups - DONE ALL
 

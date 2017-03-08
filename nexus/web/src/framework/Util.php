@@ -73,7 +73,7 @@ class Utilities {
 		foreach ($emailList as $address) {
 			$listString .= $address . ", ";
 		}
-		return stripTrailingComma($listString);
+		return self::stripTrailingComma($listString);
 	}
 	
 	public static function getDemoUidpk() { return DEMO_UIDPK; }		
@@ -681,15 +681,20 @@ class Utilities {
 		self::setSessionTimezone($zone);
 		$_SESSION['fname'] = $fname;
 		$_SESSION['lname'] = "";
-		
-		$cursor = User::getUserSessionByUsername($_SESSION['username']);
-		while ($row = pg_fetch_array($cursor)) {
-			$_SESSION['logo'] = $row['logo'];
-  		$_SESSION['networkName'] = $row['network'];
-  		$_SESSION['orgId'] = $row['affiliationid'];
- 			$_SESSION['publicForumId'] = $row['publicforumid'];
+
+		$org = pg_fetch_row(Organization::getOrganizationByUid($oid));
+		if (isset($org['id'])) {
+			$_SESSION['orgId'] = $org['id'];
+			$cursor = Organization::getNetworkByOrgId($org['id']);
+			while ($row = pg_fetch_array($cursor)) {
+		  	$_SESSION['networkName'] = $row['name'];
+  			$_SESSION['networkId'] = $row['networkid'];
+  			$_SESSION['orgId'] = 
+  			$_SESSION['publicForumId'] = $row['pforumid'] ? $row['pforumid'] : "0";
+  			$_SESSION['logo'] = $row['logo'];				
+			}
 		}
-		
+			
 		$enrollUuid = Organization::getPublicEnrollUuidByOrgUid($_SESSION['orgUid']);
 		if ($enrollUuid) {
 			$_SESSION['publicEnrollUuid'] = $enrollUuid;

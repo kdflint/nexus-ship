@@ -89,7 +89,7 @@ class Organization {
 	
 	public static function getNetworkAdminEmailByOrgId($orgId) {
 		$email = array();
-		$query = "select u.email from public.user u, user_organization uo where uo.role_fk = 1 and uo.user_fk = u.id and uo.organization_fk = 3$1";
+		$query = "select u.email from public.user u, user_organization uo where uo.role_fk = 1 and uo.user_fk = u.id and uo.organization_fk = $1";
 		$cursor = PgDatabase::psExecute($query, array($orgId));
 	  while ($row = pg_fetch_array($cursor)) {
 	  	array_push($email, $row['email']);
@@ -234,7 +234,7 @@ class Organization {
 	public static function getNetworkByOrgId($orgId) {
 		// TODO - will not accomodate orgs belonging to multiple networks
 		$query = "select 
-			oo.organization_from_fk as networkid, oa.account_type, o.name, o.forum_id as forumid, o.uid, o.logo
+			oo.organization_from_fk as networkid, oa.account_type, o.name, o.forum_id as forumid, o.public_forum_id as pforumid, o.uid, o.logo
 			from organization_organization oo, organization o, organization_account oa 
 			where oo.organization_to_fk = $1 
 			and oo.organization_from_fk = o.id
