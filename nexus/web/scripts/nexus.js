@@ -1216,6 +1216,7 @@ function getMaxDaysForFebruary(year) {
 }
 
 function switchToOrganizationView() {
+	document.getElementById('directory-form-submit').click();
 	document.getElementById('member_view_control').style.display = "block";
 	document.getElementById('directory_view_control').style.display = "none";
 	document.getElementById('map_control').style.display = "block";

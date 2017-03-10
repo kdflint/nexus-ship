@@ -14,9 +14,9 @@ if (Utilities::isSessionValid()) {
 	// TODO - allow for multiples on these dropdowns
 	if (isset($_GET['specialty']) && $_GET['specialty'] > 0) { $filters['specialty'] = $_GET['specialty']; }
 	if (isset($_GET['type']) && strcmp($_GET['type'], "0")) { $filters['type'] = $_GET['type']; }
-	
-	//$data = Catalogue::getEntries($_SESSION['groups'][0]['id'], $_SESSION['orgId'], $string, $filters);
+
 	$data = Catalogue::getEntries($_SESSION['groups'][0]['id'], $_SESSION['networkId'], $string, $filters);
+	
 	header('Content-Type: application/json');		
 	echo json_encode($data);
 } else {

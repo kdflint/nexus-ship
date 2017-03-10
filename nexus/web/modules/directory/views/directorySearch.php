@@ -1,16 +1,27 @@
+<?php if ($_SESSION['nexusContext'] === "ADV") { ?>
+	<span class='date detail' style="">Organizational Directory</span>
+<?php } ?>
+
 <form id="directory-form" class="pure-form" action="" method="post" id="searchForm">
 	<div style="margin-top:10px;">
-		<p>Search the directory using up to three keywords and other filters.</p>
-		<p>A keyword may be part of an organization's name, person's name, address, program language or program content.</p>
+		<?php if ($_SESSION['nexusContext'] === "PUB") { ?>
+			<span class='date detail' style="margin-top:5px;">Directory Search</span>
+		<?php } ?>
+		<p style="font-size:80%;margin-left:36px;">A keyword may be part of a name, address, or program description.</p>
 		<span class="fa fa-search" style="margin-right:18px;"></span><input type="text" name="keyword" style="width:86%;" placeholder="Keywords (up to three)"/>
 	</div>
+	<?php if ($_SESSION['networkId'] === "18") { ?>
+		<div style="margin-top:10px;">
+			<span class="searchQualifier">and</span>
+			<input type="text" name="keyword2" style="width:86%;" placeholder="Language is"/>	
+		</div>
+	<?php } ?>
 	<div style="margin-top:10px;">
 		<span class="searchQualifier">and</span>
 		<select id="directory-form-select-specialty" name="specialty" style="width:228px;">
 			<option value="0" selected>Focus Area is</option>	
 			<option value="0" >------------</option>	
-			<!-- TODO - make this list dynamic by organization -->
-	    <?php include(Utilities::getModulesRoot() . "/directory/views/18.html"); ?>
+	    <?php include(Utilities::getPartnerCustomRoot() . "/custom/orgfocus-" . $_SESSION['networkId'] . ".html"); ?>
     </select>
 	</div>
 	<div style="margin-top:10px;">
@@ -18,12 +29,7 @@
 		<select id="directory-form-select-type" name="type" style="width:228px;">
 			<option value="0" selected>Organization Type is</option>
 			<option value="0" >------------</option>
-			<option value="Academic">Academic</option>
-			<option value="Collaboration/Network">Collaboration/Network</option>
-			<option value="Community Organization">Community Organization</option>
-			<option value="Faith Community/House of Worship">Faith Community/House of Worship</option>
-			<option value="Government">Government</option>
-			<option value="Health Care Provider">Health Care Provider</option>
+			<?php include(Utilities::getPartnerCustomRoot() . "/custom/orgtype-" . $_SESSION['networkId'] . ".html"); ?>
 		</select>
 	</div>
   <a id="directory-form-submit" class="pure-button button-menu" href="javascript:void(0)" onclick="getDirectoryList('directory-form');" style="float:right;background-color:#d27b4b;width:70px;font-size:90%;margin-top:25px;color:#e6e6e6" >Search</a>

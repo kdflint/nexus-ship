@@ -299,9 +299,8 @@ class Organization {
 			and uo.user_fk = u.id
 			and oo.organization_to_fk = uo.organization_fk
 			and oo.organization_from_fk = o.id
-			and oo.relationship = 'parent' 		
-			and oa.organization_fk = o.id
-			and o.uid != '99999999'
+			and oo.relationship = 'parent'
+			and oa.organization_fk = oo.organization_to_fk
 			limit 1";
 		$cursor = PgDatabase::psExecute($query, array($username));
 		$resultArray = array();
@@ -315,7 +314,7 @@ class Organization {
 		
 		$result0 = PgDatabase::psExecute("select name, type, structure, status_fk as status from organization where id = $1", array($orgId));
 		
-		$result1 = PgDatabase::psExecute("select l.address1 || ', ' || l.address2 as line1, l.municipality || ', ' || l.region2 || '  ' || l.postal_code as line2, l.latitude as lat, l.longitude as long 
+		$result1 = PgDatabase::psExecute("select l.g_formatted_address as formatted, l.address1 || ', ' || l.address2 as line1, l.municipality || ', ' || l.region2 || '  ' || l.postal_code as line2, l.latitude as lat, l.longitude as long 
 															from location l, organization_location ol
 															where ol.organization_fk = $1
 															and ol.location_fk = l.id", array($orgId));
@@ -344,6 +343,7 @@ class Organization {
 	  
 	  $counter = 0;
 	  while ($row1 = pg_fetch_array($result1)) {
+	  	$resultArray['formatted'] = $row1['formatted'];
 	  	$resultArray['location1'] = $row1['line1'];
 	  	$resultArray['location2'] = $row1['line2'];
 	  	$resultArray['lat'] = $row1['lat'];

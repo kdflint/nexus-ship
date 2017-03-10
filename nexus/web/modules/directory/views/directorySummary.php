@@ -8,7 +8,21 @@
 				"</div>" +
      	"</div>" +
     "</div>";
-		var searchString = document.forms[thisForm].keyword.value;
+    var keywordString = document.forms[thisForm].keyword.value;
+    // yuck yuck yuck. Doing below for CFCHT
+		var searchString = "";
+		if (document.forms[thisForm].keyword2 !== undefined) {
+			searchString += document.forms[thisForm].keyword2.value;
+		}
+		if (document.forms[thisForm].keyword3 !== undefined) {
+			searchString += " " + document.forms[thisForm].keyword3.value;
+		}
+		if (searchString.length > 0) {
+			searchString += " " + keywordString;
+		} else {
+			searchString = keywordString;
+		}
+		console.log(searchString);
 		var searchSpecialty = document.forms[thisForm].specialty.value;
 		var searchType = document.forms[thisForm].type.value;
 		var xmlhttp = getXmlHttpRequest();
@@ -18,11 +32,11 @@
 				//var stringToParse = '{"name":"Nexus Training Organization","content":[{"contact":[""]},{"language":[""]},{"topic":[""]},{"location":[""]},{"orgid":"330"}]}';//,{"name":"Nexus Web Meet Demonstration","content":[{"contact":[""]},{"language":[""]},{"topic":[""]},{"location":[""]},{"orgid":"331"}]}';
 			 	var jsonObj = JSON.parse(stringToParse);
 			 	var geoData = jsonObj.geoEntry;
-			 	//console.log(stringToParse);
 	   		addMarkers(geoData);  	
 			 	// put row containers in the directory table, 1 for each event
 			 	var tableRows = "";
 			 	var n = -1;
+       	document.getElementById("directory_search_count").innerHTML = jsonObj.orgEntry.length + " Records";
 			 	if (jsonObj.orgEntry.length == 0) {
 			 		tableRows = tableRows + 
 			 		"<div id='directoryRow0' class='tr-div viewSet0' style='position:relative;'>" +
@@ -107,7 +121,11 @@
 
 </script>
 
-<span class='date detail' style="position:absolute;padding-top:14px;padding-left:14px;">Search Results</span>
+<?php if ($_SESSION['nexusContext'] === "PUB") { ?>
+	<span class='date detail' style="position:absolute;padding-top:14px;padding-left:14px;"><span id="directory_search_header1">Search</span> Results: <span id="directory_search_count"></span></span>
+<?php } else { ?>
+	<span style="position:absolute;padding-top:14px;padding-left:14px;font-size:120%;">Results: <span id="directory_search_count"></span></span>
+<?php } ?>
 	<?php if ($_SESSION['nexusContext'] === "PUB") { ?>
 	<div style="margin-top:10px;margin-right:10px;float:right">
 		<a id='map_control' href='#' onclick="initMap();">
@@ -116,7 +134,9 @@
   </div>	
 	<?php } ?>
 
-<div id="directoryTable" class="table-div" style="border:0px none !important;width:90%;padding-left:20px;padding-top:50px;"></div>
+<div id="directoryTable" class="table-div" style="border:0px none !important;width:90%;padding-left:20px;padding-top:50px;">
+Please enter your search term at left.
+</div>
 
 <div id="directoryMapContainer" class="table-div" style="opacity:0;z-index:-1;filter:alpha(opacity=0);width:100%;height:82%;border: 0px none !important;position:absolute;top:70px;"></div>
 
@@ -153,10 +173,6 @@
 	function addMarkers(geoData) {
 		if (geoData) {
   		for (var org in geoData) {
-  			//console.log(org);	
-  			//console.log(parseFloat(geoData[org]['lat']));	
-  			//console.log(parseFloat(geoData[org]['lng']));
-  			//console.log(geoData[org]['title']);
 		  	var marker = new google.maps.Marker({
 		    	position: {lat: parseFloat(geoData[org]['lat']), lng: parseFloat(geoData[org]['lng'])},
     			map: map,

@@ -41,12 +41,12 @@ if ($_SESSION['networkId'] == '358') {
 
 <div id="network-frame" style="height:420px;clear:left;">
 	<div id="organizational_directory" style="display:none;">
-		<div class="controlCol" style="left:15px;border-right: 1px solid #eeeeee;">
+		<div class="controlCol" style="left:15px;border-right: 1px solid #eeeeee;margin-top:-10px;">
 			<?php //echo "Sticky count " . $stickyCount; ?>
 			<?php //echo "Search string " . $stickyString; ?>
 			<?php include(Utilities::getModulesRoot() . "/directory/views/directorySearch.php"); ?>
 		</div>
-		<div id="show-directoryResults" class="displayCol" style="border:0px !important;width:600px;margin-left:5px;margin-top:-10px;">
+		<div id="show-directoryResults" class="displayCol" style="border:0px !important;width:600px;margin-left:5px;margin-top:-20px;">
 			<?php include(Utilities::getModulesRoot() . "/directory/views/directorySummary.php"); ?>
 		</div>
 		<div id="show-directoryDetail" class="displayCol displayDetail" style="display:none;border:0px !important;margin-left:5px;margin-top:-10px;">

@@ -124,6 +124,8 @@ class Utilities {
 	
 	public static function getPartnerFileRoot() { return PTR_ROOT . "/file"; }
 
+	public static function getPartnerCustomRoot() { return PTR_ROOT . "/custom"; }
+	
 	public static function getHttpImagePath() { return self::getHttpPath() . "/image"; }
 	
 	public static function getForumHttpPath() { return FORUM_URL; }
@@ -596,6 +598,7 @@ class Utilities {
 	
 	public static function setSessionOrgs($username) {
 		$_SESSION['orgs'] = Organization::getOrganizationsByUsername($username);		
+		// Filtering out networks
 		for ($i = 0; $i < count($_SESSION['orgs']); $i++) {
 			if ($_SESSION['networkId'] === $_SESSION['orgs'][$i]['id']) {
 				array_splice($_SESSION['orgs'],$i,1);
@@ -644,8 +647,7 @@ class Utilities {
   		$_SESSION['defaultForumId'] = $networks[0]['forumid'] ? $networks[0]['forumid'] : "0";
   		$_SESSION['logo'] = $networks[0]['logo'];	
 		}
-
-		// May end up with network in orgs list. Filtering here until we identify correct course with data
+		
 		self::setSessionOrgs($_SESSION['username']);
 	
 		$_SESSION['groups'] = Group::getUserGroupsByUsername($_SESSION['username']);
@@ -658,6 +660,9 @@ class Utilities {
 	}
 	
 	public static function setPublicSession($oid, $zone = "undefined", $fname = "Anonymous", $uuid = false) {
+
+		$logger = Log::singleton("file", Utilities::getLogRoot() ."/util_message.log", "", $conf, PEAR_LOG_DEBUG);
+
 		$_SESSION['nexusContext'] = "PUB";
 		$_SESSION['orgUid'] = $oid;
 		$_SESSION['username'] = "pUser-" . substr($oid, 0, 8);
@@ -673,7 +678,8 @@ class Utilities {
 		$_SESSION['fname'] = $fname;
 		$_SESSION['lname'] = "";
 
-		$org = pg_fetch_row(Organization::getOrganizationByUid($oid));
+		$org = pg_fetch_array(Organization::getOrganizationByUid($oid));
+	
 		if (isset($org['id'])) {
 			$_SESSION['orgId'] = $org['id'];
 			$cursor = Organization::getNetworkByOrgId($org['id']);
@@ -690,6 +696,8 @@ class Utilities {
 			$_SESSION['publicEnrollUuid'] = $enrollUuid;
 		}
 		
+		$logger->log(print_r($_SESSION, TRUE), PEAR_LOG_DEBUG);
+
 	}
 	
 	public static function setDemoSession($username, $remember, $zone = "undefined") {
