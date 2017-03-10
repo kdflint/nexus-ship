@@ -25,6 +25,7 @@ $user->session_begin();
     		}
     	?>
     	<tr><td>Groups Detail: </td><td><?php print_r($_SESSION['groups']); ?></td></tr>
+    	<tr><td>Orgs Detail: </td><td><?php print_r($_SESSION['orgs']); ?></td></tr>
   		</table>
   	</div>
   			

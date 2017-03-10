@@ -10,6 +10,16 @@ class User {
 		return PgDatabase::psExecute($query, array($uid));	
 	}
 	
+	public static function isFirstLogin($uid) {
+		$query = "select count(*) from user_session where user_fk = $1";
+		$loginCount = pg_fetch_row(PgDatabase::psExecute($query, array($uid)));
+		if ($loginCount[0] == 1) {
+			return TRUE;
+		} else {
+			return FALSE;
+		}
+	}
+	
 	public static function insertPasswordResetActivity($userId, $uuid) {
 		// invalidate prior open reset links
 		$query = "update user_password set response_dttm = now() where user_fk = $1";
@@ -145,8 +155,18 @@ class User {
 	}
 	
 	public static function addUserOrgRelation($userId, $orgId, $grantorId, $roleId) {
+		$query = "select exists (select true from user_organization where user_fk = $1 and organization_fk = $2)";
+		$row = pg_fetch_row(PgDatabase::psExecute($query, array($userId, $orgId)));
+		if (!strcmp($row[0], "f")) {
 			$query = "insert into user_organization (user_fk, organization_fk, grantor_fk, role_fk, create_dttm) values ($1, $2, $3, $4, now()) returning id";
-			return PgDatabase::psExecute($query, array($userId, $orgId, $grantorId, $roleId));		
+			PgDatabase::psExecute($query, array($userId, $orgId, $grantorId, $roleId));		
+		}
+		return;
+	}
+	
+	public static function removeUserOrgRelation($userId, $orgId) {
+		$query = "delete from user_organization where user_fk = $1 and organization_fk = $2";
+		return PgDatabase::psExecute($query, array($userId, $orgId));	
 	}
 	
 	public static function addUserGroupRelation($userId, $groupId, $roleId) {

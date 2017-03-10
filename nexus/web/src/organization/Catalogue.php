@@ -6,15 +6,18 @@ require_once(Utilities::getSrcRoot() . "/organization/Organization.php");
 
 class Catalogue {
 	
-	public static function getEntries($groupId, $orgId, $inputString, $filters) {
+	//public static function getEntries($groupId, $orgId, $inputString, $filters) {
+	public static function getEntries($groupId, $networkId, $inputString, $filters) {
 				
 		$results = array();
 		$terms = trim(Utilities::strip2($inputString));
+		/*
 		$networkId = "";
 		$row = pg_fetch_row(Organization::getNetworkByOrgId($orgId));
 		if (isset($row) && count($row) > 0) {
 			$networkId = $row[0];
 		}
+		*/
 					
 		// TODO: Escape apostrophes instead of stripping
 		// TODO: solve for 2 orgs with same name

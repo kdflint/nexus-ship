@@ -26,7 +26,12 @@ Use only clean input beyond this point (i.e. $clean[])
 
 ======================================================= */
 
-$orgid = Organization::addOrganization($result['clean']['org-name'], $_SESSION['networkId']);
+$orgid = Organization::getOrganizationByName($result['clean']['org-name']);
+if (!$orgid) {
+	$orgid = Organization::addOrganization($result['clean']['org-name'], $_SESSION['networkId']);
+}
+unset($_SESSION['tmp_orgeditname']);
+
 Organization::addOrganizationContact($orgid, $result['clean']['org-contact-name'], $result['clean']['org-contact-title'], $result['clean']['org-contact-email'], $result['clean']['org-contact-phone'], $result['clean']['org-url']);
 if ($result['clean']['g_status']) {
 	Organization::addOrganizationLocation($orgid,
@@ -62,7 +67,8 @@ if ((session_status() === PHP_SESSION_ACTIVE) && isset($_SESSION['nexusContext']
 			header("location:" . Utilities::getHttpPath() . "/nexus.php");
  			break;
  		case "ADV":
-			header("location:" . Utilities::getHttpPath() . "/nexus.php?view=orgid-" . $orgid);
+			//header("location:" . Utilities::getHttpPath() . "/nexus.php?view=orgid-" . $orgid);
+			header("location:" . Utilities::getHttpPath() . "/nexus.php");
  			break;
  		case "PUB":
  			header("location:" . Utilities::getPluginPath() . "/publicSuite.php?oid=" . $_SESSION['orgUid'] . "&context=directory");

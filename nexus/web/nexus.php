@@ -39,7 +39,12 @@ if ($_SESSION['nexusContext'] == "ADV") {
 	$user->session_begin();
 	Utilities::loginForum($user, $auth);
 }	
-	
+
+$firstLogin = "false";
+if ($_SESSION['firstLogin'] === "TRUE") {
+		$firstLogin = "true";
+}	
+
 Utilities::setSessionLastActivity();
 
 $showProfile = "false";
@@ -53,6 +58,8 @@ $showAdvIm = "false";
 $showOrgDetailId = "";
 $showAdvProfileUsername = "";
 $showAdvImUsername = "";
+$showOrganizationEditBasic = "false";
+$showOrgEditDetailId = "";
 
 // TODO - add the NWM/ADV check to these
 if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharacterSet($_GET['view'])) {
@@ -64,6 +71,8 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 		// We have ensured that $_GET['view'] will evaluate to true, that's why below is viable
 		case (strpos($_GET['view'], 'orgid-') === 0 ? true : false):
 			$showOrganizationDetail = "true"; $showOrgDetailId = substr($_GET['view'], 6);
+		case (strpos($_GET['view'], 'orgeditid-') === 0 ? true : false):
+			$showOrganizationEditBasic = "true"; $showOrgEditDetailId = substr($_GET['view'], 10);
 		case (strpos($_GET['view'], 'profileuser-') === 0 ? true : false):
 			$showAdvProfile = "true"; $showAdvProfileUsername = substr($_GET['view'], 12);		
 		case (strpos($_GET['view'], 'imuser-') === 0 ? true : false):
@@ -102,7 +111,6 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 
     <link rel="stylesheet" href="styles/datatables.css" type="text/css" />
 
-       
     <!-- New way to include font awesome - why?? -->
     <!--<script src="https://use.fontawesome.com/2eef5e944e.js"></script>-->
     <script src="scripts/nexus.js" language="javascript"></script>
@@ -117,6 +125,8 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
   	<script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js"></script>
   	<!-- http://www.pinlady.net/PluginDetect/ -->
   	<script type="text/javascript" src="scripts/lib/javaDetect/scripts/PluginDetect_Java_Simple.js"></script>
+  	<!-- https://plugins.jquery.com/cookie/ -->
+  	<script src="scripts/lib/jquery.cookie.js" language="javascript"></script>
   	<!-- http://logomakr.com -->
   	<!-- https://datatables.net -->
 		<!--<script type="text/javascript" src="//cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js" charset="utf8"></script>-->
@@ -139,7 +149,24 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
     	<?php include("scripts/techCheck.js"); ?>
     	  	
 			$(document).ready(function () {	
-				$( '#adv-menu-profile' ).click();
+				
+				if ( $.cookie('nexusadv_lastvisit') !== 'undefined' ) {
+					loadPreviousTab($.cookie('nexusadv_lastvisit'));
+				} else {
+					// default view implemented by tab style load settings
+				}
+				
+				$( "#organization-name-autocomplete" ).autocomplete({
+					source: "<?php echo(Utilities::getHttpPath()); ?>/src/framework/orgnameLookup.php",
+					minLength: 3,
+					/*
+					select: function (event, ui) {
+						alert(this.id);
+          	$(this).val(ui.item.label);
+            $("#organization-id-autocomplete").val(ui.item.value);
+          },
+          */
+        });
 				
 				var table = $('#member-directory').DataTable( {
 						"pageLength": 10,
@@ -241,6 +268,9 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 	  			$( "#profile_control_icon" ).toggleClass("fa-minus-square");
 	  			resetProfileForm();		
 				});
+				if(<?php echo $firstLogin; ?>) {
+					$( "#profile_org_edit" ).click();		
+				}
 				if(<?php echo $showProfile; ?>) {
 					$( "#profile_control" ).click();
     			$( "#adv-menu-profile" ).click();
@@ -266,7 +296,10 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 					document.getElementById("training-register2").setAttribute("target", "");
 					document.getElementById("index-module-name").innerHTML = "Web Meet Demo";
 					document.getElementById("get-nexus-link").innerHTML = "<a href='http://northbridgetech.org/apps/waterwheel/module/core/index.php?view=apply' target='_blank'>Get Nexus</a>";
-				}					
+				}	
+				if(<?php echo $showOrganizationEditBasic; ?>) {
+					showDirectoryEditBasic("<?php echo $showOrgEditDetailId; ?>");	
+				}			
 				if(<?php echo $showOrganizationDetail; ?>) {
 					$( "#adv-menu-network" ).click();
 					showDirectoryDetail("<?php echo $showOrgDetailId; ?>");	

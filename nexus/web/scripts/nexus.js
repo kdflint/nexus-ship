@@ -427,7 +427,12 @@ function toggleAdvFrameDisplay(menuItem) {
 		menuItems[i].style.backgroundColor='#dae0bc';
 	}
 	showButton.style.backgroundColor='rgba(137, 157, 112, 1)';
+	document.cookie = "nexusadv_lastvisit=" + menuItem.id;
 	loadAdvPage(menuItem.id);
+}
+
+function loadPreviousTab(id) {
+	toggleAdvFrameDisplay(document.getElementById(id));
 }
 
 function checkGoodForumSession(thisFrame) {
@@ -1081,6 +1086,30 @@ function profileValidateAndSubmit() {
  		submitButton.style.opacity = ".6";
  		profileForm.submit();
  	}
+}
+
+function organizatonNameValidateAndSubmit(thisForm) {
+
+	var organizationNameForm = document.forms[thisForm];
+	var submitButton = document.getElementById(thisForm + "-submit");
+	var pass = true;	
+	
+	var nameField = organizationNameForm['org-name'];
+	
+  var name = nameField.value;
+	setFieldPassStyles(nameField, "Organization Name");
+  if (isEmptyOrLong(name, 100)) {
+  	setFieldErrorStyles(nameField, "Organization name is required");
+    pass = false;
+  }
+
+ 	if (Boolean(pass)) {
+ 		submitButton.disabled = true;  
+ 		submitButton.innerHTML = "One Moment"; 
+ 		submitButton.style.opacity = ".6";
+ 		organizationNameForm.submit();
+ 	}	
+
 }
 
 function organizationBasicValidateAndSubmit(thisForm) {

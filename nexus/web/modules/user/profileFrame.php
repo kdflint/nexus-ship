@@ -13,7 +13,7 @@ $testEmail = $_SESSION['email'];
 ?>
 
 <div id="profile-secondary" class="secondaryControlContainer">
-	<!--<a href='#' onclick="alert('hello')" class="secondaryControl" title="Edit Profile"><span class='fa fa-pencil fa-lg' ></span></a>-->
+	<a href='#openProfileOrg' onclick="" class="secondaryControl" title="Edit Organization"><span class='fa fa-university fa-lg' ></span></a>
 </div>
 
 

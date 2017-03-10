@@ -2,7 +2,13 @@
 	<fieldset style="position:relative;width:390px;">
 		<label>Organizational Basics</label>
  		<div class="form-field">
-   		<textarea type="text" name="org-name" style="width:100%;" rows="2" maxlength="100" placeholder="Organization Name" ></textarea>
+ 			<?php 
+ 				$readonly = "";
+ 				if (isset($_SESSION['tmp_orgeditname'])) { 
+ 					$readonly = "readonly";
+ 				}
+ 			?>
+			<input type="text" name="org-name" style="width:100%;" maxlength="100" placeholder="Organization Name" <?php echo($readonly); ?> value="<?php echo($_SESSION['tmp_orgeditname']); ?>"/>
 		</div>
     <div class="form-field">
 	  	<input type="text" name="org-url" style="width:100%" maxlength="100" placeholder="Organization Web Site (http://)" >

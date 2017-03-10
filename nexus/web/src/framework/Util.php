@@ -594,6 +594,16 @@ class Utilities {
 		return true;
 	}
 	
+	public static function setSessionOrgs($username) {
+		$_SESSION['orgs'] = Organization::getOrganizationsByUsername($username);		
+		for ($i = 0; $i < count($_SESSION['orgs']); $i++) {
+			if ($_SESSION['networkId'] === $_SESSION['orgs'][$i]['id']) {
+				array_splice($_SESSION['orgs'],$i,1);
+				break;
+			}
+		}
+	}
+	
 	public static function setSession($username, $remember, $zone = "undefined", $password = "undefined") {
 
 		// TODO - loading a PUBLIC context will wipe this one out and then screw up Nexus context
@@ -621,44 +631,25 @@ class Utilities {
   		$_SESSION['lname'] = $row['lname'];
   		$_SESSION['email'] = $row['email'];
 		}
-
-		$orgUid = "";
-		$cursor = Organization::getOrganizationsByUsername($_SESSION['username']);
-		//  TODO - this query currently puts limit 1, so multiple organizations are not reported
-		// Currently global network invites put users tied to network org, so this works
-		// when we add organization selection to enrollment, this will change
-		while ($row = pg_fetch_array($cursor)) {
-  		$_SESSION['orgName'] = $row['name'];
-  		$_SESSION['orgId'] = $row['id'];
-  		$_SESSION['role'] = self::getRoleName($row['role_fk']);
-  		$orgUid = $row['uid'];
-		}
 		
+		$_SESSION['firstLogin'] = User::isFirstLogin($_SESSION['uidpk']);
 
-		// NWM accounts have their own row. ADV account sessions are pulled from the parent
-		$accountType = Organization::getOrganizationAccountTypeByOrgId($_SESSION['orgId']);
-		if ($accountType) {
-			$_SESSION['nexusContext'] = $accountType;
-			$_SESSION['orgUid'] = $orgUid;
+		$networks = Organization::getNetworksByUsername($_SESSION['username']);
+		// Limiting to one for now on query
+		if ($networks) {
+			$_SESSION['nexusContext'] = $networks[0]['account_type'];
+			$_SESSION['orgUid'] = $networks[0]['uid'];
+	  	$_SESSION['networkName'] = $networks[0]['name'];
+  		$_SESSION['networkId'] = $networks[0]['id'];
+  		$_SESSION['defaultForumId'] = $networks[0]['forumid'] ? $networks[0]['forumid'] : "0";
+  		$_SESSION['logo'] = $networks[0]['logo'];	
 		}
 
-		$cursor = Organization::getNetworkByOrgId($_SESSION['orgId']);
-		//  TODO - this query currently puts limit 1, so multiple organizations are not reported
-		while ($row = pg_fetch_array($cursor)) {
-			if (!$accountType) {
-				$_SESSION['nexusContext'] = $row['account_type'];
-				$_SESSION['orgUid'] = $row['uid'];
-			}
-	  	$_SESSION['networkName'] = $row['name'];
-  		$_SESSION['networkId'] = $row['networkid'];
-  		$_SESSION['defaultForumId'] = $row['forumid'] ? $row['forumid'] : "0";
-  		$_SESSION['logo'] = $row['logo'];				
-		}
-		
+		// May end up with network in orgs list. Filtering here until we identify correct course with data
+		self::setSessionOrgs($_SESSION['username']);
+	
 		$_SESSION['groups'] = Group::getUserGroupsByUsername($_SESSION['username']);
 
-		// LEFT OFF check these two reworked methods
-		// Also, check public setSession()
 		$returnArray = Group::getPublicSystemGroupByOrgId($_SESSION['networkId']);
 		$_SESSION['pgpk'] = $returnArray[0]['id'];
 		
@@ -689,7 +680,6 @@ class Utilities {
 			while ($row = pg_fetch_array($cursor)) {
 		  	$_SESSION['networkName'] = $row['name'];
   			$_SESSION['networkId'] = $row['networkid'];
-  			$_SESSION['orgId'] = 
   			$_SESSION['publicForumId'] = $row['pforumid'] ? $row['pforumid'] : "0";
   			$_SESSION['logo'] = $row['logo'];				
 			}

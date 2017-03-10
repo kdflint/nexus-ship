@@ -14,3 +14,5 @@ ALTER TABLE organization
 
 -- turn off announcement permission for Network groups - DONE ALL
 
+GRANT SELECT, INSERT, DELETE ON TABLE user_organization TO northbr6_web;
+

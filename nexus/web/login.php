@@ -136,11 +136,14 @@ Utilities::setUserLanguageEnv();
     <script src="scripts/js_lang.php" type="text/javascript"></script>
   	<!-- http://www.featureblend.com/javascript-flash-detection-library.html -->
  		<script src="scripts/lib/flash_detect.js"></script>
- 		<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+ 		<script src="//code.jquery.com/jquery-1.12.4.js"></script>
   	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
   	<script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js"></script>
   	<!-- http://www.pinlady.net/PluginDetect/ -->
   	<script type="text/javascript" src="scripts/lib/javaDetect/scripts/PluginDetect_Java_Simple.js"></script>
+  	<!-- https://plugins.jquery.com/cookie/ -->
+  	<script src="scripts/lib/jquery.cookie.js" language="javascript"></script>
+
     <link rel="icon" href="images/NB_icon.png" />
     <title>Northbridge Nexus | Login</title> 
     
