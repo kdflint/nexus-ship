@@ -15,7 +15,7 @@ define("DEST_LOGFILE", "3");
 $userid = isset($_SESSION['uidpk']) ? $_SESSION['uidpk'] : "undefined";
 $email = isset($_SESSION['email']) ? $_SESSION['email'] : "undefined";
 $context = isset($_SESSION['nexusContext']) ? $_SESSION['nexusContext'] : "undefined";
-$orgid = isset($_SESSION['orgUid']) ? $_SESSION['orgId'] : "undefined";
+$orgid = isset($_SESSION['networkId']) ? $_SESSION['networkId'] : "undefined";
 $first = isset($_SESSION['fname']) ? $_SESSION['fname'] : "undefined";
 $last = isset($_SESSION['lname']) ? $_SESSION['lname'] : "undefined";
 

@@ -598,9 +598,12 @@ class Utilities {
 	
 	public static function setSessionOrgs($username) {
 		$_SESSION['orgs'] = Organization::getOrganizationsByUsername($username);		
-		// Filtering out networks
+		// Filtering out networks and at the same time snagging the network role, if existent
 		for ($i = 0; $i < count($_SESSION['orgs']); $i++) {
 			if ($_SESSION['networkId'] === $_SESSION['orgs'][$i]['id']) {
+				if (isset($_SESSION['orgs'][$i]['role'])) {
+					$_SESSION['role'] = self::getRoleName($_SESSION['orgs'][$i]['role']);
+				}
 				array_splice($_SESSION['orgs'],$i,1);
 				break;
 			}
@@ -624,7 +627,7 @@ class Utilities {
 		$_SESSION['remember'] = ($remember ? "true" : "false");
 		self::setSessionTimezone($zone);
 		$_SESSION['language'] = self::getUserLangagePreference();
-		$_SESSION['defaultSearchId'] = self::newUuid();
+		//$_SESSION['defaultSearchId'] = self::newUuid();
  		$_SESSION['password'] = $password;
 		
 		$cursor = User::getActiveUserByUsername($_SESSION['username']);

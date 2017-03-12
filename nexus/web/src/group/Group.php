@@ -64,6 +64,7 @@ class Group {
 		$counter = 0;		
 		while ($row = pg_fetch_array($cursor)) {
 			$users[$counter]['id'] = "0";
+			$users[$counter]['username'] = "";
 			$users[$counter]['fname'] = "Pending";
 			$users[$counter]['lname'] = "Enrollment";
 			$users[$counter]['title'] = "";
@@ -76,13 +77,13 @@ class Group {
 			$counter++;
 		}
 
-		$query = "select u.id as id, u.username, u.fname, u.lname, u.email, ug.role_fk as roleid, o.name as oname
-			from public.user u, user_group ug, organization o, user_organization uo
+		$query = "select distinct u.id as id, u.username, u.fname, u.lname, u.email, ug.role_fk as roleid
+			from public.user u, user_group ug
 			where u.id = ug.user_fk
 			and u.suspend_dttm is NULL
-			and uo.user_fk = u.id
-			and o.id = uo.organization_fk
 			and ug.group_fk = $1
+			and u.username not like 'pUser-%'
+			and u.username not like 'nUser-%'
 			order by u.fname, u.lname
 			";			
 			$cursor = PgDatabase::psExecute($query, array($id));
@@ -105,7 +106,8 @@ class Group {
 	}	
 
 	public static function getNetworkMembersbyNetworkId($id, $ssnUser) {
-		$query = "select u.id as id, u.username, u.fname, u.lname, u.email, uo.role_fk as roleid
+		$users = array();
+		$query = "select distinct u.id as id, u.username, u.fname, u.lname, u.email
 			from public.user u, user_organization uo
 			where u.id = uo.user_fk
 			and u.suspend_dttm is NULL
@@ -115,6 +117,7 @@ class Group {
 				(select distinct organization_to_fk from organization_organization where organization_from_fk = $1 and relationship = 'parent')
 			order by u.fname, u.lname";
 		$cursor = PgDatabase::psExecute($query, array($id));
+		$counter = 0;	
 		while ($row = pg_fetch_array($cursor)) {
 			$users[$counter]['id'] = $row['id'];
 			$users[$counter]['username'] = $row['username'];
@@ -125,7 +128,7 @@ class Group {
 			$users[$counter]['email'] = $row['email'];
 			$users[$counter]['sessionUser'] = $ssnUser;
 			$users[$counter]['uidpk'] = $row['id'];
-			$users[$counter]['role'] = Utilities::getRoleName($row['roleid']);
+			$users[$counter]['role'] = "";
 			$users[$counter]['status'] = "active";
 			$counter++;
 		}
@@ -133,7 +136,6 @@ class Group {
 		return $users;
 	}
 
-	
 	public static function getUserGroupsByUsername($username) {
 		$query = "select g.id as id, g.name as name, g.forum_group_id as forumid from public.group g, public.user u, user_group ug where u.username = $1 and ug.user_fk = u.id and ug.group_fk = g.id";
 		$cursor = PgDatabase::psExecute($query, array($username));

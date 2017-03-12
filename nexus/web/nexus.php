@@ -129,9 +129,9 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
   	<script src="scripts/lib/jquery.cookie.js" language="javascript"></script>
   	<!-- http://logomakr.com -->
   	<!-- https://datatables.net -->
-		<!--<script type="text/javascript" src="//cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js" charset="utf8"></script>-->
+		<script type="text/javascript" src="//cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js" charset="utf8"></script>
 		<!--<script type="text/javascript" src="//cdn.datatables.net/v/dt/dt-1.10.13/b-1.2.4/datatables.min.js"></script>-->
-		<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.13/b-1.2.4/se-1.2.0/datatables.min.js"></script>
+		<!--<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.13/b-1.2.4/se-1.2.0/datatables.min.js"></script>-->
 
   	 	 	
     <title>Northbridge Nexus</title> 
@@ -144,6 +144,7 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 			HTTP_FORUM_PATH = "<?php echo Utilities::getForumHttpPath(); ?>";
 			FORUM_SESSION_REFRESH_COUNTER = 0;
 			INBOX_FOCUS = DEFAULT_INBOX_FOCUS;
+			RECIPIENT_LIST = [];
 			
 			<!-- include in this manner instead of in a meta link so that php code inside this file will resolve prior to runtime -->
     	<?php include("scripts/techCheck.js"); ?>
@@ -159,43 +160,11 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 				$( "#organization-name-autocomplete" ).autocomplete({
 					source: "<?php echo(Utilities::getHttpPath()); ?>/src/framework/orgnameLookup.php",
 					minLength: 3,
-					/*
-					select: function (event, ui) {
-						alert(this.id);
-          	$(this).val(ui.item.label);
-            $("#organization-id-autocomplete").val(ui.item.value);
-          },
-          */
         });
-				
-				var table = $('#member-directory').DataTable( {
-						"pageLength": 10,
-						"lengthChange": false,
-						"order": [[2, 'asc']],
-						"columns": [
-    					{ "orderable": false },
-    					{ "orderable": false },
-    					null,
-    					null,
-							null
-						]/*,
-						dom: 'Bfrtip',
-				    buttons: [
-    		    	'selectAll',
-        			'selectNone'
-    				],
-    				language: {
-        			buttons: {
-            		selectAll: "Select all",
-            		selectNone: "Unselect all"
-        			}
-    				}
-    				*/
-				} );
+										
+				var memberTable;
 
-				var recipientlist = [];  
-
-				$('#member-directory tbody').on( 'click', 'tr', function (event) {
+				$('#group-list-table-rows').on( 'click', 'tr', function (event) {
     			if (event.target.type !== 'checkbox') {
     				$(':checkbox', this).trigger('click');
     			} else if ($(':checkbox', this).prop('checked')==true) {
@@ -204,35 +173,25 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 							var dto = new Object();	
 							dto.username = keyval[0];
 							dto.fullname = keyval[1];	
-							recipientlist.push(dto);	
+							RECIPIENT_LIST.push(dto);	
+							//console.log(keyval[0]); 
 	  				}    	
 			    } else {
 						var keyval = $(':checkbox', this).val().split("::");
 						if (keyval.length == 2) {
-				    	recipientlist.splice( recipientlist.indexOf(keyval[0]), 1 );
+				    	RECIPIENT_LIST.splice( RECIPIENT_LIST.indexOf(keyval[0]), 1 );
 			    	}
-		    	} 
-    			//$(this).toggleClass('selected');
-    			//console.log(JSON.stringify(recipientlist));
+		    	}
 				} );
 				
-			
 				$('#compose_pm').click( function() {
-        	//$('#member-directory').find('input[type="checkbox"]:checked').each(function () {
-					//	console.log("==>" + $(this).val());
-					//	var keyval = $(this).val().split("::");
-					//		if (keyval.length == 2) {
-					//			var dto = new Object();	
-					//			dto.username = keyval[0];
-					//			dto.fullname = keyval[1];	
-					//			recipientlist.push(dto);	
-	  			//		}
-        	//} );	  					
-        	console.log(JSON.stringify(recipientlist));
-        	document.getElementById("recipient-dto").innerHTML = JSON.stringify(recipientlist);
-        	//goToInboxCompose();
+         	document.getElementById("recipient-dto").innerHTML = JSON.stringify(RECIPIENT_LIST);
         	document.getElementById("inbox-mode").innerHTML = "compose";
 					$( "#adv-menu-inbox" ).click();	
+    		} );				
+						
+				$('#add_to_group').click( function() {
+					document.getElementById("selected-user-count").innerHTML = RECIPIENT_LIST.length;
     		} );
 				
 				$( '#schedule_control' ).click(function() {
@@ -337,6 +296,22 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
       		effect: "fade"
     		});    
   		});
+
+			// We call this initialization when ajax delivery of initial table contents is complete
+			function initMemberTable(tableId) {
+				memberTable = $('#member-directory').DataTable( {
+					"retrieve": true,
+					"pageLength": 10,
+					"lengthChange": false,
+					"order": [[2, 'asc']],
+					"columns": [
+	   				{ "orderable": false },
+   					{ "orderable": false },
+   					null,
+   					null
+					]
+				} );
+			}
 	  		  	
 		</script>
     

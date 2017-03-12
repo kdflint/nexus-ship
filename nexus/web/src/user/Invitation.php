@@ -16,7 +16,7 @@ class Invitation {
 	// TODO - double check this - where used?
 	public static function addGlobalInvitation($groupId, $roleId, $issuerId, $orgId) {
 		$uuid = Utilities::newUuid();
-		$query = "insert into invitation (uuid, email, create_dttm, accept_dttm, network_fk, invitation_dttm, role_fk, expire_dt, issuer_fk, type, organization_fk, group_fk) values ($3, $1, now(), $4, NULL, now(), $4, NULL, $5, 'global', $6, $2) returning uuid";
+		$query = "insert into invitation (uuid, email, create_dttm, accept_dttm, network_fk, invitation_dttm, role_fk, expire_dt, issuer_fk, type, organization_fk, group_fk) values ($3, $1, now(), NULL, $6, now(), $4, NULL, $5, 'global', $6, $2) returning uuid";
 		$cursor = PgDatabase::psExecute($query, array("", $groupId, $uuid, $roleId, $issuerId, $orgId));		
 		$row = pg_fetch_row($cursor);
 		return $row[0];
@@ -59,18 +59,6 @@ class Invitation {
 		return PgDatabase::psExecute($query, array($uuid));
 	}
 	
-	/*
-	
-	Business rules (tmp doc until this can be codified)
-	Global network, meant for public facing link
-		network_fk = n
-		type = 'global'
-		role_fk = 5
-		expire_dt = NULL
-	
-	
-	*/
-
 }
 
 ?>

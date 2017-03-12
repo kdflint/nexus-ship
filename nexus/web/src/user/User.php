@@ -174,6 +174,27 @@ class User {
 			return PgDatabase::psExecute($query, array($userId, $groupId, $roleId));	
 	}
 	
+	public static function removeUserGroupRelation($userId, $groupId) {
+			$query = "delete from user_group where user_fk = $1 and group_fk = $2";
+			return PgDatabase::psExecute($query, array($userId, $groupId));	
+	}
+	
+	public static function addUserGroupRelationbyUsername($username, $groupId, $roleId) {
+			$query = "select id from public.user where username = $1";
+			$row = pg_fetch_row(PgDatabase::psExecute($query, array($username)));
+			if ($row and $row[0] != NULL) {
+				self::addUserGroupRelation($row[0], $groupId, $roleId);
+			}
+	}
+	
+	public static function removeUserGroupRelationbyUsername($username, $groupId) {
+			$query = "select id from public.user where username = $1";
+			$row = pg_fetch_row(PgDatabase::psExecute($query, array($username)));
+			if ($row and $row[0] != NULL) {
+				self::removeUserGroupRelation($row[0], $groupId);
+			}
+	}
+	
 	public static function getUserOrgRelationsByUserId($userId) {
 			$query = "select o.name, o.id from user_organization uo, organization o where uo.user_fk = $1 and uo.organization_fk = o.id";
 			return PgDatabase::psExecute($query, array($userId));

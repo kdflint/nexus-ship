@@ -14,21 +14,31 @@ ALTER TABLE organization
 
 -- turn off announcement permission for Network groups - DONE ALL
 
-GRANT SELECT, INSERT, DELETE ON TABLE user_organization TO northbr6_web;
+GRANT SELECT, INSERT, DELETE ON TABLE user_organization TO northbri_web;
+GRANT SELECT, INSERT, DELETE ON TABLE user_group TO northbri_web;
+
 
 make new directory partner/custom
 
 copy over orgtype-18.html
 move 18.html to partner/custom/orgfocus-18.html 
 
--- possibly change the below relationship == 'god'
-
+-- change the below relationship == 'god'
+-- (local, this was organization_organization ids 2,355,357,362,365,367)
+-- (dev: 1,18,339)
 
 select id, organization_from_fk, organization_to_fk, relationship from organization_organization 
 where organization_to_fk in (select organization_fk from organization_account where account_type = 'ADV')
 and organization_from_fk = 13
 and organization_to_fk != 13
 
-(local, this was organization_organization ids 2,355,357,362,365,367)
+update organization_organization set relationship = 'god' where id = 2;
+update organization_organization set relationship = 'god' where id = 325;
+update organization_organization set relationship = 'god' where id = 327;
+
+--add network admins to all groups, like this:
+
+select * from user_organization where organization_fk = 379
+insert into user_group (user_fk, group_fk, role_fk) values (300,28,1)
 
 

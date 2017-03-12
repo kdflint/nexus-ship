@@ -18,7 +18,7 @@
 			<?php include("modules/directory/views/organizationAdd.php"); ?>
 		</div>
 	</div>
-	
+
 	<div id="openProfileOrg" class="modalDialog">
 		<div>
 			<a href="#close" title="Skip" class="close">X</a>
@@ -26,6 +26,21 @@
 			<?php include("modules/directory/views/organizationLookup.php"); ?>
 		</div>
 	</div>
+	
+	<div id="openGroupUserAdd" class="modalDialog">
+		<div>
+			<a href="#close" title="Skip" class="close">X</a>
+			<?php include("modules/directory/views/groupUserAdd.php") ?>
+		</div>
+	</div>
+
+	<div id="openGroupUserDelete" class="modalDialog">
+		<div>
+			<a href="#close" title="Skip" class="close">X</a>
+			<?php include("modules/directory/views/groupUserRemove.php") ?>
+		</div>
+	</div>
+
 	
 	<div id="openProfile" class="modalDialog">
 		<div style="background:#ffffff;">

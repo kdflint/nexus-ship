@@ -14,7 +14,7 @@ var HTTP_FORUM_PATH;
 var FORUM_SESSION_REFRESH_COUNTER = 0;
 var DEFAULT_INBOX_FOCUS = "/ucp.php?i=pm&folder=inbox";
 var INBOX_FOCUS = "";
-//var RECIPIENT_LIST = [];
+var RECIPIENT_LIST = [];
 
 
 /*
@@ -193,29 +193,28 @@ function post(uiContext, to, p) {
 
 }
 
-function fillRecipients() {
-	var recipientlist = [];
-	var names = document.forms['member-directory-form'].elements['names[]'];
-	for (var i=0; i<names.length; i++) {
-		console;log("hi");
-		if (names[i].checked) {
-			var keyval = names[i].value.split("::");
-			if (keyval.length == 2) {
-				var dto = new Object();	
-				dto.username = keyval[0];
-				dto.fullname = keyval[1];	
-				recipientlist.push(dto);	
-	  	}
-	  }
+function addUserToGroup(groupid) {
+	for(var i = 0; i < RECIPIENT_LIST.length; i++) {
+		var xmlhttp = getXmlHttpRequest();
+		xmlhttp.onreadystatechange=function() {
+			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {	}
+  	};
+		xmlhttp.open("GET","src/framework/groupAddManager.php?username=" + RECIPIENT_LIST[i].username + "&groupid=" + groupid);
+		xmlhttp.send();  					
 	}
-	document.getElementById("recipient-dto").innerHTML = JSON.stringify(recipientlist);
-	console.log(JSON.stringify(recipientlist));
+	getGroupList(groupid, "");
 }
 
-function goToInboxCompose() {
-	//fillRecipients();
-	document.getElementById("inbox-mode").innerHTML = "compose";
-	$( "#adv-menu-inbox" ).click();	
+function deleteUserFromGroup(groupid) {
+	for(var i = 0; i < RECIPIENT_LIST.length; i++) {
+		var xmlhttp = getXmlHttpRequest();
+		xmlhttp.onreadystatechange=function() {
+			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {	}
+  	};
+		xmlhttp.open("GET","src/framework/groupDeleteManager.php?username=" + RECIPIENT_LIST[i].username + "&groupid=" + groupid);
+		xmlhttp.send();  					
+	}
+	getGroupList(groupid, "");
 }
 
 function checkAll(formname) {
@@ -1223,11 +1222,18 @@ function switchToOrganizationView() {
 	document.getElementById('compose_pm').style.display = "none";
 	document.getElementById("organizational_directory").style.display = "block";
 	document.getElementById("member_directory").style.display = "none";
+	document.getElementById('secondary-network-filter').style.display = "none";
+	document.getElementById('add_to_group').style.display = "none";
+	document.getElementById('remove_from_group').style.display = "none";
 	var addNewOrg = document.getElementById('add_new_org');
 	var addNewMember = document.getElementById('add_new_member');
 	if (addNewOrg && addNewMember) {
 		addNewOrg.style.display = "block";
 		addNewMember.style.display = "none";
+	}
+	var secondaryOrgEditIcon = document.getElementById("secondary-network-edit");
+	if (secondaryOrgEditIcon) {
+		secondaryOrgEditIcon.style.display = "none";
 	}
 }
 	
@@ -1238,11 +1244,18 @@ function switchToMemberView() {
 	document.getElementById('compose_pm').style.display = "block";
 	document.getElementById("organizational_directory").style.display = "none";
 	document.getElementById("member_directory").style.display = "block";
+	document.getElementById('secondary-network-filter').style.display = "block";
+	document.getElementById('add_to_group').style.display = "block";
+	document.getElementById('remove_from_group').style.display = "block";
 	var addNewOrg = document.getElementById('add_new_org');
 	var addNewMember = document.getElementById('add_new_member');
 	if (addNewOrg && addNewMember) {
 		addNewOrg.style.display = "none";
 		addNewMember.style.display = "block";
+	}
+	var secondaryOrgEditIcon = document.getElementById("secondary-network-edit");
+	if (secondaryOrgEditIcon) {
+		secondaryOrgEditIcon.style.display = "none";
 	}
 }
 
