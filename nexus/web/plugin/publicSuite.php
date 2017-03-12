@@ -113,6 +113,9 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 					list[i].className = 'pure-menu-item';
 				}
 				list[selectNdx].className = 'pure-menu-item pure-menu-selected'; 
+				if (displayId === 'mod_directory') {
+					document.getElementById('directory-form-submit').click();
+				}
 			}			
 		
 			function showEventDetail(eventUuid) {

@@ -73,7 +73,7 @@ class Utilities {
 		foreach ($emailList as $address) {
 			$listString .= $address . ", ";
 		}
-		return stripTrailingComma($listString);
+		return self::stripTrailingComma($listString);
 	}
 	
 	public static function getDemoUidpk() { return DEMO_UIDPK; }		
@@ -124,6 +124,8 @@ class Utilities {
 	
 	public static function getPartnerFileRoot() { return PTR_ROOT . "/file"; }
 
+	public static function getPartnerCustomRoot() { return PTR_ROOT . "/custom"; }
+	
 	public static function getHttpImagePath() { return self::getHttpPath() . "/image"; }
 	
 	public static function getForumHttpPath() { return FORUM_URL; }
@@ -594,6 +596,20 @@ class Utilities {
 		return true;
 	}
 	
+	public static function setSessionOrgs($username) {
+		$_SESSION['orgs'] = Organization::getOrganizationsByUsername($username);		
+		// Filtering out networks and at the same time snagging the network role, if existent
+		for ($i = 0; $i < count($_SESSION['orgs']); $i++) {
+			if ($_SESSION['networkId'] === $_SESSION['orgs'][$i]['id']) {
+				if (isset($_SESSION['orgs'][$i]['role'])) {
+					$_SESSION['role'] = self::getRoleName($_SESSION['orgs'][$i]['role']);
+				}
+				array_splice($_SESSION['orgs'],$i,1);
+				break;
+			}
+		}
+	}
+	
 	public static function setSession($username, $remember, $zone = "undefined", $password = "undefined") {
 
 		// TODO - loading a PUBLIC context will wipe this one out and then screw up Nexus context
@@ -611,7 +627,7 @@ class Utilities {
 		$_SESSION['remember'] = ($remember ? "true" : "false");
 		self::setSessionTimezone($zone);
 		$_SESSION['language'] = self::getUserLangagePreference();
-		$_SESSION['defaultSearchId'] = self::newUuid();
+		//$_SESSION['defaultSearchId'] = self::newUuid();
  		$_SESSION['password'] = $password;
 		
 		$cursor = User::getActiveUserByUsername($_SESSION['username']);
@@ -621,44 +637,24 @@ class Utilities {
   		$_SESSION['lname'] = $row['lname'];
   		$_SESSION['email'] = $row['email'];
 		}
+		
+		$_SESSION['firstLogin'] = User::isFirstLogin($_SESSION['uidpk']);
 
-		$orgUid = "";
-		$cursor = Organization::getOrganizationsByUsername($_SESSION['username']);
-		//  TODO - this query currently puts limit 1, so multiple organizations are not reported
-		// Currently global network invites put users tied to network org, so this works
-		// when we add organization selection to enrollment, this will change
-		while ($row = pg_fetch_array($cursor)) {
-  		$_SESSION['orgName'] = $row['name'];
-  		$_SESSION['orgId'] = $row['id'];
-  		$_SESSION['role'] = self::getRoleName($row['role_fk']);
-  		$orgUid = $row['uid'];
+		$networks = Organization::getNetworksByUsername($_SESSION['username']);
+		// Limiting to one for now on query
+		if ($networks) {
+			$_SESSION['nexusContext'] = $networks[0]['account_type'];
+			$_SESSION['orgUid'] = $networks[0]['uid'];
+	  	$_SESSION['networkName'] = $networks[0]['name'];
+  		$_SESSION['networkId'] = $networks[0]['id'];
+  		$_SESSION['defaultForumId'] = $networks[0]['forumid'] ? $networks[0]['forumid'] : "0";
+  		$_SESSION['logo'] = $networks[0]['logo'];	
 		}
 		
-
-		// NWM accounts have their own row. ADV account sessions are pulled from the parent
-		$accountType = Organization::getOrganizationAccountTypeByOrgId($_SESSION['orgId']);
-		if ($accountType) {
-			$_SESSION['nexusContext'] = $accountType;
-			$_SESSION['orgUid'] = $orgUid;
-		}
-
-		$cursor = Organization::getNetworkByOrgId($_SESSION['orgId']);
-		//  TODO - this query currently puts limit 1, so multiple organizations are not reported
-		while ($row = pg_fetch_array($cursor)) {
-			if (!$accountType) {
-				$_SESSION['nexusContext'] = $row['account_type'];
-				$_SESSION['orgUid'] = $row['uid'];
-			}
-	  	$_SESSION['networkName'] = $row['name'];
-  		$_SESSION['networkId'] = $row['networkid'];
-  		$_SESSION['defaultForumId'] = $row['forumid'] ? $row['forumid'] : "0";
-  		$_SESSION['logo'] = $row['logo'];				
-		}
-		
+		self::setSessionOrgs($_SESSION['username']);
+	
 		$_SESSION['groups'] = Group::getUserGroupsByUsername($_SESSION['username']);
 
-		// LEFT OFF check these two reworked methods
-		// Also, check public setSession()
 		$returnArray = Group::getPublicSystemGroupByOrgId($_SESSION['networkId']);
 		$_SESSION['pgpk'] = $returnArray[0]['id'];
 		
@@ -667,6 +663,9 @@ class Utilities {
 	}
 	
 	public static function setPublicSession($oid, $zone = "undefined", $fname = "Anonymous", $uuid = false) {
+
+		$logger = Log::singleton("file", Utilities::getLogRoot() ."/util_message.log", "", $conf, PEAR_LOG_DEBUG);
+
 		$_SESSION['nexusContext'] = "PUB";
 		$_SESSION['orgUid'] = $oid;
 		$_SESSION['username'] = "pUser-" . substr($oid, 0, 8);
@@ -681,20 +680,27 @@ class Utilities {
 		self::setSessionTimezone($zone);
 		$_SESSION['fname'] = $fname;
 		$_SESSION['lname'] = "";
-		
-		$cursor = User::getUserSessionByUsername($_SESSION['username']);
-		while ($row = pg_fetch_array($cursor)) {
-			$_SESSION['logo'] = $row['logo'];
-  		$_SESSION['networkName'] = $row['network'];
-  		$_SESSION['orgId'] = $row['affiliationid'];
- 			$_SESSION['publicForumId'] = $row['publicforumid'];
+
+		$org = pg_fetch_array(Organization::getOrganizationByUid($oid));
+	
+		if (isset($org['id'])) {
+			$_SESSION['orgId'] = $org['id'];
+			$cursor = Organization::getNetworkByOrgId($org['id']);
+			while ($row = pg_fetch_array($cursor)) {
+		  	$_SESSION['networkName'] = $row['name'];
+  			$_SESSION['networkId'] = $row['networkid'];
+  			$_SESSION['publicForumId'] = $row['pforumid'] ? $row['pforumid'] : "0";
+  			$_SESSION['logo'] = $row['logo'];				
+			}
 		}
-		
+			
 		$enrollUuid = Organization::getPublicEnrollUuidByOrgUid($_SESSION['orgUid']);
 		if ($enrollUuid) {
 			$_SESSION['publicEnrollUuid'] = $enrollUuid;
 		}
 		
+		$logger->log(print_r($_SESSION, TRUE), PEAR_LOG_DEBUG);
+
 	}
 	
 	public static function setDemoSession($username, $remember, $zone = "undefined") {

@@ -18,26 +18,35 @@
 			<?php include("modules/directory/views/organizationAdd.php"); ?>
 		</div>
 	</div>
-	
-	<!-- Pretty sure below are deprecated altogether -->
-	<div id="openProfile" class="modalDialog">
-		<div style="background:#ffffff;">
-			<a href="#close" title="Close" class="close">X</a>
-			<div id="securityProfile" style="display:none;">
-				<?php 
-					if ($showAdvProfileUsername === $_SESSION['username']) {
-						//include("modules/user/views/securityProfileAdv.html");
-					} 
-				?>	
-			</div>
-			<iframe id="adv-profile-frame" src="loading_placeholder.html" style="height:260px;width:100%;border:0;margin:0;padding:0;overflow:hidden;" scrolling="no"></iframe>
+
+	<div id="openProfileOrg" class="modalDialog">
+		<div>
+			<a href="#close" title="Skip" class="close">X</a>
+			<?php include("modules/directory/views/organizationProfileList.php") ?>
+			<?php include("modules/directory/views/organizationLookup.php"); ?>
 		</div>
 	</div>
 	
-	<div id="openSecurityProfile" class="modalDialog">
+	<div id="openGroupUserAdd" class="modalDialog">
 		<div>
+			<a href="#close" title="Skip" class="close">X</a>
+			<?php include("modules/directory/views/groupUserAdd.php") ?>
+		</div>
+	</div>
+
+	<div id="openGroupUserDelete" class="modalDialog">
+		<div>
+			<a href="#close" title="Skip" class="close">X</a>
+			<?php include("modules/directory/views/groupUserRemove.php") ?>
+		</div>
+	</div>
+
+	
+	<div id="openProfile" class="modalDialog">
+		<div style="background:#ffffff;">
 			<a href="#close" title="Close" class="close">X</a>
-			<?php //include("modules/user/views/profile.html"); ?>	
-		</div>	
-	</div>	
+			<iframe id="adv-profile-frame" src="loading_placeholder.html" style="height:260px;width:100%;border:0;margin:0;padding:0;overflow:hidden;" scrolling="no"></iframe>
+		</div>
+	</div>
+
 	

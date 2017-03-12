@@ -6,15 +6,10 @@ require_once(Utilities::getSrcRoot() . "/organization/Organization.php");
 
 class Catalogue {
 	
-	public static function getEntries($groupId, $orgId, $inputString, $filters) {
+	public static function getEntries($groupId, $networkId, $inputString, $filters) {
 				
 		$results = array();
 		$terms = trim(Utilities::strip2($inputString));
-		$networkId = "";
-		$row = pg_fetch_row(Organization::getNetworkByOrgId($orgId));
-		if (isset($row) && count($row) > 0) {
-			$networkId = $row[0];
-		}
 					
 		// TODO: Escape apostrophes instead of stripping
 		// TODO: solve for 2 orgs with same name
@@ -287,8 +282,6 @@ class Catalogue {
 					}
 				}	
 			}
-			
-
 	
 			if (isset($filters['type']) && strcmp($filters['type'], "0")) {
 				foreach ($results as $key=>$val) {
@@ -301,7 +294,27 @@ class Catalogue {
 			}
 						
 		} else {
-			// We get here if we had no free search terms or filter. 
+			// If we get here, we had not search terms or filters
+			
+			$cursor = Organization::getOrganizationsByNetworkId($networkId);
+			
+			while ($pass = pg_fetch_array($cursor)) { 
+				if (!strcmp($pass['type'], "Organization")) {
+					if (array_key_exists($pass['name'], $results)) {
+						// do nothing - we already have an index for this org in the data set
+					} else {
+						$results[$pass['name']] = array(
+							//"Programs" => array(),
+							//"People" =>  array(),
+							"Contact" => array(),
+							"Language" => array(),
+							"Topic" => array(),
+							"Location" => array(),
+							"OrgId" => $pass['id']
+						);
+					}
+				}
+			}
 		}
 				
 		// We do this to be JSON-friendly

@@ -77,6 +77,15 @@ class Organization {
 		return PgDatabase::psExecute($query, array($orgId));
 	}
 	
+	public static function getOrganizationByName($name) {
+		$query = "select id, type, structure, logo, status_fk as status, uid from organization where upper(name) = $1 limit 1";
+		$row = pg_fetch_array(PgDatabase::psExecute($query, array(strtoupper($name))));
+		if ($row['id'] === "NULL") {
+			return FALSE;
+		} else {
+			return $row['id'];
+		}	}	
+	
 	public static function getNetworkForumByOrgId($orgId) {
 		$query = "select network_forum_id from organization where id = $1";
 		$row = pg_fetch_row(PgDatabase::psExecute($query, array($orgId)));
@@ -89,7 +98,7 @@ class Organization {
 	
 	public static function getNetworkAdminEmailByOrgId($orgId) {
 		$email = array();
-		$query = "select u.email from public.user u, user_organization uo where uo.role_fk = 1 and uo.user_fk = u.id and uo.organization_fk = 3$1";
+		$query = "select u.email from public.user u, user_organization uo where uo.role_fk = 1 and uo.user_fk = u.id and uo.organization_fk = $1";
 		$cursor = PgDatabase::psExecute($query, array($orgId));
 	  while ($row = pg_fetch_array($cursor)) {
 	  	array_push($email, $row['email']);
@@ -209,6 +218,16 @@ class Organization {
 			return array();
 		}
 	}
+
+	public static function organizationNameExists($name) {
+		$query = "select exists (select true from organization where upper(name)=$1)";
+		$row = pg_fetch_row(PgDatabase::psExecute($query, array(strtoupper($name))));
+		if ($row[0] === 't') {
+			return TRUE;
+		} else {
+			return FALSE;
+		}
+	}
 	
 	public static function organizationTopicExists($orgId, $topics) {
 		$query = "select exists (select true from organization_topic where organization_fk=$1 and topic_fk in ($2))";
@@ -234,7 +253,7 @@ class Organization {
 	public static function getNetworkByOrgId($orgId) {
 		// TODO - will not accomodate orgs belonging to multiple networks
 		$query = "select 
-			oo.organization_from_fk as networkid, oa.account_type, o.name, o.forum_id as forumid, o.uid, o.logo
+			oo.organization_from_fk as networkid, oa.account_type, o.name, o.forum_id as forumid, o.public_forum_id as pforumid, o.uid, o.logo
 			from organization_organization oo, organization o, organization_account oa 
 			where oo.organization_to_fk = $1 
 			and oo.organization_from_fk = o.id
@@ -247,13 +266,17 @@ class Organization {
 	}
 
 	public static function getOrganizationsByUsername($username) {
-		// TODO - remove limit 1
 		$query = "select o.id, o.name, o.uid, uo.role_fk from organization o, user_organization uo, public.user u
 			where u.username = $1
 			and u.id = uo.user_fk
-			and uo.organization_fk = o.id
-			limit 1";
-			return PgDatabase::psExecute($query, array($username));
+			and uo.organization_fk = o.id";
+		$cursor = PgDatabase::psExecute($query, array($username));
+			
+		$resultArray = array();
+	  while ($row = pg_fetch_array($cursor)) {
+	  	array_push($resultArray, array("id" => $row['id'], "name" => $row['name'], "uid" => $row['uid'], "role" => $row['role_fk']));
+	  }		
+	  return $resultArray;
 	}
 	
 	public static function getOrganizationAccountTypeByOrgId($id) {
@@ -269,14 +292,29 @@ class Organization {
 	}
 	
 	public static function getNetworksByUsername($username) {
-		//LEFT OFF HERE
+		$query = "select distinct
+			oo.organization_from_fk as networkid, oa.account_type, o.name, o.forum_id as forumid, o.public_forum_id as pforumid, o.uid, o.logo
+			from public.user u, user_organization uo, organization_organization oo, organization o, organization_account oa
+			where u.username = $1
+			and uo.user_fk = u.id
+			and oo.organization_to_fk = uo.organization_fk
+			and oo.organization_from_fk = o.id
+			and oo.relationship = 'parent'
+			and oa.organization_fk = oo.organization_to_fk
+			limit 1";
+		$cursor = PgDatabase::psExecute($query, array($username));
+		$resultArray = array();
+	  while ($row = pg_fetch_array($cursor)) {
+	  	array_push($resultArray, array("id" => $row['networkid'], "name" => $row['name'], "uid" => $row['uid'], "role" => $row['role_fk'], "account_type" => $row['account_type'], "forumid" => $row['forumid'], "logo" => $row['logo']));
+	  }		
+	  return $resultArray;
 	}
 	
 	public static function getOrganizationDetailById($orgId) {
 		
 		$result0 = PgDatabase::psExecute("select name, type, structure, status_fk as status from organization where id = $1", array($orgId));
 		
-		$result1 = PgDatabase::psExecute("select l.address1 || ', ' || l.address2 as line1, l.municipality || ', ' || l.region2 || '  ' || l.postal_code as line2, l.latitude as lat, l.longitude as long 
+		$result1 = PgDatabase::psExecute("select l.g_formatted_address as formatted, l.address1 || ', ' || l.address2 as line1, l.municipality || ', ' || l.region2 || '  ' || l.postal_code as line2, l.latitude as lat, l.longitude as long 
 															from location l, organization_location ol
 															where ol.organization_fk = $1
 															and ol.location_fk = l.id", array($orgId));
@@ -305,6 +343,7 @@ class Organization {
 	  
 	  $counter = 0;
 	  while ($row1 = pg_fetch_array($result1)) {
+	  	$resultArray['formatted'] = $row1['formatted'];
 	  	$resultArray['location1'] = $row1['line1'];
 	  	$resultArray['location2'] = $row1['line2'];
 	  	$resultArray['lat'] = $row1['lat'];

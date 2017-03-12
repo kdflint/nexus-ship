@@ -39,7 +39,12 @@ if ($_SESSION['nexusContext'] == "ADV") {
 	$user->session_begin();
 	Utilities::loginForum($user, $auth);
 }	
-	
+
+$firstLogin = "false";
+if ($_SESSION['firstLogin'] === "TRUE") {
+		$firstLogin = "true";
+}	
+
 Utilities::setSessionLastActivity();
 
 $showProfile = "false";
@@ -53,6 +58,8 @@ $showAdvIm = "false";
 $showOrgDetailId = "";
 $showAdvProfileUsername = "";
 $showAdvImUsername = "";
+$showOrganizationEditBasic = "false";
+$showOrgEditDetailId = "";
 
 // TODO - add the NWM/ADV check to these
 if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharacterSet($_GET['view'])) {
@@ -64,6 +71,8 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 		// We have ensured that $_GET['view'] will evaluate to true, that's why below is viable
 		case (strpos($_GET['view'], 'orgid-') === 0 ? true : false):
 			$showOrganizationDetail = "true"; $showOrgDetailId = substr($_GET['view'], 6);
+		case (strpos($_GET['view'], 'orgeditid-') === 0 ? true : false):
+			$showOrganizationEditBasic = "true"; $showOrgEditDetailId = substr($_GET['view'], 10);
 		case (strpos($_GET['view'], 'profileuser-') === 0 ? true : false):
 			$showAdvProfile = "true"; $showAdvProfileUsername = substr($_GET['view'], 12);		
 		case (strpos($_GET['view'], 'imuser-') === 0 ? true : false):
@@ -102,7 +111,6 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 
     <link rel="stylesheet" href="styles/datatables.css" type="text/css" />
 
-       
     <!-- New way to include font awesome - why?? -->
     <!--<script src="https://use.fontawesome.com/2eef5e944e.js"></script>-->
     <script src="scripts/nexus.js" language="javascript"></script>
@@ -117,11 +125,13 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
   	<script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js"></script>
   	<!-- http://www.pinlady.net/PluginDetect/ -->
   	<script type="text/javascript" src="scripts/lib/javaDetect/scripts/PluginDetect_Java_Simple.js"></script>
+  	<!-- https://plugins.jquery.com/cookie/ -->
+  	<script src="scripts/lib/jquery.cookie.js" language="javascript"></script>
   	<!-- http://logomakr.com -->
   	<!-- https://datatables.net -->
-		<!--<script type="text/javascript" src="//cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js" charset="utf8"></script>-->
+		<script type="text/javascript" src="//cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js" charset="utf8"></script>
 		<!--<script type="text/javascript" src="//cdn.datatables.net/v/dt/dt-1.10.13/b-1.2.4/datatables.min.js"></script>-->
-		<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.13/b-1.2.4/se-1.2.0/datatables.min.js"></script>
+		<!--<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.13/b-1.2.4/se-1.2.0/datatables.min.js"></script>-->
 
   	 	 	
     <title>Northbridge Nexus</title> 
@@ -134,41 +144,27 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 			HTTP_FORUM_PATH = "<?php echo Utilities::getForumHttpPath(); ?>";
 			FORUM_SESSION_REFRESH_COUNTER = 0;
 			INBOX_FOCUS = DEFAULT_INBOX_FOCUS;
+			RECIPIENT_LIST = [];
 			
 			<!-- include in this manner instead of in a meta link so that php code inside this file will resolve prior to runtime -->
     	<?php include("scripts/techCheck.js"); ?>
     	  	
 			$(document).ready(function () {	
-				$( '#adv-menu-profile' ).click();
 				
-				var table = $('#member-directory').DataTable( {
-						"pageLength": 10,
-						"lengthChange": false,
-						"order": [[2, 'asc']],
-						"columns": [
-    					{ "orderable": false },
-    					{ "orderable": false },
-    					null,
-    					null,
-							null
-						]/*,
-						dom: 'Bfrtip',
-				    buttons: [
-    		    	'selectAll',
-        			'selectNone'
-    				],
-    				language: {
-        			buttons: {
-            		selectAll: "Select all",
-            		selectNone: "Unselect all"
-        			}
-    				}
-    				*/
-				} );
+				if ( $.cookie('nexusadv_lastvisit') !== 'undefined' ) {
+					loadPreviousTab($.cookie('nexusadv_lastvisit'));
+				} else {
+					// default view implemented by tab style load settings
+				}
+				
+				$( "#organization-name-autocomplete" ).autocomplete({
+					source: "<?php echo(Utilities::getHttpPath()); ?>/src/framework/orgnameLookup.php",
+					minLength: 3,
+        });
+										
+				var memberTable;
 
-				var recipientlist = [];  
-
-				$('#member-directory tbody').on( 'click', 'tr', function (event) {
+				$('#group-list-table-rows').on( 'click', 'tr', function (event) {
     			if (event.target.type !== 'checkbox') {
     				$(':checkbox', this).trigger('click');
     			} else if ($(':checkbox', this).prop('checked')==true) {
@@ -177,35 +173,25 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 							var dto = new Object();	
 							dto.username = keyval[0];
 							dto.fullname = keyval[1];	
-							recipientlist.push(dto);	
+							RECIPIENT_LIST.push(dto);	
+							//console.log(keyval[0]); 
 	  				}    	
 			    } else {
 						var keyval = $(':checkbox', this).val().split("::");
 						if (keyval.length == 2) {
-				    	recipientlist.splice( recipientlist.indexOf(keyval[0]), 1 );
+				    	RECIPIENT_LIST.splice( RECIPIENT_LIST.indexOf(keyval[0]), 1 );
 			    	}
-		    	} 
-    			//$(this).toggleClass('selected');
-    			//console.log(JSON.stringify(recipientlist));
+		    	}
 				} );
 				
-			
 				$('#compose_pm').click( function() {
-        	//$('#member-directory').find('input[type="checkbox"]:checked').each(function () {
-					//	console.log("==>" + $(this).val());
-					//	var keyval = $(this).val().split("::");
-					//		if (keyval.length == 2) {
-					//			var dto = new Object();	
-					//			dto.username = keyval[0];
-					//			dto.fullname = keyval[1];	
-					//			recipientlist.push(dto);	
-	  			//		}
-        	//} );	  					
-        	console.log(JSON.stringify(recipientlist));
-        	document.getElementById("recipient-dto").innerHTML = JSON.stringify(recipientlist);
-        	//goToInboxCompose();
+         	document.getElementById("recipient-dto").innerHTML = JSON.stringify(RECIPIENT_LIST);
         	document.getElementById("inbox-mode").innerHTML = "compose";
 					$( "#adv-menu-inbox" ).click();	
+    		} );				
+						
+				$('#add_to_group').click( function() {
+					document.getElementById("selected-user-count").innerHTML = RECIPIENT_LIST.length;
     		} );
 				
 				$( '#schedule_control' ).click(function() {
@@ -241,6 +227,9 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 	  			$( "#profile_control_icon" ).toggleClass("fa-minus-square");
 	  			resetProfileForm();		
 				});
+				if(<?php echo $firstLogin; ?>) {
+					$( "#profile_org_edit" ).click();		
+				}
 				if(<?php echo $showProfile; ?>) {
 					$( "#profile_control" ).click();
     			$( "#adv-menu-profile" ).click();
@@ -266,7 +255,10 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 					document.getElementById("training-register2").setAttribute("target", "");
 					document.getElementById("index-module-name").innerHTML = "Web Meet Demo";
 					document.getElementById("get-nexus-link").innerHTML = "<a href='http://northbridgetech.org/apps/waterwheel/module/core/index.php?view=apply' target='_blank'>Get Nexus</a>";
-				}					
+				}	
+				if(<?php echo $showOrganizationEditBasic; ?>) {
+					showDirectoryEditBasic("<?php echo $showOrgEditDetailId; ?>");	
+				}			
 				if(<?php echo $showOrganizationDetail; ?>) {
 					$( "#adv-menu-network" ).click();
 					showDirectoryDetail("<?php echo $showOrgDetailId; ?>");	
@@ -304,6 +296,22 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
       		effect: "fade"
     		});    
   		});
+
+			// We call this initialization when ajax delivery of initial table contents is complete
+			function initMemberTable(tableId) {
+				memberTable = $('#member-directory').DataTable( {
+					"retrieve": true,
+					"pageLength": 10,
+					"lengthChange": false,
+					"order": [[2, 'asc']],
+					"columns": [
+	   				{ "orderable": false },
+   					{ "orderable": false },
+   					null,
+   					null
+					]
+				} );
+			}
 	  		  	
 		</script>
     

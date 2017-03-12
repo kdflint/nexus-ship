@@ -10,6 +10,16 @@ class User {
 		return PgDatabase::psExecute($query, array($uid));	
 	}
 	
+	public static function isFirstLogin($uid) {
+		$query = "select count(*) from user_session where user_fk = $1";
+		$loginCount = pg_fetch_row(PgDatabase::psExecute($query, array($uid)));
+		if ($loginCount[0] == 1) {
+			return TRUE;
+		} else {
+			return FALSE;
+		}
+	}
+	
 	public static function insertPasswordResetActivity($userId, $uuid) {
 		// invalidate prior open reset links
 		$query = "update user_password set response_dttm = now() where user_fk = $1";
@@ -38,26 +48,6 @@ class User {
 	public static function countActiveUsers($uid, $password) {
 		$query = "select id from public.user where username=$1 and password=$2 and status_fk='1' and suspend_dttm is NULL";
 		return pg_num_rows(PgDatabase::psExecute($query, array($uid, $password)));
-	}
-	
-	public static function getUserSessionByUsername($uid) {
-		// TODO: add active check?
-		// TODO: fix up network id determination (parent, god, etc)
-		// TODO - this will fail if user in > 1 group
-		$query = "
-			select distinct u.id as id, u.fname as fname, u.lname as lname, u.password as password, u.conference_link as link, u.email as email, ug.role_fk as roleid, o1.name as affiliation, o1.id as affiliationid, o1.uid as affiliationuid, o2.logo as logo, o2.name as network, o2.id as networkid, o2.forum_id as forumid, o2.public_forum_id as publicforumid, uo.role_fk as role, oa.account_type as account
-			from public.user u, user_organization uo, user_group ug, organization o1, organization o2, organization_organization oo, organization_account oa
-			where u.username = $1
-			and uo.user_fk = u.id
-			and ug.user_fk = u.id
-			and uo.organization_fk = o1.id
-			and oa.organization_fk = o1.id
-			and oo.organization_to_fk = o1.id 
-			and oo.organization_from_fk = o2.id
-			and o2.uid != '99999999'
-			and oo.relationship in ('parent', 'god')
-			";
-		return PgDatabase::psExecute($query, array($uid));	
 	}
 	
 	public static function setLoginByIp($ip, $userId) {
@@ -165,13 +155,44 @@ class User {
 	}
 	
 	public static function addUserOrgRelation($userId, $orgId, $grantorId, $roleId) {
+		$query = "select exists (select true from user_organization where user_fk = $1 and organization_fk = $2)";
+		$row = pg_fetch_row(PgDatabase::psExecute($query, array($userId, $orgId)));
+		if (!strcmp($row[0], "f")) {
 			$query = "insert into user_organization (user_fk, organization_fk, grantor_fk, role_fk, create_dttm) values ($1, $2, $3, $4, now()) returning id";
-			return PgDatabase::psExecute($query, array($userId, $orgId, $grantorId, $roleId));		
+			PgDatabase::psExecute($query, array($userId, $orgId, $grantorId, $roleId));		
+		}
+		return;
+	}
+	
+	public static function removeUserOrgRelation($userId, $orgId) {
+		$query = "delete from user_organization where user_fk = $1 and organization_fk = $2";
+		return PgDatabase::psExecute($query, array($userId, $orgId));	
 	}
 	
 	public static function addUserGroupRelation($userId, $groupId, $roleId) {
 			$query = "insert into user_group (user_fk, group_fk, role_fk, create_dttm) values ($1, $2, $3, now())";
 			return PgDatabase::psExecute($query, array($userId, $groupId, $roleId));	
+	}
+	
+	public static function removeUserGroupRelation($userId, $groupId) {
+			$query = "delete from user_group where user_fk = $1 and group_fk = $2";
+			return PgDatabase::psExecute($query, array($userId, $groupId));	
+	}
+	
+	public static function addUserGroupRelationbyUsername($username, $groupId, $roleId) {
+			$query = "select id from public.user where username = $1";
+			$row = pg_fetch_row(PgDatabase::psExecute($query, array($username)));
+			if ($row and $row[0] != NULL) {
+				self::addUserGroupRelation($row[0], $groupId, $roleId);
+			}
+	}
+	
+	public static function removeUserGroupRelationbyUsername($username, $groupId) {
+			$query = "select id from public.user where username = $1";
+			$row = pg_fetch_row(PgDatabase::psExecute($query, array($username)));
+			if ($row and $row[0] != NULL) {
+				self::removeUserGroupRelation($row[0], $groupId);
+			}
 	}
 	
 	public static function getUserOrgRelationsByUserId($userId) {

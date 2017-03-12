@@ -1,9 +1,9 @@
 every org hierarchy ends with northbridge
 
-ADV accounts must belong to orgs whose parent is northbridge
+ADV accounts must belong to orgs whose god is northbridge
+ADV account holders must have themselves as a parent
 NWM accounts must belong to orgs whose parent is northbridge
-
-ADV account holders must have themselves as a parent, in addition to northbridge
+NWM account holders do not have a god
 
 an organization is a constituent of Nexus if they have an ancestor that is northbridge
 

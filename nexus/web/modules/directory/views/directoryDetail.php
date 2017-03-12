@@ -10,20 +10,19 @@
 			 		var jsonObj;
 			 		try { jsonObj = JSON.parse(xmlhttp.responseText); } catch(err) { console.log(err); jsonObj = 'undefined';}	
 			 		if ((typeof jsonObj !== 'undefined') && jsonObj !== null & jsonObj.oname !== null) { 
+			 			var loc1 = jsonObj.location1 ? "<span>" + jsonObj.location1 + "</span><br/>" : "";
+			 			var loc2 = jsonObj.location2 ? "<span>" + jsonObj.location2 + "</span><br/>" : "";
 				 		tableItem = 
 		 						"<a href='javascript:void(0);' onclick='showDirectoryResults();'><span class='fa fa-chevron-circle-left fa-3x' 	style='margin-right:10px;'></span></a>" + 
        					"<span class='fname detail'>" + jsonObj.oname + "</span>" +
-       					(orgEditLinkData[orgId] ? "<a href='" + orgEditLinkData[orgId] + "' target='_blank' style='margin-left:20px;' >Edit 	this Listing</a>" : "") +
+       					((typeof orgEditLinkData != "undefined") && orgEditLinkData[orgId] ? "<a href='" + orgEditLinkData[orgId] + "' target='_blank' style='margin-left:20px;' >Edit 	this Listing</a>" : "") +
        					"<div class='detail'>" +
        							(jsonObj.url ? "<p><span class='tod'><a href='" + jsonObj.url + "' target='_blank'>" + jsonObj.url + "</a></span>	</p>" : "<p>&nbsp;</p>") +
-		       												
 										(jsonObj.cname ? "<span>" + jsonObj.cname + "</span><br/>" : "") +
 										(jsonObj.email ? "<span>Email: " + jsonObj.email + "</span><br/>" : "") +
 										(jsonObj.phone ? "<span>Phone: " + jsonObj.phone + "</span><br/>" : "") +
 										(jsonObj.fax ? "<span>Fax: " + jsonObj.fax + "</span><br/>" : "") +
-		
-       							(jsonObj.location1 ? "<span>" + jsonObj.location1 + "</span><br/>" : "") +
-										(jsonObj.location2 ? "<span>" + jsonObj.location2 + "</span><br/>" : "") +
+										(jsonObj.formatted ? "<span>" + jsonObj.formatted + "</span><br/>" : loc1 + loc2) +
 								"</div>";
 			 				document.getElementById("itemRow").innerHTML = "<div class='td-div'>" + tableItem + "<div>";   
  							addDetailMarker(jsonObj);
