@@ -431,7 +431,10 @@ function toggleAdvFrameDisplay(menuItem) {
 }
 
 function loadPreviousTab(id) {
-	toggleAdvFrameDisplay(document.getElementById(id));
+	var tab2load = document.getElementById(id);
+	if (tab2load) {
+		toggleAdvFrameDisplay(document.getElementById(id));
+	}
 }
 
 function checkGoodForumSession(thisFrame) {
@@ -702,6 +705,28 @@ function showDirectoryList() {
 }
 
 // TODO - refactor these front validations scripts - way too redundant!
+
+function groupAddValidateAndSubmit() {
+		
+	pass = true;
+	var groupForm = document.forms["group-add"];
+	var submitButton = document.getElementById("group-add-submit");
+	
+  var nameField = groupForm["group-name"];
+  var name = nameField.value;
+  setFieldPassStyles(nameField, "");
+  if (name == null || name.length < 1) {
+    setFieldErrorStyles(nameField, "Please enter a name for your group.");
+    pass = false;
+  }
+
+ 	if (Boolean(pass)) {
+ 		submitButton.disabled = true;  
+ 		submitButton.innerHTML = "One Moment"; 
+ 		submitButton.style.opacity = ".6";
+ 		groupForm.submit();
+ 	}
+}
 
 function loginValidateAndSubmit() {
 		
@@ -1223,14 +1248,16 @@ function switchToOrganizationView() {
 	document.getElementById("organizational_directory").style.display = "block";
 	document.getElementById("member_directory").style.display = "none";
 	document.getElementById('secondary-network-filter').style.display = "none";
-	document.getElementById('add_to_group').style.display = "none";
-	document.getElementById('remove_from_group').style.display = "none";
+	var addToGroup = document.getElementById('add_to_group');
+	var removeFromGroup = document.getElementById('remove_from_group');
 	var addNewOrg = document.getElementById('add_new_org');
-	var addNewMember = document.getElementById('add_new_member');
-	if (addNewOrg && addNewMember) {
+	if (addNewOrg) {
 		addNewOrg.style.display = "block";
-		addNewMember.style.display = "none";
 	}
+	if (addToGroup && removeFromGroup) {
+		addToGroup.style.display = "none";
+		removeFromGroup.style.display = "none";
+	}		
 	var secondaryOrgEditIcon = document.getElementById("secondary-network-edit");
 	if (secondaryOrgEditIcon) {
 		secondaryOrgEditIcon.style.display = "none";
@@ -1245,14 +1272,16 @@ function switchToMemberView() {
 	document.getElementById("organizational_directory").style.display = "none";
 	document.getElementById("member_directory").style.display = "block";
 	document.getElementById('secondary-network-filter').style.display = "block";
-	document.getElementById('add_to_group').style.display = "block";
-	document.getElementById('remove_from_group').style.display = "block";
+	var addToGroup = document.getElementById('add_to_group');
+	var removeFromGroup = document.getElementById('remove_from_group');
 	var addNewOrg = document.getElementById('add_new_org');
-	var addNewMember = document.getElementById('add_new_member');
-	if (addNewOrg && addNewMember) {
+	if (addNewOrg) {
 		addNewOrg.style.display = "none";
-		addNewMember.style.display = "block";
 	}
+	if (addToGroup && removeFromGroup) {
+		addToGroup.style.display = "block";
+		removeFromGroup.style.display = "block";
+	}	
 	var secondaryOrgEditIcon = document.getElementById("secondary-network-edit");
 	if (secondaryOrgEditIcon) {
 		secondaryOrgEditIcon.style.display = "none";

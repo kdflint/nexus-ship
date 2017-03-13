@@ -21,7 +21,7 @@
 		<select id="directory-form-select-specialty" name="specialty" style="width:228px;">
 			<option value="0" selected>Focus Area is</option>	
 			<option value="0" >------------</option>	
-	    <?php include(Utilities::getPartnerCustomRoot() . "/custom/orgfocus-" . $_SESSION['networkId'] . ".html"); ?>
+	    <?php include(Utilities::getPartnerCustomRoot() . "/orgfocus-" . $_SESSION['networkId'] . ".html"); ?>
     </select>
 	</div>
 	<div style="margin-top:10px;">
@@ -29,7 +29,7 @@
 		<select id="directory-form-select-type" name="type" style="width:228px;">
 			<option value="0" selected>Organization Type is</option>
 			<option value="0" >------------</option>
-			<?php include(Utilities::getPartnerCustomRoot() . "/custom/orgtype-" . $_SESSION['networkId'] . ".html"); ?>
+			<?php include(Utilities::getPartnerCustomRoot() . "/orgtype-" . $_SESSION['networkId'] . ".html"); ?>
 		</select>
 	</div>
   <a id="directory-form-submit" class="pure-button button-menu" href="javascript:void(0)" onclick="getDirectoryList('directory-form');" style="float:right;background-color:#d27b4b;width:70px;font-size:90%;margin-top:25px;color:#e6e6e6" >Search</a>

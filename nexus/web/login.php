@@ -35,6 +35,7 @@ if(isset($_GET['logoutAll'])) {
 $remembered = $enrolled = "false";
 $cleanMessage = "";
 $cleanIcon = "";
+$enrolledUsername = "";
 
 // TODO - this is definitely not right. Need to not let in a public session user that others passes these tests.
 if (isset($_SESSION['username']) && substr($_SESSION['username'], 0, 6 ) !== "pUser-") {

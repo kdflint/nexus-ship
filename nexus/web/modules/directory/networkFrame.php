@@ -12,8 +12,10 @@ if ($_SESSION['networkId'] == '358') {
 <div id="network-secondary" class="secondaryControlContainer">
 <span style="float:left;">
 	<a id="compose_pm" class="pure-button pure-button-primary" href="javascript:void(0);" style="float:left;" >Compose Message</a>
-	<a id="add_to_group" class="pure-button pure-button-primary" href="#openGroupUserAdd" style="float:left;font-size:80%;" >Add To Group</a>
-	<a id="remove_from_group" class="pure-button pure-button-primary" href="#openGroupUserDelete" style="float:left;font-size:80%;" >Remove from Group</a>
+	<?php if (Utilities::isSessionAdmin()) { ?>
+		<a id="add_to_group" class="pure-button pure-button-primary" href="#openGroupUserAdd" style="float:left;font-size:80%;" >Add To Group</a>
+		<a id="remove_from_group" class="pure-button pure-button-primary" href="#openGroupUserDelete" style="float:left;font-size:80%;" >Remove from Group</a>
+	<?php } ?>	
 	<!--<a id="mark_all" href="#" onclick="checkAll('member-directory-form')" style="border-left:20px;float:left;">Select All</a> -->
 </span>
 <span style="float:right;">
@@ -21,7 +23,8 @@ if ($_SESSION['networkId'] == '358') {
 	<a id='member_view_control' href="#" onclick="switchToMemberView();" class="secondaryControl" title="Member Directory" style="display:none;"><span class='fa fa-address-book-o fa-lg'></span></a>
 	<?php if (Utilities::isSessionAdmin()) { ?>
 		<a id="add_new_org" href='#openDirectoryEdit' onclick="return resetDirectoryForm();" class="secondaryControl" title="Add New Organization" style="display:none;"><span class='fa fa-university fa-lg' ></span><span class='fa fa-plus' ></span></a>
-		<a id="add_new_member" href='#' onclick="alert('<?php echo($globalNetworkEnrollLink1); ?>\n\n<?php echo($globalNetworkEnrollLink2); ?>')" class="secondaryControl" title="Invite New Member"><span class='fa fa-users fa-lg' ></span><span class='fa fa-plus' style="margin-left:3px;"></span></a>
+		<!--<a id="add_new_group" href='#openGroupAdd' onclick="alert('<?php echo($globalNetworkEnrollLink1); ?>\n\n<?php echo($globalNetworkEnrollLink2); ?>')" class="secondaryControl" title="Add New Group"><span class='fa fa-users fa-lg' ></span><span class='fa fa-plus' style="margin-left:3px;"></span></a>-->
+		<a id="add_new_group" href='#openGroupAdd' class="secondaryControl" title="Add New Group"><span class='fa fa-users fa-lg' ></span><span class='fa fa-plus' style="margin-left:3px;"></span></a>
 	<?php } ?>
 	<!-- TODO - move js controls from public to nexus.js -->
 	<a id='map_control' href="#" onclick="initMap();" class="secondaryControl" title="Map View" style="display:none;"><span id="directory_control" class='fa fa-globe fa-lg'></span></a>

@@ -41,7 +41,8 @@ if ($_SESSION['nexusContext'] == "ADV") {
 }	
 
 $firstLogin = "false";
-if ($_SESSION['firstLogin'] === "TRUE") {
+//if ($_SESSION['firstLogin'] === "TRUE") {
+if (count($_SESSION['orgs']) < 1) {
 		$firstLogin = "true";
 }	
 
@@ -228,7 +229,7 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 	  			resetProfileForm();		
 				});
 				if(<?php echo $firstLogin; ?>) {
-					$( "#profile_org_edit" ).click();		
+					window.location.assign(HTTP_WEB_PATH + "/nexus.php#openProfileOrg");	
 				}
 				if(<?php echo $showProfile; ?>) {
 					$( "#profile_control" ).click();
