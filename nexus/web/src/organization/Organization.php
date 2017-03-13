@@ -105,6 +105,16 @@ class Organization {
 	  }		
 	  return $email;
 	}	
+
+	public static function getNetworkAdminIdByOrgId($orgId) {
+		$email = array();
+		$query = "select u.id from public.user u, user_organization uo where uo.role_fk = 1 and uo.user_fk = u.id and uo.organization_fk = $1";
+		$cursor = PgDatabase::psExecute($query, array($orgId));
+	  while ($row = pg_fetch_array($cursor)) {
+	  	array_push($email, $row['id']);
+	  }		
+	  return $email;
+	}
 	
 	public static function getPublicEnrollUuidByOrgUid($orgUid) {
 		$query = "select i.uuid from organization o, invitation i where i.id = o.public_global_invite_fk and o.uid = $1";
@@ -305,7 +315,7 @@ class Organization {
 		$cursor = PgDatabase::psExecute($query, array($username));
 		$resultArray = array();
 	  while ($row = pg_fetch_array($cursor)) {
-	  	array_push($resultArray, array("id" => $row['networkid'], "name" => $row['name'], "uid" => $row['uid'], "role" => $row['role_fk'], "account_type" => $row['account_type'], "forumid" => $row['forumid'], "logo" => $row['logo']));
+	  	array_push($resultArray, array("id" => $row['networkid'], "name" => $row['name'], "uid" => $row['uid'], "account_type" => $row['account_type'], "forumid" => $row['forumid'], "logo" => $row['logo']));
 	  }		
 	  return $resultArray;
 	}

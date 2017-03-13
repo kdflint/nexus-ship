@@ -41,6 +41,12 @@
 		</div>
 	</div>
 
+	<div id="openGroupAdd" class="modalDialog">
+		<div>
+			<a href="#close" title="Skip" class="close">X</a>
+			<?php include("modules/directory/views/groupAdd.php") ?>
+		</div>
+	</div>
 	
 	<div id="openProfile" class="modalDialog">
 		<div style="background:#ffffff;">

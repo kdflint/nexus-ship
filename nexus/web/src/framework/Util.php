@@ -610,6 +610,10 @@ class Utilities {
 		}
 	}
 	
+	public static function setSessionGroups($username) {
+		$_SESSION['groups'] = Group::getUserGroupsByUsername($username);
+	}
+	
 	public static function setSession($username, $remember, $zone = "undefined", $password = "undefined") {
 
 		// TODO - loading a PUBLIC context will wipe this one out and then screw up Nexus context
@@ -644,17 +648,24 @@ class Utilities {
 		// Limiting to one for now on query
 		if ($networks) {
 			$_SESSION['nexusContext'] = $networks[0]['account_type'];
-			$_SESSION['orgUid'] = $networks[0]['uid'];
-	  	$_SESSION['networkName'] = $networks[0]['name'];
-  		$_SESSION['networkId'] = $networks[0]['id'];
-  		$_SESSION['defaultForumId'] = $networks[0]['forumid'] ? $networks[0]['forumid'] : "0";
-  		$_SESSION['logo'] = $networks[0]['logo'];	
+			if ($_SESSION['nexusContext'] === "ADV") {
+	  		$_SESSION['networkName'] = $networks[0]['name'];
+  			$_SESSION['networkId'] = $networks[0]['id'];
+  			$_SESSION['defaultForumId'] = $networks[0]['forumid'] ? $networks[0]['forumid'] : "0";
+  			$_SESSION['logo'] = $networks[0]['logo'];	
+				$_SESSION['orgUid'] = $networks[0]['uid'];
+			}
 		}
 		
 		self::setSessionOrgs($_SESSION['username']);
+		if ($_SESSION['nexusContext'] === "NWM") {
+			$_SESSION['orgId'] = $_SESSION['orgs'][0]['id'];
+			$_SESSION['orgUid'] = $_SESSION['orgs'][0]['uid'];
+			$_SESSION['orgName'] = $_SESSION['orgs'][0]['name'];
+		}
+		
+		self::setSessionGroups($_SESSION['username']);
 	
-		$_SESSION['groups'] = Group::getUserGroupsByUsername($_SESSION['username']);
-
 		$returnArray = Group::getPublicSystemGroupByOrgId($_SESSION['networkId']);
 		$_SESSION['pgpk'] = $returnArray[0]['id'];
 		

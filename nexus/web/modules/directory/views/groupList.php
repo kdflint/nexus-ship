@@ -31,7 +31,7 @@
        	}
        	// Draw the member DataTable
        	memberTable.draw();
-       	document.getElementById("group_name").innerHTML = groupName;
+       	//document.getElementById("group_name").innerHTML = groupName;
 			}
 		}
 		xmlhttp.open("GET", "<?php echo(Utilities::getHttpPath()); ?>" + "/src/framework/groupListManager.php?id=" + groupId);
@@ -40,8 +40,7 @@
 </script>
 
 <form id="member-directory-form" action="#" method="post">
-	<p id="group_name" style="margin-left:40px;font-size:110%;"></p>
-	<table id="member-directory" class="display" width="100%" cellspacing="0">	
+	<table id="member-directory" class="display compact" width="100%" cellspacing="0">	
 		<thead>
 			<tr><th>Select for Message</th><th>Details</th><th>First</th><th>Last</th></tr>
 		</thead>

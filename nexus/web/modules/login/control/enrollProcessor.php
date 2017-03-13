@@ -120,8 +120,11 @@ if (isset($invitation['account_type']) && $invitation['account_type'] === "ADV")
 		
 		Forum::updateUserProfile($clean['username'], $clean['fname'], $clean['lname'], "", $clean['email'], "");
 		
+		// These are additional enrollments, based on enrollment form selection. This may not be necessary
 		foreach ($forumEnrollments as $forumId) {
-			ExternalMessage::addForumSubscription($addedUserId, $forumId);	
+			if ($forumId) {
+				ExternalMessage::addForumSubscription($addedUserId, $forumId);	
+			}
 		}
 		
 	} else {
