@@ -26,6 +26,7 @@ move 18.html to partner/custom/orgfocus-18.html
 -- change the below relationship == 'god'
 -- (local, this was organization_organization ids 2,355,357,362,365,367)
 -- (dev: 1,18,339)
+-- (prod: 1,18,358)
 
 select id, organization_from_fk, organization_to_fk, relationship from organization_organization 
 where organization_to_fk in (select organization_fk from organization_account where account_type = 'ADV')
@@ -39,6 +40,21 @@ update organization_organization set relationship = 'god' where id = 327;
 --add network admins to all groups, like this:
 
 select * from user_organization where organization_fk = 379
+--dev
 insert into user_group (user_fk, group_fk, role_fk) values (300,28,1)
 
+--prod:
+insert into user_group (user_fk, group_fk, role_fk) values (88,26,1)
+insert into user_group (user_fk, group_fk, role_fk) values (89,26,1)
+insert into user_group (user_fk, group_fk, role_fk) values (138,26,1)
+insert into user_group (user_fk, group_fk, role_fk) values (143,26,1)
+insert into user_group (user_fk, group_fk, role_fk) values (89,25,1)
+-- none for EC
 
+--==== after build
+
+update organization_organization set relationship = 'god' where id = 356;
+update organization_organization set relationship = 'god' where id = 357;
+update organization_organization set relationship = 'god' where id = 358;
+
+-- remove definition of EVENT_APPROVE_LIST
