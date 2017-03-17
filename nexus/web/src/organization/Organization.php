@@ -276,7 +276,7 @@ class Organization {
 	}
 
 	public static function getOrganizationsByUsername($username) {
-		$query = "select o.id, o.name, o.uid, uo.role_fk from organization o, user_organization uo, public.user u
+		$query = "select o.id, o.name, o.uid, o.logo, uo.role_fk from organization o, user_organization uo, public.user u
 			where u.username = $1
 			and u.id = uo.user_fk
 			and uo.organization_fk = o.id";
@@ -284,7 +284,7 @@ class Organization {
 			
 		$resultArray = array();
 	  while ($row = pg_fetch_array($cursor)) {
-	  	array_push($resultArray, array("id" => $row['id'], "name" => $row['name'], "uid" => $row['uid'], "role" => $row['role_fk']));
+	  	array_push($resultArray, array("id" => $row['id'], "name" => $row['name'], "uid" => $row['uid'], "role" => $row['role_fk'], "logo" => $row['logo']));
 	  }		
 	  return $resultArray;
 	}

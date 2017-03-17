@@ -11,6 +11,7 @@ class User {
 	}
 	
 	public static function isFirstLogin($uid) {
+		//method untested
 		$query = "select count(*) from user_session where user_fk = $1";
 		$loginCount = pg_fetch_row(PgDatabase::psExecute($query, array($uid)));
 		if ($loginCount[0] == 1) {

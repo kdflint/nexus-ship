@@ -40,12 +40,6 @@ if ($_SESSION['nexusContext'] == "ADV") {
 	Utilities::loginForum($user, $auth);
 }	
 
-$firstLogin = "false";
-//if ($_SESSION['firstLogin'] === "TRUE") {
-if (count($_SESSION['orgs']) < 1) {
-		$firstLogin = "true";
-}	
-
 Utilities::setSessionLastActivity();
 
 $showProfile = "false";
@@ -194,6 +188,10 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 				$('#add_to_group').click( function() {
 					document.getElementById("selected-user-count").innerHTML = RECIPIENT_LIST.length;
     		} );
+    		
+				$('#remove_from_group').click( function() {
+					document.getElementById("selected-user-count-2").innerHTML = RECIPIENT_LIST.length;
+    		} );
 				
 				$( '#schedule_control' ).click(function() {
 	  			toggleNewEventDisplay();
@@ -228,9 +226,6 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 	  			$( "#profile_control_icon" ).toggleClass("fa-minus-square");
 	  			resetProfileForm();		
 				});
-				if(<?php echo $firstLogin; ?>) {
-					window.location.assign(HTTP_WEB_PATH + "/nexus.php#openProfileOrg");	
-				}
 				if(<?php echo $showProfile; ?>) {
 					$( "#profile_control" ).click();
     			$( "#adv-menu-profile" ).click();
