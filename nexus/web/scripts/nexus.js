@@ -11,10 +11,12 @@ var ACTIVITY_FLAG = 1;
 var DEFAULT_FORUM;
 var HTTP_WEB_PATH;
 var HTTP_FORUM_PATH;
+var HTTP_PARTNER_PATH;
 var FORUM_SESSION_REFRESH_COUNTER = 0;
 var DEFAULT_INBOX_FOCUS = "/ucp.php?i=pm&folder=inbox";
 var INBOX_FOCUS = "";
 var RECIPIENT_LIST = [];
+var ZERO_ORGS = false;
 
 
 /*
@@ -500,6 +502,9 @@ function loadAdvPage(resource) {
     	case "adv-menu-profile":
     		document.getElementById("profile_display").style.display ="block";
     		divDisplay.style.display ="block";
+    		if(ZERO_ORGS) {
+    			document.getElementById("profile_org_edit").click();
+    		}
     		break;
     	default:
        	document.getElementById(frameId).src = HTTP_WEB_PATH + "/production_placeholder.html";
@@ -514,7 +519,6 @@ function refreshForumSession() {
 		console.log(xmlhttp.readyState);
   	if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { return true;  }
  	}
- 	console.log("refreshing forum");
 	xmlhttp.open("GET","src/framework/sessionManager.php?forum=1", false); // synchronous call
 	xmlhttp.send();  					
 }
@@ -1248,6 +1252,7 @@ function switchToOrganizationView() {
 	document.getElementById("organizational_directory").style.display = "block";
 	document.getElementById("member_directory").style.display = "none";
 	document.getElementById('secondary-network-filter').style.display = "none";
+	document.getElementById('network_group_name').style.display="none";
 	var addToGroup = document.getElementById('add_to_group');
 	var removeFromGroup = document.getElementById('remove_from_group');
 	var addNewOrg = document.getElementById('add_new_org');
@@ -1272,6 +1277,7 @@ function switchToMemberView() {
 	document.getElementById("organizational_directory").style.display = "none";
 	document.getElementById("member_directory").style.display = "block";
 	document.getElementById('secondary-network-filter').style.display = "block";
+	document.getElementById('network_group_name').style.display="inline";
 	var addToGroup = document.getElementById('add_to_group');
 	var removeFromGroup = document.getElementById('remove_from_group');
 	var addNewOrg = document.getElementById('add_new_org');
@@ -1324,7 +1330,7 @@ function populateEventForm(i) {
 		// TODO - put the whole file path into db
 		eventForm['old-file-ext'].value = currentEvents[i].fileext;
 		document.getElementById("attachment-label").innerHTML = 
-		"<b>Attached file: </b> <a href='http://northbridgetech.org/apps/nexus/partner/file/event-" + currentEvents[i].uuid + "." + currentEvents[i].fileext + "' target='_blank'>View</a>";
+		"<b>Attached file: </b> <a href='" + HTTP_PARTNER_FILE_PATH + "/event-" + currentEvents[i].uuid + "." + currentEvents[i].fileext + "' target='_blank'>View</a>";
 	}
 
 	var startTime = currentEvents[i].hour_24 + ":" + currentEvents[i].minute + ":00";

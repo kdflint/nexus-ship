@@ -42,6 +42,7 @@ if ($_SESSION['networkId'] == '358') {
 			</form>
 	</div>
 </span>
+<span id="network_group_name" style="clear:both;font-size:90%;color:#004d62;font-weight:bold;"></span>
 </div>
 
 <div id="network-frame" style="height:420px;clear:left;">
@@ -56,7 +57,7 @@ if ($_SESSION['networkId'] == '358') {
 			<?php include(Utilities::getModulesRoot() . "/directory/views/directoryDetail.php"); ?>
 		</div>
 	</div>
-	<div id="member_directory" style="display:block;">
+	<div id="member_directory" style="display:block;position:relative;top:-20px;">
 
 			<div style="font-size:12px;height:480px;overflow:auto;">
 			<?php include("views/groupList.php"); ?>

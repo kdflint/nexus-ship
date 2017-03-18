@@ -19,6 +19,13 @@
 		</div>
 	</div>
 
+	<div id="openDirectoryFilter" class="modalDialog">
+		<div>
+			<a href="#close" title="Close" class="close">X</a>
+			<?php include("modules/directory/views/organizationFilterAdd.php"); ?>
+		</div>
+	</div>
+
 	<div id="openProfileOrg" class="modalDialog">
 		<div>
 			<a href="#close" title="Skip" class="close">X</a>

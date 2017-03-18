@@ -75,6 +75,11 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 	}
 }
 
+$zeroOrgs = "false";
+if (count($_SESSION['orgs']) < 1) {
+		$zeroOrgs = "true";
+}	
+
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
@@ -137,9 +142,11 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 			DEFAULT_FORUM = "<?php echo $_SESSION['defaultForumId']; ?>";
 			HTTP_WEB_PATH = "<?php echo Utilities::getHttpPath(); ?>";
 			HTTP_FORUM_PATH = "<?php echo Utilities::getForumHttpPath(); ?>";
+			HTTP_PARTNER_FILE_PATH = "<?php echo Utilities::getPartnerFileUrl(); ?>";
 			FORUM_SESSION_REFRESH_COUNTER = 0;
 			INBOX_FOCUS = DEFAULT_INBOX_FOCUS;
 			RECIPIENT_LIST = [];
+			ZERO_ORGS = <?php echo $zeroOrgs; ?>;
 			
 			<!-- include in this manner instead of in a meta link so that php code inside this file will resolve prior to runtime -->
     	<?php include("scripts/techCheck.js"); ?>
@@ -328,6 +335,8 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
       	// schedule-form elements
         $( "#datepicker" ).datepicker({ changeMonth: true, changeYear: true });
         $( "#datepicker-end" ).datepicker({ changeMonth: true, changeYear: true });
+        $( "#now-form-duration" ).selectmenu();
+        $( "#now-form-type" ).selectmenu();
       	$( "#schedule-form-time" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
       	$( "#schedule-form-time-end" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
         $( "#schedule-form-duration" ).selectmenu();
@@ -336,10 +345,9 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
         $( "#schedule-form-country" ).selectmenu({ change: function() { displayTimeZones(); } });
         $( "#schedule-form-countryTimeZones" ).selectmenu();
         $( "#schedule-form-countryTimeZones" ).selectmenu({ change: function() { setTimeZoneDisplay(document.getElementById("schedule-form-countryTimeZones").value); } });
-        $( "#now-form-duration" ).selectmenu();
-        $( "#now-form-type" ).selectmenu();
         $( "#directory-form-select-specialty").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
        	$( "#directory-form-select-type").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
+       	$( "#directory-form-select-type-in").selectmenu();
        	$( "#organization-form-country" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
         $( "#organization-form-country" ).selectmenu({ change: function() { displayStates(); } });
         $( "#organization-form-countryStates" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
@@ -431,9 +439,7 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 					} 				
 				?>
       </div>
-      
-      <div class="footer">
-      </div>
+
     </div><!-- container -->       
 
   <?php 

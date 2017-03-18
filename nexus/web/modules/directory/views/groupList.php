@@ -31,7 +31,7 @@
        	}
        	// Draw the member DataTable
        	memberTable.draw();
-       	//document.getElementById("group_name").innerHTML = groupName;
+       	document.getElementById("network_group_name").innerHTML = truncateString(groupName,70);
 			}
 		}
 		xmlhttp.open("GET", "<?php echo(Utilities::getHttpPath()); ?>" + "/src/framework/groupListManager.php?id=" + groupId);
