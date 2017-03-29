@@ -349,6 +349,8 @@ class Catalogue {
 		
 		$result = Organization::getGeoByOrgIds($orgIdList);
 
+		$geoResults = array();
+		
 		while ($row = pg_fetch_array($result)) {
 			$orgId = $row['oid'];
 			$geoResults[$orgId]['lat'] = $row['lat'];

@@ -51,7 +51,23 @@ class Organization {
 		$query = "insert into organization_account (organization_fk, account_type) values ($1, 'ADV')";
 		$result = PgDatabase::psExecute($query, array($orgId));	
 		return $result;
-	}		
+	}	
+	
+	public static function addOrganizationType($orgId, $type) {
+		$exists = self::organizationIdExists($orgId);
+		if($exists) {
+			$query = "update organization set type = $1 where id = $2 returning id";
+			return PgDatabase::psExecute($query, array($type, $orgId));
+		}
+	}	
+	
+	public static function addOrganizationSpecialty($orgId, $specialtyId) {
+		$exists = self::organizationIdExists($orgId);
+		if($exists) {
+			$query = "insert into organization_topic (organization_fk, topic_fk) values ($1, $2)";
+			return PgDatabase::psExecute($query, array($orgId, $specialtyId));
+		}
+	}
 	
 	public static function addOrganizationContact($orgfk, $name, $title, $email, $phone, $url) {
 		//print_r(array($name, $title, $email, $phone, $url)); exit(0);
@@ -179,6 +195,15 @@ class Organization {
 	
 	private static function organizationUidExists($id) {
 		$query = "select exists (select true from organization where uid = $1)";
+		$row = pg_fetch_row(PgDatabase::psExecute($query, array($id)));
+		if (!strcmp($row[0], "t")) {
+			return TRUE;
+		}
+		return FALSE;
+	}
+	
+	private static function organizationIdExists($id) {
+		$query = "select exists (select true from organization where id = $1)";
 		$row = pg_fetch_row(PgDatabase::psExecute($query, array($id)));
 		if (!strcmp($row[0], "t")) {
 			return TRUE;

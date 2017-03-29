@@ -328,6 +328,7 @@ if (count($_SESSION['orgs']) < 1) {
       label { display: block; margin: 30px 0 0 0; }
       select { width: 170px; }
       .overflow { height: 200px; }
+      .overflow-tall { height: 320px; }
     </style>
 
     <script type="text/javascript">
@@ -345,8 +346,16 @@ if (count($_SESSION['orgs']) < 1) {
         $( "#schedule-form-country" ).selectmenu({ change: function() { displayTimeZones(); } });
         $( "#schedule-form-countryTimeZones" ).selectmenu();
         $( "#schedule-form-countryTimeZones" ).selectmenu({ change: function() { setTimeZoneDisplay(document.getElementById("schedule-form-countryTimeZones").value); } });
-        $( "#directory-form-select-specialty").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
-       	$( "#directory-form-select-type").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
+        $( "#directory-form-select-specialty").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow-tall" );
+       	$( "#directory-form-select-specialty").selectmenu().selectmenu({
+						position: { my : "left+50 top", at: "right top-85" },
+						width: 228
+				});
+       	$( "#directory-form-select-type").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow-tall" );
+       	$( "#directory-form-select-type").selectmenu().selectmenu({
+						position: { my : "left+50 top", at: "right top-135" },
+						width: 228
+				});
        	$( "#directory-form-select-type-in").selectmenu();
        	$( "#organization-form-country" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
         $( "#organization-form-country" ).selectmenu({ change: function() { displayStates(); } });

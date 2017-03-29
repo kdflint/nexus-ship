@@ -26,12 +26,13 @@ Use only clean input beyond this point (i.e. $clean[])
 
 ======================================================= */
 
-$return = "#openProfileOrg";
+$return = "#openOrganizationName";
 $orgId = Organization::getOrganizationByName($result['clean']['org-name']);
 if (!$orgId) {
 	$orgId = Organization::addOrganization($result['clean']['org-name'], $_SESSION['networkId']);
-	$return = "#openDirectoryEdit";
+	$return = "#openOrganizationBasic";
 	$_SESSION['tmp_orgeditname'] = $result['clean']['org-name'];
+	$_SESSION['tmp_orgeditid'] = $orgId;
 }
 User::addUserOrgRelation($_SESSION['uidpk'],$orgId,88,5);
 

@@ -1,5 +1,5 @@
 <div style="position:relative;">
-<form id="organization-name-lookup" class="pure-form" action="<?php echo(Utilities::getHttpPath()); ?>/modules/directory/control/addNewOrgNameProcessor.php" method="post">
+<form id="organization-name-lookup" class="pure-form" action="<?php echo(Utilities::getHttpPath()); ?>/modules/directory/control/organizationNameProcessor.php" method="post">
 	<fieldset style="position:relative;width:560px;">
  		<div class="form-field">
    		<input type="text" id="organization-name-autocomplete" type="text" name="org-name" style="width:100%;" rows="2" maxlength="100" placeholder="Add an Organization to your profile"/>

@@ -1133,10 +1133,32 @@ function organizatonNameValidateAndSubmit(thisForm) {
 
  	if (Boolean(pass)) {
  		submitButton.disabled = true;  
- 		submitButton.innerHTML = "One Moment"; 
+ 		submitButton.innerHTML = "<span class='fa fa-spinner'></span>"; 
  		submitButton.style.opacity = ".6";
  		organizationNameForm.submit();
  	}	
+
+}
+
+function organizationFilterValidateAndSubmit(thisForm) {
+
+	var organizationFilterForm = document.forms[thisForm];
+	var submitButton = document.getElementById(thisForm + "-submit");
+	var pass = true;	
+	
+	var typeField = document.getElementById("directory-form-select-type-in");
+	setFieldPassStyles(document.getElementById("directory-form-select-type-in-button", "------------"));
+	if (typeField.value === "0") {
+		setFieldErrorStyles(document.getElementById("directory-form-select-type-in-button", "------------"));
+		pass = false;
+	}
+	
+	if (Boolean(pass)) {
+ 		submitButton.disabled = true;  
+ 		submitButton.innerHTML = "<span class='fa fa-spinner'></span>"; 
+ 		submitButton.style.opacity = ".6";
+ 		organizationFilterForm.submit();
+ 	}
 
 }
 
@@ -1214,7 +1236,7 @@ function organizationBasicValidateAndSubmit(thisForm) {
 	
  	if (Boolean(pass)) {
  		submitButton.disabled = true;  
- 		submitButton.innerHTML = "One Moment"; 
+ 		submitButton.innerHTML = "<span class='fa fa-spinner'></span>"; 
  		submitButton.style.opacity = ".6";
  		organizationBasicForm.submit();
  	}

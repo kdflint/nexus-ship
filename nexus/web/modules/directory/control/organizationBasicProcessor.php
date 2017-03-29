@@ -17,7 +17,7 @@ $result = validateOrganization($_POST);
 
 if (count($result['error']) > 0) {
 	print_r($result);
- exit(0);
+ 	exit(0);
 }
 
 /* ====================================================
@@ -30,7 +30,9 @@ $orgid = Organization::getOrganizationByName($result['clean']['org-name']);
 if (!$orgid) {
 	$orgid = Organization::addOrganization($result['clean']['org-name'], $_SESSION['networkId']);
 }
-unset($_SESSION['tmp_orgeditname']);
+
+$_SESSION['tmp_orgeditname'] = $result['clean']['org-name'];
+$_SESSION['tmp_orgeditid'] = $orgid;
 
 Organization::addOrganizationContact($orgid, $result['clean']['org-contact-name'], $result['clean']['org-contact-title'], $result['clean']['org-contact-email'], $result['clean']['org-contact-phone'], $result['clean']['org-url']);
 if ($result['clean']['g_status']) {

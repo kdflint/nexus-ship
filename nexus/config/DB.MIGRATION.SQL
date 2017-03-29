@@ -19,3 +19,6 @@ insert into topic (id, name) values (55,'Bilingual Education');
 insert into topic (id, name) values (56,'School Turnaround');
 insert into topic (id, name) values (57,'Bullying and Harassment');
 insert into topic (id, name) values (58,'Family Engagement');
+
+GRANT ALL ON TABLE organization_topic_id_seq TO northbri_devnexus;
+GRANT SELECT, UPDATE ON TABLE organization_topic_id_seq TO northbri_web;
