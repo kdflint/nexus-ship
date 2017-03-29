@@ -18,7 +18,7 @@
 	<?php } ?>
 	<div style="margin-top:10px;">
 		<span class="searchQualifier">and</span>
-		<select id="directory-form-select-specialty" name="specialty" style="width:228px;">
+		<select id="directory-form-select-specialty" name="specialty">
 			<option value="0" selected>Focus Area is</option>	
 			<option value="0" >------------</option>	
 	    <?php include(Utilities::getPartnerCustomRoot() . "/orgfocus-" . $_SESSION['networkId'] . ".html"); ?>
@@ -26,7 +26,7 @@
 	</div>
 	<div style="margin-top:10px;">
 		<span class="searchQualifier">and</span>
-		<select id="directory-form-select-type" name="type" style="width:228px;">
+		<select id="directory-form-select-type" name="type">
 			<option value="0" selected>Organization Type is</option>
 			<option value="0" >------------</option>
 			<?php include(Utilities::getPartnerCustomRoot() . "/orgtype-" . $_SESSION['networkId'] . ".html"); ?>

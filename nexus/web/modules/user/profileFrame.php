@@ -13,9 +13,8 @@ $testEmail = $_SESSION['email'];
 ?>
 
 <div id="profile-secondary" class="secondaryControlContainer">
-	<a href='#openProfileOrg' id="profile_org_edit" onclick="" class="secondaryControl" title="Edit Organization"><span class='fa fa-university fa-lg' ></span></a>
+	<a href='#openOrganizationName' id="profile_org_edit" onclick="" class="secondaryControl" title="Edit Organization"><span class='fa fa-university fa-lg' ></span></a>
 </div>
-
 
 <div id="profile-frame" style="height:520px;">
 <form action="<?php echo(Utilities::getHttpPath()); ?>/modules/user/control/profileProcessor.php" method="post" id="profile-form" class="pure-form pure-form-aligned">

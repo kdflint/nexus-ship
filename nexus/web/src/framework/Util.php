@@ -656,14 +656,17 @@ class Utilities {
 				$_SESSION['orgUid'] = $networks[0]['uid'];
 			}
 		}
-		
+			
 		self::setSessionOrgs($_SESSION['username']);
+		// Below assumes Nexus user is only associated with one org.
 		if ($_SESSION['nexusContext'] === "NWM") {
 			$_SESSION['orgId'] = $_SESSION['orgs'][0]['id'];
 			$_SESSION['orgUid'] = $_SESSION['orgs'][0]['uid'];
 			$_SESSION['orgName'] = $_SESSION['orgs'][0]['name'];
+			$_SESSION['logo'] = $_SESSION['orgs'][0]['logo'];	
+			$_SESSION['role'] = self::getRoleName($_SESSION['orgs'][0]['role']);
 		}
-		
+	
 		self::setSessionGroups($_SESSION['username']);
 	
 		$returnArray = Group::getPublicSystemGroupByOrgId($_SESSION['networkId']);

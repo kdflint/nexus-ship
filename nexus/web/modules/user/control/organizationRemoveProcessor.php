@@ -36,7 +36,7 @@ if ((session_status() === PHP_SESSION_ACTIVE) && isset($_SESSION['nexusContext']
 			header("location:" . Utilities::getHttpPath() . "/nexus.php");
  			break;
  		case "ADV":
-			header("location:" . Utilities::getHttpPath() . "/nexus.php#openProfileOrg");
+			header("location:" . Utilities::getHttpPath() . "/nexus.php#openOrganizationName");
  			break;
  		default: 			
  	}

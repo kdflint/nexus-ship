@@ -51,7 +51,23 @@ class Organization {
 		$query = "insert into organization_account (organization_fk, account_type) values ($1, 'ADV')";
 		$result = PgDatabase::psExecute($query, array($orgId));	
 		return $result;
-	}		
+	}	
+	
+	public static function addOrganizationType($orgId, $type) {
+		$exists = self::organizationIdExists($orgId);
+		if($exists) {
+			$query = "update organization set type = $1 where id = $2 returning id";
+			return PgDatabase::psExecute($query, array($type, $orgId));
+		}
+	}	
+	
+	public static function addOrganizationSpecialty($orgId, $specialtyId) {
+		$exists = self::organizationIdExists($orgId);
+		if($exists) {
+			$query = "insert into organization_topic (organization_fk, topic_fk) values ($1, $2)";
+			return PgDatabase::psExecute($query, array($orgId, $specialtyId));
+		}
+	}
 	
 	public static function addOrganizationContact($orgfk, $name, $title, $email, $phone, $url) {
 		//print_r(array($name, $title, $email, $phone, $url)); exit(0);
@@ -186,6 +202,15 @@ class Organization {
 		return FALSE;
 	}
 	
+	private static function organizationIdExists($id) {
+		$query = "select exists (select true from organization where id = $1)";
+		$row = pg_fetch_row(PgDatabase::psExecute($query, array($id)));
+		if (!strcmp($row[0], "t")) {
+			return TRUE;
+		}
+		return FALSE;
+	}
+	
 	public static function getOrganizationByLanguageId($langId) {
 			$query = "select o.name, o.id from organization_language ol, organization o where ol.language_fk = $1 and ol.organization_fk = o.id";
 			return PgDatabase::psExecute($query, array($langId));		
@@ -276,7 +301,7 @@ class Organization {
 	}
 
 	public static function getOrganizationsByUsername($username) {
-		$query = "select o.id, o.name, o.uid, uo.role_fk from organization o, user_organization uo, public.user u
+		$query = "select o.id, o.name, o.uid, o.logo, uo.role_fk from organization o, user_organization uo, public.user u
 			where u.username = $1
 			and u.id = uo.user_fk
 			and uo.organization_fk = o.id";
@@ -284,7 +309,7 @@ class Organization {
 			
 		$resultArray = array();
 	  while ($row = pg_fetch_array($cursor)) {
-	  	array_push($resultArray, array("id" => $row['id'], "name" => $row['name'], "uid" => $row['uid'], "role" => $row['role_fk']));
+	  	array_push($resultArray, array("id" => $row['id'], "name" => $row['name'], "uid" => $row['uid'], "role" => $row['role_fk'], "logo" => $row['logo']));
 	  }		
 	  return $resultArray;
 	}

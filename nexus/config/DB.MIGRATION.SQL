@@ -1,44 +1,24 @@
-ALTER TABLE organization
-   ADD COLUMN public_global_invite_fk integer;
-   
- ALTER TABLE organization
-  ADD CONSTRAINT public_global_invite_fk_fkey FOREIGN KEY (public_global_invite_fk) REFERENCES invitation (id)
-   ON UPDATE NO ACTION ON DELETE NO ACTION;
-   
- update organization set public_global_invite_fk = 118 where id = 376
+-- copy over orgtype, orgfocus files
 
+-- double check ids, then:
 
--- remove definition of EVENT_APPROVE_LIST
+insert into topic (id, name) values (42,'Race');
+insert into topic (id, name) values (43,'Sex'); 
+insert into topic (id, name) values (44,'National Origin');
+insert into topic (id, name) values (45,'Gender');
+insert into topic (id, name) values (46,'LGBTQ');
+insert into topic (id, name) values (47,'Religion');
+insert into topic (id, name) values (48,'School Desegregation');
+insert into topic (id, name) values (49,'School Discipline');
+insert into topic (id, name) values (50,'Multicultural Education');
+insert into topic (id, name) values (51,'Social Justice');
+insert into topic (id, name) values (52,'School Finance');
+insert into topic (id, name) values (53,'Immigrant Rights in Education');
+insert into topic (id, name) values (54,'English Language Learners');
+insert into topic (id, name) values (55,'Bilingual Education');
+insert into topic (id, name) values (56,'School Turnaround');
+insert into topic (id, name) values (57,'Bullying and Harassment');
+insert into topic (id, name) values (58,'Family Engagement');
 
--- shut down Guest group search permission (Action on all forums that Guest can see) - DONE ALL
-
--- turn off announcement permission for Network groups - DONE ALL
-
-GRANT SELECT, INSERT, DELETE ON TABLE user_organization TO northbri_web;
-GRANT SELECT, INSERT, DELETE ON TABLE user_group TO northbri_web;
-
-
-make new directory partner/custom
-
-copy over orgtype-18.html
-move 18.html to partner/custom/orgfocus-18.html 
-
--- change the below relationship == 'god'
--- (local, this was organization_organization ids 2,355,357,362,365,367)
--- (dev: 1,18,339)
-
-select id, organization_from_fk, organization_to_fk, relationship from organization_organization 
-where organization_to_fk in (select organization_fk from organization_account where account_type = 'ADV')
-and organization_from_fk = 13
-and organization_to_fk != 13
-
-update organization_organization set relationship = 'god' where id = 2;
-update organization_organization set relationship = 'god' where id = 325;
-update organization_organization set relationship = 'god' where id = 327;
-
---add network admins to all groups, like this:
-
-select * from user_organization where organization_fk = 379
-insert into user_group (user_fk, group_fk, role_fk) values (300,28,1)
-
-
+GRANT ALL ON TABLE organization_topic_id_seq TO northbri_devnexus;
+GRANT SELECT, UPDATE ON TABLE organization_topic_id_seq TO northbri_web;

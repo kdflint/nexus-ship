@@ -52,7 +52,7 @@
 	       				"<span class='month'>" + nowMeeting.hour_end + ":" + nowMeeting.minute_end + "</span><span class='period'> " + nowMeeting.period_end + " " + nowMeeting.abbrev + "</span>" +
 							"</div>" +
        			"</div>" +
-       			"<div id='nowEventDetail' class='td-div' style='position:absolute;left:140px;top:5px;height:210px;'>" +     				
+       			"<div id='nowEventDetail' class='td-div' style='position:absolute;left:140px;top:5px;height:220px;'>" +     				
 			        "<div class='meeting'>" +
           			"<span class='purpose'>" + nowMeeting.purpose + "</span><br/>" +
           			"<span class='descr'>" +

@@ -40,12 +40,6 @@ if ($_SESSION['nexusContext'] == "ADV") {
 	Utilities::loginForum($user, $auth);
 }	
 
-$firstLogin = "false";
-//if ($_SESSION['firstLogin'] === "TRUE") {
-if (count($_SESSION['orgs']) < 1) {
-		$firstLogin = "true";
-}	
-
 Utilities::setSessionLastActivity();
 
 $showProfile = "false";
@@ -80,6 +74,11 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 			$showAdvIm = "true"; $showAdvImUsername = substr($_GET['view'], 7);		
 	}
 }
+
+$zeroOrgs = "false";
+if (count($_SESSION['orgs']) < 1) {
+		$zeroOrgs = "true";
+}	
 
 ?>
 
@@ -143,9 +142,11 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 			DEFAULT_FORUM = "<?php echo $_SESSION['defaultForumId']; ?>";
 			HTTP_WEB_PATH = "<?php echo Utilities::getHttpPath(); ?>";
 			HTTP_FORUM_PATH = "<?php echo Utilities::getForumHttpPath(); ?>";
+			HTTP_PARTNER_FILE_PATH = "<?php echo Utilities::getPartnerFileUrl(); ?>";
 			FORUM_SESSION_REFRESH_COUNTER = 0;
 			INBOX_FOCUS = DEFAULT_INBOX_FOCUS;
 			RECIPIENT_LIST = [];
+			ZERO_ORGS = <?php echo $zeroOrgs; ?>;
 			
 			<!-- include in this manner instead of in a meta link so that php code inside this file will resolve prior to runtime -->
     	<?php include("scripts/techCheck.js"); ?>
@@ -194,6 +195,10 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 				$('#add_to_group').click( function() {
 					document.getElementById("selected-user-count").innerHTML = RECIPIENT_LIST.length;
     		} );
+    		
+				$('#remove_from_group').click( function() {
+					document.getElementById("selected-user-count-2").innerHTML = RECIPIENT_LIST.length;
+    		} );
 				
 				$( '#schedule_control' ).click(function() {
 	  			toggleNewEventDisplay();
@@ -228,9 +233,6 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 	  			$( "#profile_control_icon" ).toggleClass("fa-minus-square");
 	  			resetProfileForm();		
 				});
-				if(<?php echo $firstLogin; ?>) {
-					window.location.assign(HTTP_WEB_PATH + "/nexus.php#openProfileOrg");	
-				}
 				if(<?php echo $showProfile; ?>) {
 					$( "#profile_control" ).click();
     			$( "#adv-menu-profile" ).click();
@@ -326,6 +328,7 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
       label { display: block; margin: 30px 0 0 0; }
       select { width: 170px; }
       .overflow { height: 200px; }
+      .overflow-tall { height: 320px; }
     </style>
 
     <script type="text/javascript">
@@ -333,6 +336,8 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
       	// schedule-form elements
         $( "#datepicker" ).datepicker({ changeMonth: true, changeYear: true });
         $( "#datepicker-end" ).datepicker({ changeMonth: true, changeYear: true });
+        $( "#now-form-duration" ).selectmenu();
+        $( "#now-form-type" ).selectmenu();
       	$( "#schedule-form-time" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
       	$( "#schedule-form-time-end" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
         $( "#schedule-form-duration" ).selectmenu();
@@ -341,10 +346,17 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
         $( "#schedule-form-country" ).selectmenu({ change: function() { displayTimeZones(); } });
         $( "#schedule-form-countryTimeZones" ).selectmenu();
         $( "#schedule-form-countryTimeZones" ).selectmenu({ change: function() { setTimeZoneDisplay(document.getElementById("schedule-form-countryTimeZones").value); } });
-        $( "#now-form-duration" ).selectmenu();
-        $( "#now-form-type" ).selectmenu();
-        $( "#directory-form-select-specialty").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
-       	$( "#directory-form-select-type").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
+        $( "#directory-form-select-specialty").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow-tall" );
+       	$( "#directory-form-select-specialty").selectmenu().selectmenu({
+						position: { my : "left+50 top", at: "right top-85" },
+						width: 228
+				});
+       	$( "#directory-form-select-type").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow-tall" );
+       	$( "#directory-form-select-type").selectmenu().selectmenu({
+						position: { my : "left+50 top", at: "right top-135" },
+						width: 228
+				});
+       	$( "#directory-form-select-type-in").selectmenu();
        	$( "#organization-form-country" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
         $( "#organization-form-country" ).selectmenu({ change: function() { displayStates(); } });
         $( "#organization-form-countryStates" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
@@ -436,9 +448,7 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 					} 				
 				?>
       </div>
-      
-      <div class="footer">
-      </div>
+
     </div><!-- container -->       
 
   <?php 

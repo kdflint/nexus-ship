@@ -22,7 +22,7 @@ if ($_SESSION['networkId'] == '358') {
 	<a id='directory_view_control' href="#" onclick="switchToOrganizationView();" class="secondaryControl" title="Organizational Directory"><span class='fa fa-university fa-lg'></span></a>
 	<a id='member_view_control' href="#" onclick="switchToMemberView();" class="secondaryControl" title="Member Directory" style="display:none;"><span class='fa fa-address-book-o fa-lg'></span></a>
 	<?php if (Utilities::isSessionAdmin()) { ?>
-		<a id="add_new_org" href='#openDirectoryEdit' onclick="return resetDirectoryForm();" class="secondaryControl" title="Add New Organization" style="display:none;"><span class='fa fa-university fa-lg' ></span><span class='fa fa-plus' ></span></a>
+		<a id="add_new_org" href='#openOrganizationBasic' onclick="return resetDirectoryForm();" class="secondaryControl" title="Add New Organization" style="display:none;"><span class='fa fa-university fa-lg' ></span><span class='fa fa-plus' ></span></a>
 		<!--<a id="add_new_group" href='#openGroupAdd' onclick="alert('<?php echo($globalNetworkEnrollLink1); ?>\n\n<?php echo($globalNetworkEnrollLink2); ?>')" class="secondaryControl" title="Add New Group"><span class='fa fa-users fa-lg' ></span><span class='fa fa-plus' style="margin-left:3px;"></span></a>-->
 		<a id="add_new_group" href='#openGroupAdd' class="secondaryControl" title="Add New Group"><span class='fa fa-users fa-lg' ></span><span class='fa fa-plus' style="margin-left:3px;"></span></a>
 	<?php } ?>
@@ -42,6 +42,7 @@ if ($_SESSION['networkId'] == '358') {
 			</form>
 	</div>
 </span>
+<span id="network_group_name" style="clear:both;font-size:90%;color:#004d62;font-weight:bold;"></span>
 </div>
 
 <div id="network-frame" style="height:420px;clear:left;">
@@ -56,7 +57,7 @@ if ($_SESSION['networkId'] == '358') {
 			<?php include(Utilities::getModulesRoot() . "/directory/views/directoryDetail.php"); ?>
 		</div>
 	</div>
-	<div id="member_directory" style="display:block;">
+	<div id="member_directory" style="display:block;position:relative;top:-20px;">
 
 			<div style="font-size:12px;height:480px;overflow:auto;">
 			<?php include("views/groupList.php"); ?>

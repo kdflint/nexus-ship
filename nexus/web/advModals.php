@@ -12,18 +12,25 @@
 		</div>
 	</div>
 	
-	<div id="openDirectoryEdit" class="modalDialog">
-		<div>
-			<a href="#close" title="Close" class="close">X</a>
-			<?php include("modules/directory/views/organizationAdd.php"); ?>
-		</div>
-	</div>
-
-	<div id="openProfileOrg" class="modalDialog">
+	<div id="openOrganizationName" class="modalDialog">
 		<div>
 			<a href="#close" title="Skip" class="close">X</a>
 			<?php include("modules/directory/views/organizationProfileList.php") ?>
 			<?php include("modules/directory/views/organizationLookup.php"); ?>
+		</div>
+	</div>
+
+	<div id="openOrganizationBasic" class="modalDialog">
+		<div>
+			<a href="#close" title="Close" class="close">X</a>
+			<?php include("modules/directory/views/organizationBasicAdd.php"); ?>
+		</div>
+	</div>
+
+	<div id="openOrganizationFilter" class="modalDialog">
+		<div>
+			<a href="#close" title="Close" class="close">X</a>
+			<?php include("modules/directory/views/organizationFilterAdd.php"); ?>
 		</div>
 	</div>
 	

@@ -60,7 +60,8 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
       fieldset { border: 0; }
       label { display: block; margin: 30px 0 0 0; }
       select { width: 170px; }
-      .overflow { height: 200px; }
+      .overflow { height: 320px; }
+      .overflow-short { height: 200px; }
 	  	table { border: 0px !important; margin-bottom: 0px; width: auto; }
 			body { min-width: 215px; min-height: 440px;}
 			.pure-table td { padding: 10px 0px !important; }
@@ -81,17 +82,23 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
    	<script type="text/javascript">
 			$(document).ready(function() {
         $( "[id^=datepicker]" ).datepicker({ changeMonth: true, changeYear: true });
-      	$( "#schedule-form-time").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
-      	$( "#schedule-form-time-end").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
+      	$( "#schedule-form-time").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow-short" );
+      	$( "#schedule-form-time-end").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow-short" );
         $( "#schedule-form-duration" ).selectmenu();
         $( "#schedule-form-country" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
         $( "#schedule-form-country" ).selectmenu({ change: function() { displayTimeZones(); } });
         $( "#schedule-form-countryTimeZones" ).selectmenu();
         $( "#schedule-form-countryTimeZones" ).selectmenu({ change: function() { setTimeZoneDisplay(document.getElementById("schedule-form-countryTimeZones").value); } });
-       	//$( "[id^=directory-form-select]").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
-       	// The above does not assign overflow class to both elements in id set - why??
        	$( "#directory-form-select-specialty").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
+       	$( "#directory-form-select-specialty").selectmenu().selectmenu({
+						position: { my : "left+50 top", at: "right top-80" },
+						width: 228
+				});
        	$( "#directory-form-select-type").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
+       	$( "#directory-form-select-type").selectmenu().selectmenu({
+						position: { my : "left+50 top", at: "right top-130" },
+						width: 228
+				});
 				toggleDisplay(<?php echo $viewId; ?>);
 			});
 		</script>

@@ -26,12 +26,13 @@ Use only clean input beyond this point (i.e. $clean[])
 
 ======================================================= */
 
-$return = "#openProfileOrg";
+$return = "#openOrganizationName";
 $orgId = Organization::getOrganizationByName($result['clean']['org-name']);
 if (!$orgId) {
 	$orgId = Organization::addOrganization($result['clean']['org-name'], $_SESSION['networkId']);
-	$return = "#openDirectoryEdit";
+	$return = "#openOrganizationBasic";
 	$_SESSION['tmp_orgeditname'] = $result['clean']['org-name'];
+	$_SESSION['tmp_orgeditid'] = $orgId;
 }
 User::addUserOrgRelation($_SESSION['uidpk'],$orgId,88,5);
 
@@ -43,6 +44,7 @@ if ((session_status() === PHP_SESSION_ACTIVE) && isset($_SESSION['nexusContext']
 			header("location:" . Utilities::getHttpPath() . "/nexus.php");
  			break;
  		case "ADV":
+ 			// reloading here causes javascript ZERO_ORGS to refresh
 			header("location:" . Utilities::getHttpPath() . "/nexus.php" . $return);
  			break;
  		case "PUB":

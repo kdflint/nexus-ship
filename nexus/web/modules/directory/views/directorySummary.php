@@ -149,7 +149,7 @@ Please enter your search term at left.
   	var mapDiv = document.getElementById('directoryMapContainer');
     map = new google.maps.Map(mapDiv, {
     	center: {lat: 41.88, lng: -87.62},
-      zoom: 9
+      zoom: 3
     });
     showDirectoryMap();	
     setMapOnAll(map);
