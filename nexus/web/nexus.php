@@ -466,7 +466,8 @@ if (count($_SESSION['orgs']) < 1) {
 
 	<script>
 		var stateObj = { foo: "bar" };
-		history.pushState(stateObj, "", "nexus.php#close");
+		// TODO - this breaks multi-modal displays on Org Forms in everything but Firefox
+		//history.pushState(stateObj, "", "nexus.php#close");
 	</script>
 	
 	</body>
