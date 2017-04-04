@@ -16,7 +16,8 @@ if (!Utilities::isSessionValid()) {
 $result = validateOrganization($_POST);
 
 if (count($result['error']) > 0) {
-	print_r($result);
+	header('Content-Type: application/json');			
+	echo json_encode($result);	
  	exit(0);
 }
 
@@ -26,13 +27,14 @@ Use only clean input beyond this point (i.e. $clean[])
 
 ======================================================= */
 
+$return = array();
 $orgid = Organization::getOrganizationByName($result['clean']['org-name']);
 if (!$orgid) {
 	$orgid = Organization::addOrganization($result['clean']['org-name'], $_SESSION['networkId']);
 }
 
-$_SESSION['tmp_orgeditname'] = $result['clean']['org-name'];
-$_SESSION['tmp_orgeditid'] = $orgid;
+$return['org-name'] = $result['clean']['org-name'];
+$return['org-id'] = $orgid;
 
 Organization::addOrganizationContact($orgid, $result['clean']['org-contact-name'], $result['clean']['org-contact-title'], $result['clean']['org-contact-email'], $result['clean']['org-contact-phone'], $result['clean']['org-url']);
 if ($result['clean']['g_status']) {
@@ -65,19 +67,13 @@ if ($result['clean']['g_status']) {
 
 if ((session_status() === PHP_SESSION_ACTIVE) && isset($_SESSION['nexusContext'])) {
  switch($_SESSION['nexusContext']) {
- 		case "NWM":
-			header("location:" . Utilities::getHttpPath() . "/nexus.php");
- 			break;
  		case "ADV":
-			header("location:" . Utilities::getHttpPath() . "/nexus.php#openOrganizationFilter");
- 			break;
- 		case "PUB":
- 			header("location:" . Utilities::getPluginPath() . "/publicSuite.php?oid=" . $_SESSION['orgUid'] . "&context=directory");
+			header('Content-Type: application/json');			
+			echo json_encode($return);	
  			break;
  		default: 			
  	}
 }
-
 
 function validateOrganization($input) {
 	$result = array('clean' => array(), 'error' => array());

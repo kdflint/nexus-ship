@@ -8,14 +8,8 @@
 	<fieldset style="position:absolute;left:430px;width:390px;top:16px;">
 		<label>Organizational Name</label>
  		<div class="form-field" style="margin-left:0px;">
- 			<?php 
- 				$readonly = "";
- 				if (isset($_SESSION['tmp_orgeditname']) && isset($_SESSION['tmp_orgeditid'])) { 
- 					$readonly = "readonly";
- 				}
- 			?>
-			<input type="text" name="org-name" style="width:100%;" maxlength="100" placeholder="Organization Name" <?php echo($readonly); ?> value="<?php echo($_SESSION['tmp_orgeditname']); ?>"/>
-			<input type="hidden" name="org-id" value="<?php echo($_SESSION['tmp_orgeditid']); ?>"/>
+			<input type="text" name="org-name" style="width:100%;" maxlength="100" placeholder="Organization Name" value=""/>
+			<input type="hidden" name="org-id" value=""/>
 		</div>
 		<label>Organization Type (select one) </label>
 		<select id="directory-form-select-type-in" name="type">

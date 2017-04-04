@@ -2,14 +2,8 @@
 	<fieldset style="position:relative;width:390px;">
 		<label>Organizational Basics</label>
  		<div class="form-field">
- 			<?php 
- 				$readonly = "";
- 				if (isset($_SESSION['tmp_orgeditname']) && isset($_SESSION['tmp_orgeditid'])) { 
- 					$readonly = "readonly";
- 				}
- 			?>
-			<input type="text" name="org-name" style="width:100%;" maxlength="100" placeholder="Organization Name" <?php echo($readonly); ?> value="<?php echo($_SESSION['tmp_orgeditname']); ?>"/>
-			<input type="hidden" name="org-id" value="<?php echo($_SESSION['tmp_orgeditid']); ?>"/>
+			<input type="text" name="org-name" style="width:100%;" maxlength="100" placeholder="Organization Name" value=""/>
+			<input type="hidden" name="org-id" value=""/>
 		</div>
     <div class="form-field">
 	  	<input type="text" name="org-url" style="width:100%" maxlength="100" placeholder="Organization Web Site (http://)" >

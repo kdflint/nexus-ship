@@ -13,10 +13,18 @@
 	</div>
 	
 	<div id="openOrganizationName" class="modalDialog">
-		<div>
+		<div id="openOrganizationName-part-name" class="openOrganizationName-part" style="display:block;">
 			<a href="#close" title="Skip" class="close">X</a>
 			<?php include("modules/directory/views/organizationProfileList.php") ?>
 			<?php include("modules/directory/views/organizationLookup.php"); ?>
+		</div>
+		<div id="openOrganizationName-part-basic" class="openOrganizationName-part" style="display:none;">			
+			<a href="#close" title="Skip" class="close">X</a>
+			<?php include("modules/directory/views/organizationBasicAdd.php"); ?>		
+		</div>
+		<div id="openOrganizationName-part-filter" class="openOrganizationName-part" style="display:none;">			
+			<a href="#close" title="Skip" class="close">X</a>
+			<?php include("modules/directory/views/organizationFilterAdd.php"); ?>		
 		</div>
 	</div>
 

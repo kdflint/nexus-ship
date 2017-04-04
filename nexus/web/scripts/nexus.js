@@ -195,6 +195,33 @@ function post(uiContext, to, p) {
 
 }
 
+function formSjaxSubmit(frm) {
+	var xmlhttp = $.ajax({
+		type: $(frm).attr('method'),
+		url: $(frm).attr('action'),
+		data: $(frm).serialize(),
+		async: false,
+		success: function (data) {
+			//alert('ok');
+		}
+	});
+	jsonObj = JSON.parse(xmlhttp.responseText);	
+  return jsonObj;
+}
+
+function formAjaxSubmit(frm) {
+	// untested, but exactly like above only asynchronous
+	$.ajax({
+		type: $(frm).attr('method'),
+		url: $(frm).attr('action'),
+		data: $(frm).serialize(),
+		async: true,
+		success: function (data) {
+			//alert('ok');
+		}
+	});
+}
+
 function addUserToGroup(groupid) {
 	for(var i = 0; i < RECIPIENT_LIST.length; i++) {
 		var xmlhttp = getXmlHttpRequest();
@@ -529,7 +556,6 @@ function usernameValidCheck(input) {
 	xmlhttp.onreadystatechange=function() {
   	if (xmlhttp.readyState == 4) {
   		if (xmlhttp.status == 200) { 
-  			console.log(xmlhttp.responseText);
   			jsonObj = JSON.parse(xmlhttp.responseText);	
   			status = jsonObj['username-status'];
   		} else {
@@ -543,29 +569,6 @@ function usernameValidCheck(input) {
 	return status;  					
 }
 
-
-function myHTMLInclude() {
-  var z, i, a, file, xhttp;
-  z = document.getElementsByTagName("*");
-  for (i = 0; i < z.length; i++) {
-    if (z[i].getAttribute("w3-include-html")) {
-      a = z[i].cloneNode(false);
-      file = z[i].getAttribute("w3-include-html");
-      var xhttp = new XMLHttpRequest();
-      xhttp.onreadystatechange = function() {
-        if (xhttp.readyState == 4 && xhttp.status == 200) {
-          a.removeAttribute("w3-include-html");
-          a.innerHTML = xhttp.responseText;
-          z[i].parentNode.replaceChild(a, z[i]);
-          myHTMLInclude();
-        }
-      }      
-      xhttp.open("GET", file, true);
-      xhttp.send();
-      return;
-    }
-  }
-}
 
 function getLocalTz() {
 	// https://bitbucket.org/pellepim/jstimezonedetect
@@ -1116,8 +1119,20 @@ function profileValidateAndSubmit() {
  	}
 }
 
-function organizatonNameValidateAndSubmit(thisForm) {
+function toggleMultiPartModal(modal, part) {
+	var modalDiv = document.getElementById(modal);
+	var modalParts = modalDiv.getElementsByClassName(modal + "-part");
+	 for (var i=0; i<modalParts.length; i++) {
+		modalParts[i].style.display = "none";
+	}
+	var thisModalPart = document.getElementById(modal + "-part-" + part);
+	if (thisModalPart) {
+		thisModalPart.style.display = "block";
+	}
+}
 
+function organizatonNameValidateAndSubmit(thisForm) {
+	
 	var organizationNameForm = document.forms[thisForm];
 	var submitButton = document.getElementById(thisForm + "-submit");
 	var pass = true;	
@@ -1133,31 +1148,22 @@ function organizatonNameValidateAndSubmit(thisForm) {
 
  	if (Boolean(pass)) {
  		submitButton.disabled = true;  
- 		submitButton.innerHTML = "<span class='fa fa-spinner'></span>"; 
+ 		submitButton.innerHTML = "<span class='fa fa-spinner fa-pulse'></span>"; 
  		submitButton.style.opacity = ".6";
- 		organizationNameForm.submit();
- 	}	
-
-}
-
-function organizationFilterValidateAndSubmit(thisForm) {
-
-	var organizationFilterForm = document.forms[thisForm];
-	var submitButton = document.getElementById(thisForm + "-submit");
-	var pass = true;	
-	
-	var typeField = document.getElementById("directory-form-select-type-in");
-	setFieldPassStyles(document.getElementById("directory-form-select-type-in-button", "------------"));
-	if (typeField.value === "0") {
-		setFieldErrorStyles(document.getElementById("directory-form-select-type-in-button", "------------"));
-		pass = false;
-	}
-	
-	if (Boolean(pass)) {
- 		submitButton.disabled = true;  
- 		submitButton.innerHTML = "<span class='fa fa-spinner'></span>"; 
- 		submitButton.style.opacity = ".6";
- 		organizationFilterForm.submit();
+ 		var details = formSjaxSubmit(organizationNameForm);
+		if (details['status'] === "name-new") {
+			// must manually update ZERO_ORGS since no page reload
+			ZERO_ORGS = false;
+			var basicForm = document.forms['organization-form-basic'];
+ 			basicForm['org-name'].value = details['org-name'];
+ 			basicForm['org-name'].readOnly = true;
+ 			basicForm['org-id'] = details['org-id'];
+ 			toggleMultiPartModal("openOrganizationName", "basic");
+ 		} else {
+ 			// reload here will cause ZERO_ORGS update
+ 			location.reload();
+ 			toggleMultiPartModal("openOrganizationName", "name");
+ 		}
  	}
 
 }
@@ -1236,10 +1242,39 @@ function organizationBasicValidateAndSubmit(thisForm) {
 	
  	if (Boolean(pass)) {
  		submitButton.disabled = true;  
- 		submitButton.innerHTML = "<span class='fa fa-spinner'></span>"; 
+ 		submitButton.innerHTML = "<span class='fa fa-spinner fa-pulse'></span>"; 
  		submitButton.style.opacity = ".6";
- 		organizationBasicForm.submit();
+ 		var details = formSjaxSubmit(organizationBasicForm);
+		var filterForm = document.forms['organization-form-filters'];
+ 		filterForm['org-name'].value = details['org-name'];
+ 		filterForm['org-name'].readOnly = true;
+ 		filterForm['org-id'].value = details['org-id'];
+ 		toggleMultiPartModal("openOrganizationName", "filter");
  	}
+}
+
+function organizationFilterValidateAndSubmit(thisForm) {
+
+	var organizationFilterForm = document.forms[thisForm];
+	var submitButton = document.getElementById(thisForm + "-submit");
+	var pass = true;	
+	
+	var typeField = document.getElementById("directory-form-select-type-in");
+	setFieldPassStyles(document.getElementById("directory-form-select-type-in-button", "------------"));
+	if (typeField.value === "0") {
+		setFieldErrorStyles(document.getElementById("directory-form-select-type-in-button", "------------"));
+		pass = false;
+	}
+	
+	if (Boolean(pass)) {
+ 		submitButton.disabled = true;  
+ 		submitButton.innerHTML = "<span class='fa fa-spinner fa-pulse'></span>"; 
+ 		submitButton.style.opacity = ".6";
+ 		var details = formSjaxSubmit(organizationFilterForm);
+ 		toggleMultiPartModal("openOrganizationName", "name");
+ 		location.assign(HTTP_WEB_PATH + "/nexus.php#close");
+ 	}
+
 }
 
 function getMaxDaysForMonth(month) {

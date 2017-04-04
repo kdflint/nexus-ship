@@ -3,7 +3,6 @@
 	<fieldset style="position:relative;width:560px;">
  		<div class="form-field">
    		<input type="text" id="organization-name-autocomplete" type="text" name="org-name" style="width:100%;" rows="2" maxlength="100" placeholder="Add an Organization to your profile"/>
-   		<!--<input type="hidden" id="organization-id-autocomplete" name="org-id" value="" />-->
 		</div>
 	</fieldset>
 	<fieldset style="position:absolute;left:600px;width:200px;top:24px;">

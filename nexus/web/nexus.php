@@ -466,8 +466,19 @@ if (count($_SESSION['orgs']) < 1) {
 
 	<script>
 		var stateObj = { foo: "bar" };
-		// TODO - this breaks multi-modal displays on Org Forms in everything but Firefox
-		//history.pushState(stateObj, "", "nexus.php#close");
+		if(window.location.hash) {
+			// In everything but FF, a processor return "location:" value that uses a hash to display a modal 
+			// gets ignored for some reason due to history pushState. Not sure why, but this is an example 
+			// of what doesn't work, from organizationRemoveProcessor.php: 
+			// header("location:" . Utilities::getHttpPath() . "/nexus.php#openOrganizationName");
+			// What we want is to response to show that modal, but it doesn't
+			// So we only puhStat when location url does not contain a hash valueS
+		} else {
+			// In general we do this to eliminate confusion because this is such a js driven site, back button feels a little chaotic
+			// Revisit at some point
+			history.pushState(stateObj, "", "nexus.php#close");
+		}
+
 	</script>
 	
 	</body>
