@@ -471,11 +471,11 @@ if (count($_SESSION['orgs']) < 1) {
 			// gets ignored for some reason due to history pushState. Not sure why, but this is an example 
 			// of what doesn't work, from organizationRemoveProcessor.php: 
 			// header("location:" . Utilities::getHttpPath() . "/nexus.php#openOrganizationName");
-			// What we want is to response to show that modal, but it doesn't
-			// So we only puhStat when location url does not contain a hash valueS
+			// What we want is response to reveal that modal, but it doesn't
+			// So we only pushState when location url does not contain a hash value
 		} else {
-			// In general we do this to eliminate confusion because this is such a js driven site, back button feels a little chaotic
-			// Revisit at some point
+			// In general we do this to eliminate confusion because this is such a js driven site, back button 
+			// feels arbitrary and unintuitive. Revisit at some point... 
 			history.pushState(stateObj, "", "nexus.php#close");
 		}
 

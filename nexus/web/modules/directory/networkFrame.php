@@ -22,7 +22,7 @@ if ($_SESSION['networkId'] == '358') {
 	<a id='directory_view_control' href="#" onclick="switchToOrganizationView();" class="secondaryControl" title="Organizational Directory"><span class='fa fa-university fa-lg'></span></a>
 	<a id='member_view_control' href="#" onclick="switchToMemberView();" class="secondaryControl" title="Member Directory" style="display:none;"><span class='fa fa-address-book-o fa-lg'></span></a>
 	<?php if (Utilities::isSessionAdmin()) { ?>
-		<a id="add_new_org" href='#openOrganizationBasic' onclick="return resetDirectoryForm();" class="secondaryControl" title="Add New Organization" style="display:none;"><span class='fa fa-university fa-lg' ></span><span class='fa fa-plus' ></span></a>
+		<a id="add_new_org" href='javascript:void(0);' onclick="openOrganizationBasicForm();" class="secondaryControl" title="Add New Organization" style="display:none;"><span class='fa fa-university fa-lg' ></span><span class='fa fa-plus' ></span></a>
 		<!--<a id="add_new_group" href='#openGroupAdd' onclick="alert('<?php echo($globalNetworkEnrollLink1); ?>\n\n<?php echo($globalNetworkEnrollLink2); ?>')" class="secondaryControl" title="Add New Group"><span class='fa fa-users fa-lg' ></span><span class='fa fa-plus' style="margin-left:3px;"></span></a>-->
 		<a id="add_new_group" href='#openGroupAdd' class="secondaryControl" title="Add New Group"><span class='fa fa-users fa-lg' ></span><span class='fa fa-plus' style="margin-left:3px;"></span></a>
 	<?php } ?>

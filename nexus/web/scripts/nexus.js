@@ -965,6 +965,11 @@ function validatePhone(phone) {
 	return /^[0-9()-. ]+$/.test(phone);
 }
 
+function openOrganizationBasicForm() {
+	toggleMultiPartModal("openOrganizationName", "basic");
+	location.assign(HTTP_WEB_PATH + "/nexus.php#openOrganizationName");
+}
+
 function resetProfileForm() {
 	var profileForm = document.forms['profile-form'];
 	profileForm.reset();
@@ -1013,10 +1018,6 @@ function resetEventForm() {
 	scheduleForm['meeting-registr'].innerHTML = "";
 	scheduleForm['meeting-uuid'].value = "";
 	// TODO - timezone value is not resetting - why? Also affects NWM (that is, form cancel does not reset tx value/display)
-	return true;
-}
-
-function resetDirectoryForm() {
 	return true;
 }
 
