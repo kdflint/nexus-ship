@@ -320,6 +320,7 @@ class Catalogue {
 		// We do this to be JSON-friendly
 		$indexedResults = array();
 		$orgIdList = array();
+		ksort($results);
 		$counter1 = 0;
 		foreach ($results as $key1=>$val1) {
 			$indexedResults[$counter1]["name"] = $key1;
