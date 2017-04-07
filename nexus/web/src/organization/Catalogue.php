@@ -51,7 +51,7 @@ class Catalogue {
 						} else {
 							$results[$pass1['name']] = array(
 								//"Programs" => array(),
-								//"People" =>  array(),
+								"People" =>  array(),
 								"Contact" => array(),
 								"Language" => array(),
 								"Topic" => array(),
@@ -72,8 +72,6 @@ class Catalogue {
 				// 		Set a Person associative index inside the $results record, where User Id is key, Person name is value
 				// Otherwise create a new index for this organization inside $results and include this Person
 			
-				// For public view, skip Persons
-				/*
 				while ($pass2 = pg_fetch_array($cursor2)) { 
 					if (!strcmp($pass2['type'], "Person")) {
 						$innerCursor2 = User::getUserOrgRelationsByUserId($pass2['id']);
@@ -84,9 +82,9 @@ class Catalogue {
 								}
 							} else {					
 								$results[$inner2['name']] = array(
-									"Programs" => array(),
+									//"Programs" => array(),
 									"People" => array($pass2['id'] => $pass2['name']),
-							   	"Contact" => array(),
+						   		"Contact" => array(),
 									"Language" => array(),
 									"Topic" => array(),
 									"Location" => array(),
@@ -96,7 +94,6 @@ class Catalogue {
 						}
 					}
 				}
-				*/
 		
 				while ($pass5 = pg_fetch_array($cursor5)) { 
 					if (!strcmp($pass5['type'], "Contact")) {
@@ -109,7 +106,7 @@ class Catalogue {
 							} else {
 								$results[$inner5['name']] = array(
 									//"Programs" => array(),
-									//"People" => array(),
+									"People" => array(),
 							  	"Contact" => array($pass5['name']),
 									"Language" => array(),
 									"Topic" => array(),
@@ -132,7 +129,7 @@ class Catalogue {
 							} else {
 								$results[$inner3['name']] = array(
 									//"Programs" => array(),
-									//"People" => array(),
+									"People" => array(),
 									"Contact" => array(),
 									"Language" => array($pass3['name']),
 									"Topic" => array(),
@@ -144,7 +141,7 @@ class Catalogue {
 					}
 				}
 		
-				// For Public view, skip Programs
+				// When this opens up, adjust directorySummary.php: indexes inside loop at line 62-ish
 				/*
 				while ($pass4 = pg_fetch_array($cursor4)) { 
 					if (!strcmp($pass4['type'], "Program")) {
@@ -181,7 +178,7 @@ class Catalogue {
 							} else {
 								$results[$inner7['name']] = array(
 									//"Programs" => array(),
-									//"People" => array(),
+									"People" => array(),
 							  	"Contact" => array(),
 									"Language" => array(),
 									"Topic" => array($pass7['name']),
@@ -204,7 +201,7 @@ class Catalogue {
 							} else {
 								$results[$inner6['name']] = array(
 									//"Programs" => array(),
-									//"People" => array(),
+									"People" => array(),
 							  	"Contact" => array(),
 									"Language" => array(),
 									"Topic" => array(),
@@ -251,7 +248,7 @@ class Catalogue {
 					} else {
 						$results[$pass['name']] = array(
 							//"Programs" => array(),
-							//"People" =>  array(),
+							"People" =>  array(),
 							"Contact" => array(),
 							"Language" => array(),
 							"Topic" => array(),
@@ -294,7 +291,7 @@ class Catalogue {
 			}
 						
 		} else {
-			// If we get here, we had not search terms or filters
+			// If we get here, we had no search terms or filters
 			
 			$cursor = Organization::getOrganizationsByNetworkId($networkId);
 			
@@ -305,7 +302,7 @@ class Catalogue {
 					} else {
 						$results[$pass['name']] = array(
 							//"Programs" => array(),
-							//"People" =>  array(),
+							"People" =>  array(),
 							"Contact" => array(),
 							"Language" => array(),
 							"Topic" => array(),
@@ -326,7 +323,8 @@ class Catalogue {
 			$indexedResults[$counter1]["name"] = $key1;
 			$counter2 = 0;
 			foreach ($val1 as $key2=>$val2) {
-				if ($counter2 == 4) {
+				// If this is the OrgId item
+				if ($key2 === "OrgId") {
 					$indexedResults[$counter1]["content"][$counter2][strtolower($key2)] = $val2;
 					array_push($orgIdList, $val2);
 				} else {
@@ -345,9 +343,8 @@ class Catalogue {
 			}
 			$counter1++;
 		}
-				
-		/* Yes, this code keeps getting more and more awesome... */
-		
+					
+		/* Yes, this code keeps getting more and more awesome... */	
 		$result = Organization::getGeoByOrgIds($orgIdList);
 
 		$geoResults = array();
@@ -381,7 +378,7 @@ class Catalogue {
 			
 			union
 			
-			select 'Person' as type, u.id as id, (u.fname || ' ' || u.mname || ' ' || u.lname) as name
+			select distinct 'Person' as type, u.id as id, (u.fname || ' ' || u.mname || ' ' || u.lname || '::' || u.username) as name
 			from public.user u, organization_organization oo, user_organization uo
 			where (
 				lower(u.fname) like lower('%' || $1 || '%')
@@ -396,7 +393,7 @@ class Catalogue {
 			
 			union
 			
-			select 'Contact' as type, c.id as id, c.name as name
+			select distinct 'Contact' as type, c.id as id, c.name as name
 			from contact c, organization_organization oo, organization_contact oc
 			where (
 				lower(c.name) like lower('%' || $1 || '%')
@@ -409,7 +406,7 @@ class Catalogue {
 			
 			union
 			
-			select 'Program' as type, p.id as id, p.name as name
+			select distinct 'Program' as type, p.id as id, p.name as name
 			from program p, organization_organization oo, organization_program op
 			where (
 				lower(p.name) like lower('%' || $1 || '%')
@@ -444,7 +441,7 @@ class Catalogue {
 					
 			union
 			
-			select 'Location' as type, loc.id as id, loc.municipality || ', ' || loc.region2 as name
+			select distinct 'Location' as type, loc.id as id, loc.municipality || ', ' || loc.region2 as name
 			from location loc, organization_organization oo, organization_location oloc
 			where (
 				lower(loc.address1) like lower('%' || $1 || '%')

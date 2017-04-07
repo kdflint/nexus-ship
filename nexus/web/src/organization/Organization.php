@@ -368,7 +368,15 @@ class Organization {
 															from topic t, organization_topic ot
 															where ot.organization_fk = $1
 															and ot.topic_fk = t.id", array($orgId));
-																															
+															
+		$result5 = PgDatabase::psExecute("select distinct (u.fname || ' ' || u.lname) as name, u.username
+															from public.user u, user_organization uo
+															where u.id = uo.user_fk
+															and u.username not like 'pUser-%'
+															and u.username not like 'nUser-%'
+															and uo.organization_fk = $1
+															order by name asc", array($orgId));
+																														
 		$resultArray = array();							
 		  
 	  $row0 = pg_fetch_array($result0);
@@ -405,6 +413,12 @@ class Organization {
 	  $counter = 0;
 	  while ($row4 = pg_fetch_array($result4)) {
 	  	$resultArray['topic'] = $row4['topic'];
+	  	$counter++;
+	  }
+
+		$counter = 0;
+	  while ($row5 = pg_fetch_array($result5)) {
+	  	$resultArray['member'][$counter] = $row5['name'] . "::" . $row5['username'];
 	  	$counter++;
 	  }
 	  

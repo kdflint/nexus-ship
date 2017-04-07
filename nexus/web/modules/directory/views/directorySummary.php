@@ -22,7 +22,6 @@
 		} else {
 			searchString = keywordString;
 		}
-		console.log(searchString);
 		var searchSpecialty = document.forms[thisForm].specialty.value;
 		var searchType = document.forms[thisForm].type.value;
 		var xmlhttp = getXmlHttpRequest();
@@ -30,6 +29,7 @@
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 				var stringToParse = xmlhttp.responseText;
 				//var stringToParse = '{"name":"Nexus Training Organization","content":[{"contact":[""]},{"language":[""]},{"topic":[""]},{"location":[""]},{"orgid":"330"}]}';//,{"name":"Nexus Web Meet Demonstration","content":[{"contact":[""]},{"language":[""]},{"topic":[""]},{"location":[""]},{"orgid":"331"}]}';
+				//console.log(stringToParse);
 			 	var jsonObj = JSON.parse(stringToParse);
 			 	var geoData = jsonObj.geoEntry;
 	   		addMarkers(geoData);  	
@@ -62,52 +62,58 @@
 		 		for (var i = 0; i < jsonObj.orgEntry.length; i++) {
 		 			var thisContent = "";
 		 			var lineHeightMultiple = 0;
-	 				for (var j = 0; j < jsonObj.orgEntry[i].content[0].contact.length; j++) {
-	 					if (jsonObj.orgEntry[i].content[0].contact[j].length > 0) {
+	 				for (var j = 0; j < jsonObj.orgEntry[i].content[1].contact.length; j++) {
+	 					if (jsonObj.orgEntry[i].content[1].contact[j].length > 0) {
 	 						if (j == 0) {
-	 							thisContent = thisContent + "<br/>Contact: ";
+	 							thisContent = thisContent + "<br/>Organizational Contact: ";
 	 						}
-	 						thisContent = thisContent + jsonObj.orgEntry[i].content[0].contact[j];
-	 						if (j < jsonObj.orgEntry[i].content[0].contact.length-1) {thisContent = thisContent + ", ";}
+	 						thisContent = thisContent + jsonObj.orgEntry[i].content[1].contact[j];
+	 						if (j < jsonObj.orgEntry[i].content[1].contact.length-1) {thisContent = thisContent + ", ";}
 	 						lineHeightMultiple++;
 	 					}
 	 				}
-	 				for (var j = 0; j < jsonObj.orgEntry[i].content[1].language.length; j++) {
-	 					if (jsonObj.orgEntry[i].content[1].language[j].length > 0) {
+	 				for (var j = 0; j < jsonObj.orgEntry[i].content[2].language.length; j++) {
+	 					if (jsonObj.orgEntry[i].content[2].language[j].length > 0) {
 	 						if (j == 0) {
 	 							thisContent = thisContent + "<br/>Language: ";
 	 						}
-		 					thisContent = thisContent + jsonObj.orgEntry[i].content[1].language[j];
-		 					if (j < jsonObj.orgEntry[i].content[1].language.length-1) {thisContent = thisContent + ", ";}
+		 					thisContent = thisContent + jsonObj.orgEntry[i].content[2].language[j];
+		 					if (j < jsonObj.orgEntry[i].content[2].language.length-1) {thisContent = thisContent + ", ";}
 	 						lineHeightMultiple++;
 		 				}
 	 				}
-	 				for (var j = 0; j < jsonObj.orgEntry[i].content[2].topic.length; j++) {
-	 					if (jsonObj.orgEntry[i].content[2].topic[j].length > 0) {
+	 				for (var j = 0; j < jsonObj.orgEntry[i].content[3].topic.length; j++) {
+	 					if (jsonObj.orgEntry[i].content[3].topic[j].length > 0) {
 	 						if (j == 0) {
 	 							thisContent = thisContent + "<br/>Topic: ";
 	 						}
-	 						thisContent = thisContent + jsonObj.orgEntry[i].content[2].topic[j];
-	 						if (j < jsonObj.orgEntry[i].content[2].topic.length-1) {thisContent = thisContent + ", ";}
+	 						thisContent = thisContent + jsonObj.orgEntry[i].content[3].topic[j];
+	 						if (j < jsonObj.orgEntry[i].content[3].topic.length-1) {thisContent = thisContent + ", ";}
 	 						lineHeightMultiple++;
 	 					}
 	 				}
-	 				for (var j = 0; j < jsonObj.orgEntry[i].content[3].location.length; j++) {
-	 					if (jsonObj.orgEntry[i].content[3].location[j].length > 0) {
+	 				for (var j = 0; j < jsonObj.orgEntry[i].content[4].location.length; j++) {
+	 					if (jsonObj.orgEntry[i].content[4].location[j].length > 0) {
 	 						if (j == 0) {
 	 							thisContent = thisContent + "<br/>Location: ";
 	 						}
-	 						thisContent = thisContent + jsonObj.orgEntry[i].content[3].location[j];
-	 						if (j < jsonObj.orgEntry[i].content[3].location.length-1) {thisContent = thisContent + ", ";}
+	 						thisContent = thisContent + jsonObj.orgEntry[i].content[4].location[j];
+	 						if (j < jsonObj.orgEntry[i].content[4].location.length-1) {thisContent = thisContent + ", ";}
 	 						lineHeightMultiple++;
 	 					}
 	 				}
-					var lineHeight = 60 + (lineHeightMultiple*20);
+	 				if (jsonObj.orgEntry[i].content[0].people[0].length > 0) {
+	 					var numPeople = jsonObj.orgEntry[i].content[0].people.length;
+						var suffix = numPeople > 1 ? "es" : ""
+						thisContent = thisContent + "<br/>" + numPeople + " Network Member Match" + suffix;
+ 						lineHeightMultiple++;
+ 					}
+					var lineHeight = 40 + (lineHeightMultiple*20);
 		 			tableItem = 
        			"<div class='td-div'>" +
        				"<div class='detail'>" +
- 					  		"<a href='javascript:void(0)' onclick='showDirectoryDetail(" + jsonObj.orgEntry[i].content[4].orgid + ")'><span class='organization'>" + jsonObj.orgEntry[i].name + "</span></a>" +
- 					  		"<span class='tod'>" + thisContent + "</span>" +
+ 					  		"<a href='javascript:void(0)' onclick='showDirectoryDetail(" + jsonObj.orgEntry[i].content[5].orgid + ")'><span class='organization'>" + jsonObj.orgEntry[i].name + "</span></a>" +
+ 					  		"<span style='font-size:80%'>" + thisContent + "</span>" +
 							"</div>" +
      				"</div>";
     			document.getElementById("directoryRow" + i).innerHTML = tableItem;   

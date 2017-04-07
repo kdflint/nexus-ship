@@ -17,12 +17,13 @@
        					"<span class='fname detail'>" + jsonObj.oname + "</span>" +
        					((typeof orgEditLinkData != "undefined") && orgEditLinkData[orgId] ? "<a href='" + orgEditLinkData[orgId] + "' target='_blank' style='margin-left:20px;' >Edit 	this Listing</a>" : "") +
        					"<div class='detail'>" +
+										(jsonObj.member ? "<p><span>" + jsonObj.member.length + " network members (enroll to view)</span></p>" : "") +
        							(jsonObj.url ? "<p><span class='tod'><a href='" + jsonObj.url + "' target='_blank'>" + jsonObj.url + "</a></span>	</p>" : "<p>&nbsp;</p>") +
 										(jsonObj.cname ? "<span>" + jsonObj.cname + "</span><br/>" : "") +
 										(jsonObj.email ? "<span>Email: " + jsonObj.email + "</span><br/>" : "") +
 										(jsonObj.phone ? "<span>Phone: " + jsonObj.phone + "</span><br/>" : "") +
 										(jsonObj.fax ? "<span>Fax: " + jsonObj.fax + "</span><br/>" : "") +
-										(jsonObj.formatted ? "<span>" + jsonObj.formatted + "</span><br/>" : loc1 + loc2) +
+										(jsonObj.formatted ? "<span>" + jsonObj.formatted + "</span>" : loc1 + loc2) +
 								"</div>";
 			 				document.getElementById("itemRow").innerHTML = "<div class='td-div'>" + tableItem + "<div>";   
  							addDetailMarker(jsonObj);
