@@ -345,6 +345,36 @@ class Organization {
 	  return $resultArray;
 	}
 	
+	public static function getOrganizationMembersbyOrgId($id, $ssnUser) {
+		$users = array();
+		$query = "select distinct u.id as id, u.username, u.fname, u.lname, u.email
+			from public.user u, user_organization uo
+			where u.id = uo.user_fk
+			and u.suspend_dttm is NULL
+			and u.username not like 'nUser-%'
+			and u.username not like 'pUser-%'
+			and uo.organization_fk = $1
+			order by u.fname, u.lname";
+		$cursor = PgDatabase::psExecute($query, array($id));
+		$counter = 0;	
+		while ($row = pg_fetch_array($cursor)) {
+			$users[$counter]['id'] = $row['id'];
+			$users[$counter]['username'] = $row['username'];
+			$users[$counter]['fname'] = $row['fname'];
+			$users[$counter]['lname'] = $row['lname'];
+			$users[$counter]['title'] = "";
+			$users[$counter]['descr'] = "";
+			$users[$counter]['email'] = $row['email'];
+			$users[$counter]['sessionUser'] = $ssnUser;
+			$users[$counter]['uidpk'] = $row['id'];
+			$users[$counter]['role'] = "";
+			$users[$counter]['status'] = "active";
+			$counter++;
+		}
+		return $users;
+	}
+
+	
 	public static function getOrganizationDetailById($orgId) {
 		
 		$result0 = PgDatabase::psExecute("select name, type, structure, status_fk as status from organization where id = $1", array($orgId));
@@ -384,35 +414,31 @@ class Organization {
 	  $resultArray['oname'] = $row0['name'];
 	  $resultArray['type'] = $row0['type'];
 	  
-	  $counter = 0;
 	  while ($row1 = pg_fetch_array($result1)) {
 	  	$resultArray['formatted'] = $row1['formatted'];
 	  	$resultArray['location1'] = $row1['line1'];
 	  	$resultArray['location2'] = $row1['line2'];
 	  	$resultArray['lat'] = $row1['lat'];
 	  	$resultArray['long'] = $row1['long'];
-	  	$counter++;
 	  }
 	  
-	  $counter = 0;
 	  while ($row2 = pg_fetch_array($result2)) {
 	  	$resultArray['phone'] = Utilities::prettyPrintPhone($row2['phone']);
 	  	$resultArray['email'] = $row2['email'];
 	  	$resultArray['url'] = $row2['url'];
 	  	$resultArray['cname'] = $row2['name'];
 	  	$resultArray['fax'] = Utilities::prettyPrintPhone($row2['fax']);
-	  	$counter++;
 	  }
 	  
 	  $counter = 0;
 	  while ($row3 = pg_fetch_array($result3)) {
-	  	$resultArray['language'] = $row3['language'];
+	  	$resultArray['language'][$counter] = $row3['language'];
 	  	$counter++;
 	  }
 	  
 	  $counter = 0;
 	  while ($row4 = pg_fetch_array($result4)) {
-	  	$resultArray['topic'] = $row4['topic'];
+	  	$resultArray['topic'][$counter] = $row4['topic'];
 	  	$counter++;
 	  }
 

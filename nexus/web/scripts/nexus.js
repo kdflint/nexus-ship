@@ -17,7 +17,9 @@ var DEFAULT_INBOX_FOCUS = "/ucp.php?i=pm&folder=inbox";
 var INBOX_FOCUS = "";
 var RECIPIENT_LIST = [];
 var ZERO_ORGS = false;
-
+var MEMBER_TABLE;
+var ORG_MEMBER_TABLE;
+var ORG_TABLE;
 
 /*
 Would like to avoid initializing these and force the including php page to do so, but that might break something right now. 
@@ -265,10 +267,18 @@ function checkAll(formname) {
 	}
 }	
 
-function showAdvProfile(username) {
+function showAdvProfile(username, fullname) {
+	var dto = new Object();	
+	dto.username = username;
+	dto.fullname = fullname;	
+	RECIPIENT_LIST.push(dto);	
+	document.getElementById("recipient-dto").innerHTML = JSON.stringify(RECIPIENT_LIST);
+	document.getElementById("inbox-mode").innerHTML = "compose";
+	// LEFT OFF - for some reason above is not making it to posting_pm_header.html, line 3
 	var iframeSrc = HTTP_FORUM_PATH  + "/memberlist.php?mode=viewprofile&un=" + username;
   var iframe = document.getElementById("adv-profile-frame");
   iframe.src = iframeSrc;
+  //$( "#adv-menu-inbox" ).click();
   window.location.assign(HTTP_WEB_PATH + "/nexus.php#openProfile");
 }
 
@@ -673,8 +683,13 @@ function showDirectoryDetail(orgId) {
 		secondaryOrgEditIcon.style.display = "block";
 	}
 	getDirectoryDetail(orgId);
+}
+
+function showDirectoryDetailAdv(orgid) {	
+	document.getElementById('show_directory_detail').click();
+	getDirectoryDetailAdv(orgid);
 }	
-			
+		
 function showDirectoryResults() {
 	document.getElementById("show-directoryResults").style.display='block';
 	document.getElementById("show-directoryDetail").style.display='none';	
@@ -1132,6 +1147,12 @@ function toggleMultiPartModal(modal, part) {
 	}
 }
 
+function showOrgMemberList(orgId, orgName) {
+	alert(orgName);
+	getOrgMemberList(orgId, orgName);
+	toggleMultiPartModal("openOrganizationView", "members");
+}
+
 function organizatonNameValidateAndSubmit(thisForm) {
 	
 	var organizationNameForm = document.forms[thisForm];
@@ -1196,8 +1217,8 @@ function organizationBasicValidateAndSubmit(thisForm) {
   // TODO - validate url, also in event form
   var url = urlField.value;
 	setFieldPassStyles(urlField, "Organization Web Site (http://)");
-  if (isEmptyOrLong(url, 100)) {
-  	setFieldErrorStyles(urlField, "Organization web site is required");
+  if (url.length > 100) {
+  	setFieldErrorStyles(urlField, "Organization web site max length is 100");
     pass = false;
   }  
   

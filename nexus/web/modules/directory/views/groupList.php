@@ -9,7 +9,7 @@
 			 		tableRows = tableRows + "<tr id='group-list-table-row-" + i + "'>" +
 			 			"<td><input type='checkbox' name='names[]' value='" + jsonObj[i].username + "::" + jsonObj[i].fname + " " + jsonObj[i].lname + "'  \></td>" + 
 			 			"<td>" + 
-			 				"<a href='javascript:void(0)' style='font-size:12px;font-weight:normal;' onclick='showAdvProfile(\"" + jsonObj[i].username + "\");'>" +
+			 				"<a href='javascript:void(0)' style='font-size:12px;font-weight:normal;' onclick='showAdvProfile(\"" + jsonObj[i].username + "\", \"" + jsonObj[i].fname + " " + jsonObj[i].lname + "\");'>" +
 			 					"<span class='fa fa-plus'></span>" +
 			 				"</a>" +
 			 			"</td>" +			
@@ -23,14 +23,14 @@
        	initMemberTable();
        	// Clear all rows in the member DataTable and internal memory
 				RECIPIENT_LIST = [];
-       	memberTable.clear();
+       	MEMBER_TABLE.clear();
        	for (var i = 0; i < jsonObj.length; i++) { 
        		var thisRow = document.getElementById("group-list-table-row-" + i);
        		// Add each row to the member DataTable
-       		memberTable.row.add(thisRow);
+       		MEMBER_TABLE.row.add(thisRow);
        	}
        	// Draw the member DataTable
-       	memberTable.draw();
+       	MEMBER_TABLE.draw();
        	document.getElementById("network_group_name").innerHTML = truncateString(groupName,70);
 			}
 		}

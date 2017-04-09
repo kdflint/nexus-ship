@@ -18,7 +18,7 @@ if(true) {
 		exit(0);
 	}	
 	if ($cleanGroupId === "-1") {
-		$data = Group::getNetworkMembersbyNetworkId($_SESSION['networkId'], $_SESSION['uidpk']);;
+		$data = Group::getNetworkMembersbyNetworkId($_SESSION['networkId'], $_SESSION['uidpk']);
 	} else {
 		$data = Group::getGroupMembersByGroupId($cleanGroupId, $_SESSION['uidpk']);
 	}

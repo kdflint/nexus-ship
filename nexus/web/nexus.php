@@ -164,8 +164,6 @@ if (count($_SESSION['orgs']) < 1) {
 					minLength: 3,
         });
 										
-				var memberTable;
-
 				$('#group-list-table-rows').on( 'click', 'tr', function (event) {
     			if (event.target.type !== 'checkbox') {
     				$(':checkbox', this).trigger('click');
@@ -176,7 +174,6 @@ if (count($_SESSION['orgs']) < 1) {
 							dto.username = keyval[0];
 							dto.fullname = keyval[1];	
 							RECIPIENT_LIST.push(dto);	
-							//console.log(keyval[0]); 
 	  				}    	
 			    } else {
 						var keyval = $(':checkbox', this).val().split("::");
@@ -186,11 +183,15 @@ if (count($_SESSION['orgs']) < 1) {
 		    	}
 				} );
 				
+				$('#org-list-table-rows').on( 'click', 'tr', function (event) {
+					showDirectoryDetailAdv(ORG_TABLE.row( this ).data()[0])
+				} );
+				
 				$('#compose_pm').click( function() {
          	document.getElementById("recipient-dto").innerHTML = JSON.stringify(RECIPIENT_LIST);
         	document.getElementById("inbox-mode").innerHTML = "compose";
 					$( "#adv-menu-inbox" ).click();	
-    		} );				
+    		} );		
 						
 				$('#add_to_group').click( function() {
 					document.getElementById("selected-user-count").innerHTML = RECIPIENT_LIST.length;
@@ -300,9 +301,9 @@ if (count($_SESSION['orgs']) < 1) {
     		});    
   		});
 
-			// We call this initialization when ajax delivery of initial table contents is complete
-			function initMemberTable(tableId) {
-				memberTable = $('#member-directory').DataTable( {
+			// We call these initialization when ajax delivery of initial table contents is complete
+			function initMemberTable() {
+				MEMBER_TABLE = $('#member-directory').DataTable( {
 					"retrieve": true,
 					"pageLength": 10,
 					"lengthChange": false,
@@ -313,6 +314,35 @@ if (count($_SESSION['orgs']) < 1) {
    					null,
    					null
 					]
+				} );
+			}
+			
+			function initOrgMemberTable() {
+				ORG_MEMBER_TABLE = $('#org-member-directory').DataTable( {
+					"retrieve": true,
+					"pageLength": 5,
+					"lengthChange": false,
+					"searching": false,
+					"order": [[1, 'asc']],
+					"columns": [
+   					null,
+   					null,
+   					{ "orderable": false }
+					]
+				} );
+			}
+			
+			function initOrgTable() {
+				ORG_TABLE = $('#org-directory').DataTable( {
+					"retrieve": true,
+					"pageLength": 10,
+					"lengthChange": false,
+					"searching": false,
+					"info": false,
+					"order": [[1, 'asc']],
+ 				  "columnDefs": [
+    				{ "visible": false, "targets": 0 }
+  				]
 				} );
 			}
 	  		  	

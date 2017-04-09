@@ -56,4 +56,17 @@
 		</div>
 	</div>
 
+	<div id="openOrganizationView" class="modalDialog">
+		<div>
+			<a href="#close" title="Skip" class="close">X</a>
+			<div id="openOrganizationView-part-detail" class="openOrganizationView-part" style="display:block;">
+				<?php include("modules/directory/views/directoryDetailAdv.php") ?>
+			</div>
+			<div id="openOrganizationView-part-members" class="openOrganizationView-part" style="display:none;">
+				<a href="javascript:void(0);" onclick="toggleMultiPartModal('openOrganizationView', 'detail')"><span class='fa fa-chevron-circle-left fa-2x' style="margin-right:10px;"></span>Back to detail record</a>
+				<p>Network members affiliated with <span id="orgDetailNameForBlahBlah">this organization</span>:</p>
+				<?php include("modules/directory/views/orgMemberList.php") ?>
+			</div>
+		</div>
+	</div>
 	

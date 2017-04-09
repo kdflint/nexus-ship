@@ -19,6 +19,7 @@ if ($_SESSION['networkId'] == '358') {
 	<!--<a id="mark_all" href="#" onclick="checkAll('member-directory-form')" style="border-left:20px;float:left;">Select All</a> -->
 </span>
 <span style="float:right;">
+	<a id="show_directory_detail" href="#openOrganizationView" style="display:none;" ></a>
 	<a id='directory_view_control' href="#" onclick="switchToOrganizationView();" class="secondaryControl" title="Organizational Directory"><span class='fa fa-university fa-lg'></span></a>
 	<a id='member_view_control' href="#" onclick="switchToMemberView();" class="secondaryControl" title="Member Directory" style="display:none;"><span class='fa fa-address-book-o fa-lg'></span></a>
 	<?php if (Utilities::isSessionAdmin()) { ?>
@@ -50,16 +51,13 @@ if ($_SESSION['networkId'] == '358') {
 		<div class="controlCol" style="left:15px;border-right: 1px solid #eeeeee;margin-top:-10px;">
 			<?php include(Utilities::getModulesRoot() . "/directory/views/directorySearch.php"); ?>
 		</div>
-		<div id="show-directoryResults" class="displayCol" style="border:0px !important;width:600px;margin-left:5px;margin-top:-20px;">
-			<?php include(Utilities::getModulesRoot() . "/directory/views/directorySummary.php"); ?>
-		</div>
-		<div id="show-directoryDetail" class="displayCol displayDetail" style="display:none;border:0px !important;margin-left:5px;margin-top:-10px;">
-			<?php include(Utilities::getModulesRoot() . "/directory/views/directoryDetail.php"); ?>
+		<div id="show-directoryResults" class="displayCol" style="border:0px !important;width:630px;overflow:visible;font-size:80%;margin-top:40px;">
+			<?php include(Utilities::getModulesRoot() . "/directory/views/directoryTableAdv.php"); ?>
 		</div>
 	</div>
 	<div id="member_directory" style="display:block;position:relative;top:-20px;">
 
-			<div style="font-size:12px;height:480px;overflow:auto;">
+			<div style="font-size:80%;height:480px;overflow:auto;">
 			<?php include("views/groupList.php"); ?>
 		</div>
 	</div>
