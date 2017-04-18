@@ -685,7 +685,7 @@ function showDirectoryDetail(orgId) {
 	getDirectoryDetail(orgId);
 }
 
-function showDirectoryDetailAdv(orgid) {	
+function showDirectoryDetailAdv(orgid) {
 	document.getElementById('show_directory_detail').click();
 	getDirectoryDetailAdv(orgid);
 }	
@@ -713,6 +713,15 @@ function showDirectoryMap() {
 	document.getElementById("map_control").onclick=function(){showDirectoryList();};
 }
 
+function showDirectoryMapAdv() {
+	document.getElementById("directoryMapContainer").style.opacity=1;
+	document.getElementById("directoryMapContainer").style.filter='alpha(opacity=100)'
+	document.getElementById("directoryMapContainer").style.zIndex=10;
+	document.getElementById("directoryDataContainer").style.display='none';
+	document.getElementById("directory_control").className='fa fa-list fa-' + getDirectoryIconSize();
+	document.getElementById("map_control").onclick=function(){showDirectoryListAdv();};
+}
+
 function getDirectoryIconSize() {
 	return "lg";
 }
@@ -724,6 +733,15 @@ function showDirectoryList() {
 	document.getElementById("directoryTable").style.display='block';
 	document.getElementById("directory_control").className='fa fa-globe fa-' + getDirectoryIconSize();
 	document.getElementById("map_control").onclick=function(){showDirectoryMap();};
+}
+
+function showDirectoryListAdv() {
+	document.getElementById("directoryMapContainer").style.opacity=0;
+	document.getElementById("directoryMapContainer").style.filter='alpha(opacity=0)'
+	document.getElementById("directoryMapContainer").style.zIndex=-1;
+	document.getElementById("directoryDataContainer").style.display='block';
+	document.getElementById("directory_control").className='fa fa-globe fa-' + getDirectoryIconSize();
+	document.getElementById("map_control").onclick=function(){showDirectoryMapAdv();};
 }
 
 // TODO - refactor these front validations scripts - way too redundant!
@@ -1148,7 +1166,6 @@ function toggleMultiPartModal(modal, part) {
 }
 
 function showOrgMemberList(orgId, orgName) {
-	alert(orgName);
 	getOrgMemberList(orgId, orgName);
 	toggleMultiPartModal("openOrganizationView", "members");
 }
@@ -1785,6 +1802,10 @@ function getDaysPassing(num, freq, start) {
     	return loopCount - 1;
 	}
 	return 1;
+}
+
+function htmlEntities(str) {
+	return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;').replace(/\'/g, '&#39;');	
 }
 
 function millisecondsToFormat(formatString, ms){
