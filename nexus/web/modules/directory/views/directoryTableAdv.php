@@ -22,7 +22,6 @@
 		xmlhttp.onreadystatechange=function() {
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 				var stringToParse = xmlhttp.responseText;
-				//var stringToParse = '{"name":"Nexus Training Organization","content":[{"contact":[""]},{"language":[""]},{"topic":[""]},{"location":[""]},{"orgid":"330"}]}';//,{"name":"Nexus Web Meet Demonstration","content":[{"contact":[""]},{"language":[""]},{"topic":[""]},{"location":[""]},{"orgid":"331"}]}';
 			 	var jsonObj = JSON.parse(stringToParse);
 			 	var geoData = jsonObj.geoEntry;
 	   		addMarkers(geoData);  	
@@ -43,13 +42,6 @@
     			tr.appendChild(td1);
     			tr.appendChild(td2);
     			tableRows.push(tr);
-			 		//document.getElementById("org-list-table-rows").innerHTML = "<tr id='directoryRow0'>" +
-			 		//	"<td>" +
-       		//		"<div class='detail'>" +
- 					 // 		"<span class='organization'>There are no findings for this search.</span>" +
-					//		"</div>" +
-     			//	"</td>" +
-     			//"</tr>";
 			 	} else {				
 					// Show only those components returned by search.
 					// Ugly as stink - will refactor this object altogether once requirements become more clear -kdf
@@ -104,7 +96,7 @@
     					var td2 = document.createElement("TD");
     						var span1 = document.createElement("SPAN");
     						span1.setAttribute("class", "organization");
-    						span1.setAttribute("style", "font-weight:bold;color:#d27b4b;");
+    						span1.setAttribute("style", "font-weight:bold;color:#d27b4b;cursor:pointer;");
     						var span2 = document.createElement("SPAN");
     						var orgName = document.createTextNode(jsonObj.orgEntry[i].name);
     						var orgContent = document.createTextNode(thisContent);
@@ -120,7 +112,7 @@
 	 	   	// Initialize the org DataTable (only necessary first time, but does no harm subsequently.
 	      initOrgTable();
 	      ORG_TABLE.clear();
-	      for (var i = 0; i < tableRows.length; i++) {      		
+	      for (var i = 0; i < tableRows.length; i++) {     		
 	      	ORG_TABLE.row.add(tableRows[i]);
 	      }
 	      ORG_TABLE.draw();	      
@@ -133,16 +125,16 @@
 </script>
 
 <span style="position:absolute;padding-top:14px;padding-left:14px;font-size:120%;"><span id="directory_search_count"></span></span>
-
-<table id="org-directory" class="display compact" width="90%" cellspacing="2" cellpadding="2" style="margin-left:-10px;">	
-	<thead>
-		<tr><th>id-hidden</th><th>Search Results</th></tr>
-	</thead>
-	<tbody id="org-list-table-rows">
-	</tbody>
-</table>
-
-<div id="directoryMapContainer" class="table-div" style="opacity:0;z-index:-1;filter:alpha(opacity=0);width:100%;height:82%;border: 0px none !important;position:absolute;top:70px;"></div>
+<div id="directoryDataContainer">
+	<table id="org-directory" class="display compact" width="90%" cellspacing="2" cellpadding="2" style="margin-left:-10px;">	
+		<thead>
+			<tr><th>id-hidden</th><th>Search Results</th></tr>
+		</thead>
+		<tbody id="org-list-table-rows">
+		</tbody>
+	</table>
+</div>
+<div id="directoryMapContainer" class="table-div" style="opacity:0;z-index:-1;filter:alpha(opacity=0);width:90%;margin-left:20px;height:82%;border: 0px none !important;position:absolute;"></div>
 
 <script>
 	
@@ -150,12 +142,13 @@
 	var markers = [];
 	
   function initMap() {
+  	alert("map init");
   	var mapDiv = document.getElementById('directoryMapContainer');
     map = new google.maps.Map(mapDiv, {
     	center: {lat: 41.88, lng: -87.62},
       zoom: 3
     });
-    showDirectoryMap();	
+    showDirectoryMapAdv();	
     setMapOnAll(map);
    }
 
@@ -168,13 +161,14 @@
     		map: map,
     		title: orgGeo['title']
   		});
-	  	marker.addListener('click', function() {showDirectoryDetail(orgid);});
+	  	marker.addListener('click', function() {showDirectoryDetailAdv(geoDataCfcht[orgid]);});
   		markers.push(marker);
   	}
 	}
 	*/
 
 	function addMarkers(geoData) {
+		alert("attempting marker add");
 		if (geoData) {
   		for (var org in geoData) {
 		  	var marker = new google.maps.Marker({
@@ -182,7 +176,9 @@
     			map: map,
     			title: geoData[org]['title']
   			});
-	  		marker.addListener('click', function() {showDirectoryDetail(org);});
+	  		marker.addListener('click', function() {
+	  			showDirectoryDetailAdv(org);
+	  		});
   			markers.push(marker);
   		}
   	}
@@ -190,12 +186,14 @@
 	
 
 	function setMapOnAll(map) {
+		alert("Setting " + markers.length + " markers");
   	for (var i = 0; i < markers.length; i++) {
 	    markers[i].setMap(map);
 	  }
 	}
 	
 	function clearAllMarkers() {
+		alert("clearing");
   	setMapOnAll(null);
   	markers = [];
 	}

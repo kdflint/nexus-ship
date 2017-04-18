@@ -54,7 +54,7 @@ function validateInput($input) {
 	$result = array('clean' => array(), 'error' => array());
 
 	if (isset($input['org-name']) && strlen($input['org-name']) > 0) {
-		$result['clean']['org-name'] = Utilities::sanitize($input['org-name']);
+		$result['clean']['org-name'] = $input['org-name'];
 	} else {
 		$result['error']['org-name'] = "error";
 	}
