@@ -24,7 +24,7 @@
 				var stringToParse = xmlhttp.responseText;
 			 	var jsonObj = JSON.parse(stringToParse);
 			 	var geoData = jsonObj.geoEntry;
-	   		buildMarkerList(geoData);  	
+	   		buildMarkerList(geoData, "ADV");  	
 
 			 	var tableRows = [];
 			 	if (jsonObj.orgEntry.length == 0) {
@@ -125,7 +125,7 @@
 </script>
 
 <span style="position:absolute;padding-top:14px;padding-left:14px;font-size:120%;"><span id="directory_search_count"></span></span>
-<div id="directoryDataContainer">
+<div id="directoryDataContainer" class="directory-table">
 	<table id="org-directory" class="display compact" width="90%" cellspacing="2" cellpadding="2" style="margin-left:-10px;">	
 		<thead>
 			<tr><th>id-hidden</th><th>Search Results</th></tr>

@@ -1,6 +1,6 @@
 <script>
 	function getDirectoryDetail(orgId) {
-		if (detailMap === undefined) { initDetailMap(); }
+		if (DETAIL_MAP === undefined) { initDetailMap(); }
 		clearAllDetailMarkers();
 		var xmlhttp = getXmlHttpRequest();
 		xmlhttp.onreadystatechange=function() {
@@ -79,44 +79,3 @@
 </div>
 
 </div>
-
-<script>
-	
-	var detailMap;
-	var detailMarkers = [];
-	
-  function initDetailMap() {
-		console.log("map initialized");
-  	var mapDiv = document.getElementById('detailMapContainer');
-    detailMap = new google.maps.Map(mapDiv, {
-    	center: {lat: 41.88, lng: -87.62},
-      zoom: 10
-    });
-   }
-
-	function addDetailMarker(org) {
-		//console.log("adding detail - lat: " + parseFloat(org.lat));
-		//console.log("adding detail - long: " + parseFloat(org.long));
-		// TODO - verify input is json
-  	var marker = new google.maps.Marker({
-	    position: {lat: parseFloat(org.lat), lng: parseFloat(org.long)},
-   		map: detailMap,
-   		title: org.oname
- 		});
- 		detailMarkers.push(marker);
- 		setDetailMapOnAll(detailMap);
- 		detailMap.setCenter(marker.getPosition());
-	}
-	
-	function setDetailMapOnAll(map) {
-  	for (var i = 0; i < detailMarkers.length; i++) {
-	    detailMarkers[i].setMap(map);
-	  }
-	}
-	
-	function clearAllDetailMarkers() {
-  	setDetailMapOnAll(null);
-  	detailMarkers = [];
-	}
-	
-</script>

@@ -32,7 +32,7 @@
 				//console.log(stringToParse);
 			 	var jsonObj = JSON.parse(stringToParse);
 			 	var geoData = jsonObj.geoEntry;
-	   		addMarkers(geoData);  	
+	   		buildMarkerList(geoData, "NWM");  	
 			 	// put row containers in the directory table, 1 for each event
 			 	var tableRows = "";
 			 	var n = -1;
@@ -112,7 +112,7 @@
 		 			tableItem = 
        			"<div class='td-div'>" +
        				"<div class='detail'>" +
- 					  		"<a href='javascript:void(0)' onclick='showDirectoryDetail(" + jsonObj.orgEntry[i].content[5].orgid + ")'><span class='organization'>" + jsonObj.orgEntry[i].name + "</span></a>" +
+ 					  		"<a href='javascript:void(0)' onclick='showDirectoryDetail(" + jsonObj.orgEntry[i].content[5].orgid + ")'><span class='organization'>" + htmlEntities(jsonObj.orgEntry[i].name) + "</span></a>" +
  					  		"<span style='font-size:80%'>" + thisContent + "</span>" +
 							"</div>" +
      				"</div>";
@@ -140,66 +140,8 @@
   </div>	
 	<?php } ?>
 
-<div id="directoryTable" class="table-div" style="border:0px none !important;width:90%;padding-left:20px;padding-top:50px;">
+<div id="directoryTable" class="table-div directory-table" style="border:0px none !important;width:90%;padding-left:20px;padding-top:50px;">
 Please enter your search term at left.
 </div>
 
 <div id="directoryMapContainer" class="table-div" style="opacity:0;z-index:-1;filter:alpha(opacity=0);width:100%;height:82%;border: 0px none !important;position:absolute;top:70px;"></div>
-
-<script>
-	
-	var map;
-	var markers = [];
-	
-  function initMap() {
-  	var mapDiv = document.getElementById('directoryMapContainer');
-    map = new google.maps.Map(mapDiv, {
-    	center: {lat: 41.88, lng: -87.62},
-      zoom: 3
-    });
-    showDirectoryMap();	
-    setMapOnAll(map);
-   }
-
-	/*
-	function addMarker(orgid) {
-		if (geoDataCfcht[orgid]) {
-			var orgGeo = geoDataCfcht[orgid][0];
-	  	var marker = new google.maps.Marker({
-		    position: {lat: orgGeo['lat'], lng: orgGeo['lng']},
-    		map: map,
-    		title: orgGeo['title']
-  		});
-	  	marker.addListener('click', function() {showDirectoryDetail(orgid);});
-  		markers.push(marker);
-  	}
-	}
-	*/
-
-	function addMarkers(geoData) {
-		if (geoData) {
-  		for (var org in geoData) {
-		  	var marker = new google.maps.Marker({
-		    	position: {lat: parseFloat(geoData[org]['lat']), lng: parseFloat(geoData[org]['lng'])},
-    			map: map,
-    			title: geoData[org]['title']
-  			});
-	  		marker.addListener('click', function() {showDirectoryDetail(org);});
-  			markers.push(marker);
-  		}
-  	}
-	}
-	
-
-	function setMapOnAll(map) {
-  	for (var i = 0; i < markers.length; i++) {
-	    markers[i].setMap(map);
-	  }
-	}
-	
-	function clearAllMarkers() {
-  	setMapOnAll(null);
-  	markers = [];
-	}
-	
-</script>

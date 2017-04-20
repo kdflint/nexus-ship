@@ -184,7 +184,12 @@ if (count($_SESSION['orgs']) < 1) {
 				} );
 				
 				$('#org-list-table-rows').on( 'click', 'tr', function (event) {
-					showDirectoryDetailAdv(ORG_TABLE.row( this ).data()[0])
+					showDirectoryDetail(ORG_TABLE.row( this ).data()[0], "ADV")
+				} );
+				
+				$('#datatable-input').on( 'keyup', function () {
+					filterMemberTable(this.value);
+    			//ORG_MEMBER_TABLE.search( this.value ).draw();
 				} );
 				
 				$('#compose_pm').click( function() {
@@ -265,7 +270,7 @@ if (count($_SESSION['orgs']) < 1) {
 				}			
 				if(<?php echo $showOrganizationDetail; ?>) {
 					$( "#adv-menu-network" ).click();
-					showDirectoryDetail("<?php echo $showOrgDetailId; ?>");	
+					showDirectoryDetail("<?php echo $showOrgDetailId; ?>", "NWM");	
 				}
 				if(<?php echo $showAdvProfile; ?>) {
 					showAdvProfile("<?php echo($showAdvProfileUsername); ?>");
@@ -344,6 +349,12 @@ if (count($_SESSION['orgs']) < 1) {
     				{ "visible": false, "targets": 0 }
   				]
 				} );
+			}
+			
+			function filterMemberTable(term) {
+				if (MEMBER_TABLE) {
+					MEMBER_TABLE.search( term ).draw();
+				}
 			}
 	  		  	
 		</script>

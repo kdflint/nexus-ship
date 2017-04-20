@@ -30,6 +30,8 @@ var ORG_MEMBER_TABLE;
 var ORG_TABLE;
 var MAP;
 var MARKERS = [];
+var DETAIL_MAP;
+var DETAIL_MARKERS = [];
 	
 function initMap() {
 	console.log("MAP init");
@@ -38,11 +40,11 @@ function initMap() {
   	center: {lat: 41.88, lng: -87.62},
    	zoom: 3
   });
-  showDirectoryMapAdv();	
+  showDirectoryMap();	
   setMapOnAllMarkers(MAP);
 }
 
-function buildMarkerList(geoData) {
+function buildMarkerList(geoData, context) {
 	console.log("building the marker list");
 	if (geoData) {
  		for (var org in geoData) {
@@ -54,7 +56,7 @@ function buildMarkerList(geoData) {
  			});
  			thisMarker.addListener('click', function() {
   			console.log("showing detail record for org id " + this.id);
-  			showDirectoryDetailAdv(this.id);
+  			showDirectoryDetail(this.id, context);
   		});
  			MARKERS.push(thisMarker);
  		}
@@ -72,6 +74,36 @@ function clearAllMarkers() {
 	console.log("clearing markers");
 	setMapOnAllMarkers(null);
  	MARKERS = [];
+}
+
+function initDetailMap() {
+  var mapDiv = document.getElementById('detailMapContainer');
+  DETAIL_MAP = new google.maps.Map(mapDiv, {
+  	center: {lat: 41.88, lng: -87.62},
+    zoom: 10
+	});
+}
+
+function addDetailMarker(org) {
+ 	var marker = new google.maps.Marker({
+    position: {lat: parseFloat(org.lat), lng: parseFloat(org.long)},
+  		map: DETAIL_MAP,
+  		title: org.oname
+		});
+	DETAIL_MARKERS.push(marker);
+	setDetailMapOnAll(DETAIL_MAP);
+	DETAIL_MAP.setCenter(marker.getPosition());
+}
+	
+function setDetailMapOnAll(map) {
+ 	for (var i = 0; i < DETAIL_MARKERS.length; i++) {
+    DETAIL_MARKERS[i].setMap(map);
+  }
+}
+	
+function clearAllDetailMarkers() {
+ 	setDetailMapOnAll(null);
+ 	DETAIL_MARKERS = [];
 }
 
 function formSubmit(formId) {
@@ -715,25 +747,25 @@ function toggleTooltip(tip) {
 	}
 }
 
-function showDirectoryDetail(orgId) {
-	document.getElementById("show-directoryResults").style.display='none';
-	document.getElementById("show-directoryDetail").style.display='block';	
-	var secondaryFilterIcon = document.getElementById("secondary-network-filter");
-	if (secondaryFilterIcon) {
-		secondaryFilterIcon.className = "secondaryControlDisabled";
+function showDirectoryDetail(orgId, context) {
+	if (context === "ADV") {
+		document.getElementById('show_directory_detail').click();
+		getDirectoryDetailAdv(orgId);
+	} else {
+		document.getElementById("show-directoryResults").style.display='none';
+		document.getElementById("show-directoryDetail").style.display='block';	
+		var secondaryFilterIcon = document.getElementById("secondary-network-filter");
+		if (secondaryFilterIcon) {
+			secondaryFilterIcon.className = "secondaryControlDisabled";
+		}
+		var secondaryOrgEditIcon = document.getElementById("secondary-network-edit");
+		if (secondaryOrgEditIcon) {
+			secondaryOrgEditIcon.style.display = "block";
+		}
+		getDirectoryDetail(orgId);
 	}
-	var secondaryOrgEditIcon = document.getElementById("secondary-network-edit");
-	if (secondaryOrgEditIcon) {
-		secondaryOrgEditIcon.style.display = "block";
-	}
-	getDirectoryDetail(orgId);
 }
-
-function showDirectoryDetailAdv(orgid) {
-	document.getElementById('show_directory_detail').click();
-	getDirectoryDetailAdv(orgid);
-}	
-		
+	
 function showDirectoryResults() {
 	document.getElementById("show-directoryResults").style.display='block';
 	document.getElementById("show-directoryDetail").style.display='none';	
@@ -752,18 +784,12 @@ function showDirectoryMap() {
 	document.getElementById("directoryMapContainer").style.opacity=1;
 	document.getElementById("directoryMapContainer").style.filter='alpha(opacity=100)'
 	document.getElementById("directoryMapContainer").style.zIndex=10;
-	document.getElementById("directoryTable").style.display='none';
+	var tables = document.getElementsByClassName("directory-table");
+	for (var i = 0; i < tables.length; i++) {
+    tables[i].style.display='none';
+	}
 	document.getElementById("directory_control").className='fa fa-list fa-' + getDirectoryIconSize();
 	document.getElementById("map_control").onclick=function(){showDirectoryList();};
-}
-
-function showDirectoryMapAdv() {
-	document.getElementById("directoryMapContainer").style.opacity=1;
-	document.getElementById("directoryMapContainer").style.filter='alpha(opacity=100)'
-	document.getElementById("directoryMapContainer").style.zIndex=10;
-	document.getElementById("directoryDataContainer").style.display='none';
-	document.getElementById("directory_control").className='fa fa-list fa-' + getDirectoryIconSize();
-	document.getElementById("map_control").onclick=function(){showDirectoryListAdv();};
 }
 
 function getDirectoryIconSize() {
@@ -774,18 +800,12 @@ function showDirectoryList() {
 	document.getElementById("directoryMapContainer").style.opacity=0;
 	document.getElementById("directoryMapContainer").style.filter='alpha(opacity=0)'
 	document.getElementById("directoryMapContainer").style.zIndex=-1;
-	document.getElementById("directoryTable").style.display='block';
+	var tables = document.getElementsByClassName("directory-table");
+	for (var i = 0; i < tables.length; i++) {
+    tables[i].style.display='block';
+	}
 	document.getElementById("directory_control").className='fa fa-globe fa-' + getDirectoryIconSize();
 	document.getElementById("map_control").onclick=function(){showDirectoryMap();};
-}
-
-function showDirectoryListAdv() {
-	document.getElementById("directoryMapContainer").style.opacity=0;
-	document.getElementById("directoryMapContainer").style.filter='alpha(opacity=0)'
-	document.getElementById("directoryMapContainer").style.zIndex=-1;
-	document.getElementById("directoryDataContainer").style.display='block';
-	document.getElementById("directory_control").className='fa fa-globe fa-' + getDirectoryIconSize();
-	document.getElementById("map_control").onclick=function(){showDirectoryMapAdv();};
 }
 
 // TODO - refactor these front validations scripts - way too redundant!
@@ -1210,6 +1230,7 @@ function toggleMultiPartModal(modal, part) {
 }
 
 function showOrgMemberList(orgId, orgName) {
+	console.log(orgName);
 	getOrgMemberList(orgId, orgName);
 	toggleMultiPartModal("openOrganizationView", "members");
 }
@@ -1849,7 +1870,7 @@ function getDaysPassing(num, freq, start) {
 }
 
 function htmlEntities(str) {
-	return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;').replace(/\'/g, '&#39;');	
+	return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;').replace(/\'/g, '&#39;').replace(/\(/g, '&#40;').replace(/\)/g, '&#41;');	
 }
 
 function millisecondsToFormat(formatString, ms){
