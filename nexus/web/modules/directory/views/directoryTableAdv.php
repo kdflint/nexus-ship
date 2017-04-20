@@ -24,7 +24,7 @@
 				var stringToParse = xmlhttp.responseText;
 			 	var jsonObj = JSON.parse(stringToParse);
 			 	var geoData = jsonObj.geoEntry;
-	   		addMarkers(geoData);  	
+	   		buildMarkerList(geoData);  	
 
 			 	var tableRows = [];
 			 	if (jsonObj.orgEntry.length == 0) {
@@ -136,66 +136,3 @@
 </div>
 <div id="directoryMapContainer" class="table-div" style="opacity:0;z-index:-1;filter:alpha(opacity=0);width:90%;margin-left:20px;height:82%;border: 0px none !important;position:absolute;"></div>
 
-<script>
-	
-	var map;
-	var markers = [];
-	
-  function initMap() {
-  	alert("map init");
-  	var mapDiv = document.getElementById('directoryMapContainer');
-    map = new google.maps.Map(mapDiv, {
-    	center: {lat: 41.88, lng: -87.62},
-      zoom: 3
-    });
-    showDirectoryMapAdv();	
-    setMapOnAll(map);
-   }
-
-	/*
-	function addMarker(orgid) {
-		if (geoDataCfcht[orgid]) {
-			var orgGeo = geoDataCfcht[orgid][0];
-	  	var marker = new google.maps.Marker({
-		    position: {lat: orgGeo['lat'], lng: orgGeo['lng']},
-    		map: map,
-    		title: orgGeo['title']
-  		});
-	  	marker.addListener('click', function() {showDirectoryDetailAdv(geoDataCfcht[orgid]);});
-  		markers.push(marker);
-  	}
-	}
-	*/
-
-	function addMarkers(geoData) {
-		alert("attempting marker add");
-		if (geoData) {
-  		for (var org in geoData) {
-		  	var marker = new google.maps.Marker({
-		    	position: {lat: parseFloat(geoData[org]['lat']), lng: parseFloat(geoData[org]['lng'])},
-    			map: map,
-    			title: geoData[org]['title']
-  			});
-	  		marker.addListener('click', function() {
-	  			showDirectoryDetailAdv(org);
-	  		});
-  			markers.push(marker);
-  		}
-  	}
-	}
-	
-
-	function setMapOnAll(map) {
-		alert("Setting " + markers.length + " markers");
-  	for (var i = 0; i < markers.length; i++) {
-	    markers[i].setMap(map);
-	  }
-	}
-	
-	function clearAllMarkers() {
-		alert("clearing");
-  	setMapOnAll(null);
-  	markers = [];
-	}
-	
-</script>

@@ -82,7 +82,7 @@
 	var detailMarkers = [];
 	
   function initDetailMap() {
-		console.log("map initialized");
+		console.log("detail map initialized");
   	var mapDiv = document.getElementById('detailMapContainer');
     detailMap = new google.maps.Map(mapDiv, {
     	center: {lat: 41.88, lng: -87.62},

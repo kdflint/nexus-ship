@@ -1,7 +1,15 @@
 var errorBackground = "rgba(247,248,239,0.6) url('') no-repeat right top";
 
 var currentEvents;
-var geoDataOrgSearch;
+
+/*
+Would like to avoid initializing these and force the including php page to do so, but that might break something right now. 
+So, we've got redundand code for the moment
+See login.php:142
+*/
+var USERNAME_REQUIRED = "Username is required";
+var PASSWORD_REQUIRED = "Password is required";
+var EMAIL_REQUIRED = "Valid email is required";
 
 var MEETING_INFO_NEXT_REFRESH = "60000";
 var NEXT_MEETING_START;
@@ -20,15 +28,51 @@ var ZERO_ORGS = false;
 var MEMBER_TABLE;
 var ORG_MEMBER_TABLE;
 var ORG_TABLE;
+var MAP;
+var MARKERS = [];
+	
+function initMap() {
+	console.log("MAP init");
+ 	var mapDiv = document.getElementById('directoryMapContainer');
+  MAP = new google.maps.Map(mapDiv, {
+  	center: {lat: 41.88, lng: -87.62},
+   	zoom: 3
+  });
+  showDirectoryMapAdv();	
+  setMapOnAllMarkers(MAP);
+}
 
-/*
-Would like to avoid initializing these and force the including php page to do so, but that might break something right now. 
-So, we've got redundand code for the moment
-See login.php:142
-*/
-var USERNAME_REQUIRED = "Username is required";
-var PASSWORD_REQUIRED = "Password is required";
-var EMAIL_REQUIRED = "Valid email is required";
+function buildMarkerList(geoData) {
+	console.log("building the marker list");
+	if (geoData) {
+ 		for (var org in geoData) {
+	  	var thisMarker = new google.maps.Marker({
+	    	position: {lat: parseFloat(geoData[org]['lat']), lng: parseFloat(geoData[org]['lng'])},
+   			map: MAP,
+   			title: geoData[org]['title'],
+   			id: org
+ 			});
+ 			thisMarker.addListener('click', function() {
+  			console.log("showing detail record for org id " + this.id);
+  			showDirectoryDetailAdv(this.id);
+  		});
+ 			MARKERS.push(thisMarker);
+ 		}
+ 	}
+}
+
+function setMapOnAllMarkers(map) {
+	console.log("Setting " + MARKERS.length + " markers to " + map);
+ 	for (var i = 0; i < MARKERS.length; i++) {
+    MARKERS[i].setMap(map);
+  }
+}
+
+function clearAllMarkers() {
+	console.log("clearing markers");
+	setMapOnAllMarkers(null);
+ 	MARKERS = [];
+}
 
 function formSubmit(formId) {
  		document.forms[formId].submit();
