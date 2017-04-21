@@ -98,7 +98,7 @@
     						span1.setAttribute("class", "organization");
     						span1.setAttribute("style", "font-weight:bold;color:#d27b4b;cursor:pointer;");
     						var span2 = document.createElement("SPAN");
-    						var orgName = document.createTextNode(jsonObj.orgEntry[i].name);
+    						var orgName = document.createTextNode(htmlEntities(jsonObj.orgEntry[i].name));
     						var orgContent = document.createTextNode(thisContent);
     						span1.appendChild(orgName);
     						span2.appendChild(orgContent);
@@ -128,7 +128,7 @@
 <div id="directoryDataContainer" class="directory-table">
 	<table id="org-directory" class="display compact" width="90%" cellspacing="2" cellpadding="2" style="margin-left:-10px;">	
 		<thead>
-			<tr><th>id-hidden</th><th>Search Results</th></tr>
+			<tr><th>id-hidden</th><th>Organization Name</th></tr>
 		</thead>
 		<tbody id="org-list-table-rows">
 		</tbody>

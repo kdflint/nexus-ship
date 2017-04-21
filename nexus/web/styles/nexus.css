@@ -13,6 +13,10 @@ body {
 	height: 100%;
 }
 
+.priv-1 {
+	display: none;
+}
+
 .container {
 	/* top level container for all content, left aligned inside a centered body   *
 	 * optimized for a tablet -kdf																								*/

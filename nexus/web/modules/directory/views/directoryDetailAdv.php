@@ -10,6 +10,7 @@
 			 		var jsonObj;
 			 		try { jsonObj = JSON.parse(xmlhttp.responseText); } catch(err) { console.log(err); jsonObj = 'undefined';}	
 			 		if ((typeof jsonObj !== 'undefined') && jsonObj !== null & jsonObj.oname !== null) { 
+			 			CURRENT_ORG = jsonObj;
 			 			var loc1 = jsonObj.location1 ? "<span>" + jsonObj.location1 + "</span><br/>" : "";
 			 			var loc2 = jsonObj.location2 ? "<span>" + jsonObj.location2 + "</span><br/>" : "";
 			 			var topicString = "";
@@ -26,7 +27,8 @@
 			 			}
 				 		tableItem = 
        					"<span class='fname detail'>" + htmlEntities(jsonObj.oname) + "</span>" +
-       					((typeof orgEditLinkData != "undefined") && orgEditLinkData[orgId] ? "<a href='" + orgEditLinkData[orgId] + "' target='_blank' style='margin-left:20px;' >Edit 	this Listing</a>" : "") +
+       					"<a id='secondary-network-edit' class='secondaryControl priv-1' href='javascript:void(0)' onclick='return populateDirectoryFormBasic();' title='Edit Organization'><span class='fa fa-pencil fa-lg' ></span></a>" +
+       					//((typeof orgEditLinkData != "undefined") && orgEditLinkData[orgId] ? "<a href='" + orgEditLinkData[orgId] + "' target='_blank' style='margin-left:20px;' >Edit 	this Listing</a>" : "") +
        					"<div class='detail' style='width:390px;top:80px;'>" +
 										(jsonObj.member ? "<p><span><a href='javascript:void(0)' onclick='showOrgMemberList(\"" + orgId + "\", \"" + htmlEntities(jsonObj.oname) + "\")'>" + jsonObj.member.length + " network member" + (jsonObj.member.length > 1 ? "s" : "") + "</a></span></p>" : "") +
        							(jsonObj.url ? "<p><span class='tod'><a href='" + jsonObj.url + "' target='_blank'>" + jsonObj.url + "</a></span>	</p>" : "<p>&nbsp;</p>") +

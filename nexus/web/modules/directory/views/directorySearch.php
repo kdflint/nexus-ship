@@ -1,5 +1,5 @@
 <?php if ($_SESSION['nexusContext'] === "ADV") { ?>
-	<span class='date detail' style="">Organizational Directory</span>
+	<span class='detail' style="font-size:140%;">Organization Directory</span>	<a id='member_view_control' href="#" onclick="switchToMemberView();" class="secondaryControl" title="Member Directory" style="display:none;"><span class='fa fa-users fa-lg'></span></a>
 <?php } ?>
 
 <form id="directory-form" class="pure-form" action="" method="post" id="searchForm">
@@ -17,7 +17,7 @@
 		</div>
 	<?php } ?>
 	<div style="margin-top:10px;">
-		<span class="searchQualifier">and</span>
+		<span class="searchQualifier">and&nbsp;</span>
 		<select id="directory-form-select-specialty" name="specialty">
 			<option value="0" selected>Focus Area is</option>	
 			<option value="0" >------------</option>	
@@ -25,7 +25,7 @@
     </select>
 	</div>
 	<div style="margin-top:10px;">
-		<span class="searchQualifier">and</span>
+		<span class="searchQualifier">and&nbsp;</span>
 		<select id="directory-form-select-type" name="type">
 			<option value="0" selected>Organization Type is</option>
 			<option value="0" >------------</option>

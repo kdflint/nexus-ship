@@ -80,6 +80,11 @@ if (count($_SESSION['orgs']) < 1) {
 		$zeroOrgs = "true";
 }	
 
+$isAdmin = "false";
+if (Utilities::isSessionAdmin()) {
+	$isAdmin = "true";
+}
+
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
@@ -152,6 +157,8 @@ if (count($_SESSION['orgs']) < 1) {
     	<?php include("scripts/techCheck.js"); ?>
     	  	
 			$(document).ready(function () {	
+				
+				switchToOrganizationView();	
 				
 				if ( $.cookie('nexusadv_lastvisit') !== 'undefined' ) {
 					loadPreviousTab($.cookie('nexusadv_lastvisit'));
@@ -279,6 +286,12 @@ if (count($_SESSION['orgs']) < 1) {
 					INBOX_FOCUS = "/ucp.php?i=pm&mode=compose&username=<?php echo($showAdvImUsername); ?>";
 					$( "#adv-menu-inbox" ).click();					
 				}
+				if (<?php echo $isAdmin; ?>) {
+					// TODO - this is far from perfect! Keep working on it...
+					showPriv1();
+				} else {
+					hidePriv1();
+				}
 				
 			});
 			
@@ -313,6 +326,7 @@ if (count($_SESSION['orgs']) < 1) {
 					"pageLength": 10,
 					"lengthChange": false,
 					"order": [[2, 'asc']],
+					"dom": 'tip',
 					"columns": [
 	   				{ "orderable": false },
    					{ "orderable": false },

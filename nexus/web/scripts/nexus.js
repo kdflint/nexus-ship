@@ -1,6 +1,7 @@
 var errorBackground = "rgba(247,248,239,0.6) url('') no-repeat right top";
 
 var currentEvents;
+var CURRENT_ORG;
 
 /*
 Would like to avoid initializing these and force the including php page to do so, but that might break something right now. 
@@ -33,6 +34,23 @@ var MARKERS = [];
 var DETAIL_MAP;
 var DETAIL_MARKERS = [];
 	
+function showPriv1() {
+	var privileged = document.getElementsByClassName("priv-1");
+	for (var i = 0; i < privileged.length; i++) {
+    privileged[i].style.display='block';
+	}
+	var sheet = document.createElement('STYLE')
+	sheet.innerHTML = ".priv-1 {display: block;}";
+	document.body.appendChild(sheet);
+}
+
+function hidePriv1() {
+	var privileged = document.getElementsByClassName("priv-1");
+	for (var i = 0; i < privileged.length; i++) {
+    privileged[i].style.display='none';
+	}	
+}
+
 function initMap() {
 	console.log("MAP init");
  	var mapDiv = document.getElementById('directoryMapContainer');
@@ -1405,6 +1423,7 @@ function getMaxDaysForFebruary(year) {
 }
 
 function switchToOrganizationView() {
+	// TODO - put all this stuff together, with a class name maybe?
 	document.getElementById('directory-form-submit').click();
 	document.getElementById('member_view_control').style.display = "block";
 	document.getElementById('directory_view_control').style.display = "none";
@@ -1417,8 +1436,12 @@ function switchToOrganizationView() {
 	var addToGroup = document.getElementById('add_to_group');
 	var removeFromGroup = document.getElementById('remove_from_group');
 	var addNewOrg = document.getElementById('add_new_org');
+	var addNewGroup = document.getElementById('add_new_group');
 	if (addNewOrg) {
 		addNewOrg.style.display = "block";
+	}
+	if (addNewGroup) {
+		addNewGroup.style.display = "none";
 	}
 	if (addToGroup && removeFromGroup) {
 		addToGroup.style.display = "none";
@@ -1442,8 +1465,12 @@ function switchToMemberView() {
 	var addToGroup = document.getElementById('add_to_group');
 	var removeFromGroup = document.getElementById('remove_from_group');
 	var addNewOrg = document.getElementById('add_new_org');
+	var addNewGroup = document.getElementById('add_new_group');
 	if (addNewOrg) {
 		addNewOrg.style.display = "none";
+	}
+	if (addNewGroup) {
+		addNewGroup.style.display = "block";
 	}
 	if (addToGroup && removeFromGroup) {
 		addToGroup.style.display = "block";
@@ -1452,6 +1479,32 @@ function switchToMemberView() {
 	var secondaryOrgEditIcon = document.getElementById("secondary-network-edit");
 	if (secondaryOrgEditIcon) {
 		secondaryOrgEditIcon.style.display = "none";
+	}
+}
+
+function populateDirectoryFormBasic() {
+	if (CURRENT_ORG) {
+		var organizationForm = document.forms['organization-form-basic'];
+		if (CURRENT_ORG.oname && CURRENT_ORG.orgid) { 
+			organizationForm['org-name'].value = CURRENT_ORG.oname; 
+			organizationForm['org-id'].value = CURRENT_ORG.orgid; 
+			organizationForm['org-url'].value = CURRENT_ORG.url;
+			organizationForm['org-contact-name'].value = CURRENT_ORG.cname;
+			//organizationForm['org-contact-title'].value = CURRENT_ORG.
+			organizationForm['org-contact-email'].value = CURRENT_ORG.email;
+			organizationForm['org-contact-phone'].value = CURRENT_ORG.phone;
+			//organizationForm['org-street'].value = CURRENT_ORG.
+			//organizationForm['org-city'].value = CURRENT_ORG.
+			document.getElementById('organization-form-basic-submit').innerHTML = "Next";
+		}
+	}
+	document.getElementById('add_new_org').click();
+}
+
+function populateDirectoryFormFilters() {
+	if (CURRENT_ORG) {
+		var organizationForm = document.forms['organization-form-filters'];
+		// ??
 	}
 }
 
@@ -1870,7 +1923,7 @@ function getDaysPassing(num, freq, start) {
 }
 
 function htmlEntities(str) {
-	return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;').replace(/\'/g, '&#39;').replace(/\(/g, '&#40;').replace(/\)/g, '&#41;');	
+	return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;');	
 }
 
 function millisecondsToFormat(formatString, ms){
