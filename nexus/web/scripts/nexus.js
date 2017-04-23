@@ -1080,8 +1080,13 @@ function validatePhone(phone) {
 	return /^[0-9()-. ]+$/.test(phone);
 }
 
-function openOrganizationBasicForm() {
+function openOrganizationBasicForm(editMode) {
 	toggleMultiPartModal("openOrganizationName", "basic");
+	if (!editMode) {
+		document.getElementById("organization-form-basic-faddress-readonly").style.display = "none";
+		document.forms['organization-form-basic']['require-address'].value = "true";
+		document.forms['organization-form-basic'].reset();
+	}
 	location.assign(HTTP_WEB_PATH + "/nexus.php#openOrganizationName");
 }
 
@@ -1330,36 +1335,38 @@ function organizationBasicValidateAndSubmit(thisForm) {
   	pass = false;
   }
   
-	var street = streetField.value;
-	setFieldPassStyles(streetField, "Street Address");
-	if (isEmptyOrLong(street, 50)) {
-		setFieldErrorStyles(streetField, "Street address is required");
-		streetField.value = "";
-		pass = false;
-	}
-	
-	var city = cityField.value;
-	setFieldPassStyles(cityField, "City");
-	if (isEmptyOrLong(city, 50)) {
-		setFieldErrorStyles(cityField, "City is required");
-		cityField.value = "";
-		pass = false;
-	}
+	if (organizationBasicForm['require-address'].value === "true") {
+		var street = streetField.value;
+		setFieldPassStyles(streetField, "Street Address");
+		if (isEmptyOrLong(street, 50)) {
+			setFieldErrorStyles(streetField, "Street address is required");
+			streetField.value = "";
+			pass = false;
+		}
+		
+		var city = cityField.value;
+		setFieldPassStyles(cityField, "City");
+		if (isEmptyOrLong(city, 50)) {
+			setFieldErrorStyles(cityField, "City is required");
+			cityField.value = "";
+			pass = false;
+		}	
 
-	var country = countryField.value;
-	setFieldPassStyles(document.getElementById("organization-form-country-button", "Country"))
-	if (country === "AA") {
-		setFieldErrorStyles(document.getElementById("organization-form-country-button", "Country"));
-		pass = false;
-	}
+		var country = countryField.value;
+		setFieldPassStyles(document.getElementById("organization-form-country-button", "Country"))
+		if (country === "AA") {
+			setFieldErrorStyles(document.getElementById("organization-form-country-button", "Country"));
+			pass = false;
+		}
 
-	// TODO - not all countries have states so must revise when we open up country list. Also, could be province.
-	// http://www.columbia.edu/~fdc/postal/
-	var state = stateField.value;
-	setFieldPassStyles(document.getElementById("organization-form-countryStates-button", "States"));
-	if (state === "State") {
-		setFieldErrorStyles(document.getElementById("organization-form-countryStates-button", "States"));
-		pass = false;
+		// TODO - not all countries have states so must revise when we open up country list. Also, could be province.
+		// http://www.columbia.edu/~fdc/postal/
+		var state = stateField.value;
+		setFieldPassStyles(document.getElementById("organization-form-countryStates-button", "States"));
+		if (state === "State") {
+			setFieldErrorStyles(document.getElementById("organization-form-countryStates-button", "States"));
+			pass = false;
+		}
 	}
 	
  	if (Boolean(pass)) {
@@ -1488,24 +1495,25 @@ function populateDirectoryFormBasic() {
 		if (CURRENT_ORG.oname && CURRENT_ORG.orgid) { 
 			organizationForm['org-name'].value = CURRENT_ORG.oname; 
 			organizationForm['org-id'].value = CURRENT_ORG.orgid; 
-			organizationForm['org-url'].value = CURRENT_ORG.url;
-			organizationForm['org-contact-name'].value = CURRENT_ORG.cname;
-			//organizationForm['org-contact-title'].value = CURRENT_ORG.
-			organizationForm['org-contact-email'].value = CURRENT_ORG.email;
-			organizationForm['org-contact-phone'].value = CURRENT_ORG.phone;
+			organizationForm['org-url'].value = CURRENT_ORG.url ? CURRENT_ORG.url : "";
+			organizationForm['org-contact-name'].value = CURRENT_ORG.cname ? CURRENT_ORG.cname : "";
+			//organizationForm['org-contact-title'].value = CURRENT_ORG. 
+			organizationForm['org-contact-email'].value = CURRENT_ORG.email ? CURRENT_ORG.email : "";
+			organizationForm['org-contact-phone'].value = CURRENT_ORG.phone ? CURRENT_ORG.phone : "";
+			document.getElementById("faddress-body").innerHTML = CURRENT_ORG.formatted ? CURRENT_ORG.formatted : "";
+			document.getElementById("organization-form-basic-faddress-readonly").style.display = "block";
+			organizationForm['require-address'].value = "false";
 			//organizationForm['org-street'].value = CURRENT_ORG.
 			//organizationForm['org-city'].value = CURRENT_ORG.
+			//organizationForm['org-country'].value = CURRENT_ORG
+			//organizationForm['org-state'].value = CURRENT_ORG
 			document.getElementById('organization-form-basic-submit').innerHTML = "Next";
+			
+			// Populate this form also
+			var filterForm = document.forms['organization-form-filters'];
 		}
 	}
-	document.getElementById('add_new_org').click();
-}
-
-function populateDirectoryFormFilters() {
-	if (CURRENT_ORG) {
-		var organizationForm = document.forms['organization-form-filters'];
-		// ??
-	}
+	openOrganizationBasicForm(true);
 }
 
 function populateEventForm(i) {

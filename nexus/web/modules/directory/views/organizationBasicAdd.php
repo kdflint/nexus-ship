@@ -24,6 +24,11 @@
 	</fieldset>
 	<fieldset style="position:absolute;left:430px;width:390px;top:16px;">
 		<label>Primary Location</label>
+		<div id="organization-form-basic-faddress-readonly" class="form-field" style="display:none;">
+			<span id="faddress-body"></span>
+			<p>Update address using fields below:</p>
+		</div>
+		<input type="hidden" name="require-address" value="true"/>
     <div class="form-field">
 	  	<input type="text" name="org-street" style="width:100%" maxlength="50" placeholder="Street Address" >
 		</div>

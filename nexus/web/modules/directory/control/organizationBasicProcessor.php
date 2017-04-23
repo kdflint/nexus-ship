@@ -28,43 +28,53 @@ Use only clean input beyond this point (i.e. $clean[])
 ======================================================= */
 
 $return = array();
-$orgid = Organization::getOrganizationByName($result['clean']['org-name']);
-if (!$orgid) {
-	$orgid = Organization::addOrganization($result['clean']['org-name'], $_SESSION['networkId']);
-}
 
-$return['org-name'] = $result['clean']['org-name'];
-$return['org-id'] = $orgid;
-
-Organization::addOrganizationContact($orgid, $result['clean']['org-contact-name'], $result['clean']['org-contact-title'], $result['clean']['org-contact-email'], $result['clean']['org-contact-phone'], $result['clean']['org-url']);
-if ($result['clean']['g_status']) {
-	Organization::addOrganizationLocation($orgid,
-		$result['clean']['f_address'],
-		"",
-		$result['clean']['neighborhood'],
-		$result['clean']['city'],
-		$result['clean']['county'],
-		$result['clean']['state'],
-		$result['clean']['country'],
-		$result['clean']['postal'],
-		$result['clean']['lat'],
-		$result['clean']['long'],
-		$result['clean']['placeid'] );
+$orgid = false;
+if (isset($result['clean']['org-id']) && $result['clean']['org-id'] === $_SESSION['tmp-editorgid']) {
+	$orgid = Organization::updateOrganizationName($result['clean']['org-id'], $result['clean']['org-name']);
 } else {
-	Organization::addOrganizationLocation($orgid,
-		"",
-		$result['clean']['address1'],
-		"",
-		$result['clean']['city'],
-		"",
-		$result['clean']['state'],
-		$result['clean']['country'],
-		"",
-		"",
-		"",
-		"" );		
+	$orgid = Organization::getOrganizationByName($result['clean']['org-name']);
+	if (!$orgid) {
+		$orgid = Organization::addOrganization($result['clean']['org-name'], $_SESSION['networkId']);
+	}
 }
 
+if ($orgid) {
+
+	$return['org-name'] = $result['clean']['org-name'];
+	$return['org-id'] = $orgid;
+	
+	Organization::addOrganizationContact($orgid, $result['clean']['org-contact-name'], $result['clean']['org-contact-title'], $result['clean']['org-contact-email'], $result['clean']['org-contact-phone'], $result['clean']['org-url']);
+	
+	if ($result['clean']['g_status']) {
+		Organization::addOrganizationLocation($orgid,
+			$result['clean']['f_address'],
+			"",
+			$result['clean']['neighborhood'],
+			$result['clean']['city'],
+			$result['clean']['county'],
+			$result['clean']['state'],
+			$result['clean']['country'],
+			$result['clean']['postal'],
+			$result['clean']['lat'],
+			$result['clean']['long'],
+			$result['clean']['placeid'] );
+	} else {
+		Organization::addOrganizationLocation($orgid,
+			"",
+			$result['clean']['address1'],
+			"",
+			$result['clean']['city'],
+			"",
+			$result['clean']['state'],
+			$result['clean']['country'],
+			"",
+			"",
+			"",
+			"" );		
+	}
+}
+	
 if ((session_status() === PHP_SESSION_ACTIVE) && isset($_SESSION['nexusContext'])) {
  switch($_SESSION['nexusContext']) {
  		case "ADV":
@@ -84,6 +94,10 @@ function validateOrganization($input) {
 		$result['error']['org-name'] = "error";
 	}
 
+	if (isset($input['org-id'])) {
+		$result['clean']['org-id'] = $input['org-id'];
+	}
+	
 	if (isset($input['org-url'])) {
 		$result['clean']['org-url'] = $input['org-url'];
 	}

@@ -35,6 +35,16 @@ class Organization {
 		return $orgId;
 	}
 	
+	public static function updateOrganizationName($orgId, $orgName) {
+		$query = "update organization set name = $2 where id = $1 returning id";
+		$row = pg_fetch_row(PgDatabase::psExecute($query, array($orgId, $orgName)));
+		if ($row[0]) {
+			return $row[0];
+		} else {
+			return false;
+		}
+	}
+	
 	public static function addOrganizationParent($from, $to) {
 		$query = "insert into organization_organization (organization_from_fk, organization_to_fk, relationship) values ($1, $2, 'parent')";
 		$result = PgDatabase::psExecute($query, array($from, $to));
@@ -70,21 +80,40 @@ class Organization {
 	}
 	
 	public static function addOrganizationContact($orgfk, $name, $title, $email, $phone, $url) {
-		//print_r(array($name, $title, $email, $phone, $url)); exit(0);
+		// TODO - if this is an edit scenario, this may create a duplicate contact row and leave the existing row stranded (not tied to an org)
 		$query = "insert into contact (name, title, email, phone, url) values ($1, $2, $3, $4, $5) returning id";
 		$row = pg_fetch_row(PgDatabase::psExecute($query, array($name, $title, $email, $phone, $url)));
 		$contactId = $row[0];
-		$query = "insert into organization_contact (organization_fk, contact_fk) values ($1, $2)";
-		PgDatabase::psExecute($query, array($orgfk, $contactId));
+		$query = "insert into organization_contact (organization_fk, contact_fk) values ($1, $2) returning id";
+		$row = pg_fetch_row(PgDatabase::psExecute($query, array($orgfk, $contactId)));
+		// insert on conflict (upsert) would be much better here, but we are on pg 9.4 :(
+		if ($row[0]) {
+			$query = "select * from organization_contact where organization_fk = $1 and contact_fk != $2";
+			$count = pg_num_rows(PgDatabase::psExecute($query, array($orgFk, $row[0])));
+			if ($count == 1) {
+				$query = "delete from organization_contact where organization_fk = $1 and contact_fk != $2";
+				PgDatabase::psExecute($query, array($orgFk, $row[0]));
+			}
+		}
 		return true;
 	}
 		
 	public static function addOrganizationLocation($orgFk, $formatted, $street, $neighborhood, $city, $county, $state, $country, $postal, $lat, $long, $placeid) {
+		// TODO - if this is an edit scenario, this may create a duplicate contact row and leave the existing row stranded (not tied to an org)
 		$query = "insert into location (g_formatted_address, address1, neighborhood, municipality, region1, region2, country, postal_code, latitude, longitude, g_placeid) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) returning id";
 		$row = pg_fetch_row(PgDatabase::psExecute($query, array($formatted, $street, $neighborhood, $city, $county, $state, $country, $postal, $lat, $long, $placeid)));
 		$locId = $row[0];
-		$query = "insert into organization_location (organization_fk, location_fk) values ($1, $2)";
-		PgDatabase::psExecute($query, array($orgFk, $locId));
+		$query = "insert into organization_location (organization_fk, location_fk) values ($1, $2) returning id";
+		$row = pg_fetch_row(PgDatabase::psExecute($query, array($orgFk, $locId)));
+		// insert on conflict (upsert) would be much better here, but we are on pg 9.4 :(
+		if ($row[0]) {
+			$query = "select * from organization_location where organization_fk = $1 and location_fk != $2";
+			$count = pg_num_rows(PgDatabase::psExecute($query, array($orgFk, $row[0])));
+			if ($count == 1) {
+				$query = "delete from organization_location where organization_fk = $1 and location_fk != $2";
+				PgDatabase::psExecute($query, array($orgFk, $row[0]));
+			}
+		}
 		return true;		
 	}
 	
