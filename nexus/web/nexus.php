@@ -144,6 +144,7 @@ if (Utilities::isSessionAdmin()) {
     <script type="text/javascript">
 		
     	// TODO - create a global js init script - can format this as a php file that parses into javascript, look for example...
+			NETWORK_ID = "<?php echo $_SESSION['networkId']; ?>";
 			DEFAULT_FORUM = "<?php echo $_SESSION['defaultForumId']; ?>";
 			HTTP_WEB_PATH = "<?php echo Utilities::getHttpPath(); ?>";
 			HTTP_FORUM_PATH = "<?php echo Utilities::getForumHttpPath(); ?>";
@@ -157,9 +158,7 @@ if (Utilities::isSessionAdmin()) {
     	<?php include("scripts/techCheck.js"); ?>
     	  	
 			$(document).ready(function () {	
-				
-				switchToOrganizationView();	
-				
+								
 				if ( $.cookie('nexusadv_lastvisit') !== 'undefined' ) {
 					loadPreviousTab($.cookie('nexusadv_lastvisit'));
 				} else {
@@ -196,7 +195,6 @@ if (Utilities::isSessionAdmin()) {
 				
 				$('#datatable-input').on( 'keyup', function () {
 					filterMemberTable(this.value);
-    			//ORG_MEMBER_TABLE.search( this.value ).draw();
 				} );
 				
 				$('#compose_pm').click( function() {
@@ -293,6 +291,8 @@ if (Utilities::isSessionAdmin()) {
 					hidePriv1();
 				}
 				
+				switchToOrganizationView();	
+				
 			});
 			
 			function toggleJoinDisplay() {
@@ -357,7 +357,7 @@ if (Utilities::isSessionAdmin()) {
 					"pageLength": 10,
 					"lengthChange": false,
 					"searching": false,
-					"info": false,
+					"info": true,
 					"order": [[1, 'asc']],
  				  "columnDefs": [
     				{ "visible": false, "targets": 0 }

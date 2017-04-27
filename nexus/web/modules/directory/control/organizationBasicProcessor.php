@@ -30,7 +30,7 @@ Use only clean input beyond this point (i.e. $clean[])
 $return = array();
 
 $orgid = false;
-if (isset($result['clean']['org-id']) && $result['clean']['org-id'] === $_SESSION['tmp-editorgid']) {
+if (isset($result['clean']['org-id']) && $result['clean']['org-id'] === $_SESSION['tmp-editorgid']  && Utilities::isSessionAdmin()) {
 	$orgid = Organization::updateOrganizationName($result['clean']['org-id'], $result['clean']['org-name']);
 } else {
 	$orgid = Organization::getOrganizationByName($result['clean']['org-name']);

@@ -32,8 +32,8 @@ if (isset($result['clean']['org-id']) && $result['clean']['org-id'] === $_SESSIO
 	// TODO - not checking for admin role on edit scenario
 	$thisOrg = Organization::getOrganizationById($result['clean']['org-id']);
 	if (pg_num_rows($thisOrg) == 1) {
-		Organization::addOrganizationType($result['clean']['org-id'], $result['clean']['type']);
-		Organization::addOrganizationSpecialties($result['clean']['org-id'], $result['clean']['specialty']);
+		Organization::addOrganizationEthnicities($result['clean']['org-id'], $result['clean']['ethnicity']);
+		Organization::addOrganizationAffiliations($result['clean']['org-id'], $result['clean']['affiliation']);
 	}
 }
 
@@ -50,7 +50,6 @@ if ((session_status() === PHP_SESSION_ACTIVE) && isset($_SESSION['nexusContext']
  	}
 }
 
-
 function validateOrganization($input) {
 	$result = array('clean' => array(), 'error' => array());
 	
@@ -66,16 +65,16 @@ function validateOrganization($input) {
 		$result['error']['org-id'] = "error";
 	}
 	
-	if (isset($input['type'])) {
-		$result['clean']['type'] = $input['type'];
+	if (isset($input['ethnicity'])) {
+		$result['clean']['ethnicity'] = $input['ethnicity'];
 	} else {
-		$result['error']['type'] = "error";
-	}		
+		$result['clean']['ethnicity'] = array();
+	}	
 
-	if (isset($input['specialty'])) {
-		$result['clean']['specialty'] = $input['specialty'];
+	if (isset($input['affiliation'])) {
+		$result['clean']['affiliation'] = $input['affiliation'];
 	} else {
-		$result['clean']['specialty'] = array();
+		$result['clean']['affiliation'] = array();
 	}	
 	
  	return $result;

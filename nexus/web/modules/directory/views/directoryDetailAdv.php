@@ -1,5 +1,6 @@
 <script>
 	function getDirectoryDetailAdv(orgId) {
+		toggleMultiPartModal('openOrganizationView', 'detail')
 		if (DETAIL_MAP === undefined) { initDetailMap(); }
 		clearAllDetailMarkers();
 		var xmlhttp = getXmlHttpRequest();
@@ -15,6 +16,8 @@
 			 			var loc2 = jsonObj.location2 ? "<span>" + jsonObj.location2 + "</span><br/>" : "";
 			 			var topicString = "";
 						var languageString ="";
+						var ethnicityString ="";
+						var affiliationString ="";
 			 			if (jsonObj.topic) {
 			 				for (var i = 0; i < jsonObj.topic.length; i++) {
 			 					topicString += jsonObj.topic[i] + ", ";
@@ -25,14 +28,25 @@
 			 					languageString += jsonObj.language[i] + ", ";
 			 				}
 			 			}
+			 			if (jsonObj.ethnicity) {
+			 				for (var i = 0; i < jsonObj.ethnicity.length; i++) {
+			 					ethnicityString += jsonObj.ethnicity[i] + ", ";
+			 				}
+			 			}
+			 			if (jsonObj.affiliation) {
+			 				for (var i = 0; i < jsonObj.affiliation.length; i++) {
+			 					affiliationString += jsonObj.affiliation[i] + ", ";
+			 				}
+			 			}
 				 		tableItem = 
        					"<span class='fname detail'>" + htmlEntities(jsonObj.oname) + "</span>" +
-       					"<a id='secondary-network-edit' class='secondaryControl priv-1' href='javascript:void(0)' onclick='return populateDirectoryFormBasic();' title='Edit Organization'><span class='fa fa-pencil fa-lg' ></span></a>" +
+       					"<a id='secondary-network-edit' class='secondaryControl priv-1' href='javascript:void(0)' onclick='return populateDirectoryMultiForm();' title='Edit Organization'><span class='fa fa-pencil fa-lg' ></span></a>" +
        					//((typeof orgEditLinkData != "undefined") && orgEditLinkData[orgId] ? "<a href='" + orgEditLinkData[orgId] + "' target='_blank' style='margin-left:20px;' >Edit 	this Listing</a>" : "") +
        					"<div class='detail' style='width:390px;top:80px;'>" +
 										(jsonObj.member ? "<p><span><a href='javascript:void(0)' onclick='showOrgMemberList(\"" + orgId + "\", \"" + htmlEntities(jsonObj.oname) + "\")'>" + jsonObj.member.length + " network member" + (jsonObj.member.length > 1 ? "s" : "") + "</a></span></p>" : "") +
        							(jsonObj.url ? "<p><span class='tod'><a href='" + jsonObj.url + "' target='_blank'>" + jsonObj.url + "</a></span>	</p>" : "<p>&nbsp;</p>") +
 										(jsonObj.cname ? "<span>" + jsonObj.cname + "</span><br/>" : "") +
+										(jsonObj.title ? "<span>" + jsonObj.title + "</span><br/>" : "") +
 										(jsonObj.email ? "<span>Email: " + jsonObj.email + "</span><br/>" : "") +
 										(jsonObj.phone ? "<span>Phone: " + jsonObj.phone + "</span><br/>" : "") +
 										(jsonObj.fax ? "<span>Fax: " + jsonObj.fax + "</span>" : "") +
@@ -40,6 +54,9 @@
 										(jsonObj.type ? "<p>Organization Type: " + jsonObj.type + "</p>" : "") +
 										(topicString ? "<p>Focus Areas: " + truncateString(topicString.replace(/,\s*$/, ""),200) + "</p>" : "") +
 										(languageString ? "<p>Languages: " + truncateString(languageString.replace(/,\s*$/, ""),200) + "</p>" : "") +
+										(ethnicityString ? "<p>Ethnicities Served: " + truncateString(ethnicityString.replace(/,\s*$/, ""),200) + "</p>" : "") +
+										(affiliationString ? "<p>Denominational Affiliation: " + truncateString(affiliationString.replace(/,\s*$/, ""),200) + "</p>" : "") +
+										(jsonObj.size ? "<p>Congregation Size: " + jsonObj.size + "</p>" : "") +
 								"</div>";
 			 				document.getElementById("itemCol1Adv").innerHTML = "<div class='td-div'>" + tableItem + "<div>";   
  							addDetailMarker(jsonObj);

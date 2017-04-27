@@ -455,18 +455,6 @@ class Utilities {
 		return $out;
 	}
 	
-	public static function strip($in) {
-		$out = strtr($in, array('(' => '',
-                          	')' => '',
-									        	'"' => '',
-									        	'<' => '',
-									        	'>' => '',
-									        	'&' => '',
-									        	'\'' => ''));
-		$out = trim($out);
-		return $out;
-	}
-	
 	// TODO - this special character situation is chaotic!
 	public static function strip2($in) {
 		$out = strtr($in, array('(' => '',

@@ -26,6 +26,15 @@
 			<a href="#close" title="Skip" class="close">X</a>
 			<?php include("modules/directory/views/organizationFilterAdd.php"); ?>		
 		</div>
+		<div id="openOrganizationName-part-sizelang" class="openOrganizationName-part cfcht-custom" style="display:none;">			
+			<a href="#close" title="Skip" class="close">X</a>
+			<?php include("modules/directory/views/organizationSizeLangAdd.php"); ?>		
+		</div>
+		<div id="openOrganizationName-part-affil" class="openOrganizationName-part cfcht-custom" style="display:none;">			
+			<a href="#close" title="Skip" class="close">X</a>
+			<?php include("modules/directory/views/organizationAffiliationAdd.php"); ?>		
+		</div>
+
 	</div>
 
 	<div id="openGroupUserAdd" class="modalDialog">

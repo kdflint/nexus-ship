@@ -64,18 +64,31 @@ class Organization {
 	}	
 	
 	public static function addOrganizationType($orgId, $type) {
-		$exists = self::organizationIdExists($orgId);
-		if($exists) {
+		$orgExists = self::organizationIdExists($orgId);
+		if($orgExists) {
 			$query = "update organization set type = $1 where id = $2 returning id";
 			return PgDatabase::psExecute($query, array($type, $orgId));
 		}
 	}	
 	
-	public static function addOrganizationSpecialty($orgId, $specialtyId) {
-		$exists = self::organizationIdExists($orgId);
-		if($exists) {
-			$query = "insert into organization_topic (organization_fk, topic_fk) values ($1, $2)";
-			return PgDatabase::psExecute($query, array($orgId, $specialtyId));
+	public static function addOrganizationSize($orgId, $size) {
+		$orgExists = self::organizationIdExists($orgId);
+		if($orgExists) {
+			$query = "update organization set size = $1 where id = $2 returning id";
+			return PgDatabase::psExecute($query, array($size, $orgId));
+		}
+	}	
+	
+	public static function addOrganizationSpecialties($orgId, $specialtyIds) {
+		$orgExists = self::organizationIdExists($orgId);
+		if($orgExists && $specialtyIds && is_array($specialtyIds)) {
+			$query = "delete from organization_topic where organization_fk = $1";
+			PgDatabase::psExecute($query, array($orgId));
+			foreach ($specialtyIds as $thisId) {
+				$query = "insert into organization_topic (organization_fk, topic_fk) values ($1, $2)";
+				PgDatabase::psExecute($query, array($orgId, $thisId));
+			}
+		return true;
 		}
 	}
 	
@@ -89,10 +102,10 @@ class Organization {
 		// insert on conflict (upsert) would be much better here, but we are on pg 9.4 :(
 		if ($row[0]) {
 			$query = "select * from organization_contact where organization_fk = $1 and contact_fk != $2";
-			$count = pg_num_rows(PgDatabase::psExecute($query, array($orgFk, $row[0])));
+			$count = pg_num_rows(PgDatabase::psExecute($query, array($orgfk, $row[0])));
 			if ($count == 1) {
 				$query = "delete from organization_contact where organization_fk = $1 and contact_fk != $2";
-				PgDatabase::psExecute($query, array($orgFk, $row[0]));
+				PgDatabase::psExecute($query, array($orgfk, $row[0]));
 			}
 		}
 		return true;
@@ -116,7 +129,47 @@ class Organization {
 		}
 		return true;		
 	}
-	
+
+	public static function addOrganizationLanguages($orgId, $languageIds) {
+		$orgExists = self::organizationIdExists($orgId);
+		if($orgExists && $languageIds && is_array($languageIds)) {
+			$query = "delete from organization_language where organization_fk = $1";
+			PgDatabase::psExecute($query, array($orgId));
+			foreach ($languageIds as $thisId) {
+				$query = "insert into organization_language (organization_fk, language_fk) values ($1, $2)";
+				PgDatabase::psExecute($query, array($orgId, $thisId));
+			}
+		return true;
+		}
+	}
+
+	public static function addOrganizationEthnicities($orgId, $ethnicityIds) {
+		$orgExists = self::organizationIdExists($orgId);
+		if($orgExists && $ethnicityIds && is_array($ethnicityIds)) {
+			$query = "delete from organization_ethnicity where organization_fk = $1";
+			PgDatabase::psExecute($query, array($orgId));
+			foreach ($ethnicityIds as $thisId) {
+				$query = "insert into organization_ethnicity (organization_fk, ethnicity_fk) values ($1, $2)";
+				PgDatabase::psExecute($query, array($orgId, $thisId));
+			}
+		return true;
+		}
+	}
+
+	public static function addOrganizationAffiliations($orgId, $affiliationIds) {
+		$orgExists = self::organizationIdExists($orgId);
+		if($orgExists && $affiliationIds && is_array($affiliationIds)) {
+			$query = "delete from organization_affiliation where organization_fk = $1";
+			PgDatabase::psExecute($query, array($orgId));
+			foreach ($affiliationIds as $thisId) {
+				$query = "insert into organization_affiliation (organization_fk, affiliation_fk) values ($1, $2)";
+				PgDatabase::psExecute($query, array($orgId, $thisId));
+			}
+		return true;
+		}
+	}
+
+		
 	public static function getOrganizationById($orgId) {
 		$query = "select name, type, structure, logo, status_fk as status, uid from organization where id = $1";
 		return PgDatabase::psExecute($query, array($orgId));
@@ -406,14 +459,14 @@ class Organization {
 	
 	public static function getOrganizationDetailById($orgId) {
 		
-		$result0 = PgDatabase::psExecute("select name, type, structure, status_fk as status from organization where id = $1", array($orgId));
+		$result0 = PgDatabase::psExecute("select name, type, size, structure, status_fk as status from organization where id = $1", array($orgId));
 		
 		$result1 = PgDatabase::psExecute("select l.g_formatted_address as formatted, l.address1 || ', ' || l.address2 as line1, l.municipality || ', ' || l.region2 || '  ' || l.postal_code as line2, l.latitude as lat, l.longitude as long 
 															from location l, organization_location ol
 															where ol.organization_fk = $1
 															and ol.location_fk = l.id", array($orgId));
 															
-		$result2 = PgDatabase::psExecute("select c.phone as phone, c.email as email, c.url as url, c.name as name, c.fax as fax 
+		$result2 = PgDatabase::psExecute("select c.phone as phone, c.email as email, c.url as url, c.name as name, c.title as title, c.fax as fax 
 															from contact c, organization_contact oc
 															where oc.organization_fk = $1
 															and oc.contact_fk = c.id", array($orgId));
@@ -423,7 +476,7 @@ class Organization {
 															where ol.organization_fk = $1
 															and ol.language_fk = l.id", array($orgId));
 															
-  	$result4 = PgDatabase::psExecute("select t.name as topic
+  	$result4 = PgDatabase::psExecute("select distinct t.name as topic
 															from topic t, organization_topic ot
 															where ot.organization_fk = $1
 															and ot.topic_fk = t.id", array($orgId));
@@ -435,6 +488,17 @@ class Organization {
 															and u.username not like 'nUser-%'
 															and uo.organization_fk = $1
 															order by name asc", array($orgId));
+
+		$result6 = PgDatabase::psExecute("select e.ethnicity as ethnicity
+															from ethnicity e, organization_ethnicity oe
+															where oe.organization_fk = $1
+															and oe.ethnicity_fk = e.id", array($orgId));
+
+		$result7 = PgDatabase::psExecute("select a.affiliation as affiliation
+															from affiliation a, organization_affiliation oa
+															where oa.organization_fk = $1
+															and oa.affiliation_fk = a.id", array($orgId));
+
 																														
 		$resultArray = array();							
 		  
@@ -442,6 +506,7 @@ class Organization {
 	  $resultArray['orgid'] = $orgId;
 	  $resultArray['oname'] = $row0['name'];
 	  $resultArray['type'] = $row0['type'];
+	  $resultArray['size'] = $row0['size'];
 	  
 	  while ($row1 = pg_fetch_array($result1)) {
 	  	$resultArray['formatted'] = $row1['formatted'];
@@ -456,6 +521,7 @@ class Organization {
 	  	$resultArray['email'] = $row2['email'];
 	  	$resultArray['url'] = $row2['url'];
 	  	$resultArray['cname'] = $row2['name'];
+	  	$resultArray['title'] = $row2['title'];
 	  	$resultArray['fax'] = Utilities::prettyPrintPhone($row2['fax']);
 	  }
 	  
@@ -476,7 +542,19 @@ class Organization {
 	  	$resultArray['member'][$counter] = $row5['name'] . "::" . $row5['username'];
 	  	$counter++;
 	  }
-	  
+
+	  $counter = 0;
+	  while ($row6 = pg_fetch_array($result6)) {
+	  	$resultArray['ethnicity'][$counter] = $row6['ethnicity'];
+	  	$counter++;
+	  }
+
+	  $counter = 0;
+	  while ($row7 = pg_fetch_array($result7)) {
+	  	$resultArray['affiliation'][$counter] = $row7['affiliation'];
+	  	$counter++;
+	  }
+
 		return $resultArray; 	
 
 	}

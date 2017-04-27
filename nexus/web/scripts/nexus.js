@@ -17,6 +17,7 @@ var NEXT_MEETING_START;
 var IS_NOW = true;
 var IS_TIMER_INIT = false;
 var ACTIVITY_FLAG = 1;
+var NETWORK_ID = "";
 var DEFAULT_FORUM;
 var HTTP_WEB_PATH;
 var HTTP_FORUM_PATH;
@@ -298,9 +299,9 @@ function formSjaxSubmit(frm) {
 		data: $(frm).serialize(),
 		async: false,
 		success: function (data) {
-			//alert('ok');
 		}
 	});
+	console.log(xmlhttp.responseText);
 	jsonObj = JSON.parse(xmlhttp.responseText);	
   return jsonObj;
 }
@@ -1081,11 +1082,27 @@ function validatePhone(phone) {
 }
 
 function openOrganizationBasicForm(editMode) {
-	toggleMultiPartModal("openOrganizationName", "basic");
+	toggleMultiPartModal("openOrganizationName", "basic");	
+	var basicForm = document.forms['organization-form-basic'];
+	var filterForm = document.forms['organization-form-filters'];
+	var sizelangForm = document.forms['organization-form-size-lang'];
+	var affiliationForm = document.forms['organization-form-affiliation'];
 	if (!editMode) {
 		document.getElementById("organization-form-basic-faddress-readonly").style.display = "none";
-		document.forms['organization-form-basic']['require-address'].value = "true";
-		document.forms['organization-form-basic'].reset();
+		basicForm['require-address'].value = "true";
+		basicForm.reset();
+		document.getElementById('organization-form-basic-submit').innerHTML = "Add";
+		document.getElementById('organization-form-basic-submit').style.opacity = "1";
+		filterForm.reset();
+		document.getElementById('organization-form-filters-submit').innerHTML = "Add";
+		document.getElementById('organization-form-filters-submit').style.opacity = "1";
+		sizelangForm.reset();
+		document.getElementById('organization-form-size-lang-submit').innerHTML = "Add";
+		document.getElementById('organization-form-size-lang-submit').style.opacity = "1";
+		affiliationForm.reset();
+		document.getElementById('organization-form-affiliation-submit').innerHTML = "Add";
+		document.getElementById('organization-form-affiliation-submit').style.opacity = "1";
+
 	}
 	location.assign(HTTP_WEB_PATH + "/nexus.php#openOrganizationName");
 }
@@ -1239,6 +1256,15 @@ function profileValidateAndSubmit() {
  		profileForm.submit();
  	}
 }
+function displayThisContext(element) {
+	if (element && (element.className).indexOf('cfcht-custom') > -1) {
+		if (NETWORK_ID == "18") {
+			return true;
+		}
+		return false;			
+	}
+	return true;
+}
 
 function toggleMultiPartModal(modal, part) {
 	var modalDiv = document.getElementById(modal);
@@ -1247,9 +1273,11 @@ function toggleMultiPartModal(modal, part) {
 		modalParts[i].style.display = "none";
 	}
 	var thisModalPart = document.getElementById(modal + "-part-" + part);
-	if (thisModalPart) {
+	if (thisModalPart && displayThisContext(thisModalPart)) {
 		thisModalPart.style.display = "block";
-	}
+	} else {
+		location.assign(HTTP_WEB_PATH + "/nexus.php#close");
+	}	
 }
 
 function showOrgMemberList(orgId, orgName) {
@@ -1358,9 +1386,8 @@ function organizationBasicValidateAndSubmit(thisForm) {
 			setFieldErrorStyles(document.getElementById("organization-form-country-button", "Country"));
 			pass = false;
 		}
-
-		// TODO - not all countries have states so must revise when we open up country list. Also, could be province.
-		// http://www.columbia.edu/~fdc/postal/
+	 	// TODO - not all countries have states so must revise when we open up country list. Also, could be province.
+		// http://www.columbia.edu/~fdc/postal/-			
 		var state = stateField.value;
 		setFieldPassStyles(document.getElementById("organization-form-countryStates-button", "States"));
 		if (state === "State") {
@@ -1378,13 +1405,15 @@ function organizationBasicValidateAndSubmit(thisForm) {
  		filterForm['org-name'].value = details['org-name'];
  		filterForm['org-name'].readOnly = true;
  		filterForm['org-id'].value = details['org-id'];
+ 		document.getElementById("directory-form-submit").click();
  		toggleMultiPartModal("openOrganizationName", "filter");
+ 		
  	}
 }
 
 function organizationFilterValidateAndSubmit(thisForm) {
 
-	var organizationFilterForm = document.forms[thisForm];
+	var organizationFilterForm = document.forms[thisForm];	
 	var submitButton = document.getElementById(thisForm + "-submit");
 	var pass = true;	
 	
@@ -1400,11 +1429,48 @@ function organizationFilterValidateAndSubmit(thisForm) {
  		submitButton.innerHTML = "<span class='fa fa-spinner fa-pulse'></span>"; 
  		submitButton.style.opacity = ".6";
  		var details = formSjaxSubmit(organizationFilterForm);
- 		toggleMultiPartModal("openOrganizationName", "name");
- 		location.assign(HTTP_WEB_PATH + "/nexus.php#close");
+ 		console.log(details);
+		var sizelangForm = document.forms['organization-form-size-lang'];
+ 		sizelangForm['org-name'].value = details['org-name'];
+ 		sizelangForm['org-name'].readOnly = true;
+ 		sizelangForm['org-id'].value = details['org-id'];
+ 		toggleMultiPartModal("openOrganizationName", "sizelang");
  	}
 
 }
+
+function organizationSizeLangValidateAndSubmit(thisForm) {
+	var organizationSizeLangForm = document.forms[thisForm];	
+	var submitButton = document.getElementById(thisForm + "-submit");
+	var pass = true;	
+
+	if (Boolean(pass)) {
+ 		submitButton.disabled = true;  
+ 		submitButton.innerHTML = "<span class='fa fa-spinner fa-pulse'></span>"; 
+ 		submitButton.style.opacity = ".6";
+ 		var details = formSjaxSubmit(organizationSizeLangForm);
+		var affiliationForm = document.forms['organization-form-affiliation'];
+ 		affiliationForm['org-name'].value = details['org-name'];
+ 		affiliationForm['org-name'].readOnly = true;
+ 		affiliationForm['org-id'].value = details['org-id'];
+ 		toggleMultiPartModal("openOrganizationName", "affil");
+ 	}
+}
+
+function organizationAffiliationValidateAndSubmit(thisForm) {
+	var organizationAffiliationForm = document.forms[thisForm];	
+	var submitButton = document.getElementById(thisForm + "-submit");
+	var pass = true;	
+
+	if (Boolean(pass)) {
+ 		submitButton.disabled = true;  
+ 		submitButton.innerHTML = "<span class='fa fa-spinner fa-pulse'></span>"; 
+ 		submitButton.style.opacity = ".6";
+ 		var details = formSjaxSubmit(organizationAffiliationForm);
+ 		toggleMultiPartModal("openOrganizationName", "endHere");
+ 	}
+}
+
 
 function getMaxDaysForMonth(month) {
 	switch(month) {
@@ -1489,9 +1555,10 @@ function switchToMemberView() {
 	}
 }
 
-function populateDirectoryFormBasic() {
+function populateDirectoryMultiForm() {
 	if (CURRENT_ORG) {
 		var organizationForm = document.forms['organization-form-basic'];
+		organizationForm.reset();
 		if (CURRENT_ORG.oname && CURRENT_ORG.orgid) { 
 			organizationForm['org-name'].value = CURRENT_ORG.oname; 
 			organizationForm['org-id'].value = CURRENT_ORG.orgid; 
@@ -1508,9 +1575,93 @@ function populateDirectoryFormBasic() {
 			//organizationForm['org-country'].value = CURRENT_ORG
 			//organizationForm['org-state'].value = CURRENT_ORG
 			document.getElementById('organization-form-basic-submit').innerHTML = "Next";
+			document.getElementById('organization-form-basic-submit').style.opacity = "1";
 			
-			// Populate this form also
 			var filterForm = document.forms['organization-form-filters'];
+			var typeSelect = filterForm['directory-form-select-type-in'];
+			var specialtySelect = filterForm['directory-form-select-specialty-in'];
+			document.getElementById('organization-form-filters-submit').innerHTML = "Next";
+			document.getElementById('organization-form-filters-submit').style.opacity = "1";
+			
+			filterForm.reset();
+			if (CURRENT_ORG.topic) {
+				for ( var i = 0, option; i < specialtySelect.options.length; i++ ) {
+  				option = specialtySelect.options[i];
+  				for (var m = 0; m < CURRENT_ORG.topic.length; m++) {
+  					if ( CURRENT_ORG.topic[m] === option.text ) {
+    					option.selected = true;
+  					}
+  				}
+				}
+			}
+			
+			if (CURRENT_ORG.type) {
+				for ( var i = 1, option; i < typeSelect.options.length; i++ ) {
+  				option = typeSelect.options[i];
+  				if ( CURRENT_ORG.type === option.text ) {
+    				option.selected = true;
+  				}
+				}
+			}
+			
+			var sizelangForm = document.forms['organization-form-size-lang'];
+			var sizeSelect = sizelangForm['directory-form-select-size-in'];
+			var langSelect = sizelangForm['directory-form-select-languages-in'];
+			document.getElementById('organization-form-size-lang-submit').innerHTML = "Next";
+			document.getElementById('organization-form-size-lang-submit').style.opacity = "1";
+			sizelangForm.reset();
+
+			if (CURRENT_ORG.language) {
+				for ( var i = 0, option; i < langSelect.options.length; i++ ) {
+  				option = langSelect.options[i];
+  				for (var m = 0; m < CURRENT_ORG.language.length; m++) {
+  					if ( CURRENT_ORG.language[m] === option.text ) {
+    					option.selected = true;
+  					}
+  				}
+				}
+			}
+			
+			if (CURRENT_ORG.size) {
+				for ( var i = 1, option; i < sizeSelect.options.length; i++ ) {
+  				option = sizeSelect.options[i];
+  				if ( CURRENT_ORG.size === option.text ) {
+    				option.selected = true;
+  				}
+				}
+			}
+			
+			var affiliationForm = document.forms['organization-form-affiliation'];
+			var ethnicitySelect = affiliationForm['directory-form-select-ethnicity-in'];
+			var affiliationSelect = affiliationForm['directory-form-select-affiliation-in'];
+			document.getElementById('organization-form-affiliation-submit').innerHTML = "Next";
+			document.getElementById('organization-form-affiliation-submit').style.opacity = "1";
+			affiliationForm.reset();
+
+			if (CURRENT_ORG.ethnicity) {
+				for ( var i = 0, option; i < ethnicitySelect.options.length; i++ ) {
+  				option = ethnicitySelect.options[i];
+  				for (var m = 0; m < CURRENT_ORG.ethnicity.length; m++) {
+  					if ( CURRENT_ORG.ethnicity[m] === option.text ) {
+    					option.selected = true;
+  					}
+  				}
+				}
+			}
+
+			if (CURRENT_ORG.affiliation) {
+				for ( var i = 0, option; i < affiliationSelect.options.length; i++ ) {
+  				option = affiliationSelect.options[i];
+  				for (var m = 0; m < CURRENT_ORG.affiliation.length; m++) {
+  					if ( CURRENT_ORG.affiliation[m] === option.text ) {
+    					option.selected = true;
+  					}
+  				}
+				}
+			}
+
+
+			
 		}
 	}
 	openOrganizationBasicForm(true);
