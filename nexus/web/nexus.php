@@ -411,7 +411,8 @@ if (Utilities::isSessionAdmin()) {
 						position: { my : "left+50 top", at: "right top-135" },
 						width: 228
 				});
-       	$( "#directory-form-select-type-in").selectmenu();
+       	$( "#directory-form-select-type-in").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
+       	$( "#directory-form-select-size-in").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
        	$( "#organization-form-country" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
         $( "#organization-form-country" ).selectmenu({ change: function() { displayStates(); } });
         $( "#organization-form-countryStates" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );

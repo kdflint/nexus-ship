@@ -1,5 +1,5 @@
-<form id="organization-form-basic" class="pure-form" action="<?php echo(Utilities::getHttpPath()); ?>/modules/directory/control/organizationBasicProcessor.php" method="post" style="display:block;">
-	<fieldset style="position:relative;width:390px;">
+<form id="organization-form-basic" class="pure-form modal-form" action="<?php echo(Utilities::getHttpPath()); ?>/modules/directory/control/organizationBasicProcessor.php" method="post" style="display:block;">
+	<fieldset>
 		<label>Organizational Basics</label>
  		<div class="form-field">
 			<input type="text" name="org-name" style="width:100%;" maxlength="100" placeholder="Organization Name" value=""/>
@@ -22,7 +22,7 @@
 	  	<input type="text" name="org-contact-phone" style="width:100%" maxlength="20" placeholder="Phone" >
 		</div>
 	</fieldset>
-	<fieldset style="position:absolute;left:430px;width:390px;top:16px;">
+	<fieldset>
 		<label>Primary Location</label>
 		<div id="organization-form-basic-faddress-readonly" class="form-field" style="display:none;">
 			<span id="faddress-body"></span>
@@ -46,9 +46,9 @@
 				<option selected>State</option>
 			</select>
 		</div>
-		<div style="margin-top:180px;">
-			<a id="organization-form-basic-submit" class="pure-button button-menu" href="javascript:void(0)" onclick="organizationBasicValidateAndSubmit('organization-form-basic');" style="float:right;background-color:#d27b4b;width:70px;font-size:90%;margin-top:-10px;color:#e6e6e6" >Add</a>
- 			<a href="#close" style="float:right;margin-right:20px;">Cancel</a>
- 	</div>
 	</fieldset>					
+	<fieldset>
+		<a id="organization-form-basic-submit" class="pure-button button-menu" href="javascript:void(0)" onclick="organizationBasicValidateAndSubmit('organization-form-basic');" style="float:right;background-color:#d27b4b;width:70px;font-size:90%;margin-top:-10px;color:#e6e6e6" >Add</a>			
+		<a href="#close" style="float:right;margin-right:20px;">Cancel</a>
+ 	</fieldset>
 </form>

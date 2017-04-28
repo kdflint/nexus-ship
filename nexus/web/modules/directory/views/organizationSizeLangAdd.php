@@ -1,11 +1,11 @@
-<form id="organization-form-size-lang" class="pure-form" action="<?php echo(Utilities::getHttpPath()); ?>/modules/directory/control/organizationSizeLangProcessor.php" method="post">
-	<fieldset style="position:relative;width:390px;">
+<form id="organization-form-size-lang" class="pure-form modal-form" action="<?php echo(Utilities::getHttpPath()); ?>/modules/directory/control/organizationSizeLangProcessor.php" method="post">
+	<fieldset>
 		<label>Languages Served (Ctrl-click to select multiple) </label>
-		<select id="directory-form-select-languages-in" name="language[]" style="height:400px;width:360px;" multiple>
+		<select id="directory-form-select-languages-in" name="language[]" style="height:330px;width:360px;" multiple>
 	    <?php include(Utilities::getPartnerCustomRoot() . "/orglanguage-" . $_SESSION['networkId'] . ".html"); ?>
     </select>
 	</fieldset>
-	<fieldset style="position:absolute;left:430px;width:390px;top:16px;">
+	<fieldset>
 		<label>Organizational Name</label>
  		<div class="form-field" style="margin-left:0px;">
 			<input type="text" name="org-name" style="width:100%;" maxlength="100" placeholder="Organization Name" value=""/>
@@ -16,9 +16,9 @@
 			<option value="0" >------------</option>	
 			<?php include(Utilities::getPartnerCustomRoot() . "/orgsize-" . $_SESSION['networkId'] . ".html"); ?>
 		</select>
-		<div style="margin-top:180px;">
+	</fieldset>
+	<fieldset>
 			<a id="organization-form-size-lang-submit" class="pure-button button-menu" href="javascript:void(0)" onclick="organizationSizeLangValidateAndSubmit('organization-form-size-lang');" style="float:right;background-color:#d27b4b;width:70px;font-size:90%;margin-top:-10px;color:#e6e6e6" >Add</a>
  			<a href="#close" style="float:right;margin-right:20px;">Cancel</a>
- 	</div>
-	</fieldset>					
+ 	</fieldset>					
 </form>
