@@ -16,7 +16,8 @@ if (!Utilities::isSessionValid()) {
 $result = validateOrganization($_POST);
 
 if (count($result['error']) > 0) {
-	print_r($result);
+	header('Content-Type: application/json');			
+	echo json_encode($result);	
  	exit(0);
 }
 
@@ -26,68 +27,77 @@ Use only clean input beyond this point (i.e. $clean[])
 
 ======================================================= */
 
-$orgid = Organization::getOrganizationByName($result['clean']['org-name']);
-if (!$orgid) {
-	$orgid = Organization::addOrganization($result['clean']['org-name'], $_SESSION['networkId']);
-}
+$return = array();
 
-$_SESSION['tmp_orgeditname'] = $result['clean']['org-name'];
-$_SESSION['tmp_orgeditid'] = $orgid;
-
-Organization::addOrganizationContact($orgid, $result['clean']['org-contact-name'], $result['clean']['org-contact-title'], $result['clean']['org-contact-email'], $result['clean']['org-contact-phone'], $result['clean']['org-url']);
-if ($result['clean']['g_status']) {
-	Organization::addOrganizationLocation($orgid,
-		$result['clean']['f_address'],
-		"",
-		$result['clean']['neighborhood'],
-		$result['clean']['city'],
-		$result['clean']['county'],
-		$result['clean']['state'],
-		$result['clean']['country'],
-		$result['clean']['postal'],
-		$result['clean']['lat'],
-		$result['clean']['long'],
-		$result['clean']['placeid'] );
+$orgid = false;
+if (isset($result['clean']['org-id']) && $result['clean']['org-id'] === $_SESSION['tmp-editorgid']  && Utilities::isSessionAdmin()) {
+	$orgid = Organization::updateOrganizationName($result['clean']['org-id'], $result['clean']['org-name']);
 } else {
-	Organization::addOrganizationLocation($orgid,
-		"",
-		$result['clean']['address1'],
-		"",
-		$result['clean']['city'],
-		"",
-		$result['clean']['state'],
-		$result['clean']['country'],
-		"",
-		"",
-		"",
-		"" );		
+	$orgid = Organization::getOrganizationByName($result['clean']['org-name']);
+	if (!$orgid) {
+		$orgid = Organization::addOrganization($result['clean']['org-name'], $_SESSION['networkId']);
+	}
 }
 
+if ($orgid) {
+
+	$return['org-name'] = $result['clean']['org-name'];
+	$return['org-id'] = $orgid;
+	
+	Organization::addOrganizationContact($orgid, $result['clean']['org-contact-name'], $result['clean']['org-contact-title'], $result['clean']['org-contact-email'], $result['clean']['org-contact-phone'], $result['clean']['org-url']);
+	
+	if ($result['clean']['g_status']) {
+		Organization::addOrganizationLocation($orgid,
+			$result['clean']['f_address'],
+			"",
+			$result['clean']['neighborhood'],
+			$result['clean']['city'],
+			$result['clean']['county'],
+			$result['clean']['state'],
+			$result['clean']['country'],
+			$result['clean']['postal'],
+			$result['clean']['lat'],
+			$result['clean']['long'],
+			$result['clean']['placeid'] );
+	} else {
+		Organization::addOrganizationLocation($orgid,
+			"",
+			$result['clean']['address1'],
+			"",
+			$result['clean']['city'],
+			"",
+			$result['clean']['state'],
+			$result['clean']['country'],
+			"",
+			"",
+			"",
+			"" );		
+	}
+}
+	
 if ((session_status() === PHP_SESSION_ACTIVE) && isset($_SESSION['nexusContext'])) {
  switch($_SESSION['nexusContext']) {
- 		case "NWM":
-			header("location:" . Utilities::getHttpPath() . "/nexus.php");
- 			break;
  		case "ADV":
-			header("location:" . Utilities::getHttpPath() . "/nexus.php#openOrganizationFilter");
- 			break;
- 		case "PUB":
- 			header("location:" . Utilities::getPluginPath() . "/publicSuite.php?oid=" . $_SESSION['orgUid'] . "&context=directory");
+			header('Content-Type: application/json');			
+			echo json_encode($return);	
  			break;
  		default: 			
  	}
 }
 
-
 function validateOrganization($input) {
 	$result = array('clean' => array(), 'error' => array());
 
 	if (isset($input['org-name']) && strlen($input['org-name']) > 0) {
-		$result['clean']['org-name'] = Utilities::sanitize($input['org-name']);
+		$result['clean']['org-name'] = $input['org-name'];
 	} else {
 		$result['error']['org-name'] = "error";
 	}
 
+	if (isset($input['org-id'])) {
+		$result['clean']['org-id'] = $input['org-id'];
+	}
+	
 	if (isset($input['org-url'])) {
 		$result['clean']['org-url'] = $input['org-url'];
 	}

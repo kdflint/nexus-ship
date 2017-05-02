@@ -1,23 +1,7 @@
 var errorBackground = "rgba(247,248,239,0.6) url('') no-repeat right top";
 
 var currentEvents;
-var geoDataOrgSearch;
-
-var MEETING_INFO_NEXT_REFRESH = "60000";
-var NEXT_MEETING_START;
-var IS_NOW = true;
-var IS_TIMER_INIT = false;
-var ACTIVITY_FLAG = 1;
-var DEFAULT_FORUM;
-var HTTP_WEB_PATH;
-var HTTP_FORUM_PATH;
-var HTTP_PARTNER_PATH;
-var FORUM_SESSION_REFRESH_COUNTER = 0;
-var DEFAULT_INBOX_FOCUS = "/ucp.php?i=pm&folder=inbox";
-var INBOX_FOCUS = "";
-var RECIPIENT_LIST = [];
-var ZERO_ORGS = false;
-
+var CURRENT_ORG;
 
 /*
 Would like to avoid initializing these and force the including php page to do so, but that might break something right now. 
@@ -27,6 +11,119 @@ See login.php:142
 var USERNAME_REQUIRED = "Username is required";
 var PASSWORD_REQUIRED = "Password is required";
 var EMAIL_REQUIRED = "Valid email is required";
+
+var MEETING_INFO_NEXT_REFRESH = "60000";
+var NEXT_MEETING_START;
+var IS_NOW = true;
+var IS_TIMER_INIT = false;
+var ACTIVITY_FLAG = 1;
+var NETWORK_ID = "";
+var DEFAULT_FORUM;
+var HTTP_WEB_PATH;
+var HTTP_FORUM_PATH;
+var HTTP_PARTNER_PATH;
+var FORUM_SESSION_REFRESH_COUNTER = 0;
+var DEFAULT_INBOX_FOCUS = "/ucp.php?i=pm&folder=inbox";
+var INBOX_FOCUS = "";
+var RECIPIENT_LIST = [];
+var ZERO_ORGS = false;
+var MEMBER_TABLE;
+var ORG_MEMBER_TABLE;
+var ORG_TABLE;
+var MAP;
+var MARKERS = [];
+var DETAIL_MAP;
+var DETAIL_MARKERS = [];
+	
+function showPriv1() {
+	var privileged = document.getElementsByClassName("priv-1");
+	for (var i = 0; i < privileged.length; i++) {
+    privileged[i].style.display='block';
+	}
+	var sheet = document.createElement('STYLE')
+	sheet.innerHTML = ".priv-1 {display: block;}";
+	document.body.appendChild(sheet);
+}
+
+function hidePriv1() {
+	var privileged = document.getElementsByClassName("priv-1");
+	for (var i = 0; i < privileged.length; i++) {
+    privileged[i].style.display='none';
+	}	
+}
+
+function initMap() {
+	console.log("MAP init");
+ 	var mapDiv = document.getElementById('directoryMapContainer');
+  MAP = new google.maps.Map(mapDiv, {
+  	center: {lat: 41.88, lng: -87.62},
+   	zoom: 3
+  });
+  showDirectoryMap();	
+  setMapOnAllMarkers(MAP);
+}
+
+function buildMarkerList(geoData, context) {
+	console.log("building the marker list");
+	if (geoData) {
+ 		for (var org in geoData) {
+	  	var thisMarker = new google.maps.Marker({
+	    	position: {lat: parseFloat(geoData[org]['lat']), lng: parseFloat(geoData[org]['lng'])},
+   			map: MAP,
+   			title: geoData[org]['title'],
+   			id: org
+ 			});
+ 			thisMarker.addListener('click', function() {
+  			console.log("showing detail record for org id " + this.id);
+  			showDirectoryDetail(this.id, context);
+  		});
+ 			MARKERS.push(thisMarker);
+ 		}
+ 	}
+}
+
+function setMapOnAllMarkers(map) {
+	console.log("Setting " + MARKERS.length + " markers to " + map);
+ 	for (var i = 0; i < MARKERS.length; i++) {
+    MARKERS[i].setMap(map);
+  }
+}
+
+function clearAllMarkers() {
+	console.log("clearing markers");
+	setMapOnAllMarkers(null);
+ 	MARKERS = [];
+}
+
+function initDetailMap() {
+  var mapDiv = document.getElementById('detailMapContainer');
+  DETAIL_MAP = new google.maps.Map(mapDiv, {
+  	center: {lat: 41.88, lng: -87.62},
+    zoom: 10
+	});
+}
+
+function addDetailMarker(org) {
+ 	var marker = new google.maps.Marker({
+    position: {lat: parseFloat(org.lat), lng: parseFloat(org.long)},
+  		map: DETAIL_MAP,
+  		title: org.oname
+		});
+	DETAIL_MARKERS.push(marker);
+	setDetailMapOnAll(DETAIL_MAP);
+	DETAIL_MAP.setCenter(marker.getPosition());
+}
+	
+function setDetailMapOnAll(map) {
+ 	for (var i = 0; i < DETAIL_MARKERS.length; i++) {
+    DETAIL_MARKERS[i].setMap(map);
+  }
+}
+	
+function clearAllDetailMarkers() {
+ 	setDetailMapOnAll(null);
+ 	DETAIL_MARKERS = [];
+}
 
 function formSubmit(formId) {
  		document.forms[formId].submit();
@@ -195,6 +292,33 @@ function post(uiContext, to, p) {
 
 }
 
+function formSjaxSubmit(frm) {
+	var xmlhttp = $.ajax({
+		type: $(frm).attr('method'),
+		url: $(frm).attr('action'),
+		data: $(frm).serialize(),
+		async: false,
+		success: function (data) {
+		}
+	});
+	console.log(xmlhttp.responseText);
+	jsonObj = JSON.parse(xmlhttp.responseText);	
+  return jsonObj;
+}
+
+function formAjaxSubmit(frm) {
+	// untested, but exactly like above only asynchronous
+	$.ajax({
+		type: $(frm).attr('method'),
+		url: $(frm).attr('action'),
+		data: $(frm).serialize(),
+		async: true,
+		success: function (data) {
+			//alert('ok');
+		}
+	});
+}
+
 function addUserToGroup(groupid) {
 	for(var i = 0; i < RECIPIENT_LIST.length; i++) {
 		var xmlhttp = getXmlHttpRequest();
@@ -238,10 +362,18 @@ function checkAll(formname) {
 	}
 }	
 
-function showAdvProfile(username) {
+function showAdvProfile(username, fullname) {
+	var dto = new Object();	
+	dto.username = username;
+	dto.fullname = fullname;	
+	RECIPIENT_LIST.push(dto);	
+	document.getElementById("recipient-dto").innerHTML = JSON.stringify(RECIPIENT_LIST);
+	document.getElementById("inbox-mode").innerHTML = "compose";
+	// LEFT OFF - for some reason above is not making it to posting_pm_header.html, line 3
 	var iframeSrc = HTTP_FORUM_PATH  + "/memberlist.php?mode=viewprofile&un=" + username;
   var iframe = document.getElementById("adv-profile-frame");
   iframe.src = iframeSrc;
+  //$( "#adv-menu-inbox" ).click();
   window.location.assign(HTTP_WEB_PATH + "/nexus.php#openProfile");
 }
 
@@ -529,7 +661,6 @@ function usernameValidCheck(input) {
 	xmlhttp.onreadystatechange=function() {
   	if (xmlhttp.readyState == 4) {
   		if (xmlhttp.status == 200) { 
-  			console.log(xmlhttp.responseText);
   			jsonObj = JSON.parse(xmlhttp.responseText);	
   			status = jsonObj['username-status'];
   		} else {
@@ -543,29 +674,6 @@ function usernameValidCheck(input) {
 	return status;  					
 }
 
-
-function myHTMLInclude() {
-  var z, i, a, file, xhttp;
-  z = document.getElementsByTagName("*");
-  for (i = 0; i < z.length; i++) {
-    if (z[i].getAttribute("w3-include-html")) {
-      a = z[i].cloneNode(false);
-      file = z[i].getAttribute("w3-include-html");
-      var xhttp = new XMLHttpRequest();
-      xhttp.onreadystatechange = function() {
-        if (xhttp.readyState == 4 && xhttp.status == 200) {
-          a.removeAttribute("w3-include-html");
-          a.innerHTML = xhttp.responseText;
-          z[i].parentNode.replaceChild(a, z[i]);
-          myHTMLInclude();
-        }
-      }      
-      xhttp.open("GET", file, true);
-      xhttp.send();
-      return;
-    }
-  }
-}
 
 function getLocalTz() {
 	// https://bitbucket.org/pellepim/jstimezonedetect
@@ -658,20 +766,25 @@ function toggleTooltip(tip) {
 	}
 }
 
-function showDirectoryDetail(orgId) {
-	document.getElementById("show-directoryResults").style.display='none';
-	document.getElementById("show-directoryDetail").style.display='block';	
-	var secondaryFilterIcon = document.getElementById("secondary-network-filter");
-	if (secondaryFilterIcon) {
-		secondaryFilterIcon.className = "secondaryControlDisabled";
+function showDirectoryDetail(orgId, context) {
+	if (context === "ADV") {
+		document.getElementById('show_directory_detail').click();
+		getDirectoryDetailAdv(orgId);
+	} else {
+		document.getElementById("show-directoryResults").style.display='none';
+		document.getElementById("show-directoryDetail").style.display='block';	
+		var secondaryFilterIcon = document.getElementById("secondary-network-filter");
+		if (secondaryFilterIcon) {
+			secondaryFilterIcon.className = "secondaryControlDisabled";
+		}
+		var secondaryOrgEditIcon = document.getElementById("secondary-network-edit");
+		if (secondaryOrgEditIcon) {
+			secondaryOrgEditIcon.style.display = "block";
+		}
+		getDirectoryDetail(orgId);
 	}
-	var secondaryOrgEditIcon = document.getElementById("secondary-network-edit");
-	if (secondaryOrgEditIcon) {
-		secondaryOrgEditIcon.style.display = "block";
-	}
-	getDirectoryDetail(orgId);
-}	
-			
+}
+	
 function showDirectoryResults() {
 	document.getElementById("show-directoryResults").style.display='block';
 	document.getElementById("show-directoryDetail").style.display='none';	
@@ -690,7 +803,10 @@ function showDirectoryMap() {
 	document.getElementById("directoryMapContainer").style.opacity=1;
 	document.getElementById("directoryMapContainer").style.filter='alpha(opacity=100)'
 	document.getElementById("directoryMapContainer").style.zIndex=10;
-	document.getElementById("directoryTable").style.display='none';
+	var tables = document.getElementsByClassName("directory-table");
+	for (var i = 0; i < tables.length; i++) {
+    tables[i].style.display='none';
+	}
 	document.getElementById("directory_control").className='fa fa-list fa-' + getDirectoryIconSize();
 	document.getElementById("map_control").onclick=function(){showDirectoryList();};
 }
@@ -703,7 +819,10 @@ function showDirectoryList() {
 	document.getElementById("directoryMapContainer").style.opacity=0;
 	document.getElementById("directoryMapContainer").style.filter='alpha(opacity=0)'
 	document.getElementById("directoryMapContainer").style.zIndex=-1;
-	document.getElementById("directoryTable").style.display='block';
+	var tables = document.getElementsByClassName("directory-table");
+	for (var i = 0; i < tables.length; i++) {
+    tables[i].style.display='block';
+	}
 	document.getElementById("directory_control").className='fa fa-globe fa-' + getDirectoryIconSize();
 	document.getElementById("map_control").onclick=function(){showDirectoryMap();};
 }
@@ -962,6 +1081,33 @@ function validatePhone(phone) {
 	return /^[0-9()-. ]+$/.test(phone);
 }
 
+function openOrganizationBasicForm(editMode) {
+	toggleMultiPartModal("openOrganizationName", "basic");	
+	var basicForm = document.forms['organization-form-basic'];
+	var filterForm = document.forms['organization-form-filters'];
+	var sizelangForm = document.forms['organization-form-size-lang'];
+	var affiliationForm = document.forms['organization-form-affiliation'];
+	if (!editMode) {
+		document.getElementById("organization-form-basic-faddress-readonly").style.display = "none";
+		basicForm['require-address'].value = "true";
+		basicForm['org-id'].value = "";
+		basicForm.reset();
+		document.getElementById('organization-form-basic-submit').innerHTML = "Add";
+		document.getElementById('organization-form-basic-submit').style.opacity = "1";
+		filterForm.reset();
+		document.getElementById('organization-form-filters-submit').innerHTML = "Add";
+		document.getElementById('organization-form-filters-submit').style.opacity = "1";
+		sizelangForm.reset();
+		document.getElementById('organization-form-size-lang-submit').innerHTML = "Add";
+		document.getElementById('organization-form-size-lang-submit').style.opacity = "1";
+		affiliationForm.reset();
+		document.getElementById('organization-form-affiliation-submit').innerHTML = "Add";
+		document.getElementById('organization-form-affiliation-submit').style.opacity = "1";
+
+	}
+	location.assign(HTTP_WEB_PATH + "/nexus.php#openOrganizationName");
+}
+
 function resetProfileForm() {
 	var profileForm = document.forms['profile-form'];
 	profileForm.reset();
@@ -1010,10 +1156,6 @@ function resetEventForm() {
 	scheduleForm['meeting-registr'].innerHTML = "";
 	scheduleForm['meeting-uuid'].value = "";
 	// TODO - timezone value is not resetting - why? Also affects NWM (that is, form cancel does not reset tx value/display)
-	return true;
-}
-
-function resetDirectoryForm() {
 	return true;
 }
 
@@ -1115,9 +1257,38 @@ function profileValidateAndSubmit() {
  		profileForm.submit();
  	}
 }
+function displayThisContext(element) {
+	if (element && (element.className).indexOf('cfcht-custom') > -1) {
+		if (NETWORK_ID == "18") {
+			return true;
+		}
+		return false;			
+	}
+	return true;
+}
+
+function toggleMultiPartModal(modal, part) {
+	var modalDiv = document.getElementById(modal);
+	var modalParts = modalDiv.getElementsByClassName(modal + "-part");
+	 for (var i=0; i<modalParts.length; i++) {
+		modalParts[i].style.display = "none";
+	}
+	var thisModalPart = document.getElementById(modal + "-part-" + part);
+	if (thisModalPart && displayThisContext(thisModalPart)) {
+		thisModalPart.style.display = "block";
+	} else {
+		location.assign(HTTP_WEB_PATH + "/nexus.php#close");
+	}	
+}
+
+function showOrgMemberList(orgId, orgName) {
+	console.log(orgName);
+	getOrgMemberList(orgId, orgName);
+	toggleMultiPartModal("openOrganizationView", "members");
+}
 
 function organizatonNameValidateAndSubmit(thisForm) {
-
+	
 	var organizationNameForm = document.forms[thisForm];
 	var submitButton = document.getElementById(thisForm + "-submit");
 	var pass = true;	
@@ -1133,31 +1304,22 @@ function organizatonNameValidateAndSubmit(thisForm) {
 
  	if (Boolean(pass)) {
  		submitButton.disabled = true;  
- 		submitButton.innerHTML = "<span class='fa fa-spinner'></span>"; 
+ 		submitButton.innerHTML = "<span class='fa fa-spinner fa-pulse'></span>"; 
  		submitButton.style.opacity = ".6";
- 		organizationNameForm.submit();
- 	}	
-
-}
-
-function organizationFilterValidateAndSubmit(thisForm) {
-
-	var organizationFilterForm = document.forms[thisForm];
-	var submitButton = document.getElementById(thisForm + "-submit");
-	var pass = true;	
-	
-	var typeField = document.getElementById("directory-form-select-type-in");
-	setFieldPassStyles(document.getElementById("directory-form-select-type-in-button", "------------"));
-	if (typeField.value === "0") {
-		setFieldErrorStyles(document.getElementById("directory-form-select-type-in-button", "------------"));
-		pass = false;
-	}
-	
-	if (Boolean(pass)) {
- 		submitButton.disabled = true;  
- 		submitButton.innerHTML = "<span class='fa fa-spinner'></span>"; 
- 		submitButton.style.opacity = ".6";
- 		organizationFilterForm.submit();
+ 		var details = formSjaxSubmit(organizationNameForm);
+		if (details['status'] === "name-new") {
+			// must manually update ZERO_ORGS since no page reload
+			ZERO_ORGS = false;
+			var basicForm = document.forms['organization-form-basic'];
+ 			basicForm['org-name'].value = details['org-name'];
+ 			basicForm['org-name'].readOnly = true;
+ 			basicForm['org-id'] = details['org-id'];
+ 			toggleMultiPartModal("openOrganizationName", "basic");
+ 		} else {
+ 			// reload here will cause ZERO_ORGS update
+ 			location.reload();
+ 			toggleMultiPartModal("openOrganizationName", "name");
+ 		}
  	}
 
 }
@@ -1189,8 +1351,8 @@ function organizationBasicValidateAndSubmit(thisForm) {
   // TODO - validate url, also in event form
   var url = urlField.value;
 	setFieldPassStyles(urlField, "Organization Web Site (http://)");
-  if (isEmptyOrLong(url, 100)) {
-  	setFieldErrorStyles(urlField, "Organization web site is required");
+  if (url.length > 100) {
+  	setFieldErrorStyles(urlField, "Organization web site max length is 100");
     pass = false;
   }  
   
@@ -1202,45 +1364,114 @@ function organizationBasicValidateAndSubmit(thisForm) {
   	pass = false;
   }
   
-	var street = streetField.value;
-	setFieldPassStyles(streetField, "Street Address");
-	if (isEmptyOrLong(street, 50)) {
-		setFieldErrorStyles(streetField, "Street address is required");
-		streetField.value = "";
-		pass = false;
-	}
-	
-	var city = cityField.value;
-	setFieldPassStyles(cityField, "City");
-	if (isEmptyOrLong(city, 50)) {
-		setFieldErrorStyles(cityField, "City is required");
-		cityField.value = "";
-		pass = false;
-	}
+	if (organizationBasicForm['require-address'].value === "true") {
+		var street = streetField.value;
+		setFieldPassStyles(streetField, "Street Address");
+		if (isEmptyOrLong(street, 50)) {
+			setFieldErrorStyles(streetField, "Street address is required");
+			streetField.value = "";
+			pass = false;
+		}
+		
+		var city = cityField.value;
+		setFieldPassStyles(cityField, "City");
+		if (isEmptyOrLong(city, 50)) {
+			setFieldErrorStyles(cityField, "City is required");
+			cityField.value = "";
+			pass = false;
+		}	
 
-	var country = countryField.value;
-	setFieldPassStyles(document.getElementById("organization-form-country-button", "Country"))
-	if (country === "AA") {
-		setFieldErrorStyles(document.getElementById("organization-form-country-button", "Country"));
-		pass = false;
-	}
-
-	// TODO - not all countries have states so must revise when we open up country list. Also, could be province.
-	// http://www.columbia.edu/~fdc/postal/
-	var state = stateField.value;
-	setFieldPassStyles(document.getElementById("organization-form-countryStates-button", "States"));
-	if (state === "State") {
-		setFieldErrorStyles(document.getElementById("organization-form-countryStates-button", "States"));
-		pass = false;
+		var country = countryField.value;
+		setFieldPassStyles(document.getElementById("organization-form-country-button", "Country"))
+		if (country === "AA") {
+			setFieldErrorStyles(document.getElementById("organization-form-country-button", "Country"));
+			pass = false;
+		}
+	 	// TODO - not all countries have states so must revise when we open up country list. Also, could be province.
+		// http://www.columbia.edu/~fdc/postal/-			
+		var state = stateField.value;
+		setFieldPassStyles(document.getElementById("organization-form-countryStates-button", "States"));
+		if (state === "State") {
+			setFieldErrorStyles(document.getElementById("organization-form-countryStates-button", "States"));
+			pass = false;
+		}
 	}
 	
  	if (Boolean(pass)) {
  		submitButton.disabled = true;  
- 		submitButton.innerHTML = "<span class='fa fa-spinner'></span>"; 
+ 		submitButton.innerHTML = "<span class='fa fa-spinner fa-pulse'></span>"; 
  		submitButton.style.opacity = ".6";
- 		organizationBasicForm.submit();
+ 		var details = formSjaxSubmit(organizationBasicForm);
+		console.log(details);
+		var filterForm = document.forms['organization-form-filters'];
+ 		filterForm['org-name'].value = details['org-name'];
+ 		filterForm['org-name'].readOnly = true;
+ 		filterForm['org-id'].value = details['org-id'];
+ 		document.getElementById("directory-form-submit").click();
+ 		toggleMultiPartModal("openOrganizationName", "filter");
+ 		
  	}
 }
+
+function organizationFilterValidateAndSubmit(thisForm) {
+
+	var organizationFilterForm = document.forms[thisForm];	
+	var submitButton = document.getElementById(thisForm + "-submit");
+	var pass = true;	
+	
+	var typeField = document.getElementById("directory-form-select-type-in");
+	setFieldPassStyles(document.getElementById("directory-form-select-type-in-button", "------------"));
+	if (false) {
+		setFieldErrorStyles(document.getElementById("directory-form-select-type-in-button", "------------"));
+		pass = false;
+	}
+	
+	if (Boolean(pass)) {
+ 		submitButton.disabled = true;  
+ 		submitButton.innerHTML = "<span class='fa fa-spinner fa-pulse'></span>"; 
+ 		submitButton.style.opacity = ".6";
+ 		var details = formSjaxSubmit(organizationFilterForm);
+		var sizelangForm = document.forms['organization-form-size-lang'];
+ 		sizelangForm['org-name'].value = details['org-name'];
+ 		sizelangForm['org-name'].readOnly = true;
+ 		sizelangForm['org-id'].value = details['org-id'];
+ 		toggleMultiPartModal("openOrganizationName", "sizelang");
+ 	}
+
+}
+
+function organizationSizeLangValidateAndSubmit(thisForm) {
+	var organizationSizeLangForm = document.forms[thisForm];	
+	var submitButton = document.getElementById(thisForm + "-submit");
+	var pass = true;	
+
+	if (Boolean(pass)) {
+ 		submitButton.disabled = true;  
+ 		submitButton.innerHTML = "<span class='fa fa-spinner fa-pulse'></span>"; 
+ 		submitButton.style.opacity = ".6";
+ 		var details = formSjaxSubmit(organizationSizeLangForm);
+		var affiliationForm = document.forms['organization-form-affiliation'];
+ 		affiliationForm['org-name'].value = details['org-name'];
+ 		affiliationForm['org-name'].readOnly = true;
+ 		affiliationForm['org-id'].value = details['org-id'];
+ 		toggleMultiPartModal("openOrganizationName", "affil");
+ 	}
+}
+
+function organizationAffiliationValidateAndSubmit(thisForm) {
+	var organizationAffiliationForm = document.forms[thisForm];	
+	var submitButton = document.getElementById(thisForm + "-submit");
+	var pass = true;	
+
+	if (Boolean(pass)) {
+ 		submitButton.disabled = true;  
+ 		submitButton.innerHTML = "<span class='fa fa-spinner fa-pulse'></span>"; 
+ 		submitButton.style.opacity = ".6";
+ 		var details = formSjaxSubmit(organizationAffiliationForm);
+ 		toggleMultiPartModal("openOrganizationName", "endHere");
+ 	}
+}
+
 
 function getMaxDaysForMonth(month) {
 	switch(month) {
@@ -1266,6 +1497,7 @@ function getMaxDaysForFebruary(year) {
 }
 
 function switchToOrganizationView() {
+	// TODO - put all this stuff together, with a class name maybe?
 	document.getElementById('directory-form-submit').click();
 	document.getElementById('member_view_control').style.display = "block";
 	document.getElementById('directory_view_control').style.display = "none";
@@ -1278,8 +1510,12 @@ function switchToOrganizationView() {
 	var addToGroup = document.getElementById('add_to_group');
 	var removeFromGroup = document.getElementById('remove_from_group');
 	var addNewOrg = document.getElementById('add_new_org');
+	var addNewGroup = document.getElementById('add_new_group');
 	if (addNewOrg) {
 		addNewOrg.style.display = "block";
+	}
+	if (addNewGroup) {
+		addNewGroup.style.display = "none";
 	}
 	if (addToGroup && removeFromGroup) {
 		addToGroup.style.display = "none";
@@ -1303,8 +1539,12 @@ function switchToMemberView() {
 	var addToGroup = document.getElementById('add_to_group');
 	var removeFromGroup = document.getElementById('remove_from_group');
 	var addNewOrg = document.getElementById('add_new_org');
+	var addNewGroup = document.getElementById('add_new_group');
 	if (addNewOrg) {
 		addNewOrg.style.display = "none";
+	}
+	if (addNewGroup) {
+		addNewGroup.style.display = "block";
 	}
 	if (addToGroup && removeFromGroup) {
 		addToGroup.style.display = "block";
@@ -1314,6 +1554,118 @@ function switchToMemberView() {
 	if (secondaryOrgEditIcon) {
 		secondaryOrgEditIcon.style.display = "none";
 	}
+}
+
+function populateDirectoryMultiForm() {
+	if (CURRENT_ORG) {
+		var organizationForm = document.forms['organization-form-basic'];
+		organizationForm.reset();
+		if (CURRENT_ORG.oname && CURRENT_ORG.orgid) { 
+			organizationForm['org-name'].value = CURRENT_ORG.oname; 
+			organizationForm['org-id'].value = CURRENT_ORG.orgid; 
+			organizationForm['org-url'].value = CURRENT_ORG.url ? CURRENT_ORG.url : "";
+			organizationForm['org-contact-name'].value = CURRENT_ORG.cname ? CURRENT_ORG.cname : "";
+			//organizationForm['org-contact-title'].value = CURRENT_ORG. 
+			organizationForm['org-contact-email'].value = CURRENT_ORG.email ? CURRENT_ORG.email : "";
+			organizationForm['org-contact-phone'].value = CURRENT_ORG.phone ? CURRENT_ORG.phone : "";
+			document.getElementById("faddress-body").innerHTML = CURRENT_ORG.formatted ? CURRENT_ORG.formatted : "";
+			document.getElementById("organization-form-basic-faddress-readonly").style.display = "block";
+			organizationForm['require-address'].value = "false";
+			//organizationForm['org-street'].value = CURRENT_ORG.
+			//organizationForm['org-city'].value = CURRENT_ORG.
+			//organizationForm['org-country'].value = CURRENT_ORG
+			//organizationForm['org-state'].value = CURRENT_ORG
+			document.getElementById('organization-form-basic-submit').innerHTML = "Next";
+			document.getElementById('organization-form-basic-submit').style.opacity = "1";
+			
+			var filterForm = document.forms['organization-form-filters'];
+			var typeSelect = filterForm['directory-form-select-type-in'];
+			var specialtySelect = filterForm['directory-form-select-specialty-in'];
+			document.getElementById('organization-form-filters-submit').innerHTML = "Next";
+			document.getElementById('organization-form-filters-submit').style.opacity = "1";
+			
+			filterForm.reset();
+			if (CURRENT_ORG.topic) {
+				for ( var i = 0, option; i < specialtySelect.options.length; i++ ) {
+  				option = specialtySelect.options[i];
+  				for (var m = 0; m < CURRENT_ORG.topic.length; m++) {
+  					if ( CURRENT_ORG.topic[m] === option.text ) {
+    					option.selected = true;
+  					}
+  				}
+				}
+			}
+			
+			if (CURRENT_ORG.type) {
+				for ( var i = 1, option; i < typeSelect.options.length; i++ ) {
+  				option = typeSelect.options[i];
+  				if ( CURRENT_ORG.type === option.text ) {
+    				option.selected = true;
+  				}
+				}
+			}		
+			
+			var sizelangForm = document.forms['organization-form-size-lang'];
+			var sizeSelect = sizelangForm['directory-form-select-size-in'];
+			var langSelect = sizelangForm['directory-form-select-languages-in'];
+			document.getElementById('organization-form-size-lang-submit').innerHTML = "Next";
+			document.getElementById('organization-form-size-lang-submit').style.opacity = "1";
+			sizelangForm.reset();
+
+			if (CURRENT_ORG.language) {
+				for ( var i = 0, option; i < langSelect.options.length; i++ ) {
+  				option = langSelect.options[i];
+  				for (var m = 0; m < CURRENT_ORG.language.length; m++) {
+  					if ( CURRENT_ORG.language[m] === option.text ) {
+    					option.selected = true;
+  					}
+  				}
+				}
+			}
+			
+			if (CURRENT_ORG.size) {
+				for ( var i = 1, option; i < sizeSelect.options.length; i++ ) {
+  				option = sizeSelect.options[i];
+  				if ( CURRENT_ORG.size === option.text ) {
+    				option.selected = true;
+  				}
+				}
+			}
+			
+			var affiliationForm = document.forms['organization-form-affiliation'];
+			var ethnicitySelect = affiliationForm['directory-form-select-ethnicity-in'];
+			var affiliationSelect = affiliationForm['directory-form-select-affiliation-in'];
+			document.getElementById('organization-form-affiliation-submit').innerHTML = "Next";
+			document.getElementById('organization-form-affiliation-submit').style.opacity = "1";
+			affiliationForm.reset();
+
+			if (CURRENT_ORG.ethnicity) {
+				for ( var i = 0, option; i < ethnicitySelect.options.length; i++ ) {
+  				option = ethnicitySelect.options[i];
+  				for (var m = 0; m < CURRENT_ORG.ethnicity.length; m++) {
+  					if ( CURRENT_ORG.ethnicity[m] === option.text ) {
+    					option.selected = true;
+  					}
+  				}
+				}
+			}
+
+			if (CURRENT_ORG.affiliation) {
+				for ( var i = 0, option; i < affiliationSelect.options.length; i++ ) {
+  				option = affiliationSelect.options[i];
+  				for (var m = 0; m < CURRENT_ORG.affiliation.length; m++) {
+  					if ( CURRENT_ORG.affiliation[m] === option.text ) {
+    					option.selected = true;
+  					}
+  				}
+				}
+			}
+
+
+			
+		}
+	}
+	openOrganizationBasicForm(true);
 }
 
 function populateEventForm(i) {
@@ -1728,6 +2080,10 @@ function getDaysPassing(num, freq, start) {
     	return loopCount - 1;
 	}
 	return 1;
+}
+
+function htmlEntities(str) {
+	return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;');	
 }
 
 function millisecondsToFormat(formatString, ms){

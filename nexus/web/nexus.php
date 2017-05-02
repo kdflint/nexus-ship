@@ -80,6 +80,11 @@ if (count($_SESSION['orgs']) < 1) {
 		$zeroOrgs = "true";
 }	
 
+$isAdmin = "false";
+if (Utilities::isSessionAdmin()) {
+	$isAdmin = "true";
+}
+
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
@@ -139,6 +144,7 @@ if (count($_SESSION['orgs']) < 1) {
     <script type="text/javascript">
 		
     	// TODO - create a global js init script - can format this as a php file that parses into javascript, look for example...
+			NETWORK_ID = "<?php echo $_SESSION['networkId']; ?>";
 			DEFAULT_FORUM = "<?php echo $_SESSION['defaultForumId']; ?>";
 			HTTP_WEB_PATH = "<?php echo Utilities::getHttpPath(); ?>";
 			HTTP_FORUM_PATH = "<?php echo Utilities::getForumHttpPath(); ?>";
@@ -152,7 +158,7 @@ if (count($_SESSION['orgs']) < 1) {
     	<?php include("scripts/techCheck.js"); ?>
     	  	
 			$(document).ready(function () {	
-				
+								
 				if ( $.cookie('nexusadv_lastvisit') !== 'undefined' ) {
 					loadPreviousTab($.cookie('nexusadv_lastvisit'));
 				} else {
@@ -164,8 +170,6 @@ if (count($_SESSION['orgs']) < 1) {
 					minLength: 3,
         });
 										
-				var memberTable;
-
 				$('#group-list-table-rows').on( 'click', 'tr', function (event) {
     			if (event.target.type !== 'checkbox') {
     				$(':checkbox', this).trigger('click');
@@ -176,7 +180,6 @@ if (count($_SESSION['orgs']) < 1) {
 							dto.username = keyval[0];
 							dto.fullname = keyval[1];	
 							RECIPIENT_LIST.push(dto);	
-							//console.log(keyval[0]); 
 	  				}    	
 			    } else {
 						var keyval = $(':checkbox', this).val().split("::");
@@ -186,11 +189,19 @@ if (count($_SESSION['orgs']) < 1) {
 		    	}
 				} );
 				
+				$('#org-list-table-rows').on( 'click', 'tr', function (event) {
+					showDirectoryDetail(ORG_TABLE.row( this ).data()[0], "ADV")
+				} );
+				
+				$('#datatable-input').on( 'keyup', function () {
+					filterMemberTable(this.value);
+				} );
+				
 				$('#compose_pm').click( function() {
          	document.getElementById("recipient-dto").innerHTML = JSON.stringify(RECIPIENT_LIST);
         	document.getElementById("inbox-mode").innerHTML = "compose";
 					$( "#adv-menu-inbox" ).click();	
-    		} );				
+    		} );		
 						
 				$('#add_to_group').click( function() {
 					document.getElementById("selected-user-count").innerHTML = RECIPIENT_LIST.length;
@@ -264,7 +275,7 @@ if (count($_SESSION['orgs']) < 1) {
 				}			
 				if(<?php echo $showOrganizationDetail; ?>) {
 					$( "#adv-menu-network" ).click();
-					showDirectoryDetail("<?php echo $showOrgDetailId; ?>");	
+					showDirectoryDetail("<?php echo $showOrgDetailId; ?>", "NWM");	
 				}
 				if(<?php echo $showAdvProfile; ?>) {
 					showAdvProfile("<?php echo($showAdvProfileUsername); ?>");
@@ -273,6 +284,14 @@ if (count($_SESSION['orgs']) < 1) {
 					INBOX_FOCUS = "/ucp.php?i=pm&mode=compose&username=<?php echo($showAdvImUsername); ?>";
 					$( "#adv-menu-inbox" ).click();					
 				}
+				if (<?php echo $isAdmin; ?>) {
+					// TODO - this is far from perfect! Keep working on it...
+					showPriv1();
+				} else {
+					hidePriv1();
+				}
+				
+				switchToOrganizationView();	
 				
 			});
 			
@@ -300,13 +319,14 @@ if (count($_SESSION['orgs']) < 1) {
     		});    
   		});
 
-			// We call this initialization when ajax delivery of initial table contents is complete
-			function initMemberTable(tableId) {
-				memberTable = $('#member-directory').DataTable( {
+			// We call these initialization when ajax delivery of initial table contents is complete
+			function initMemberTable() {
+				MEMBER_TABLE = $('#member-directory').DataTable( {
 					"retrieve": true,
 					"pageLength": 10,
 					"lengthChange": false,
 					"order": [[2, 'asc']],
+					"dom": 'tip',
 					"columns": [
 	   				{ "orderable": false },
    					{ "orderable": false },
@@ -314,6 +334,41 @@ if (count($_SESSION['orgs']) < 1) {
    					null
 					]
 				} );
+			}
+			
+			function initOrgMemberTable() {
+				ORG_MEMBER_TABLE = $('#org-member-directory').DataTable( {
+					"retrieve": true,
+					"pageLength": 5,
+					"lengthChange": false,
+					"searching": false,
+					"order": [[1, 'asc']],
+					"columns": [
+   					null,
+   					null,
+   					{ "orderable": false }
+					]
+				} );
+			}
+			
+			function initOrgTable() {
+				ORG_TABLE = $('#org-directory').DataTable( {
+					"retrieve": true,
+					"pageLength": 10,
+					"lengthChange": false,
+					"searching": false,
+					"info": true,
+					"order": [[1, 'asc']],
+ 				  "columnDefs": [
+    				{ "visible": false, "targets": 0 }
+  				]
+				} );
+			}
+			
+			function filterMemberTable(term) {
+				if (MEMBER_TABLE) {
+					MEMBER_TABLE.search( term ).draw();
+				}
 			}
 	  		  	
 		</script>
@@ -356,7 +411,7 @@ if (count($_SESSION['orgs']) < 1) {
 						position: { my : "left+50 top", at: "right top-135" },
 						width: 228
 				});
-       	$( "#directory-form-select-type-in").selectmenu();
+       	$( "#directory-form-select-size-in").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
        	$( "#organization-form-country" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
         $( "#organization-form-country" ).selectmenu({ change: function() { displayStates(); } });
         $( "#organization-form-countryStates" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
@@ -466,8 +521,19 @@ if (count($_SESSION['orgs']) < 1) {
 
 	<script>
 		var stateObj = { foo: "bar" };
-		// TODO - this breaks multi-modal displays on Org Forms in everything but Firefox
-		//history.pushState(stateObj, "", "nexus.php#close");
+		if(window.location.hash) {
+			// In everything but FF, a processor return "location:" value that uses a hash to display a modal 
+			// gets ignored for some reason due to history pushState. Not sure why, but this is an example 
+			// of what doesn't work, from organizationRemoveProcessor.php: 
+			// header("location:" . Utilities::getHttpPath() . "/nexus.php#openOrganizationName");
+			// What we want is response to reveal that modal, but it doesn't
+			// So we only pushState when location url does not contain a hash value
+		} else {
+			// In general we do this to eliminate confusion because this is such a js driven site, back button 
+			// feels arbitrary and unintuitive. Revisit at some point... 
+			history.pushState(stateObj, "", "nexus.php#close");
+		}
+
 	</script>
 	
 	</body>

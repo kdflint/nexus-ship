@@ -16,8 +16,9 @@ if (!Utilities::isSessionValid()) {
 $result = validateInput($_POST);
 
 if (count($result['error']) > 0) {
-	print_r($result);
-	exit(0);
+	header('Content-Type: application/json');			
+	echo json_encode($result);	
+ 	exit(0);
 }
 
 /* ====================================================
@@ -26,13 +27,14 @@ Use only clean input beyond this point (i.e. $clean[])
 
 ======================================================= */
 
-$return = "#openOrganizationName";
+$return = array();
+$return['status'] = "name-exists";
 $orgId = Organization::getOrganizationByName($result['clean']['org-name']);
 if (!$orgId) {
 	$orgId = Organization::addOrganization($result['clean']['org-name'], $_SESSION['networkId']);
-	$return = "#openOrganizationBasic";
-	$_SESSION['tmp_orgeditname'] = $result['clean']['org-name'];
-	$_SESSION['tmp_orgeditid'] = $orgId;
+	$return['status'] = "name-new";
+	$return['org-name'] = $result['clean']['org-name'];
+	$return['org-id'] = $orgId;
 }
 User::addUserOrgRelation($_SESSION['uidpk'],$orgId,88,5);
 
@@ -40,15 +42,9 @@ Utilities::setSessionOrgs($_SESSION['username']);
 
 if ((session_status() === PHP_SESSION_ACTIVE) && isset($_SESSION['nexusContext'])) {
  switch($_SESSION['nexusContext']) {
- 		case "NWM":
-			header("location:" . Utilities::getHttpPath() . "/nexus.php");
- 			break;
  		case "ADV":
- 			// reloading here causes javascript ZERO_ORGS to refresh
-			header("location:" . Utilities::getHttpPath() . "/nexus.php" . $return);
- 			break;
- 		case "PUB":
- 			header("location:" . Utilities::getPluginPath() . "/publicSuite.php?oid=" . $_SESSION['orgUid'] . "&context=directory");
+			header('Content-Type: application/json');			
+			echo json_encode($return);	
  			break;
  		default: 			
  	}
@@ -58,7 +54,7 @@ function validateInput($input) {
 	$result = array('clean' => array(), 'error' => array());
 
 	if (isset($input['org-name']) && strlen($input['org-name']) > 0) {
-		$result['clean']['org-name'] = Utilities::sanitize($input['org-name']);
+		$result['clean']['org-name'] = $input['org-name'];
 	} else {
 		$result['error']['org-name'] = "error";
 	}
