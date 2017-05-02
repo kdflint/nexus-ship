@@ -12,8 +12,7 @@
 			<input type="hidden" name="org-id" value=""/>
 		</div>
 		<label>Organization Type (select one) </label>
-		<select id="directory-form-select-type-in" name="type">
-			<option value="0" >------------</option>	
+		<select id="directory-form-select-type-in" name="type" style="width:100%;height:200px;" size="6" required="required">
 			<?php include(Utilities::getPartnerCustomRoot() . "/orgtype-" . $_SESSION['networkId'] . ".html"); ?>
 		</select>
 	</fieldset>					

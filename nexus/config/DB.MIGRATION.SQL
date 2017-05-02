@@ -1,18 +1,15 @@
--- clear forum cache
 
--- copy over CFCHT custom filters
+GRANT SELECT, UPDATE, INSERT, DELETE, REFERENCES ON TABLE organization_contact TO northbri_web WITH GRANT OPTION;
+GRANT SELECT, UPDATE ON TABLE organization_contact_id_seq TO northbri_web;
 
-GRANT SELECT, UPDATE, INSERT, DELETE, REFERENCES ON TABLE organization_contact TO northbr6_web WITH GRANT OPTION;
-GRANT SELECT, UPDATE ON TABLE organization_contact_id_seq TO northbr6_web;
+GRANT SELECT, UPDATE, INSERT, DELETE, REFERENCES ON TABLE organization_topic TO northbri_web WITH GRANT OPTION;
+GRANT SELECT, UPDATE ON TABLE organization_topic_id_seq TO northbri_web;
 
-GRANT SELECT, UPDATE, INSERT, DELETE, REFERENCES ON TABLE organization_topic TO northbr6_web WITH GRANT OPTION;
-GRANT SELECT, UPDATE ON TABLE organization_topic_id_seq TO northbr6_web;
+GRANT SELECT, UPDATE, INSERT, DELETE, REFERENCES ON TABLE organization_location TO northbri_web WITH GRANT OPTION;
+GRANT SELECT, UPDATE ON TABLE organization_location_id_seq TO northbri_web;
 
-GRANT SELECT, UPDATE, INSERT, DELETE, REFERENCES ON TABLE organization_location TO northbr6_web WITH GRANT OPTION;
-GRANT SELECT, UPDATE ON TABLE organization_location_id_seq TO northbr6_web;
-
-GRANT SELECT, UPDATE, INSERT, DELETE, REFERENCES ON TABLE organization_language TO northbr6_web WITH GRANT OPTION;
-GRANT SELECT, UPDATE ON TABLE organization_language_id_seq TO northbr6_web;
+GRANT SELECT, UPDATE, INSERT, DELETE, REFERENCES ON TABLE organization_language TO northbri_web WITH GRANT OPTION;
+GRANT SELECT, UPDATE ON TABLE organization_language_id_seq TO northbri_web;
 
 
 ALTER TABLE organization ADD size varchar(20);
@@ -22,6 +19,8 @@ insert into language (language) values ('Cantonese');
 insert into language (language) values ('Mandarin');
 
 -- confirm ids match custom language options file
+
+-- copy over language custom file
 
 -- Sequence: affiliation_id_seq
 
@@ -34,7 +33,7 @@ CREATE SEQUENCE affiliation_id_seq
   START 13
   CACHE 1;
 ALTER TABLE affiliation_id_seq
-  OWNER TO northbr6_devnexus;
+  OWNER TO northbri_devnexus;
   
  -- Sequence: organization_affiliation_id_seq
 
@@ -47,7 +46,7 @@ CREATE SEQUENCE organization_affiliation_id_seq
   START 119
   CACHE 1;
 ALTER TABLE organization_affiliation_id_seq
-  OWNER TO northbr6_devnexus;
+  OWNER TO northbri_devnexus;
   
  -- Table: affiliation
 
@@ -63,10 +62,10 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE affiliation
-  OWNER TO northbr6_devnexus;
-GRANT ALL ON TABLE affiliation TO northbr6_devnexus;
-GRANT SELECT, UPDATE, INSERT, REFERENCES ON TABLE affiliation TO northbr6_web WITH GRANT OPTION;
-GRANT ALL ON TABLE affiliation TO northbr6_nbnexus;
+  OWNER TO northbri_devnexus;
+GRANT ALL ON TABLE affiliation TO northbri_devnexus;
+GRANT SELECT, UPDATE, INSERT, REFERENCES ON TABLE affiliation TO northbri_web WITH GRANT OPTION;
+GRANT ALL ON TABLE affiliation TO northbri_nbnexus;
 
 
 -- Table: organization_affiliation
@@ -90,10 +89,10 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE organization_affiliation
-  OWNER TO northbr6_devnexus;
-GRANT ALL ON TABLE organization_affiliation TO northbr6_devnexus;
-GRANT SELECT, UPDATE, INSERT, DELETE, REFERENCES ON TABLE organization_affiliation TO northbr6_web WITH GRANT OPTION;
-GRANT ALL ON TABLE organization_affiliation TO northbr6_nbnexus;
+  OWNER TO northbri_devnexus;
+GRANT ALL ON TABLE organization_affiliation TO northbri_devnexus;
+GRANT SELECT, UPDATE, INSERT, DELETE, REFERENCES ON TABLE organization_affiliation TO northbri_web WITH GRANT OPTION;
+GRANT ALL ON TABLE organization_affiliation TO northbri_nbnexus;
 
 insert into affiliation (affiliation) values ('African Methodist Episcopal');
 insert into affiliation (affiliation) values ('African Methodist Episcopal Zion');
@@ -152,7 +151,7 @@ CREATE SEQUENCE ethnicity_id_seq
   START 13
   CACHE 1;
 ALTER TABLE ethnicity_id_seq
-  OWNER TO northbr6_devnexus;
+  OWNER TO northbri_devnexus;
   
  -- Sequence: organization_ethnicity_id_seq
 
@@ -165,7 +164,7 @@ CREATE SEQUENCE organization_ethnicity_id_seq
   START 119
   CACHE 1;
 ALTER TABLE organization_ethnicity_id_seq
-  OWNER TO northbr6_devnexus;
+  OWNER TO northbri_devnexus;
   
  -- Table: ethnicity
 
@@ -181,10 +180,10 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE ethnicity
-  OWNER TO northbr6_devnexus;
-GRANT ALL ON TABLE ethnicity TO northbr6_devnexus;
-GRANT SELECT, UPDATE, INSERT, REFERENCES ON TABLE ethnicity TO northbr6_web WITH GRANT OPTION;
-GRANT ALL ON TABLE ethnicity TO northbr6_nbnexus;
+  OWNER TO northbri_devnexus;
+GRANT ALL ON TABLE ethnicity TO northbri_devnexus;
+GRANT SELECT, UPDATE, INSERT, REFERENCES ON TABLE ethnicity TO northbri_web WITH GRANT OPTION;
+GRANT ALL ON TABLE ethnicity TO northbri_nbnexus;
 
 
 -- Table: organization_ethnicity
@@ -208,10 +207,10 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE organization_ethnicity
-  OWNER TO northbr6_devnexus;
-GRANT ALL ON TABLE organization_ethnicity TO northbr6_devnexus;
-GRANT SELECT, UPDATE, INSERT, DELETE, REFERENCES ON TABLE organization_ethnicity TO northbr6_web WITH GRANT OPTION;
-GRANT ALL ON TABLE organization_ethnicity TO northbr6_nbnexus;
+  OWNER TO northbri_devnexus;
+GRANT ALL ON TABLE organization_ethnicity TO northbri_devnexus;
+GRANT SELECT, UPDATE, INSERT, DELETE, REFERENCES ON TABLE organization_ethnicity TO northbri_web WITH GRANT OPTION;
+GRANT ALL ON TABLE organization_ethnicity TO northbri_nbnexus;
 
 insert into ethnicity (ethnicity) values ('European American');
 insert into ethnicity (ethnicity) values ('African American');
@@ -229,8 +228,11 @@ insert into ethnicity (ethnicity) values ('Native American');
 -- create custom html file
 select '<option value="' || id || '">' || ethnicity || '</option>' from ethnicity
 
-GRANT ALL ON TABLE organization_affiliation_id_seq TO northbr6_devnexus;
-GRANT SELECT, UPDATE ON TABLE organization_affiliation_id_seq TO northbr6_web;
-GRANT ALL ON TABLE organization_ethnicity_id_seq TO northbr6_devnexus;
-GRANT SELECT, UPDATE ON TABLE organization_ethnicity_id_seq TO northbr6_web;
+GRANT ALL ON TABLE organization_affiliation_id_seq TO northbri_devnexus;
+GRANT SELECT, UPDATE ON TABLE organization_affiliation_id_seq TO northbri_web;
+GRANT ALL ON TABLE organization_ethnicity_id_seq TO northbri_devnexus;
+GRANT SELECT, UPDATE ON TABLE organization_ethnicity_id_seq TO northbri_web;
 
+-- clear forum cache
+
+-- copy over CFCHT custom filters

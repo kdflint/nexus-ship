@@ -1090,6 +1090,7 @@ function openOrganizationBasicForm(editMode) {
 	if (!editMode) {
 		document.getElementById("organization-form-basic-faddress-readonly").style.display = "none";
 		basicForm['require-address'].value = "true";
+		basicForm['org-id'].value = "";
 		basicForm.reset();
 		document.getElementById('organization-form-basic-submit').innerHTML = "Add";
 		document.getElementById('organization-form-basic-submit').style.opacity = "1";
@@ -1401,6 +1402,7 @@ function organizationBasicValidateAndSubmit(thisForm) {
  		submitButton.innerHTML = "<span class='fa fa-spinner fa-pulse'></span>"; 
  		submitButton.style.opacity = ".6";
  		var details = formSjaxSubmit(organizationBasicForm);
+		console.log(details);
 		var filterForm = document.forms['organization-form-filters'];
  		filterForm['org-name'].value = details['org-name'];
  		filterForm['org-name'].readOnly = true;
@@ -1419,7 +1421,7 @@ function organizationFilterValidateAndSubmit(thisForm) {
 	
 	var typeField = document.getElementById("directory-form-select-type-in");
 	setFieldPassStyles(document.getElementById("directory-form-select-type-in-button", "------------"));
-	if (typeField.value === "0") {
+	if (false) {
 		setFieldErrorStyles(document.getElementById("directory-form-select-type-in-button", "------------"));
 		pass = false;
 	}
@@ -1429,7 +1431,6 @@ function organizationFilterValidateAndSubmit(thisForm) {
  		submitButton.innerHTML = "<span class='fa fa-spinner fa-pulse'></span>"; 
  		submitButton.style.opacity = ".6";
  		var details = formSjaxSubmit(organizationFilterForm);
- 		console.log(details);
 		var sizelangForm = document.forms['organization-form-size-lang'];
  		sizelangForm['org-name'].value = details['org-name'];
  		sizelangForm['org-name'].readOnly = true;
@@ -1602,7 +1603,7 @@ function populateDirectoryMultiForm() {
     				option.selected = true;
   				}
 				}
-			}
+			}		
 			
 			var sizelangForm = document.forms['organization-form-size-lang'];
 			var sizeSelect = sizelangForm['directory-form-select-size-in'];

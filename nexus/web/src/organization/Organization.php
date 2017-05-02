@@ -65,7 +65,7 @@ class Organization {
 	
 	public static function addOrganizationType($orgId, $type) {
 		$orgExists = self::organizationIdExists($orgId);
-		if($orgExists) {
+		if($orgExists && $type) {
 			$query = "update organization set type = $1 where id = $2 returning id";
 			return PgDatabase::psExecute($query, array($type, $orgId));
 		}
@@ -93,7 +93,7 @@ class Organization {
 	}
 	
 	public static function addOrganizationContact($orgfk, $name, $title, $email, $phone, $url) {
-		// TODO - if this is an edit scenario, this may create a duplicate contact row and leave the existing row stranded (not tied to an org)
+		// TODO - in edit scenario, this may create a duplicate contact row and leave the existing row stranded (not tied to an org)
 		$query = "insert into contact (name, title, email, phone, url) values ($1, $2, $3, $4, $5) returning id";
 		$row = pg_fetch_row(PgDatabase::psExecute($query, array($name, $title, $email, $phone, $url)));
 		$contactId = $row[0];
@@ -101,10 +101,10 @@ class Organization {
 		$row = pg_fetch_row(PgDatabase::psExecute($query, array($orgfk, $contactId)));
 		// insert on conflict (upsert) would be much better here, but we are on pg 9.4 :(
 		if ($row[0]) {
-			$query = "select * from organization_contact where organization_fk = $1 and contact_fk != $2";
+			$query = "select * from organization_contact where organization_fk = $1 and id != $2";
 			$count = pg_num_rows(PgDatabase::psExecute($query, array($orgfk, $row[0])));
 			if ($count == 1) {
-				$query = "delete from organization_contact where organization_fk = $1 and contact_fk != $2";
+				//$query = "delete from organization_contact where organization_fk = $1 and contact_fk != $2";
 				PgDatabase::psExecute($query, array($orgfk, $row[0]));
 			}
 		}
@@ -123,7 +123,7 @@ class Organization {
 			$query = "select * from organization_location where organization_fk = $1 and location_fk != $2";
 			$count = pg_num_rows(PgDatabase::psExecute($query, array($orgFk, $row[0])));
 			if ($count == 1) {
-				$query = "delete from organization_location where organization_fk = $1 and location_fk != $2";
+				//$query = "delete from organization_location where organization_fk = $1 and location_fk != $2";
 				PgDatabase::psExecute($query, array($orgFk, $row[0]));
 			}
 		}
@@ -464,12 +464,16 @@ class Organization {
 		$result1 = PgDatabase::psExecute("select l.g_formatted_address as formatted, l.address1 || ', ' || l.address2 as line1, l.municipality || ', ' || l.region2 || '  ' || l.postal_code as line2, l.latitude as lat, l.longitude as long 
 															from location l, organization_location ol
 															where ol.organization_fk = $1
-															and ol.location_fk = l.id", array($orgId));
+															and ol.location_fk = l.id 
+															order by ol.id desc 
+															limit 1", array($orgId));
 															
 		$result2 = PgDatabase::psExecute("select c.phone as phone, c.email as email, c.url as url, c.name as name, c.title as title, c.fax as fax 
 															from contact c, organization_contact oc
 															where oc.organization_fk = $1
-															and oc.contact_fk = c.id", array($orgId));
+															and oc.contact_fk = c.id 
+															order by oc.id desc 
+															limit 1", array($orgId));
 															
 		$result3 = PgDatabase::psExecute("select l.language as language
 															from language l, organization_language ol
