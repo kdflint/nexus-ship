@@ -291,7 +291,9 @@ if (Utilities::isSessionAdmin()) {
 					hidePriv1();
 				}
 				
-				switchToOrganizationView();	
+				if (document.getElementById('network-secondary')) {
+					switchToOrganizationView();	
+				}
 				
 			});
 			
