@@ -8,6 +8,7 @@ require_once(Utilities::getSrcRoot() . "/message/ExternalMessage.php");
 $conf = array('append' => true, 'mode' => 0644, 'timeFormat' => '%X %x');
 $logger = Log::singleton("file", "forum_message.log", "", $conf, PEAR_LOG_DEBUG);
 $logger->log("Forum external message process started", PEAR_LOG_DEBUG);
+$headers = "From: <support@northbridgetech.org>\r\n";
 
 // TODO - weed out poster?
 
@@ -26,7 +27,7 @@ $logger->log(count($topicNotificationsDue) . " external topic messages identifie
 $logger->log(print_r($topicNotificationsDue, TRUE), PEAR_LOG_DEBUG);
 
 foreach($topicNotificationsDue as $row) {
-	//mail($row[1], $row[6] . ": New Post", getNewPostMessage($row[8],$row[6],$row[7],$row[5]), $headers);
+	mail($row[1], $row[6] . ": New Post", getNewPostMessage($row[8],$row[6],$row[7],$row[5]), $headers);
 	$logger->log($row[1] . ":" . $row[6], PEAR_LOG_DEBUG);
 }
 
