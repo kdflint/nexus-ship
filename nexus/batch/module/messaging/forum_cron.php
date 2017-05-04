@@ -18,7 +18,7 @@ $logger->log(print_r($forumNotificationsDue, TRUE), PEAR_LOG_DEBUG);
 
 foreach($forumNotificationsDue as $row) {
 	$headers = "From: \"" . $row[6] . "\"<support@northbridgetech.org>\r\n";
-	mail($row[1], $row[4], getNewTopicMessage($row[6],$row[4],$row[5],$row[3]), $headers);
+	mail($row[1], $row[4], getNewTopicMessage($row[6],$row[4],$row[5],$row[3],$row[7]), $headers);
 	$logger->log($row[1] . ":" . $row[6], PEAR_LOG_DEBUG);
 }
 
@@ -27,11 +27,12 @@ $logger->log(count($topicNotificationsDue) . " external topic messages identifie
 $logger->log(print_r($topicNotificationsDue, TRUE), PEAR_LOG_DEBUG);
 
 foreach($topicNotificationsDue as $row) {
-	mail($row[1], $row[6] . ": New Post", getNewPostMessage($row[8],$row[6],$row[7],$row[5]), $headers);
-	$logger->log($row[1] . ":" . $row[6], PEAR_LOG_DEBUG);
+	//mail($row[1], $row[6] . ": New Post", getNewPostMessage($row[8],$row[6],$row[7],$row[5],$row[9]), $headers);
+	mail("kathy.flint@northbridgetech.org", "topic digest due - see forum_message.log for emails", $row[6] . ": New Post\r\n\r\n" . getNewPostMessage($row[8],$row[6],$row[7],$row[5],$row[9]), $headers);
+	$logger->log($row[1], PEAR_LOG_DEBUG);
 }
 
-function getNewTopicMessage($forumName, $topicName, $forumId, $topicId) {
+function getNewTopicMessage($forumName, $topicName, $forumId, $topicId, $uid) {
 	// TODO - pesonalize with topic poster, message recipient fname, network name, etc.
 	$messageString = "Hello,
 
@@ -39,7 +40,7 @@ The " . $forumName . " has received a new topic: \"" . $topicName . "\"
 
 Use this link to view the topic body:   
 
-" . Utilities::getPluginPath() . "/publicForumRead.php?forumid=" . $forumId . "&topicid=" . $topicId . " 
+" . Utilities::getPluginPath() . "/publicForumRead.php?forumid=" . $forumId . "&topicid=" . $topicId . "&oid=" . $uid . " 
 
 You are receiving this notification because you are watching the forum \"". $forumName . "\". 
 
@@ -52,7 +53,7 @@ The Nexus Advantage Team";
 	return $messageString;
 }
 
-function getNewPostMessage($forumName, $topicName, $forumId, $topicId) {
+function getNewPostMessage($forumName, $topicName, $forumId, $topicId, $uid) {
 	// TODO - pesonalize with topic poster, message recipient fname, network name, etc.
 	$messageString = "Hello,
 
@@ -60,7 +61,7 @@ You are receiving this notification because you are watching the topic \"" . $to
 
 Use this link to view the topic:   
 
-" . Utilities::getPluginPath() . "/publicForumRead.php?forumid=" . $forumId . "&topicid=" . $topicId . "
+" . Utilities::getPluginPath() . "/publicForumRead.php?forumid=" . $forumId . "&topicid=" . $topicId . "&oid=" . $uid . "
 
 If you no longer wish to watch this topic, please reply to this email with \"unsubscribe\" in the message body or subject line.
 

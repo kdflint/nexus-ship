@@ -8,9 +8,6 @@ require_once(Utilities::getSrcRoot() . "/organization/Organization.php");
 $cleanNetworkId = "";
 if(isset($_GET['oid']) && Organization::validateOrganizationUid($_GET['oid'])) {
  	$cleanNetworkId = $_GET['oid'];	
-} else {
-	echo("unauthorized");
-	exit(0);
 }
 
 $cleanForumId = "";
@@ -20,7 +17,7 @@ if(isset($_GET['forumid'])) {
 
 $cleanTopicId = "";
 if(isset($_GET['topicid'])) {
- 	$cleanForumId =$_GET['topicid'];	
+ 	$cleanTopicId =$_GET['topicid'];	
 }
 
 Utilities::setPublicSession($cleanNetworkId);

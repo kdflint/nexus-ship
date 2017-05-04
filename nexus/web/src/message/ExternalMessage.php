@@ -41,9 +41,11 @@ class ExternalMessage {
 					// Get the email address for the forum watcher
 					$query = "select u.email from public.user u where u.username = $1";
 					$watcherEmails = pg_fetch_all(PgDatabase::psExecute($query, array($watcher['username'])));	
+					$thisNetwork = Organization::getNetworksByUsername($watcher['username']);
+					$logger->log(print_r($thisNetwork, TRUE), PEAR_LOG_DEBUG);
 					foreach ($watcherEmails as $email) {
 						$logger->log($email['email'], PEAR_LOG_DEBUG);	
-						array_push($forumNotifications, array($watcher['username'], $email['email'], 'topic', $row['topic_id'], $row['topic_title'], $row['forum_id'], $row['forum_name']));	
+						array_push($forumNotifications, array($watcher['username'], $email['email'], 'topic', $row['topic_id'], $row['topic_title'], $row['forum_id'], $row['forum_name'], $thisNetwork[0]['uid']));	
 						$logger->log(print_r($forumNotifications,true), PEAR_LOG_DEBUG);				
 					}
 				}
@@ -67,8 +69,8 @@ class ExternalMessage {
 		
 		$query = "select floor(extract('epoch' from topic_last_poll_dttm)) from forum_poll";
 		$row = pg_fetch_row(PgDatabase::psExecute($query, array()));
-		//$lastRun = $row[0];
-		$lastRun = 1493839801;
+		$lastRun = $row[0];
+		//$lastRun = 1493839801;
 		
 		// TODO - union this with above, probably, and do all at once
 		// Get the posts that are new since last poll
@@ -97,9 +99,11 @@ class ExternalMessage {
 						// Get the email address for the user
 						$query = "select u.email from public.user u where u.username = $1";
 						$thisEmail = pg_fetch_array(PgDatabase::psExecute($query, array($watcher['username'])));
+						$thisNetwork = Organization::getNetworksByUsername($watcher['username']);
+						$logger->log(print_r($thisNetwork, TRUE), PEAR_LOG_DEBUG);
 						if ($thisEmail) {
 							$logger->log("Email: " . $thisEmail[0], PEAR_LOG_DEBUG);
-							array_push($topicNotifications, array($watcher['username'], $thisEmail[0], 'post', $row['post_id'], $row['post_subject'], $row['topic_id'], $row['topic_title'], $row['forum_id'], $row['forum_name']));		
+							array_push($topicNotifications, array($watcher['username'], $thisEmail[0], 'post', $row['post_id'], $row['post_subject'], $row['topic_id'], $row['topic_title'], $row['forum_id'], $row['forum_name'], $thisNetwork[0]['uid']));
 						}
 					}
 				}
