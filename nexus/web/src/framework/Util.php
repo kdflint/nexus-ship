@@ -36,7 +36,13 @@ autoloader(array(
 //$request->enable_super_globals();
 
 class Utilities {
-	
+
+	public static function log($message, $level) {
+		$conf = array('append' => true, 'mode' => 0644, 'timeFormat' => '%X %x');	
+		$fileLogger = Log::singleton("file", Utilities::getLogRoot() ."/web.log", "", $conf, PEAR_LOG_DEBUG);
+		$fileLogger->log($message, $level);
+	}
+
 	public static function getDbHost() { return DB_HOST; }
 	
 	public static function getDbUser() { return DB_USER; }
