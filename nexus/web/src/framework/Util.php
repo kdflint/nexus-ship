@@ -619,6 +619,7 @@ class Utilities {
 		
 		unset($_SESSION['invitation']);
 		unset($_SESSION['username']);
+		$_SESSION['tmp-editorgid'] = "";
 		$_SESSION['appRoot'] = self::getWebRoot();
 		$_SESSION['environment'] = self::getEnvName();
 		$_SESSION['username'] = $username;

@@ -28,12 +28,12 @@ Use only clean input beyond this point (i.e. $clean[])
 ======================================================= */
 
 $return = array();
-if (isset($result['clean']['org-id']) && $result['clean']['org-id'] === $_SESSION['tmp-editorgid']) {
+if (isset($result['clean']['org-id'])) {
 	// TODO - not checking for admin role on edit scenario
 	$thisOrg = Organization::getOrganizationById($result['clean']['org-id']);
 	if (pg_num_rows($thisOrg) == 1) {
 		Organization::addOrganizationEthnicities($result['clean']['org-id'], $result['clean']['ethnicity']);
-		Organization::addOrganizationAffiliations($result['clean']['org-id'], $result['clean']['affiliation']);
+		Organization::addOrganizationLanguages($result['clean']['org-id'], $result['clean']['language']);
 	}
 }
 
@@ -71,10 +71,10 @@ function validateOrganization($input) {
 		$result['clean']['ethnicity'] = array();
 	}	
 
-	if (isset($input['affiliation'])) {
-		$result['clean']['affiliation'] = $input['affiliation'];
+	if (isset($input['language'])) {
+		$result['clean']['language'] = $input['language'];
 	} else {
-		$result['clean']['affiliation'] = array();
+		$result['clean']['language'] = array();
 	}	
 	
  	return $result;

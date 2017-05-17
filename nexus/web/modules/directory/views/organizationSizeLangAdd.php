@@ -1,10 +1,10 @@
 <form id="organization-form-size-lang" class="pure-form modal-form" action="<?php echo(Utilities::getHttpPath()); ?>/modules/directory/control/organizationSizeLangProcessor.php" method="post">
 	<fieldset>
-		<label>Languages Served (Ctrl-click to select multiple) </label>
-		<select id="directory-form-select-languages-in" name="language[]" style="height:330px;width:360px;" multiple>
-	    <?php include(Utilities::getPartnerCustomRoot() . "/orglanguage-" . $_SESSION['networkId'] . ".html"); ?>
+		<label>Denomination Affil (Ctrl-click to select multiple) </label>
+		<select id="directory-form-select-affiliation-in" name="affiliation[]" style="height:330px;width:360px;" multiple>
+	    <?php include(Utilities::getPartnerCustomRoot() . "/orgaffiliation-" . $_SESSION['networkId'] . ".html"); ?>
     </select>
-	</fieldset>
+  </fieldset>
 	<fieldset>
 		<label>Organizational Name</label>
  		<div class="form-field" style="margin-left:0px;">
@@ -12,8 +12,7 @@
 			<input type="hidden" name="org-id" value=""/>
 		</div>
 		<label>Congregation Size (select one) </label>
-		<select id="directory-form-select-size-in" name="size">
-			<option value="0" >------------</option>	
+		<select id="directory-form-select-size-in" name="size" style="height:200px;width:100%;" size="6">
 			<?php include(Utilities::getPartnerCustomRoot() . "/orgsize-" . $_SESSION['networkId'] . ".html"); ?>
 		</select>
 	</fieldset>
@@ -22,3 +21,4 @@
  			<a href="#close" style="float:right;margin-right:20px;">Cancel</a>
  	</fieldset>					
 </form>
+

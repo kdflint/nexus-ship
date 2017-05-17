@@ -327,6 +327,11 @@ Utilities::setUserLanguageEnv();
      		<div id="customization-area" class="loginColRight">
       		<span style="clear:right;float:right;text-align:right;margin-top:20px;"><?php echo $networkName; ?></span>
       		<span style="clear:right;float:right;margin-top:20px;"><img src="<?php echo Utilities::getPartnerImageRoot(); ?><?php echo $networkLogo; ?>" /></span>
+      		<?php if ($cleanNetworkId === "2ab2f516") { ?>
+      			<p style="clear:right;float:right;text-align:right;margin-top:20px;"><a href="http://www.idra.org/who-we-are/privacy-policy/" target="_blank" >IDRA Privacy Policy</a></p>
+      			<p style="clear:right;float:right;text-align:right;margin-top:20px;"><a href="http://www.idra.org/who-we-are/idra-online-comment-and-discussion-policy/" target="_blank" >IDRA Online Comment and Discussion Policy</a></p>
+      		<?php } ?>
+
      		</div>
       </div>
       
