@@ -80,15 +80,14 @@ $testEmail = $_SESSION['email'];
  					<?php include("views/publishTip.html"); ?>
  				</span>
  			</div>
- 
+  
 			<div class="profileFormRow" style="top:45px;left:15px;">
-	 	 		<span class="messageCol1">Text Message:</span>
- 				<span class="messageCol2"><input type="text" size="22" name="sms" value="<?php echo($_SESSION['sms']);?>" oninput="disableTestMessageLink('testMessageLinkSms')" /></span>
- 				<!--<span class="messageCol3"><input type="checkbox" name="sms_status" <?php echo($sms_status); ?> onchange="disableTestMessageLink()" /></span>-->
- 				<span class="messageCol3"><input type="checkbox" name="sms_public" <?php echo($sms_publish); ?> /></span>
- 				<span class="messageCol4"><a id="testMessageLinkSms" href="javascript:post('testMessageLinkSms','<?php echo(Utilities::getHttpPath()); ?>/modules/user/control/messageProcessor.php',{testMessage:'true',phone:'<?php echo($testSms); ?>',email:''})">Test message</a></span>
+				<span class="messageCol1">Phone:</span>
+ 				<span class="messageCol2"><input type="text" size="22" name="phone" value="<?php echo($_SESSION['phone']);?>" /></span>
+ 				<!--<span class="messageCol3"><input type="checkbox" name="phone_status" disabled/></span>-->
+ 				<span class="messageCol3"><input type="checkbox" name="phone_public" <?php echo($phone_publish); ?> /></span>
  			</div>
- 
+ 			
 			<div class="profileFormRow" style="top:90px;left:15px;">
 	 			<span class="messageCol1">Email:</span>
  				<span class="messageCol2"><input type="text" size="22" name="email" value="<?php echo($_SESSION['email']);?>" oninput="disableTestMessageLink('testMessageLinkEmail')" 	/></span>
@@ -97,13 +96,17 @@ $testEmail = $_SESSION['email'];
  				<span class="messageCol4"><a id="testMessageLinkEmail" href="javascript:post('testMessageLinkEmail','<?php echo(Utilities::getHttpPath()); ?>/modules/user/control/messageProcessor.php',{testMessage:'true',phone:'',email:'<?php echo($testEmail); ?>'})">Test message</a></span>
  			</div>
 
-			<div class="profileFormRow" style="top:135px;left:15px;">
-				<span class="messageCol1">Phone:</span>
- 				<span class="messageCol2"><input type="text" size="22" name="phone" value="<?php echo($_SESSION['phone']);?>" /></span>
- 				<!--<span class="messageCol3"><input type="checkbox" name="phone_status" disabled/></span>-->
- 				<span class="messageCol3"><input type="checkbox" name="phone_public" <?php echo($phone_publish); ?> /></span>
-				<a id="profile-form-submit" type="submit" class="pure-button pure-button-primary" style="float:right;" href="javascript:void(0);" onclick="profileValidateAndSubmit();">Update Your Profile</a>
+    	<?php if ($_SESSION['networkId'] != '358') { ?>
+ 			<div class="profileFormRow" style="top:135px;left:15px;">
+	 	 		<span class="messageCol1">Text Message:</span>
+ 				<span class="messageCol2"><input type="text" size="22" name="sms" value="<?php echo($_SESSION['sms']);?>" oninput="disableTestMessageLink('testMessageLinkSms')" /></span>
+ 				<!--<span class="messageCol3"><input type="checkbox" name="sms_status" <?php echo($sms_status); ?> onchange="disableTestMessageLink()" /></span>-->
+ 				<span class="messageCol3"><input type="checkbox" name="sms_public" <?php echo($sms_publish); ?> /></span>
+ 				<span class="messageCol4"><a id="testMessageLinkSms" href="javascript:post('testMessageLinkSms','<?php echo(Utilities::getHttpPath()); ?>/modules/user/control/messageProcessor.php',{testMessage:'true',phone:'<?php echo($testSms); ?>',email:''})">Test message</a></span>
  			</div>
+ 			<?php } ?>
+
+			<a id="profile-form-submit" type="submit" class="pure-button pure-button-primary" style="float:right;top:150px;position:relative;" href="javascript:void(0);" onclick="profileValidateAndSubmit();">Update Your Profile</a>
  			
 	</div>
 	</form>

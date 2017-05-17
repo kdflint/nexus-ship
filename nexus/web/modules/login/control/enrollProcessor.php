@@ -65,6 +65,8 @@ $_SESSION['username'] = $clean['username'];
 
 $invitation = pg_fetch_array(Invitation::getInvitationByUuid($_SESSION['invitation']));
 
+$organization = pg_fetch_array(Organization::getOrganizationById($invitation['orgid']));
+
 $uidpk = User::addActiveUser(
 	Utilities::newUuid(),
 	$clean['username'],
@@ -145,7 +147,7 @@ while ($row = pg_fetch_array($cursor)) {
 	}
 }
 
-sendConfirmationEmail($clean['email'], $clean['fname'], $clean['username'], $usernames, $groupName, $invitation['uid']);
+sendConfirmationEmail($clean['email'], $clean['fname'], $clean['username'], $usernames, $groupName, $invitation['uid'], $organization['name']);
 
 if($isAuthenticated){
 	header("location:" . Utilities::getHttpPath() . "/login.php");
@@ -160,13 +162,13 @@ function returnToEnrollWithError($errorMessage) {
 	exit(0);
 }
 
-function sendConfirmationEmail($email, $fname, $username, $allUsernames, $groupName, $orgid) {
+function sendConfirmationEmail($email, $fname, $username, $allUsernames, $groupName, $orgid, $orgName) {
 	
 	$multiples = "";
 	if (strlen($allUsernames) > 3) {
 		$multiples = '\r\n\r\nNote: There are other usernames currently enrolled with this email address: ' . Utilities::stripTrailingComma($allUsernames);
 	}
-	$messageBody = 'Welcome ' . $fname . '!\r\n\r\nYour Nexus enrollment is complete for username: ' . $username . $multiples . '\r\n\r\nYou are now enabled to collaborate with your team.\r\n\r\nYou can login to Nexus using this link.\r\n\r\n' . Utilities::getHttpPath() . '/login.php?oid=' . $orgid . '\r\n\r\nSincerely,\r\n\r\nThe Development Team at\r\nNorthBridge Technology Alliance';
+	$messageBody = 'Welcome ' . $fname . '!\r\n\r\nYour ' . $orgName . ' enrollment is complete for username: ' . $username . $multiples . '\r\n\r\nYou are now enabled to collaborate with your colleagues.\r\n\r\nYou can login to Nexus using this link.\r\n\r\n' . Utilities::getHttpPath() . '/login.php?oid=' . $orgid . '\r\n\r\nSincerely,\r\n\r\nThe Development Team at\r\nNorthBridge Technology Alliance';
 	$message = new MessageEnrollment($email, $messageBody);
 	$message->send();
 		

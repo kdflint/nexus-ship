@@ -1582,9 +1582,9 @@ function populateDirectoryMultiForm() {
 			var typeSelect = filterForm['directory-form-select-type-in'];
 			var specialtySelect = filterForm['directory-form-select-specialty-in'];
 			document.getElementById('organization-form-filters-submit').innerHTML = "Next";
-			document.getElementById('organization-form-filters-submit').style.opacity = "1";
-			
+			document.getElementById('organization-form-filters-submit').style.opacity = "1";		
 			filterForm.reset();
+
 			if (CURRENT_ORG.topic) {
 				for ( var i = 0, option; i < specialtySelect.options.length; i++ ) {
   				option = specialtySelect.options[i];
@@ -1597,7 +1597,7 @@ function populateDirectoryMultiForm() {
 			}
 			
 			if (CURRENT_ORG.type) {
-				for ( var i = 1, option; i < typeSelect.options.length; i++ ) {
+				for ( var i = 0, option; i < typeSelect.options.length; i++ ) {
   				option = typeSelect.options[i];
   				if ( CURRENT_ORG.type === option.text ) {
     				option.selected = true;
@@ -1607,22 +1607,11 @@ function populateDirectoryMultiForm() {
 			
 			var sizelangForm = document.forms['organization-form-size-lang'];
 			var sizeSelect = sizelangForm['directory-form-select-size-in'];
-			var langSelect = sizelangForm['directory-form-select-languages-in'];
+			var affiliationSelect = sizelangForm['directory-form-select-affiliation-in'];
 			document.getElementById('organization-form-size-lang-submit').innerHTML = "Next";
 			document.getElementById('organization-form-size-lang-submit').style.opacity = "1";
 			sizelangForm.reset();
-
-			if (CURRENT_ORG.language) {
-				for ( var i = 0, option; i < langSelect.options.length; i++ ) {
-  				option = langSelect.options[i];
-  				for (var m = 0; m < CURRENT_ORG.language.length; m++) {
-  					if ( CURRENT_ORG.language[m] === option.text ) {
-    					option.selected = true;
-  					}
-  				}
-				}
-			}
-			
+		
 			if (CURRENT_ORG.size) {
 				for ( var i = 1, option; i < sizeSelect.options.length; i++ ) {
   				option = sizeSelect.options[i];
@@ -1631,10 +1620,21 @@ function populateDirectoryMultiForm() {
   				}
 				}
 			}
-			
+
+			if (CURRENT_ORG.affiliation) {
+				for ( var i = 0, option; i < affiliationSelect.options.length; i++ ) {
+  				option = affiliationSelect.options[i];
+  				for (var m = 0; m < CURRENT_ORG.affiliation.length; m++) {
+  					if ( CURRENT_ORG.affiliation[m] === option.text ) {
+    					option.selected = true;
+  					}
+  				}
+				}
+			}
+	
 			var affiliationForm = document.forms['organization-form-affiliation'];
 			var ethnicitySelect = affiliationForm['directory-form-select-ethnicity-in'];
-			var affiliationSelect = affiliationForm['directory-form-select-affiliation-in'];
+			var langSelect = affiliationForm['directory-form-select-languages-in'];
 			document.getElementById('organization-form-affiliation-submit').innerHTML = "Next";
 			document.getElementById('organization-form-affiliation-submit').style.opacity = "1";
 			affiliationForm.reset();
@@ -1650,19 +1650,17 @@ function populateDirectoryMultiForm() {
 				}
 			}
 
-			if (CURRENT_ORG.affiliation) {
-				for ( var i = 0, option; i < affiliationSelect.options.length; i++ ) {
-  				option = affiliationSelect.options[i];
-  				for (var m = 0; m < CURRENT_ORG.affiliation.length; m++) {
-  					if ( CURRENT_ORG.affiliation[m] === option.text ) {
+			if (CURRENT_ORG.language) {
+				for ( var i = 0, option; i < langSelect.options.length; i++ ) {
+  				option = langSelect.options[i];
+  				for (var m = 0; m < CURRENT_ORG.language.length; m++) {
+  					if ( CURRENT_ORG.language[m] === option.text ) {
     					option.selected = true;
   					}
   				}
 				}
 			}
-
-
-			
+		
 		}
 	}
 	openOrganizationBasicForm(true);

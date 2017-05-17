@@ -6,7 +6,7 @@ require_once(Utilities::getSrcRoot() . "/organization/Organization.php");
 
 session_start();
 
-$inviteId = $networkName = $networkLogo = $cleanMessage = $cleanIcon = "";
+$inviteId = $networkName = $networkLogo = $cleanMessage = $cleanIcon = $networkOid = "";
 $validInvitation = false;
 $showGroupEnrollWrite = $showGroupEnrollRead = false;
 $publicGroups = array();
@@ -132,11 +132,13 @@ if(isset($_GET['error']) && Utilities::isSafeCharacterSet($_GET['error'])) {
 							<?php } ?>
 							<?php if($showGroupEnrollRead && $enrollGroup) { ?>
 								<div style="margin-bottom:20px">
-									<p>You have been invited to enroll in </p>
-	 								<span style="font-size:90%;">
-	 									<?php echo($enrollGroup[0]['name']); ?>
-	 									<input type="hidden" name="group-enroll[]" value="<?php echo($enrollGroup[0]['id']); ?>"
-              		</span>
+									<b>
+										<p>Keep the conversation going! You have been invited to enroll in </p>
+	 									<span style="font-size:90%;">
+		 									<?php echo($enrollGroup[0]['name']); ?> discussion forum
+	 										<input type="hidden" name="group-enroll[]" value="<?php echo($enrollGroup[0]['id']); ?>"
+              			</span>
+              		</b>
               	</div>
 							<?php } ?>
 							<input class="form-input" type="text" name="uid"  maxlength="25" title="7-25 characters. May not contain spaces" placeholder="Choose your username"/><span class="required"> *</span>	
@@ -152,6 +154,10 @@ if(isset($_GET['error']) && Utilities::isSafeCharacterSet($_GET['error'])) {
      		<div class="loginColRight">
       		<span style="clear:right;float:right;text-align:right;margin-top:20px;"><?php echo $networkName; ?></span>
       		<span style="clear:right;float:right;margin-top:20px;"><img src="<?php echo Utilities::getPartnerImageRoot(); ?><?php echo $networkLogo; ?>" /></span>
+      		<?php if ($networkOid === "2ab2f516") { ?>
+      			<p style="clear:right;float:right;text-align:right;margin-top:20px;"><a href="http://www.idra.org/who-we-are/privacy-policy/" target="_blank" >IDRA Privacy Policy</a></p>
+      			<p style="clear:right;float:right;text-align:right;margin-top:20px;"><a href="http://www.idra.org/who-we-are/idra-online-comment-and-discussion-policy/" target="_blank" >IDRA Online Comment and Discussion Policy</a></p>
+      		<?php } ?>
      		</div>
       </div>
       

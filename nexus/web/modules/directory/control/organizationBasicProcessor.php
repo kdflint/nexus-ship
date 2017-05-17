@@ -40,38 +40,43 @@ if (isset($result['clean']['org-id']) && $result['clean']['org-id'] === $_SESSIO
 }
 
 if ($orgid) {
-
+	
 	$return['org-name'] = $result['clean']['org-name'];
 	$return['org-id'] = $orgid;
 	
 	Organization::addOrganizationContact($orgid, $result['clean']['org-contact-name'], $result['clean']['org-contact-title'], $result['clean']['org-contact-email'], $result['clean']['org-contact-phone'], $result['clean']['org-url']);
 	
-	if ($result['clean']['g_status']) {
-		Organization::addOrganizationLocation($orgid,
-			$result['clean']['f_address'],
-			"",
-			$result['clean']['neighborhood'],
-			$result['clean']['city'],
-			$result['clean']['county'],
-			$result['clean']['state'],
-			$result['clean']['country'],
-			$result['clean']['postal'],
-			$result['clean']['lat'],
-			$result['clean']['long'],
-			$result['clean']['placeid'] );
-	} else {
-		Organization::addOrganizationLocation($orgid,
-			"",
-			$result['clean']['address1'],
-			"",
-			$result['clean']['city'],
-			"",
-			$result['clean']['state'],
-			$result['clean']['country'],
-			"",
-			"",
-			"",
-			"" );		
+	Utilities::log("Location update? " . ($result['clean']['isLocUpdate'] ? "yes" : "no"), PEAR_LOG_DEBUG);
+	if ($result['clean']['isLocUpdate']) {
+		if ($result['clean']['g_status']) {
+			Utilities::log($result['clean']['f_address'], PEAR_LOG_DEBUG);
+			Organization::addOrganizationLocation($orgid,
+				$result['clean']['f_address'],
+				"",
+				$result['clean']['neighborhood'],
+				$result['clean']['city'],
+				$result['clean']['county'],
+				$result['clean']['state'],
+				$result['clean']['country'],
+				$result['clean']['postal'],
+				$result['clean']['lat'],
+				$result['clean']['long'],
+				$result['clean']['placeid'] );
+		} else {
+			Utilities::log("Unformatted address: " . $result['clean']['address1'] . "...", PEAR_LOG_DEBUG);
+			Organization::addOrganizationLocation($orgid,
+				"",
+				$result['clean']['address1'],
+				"",
+				$result['clean']['city'],
+				"",
+				$result['clean']['state'],
+				$result['clean']['country'],
+				"",
+				"",
+				"",
+				"" );		
+		}
 	}
 }
 	
@@ -120,62 +125,75 @@ function validateOrganization($input) {
 		$result['error']['org-contact-email'] = "error";
 	}	
 	
-	$result['clean']['address1'] = $input['org-street'];
+	$result['clean']['isLocUpdate'] = false;
+	$result['clean']['g_status'] = false;
+	if (isset($input['org-street']) && strlen($input['org-street']) > 0) {
+		$result['clean']['address1'] = $input['org-street'];
+		$result['clean']['isLocUpdate'] = true;
+	}
 	$result['clean']['city'] = $input['org-city'];
 	$result['clean']['state'] = $input['org-state'];
 	$result['clean']['country'] = $input['org-country'];
 	$result['clean']['neighborhood'] = "";
 	$result['clean']['county'] = "";
 	$result['clean']['postal'] = "";
-	$result['clean']['g_status'] = false;
+
 	
 	// https://developers.google.com/maps/documentation/geocoding/intro#GeocodingResponses
-	// See above for mapping specification. Oteherthings are possible beside this US-centric mapping
+	// See above for mapping specification. Other things are possible beside this US-centric mapping
 	// See https://maps.googleapis.com/maps/api/geocode/json?address=488%20Thanon%20Srinagarindra%20Tailand&key=AIzaSyD-tLX5TYQhwxQQNx5-UF0VajixUwGGkJQ
 	// Notice no locality, but several sublocalities
 
-	$addressString = $input['org-street'] . "," . $input['org-city'] . "," . $input['org-state'] . "," . $input['org-country'];
-	$response = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?address=' . urlencode($addressString) . '&key=' . Utilities::getGoogleApiKey());
-	$json = json_decode(utf8_encode($response),true);
+	if ($result['clean']['isLocUpdate']) {
+		$addressString = $result['clean']['address1'] . "," . $result['clean']['city'] . "," . $result['clean']['state'] . "," . $result['clean']['country'];
+		Utilities::log($addressString, PEAR_LOG_DEBUG);
 	
-	if ($json['status'] === "OK") {
-		$result['clean']['g_status'] = true;
-		$result['clean']['lat'] = $json['results'][0]['geometry']['location']['lat'];
-    $result['clean']['long'] = $json['results'][0]['geometry']['location']['lng'];
-    $result['clean']['f_address'] = $json['results'][0]['formatted_address'];
-    $result['clean']['placeid'] = $json['results'][0]['place_id']; 
-    foreach ($json['results'][0]['address_components'] as $address_component) {
-    	foreach ($address_component as $key => $entry) {
-    		if ($key === 'types') {
-    			foreach ($entry as $type) {
-    				switch($type) {
-    					case "locality": 
-    						$result['clean']['city'] = isset($address_component['long_name']) ? $address_component['long_name'] : "";
-    						break;
-    					case "neighborhood":
-    						$result['clean']['neighborhood'] = isset($address_component['long_name']) ? $address_component['long_name'] : "";
-    						break;
-    					case "administrative_area_level_1":
-     						$result['clean']['state'] = isset($address_component['long_name']) ? $address_component['long_name'] : "";
-    						break;
-    					case "administrative_area_level_2": 
-      					$result['clean']['county'] = isset($address_component['long_name']) ? $address_component['long_name'] : "";
-    						break;			
-    					case "country": 
-      					$result['clean']['country'] = isset($address_component['short_name']) ? $address_component['short_name'] : "";
-    						break;		
-    					case "postal_code": 
-      					$result['clean']['postal'] = isset($address_component['long_name']) ? $address_component['long_name'] : "";
-    						break;	
+		$response = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?address=' . urlencode($addressString) . '&key=' . Utilities::getGoogleApiKey());
+		$json = json_decode(utf8_encode($response),true);
+		
+		if ($json['status'] === "OK") {
+			Utilities::log("geocode good", PEAR_LOG_DEBUG);
+			$result['clean']['g_status'] = true;
+			$result['clean']['lat'] = $json['results'][0]['geometry']['location']['lat'];
+    	$result['clean']['long'] = $json['results'][0]['geometry']['location']['lng'];
+    	$result['clean']['f_address'] = $json['results'][0]['formatted_address'];
+    	$result['clean']['placeid'] = $json['results'][0]['place_id']; 
+    	foreach ($json['results'][0]['address_components'] as $address_component) {
+	    	foreach ($address_component as $key => $entry) {
+    			if ($key === 'types') {
+	    			foreach ($entry as $type) {
+    					switch($type) {
+	    					case "locality": 
+    							$result['clean']['city'] = isset($address_component['long_name']) ? $address_component['long_name'] : "";
+    							break;
+    						case "neighborhood":
+	    						$result['clean']['neighborhood'] = isset($address_component['long_name']) ? $address_component['long_name'] : "";
+    							break;
+    						case "administrative_area_level_1":
+	     						$result['clean']['state'] = isset($address_component['long_name']) ? $address_component['long_name'] : "";
+    							break;
+    						case "administrative_area_level_2": 
+	      					$result['clean']['county'] = isset($address_component['long_name']) ? $address_component['long_name'] : "";
+    							break;			
+    						case "country": 
+	      					$result['clean']['country'] = isset($address_component['short_name']) ? $address_component['short_name'] : "";
+    							break;		
+    						case "postal_code": 
+	      					$result['clean']['postal'] = isset($address_component['long_name']) ? $address_component['long_name'] : "";
+    							break;	
+    					}
     				}
     			}
     		}
     	}
-    }
-	} else {
-		// We default to the pre-assigned user entries for street, city, state, country. No geocoding data persisted.
+		} else {
+			Utilities::log("geocode fail", PEAR_LOG_DEBUG);
+			// We default to the pre-assigned user entries for street, city, state, country. No geocoding data persisted.
+		}
 	}
+
  	return $result;
+	
 }
 
 ?>

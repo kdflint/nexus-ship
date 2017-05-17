@@ -1,8 +1,8 @@
 <form id="organization-form-affiliation" class="pure-form modal-form" action="<?php echo(Utilities::getHttpPath()); ?>/modules/directory/control/organizationAffiliationProcessor.php" method="post">
 	<fieldset>
-		<label>Denomination Affil (Ctrl-click to select multiple) </label>
-		<select id="directory-form-select-affiliation-in" name="affiliation[]" style="height:330px;width:360px;" multiple>
-	    <?php include(Utilities::getPartnerCustomRoot() . "/orgaffiliation-" . $_SESSION['networkId'] . ".html"); ?>
+		<label>Languages Served (Ctrl-click to select multiple) </label>
+		<select id="directory-form-select-languages-in" name="language[]" style="height:330px;width:360px;" multiple>
+	    <?php include(Utilities::getPartnerCustomRoot() . "/orglanguage-" . $_SESSION['networkId'] . ".html"); ?>
     </select>
 	</fieldset>
 	<fieldset>

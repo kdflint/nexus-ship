@@ -28,7 +28,7 @@ Use only clean input beyond this point (i.e. $clean[])
 ======================================================= */
 
 $return = array();
-if (isset($result['clean']['org-id']) && $result['clean']['org-id'] === $_SESSION['tmp-editorgid']) {
+if (isset($result['clean']['org-id'])) {
 	// TODO - not checking for admin role on edit scenario
 	$thisOrg = Organization::getOrganizationById($result['clean']['org-id']);
 	if (pg_num_rows($thisOrg) == 1) {
