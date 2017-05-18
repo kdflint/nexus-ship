@@ -34,9 +34,8 @@
 			<a href="#close" title="Skip" class="close">X</a>
 			<?php include("modules/directory/views/organizationAffiliationAdd.php"); ?>		
 		</div>
-
 	</div>
-
+	
 	<div id="openGroupUserAdd" class="modalDialog">
 		<div>
 			<a href="#close" title="Skip" class="close">X</a>
@@ -73,8 +72,13 @@
 			</div>
 			<div id="openOrganizationView-part-members" class="openOrganizationView-part" style="display:none;">
 				<a href="javascript:void(0);" onclick="toggleMultiPartModal('openOrganizationView', 'detail')"><span class='fa fa-chevron-circle-left fa-2x' style="margin-right:10px;"></span>Back to detail record</a>
-				<p>Network members affiliated with <span id="orgDetailNameForBlahBlah">this organization</span>:</p>
+				<p>Network members affiliated with this organization</p>
 				<?php include("modules/directory/views/orgMemberList.php") ?>
+			</div>
+			<div id="openOrganizationView-part-program" class="openOrganizationView-part" style="display:none;">
+				<a href="javascript:void(0);" onclick="toggleMultiPartModal('openOrganizationView', 'program')"><span class='fa fa-chevron-circle-left fa-2x' style="margin-right:10px;"></span>Back to detail record</a>
+				<p>Program Details for this organization</p>
+				<?php include("modules/directory/views/orgProgramList.php") ?>
 			</div>
 		</div>
 	</div>

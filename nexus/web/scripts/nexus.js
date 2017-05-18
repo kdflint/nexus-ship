@@ -1257,6 +1257,7 @@ function profileValidateAndSubmit() {
  		profileForm.submit();
  	}
 }
+
 function displayThisContext(element) {
 	if (element && (element.className).indexOf('cfcht-custom') > -1) {
 		if (NETWORK_ID == "18") {
@@ -1282,10 +1283,15 @@ function toggleMultiPartModal(modal, part) {
 }
 
 function showOrgMemberList(orgId, orgName) {
-	console.log(orgName);
 	getOrgMemberList(orgId, orgName);
 	toggleMultiPartModal("openOrganizationView", "members");
 }
+
+function showOrgProgramList(orgId, orgName) {
+	//getOrgProgramList(orgId, orgName);
+	toggleMultiPartModal("openOrganizationView", "program");
+}
+
 
 function organizatonNameValidateAndSubmit(thisForm) {
 	
