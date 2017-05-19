@@ -14,7 +14,11 @@ $testEmail = $_SESSION['email'];
 
 <div id="profile-secondary" class="secondaryControlContainer">
 	<a href='#openOrganizationName' id="profile_org_edit" onclick="toggleMultiPartModal('openOrganizationName', 'name');" class="secondaryControl" title="Edit Organization"><span class='fa fa-university fa-lg' ></span></a>
-	<!--  -->
+	<?php if ($_SESSION['networkId'] === "358") { ?>
+		<a href="http://www.idra.org/who-we-are/privacy-policy/" target="_blank" class="secondaryControl" >Privacy Policy</a>
+		<a href="#" class="secondaryControl"> | </a>
+		<a href="http://www.idra.org/who-we-are/idra-online-comment-and-discussion-policy/" target="_blank" class="secondaryControl" >Comment and Discussion Policy</a>
+	<?php } ?>
 </div>
 
 <div id="profile-frame" style="height:520px;">
