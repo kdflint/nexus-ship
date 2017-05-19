@@ -624,7 +624,10 @@ class Utilities {
 		$_SESSION['environment'] = self::getEnvName();
 		$_SESSION['username'] = $username;
 		self::setSessionLastActivity();
-		$_SESSION['remember'] = ($remember ? "true" : "false");
+		//$_SESSION['remember'] = ($remember ? "true" : "false");
+		// TEMPORARY for IDRA. See also line 746
+		$_SESSION['remember'] = "true";
+		$_SESSION['remembered'] = $username;
 		self::setSessionTimezone($zone);
 		$_SESSION['language'] = self::getUserLangagePreference();
 		//$_SESSION['defaultSearchId'] = self::newUuid();
@@ -740,7 +743,9 @@ class Utilities {
 			return false;
 		}
 		if (isset($_SESSION['lastActivity']) && (time() - $_SESSION['lastActivity'] > self::getSessionTimeout())) {
-			return true;
+			//return true;
+			// TEMPORARY while rethink session management and remember me. See also nexus.php:429
+			return false;
 		}
 		return false;
 	}

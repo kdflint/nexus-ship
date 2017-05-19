@@ -159,7 +159,9 @@ if (Utilities::isSessionAdmin()) {
     	  	
 			$(document).ready(function () {	
 								
-				if ( $.cookie('nexusadv_lastvisit') !== 'undefined' ) {
+		    if ( NETWORK_ID === "358" && $.cookie('nexusadv_lastvisit') !== 'undefined') {
+					loadPreviousTab('adv-menu-forum');
+				} else if ( $.cookie('nexusadv_lastvisit') !== 'undefined' ) {
 					loadPreviousTab($.cookie('nexusadv_lastvisit'));
 				} else {
 					// default view implemented by tab style load settings
@@ -426,7 +428,9 @@ if (Utilities::isSessionAdmin()) {
 			window.setInterval(recordActivity, 60000);
 			// every 60 seconds, if there has been user activity then send a request to update the session activity timestamp		
 			function recordActivity() {
-				if(ACTIVITY_FLAG) {
+				// TEMPORARY - tore this out for IDRA. See also Utilities line 738
+				//if(ACTIVITY_FLAG) {
+				if (true) {
 					var xmlhttp = getXmlHttpRequest();
 					xmlhttp.onreadystatechange=function() {
 	  				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {	}
@@ -434,7 +438,8 @@ if (Utilities::isSessionAdmin()) {
 					xmlhttp.open("GET","src/framework/sessionManager.php");
 					xmlhttp.send();  					
 				}
-				ACTIVITY_FLAG = 0;
+				//ACTIVITY_FLAG = 0;
+				ACTIVITY_FLAG = 1;
 			}
 	   </script>
 

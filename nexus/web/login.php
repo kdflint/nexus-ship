@@ -37,7 +37,7 @@ $cleanMessage = "";
 $cleanIcon = "";
 $enrolledUsername = "";
 
-// TODO - this is definitely not right. Need to not let in a public session user that others passes these tests.
+// TODO - this is definitely not right. Need to not let in a public session user that otherwise passes these tests.
 if (isset($_SESSION['username']) && substr($_SESSION['username'], 0, 6 ) !== "pUser-") {
 	$enrolled = (isset($_SESSION['invitation']) && (isset($_SESSION['username'])) ? "true" : "false");
 	$enrolledUsername = (isset($_SESSION['invitation']) && (isset($_SESSION['username'])) ? $_SESSION['username'] : false);
@@ -48,10 +48,14 @@ $rememberedUsername = ($rememberMe->login()) ? $rememberMe->login() : false;
 if(Utilities::isSessionValid() && !Utilities::isSessionPublic()) {
 	header("location:" . Utilities::getHttpPath() . "/nexus.php");
 	exit(0);
+} else if (Utilities::isSessionValid() && Utilities::isSessionPublic() && isset($_SESSION['remembered']) && isset($_SESSION['password'])) {
+	Utilities::setSession($_SESSION['remembered'], $_SESSION['remember'], $_SESSION['timezone'], $_SESSION['password']);
+	header("location:" . Utilities::getHttpPath() . "/nexus.php");
+	exit(0);
 } else if ($rememberedUsername) {
-	$_SESSION['remembered'] = $remembered = "true";
+	$_SESSION['remember'] = $remembered = "true";
 } else if ($enrolledUsername) {
-	$_SESSION['remembered'] = "true";
+	$_SESSION['remember'] = "true";
 }
 
 if(isset($_GET['error']) && Utilities::isSafeCharacterSet($_GET['error'])) {

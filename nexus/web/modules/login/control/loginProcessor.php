@@ -37,8 +37,8 @@ Use only clean input beyond this point (i.e. $clean[])
 
 ======================================================= */
 
-if (isset($_SESSION['remembered']) && $_SESSION['remembered']) {
-	unset($_SESSION['remembered']);
+if (isset($_SESSION['remember']) && $_SESSION['remember']) {
+	unset($_SESSION['remember']);
 	$isAuthenticated = true;
 } else if (isset($_SESSION['demo']) && $_SESSION['demo']) {
 	$isAuthenticated = true;
