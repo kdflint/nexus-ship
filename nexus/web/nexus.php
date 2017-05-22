@@ -24,7 +24,9 @@ if (!Utilities::isSessionValid()) {
 		header("location:login.php?oid=" . $orgId . "&logout=true&expired=true");
 		exit(0);	
 	} else {
-		header("location:login.php?oid=" . $orgId . "&logout=true");
+		//header("location:login.php?oid=" . $orgId . "&logout=true");
+		// Don't force logout so we can fall back to remember cookie
+		header("location:login.php?oid=" . $orgId);
 		exit(0);	
 	}
 }
