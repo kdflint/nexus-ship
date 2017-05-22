@@ -41,7 +41,7 @@
 				 		tableItem = 
        					"<span class='fname detail'>" + htmlEntities(jsonObj.oname) + "</span>" +
        					"<a id='secondary-network-edit' class='secondaryControl priv-1' href='javascript:void(0)' onclick='return populateDirectoryMultiForm();' title='Edit Organization'><span class='fa fa-pencil fa-lg' ></span></a>" +
-       					(!jsonObj.program ? "<span><a class='secondaryControl' href='javascript:void(0)' onclick='showOrgProgramList(\"" + orgId + "\", \"" + htmlEntities(jsonObj.oname) + "\")'>Program Details</a></span>" : "") +
+       					(jsonObj.program ? "<span><a class='secondaryControl' href='javascript:void(0)' onclick='showOrgProgramList(\"" + orgId + "\", \"" + htmlEntities(jsonObj.oname) + "\")'>Program Details</a></span>" : "") +
        					"<div class='detail' style='width:390px;top:80px;'>" +
 										(jsonObj.member ? "<p><span><a href='javascript:void(0)' onclick='showOrgMemberList(\"" + orgId + "\", \"" + htmlEntities(jsonObj.oname) + "\")'>" + jsonObj.member.length + " network member" + (jsonObj.member.length > 1 ? "s" : "") + "</a></span></p>" : "") +
        							(jsonObj.url ? "<p><span class='tod'><a href='" + jsonObj.url + "' target='_blank'>" + jsonObj.url + "</a></span>	</p>" : "<p>&nbsp;</p>") +
