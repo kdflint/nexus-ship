@@ -77,6 +77,14 @@ class Organization {
 			$query = "update organization set size = $1 where id = $2 returning id";
 			return PgDatabase::psExecute($query, array($size, $orgId));
 		}
+	}
+	
+	public static function addOrganizationProgram($orgId) {
+		$orgExists = self::organizationIdExists($orgId);
+		if($orgExists) {
+			return true;
+		}		
+		return true;
 	}	
 	
 	public static function addOrganizationSpecialties($orgId, $specialtyIds) {
@@ -363,6 +371,7 @@ class Organization {
 			where o.id = oo.organization_to_fk
 			and oo.organization_from_fk = $1
 			and oo.relationship ='parent'
+			and o.suspend_dttm is null
 			";
 		return PgDatabase::psExecute($query, array($networkId));	
 	}
@@ -503,6 +512,7 @@ class Organization {
 															where oa.organization_fk = $1
 															and oa.affiliation_fk = a.id", array($orgId));
 
+		$result8 = PgDatabase::psExecute("select exists (select true from organization_program where organization_fk = $1)", array($orgId));
 																														
 		$resultArray = array();							
 		  
@@ -559,8 +569,19 @@ class Organization {
 	  	$counter++;
 	  }
 
+		$row8 = pg_fetch_row($result8);
+		if (!strcmp($row8[0], "t")) {
+			$resultArray['program'] = true;
+		} else {
+			$resultArray['program'] = false;
+		}
+
 		return $resultArray; 	
 
+	}
+
+	public static function getProgramDetailByOrgId($orgId) {
+		// LEFT OFF
 	}
 
 }

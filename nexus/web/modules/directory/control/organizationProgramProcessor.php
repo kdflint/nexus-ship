@@ -13,7 +13,7 @@ if (!Utilities::isSessionValid()) {
 }
 									
 // Following works, but only populates form values that HAVE a value. Empties do not copy over.
-$result = validateInput($_POST);
+$result = validateOrganization($_POST);
 
 if (count($result['error']) > 0) {
 	header('Content-Type: application/json');			
@@ -28,20 +28,16 @@ Use only clean input beyond this point (i.e. $clean[])
 ======================================================= */
 
 $return = array();
-$return['status'] = "name-exists";
-$orgId = Organization::getOrganizationByName($result['clean']['org-name']);
-
-if (!$orgId) {
-	$orgId = Organization::addOrganization($result['clean']['org-name'], $_SESSION['networkId']);
-	$return['status'] = "name-new";
+if (isset($result['clean']['org-id'])) {
+	// TODO - not checking for admin role on edit scenario
+	$thisOrg = Organization::getOrganizationById($result['clean']['org-id']);
+	if (pg_num_rows($thisOrg) == 1) {
+		Organization::addOrganizationProgram($result['clean']['org-id']);
+	}
 }
-User::addUserOrgRelation($_SESSION['uidpk'],$orgId,88,5);
-
-Utilities::setSessionOrgs($_SESSION['username']);
 
 $return['org-name'] = $result['clean']['org-name'];
-$return['org-id'] = $orgId;
-$_SESSION['tmp-editorgid'] = $orgId;
+$return['org-id'] = $result['clean']['org-id'];
 
 if ((session_status() === PHP_SESSION_ACTIVE) && isset($_SESSION['nexusContext'])) {
  switch($_SESSION['nexusContext']) {
@@ -53,7 +49,7 @@ if ((session_status() === PHP_SESSION_ACTIVE) && isset($_SESSION['nexusContext']
  	}
 }
 
-function validateInput($input) {
+function validateOrganization($input) {
 	$result = array('clean' => array(), 'error' => array());
 
 	if (isset($input['org-name']) && strlen($input['org-name']) > 0) {
@@ -61,6 +57,20 @@ function validateInput($input) {
 	} else {
 		$result['error']['org-name'] = "error";
 	}
+
+	if (isset($input['org-id']) && Utilities::validateNetworkIdFormat($input['org-id'])) {
+		$result['clean']['org-id'] = $input['org-id'];
+	} else {
+		$result['error']['org-id'] = "error";
+	}
+
+	$result['clean']['name'] = $input['name'];
+	$result['clean']['description'] = $input['description'];
+	$result['clean']['eligibility'] = $input['eligibility'];
+	$result['clean']['services'] =$input['services'];
+	$result['clean']['involvement'] =$input['involvement'];
+	$result['clean']['partner_interest'] = $input['partner_interest'];
+	$result['clean']['partner_kind'] = $input['partner_kind'];
 
  	return $result;
 }

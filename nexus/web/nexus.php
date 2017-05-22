@@ -75,15 +75,24 @@ if(isset($_GET['view']) && strlen($_GET['view']) > 0 && Utilities::isSafeCharact
 	}
 }
 
-$zeroOrgs = "false";
+$triggerProfileModal = "false";
 if (count($_SESSION['orgs']) < 1) {
-		$zeroOrgs = "true";
+		$triggerProfileModal = "true";
 }	
 
 $isAdmin = "false";
 if (Utilities::isSessionAdmin()) {
 	$isAdmin = "true";
 }
+
+$customProfile = "false";
+// if a custom profile form exists, then use it
+$customProfileForm = Utilities::getPartnerCustomRoot() . "/profile-" . $_SESSION['networkId'] . ".php";
+if(file_exists($customProfileForm)) {
+	$customProfile = "true";
+}
+
+$customProfileData = strlen($_SESSION['profile']) > 0 ? $_SESSION['profile'] : '""';
 
 ?>
 
@@ -152,14 +161,18 @@ if (Utilities::isSessionAdmin()) {
 			FORUM_SESSION_REFRESH_COUNTER = 0;
 			INBOX_FOCUS = DEFAULT_INBOX_FOCUS;
 			RECIPIENT_LIST = [];
-			ZERO_ORGS = <?php echo $zeroOrgs; ?>;
+			TRIGGER_PROFILE_MODAL = <?php echo $triggerProfileModal; ?>;
+			CUSTOM_PROFILE = <?php echo $customProfile; ?>;
+			CUSTOM_PROFILE_DATA = <?php echo $customProfileData; ?>;
 			
 			<!-- include in this manner instead of in a meta link so that php code inside this file will resolve prior to runtime -->
     	<?php include("scripts/techCheck.js"); ?>
     	  	
 			$(document).ready(function () {	
 								
-				if ( $.cookie('nexusadv_lastvisit') !== 'undefined' ) {
+		    if ( NETWORK_ID === "358" && $.cookie('nexusadv_lastvisit') !== 'undefined') {
+					loadPreviousTab('adv-menu-forum');
+				} else if ( $.cookie('nexusadv_lastvisit') !== 'undefined' ) {
 					loadPreviousTab($.cookie('nexusadv_lastvisit'));
 				} else {
 					// default view implemented by tab style load settings
@@ -426,7 +439,9 @@ if (Utilities::isSessionAdmin()) {
 			window.setInterval(recordActivity, 60000);
 			// every 60 seconds, if there has been user activity then send a request to update the session activity timestamp		
 			function recordActivity() {
+				// TEMPORARY - tore this out for IDRA. See also Utilities line 738
 				if(ACTIVITY_FLAG) {
+				//if (true) {
 					var xmlhttp = getXmlHttpRequest();
 					xmlhttp.onreadystatechange=function() {
 	  				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {	}
@@ -435,6 +450,7 @@ if (Utilities::isSessionAdmin()) {
 					xmlhttp.send();  					
 				}
 				ACTIVITY_FLAG = 0;
+				//ACTIVITY_FLAG = 1;
 			}
 	   </script>
 

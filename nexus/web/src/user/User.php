@@ -6,7 +6,7 @@ require_once(dirname(__FILE__) . "/../framework/Util.php");
 class User {
 	
 	public static function getActiveUserByUsername($uid) {
-		$query = "select u.id as id, u.email as email, u.fname as fname, u.lname as lname, u.password as password from public.user u where u.username = $1 and suspend_dttm is NULL limit 1";
+		$query = "select u.id as id, u.email as email, u.fname as fname, u.lname as lname, u.password as password, u.custom_profile as profile from public.user u where u.username = $1 and suspend_dttm is NULL limit 1";
 		return PgDatabase::psExecute($query, array($uid));	
 	}
 	
@@ -69,7 +69,8 @@ class User {
 			publish_sms = $8,
 			descr = $9,
 			phone = $10,
-			publish_phone = $11
+			publish_phone = $11,
+			update_dttm = now()
 			where id = $12
 			";
 		$result = PgDatabase::psExecute($query, array($fname, $lname, $sms, $email, $emailEnabled, $smsEnabled, $emailPublic, $smsPublic, $descr, $phone, $phonePublic, $userId));
@@ -77,6 +78,12 @@ class User {
 			return true;
 		}
 		return false; 
+	}
+	
+	public static function updateExtendedProfileById ($userId, $profile) {
+		// TODO - this only allows one custom profile for a user, encoded with network. Breaks if user belongs to multiple networks.
+		$query = "update public.user set custom_profile = $1, update_dttm = now() where id = $2";
+		return PgDatabase::psExecute($query, array($profile, $userId));
 	}
 	
 	public static function getUserById($userId) {

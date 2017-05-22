@@ -375,6 +375,7 @@ class Catalogue {
 			and o.id = oo.organization_to_fk
 			and oo.organization_from_fk = $2
 			and oo.relationship ='parent'
+			and o.suspend_dttm is null
 			
 			union
 			
@@ -390,7 +391,7 @@ class Catalogue {
 			and uo.organization_fk = oo.organization_to_fk
 			and oo.organization_from_fk = $2
 			and oo.relationship ='parent'
-			
+		
 			union
 			
 			select distinct 'Contact' as type, c.id as id, c.name as name

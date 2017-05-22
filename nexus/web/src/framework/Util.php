@@ -11,6 +11,8 @@ require_once(Utilities::getSrcRoot() . "/organization/Organization.php");
 require_once(Utilities::getSrcRoot() . "/schedule/Event.php");
 require_once(Utilities::getLibRoot() . "/autoload/autoloader.php");
 require_once(Utilities::getLibRoot() . "/bigbluebutton/bbb-api-php/includes/config.php");
+require_once(Utilities::getLibRoot() . "/rememberme/rememberme/src/Rememberme/Storage/File.php");
+require_once(Utilities::getLibRoot() . "/rememberme/rememberme/src/Rememberme/Authenticator.php");
 
 // set config settings
 autoloader(array(array(
@@ -126,7 +128,13 @@ class Utilities {
 	
 	public static function getLibRoot() {	return LIB_ROOT; }
 	
-	public static function getTokenRoot() { return TKN_ROOT; }
+	public static function getTokenRoot() {
+		if(!is_writable(TKN_ROOT) || !is_dir(TKN_ROOT)) {
+			self::log(TKN_ROOT . " does not exist or is not writable by the web server.", PEAR_LOG_ERROR);
+			return false;
+		} 
+		return TKN_ROOT; 
+	}
 	
 	public static function getPartnerFileRoot() { return PTR_ROOT . "/file"; }
 
@@ -624,10 +632,14 @@ class Utilities {
 		$_SESSION['environment'] = self::getEnvName();
 		$_SESSION['username'] = $username;
 		self::setSessionLastActivity();
-		$_SESSION['remember'] = ($remember ? "true" : "false");
+		// Pretty sure this SESSION value is deprecated since cookies are working now
+		//$_SESSION['remember'] = ($remember ? "true" : "false");
+		$_SESSION['remember'] = "true";
+		$_SESSION['remembered'] = $username;
 		self::setSessionTimezone($zone);
 		$_SESSION['language'] = self::getUserLangagePreference();
 		//$_SESSION['defaultSearchId'] = self::newUuid();
+		// NOTE - This password in session is not reliable because certain session can initiate without one. Why collecting???
  		$_SESSION['password'] = $password;
 		
 		$cursor = User::getActiveUserByUsername($_SESSION['username']);
@@ -636,6 +648,7 @@ class Utilities {
 			$_SESSION['fname'] = $row['fname'];
   		$_SESSION['lname'] = $row['lname'];
   		$_SESSION['email'] = $row['email'];
+			$_SESSION['profile'] = $row['profile'];
 		}
 		
 		$_SESSION['firstLogin'] = User::isFirstLogin($_SESSION['uidpk']);
@@ -735,8 +748,7 @@ class Utilities {
 			// Nexus Advantage and public sessions don't time out (yet)
 			return false;
 		}
-		if ((isset($_SESSION['remember']) && $_SESSION['remember'] == "true") || Utilities::getSessionTimeout() == "-1") {
-			// don't expire a session if the user has asked to be remembered on login form
+		if (Utilities::getSessionTimeout() == "-1") {
 			return false;
 		}
 		if (isset($_SESSION['lastActivity']) && (time() - $_SESSION['lastActivity'] > self::getSessionTimeout())) {
