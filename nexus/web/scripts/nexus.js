@@ -26,7 +26,7 @@ var FORUM_SESSION_REFRESH_COUNTER = 0;
 var DEFAULT_INBOX_FOCUS = "/ucp.php?i=pm&folder=inbox";
 var INBOX_FOCUS = "";
 var RECIPIENT_LIST = [];
-var ZERO_ORGS = false;
+var TRIGGER_PROFILE_MODAL = false;
 var MEMBER_TABLE;
 var ORG_MEMBER_TABLE;
 var ORG_TABLE;
@@ -34,6 +34,8 @@ var MAP;
 var MARKERS = [];
 var DETAIL_MAP;
 var DETAIL_MARKERS = [];
+var CUSTOM_PROFILE = false;
+var CUSTOM_PROFILE_DATA = "";
 	
 function showPriv1() {
 	var privileged = document.getElementsByClassName("priv-1");
@@ -301,7 +303,7 @@ function formSjaxSubmit(frm) {
 		success: function (data) {
 		}
 	});
-	console.log(xmlhttp.responseText);
+	//console.log(xmlhttp.responseText);
 	jsonObj = JSON.parse(xmlhttp.responseText);	
   return jsonObj;
 }
@@ -634,7 +636,7 @@ function loadAdvPage(resource) {
     	case "adv-menu-profile":
     		document.getElementById("profile_display").style.display ="block";
     		divDisplay.style.display ="block";
-    		if(ZERO_ORGS) {
+    		if(TRIGGER_PROFILE_MODAL || (CUSTOM_PROFILE && CUSTOM_PROFILE_DATA.length < 1)) {
     			document.getElementById("profile_org_edit").click();
     		}
     		break;
@@ -1261,6 +1263,7 @@ function profileValidateAndSubmit() {
 function displayThisContext(element) {
 	if (element && (element.className).indexOf('cfcht-custom') > -1) {
 		if (NETWORK_ID == "18") {
+		//if (NETWORK_ID == "376") {
 			return true;
 		}
 		return false;			
@@ -1293,16 +1296,15 @@ function showOrgProgramList(orgId, orgName) {
 }
 
 
-function organizatonNameValidateAndSubmit(thisForm) {
+function organizationNameValidateAndSubmit(thisForm) {
 	
 	var organizationNameForm = document.forms[thisForm];
 	var submitButton = document.getElementById(thisForm + "-submit");
 	var pass = true;	
 	
 	var nameField = organizationNameForm['org-name'];
-	
   var name = nameField.value;
-	setFieldPassStyles(nameField, "Organization Name");
+ 	setFieldPassStyles(nameField, "Organization Name");
   if (isEmptyOrLong(name, 100)) {
   	setFieldErrorStyles(nameField, "Organization name is required");
     pass = false;
@@ -1313,18 +1315,16 @@ function organizatonNameValidateAndSubmit(thisForm) {
  		submitButton.innerHTML = "<span class='fa fa-spinner fa-pulse'></span>"; 
  		submitButton.style.opacity = ".6";
  		var details = formSjaxSubmit(organizationNameForm);
+		console.log(details);
 		if (details['status'] === "name-new") {
-			// must manually update ZERO_ORGS since no page reload
-			ZERO_ORGS = false;
+			console.log("going on to basic form");
 			var basicForm = document.forms['organization-form-basic'];
  			basicForm['org-name'].value = details['org-name'];
  			basicForm['org-name'].readOnly = true;
  			basicForm['org-id'] = details['org-id'];
  			toggleMultiPartModal("openOrganizationName", "basic");
  		} else {
- 			// reload here will cause ZERO_ORGS update
- 			location.reload();
- 			toggleMultiPartModal("openOrganizationName", "name");
+ 			location.reload(true);
  		}
  	}
 
@@ -1474,8 +1474,56 @@ function organizationAffiliationValidateAndSubmit(thisForm) {
  		submitButton.innerHTML = "<span class='fa fa-spinner fa-pulse'></span>"; 
  		submitButton.style.opacity = ".6";
  		var details = formSjaxSubmit(organizationAffiliationForm);
+		var programForm = document.forms['organization-form-program'];
+ 		programForm['org-name'].value = details['org-name'];
+ 		programForm['org-id'].value = details['org-id'];
+ 		//toggleMultiPartModal("openOrganizationName", "program");
  		toggleMultiPartModal("openOrganizationName", "endHere");
  	}
+}
+
+function organizationProgramValidateAndSubmit(thisForm) {
+	var organizationProgramForm = document.forms[thisForm];	
+	var submitButton = document.getElementById(thisForm + "-submit");
+	var pass = true;	
+
+	if (Boolean(pass)) {
+ 		submitButton.disabled = true;  
+ 		submitButton.innerHTML = "<span class='fa fa-spinner fa-pulse'></span>"; 
+ 		submitButton.style.opacity = ".6";
+ 		var details = formSjaxSubmit(organizationProgram);
+ 		toggleMultiPartModal("openOrganizationName", "endHere");
+ 	}	
+}
+
+function initExtendedProfileForm() {
+	if (CUSTOM_PROFILE) {
+		populateCustomProfileForm();
+		location.assign("#openProfileExtended");
+		toggleMultiPartModal('openProfileExtended', 'demog');
+	} else {
+		location.assign("#openOrganizationName");
+		toggleMultiPartModal('openOrganizationName', 'name');
+	}
+}
+
+function profileCustomValidateAndSubmit(thisForm) {
+
+	var profileDemogForm = document.forms[thisForm];	
+	var submitButton = document.getElementById(thisForm + "-submit");
+	var pass = true;	
+	
+	if (Boolean(pass)) {
+ 		submitButton.disabled = true;  
+ 		submitButton.innerHTML = "<span class='fa fa-spinner fa-pulse'></span>"; 
+ 		submitButton.style.opacity = ".6";
+ 		var details = formSjaxSubmit(profileDemogForm);
+ 		console.log(details);
+		CUSTOM_PROFILE_DATA = details;
+ 		location.assign("#openOrganizationName");
+ 		toggleMultiPartModal("openOrganizationName", "name");
+ 	}
+
 }
 
 
@@ -1670,6 +1718,27 @@ function populateDirectoryMultiForm() {
 		}
 	}
 	openOrganizationBasicForm(true);
+}
+
+function populateCustomProfileForm() {
+	// TODO - this can be made generic as long as the name of the jsonObj property matches the name of the corresponding form field
+	// Right now, only works for IDRA's form
+ 	console.log(CUSTOM_PROFILE_DATA);
+ 	var profileForm = document.forms['profile-custom'];
+ 	var submitButton = document.getElementById("profile-custom-submit");
+ 	profileForm.reset();
+ 	submitButton.disabled = false;  
+ 	submitButton.innerHTML = "Next"; 
+ 	submitButton.style.opacity = "1";
+ 	if (CUSTOM_PROFILE_DATA.hasOwnProperty('occupation')) {
+ 		profileForm['occupation'].value = CUSTOM_PROFILE_DATA.occupation;
+ 	}
+ 	if (CUSTOM_PROFILE_DATA.hasOwnProperty('parent')) {
+ 		$("input[name=parent][value=" + CUSTOM_PROFILE_DATA.parent + "]").attr('checked', 'checked');
+ 	}
+ 	if (CUSTOM_PROFILE_DATA.hasOwnProperty('subscribe')) {
+ 		$("input[name=subscribe][value=" + CUSTOM_PROFILE_DATA.subscribe + "]").attr('checked', 'checked');
+ 	}		
 }
 
 function populateEventForm(i) {

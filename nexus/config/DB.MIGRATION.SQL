@@ -87,4 +87,6 @@ alter table program add column partner_descr varchar(250);
 alter table program add column hours varchar(50);
 alter table program add column ada boolean;
 
+alter table public.user add column custom_profile varchar(500);
+
 update organization set size = null where size = '0'

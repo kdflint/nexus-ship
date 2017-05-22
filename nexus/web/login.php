@@ -4,18 +4,15 @@ session_start();
 require_once("src/framework/Util.php");
 require_once(Utilities::getSrcRoot() . "/organization/Organization.php");
 require_once(Utilities::getSrcRoot() . "/schedule/Event.php");
-// TODO - this should be handled by the autoloader in Util
-require_once(Utilities::getLibRoot() . "/rememberme/rememberme/src/Rememberme/Storage/File.php");
-require_once(Utilities::getLibRoot() . "/rememberme/rememberme/src/Rememberme/Authenticator.php");
 
 use Birke\Rememberme;
+
 // Initialize RememberMe Library with file storage
 $storagePath = Utilities::getTokenRoot();
-if(!is_writable($storagePath) || !is_dir($storagePath)) {
-    die("'$storagePath' does not exist or is not writable by the web server.");
+if ($storagePath) {
+	$storage = new Rememberme\Storage\File($storagePath);
+	$rememberMe = new Rememberme\Authenticator($storage);
 }
-$storage = new Rememberme\Storage\File($storagePath);
-$rememberMe = new Rememberme\Authenticator($storage);
 
 if(isset($_GET['logout'])) {
 	require_once(Utilities::getModulesRoot() . "/forum/forum_integration.php");
@@ -43,17 +40,19 @@ if (isset($_SESSION['username']) && substr($_SESSION['username'], 0, 6 ) !== "pU
 	$enrolledUsername = (isset($_SESSION['invitation']) && (isset($_SESSION['username'])) ? $_SESSION['username'] : false);
 }
 
-$rememberedUsername = ($rememberMe->login()) ? $rememberMe->login() : false;
+$cookieValues = $rememberMe->getCookieValues();
+if (isset($cookieValues[0]) && strlen($cookieValues[0]) > 0) {
+	$remembered = "true";
+}	
 
 if(Utilities::isSessionValid() && !Utilities::isSessionPublic()) {
 	header("location:" . Utilities::getHttpPath() . "/nexus.php");
 	exit(0);
 } else if (Utilities::isSessionValid() && Utilities::isSessionPublic() && isset($_SESSION['remembered']) && isset($_SESSION['password'])) {
+	// transition a public session to authenticated session
 	Utilities::setSession($_SESSION['remembered'], $_SESSION['remember'], $_SESSION['timezone'], $_SESSION['password']);
 	header("location:" . Utilities::getHttpPath() . "/nexus.php");
 	exit(0);
-} else if ($rememberedUsername) {
-	$_SESSION['remember'] = $remembered = "true";
 } else if ($enrolledUsername) {
 	$_SESSION['remember'] = "true";
 }
@@ -91,7 +90,7 @@ if ($cleanNetworkId == 'userdemo') {
 
 // Toggle on CFCHT in prod, for now
 $pageTitle = "Web Meet";
-if ($cleanNetworkId == 'ed787a92') {
+if ($cleanNetworkId == 'ed787a92' || $cleanNetworkId == '2ab2f516') {
 	$pageTitle = "Advantage";
 }
 
@@ -174,17 +173,8 @@ Utilities::setUserLanguageEnv();
 				$( '#tech_check_control' ).click(function() {
 	  			$( "#tech_check_display" ).toggle( "blind" ); 			
 				});
-				if (<?php echo $remembered; ?>) {
-					loginForm.elements['uid'].value = <?php echo var_export($rememberedUsername); ?>;
-					loginForm.elements['password'].value = "Passthru1";
-					loginForm.elements['login-remember'].checked = true;
-					document.getElementById("login-form-submit").click();
-				}
 				if (<?php echo $enrolled; ?>) {
 					loginForm.elements['uid'].value = <?php echo var_export($enrolledUsername); ?>;
-					loginForm.elements['password'].value = "Passthru1";
-					loginForm.elements['login-remember'].checked = false;
-					document.getElementById("login-form-submit").click();
 				}
 				if (<?php echo $demoSession; ?>) {
 					loginForm.elements['password'].disabled = true;
@@ -200,6 +190,12 @@ Utilities::setUserLanguageEnv();
 				}
 				if (<?php echo $guestPass; ?>) {
 					techCheck();  
+				}
+				if (<?php echo $remembered; ?>) {
+					loginForm.elements['uid'].value = "remembered";
+					loginForm.elements['password'].value = "passthru1";
+					loginForm.elements['login-remember'].checked = false;
+					document.getElementById("login-form-submit").click();
 				}
 			});
 

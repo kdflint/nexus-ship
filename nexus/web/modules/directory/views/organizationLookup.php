@@ -7,7 +7,7 @@
 	</fieldset>
 	<fieldset style="position:absolute;left:600px;width:200px;top:24px;">
 		<div style="margin-top:0px;">
-			<a id="organization-name-lookup-submit" class="pure-button button-menu" href="javascript:void(0)" onclick="organizatonNameValidateAndSubmit('organization-name-lookup');" style="float:right;background-color:#d27b4b;width:70px;font-size:90%;margin-top:-10px;color:#e6e6e6" >Add</a>
+			<a id="organization-name-lookup-submit" class="pure-button button-menu" href="javascript:void(0)" onclick="organizationNameValidateAndSubmit('organization-name-lookup');" style="float:right;background-color:#d27b4b;width:70px;font-size:90%;margin-top:-10px;color:#e6e6e6" >Add</a>
  			<a href="#close" style="float:right;margin-right:20px;">Cancel</a>
  	</div>
 	</fieldset>					

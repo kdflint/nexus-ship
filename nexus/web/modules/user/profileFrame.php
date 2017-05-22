@@ -13,7 +13,7 @@ $testEmail = $_SESSION['email'];
 ?>
 
 <div id="profile-secondary" class="secondaryControlContainer">
-	<a href='#openOrganizationName' id="profile_org_edit" onclick="toggleMultiPartModal('openOrganizationName', 'name');" class="secondaryControl" title="Edit Organization"><span class='fa fa-university fa-lg' ></span></a>
+	<a href='javascript:void(0);' id="profile_org_edit" onclick="initExtendedProfileForm();" class="secondaryControl" title="Profile Details"><span class='fa fa-plus-square fa-2x' ></span></a>
 	<?php if ($_SESSION['networkId'] === "358") { ?>
 		<a href="http://www.idra.org/who-we-are/privacy-policy/" target="_blank" class="secondaryControl" >Privacy Policy</a>
 		<a href="#" class="secondaryControl"> | </a>
@@ -21,7 +21,7 @@ $testEmail = $_SESSION['email'];
 	<?php } ?>
 </div>
 
-<div id="profile-frame" style="height:520px;">
+<div id="profile-frame" style="height:520px;font-size:95%;">
 <form action="<?php echo(Utilities::getHttpPath()); ?>/modules/user/control/profileProcessor.php" method="post" id="profile-form" class="pure-form pure-form-aligned">
 	<div class="profileBlock1">
 			<p><b>Your Security</b><p>
@@ -97,21 +97,23 @@ $testEmail = $_SESSION['email'];
  				<span class="messageCol2"><input type="text" size="22" name="email" value="<?php echo($_SESSION['email']);?>" oninput="disableTestMessageLink('testMessageLinkEmail')" 	/></span>
  				<!--<span class="messageCol3"><input type="checkbox" name="email_status" <?php echo($email_status); ?>  onchange="disableTestMessageLink()" /></span>-->
  				<span class="messageCol3"><input type="checkbox" name="email_public" <?php echo($email_publish); ?> /></span>
- 				<span class="messageCol4"><a id="testMessageLinkEmail" href="javascript:post('testMessageLinkEmail','<?php echo(Utilities::getHttpPath()); ?>/modules/user/control/messageProcessor.php',{testMessage:'true',phone:'',email:'<?php echo($testEmail); ?>'})">Test message</a></span>
+ 				<span class="messageCol4"><a id="testMessageLinkEmail" href="javascript:post('testMessageLinkEmail','<?php echo(Utilities::getHttpPath()); ?>/modules/user/control/messageProcessor.php',{testMessage:'true',phone:'',email:'<?php echo($testEmail); ?>'})">Confirm</a></span>
  			</div>
 
     	<?php if ($_SESSION['networkId'] != '358') { ?>
  			<div class="profileFormRow" style="top:135px;left:15px;">
-	 	 		<span class="messageCol1">Text Message:</span>
+	 	 		<span class="messageCol1">Text:</span>
  				<span class="messageCol2"><input type="text" size="22" name="sms" value="<?php echo($_SESSION['sms']);?>" oninput="disableTestMessageLink('testMessageLinkSms')" /></span>
  				<!--<span class="messageCol3"><input type="checkbox" name="sms_status" <?php echo($sms_status); ?> onchange="disableTestMessageLink()" /></span>-->
  				<span class="messageCol3"><input type="checkbox" name="sms_public" <?php echo($sms_publish); ?> /></span>
- 				<span class="messageCol4"><a id="testMessageLinkSms" href="javascript:post('testMessageLinkSms','<?php echo(Utilities::getHttpPath()); ?>/modules/user/control/messageProcessor.php',{testMessage:'true',phone:'<?php echo($testSms); ?>',email:''})">Test message</a></span>
+ 				<span class="messageCol4"><a id="testMessageLinkSms" href="javascript:post('testMessageLinkSms','<?php echo(Utilities::getHttpPath()); ?>/modules/user/control/messageProcessor.php',{testMessage:'true',phone:'<?php echo($testSms); ?>',email:''})">Confirm</a></span>
  			</div>
  			<?php } ?>
+ 		</div>
 
-			<a id="profile-form-submit" type="submit" class="pure-button pure-button-primary" style="float:right;top:150px;position:relative;" href="javascript:void(0);" onclick="profileValidateAndSubmit();">Update Your Profile</a>
- 			
-	</div>
 	</form>
+			<div class="profileBlock4">
+			<a id="profile-form-submit" type="submit" class="pure-button pure-button-primary" href="javascript:void(0);" onclick="profileValidateAndSubmit();">Update Your Profile</a>
+ 		</div>	
+
 </div>

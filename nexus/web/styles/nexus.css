@@ -214,6 +214,12 @@ body {
 	top:430px; 
 }
 
+.profileBlock4 {
+	position: absolute;
+	bottom: 80px;
+	right: 0px;
+}
+
 .profileFormRow {
 	margin-top:5px;
 	position: relative;
@@ -248,7 +254,7 @@ body {
 
 .messageCol4 {
 	position:absolute;
-	left: 540px;
+	left: 500px;
 }
 
 /* TEXT */

@@ -34,8 +34,23 @@
 			<a href="#close" title="Skip" class="close">X</a>
 			<?php include("modules/directory/views/organizationAffiliationAdd.php"); ?>		
 		</div>
+		<div id="openOrganizationName-part-program" class="openOrganizationName-part cfcht-custom" style="display:none;overflow-x:hidden;overflow-y:auto;">
+			<a href="#close" title="Skip" class="close">X</a>
+			<?php include("modules/directory/views/organizationProgramAdd.php"); ?>		
+		</div>
 	</div>
 	
+	<div id="openProfileExtended" class="modalDialog" style="font-size:90%;">
+		<div id="openProfileExtended-part-demog" class="openProfileExtended-part" style="display:block;">
+			<a href="#close" title="Skip" class="close">X</a>
+			<?php 
+				$customProfileForm = Utilities::getPartnerCustomRoot() . "/profile-" . $_SESSION['networkId'] . ".php";
+				if(file_exists($customProfileForm)) {
+					include($customProfileForm);
+				} ?>
+		</div>
+	</div>
+
 	<div id="openGroupUserAdd" class="modalDialog">
 		<div>
 			<a href="#close" title="Skip" class="close">X</a>
@@ -68,17 +83,18 @@
 		<div>
 			<a href="#close" title="Skip" class="close">X</a>
 			<div id="openOrganizationView-part-detail" class="openOrganizationView-part" style="display:block;">
-				<?php include("modules/directory/views/directoryDetailAdv.php") ?>
+				<?php include("modules/directory/views/directoryDetailAdv.php"); ?>
 			</div>
 			<div id="openOrganizationView-part-members" class="openOrganizationView-part" style="display:none;">
 				<a href="javascript:void(0);" onclick="toggleMultiPartModal('openOrganizationView', 'detail')"><span class='fa fa-chevron-circle-left fa-2x' style="margin-right:10px;"></span>Back to detail record</a>
 				<p>Network members affiliated with this organization</p>
-				<?php include("modules/directory/views/orgMemberList.php") ?>
+				<?php include("modules/directory/views/orgMemberList.php"); ?>
 			</div>
 			<div id="openOrganizationView-part-program" class="openOrganizationView-part" style="display:none;">
 				<a href="javascript:void(0);" onclick="toggleMultiPartModal('openOrganizationView', 'program')"><span class='fa fa-chevron-circle-left fa-2x' style="margin-right:10px;"></span>Back to detail record</a>
 				<p>Program Details for this organization</p>
-				<?php include("modules/directory/views/orgProgramList.php") ?>
+				<?php //include("modules/directory/views/orgProgramList.php");
+				 ?>
 			</div>
 		</div>
 	</div>

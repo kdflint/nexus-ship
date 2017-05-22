@@ -77,6 +77,14 @@ class Organization {
 			$query = "update organization set size = $1 where id = $2 returning id";
 			return PgDatabase::psExecute($query, array($size, $orgId));
 		}
+	}
+	
+	public static function addOrganizationProgram($orgId) {
+		$orgExists = self::organizationIdExists($orgId);
+		if($orgExists) {
+			return true;
+		}		
+		return true;
 	}	
 	
 	public static function addOrganizationSpecialties($orgId, $specialtyIds) {
