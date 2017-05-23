@@ -28,6 +28,7 @@ nexus/web/modules/directory/views/include/*
 nexus/log/*
 nexus/partner/*
 nexus/include/*
+nexus/token/*
 nexus/batch/PgDb.php
 nexus/batch/Util.php
 nexus/batch/module/messaging/*.log
