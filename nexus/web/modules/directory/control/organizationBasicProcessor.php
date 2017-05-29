@@ -30,7 +30,7 @@ Use only clean input beyond this point (i.e. $clean[])
 $return = array();
 
 $orgid = false;
-if (isset($result['clean']['org-id']) && $result['clean']['org-id'] === $_SESSION['tmp-editorgid']  && Utilities::isSessionAdmin()) {
+if (isset($result['clean']['org-id']) && strlen($result['clean']['org-id']) > 0 && $result['clean']['org-id'] === $_SESSION['tmp-editorgid']  && Utilities::isSessionAdmin()) {
 	$orgid = Organization::updateOrganizationName($result['clean']['org-id'], $result['clean']['org-name']);
 } else {
 	$orgid = Organization::getOrganizationByName($result['clean']['org-name']);
@@ -122,7 +122,7 @@ function validateOrganization($input) {
 	if (isset($input['org-contact-email']) && Utilities::validateEmail($input['org-contact-email'])) {
 		$result['clean']['org-contact-email'] = $input['org-contact-email'];
 	}	else {
-		$result['error']['org-contact-email'] = "error";
+		$result['clean']['org-contact-email'] = "";
 	}	
 	
 	$result['clean']['isLocUpdate'] = false;

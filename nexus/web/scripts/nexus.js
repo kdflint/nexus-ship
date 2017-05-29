@@ -2,6 +2,7 @@ var errorBackground = "rgba(247,248,239,0.6) url('') no-repeat right top";
 
 var currentEvents;
 var CURRENT_ORG;
+var CURRENT_PROG;
 
 /*
 Would like to avoid initializing these and force the including php page to do so, but that might break something right now. 
@@ -303,7 +304,7 @@ function formSjaxSubmit(frm) {
 		success: function (data) {
 		}
 	});
-	//console.log(xmlhttp.responseText);
+	console.log(xmlhttp.responseText);
 	jsonObj = JSON.parse(xmlhttp.responseText);	
   return jsonObj;
 }
@@ -1291,7 +1292,7 @@ function showOrgMemberList(orgId, orgName) {
 }
 
 function showOrgProgramList(orgId, orgName) {
-	//getOrgProgramList(orgId, orgName);
+	getOrgProgramList(orgId);
 	toggleMultiPartModal("openOrganizationView", "program");
 }
 
@@ -1364,7 +1365,7 @@ function organizationBasicValidateAndSubmit(thisForm) {
   
   var email = contactEmailField.value;
 	setFieldPassStyles(contactEmailField, "Email");
-  if (!isValidEmail(email)) {
+  if (false) {
   	setFieldErrorStyles(contactEmailField, EMAIL_REQUIRED);
   	contactEmailField.value = "";
   	pass = false;
@@ -1477,8 +1478,7 @@ function organizationAffiliationValidateAndSubmit(thisForm) {
 		var programForm = document.forms['organization-form-program'];
  		programForm['org-name'].value = details['org-name'];
  		programForm['org-id'].value = details['org-id'];
- 		//toggleMultiPartModal("openOrganizationName", "program");
- 		toggleMultiPartModal("openOrganizationName", "endHere");
+ 		toggleMultiPartModal("openOrganizationName", "program");
  	}
 }
 
@@ -1491,7 +1491,7 @@ function organizationProgramValidateAndSubmit(thisForm) {
  		submitButton.disabled = true;  
  		submitButton.innerHTML = "<span class='fa fa-spinner fa-pulse'></span>"; 
  		submitButton.style.opacity = ".6";
- 		var details = formSjaxSubmit(organizationProgram);
+ 		var details = formSjaxSubmit(organizationProgramForm);
  		toggleMultiPartModal("openOrganizationName", "endHere");
  	}	
 }
@@ -1714,10 +1714,33 @@ function populateDirectoryMultiForm() {
   				}
 				}
 			}
-		
+			
+			getOrgProgramList(CURRENT_ORG.orgid);
+			populateProgramForm();
+	
 		}
 	}
 	openOrganizationBasicForm(true);
+}
+
+function populateProgramForm() {
+	if (CURRENT_PROG) {	
+		var programForm = document.forms['organization-form-program'];
+		programForm.reset();
+		if (CURRENT_PROG.oname && CURRENT_PROG.orgid) {
+			programForm['org-name'].value = CURRENT_PROG.oname;
+			programForm['org-id'].value = CURRENT_PROG.orgid;
+			programForm['name'].value = CURRENT_PROG.name ? htmlDecode(CURRENT_PROG.name) : "";
+			programForm['description'].value = CURRENT_PROG.description ? htmlDecode(CURRENT_PROG.description) : "";
+			programForm['eligibility'].value = CURRENT_PROG.eligibility ? htmlDecode(CURRENT_PROG.eligibility) : "";
+			programForm['services'].value = CURRENT_PROG.services ? htmlDecode(CURRENT_PROG.services) : "";
+			programForm['involvement'].value = CURRENT_PROG.involvement ? htmlDecode(CURRENT_PROG.involvement) : "";
+			programForm['partner_interest'].value = CURRENT_PROG.partner_interest ? htmlDecode(CURRENT_PROG.partner_interest) : "";
+			programForm['partner_kind'].value = CURRENT_PROG.partner_descr ? htmlDecode(CURRENT_PROG.partner_descr) : "";
+			document.getElementById('organization-form-program-submit').innerHTML = "Update";
+			document.getElementById('organization-form-program-submit').style.opacity = "1";	
+		}
+	}
 }
 
 function populateCustomProfileForm() {
@@ -2157,6 +2180,30 @@ function getDaysPassing(num, freq, start) {
 
 function htmlEntities(str) {
 	return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\"/g, '&quot;');	
+}
+
+function htmlDecode(str) {
+	console.log(str);
+	var decoded = String(str).
+		replace(/&#40;/g, '(').
+		replace(/&#41;/g, ')').
+		replace(/&#34;/g, '\"').
+		replace(/&#60;/g, '<').
+		replace(/&#62;/g, '>').
+		replace(/&#38;/g, '&').
+		replace(/&#42;/g, '*').
+		replace(/&#37;/g, '%').
+		replace(/&#61;/g, '=').
+		replace(/&#33;/g, '!').
+		replace(/&#39;/g, '\'').
+		replace(/&#47;/g, '\/').
+		replace(/&#92;/g, '\\').
+		replace(/&amp;/g, '\'').
+		replace(/&lt;/g, '<').
+		replace(/&gt;/g, '>').
+		replace(/&quot;/g, '\"');	
+	console.log(decoded);
+	return decoded;
 }
 
 function millisecondsToFormat(formatString, ms){

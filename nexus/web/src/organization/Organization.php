@@ -79,14 +79,6 @@ class Organization {
 		}
 	}
 	
-	public static function addOrganizationProgram($orgId) {
-		$orgExists = self::organizationIdExists($orgId);
-		if($orgExists) {
-			return true;
-		}		
-		return true;
-	}	
-	
 	public static function addOrganizationSpecialties($orgId, $specialtyIds) {
 		$orgExists = self::organizationIdExists($orgId);
 		if($orgExists && $specialtyIds && is_array($specialtyIds)) {
@@ -113,7 +105,7 @@ class Organization {
 			$count = pg_num_rows(PgDatabase::psExecute($query, array($orgfk, $row[0])));
 			if ($count == 1) {
 				//$query = "delete from organization_contact where organization_fk = $1 and contact_fk != $2";
-				PgDatabase::psExecute($query, array($orgfk, $row[0]));
+				//PgDatabase::psExecute($query, array($orgfk, $row[0]));
 			}
 		}
 		return true;
@@ -132,10 +124,33 @@ class Organization {
 			$count = pg_num_rows(PgDatabase::psExecute($query, array($orgFk, $row[0])));
 			if ($count == 1) {
 				//$query = "delete from organization_location where organization_fk = $1 and location_fk != $2";
-				PgDatabase::psExecute($query, array($orgFk, $row[0]));
+				//PgDatabase::psExecute($query, array($orgFk, $row[0]));
 			}
 		}
 		return true;		
+	}
+
+	public static function addOrganizationProgram($orgFk, $name, $description, $eligibility, $services, $involvement, $partner_interest, $partner_desc) {
+		$orgExists = self::organizationIdExists($orgFk);
+		if($orgExists) {
+			// TODO - if this is an edit scenario, this may create a duplicate row and leave the existing row stranded (not tied to an org)
+			$query = "insert into program (name, description, eligibility, services, involvement, partner_interest, partner_descr) values ($1, $2, $3, $4, $5, $6, $7) returning id";
+			$row = pg_fetch_row(PgDatabase::psExecute($query, array($name, $description, $eligibility, $services, $involvement, $partner_interest, $partner_desc)));
+			$programId = $row[0];
+			$query = "insert into organization_program (organization_fk, program_fk) values ($1, $2) returning id";
+			$row = pg_fetch_row(PgDatabase::psExecute($query, array($orgFk, $programId)));
+			// insert on conflict (upsert) would be much better here, but we are on pg 9.4 :(
+			if ($row[0]) {
+				$query = "select * from organization_program where organization_fk = $1 and program_fk != $2";
+				$count = pg_num_rows(PgDatabase::psExecute($query, array($orgFk, $row[0])));
+				if ($count == 1) {
+					//$query = "delete from organization_location where organization_fk = $1 and location_fk != $2";
+					//PgDatabase::psExecute($query, array($orgFk, $row[0]));
+				}
+			}
+			return true;	
+		}
+		return false;	
 	}
 
 	public static function addOrganizationLanguages($orgId, $languageIds) {
@@ -464,7 +479,33 @@ class Organization {
 		}
 		return $users;
 	}
-
+	
+	public static function getProgramDetailByOrgId($orgId) {
+		$program = array();
+		$query = "select p.name, p.description, p.eligibility, p.services, p.involvement, p.partner_interest, p.partner_descr, p.hours, p.ada, o.name as orgname, o.id as orgid 
+			from organization o, program p, organization_program op 
+			where p.id = op.program_fk
+			and o.id = op.organization_fk
+			and op.organization_fk = $1 order by op.id desc limit 1";
+		$result = PgDatabase::psExecute($query, array($orgId));
+		
+		$row = pg_fetch_array($result);
+		
+		$program['name'] = $row['name'];
+		$program['description'] = $row['description'];
+		$program['eligibility'] = $row['eligibility'];
+		$program['services'] = $row['services'];
+		$program['involvement'] = $row['involvement'];
+		$program['partner_interest'] = $row['partner_interest'];
+		$program['partner_descr'] = $row['partner_descr'];
+		$program['hours'] = $row['hours'];
+		$program['ada'] = $row['ada'];
+		$program['oname'] = $row['orgname'];
+		$program['orgid'] = $row['orgid'];
+		
+		return $program;
+			
+	}
 	
 	public static function getOrganizationDetailById($orgId) {
 		
@@ -578,10 +619,6 @@ class Organization {
 
 		return $resultArray; 	
 
-	}
-
-	public static function getProgramDetailByOrgId($orgId) {
-		// LEFT OFF
 	}
 
 }

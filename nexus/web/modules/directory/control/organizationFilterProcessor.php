@@ -69,7 +69,7 @@ function validateOrganization($input) {
 	if (isset($input['type'])) {
 		$result['clean']['type'] = $input['type'];
 	} else {
-		//$result['error']['type'] = "error";
+		$result['clean']['type'] = "";
 	}		
 
 	if (isset($input['specialty'])) {

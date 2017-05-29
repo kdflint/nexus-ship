@@ -9,7 +9,7 @@
 				if (xmlhttp.status == 200) {
 			 		var jsonObj;
 			 		try { jsonObj = JSON.parse(xmlhttp.responseText); } catch(err) { console.log(err); jsonObj = 'undefined';}	
-			 		if ((typeof jsonObj !== 'undefined') && jsonObj !== null & jsonObj.oname !== null) { 
+			 		if (jsonObj !== null && (typeof jsonObj !== 'undefined') && jsonObj.oname !== null) { 
 			 			var loc1 = jsonObj.location1 ? "<span>" + jsonObj.location1 + "</span><br/>" : "";
 			 			var loc2 = jsonObj.location2 ? "<span>" + jsonObj.location2 + "</span><br/>" : "";
 			 			var topicString = "";
