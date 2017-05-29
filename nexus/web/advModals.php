@@ -34,7 +34,7 @@
 			<a href="#close" title="Skip" class="close">X</a>
 			<?php include("modules/directory/views/organizationAffiliationAdd.php"); ?>		
 		</div>
-		<div id="openOrganizationName-part-program" class="openOrganizationName-part cfcht-custom" style="display:none;overflow-x:hidden;overflow-y:auto;">
+		<div id="openOrganizationName-part-program" class="openOrganizationName-part cfcht-custom" style="display:none;">
 			<a href="#close" title="Skip" class="close">X</a>
 			<?php include("modules/directory/views/organizationProgramAdd.php"); ?>		
 		</div>
@@ -91,9 +91,9 @@
 				<?php include("modules/directory/views/orgMemberList.php"); ?>
 			</div>
 			<div id="openOrganizationView-part-program" class="openOrganizationView-part" style="display:none;">
-				<a href="javascript:void(0);" onclick="toggleMultiPartModal('openOrganizationView', 'program')"><span class='fa fa-chevron-circle-left fa-2x' style="margin-right:10px;"></span>Back to detail record</a>
+				<a href="javascript:void(0);" onclick="toggleMultiPartModal('openOrganizationView', 'detail')"><span class='fa fa-chevron-circle-left fa-2x' style="margin-right:10px;"></span>Back to detail record</a>
 				<p>Program Details for this organization</p>
-				<?php //include("modules/directory/views/orgProgramList.php");
+				<?php include("modules/directory/views/programDetailAdv.php");
 				 ?>
 			</div>
 		</div>

@@ -38,6 +38,13 @@ if (isset($dirty['tz']) && Event::isValidTimeZone($dirty['tz'])) {
 
 $clean['remember'] = (isset($_POST['login-remember']) ? true : false);
 
+
+/* ====================================================
+
+Use only clean input beyond this point (i.e. $clean[])
+
+======================================================= */
+
 $storagePath = Utilities::getTokenRoot();
 $rememberedUsername = false;
 if ($storagePath) {
@@ -46,23 +53,12 @@ if ($storagePath) {
 	$rememberedUsername = $rememberMe->login();
 }
 
-/* ====================================================
-
-Use only clean input beyond this point (i.e. $clean[])
-
-======================================================= */
-
-
-//if (isset($_SESSION['remember']) && $_SESSION['remember']) {
-if (false) {
-	unset($_SESSION['remember']);
-	$isAuthenticated = true;
-} else if (isset($_SESSION['demo']) && $_SESSION['demo']) {
+if (isset($_SESSION['demo']) && $_SESSION['demo']) {
 	$isAuthenticated = true;
 } else if ($rememberedUsername && Utilities::validateUsernameFormat($rememberedUsername)) {
-  $clean['username'] = $rememberedUsername;
-  $clean['password'] = "tokenized";
-  $isAuthenticated = true;
+  	$clean['username'] = $rememberedUsername;
+  	$clean['password'] = "tokenized";
+  	$isAuthenticated = true;
 } else {
 	$isAuthenticated = Utilities::authenticate($clean['username'], $clean['password']);
 }
@@ -79,18 +75,19 @@ if($isAuthenticated){
 	}
 	Utilities::setLogin($_SESSION['uidpk']);
 	header("location:" . Utilities::getHttpPath() . "/nexus.php");
+	exit(0);
 } else {
-	returnToLoginWithError(Utilities::AUTHENTICATION_ERROR);
+	returnToLoginWithError("No message");
 }
 
 function returnToLoginWithError($errorMessage) {
-	header("location:" . Utilities::getHttpPath() . "/login.php?error=" . $errorMessage);
+	header("location:" . Utilities::getHttpPath() . "/login.php?logout=true&error=" . $errorMessage);
 	exit(0);
 }
 
-function returnToLoginWithPilotMessage($pilotMessage) {
-	header("location:" . Utilities::getHttpPath() . "/login.php?oid=ed787a92&logout=true&error=" . $pilotMessage);
+function returnToLoginWithLogout() {
+	header("location:" . Utilities::getHttpPath() . "/login.php?logout=true");
 	exit(0);
-	}
+}
 
 ?>

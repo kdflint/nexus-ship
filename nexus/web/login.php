@@ -69,6 +69,10 @@ if(isset($_GET['error']) && Utilities::isSafeCharacterSet($_GET['error'])) {
 	$cleanIcon = "fa fa-info-circle fa-2x";
 }
 
+if ($cleanMessage === "No message") {
+	$cleanMessage = $cleanIcon = "";
+}
+
 $logo = "";
 $disabled = "";
 $networkLogo = $networkName = $cleanMeetingId = "";	

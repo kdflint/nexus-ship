@@ -8,28 +8,27 @@
 				if (xmlhttp.status == 200) {
 			 		var jsonObj;
 			 		try { jsonObj = JSON.parse(xmlhttp.responseText); } catch(err) { console.log(err); jsonObj = 'undefined';}	
-			 		if ((typeof jsonObj !== 'undefined') && jsonObj !== null & jsonObj.oname !== null) { 
-			 			//CURRENT_PROG = jsonObj;
+			 		if (jsonObj !== null && (typeof jsonObj !== 'undefined') && jsonObj.oname !== null) { 
+			 			CURRENT_PROG = jsonObj;
 				 		tableItem = 
        					"<div class='detail' style='width:390px;top:80px;'>" +
-       							(jsonObj.url ? "<p><span class='tod'><a href='" + jsonObj.url + "' target='_blank'>" + jsonObj.url + "</a></span>	</p>" : "<p>&nbsp;</p>") +
-										(jsonObj.cname ? "<span>" + jsonObj.cname + "</span><br/>" : "") +
-										(jsonObj.title ? "<span>" + jsonObj.title + "</span><br/>" : "") +
-										(jsonObj.email ? "<span>Email: " + jsonObj.email + "</span><br/>" : "") +
-										(jsonObj.phone ? "<span>Phone: " + jsonObj.phone + "</span><br/>" : "") +
-										(jsonObj.fax ? "<span>Fax: " + jsonObj.fax + "</span>" : "") +
-										(jsonObj.formatted ? "<p><span>Program Address: " + jsonObj.formatted + "</span></p>" : "<p><span>" + loc1 + loc2 + "</span></p>") +
+       							(jsonObj.name ? "<p><span>" + jsonObj.name + "</span></p>" : "<p>&nbsp;</p>") +
+										(jsonObj.description ? "<p><span>" + jsonObj.description + "</span></p>" : "") +
+										(jsonObj.eligibility ? "<p><span>" + jsonObj.eligibility + "</span></p>" : "") +
+										(jsonObj.services ? "<p><span>" + jsonObj.services + "</span></p>" : "") +
+										(jsonObj.involvement ? "<p><span>" + jsonObj.involvement + "</span></p>" : "") +
+										(jsonObj.partner_interest ? "<p><span>" + jsonObj.partner_interest + "</span></p>" : "") +
+										(jsonObj.partner_descr ? "<p><span>" + jsonObj.partner_descr + "</span></p>" : "") +
 								"</div>";
 			 				document.getElementById("itemCol1ProgAdv").innerHTML = "<div class='td-div'>" + tableItem + "<div>";   
- 							//addDetailMarker(jsonObj);
      			} else {
 	     			tableItem = 
- 		 					"<span class='fa fa-spinner fa-meh-o fa-lg' style='margin-left:10px;margin-right:10px;'></span>Uh oh. There was an error retrieving this directory listing."
+ 		 					"<span class='fa fa-spinner fa-meh-o fa-lg' style='margin-left:10px;margin-right:10px;'></span>Uh oh. There was an error retrieving this program listing."
 			 				document.getElementById("itemCol1ProgAdv").innerHTML = "<div class='td-div'>" + tableItem + "<div>";   
      			}
      		} else {
 	     		tableItem = 
- 						"<span class='fa fa-spinner fa-meh-o fa-lg' style='margin-left:10px;margin-right:10px;'></span>Uh oh. There was an error retrieving this directory listing."
+ 						"<span class='fa fa-spinner fa-meh-o fa-lg' style='margin-left:10px;margin-right:10px;'></span>Uh oh. There was an error retrieving this program listing."
 			 			document.getElementById("itemCol1ProgAdv").innerHTML = "<div class='td-div'>" + tableItem + "<div>";
      		}
 			}

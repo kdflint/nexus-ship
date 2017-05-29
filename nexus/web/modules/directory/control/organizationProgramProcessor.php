@@ -29,10 +29,9 @@ Use only clean input beyond this point (i.e. $clean[])
 
 $return = array();
 if (isset($result['clean']['org-id'])) {
-	// TODO - not checking for admin role on edit scenario
 	$thisOrg = Organization::getOrganizationById($result['clean']['org-id']);
 	if (pg_num_rows($thisOrg) == 1) {
-		Organization::addOrganizationProgram($result['clean']['org-id']);
+		Organization::addOrganizationProgram($result['clean']['org-id'], $result['clean']['name'], $result['clean']['description'], $result['clean']['eligibility'], $result['clean']['services'], $result['clean']['involvement'], $result['clean']['partner_interest'], $result['clean']['partner_kind']);
 	}
 }
 
@@ -64,13 +63,13 @@ function validateOrganization($input) {
 		$result['error']['org-id'] = "error";
 	}
 
-	$result['clean']['name'] = $input['name'];
-	$result['clean']['description'] = $input['description'];
-	$result['clean']['eligibility'] = $input['eligibility'];
-	$result['clean']['services'] =$input['services'];
-	$result['clean']['involvement'] =$input['involvement'];
-	$result['clean']['partner_interest'] = $input['partner_interest'];
-	$result['clean']['partner_kind'] = $input['partner_kind'];
+	$result['clean']['name'] = substr(Utilities::sanitize(isset($input['name']) ? $input['name'] : ""), 0, 50);
+	$result['clean']['description'] = substr(Utilities::sanitize(isset($input['description']) ? $input['description'] : ""), 0, 1000);
+	$result['clean']['eligibility'] = substr(Utilities::sanitize(isset($input['eligibility']) ? $input['eligibility'] : ""), 0, 250);
+	$result['clean']['services'] = substr(Utilities::sanitize(isset($input['services']) ? $input['services'] : ""), 0, 100);
+	$result['clean']['involvement'] = substr(Utilities::sanitize(isset($input['involvement']) ? $input['involvement'] : ""), 0, 250);
+	$result['clean']['partner_interest'] = substr(Utilities::sanitize(isset($input['partner_interest']) ? $input['partner_interest'] : ""), 0, 250);
+	$result['clean']['partner_kind'] = substr(Utilities::sanitize(isset($input['partner_kind']) ? $input['partner_kind'] : ""), 0, 250);
 
  	return $result;
 }

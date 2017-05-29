@@ -16,7 +16,6 @@ if (Utilities::isSessionValid()) {
 	}		
 
 	$data = Organization::getProgramDetailByOrgId($cleanOrgId);
-	//$_SESSION['tmp-editorgid'] = $cleanOrgId;
 	header('Content-Type: application/json');			
 	echo json_encode($data);
 } else {

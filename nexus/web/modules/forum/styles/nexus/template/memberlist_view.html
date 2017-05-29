@@ -26,7 +26,7 @@ Or something, just not this!
 
 			<!-- IF AVATAR_IMG -->
 			<dl class="left-box">
-				<dt class="profile-avatar">{AVATAR_IMG}</dt>
+				<dt id="avatar-container-2" class="profile-avatar">{AVATAR_IMG}</dt>
 			</dl>
 			<!-- ENDIF -->
 
@@ -110,6 +110,10 @@ Or something, just not this!
 <!-- EVENT memberlist_view_contact_after -->
 
 </form>
+
+<script>
+	sizeAvatar('avatar-container-2', 'avatar');		
+</script>
 
 <!-- EVENT memberlist_view_content_append -->
 
