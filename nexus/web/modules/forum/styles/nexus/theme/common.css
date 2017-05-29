@@ -116,6 +116,12 @@ img {
 	border-width: 0;
 }
 
+/* matches profile popup avatar */
+img.avatar {
+	max-height: 90px;
+	width: auto;
+}
+
 hr {
 	border: 0 solid transparent;
 	border-top-width: 1px;

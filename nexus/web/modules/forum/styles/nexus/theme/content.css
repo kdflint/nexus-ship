@@ -772,8 +772,10 @@ dd.profile-contact {
 }
 
 /* Profile used on view-profile */
+/* matches avatar selection display */
 .profile-avatar img {
-	max-width: 100%;
+	max-height: 90px;
+	width: auto;
 }
 
 /* pm list in compose message if mass pm is enabled */
