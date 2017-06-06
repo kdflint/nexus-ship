@@ -63,13 +63,13 @@ function validateOrganization($input) {
 		$result['error']['org-id'] = "error";
 	}
 
-	$result['clean']['name'] = substr(Utilities::sanitize(isset($input['name']) ? $input['name'] : ""), 0, 50);
-	$result['clean']['description'] = substr(Utilities::sanitize(isset($input['description']) ? $input['description'] : ""), 0, 1000);
-	$result['clean']['eligibility'] = substr(Utilities::sanitize(isset($input['eligibility']) ? $input['eligibility'] : ""), 0, 250);
-	$result['clean']['services'] = substr(Utilities::sanitize(isset($input['services']) ? $input['services'] : ""), 0, 100);
-	$result['clean']['involvement'] = substr(Utilities::sanitize(isset($input['involvement']) ? $input['involvement'] : ""), 0, 250);
-	$result['clean']['partner_interest'] = substr(Utilities::sanitize(isset($input['partner_interest']) ? $input['partner_interest'] : ""), 0, 250);
-	$result['clean']['partner_kind'] = substr(Utilities::sanitize(isset($input['partner_kind']) ? $input['partner_kind'] : ""), 0, 250);
+	$result['clean']['name'] = substr(Utilities::sanitize(isset($input['name']) ? Utilities::encodeLineBreaks($input['name']) : ""), 0, 50);
+	$result['clean']['description'] = substr(Utilities::sanitize(isset($input['description']) ? Utilities::encodeLineBreaks($input['description']) : ""), 0, 1000);
+	$result['clean']['eligibility'] = substr(Utilities::sanitize(isset($input['eligibility']) ? Utilities::encodeLineBreaks($input['eligibility']) : ""), 0, 250);
+	$result['clean']['services'] = substr(Utilities::sanitize(isset($input['services']) ? Utilities::encodeLineBreaks($input['services']) : ""), 0, 100);
+	$result['clean']['involvement'] = substr(Utilities::sanitize(isset($input['involvement']) ? Utilities::encodeLineBreaks($input['involvement']) : ""), 0, 250);
+	$result['clean']['partner_interest'] = substr(Utilities::sanitize(isset($input['partner_interest']) ? Utilities::encodeLineBreaks($input['partner_interest']) : ""), 0, 250);
+	$result['clean']['partner_kind'] = substr(Utilities::sanitize(isset($input['partner_kind']) ? Utilities::encodeLineBreaks($input['partner_kind']) : ""), 0, 250);
 
  	return $result;
 }

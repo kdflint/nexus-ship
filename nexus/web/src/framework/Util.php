@@ -451,6 +451,13 @@ class Utilities {
 		}
 	return true;
 	}
+	
+	public static function encodeLineBreaks($in) {
+		if ($in) {
+			return str_replace(["\r\n", "\r", "\n"], "~", $in);	
+		}
+		return false;
+	}
 
 	public static function sanitize($in) {
 		$out = strtr($in, array('(' => '&#40;',
