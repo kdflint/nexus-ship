@@ -20,6 +20,11 @@
 										(jsonObj.involvement ? "<p><b>What does someone have to do to get involved? </b><span>" + htmlFormatParagraphs(jsonObj.involvement) + "</span></p>" : "") +
 										(jsonObj.partner_interest ? "<p><b>Are you interested in partnering with others? </b><span>" + htmlFormatParagraphs(jsonObj.partner_interest) + "</span></p>" : "") +
 										(jsonObj.partner_descr ? "<p><b>What kind of partners would you like to work with? </b><span>" + htmlFormatParagraphs(jsonObj.partner_descr) + "</span></p>" : "") +
+										(jsonObj.ada ? "<p><b>Is your facility accessible as defined by the Americans with Disabilities Act (ADA)? </b><span>" : "") + 
+										((jsonObj.ada && jsonObj.ada === 't') ?  "Yes" : "") +
+										((jsonObj.ada && jsonObj.ada === 'f') ?  "No" : "") +
+										(jsonObj.ada ? "</span></p>" : "") +
+										(jsonObj.hours ? "<p><b>Hours of operation? </b><span>" + htmlFormatParagraphs(jsonObj.hours) + "</span></p>" : "") +
 								"</div>";
 			 				document.getElementById("itemCol1ProgAdv").innerHTML = "<div class='td-div'>" + tableItem + "<div>";  
 			 				populateProgramForm(); 

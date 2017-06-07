@@ -130,12 +130,12 @@ class Organization {
 		return true;		
 	}
 
-	public static function addOrganizationProgram($orgFk, $name, $description, $eligibility, $services, $involvement, $partner_interest, $partner_desc) {
+	public static function addOrganizationProgram($orgFk, $name, $description, $eligibility, $services, $involvement, $partner_interest, $partner_desc, $ada, $hours) {
 		$orgExists = self::organizationIdExists($orgFk);
 		if($orgExists) {
 			// TODO - if this is an edit scenario, this may create a duplicate row and leave the existing row stranded (not tied to an org)
-			$query = "insert into program (name, description, eligibility, services, involvement, partner_interest, partner_descr) values ($1, $2, $3, $4, $5, $6, $7) returning id";
-			$row = pg_fetch_row(PgDatabase::psExecute($query, array($name, $description, $eligibility, $services, $involvement, $partner_interest, $partner_desc)));
+			$query = "insert into program (name, description, eligibility, services, involvement, partner_interest, partner_descr, ada, hours) values ($1, $2, $3, $4, $5, $6, $7, $8, $9) returning id";
+			$row = pg_fetch_row(PgDatabase::psExecute($query, array($name, $description, $eligibility, $services, $involvement, $partner_interest, $partner_desc, $ada, $hours)));
 			$programId = $row[0];
 			$query = "insert into organization_program (organization_fk, program_fk) values ($1, $2) returning id";
 			$row = pg_fetch_row(PgDatabase::psExecute($query, array($orgFk, $programId)));

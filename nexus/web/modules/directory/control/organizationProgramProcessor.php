@@ -31,7 +31,7 @@ $return = array();
 if (isset($result['clean']['org-id'])) {
 	$thisOrg = Organization::getOrganizationById($result['clean']['org-id']);
 	if (pg_num_rows($thisOrg) == 1) {
-		Organization::addOrganizationProgram($result['clean']['org-id'], $result['clean']['name'], $result['clean']['description'], $result['clean']['eligibility'], $result['clean']['services'], $result['clean']['involvement'], $result['clean']['partner_interest'], $result['clean']['partner_kind']);
+		Organization::addOrganizationProgram($result['clean']['org-id'], $result['clean']['name'], $result['clean']['description'], $result['clean']['eligibility'], $result['clean']['services'], $result['clean']['involvement'], $result['clean']['partner_interest'], $result['clean']['partner_kind'], $result['clean']['ada'], $result['clean']['hours']);
 	}
 }
 
@@ -70,6 +70,12 @@ function validateOrganization($input) {
 	$result['clean']['involvement'] = substr(Utilities::sanitize(isset($input['involvement']) ? Utilities::encodeLineBreaks($input['involvement']) : ""), 0, 250);
 	$result['clean']['partner_interest'] = substr(Utilities::sanitize(isset($input['partner_interest']) ? Utilities::encodeLineBreaks($input['partner_interest']) : ""), 0, 250);
 	$result['clean']['partner_kind'] = substr(Utilities::sanitize(isset($input['partner_kind']) ? Utilities::encodeLineBreaks($input['partner_kind']) : ""), 0, 250);
+	if (isset($input['ada'])) {
+		$result['clean']['ada'] = $input['ada'] === "yes" ? 't' : 'f';	
+	} else {
+		$result['clean']['ada'] = null;
+	}
+	$result['clean']['hours'] = substr(Utilities::sanitize(isset($input['hours']) ? Utilities::encodeLineBreaks($input['hours']) : ""), 0, 50);
 
  	return $result;
 }
