@@ -24,6 +24,7 @@
 		}
 		var searchSpecialty = document.forms[thisForm].specialty.value;
 		var searchType = document.forms[thisForm].type.value;
+		var searchAffiliation = document.forms[thisForm].affiliation.value;
 		var xmlhttp = getXmlHttpRequest();
 		xmlhttp.onreadystatechange=function() {
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
@@ -112,7 +113,7 @@
 		 			tableItem = 
        			"<div class='td-div'>" +
        				"<div class='detail'>" +
- 					  		"<a href='javascript:void(0)' onclick='showDirectoryDetail(" + jsonObj.orgEntry[i].content[5].orgid + ")'><span class='organization'>" + htmlEntities(jsonObj.orgEntry[i].name) + "</span></a>" +
+ 					  		"<a href='javascript:void(0)' onclick='showDirectoryDetail(" + jsonObj.orgEntry[i].content[5].orgid + ")'><span class='organization'>" + htmlDecode(jsonObj.orgEntry[i].name) + "</span></a>" +
  					  		"<span style='font-size:80%'>" + thisContent + "</span>" +
 							"</div>" +
      				"</div>";
@@ -121,7 +122,7 @@
 	   		}
 			}
 		}
-		xmlhttp.open("GET", "<?php echo(Utilities::getHttpPath()); ?>" + "/src/framework/directoryManager.php?string=" + searchString + "&specialty=" + searchSpecialty + "&type=" + searchType, true);
+		xmlhttp.open("GET", "<?php echo(Utilities::getHttpPath()); ?>" + "/src/framework/directoryManager.php?string=" + searchString + "&specialty=" + searchSpecialty + "&type=" + searchType + "&affiliation=" + searchAffiliation, true);
 		xmlhttp.send();  		
 	}
 

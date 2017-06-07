@@ -17,7 +17,12 @@
 			searchString = keywordString;
 		}
 		var searchSpecialty = document.forms[thisForm].specialty.value;
-		var searchType = document.forms[thisForm].type.value;
+		var searchType = document.forms[thisForm].type.value;	
+		var searchAffiliation = "";
+		if (document.forms[thisForm].affiliation !== undefined) {
+			searchAffiliation = document.forms[thisForm].affiliation.value;
+		}
+
 		var xmlhttp = getXmlHttpRequest();
 		xmlhttp.onreadystatechange=function() {
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
@@ -98,7 +103,7 @@
     						span1.setAttribute("class", "organization");
     						span1.setAttribute("style", "font-weight:bold;color:#d27b4b;cursor:pointer;");
     						var span2 = document.createElement("SPAN");
-    						var orgName = document.createTextNode(htmlEntities(jsonObj.orgEntry[i].name));
+    						var orgName = document.createTextNode(htmlDecode(jsonObj.orgEntry[i].name));
     						var orgContent = document.createTextNode(thisContent);
     						span1.appendChild(orgName);
     						span2.appendChild(orgContent);
@@ -118,7 +123,7 @@
 	      ORG_TABLE.draw();	      
 			}
 		}
-		xmlhttp.open("GET", "<?php echo(Utilities::getHttpPath()); ?>" + "/src/framework/directoryManager.php?string=" + searchString + "&specialty=" + searchSpecialty + "&type=" + searchType, true);
+		xmlhttp.open("GET", "<?php echo(Utilities::getHttpPath()); ?>" + "/src/framework/directoryManager.php?string=" + searchString + "&specialty=" + searchSpecialty + "&type=" + searchType + "&affiliation=" + searchAffiliation, true);
 		xmlhttp.send();  		
 	}
 
