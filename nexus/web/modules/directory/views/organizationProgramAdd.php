@@ -1,6 +1,6 @@
 <form id="organization-form-program" class="pure-form modal-form" action="<?php echo(Utilities::getHttpPath()); ?>/modules/directory/control/organizationProgramProcessor.php" method="post">
 	<label>Program Information (scroll down)</label>
-	<fieldset style="overflow-x:hidden;overflow-y:auto;height:275px;font-size:90%;margin-top:10px;width:100%;">
+	<fieldset id="organization-form-program-input" style="overflow-x:hidden;overflow-y:auto;height:275px;font-size:90%;margin-top:10px;width:100%;">
 		<label>Program Name(s)</label>
 		<textarea name="name" rows="1" style="width:95%;" maxlength="50"></textarea> 
 		<label>Full Program Description(s)</label>

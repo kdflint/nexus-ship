@@ -1476,6 +1476,7 @@ function organizationAffiliationValidateAndSubmit(thisForm) {
 		document.getElementById('organization-form-program-submit').innerHTML = "Add";
 		document.getElementById('organization-form-program-submit').style.opacity = "1";	
  		toggleMultiPartModal("openOrganizationName", "program");
+		$( "#organization-form-program-input" ).scrollTop( 0 );
  	}
 }
 
