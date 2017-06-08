@@ -15,6 +15,14 @@
 			<span class="searchQualifier">and</span>
 			<input type="text" name="keyword2" style="width:86%;" placeholder="Language is"/>	
 		</div>
+		<div style="margin-top:10px;">
+			<span class="searchQualifier">and&nbsp;</span>
+			<select id="directory-form-select-affiliation" name="affiliation">
+				<option value="0" selected>Denomination is</option>	
+				<option value="0" >------------</option>	
+	    	<?php include(Utilities::getPartnerCustomRoot() . "/orgaffiliation-" . $_SESSION['networkId'] . ".html"); ?>
+    	</select>
+		</div>
 	<?php } ?>
 	<div style="margin-top:10px;">
 		<span class="searchQualifier">and&nbsp;</span>
@@ -33,4 +41,5 @@
 		</select>
 	</div>
   <a id="directory-form-submit" class="pure-button button-menu" href="javascript:void(0)" onclick="getDirectoryList('directory-form');" style="float:right;background-color:#d27b4b;width:70px;font-size:90%;margin-top:25px;color:#e6e6e6" >Search</a>
+  <a id="directory-form-reset" href="javascript:void(0)" onclick="resetDirectorySearchForm();" style="float:left;margin-top:32px;">Reset Form</a>
 </form>

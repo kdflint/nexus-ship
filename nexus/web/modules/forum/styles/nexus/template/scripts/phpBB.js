@@ -18,7 +18,6 @@ function sizeAvatar(containerId, imgClass) {
 			var width = parseInt(img.width);
 			if (width > 90) {
 				var heightCalc = (90/width) * height;
-				console.log("resizing " + containerId + ">" + imgClass + "[0] to height = " + heightCalc);
 				img.style.width = "90px";
 				img.style.height =  heightCalc + "px";
 			}

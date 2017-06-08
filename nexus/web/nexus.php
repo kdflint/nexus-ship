@@ -428,6 +428,11 @@ $customProfileData = strlen($_SESSION['profile']) > 0 ? $_SESSION['profile'] : '
 						position: { my : "left+50 top", at: "right top-135" },
 						width: 228
 				});
+        $( "#directory-form-select-affiliation").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow-tall" );
+       	$( "#directory-form-select-affiliation").selectmenu().selectmenu({
+						position: { my : "left+50 top", at: "right top-85" },
+						width: 228
+				});
        	$( "#organization-form-country" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
         $( "#organization-form-country" ).selectmenu({ change: function() { displayStates(); } });
         $( "#organization-form-countryStates" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
