@@ -41,5 +41,5 @@
 		</select>
 	</div>
   <a id="directory-form-submit" class="pure-button button-menu" href="javascript:void(0)" onclick="getDirectoryList('directory-form');" style="float:right;background-color:#d27b4b;width:70px;font-size:90%;margin-top:25px;color:#e6e6e6" >Search</a>
-  <a id="directory-form-reset" href="javascript:void(0)" onclick="document.forms['directory-form'].reset()" style="float:left;margin-top:32px;">Reset Form</a>
+  <a id="directory-form-reset" href="javascript:void(0)" onclick="resetDirectorySearchForm();" style="float:left;margin-top:32px;">Reset Form</a>
 </form>

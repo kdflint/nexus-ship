@@ -1173,6 +1173,14 @@ function resetInviteForm() {
 	setFieldPassStyles(inviteForm['email'], "Email");
 }
 
+function resetDirectorySearchForm() {
+	var thisForm = document.forms['directory-form'];
+	thisForm.reset();
+	$('#directory-form-select-affiliation').selectmenu("refresh");
+	$('#directory-form-select-specialty').selectmenu("refresh");
+	$('#directory-form-select-type').selectmenu("refresh");
+}
+
 function profileValidateAndSubmit() {
 	
 	pass = true;
