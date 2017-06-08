@@ -56,7 +56,6 @@ function hidePriv1() {
 }
 
 function initMap() {
-	console.log("MAP init");
  	var mapDiv = document.getElementById('directoryMapContainer');
   MAP = new google.maps.Map(mapDiv, {
   	center: {lat: 41.88, lng: -87.62},
@@ -67,7 +66,6 @@ function initMap() {
 }
 
 function buildMarkerList(geoData, context) {
-	console.log("building the marker list");
 	if (geoData) {
  		for (var org in geoData) {
 	  	var thisMarker = new google.maps.Marker({
@@ -77,7 +75,6 @@ function buildMarkerList(geoData, context) {
    			id: org
  			});
  			thisMarker.addListener('click', function() {
-  			console.log("showing detail record for org id " + this.id);
   			showDirectoryDetail(this.id, context);
   		});
  			MARKERS.push(thisMarker);
@@ -86,14 +83,12 @@ function buildMarkerList(geoData, context) {
 }
 
 function setMapOnAllMarkers(map) {
-	console.log("Setting " + MARKERS.length + " markers to " + map);
  	for (var i = 0; i < MARKERS.length; i++) {
     MARKERS[i].setMap(map);
   }
 }
 
 function clearAllMarkers() {
-	console.log("clearing markers");
 	setMapOnAllMarkers(null);
  	MARKERS = [];
 }
@@ -304,7 +299,6 @@ function formSjaxSubmit(frm) {
 		success: function (data) {
 		}
 	});
-	console.log(xmlhttp.responseText);
 	jsonObj = JSON.parse(xmlhttp.responseText);	
   return jsonObj;
 }
@@ -456,7 +450,7 @@ function clearFileInput(ctrl) {
 
 function htmlFormatParagraphs(rawText) {
 	var replaced = rawText.replace(new RegExp( '~', 'g' ), '</p><p>');
-	return replaced;
+	return htmlFormatEmail(htmlFormatAnchors(replaced));
 }
 
 function htmlFormatAnchors(rawText) {
@@ -582,18 +576,15 @@ function checkGoodForumSession(thisFrame) {
 			// TODO - pick more foolproof string
    		if (rawFrameHtml.includes("Password:")) {
    			thisFrame.src = HTTP_WEB_PATH + "/loading_placeholder.html";
-   			console.log("Forum session expired. Attempting refresh.");
    			// TODO - catch the return value on this method?
 				if (FORUM_SESSION_REFRESH_COUNTER < 2) {
    				refreshForumSession();
-   				console.log("Return on attempt " + FORUM_SESSION_REFRESH_COUNTER);
    				FORUM_SESSION_REFRESH_COUNTER++;
 					document.getElementById('adv-menu-forum').click();
 				} else {
 					thisFrame.src = HTTP_WEB_PATH + "/service_unavailable.html";
 				}
    		} else {
-   			console.log("Forum session valid.");
    			FORUM_SESSION_REFRESH_COUNTER = 0;
    		}
    	}
@@ -651,7 +642,6 @@ function loadAdvPage(resource) {
 function refreshForumSession() {
 	var xmlhttp = getXmlHttpRequest();
 	xmlhttp.onreadystatechange=function() {
-		console.log(xmlhttp.readyState);
   	if (xmlhttp.readyState == 4 && xmlhttp.status == 200) { return true;  }
  	}
 	xmlhttp.open("GET","src/framework/sessionManager.php?forum=1", false); // synchronous call
@@ -673,7 +663,6 @@ function usernameValidCheck(input) {
  	}
 	xmlhttp.open("GET","src/framework/usernameLookup.php?username=" + input , false); // synchronous call
 	xmlhttp.send();
-	console.log(status);
 	return status;  					
 }
 
@@ -1106,7 +1095,8 @@ function openOrganizationBasicForm(editMode) {
 		affiliationForm.reset();
 		document.getElementById('organization-form-affiliation-submit').innerHTML = "Add";
 		document.getElementById('organization-form-affiliation-submit').style.opacity = "1";
-
+		CURRENT_PROG = null;
+		populateProgramForm();
 	}
 	location.assign(HTTP_WEB_PATH + "/nexus.php#openOrganizationName");
 }
@@ -1291,7 +1281,7 @@ function showOrgMemberList(orgId, orgName) {
 	toggleMultiPartModal("openOrganizationView", "members");
 }
 
-function showOrgProgramList(orgId, orgName) {
+function showOrgProgramList(orgId) {
 	getOrgProgramList(orgId);
 	toggleMultiPartModal("openOrganizationView", "program");
 }
@@ -1316,9 +1306,7 @@ function organizationNameValidateAndSubmit(thisForm) {
  		submitButton.innerHTML = "<span class='fa fa-spinner fa-pulse'></span>"; 
  		submitButton.style.opacity = ".6";
  		var details = formSjaxSubmit(organizationNameForm);
-		console.log(details);
 		if (details['status'] === "name-new") {
-			console.log("going on to basic form");
 			var basicForm = document.forms['organization-form-basic'];
  			basicForm['org-name'].value = details['org-name'];
  			basicForm['org-name'].readOnly = true;
@@ -1409,7 +1397,6 @@ function organizationBasicValidateAndSubmit(thisForm) {
  		submitButton.innerHTML = "<span class='fa fa-spinner fa-pulse'></span>"; 
  		submitButton.style.opacity = ".6";
  		var details = formSjaxSubmit(organizationBasicForm);
-		console.log(details);
 		var filterForm = document.forms['organization-form-filters'];
  		filterForm['org-name'].value = details['org-name'];
  		filterForm['org-name'].readOnly = true;
@@ -1478,6 +1465,8 @@ function organizationAffiliationValidateAndSubmit(thisForm) {
 		var programForm = document.forms['organization-form-program'];
  		programForm['org-name'].value = details['org-name'];
  		programForm['org-id'].value = details['org-id'];
+		document.getElementById('organization-form-program-submit').innerHTML = "Add";
+		document.getElementById('organization-form-program-submit').style.opacity = "1";	
  		toggleMultiPartModal("openOrganizationName", "program");
  	}
 }
@@ -1518,7 +1507,6 @@ function profileCustomValidateAndSubmit(thisForm) {
  		submitButton.innerHTML = "<span class='fa fa-spinner fa-pulse'></span>"; 
  		submitButton.style.opacity = ".6";
  		var details = formSjaxSubmit(profileDemogForm);
- 		console.log(details);
 		CUSTOM_PROFILE_DATA = details;
  		location.assign("#openOrganizationName");
  		toggleMultiPartModal("openOrganizationName", "name");
@@ -1615,7 +1603,7 @@ function populateDirectoryMultiForm() {
 		var organizationForm = document.forms['organization-form-basic'];
 		organizationForm.reset();
 		if (CURRENT_ORG.oname && CURRENT_ORG.orgid) { 
-			organizationForm['org-name'].value = CURRENT_ORG.oname; 
+			organizationForm['org-name'].value = htmlDecode(CURRENT_ORG.oname); 
 			organizationForm['org-id'].value = CURRENT_ORG.orgid; 
 			organizationForm['org-url'].value = CURRENT_ORG.url ? CURRENT_ORG.url : "";
 			organizationForm['org-contact-name'].value = CURRENT_ORG.cname ? CURRENT_ORG.cname : "";
@@ -1716,7 +1704,6 @@ function populateDirectoryMultiForm() {
 			}
 			
 			getOrgProgramList(CURRENT_ORG.orgid);
-			populateProgramForm();
 	
 		}
 	}
@@ -1724,19 +1711,35 @@ function populateDirectoryMultiForm() {
 }
 
 function populateProgramForm() {
+	var programForm = document.forms['organization-form-program'];
+	programForm.reset();
+	var textAreas = programForm.getElementsByTagName('textarea');
+	for ( var i = 0, option; i < textAreas.length; i++ ) {
+		textAreas[i].innerHTML = "";
+	}
 	if (CURRENT_PROG) {	
-		var programForm = document.forms['organization-form-program'];
-		programForm.reset();
 		if (CURRENT_PROG.oname && CURRENT_PROG.orgid) {
-			programForm['org-name'].value = CURRENT_PROG.oname;
+			programForm['org-name'].value = htmlDecode(CURRENT_PROG.oname);
 			programForm['org-id'].value = CURRENT_PROG.orgid;
 			programForm['name'].value = CURRENT_PROG.name ? htmlDecode(CURRENT_PROG.name) : "";
+			programForm['name'].innerHTML = CURRENT_PROG.name ? htmlDecode(CURRENT_PROG.name) : "";
 			programForm['description'].value = CURRENT_PROG.description ? htmlDecode(CURRENT_PROG.description) : "";
+			programForm['description'].innerHTML = CURRENT_PROG.description ? htmlDecode(CURRENT_PROG.description) : "";
 			programForm['eligibility'].value = CURRENT_PROG.eligibility ? htmlDecode(CURRENT_PROG.eligibility) : "";
+			programForm['eligibility'].innerHTML = CURRENT_PROG.eligibility ? htmlDecode(CURRENT_PROG.eligibility) : "";
 			programForm['services'].value = CURRENT_PROG.services ? htmlDecode(CURRENT_PROG.services) : "";
+			programForm['services'].innerHTML = CURRENT_PROG.services ? htmlDecode(CURRENT_PROG.services) : "";
 			programForm['involvement'].value = CURRENT_PROG.involvement ? htmlDecode(CURRENT_PROG.involvement) : "";
+			programForm['involvement'].innerHTML = CURRENT_PROG.involvement ? htmlDecode(CURRENT_PROG.involvement) : "";
 			programForm['partner_interest'].value = CURRENT_PROG.partner_interest ? htmlDecode(CURRENT_PROG.partner_interest) : "";
+			programForm['partner_interest'].innerHTML = CURRENT_PROG.partner_interest ? htmlDecode(CURRENT_PROG.partner_interest) : "";
 			programForm['partner_kind'].value = CURRENT_PROG.partner_descr ? htmlDecode(CURRENT_PROG.partner_descr) : "";
+			programForm['partner_kind'].innerHTML = CURRENT_PROG.partner_descr ? htmlDecode(CURRENT_PROG.partner_descr) : "";
+			if (CURRENT_PROG.ada) {
+				programForm['ada'].value = CURRENT_PROG.ada === "t" ? "yes" : "no";
+			}
+			programForm['hours'].value = CURRENT_PROG.hours ? htmlDecode(CURRENT_PROG.hours) : "";
+			programForm['hours'].innerHTML = CURRENT_PROG.hours ? htmlDecode(CURRENT_PROG.hours) : "";
 			document.getElementById('organization-form-program-submit').innerHTML = "Update";
 			document.getElementById('organization-form-program-submit').style.opacity = "1";	
 		}
@@ -1746,7 +1749,6 @@ function populateProgramForm() {
 function populateCustomProfileForm() {
 	// TODO - this can be made generic as long as the name of the jsonObj property matches the name of the corresponding form field
 	// Right now, only works for IDRA's form
- 	console.log(CUSTOM_PROFILE_DATA);
  	var profileForm = document.forms['profile-custom'];
  	var submitButton = document.getElementById("profile-custom-submit");
  	profileForm.reset();
@@ -1767,19 +1769,19 @@ function populateCustomProfileForm() {
 function populateEventForm(i) {
 	/* currentEvents is a global, initialized in the ajax processing */
 	var eventForm = document.forms['schedule-form'];	
-  if (currentEvents[i].purpose) { eventForm['meeting-name'].value = currentEvents[i].purpose; }
+  if (currentEvents[i].purpose) { eventForm['meeting-name'].value = htmlDecode(currentEvents[i].purpose); }
 	if (currentEvents[i].url) { eventForm['meeting-url'].value = currentEvents[i].url; }
 	if (currentEvents[i].descr) { 
 		var descrString = currentEvents[i].descr.replace(new RegExp( '~', 'g' ), '\r\n');
-		eventForm['meeting-descr'].innerHTML = descrString;
-		eventForm['meeting-descr'].value = descrString;
+		eventForm['meeting-descr'].innerHTML = htmlDecode(descrString);
+		eventForm['meeting-descr'].value = htmlDecode(descrString);
 	}
 	if (currentEvents[i].registration) { 
-		eventForm['meeting-registr'].innerHTML = currentEvents[i].registration; 
-		eventForm['meeting-registr'].value = currentEvents[i].registration;
+		eventForm['meeting-registr'].innerHTML = htmlDecode(currentEvents[i].registration); 
+		eventForm['meeting-registr'].value = htmlDecode(currentEvents[i].registration);
 	}
 	if (currentEvents[i].regr_url) { eventForm['registration-url'].value = currentEvents[i].regr_url; }
-	if (currentEvents[i].location) { eventForm['meeting-loc'].value = currentEvents[i].location; }
+	if (currentEvents[i].location) { eventForm['meeting-loc'].value = htmlDecode(currentEvents[i].location); }
 	if (currentEvents[i].tz_extract_name) { eventForm['tzone-name'].value = currentEvents[i].tz_extract_name; }
 	if (currentEvents[i].uuid) { eventForm['old-meeting-uuid'].value = currentEvents[i].uuid; }	
 	if (currentEvents[i].contact) { eventForm['meeting-contact'].value = currentEvents[i].contact; }
@@ -2183,7 +2185,7 @@ function htmlEntities(str) {
 }
 
 function htmlDecode(str) {
-	console.log(str);
+	var lineBreak = String.fromCharCode(13);
 	var decoded = String(str).
 		replace(/&#40;/g, '(').
 		replace(/&#41;/g, ')').
@@ -2198,11 +2200,12 @@ function htmlDecode(str) {
 		replace(/&#39;/g, '\'').
 		replace(/&#47;/g, '\/').
 		replace(/&#92;/g, '\\').
-		replace(/&amp;/g, '\'').
+		replace(/&amp;/g, '&').
 		replace(/&lt;/g, '<').
 		replace(/&gt;/g, '>').
-		replace(/&quot;/g, '\"');	
-	console.log(decoded);
+		replace(/&apos;/g, '\'').
+		replace(/&quot;/g, '\"').
+		replace(/~/g, lineBreak);
 	return decoded;
 }
 

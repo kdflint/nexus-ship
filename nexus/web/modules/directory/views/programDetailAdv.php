@@ -27,7 +27,6 @@
 										(jsonObj.hours ? "<p><b>Hours of operation? </b><span>" + htmlFormatParagraphs(jsonObj.hours) + "</span></p>" : "") +
 								"</div>";
 			 				document.getElementById("itemCol1ProgAdv").innerHTML = "<div class='td-div'>" + tableItem + "<div>";  
-			 				populateProgramForm(); 
      			} else {
 	     			tableItem = 
  		 					"<span class='fa fa-spinner fa-meh-o fa-lg' style='margin-left:10px;margin-right:10px;'></span>Uh oh. There was an error retrieving this program listing."
@@ -38,6 +37,7 @@
  						"<span class='fa fa-spinner fa-meh-o fa-lg' style='margin-left:10px;margin-right:10px;'></span>Uh oh. There was an error retrieving this program listing."
 			 			document.getElementById("itemCol1ProgAdv").innerHTML = "<div class='td-div'>" + tableItem + "<div>";
      		}
+			 	populateProgramForm();
 			}
 		}
 		xmlhttp.open("GET", "<?php echo(Utilities::getHttpPath()); ?>" + "/src/framework/programDetailManager.php?id=" + orgId, true);
