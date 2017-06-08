@@ -7,6 +7,9 @@ require_once(Utilities::getSrcRoot() . "/organization/Organization.php");
 class Catalogue {
 	
 	public static function getEntries($groupId, $networkId, $inputString, $filters) {
+		
+		$conf = array('append' => true, 'mode' => 0644, 'timeFormat' => '%X %x');	
+		$logger = Log::singleton("file", Utilities::getLogRoot() ."/web.log", "", $conf, PEAR_LOG_DEBUG);
 				
 		$results = array();
 		$terms = trim(Utilities::strip2($inputString));
@@ -50,7 +53,7 @@ class Catalogue {
 							// do nothing - we already have an index for this org in the data set
 						} else {
 							$results[$pass1['name']] = array(
-								//"Programs" => array(),
+								"Programs" => array(),
 								"People" =>  array(),
 								"Contact" => array(),
 								"Language" => array(),
@@ -82,7 +85,7 @@ class Catalogue {
 								}
 							} else {					
 								$results[$inner2['name']] = array(
-									//"Programs" => array(),
+									"Programs" => array(),
 									"People" => array($pass2['id'] => $pass2['name']),
 						   		"Contact" => array(),
 									"Language" => array(),
@@ -105,7 +108,7 @@ class Catalogue {
 								}
 							} else {
 								$results[$inner5['name']] = array(
-									//"Programs" => array(),
+									"Programs" => array(),
 									"People" => array(),
 							  	"Contact" => array($pass5['name']),
 									"Language" => array(),
@@ -128,7 +131,7 @@ class Catalogue {
 								}
 							} else {
 								$results[$inner3['name']] = array(
-									//"Programs" => array(),
+									"Programs" => array(),
 									"People" => array(),
 									"Contact" => array(),
 									"Language" => array($pass3['name']),
@@ -142,7 +145,6 @@ class Catalogue {
 				}
 		
 				// When this opens up, adjust directorySummary.php: indexes inside loop at line 62-ish
-				/*
 				while ($pass4 = pg_fetch_array($cursor4)) { 
 					if (!strcmp($pass4['type'], "Program")) {
 						$innerCursor4 = Organization::getOrganizationByProgramId($pass4['id']);
@@ -165,7 +167,6 @@ class Catalogue {
 						}
 					}
 				}
-				*/
 			
 				while ($pass7 = pg_fetch_array($cursor7)) { 
 					if (!strcmp($pass7['type'], "Topic")) {
@@ -177,7 +178,7 @@ class Catalogue {
 								}
 							} else {
 								$results[$inner7['name']] = array(
-									//"Programs" => array(),
+									"Programs" => array(),
 									"People" => array(),
 							  	"Contact" => array(),
 									"Language" => array(),
@@ -200,7 +201,7 @@ class Catalogue {
 								}
 							} else {
 								$results[$inner6['name']] = array(
-									//"Programs" => array(),
+									"Programs" => array(),
 									"People" => array(),
 							  	"Contact" => array(),
 									"Language" => array(),
@@ -236,6 +237,17 @@ class Catalogue {
 				}	
 			}
 			
+			if (isset($filters['affiliation']) && $filters['affiliation'] > 0) {
+				foreach ($results as $key=>$val) {
+					$row = pg_fetch_row(Organization::organizationAffiliationExists($val['OrgId'], $filters['affiliation']));
+					$affiliationMatch = $row[0];
+					if (strcmp($affiliationMatch, "t")) {
+						unset($results[$key]);
+					}
+				}	
+			}
+
+			
 		} else if (isset($filters) && count($filters) > 0) {
 		// We get here if there are no free search terms. So, run filters against the entire network
 		
@@ -247,7 +259,7 @@ class Catalogue {
 						// do nothing - we already have an index for this org in the data set
 					} else {
 						$results[$pass['name']] = array(
-							//"Programs" => array(),
+							"Programs" => array(),
 							"People" =>  array(),
 							"Contact" => array(),
 							"Language" => array(),
@@ -258,18 +270,7 @@ class Catalogue {
 					}
 				}
 			}
-				
-			// TODO - extract all this into a function - it is copied code
-			/*
-			if (isset($filters['org']) && count($filters['org']) > 0) {
-				foreach ($results as $key=>$val) {
-					if (!in_array($val['OrgId'], $filters['org'])) {
-						unset($results[$key]);
-					}
-				}
-			}
-			*/
-				
+								
 			if (isset($filters['specialty']) && $filters['specialty'] > 0) {
 				foreach ($results as $key=>$val) {
 					$row = pg_fetch_row(Organization::organizationTopicExists($val['OrgId'], $filters['specialty']));
@@ -289,6 +290,16 @@ class Catalogue {
 					}
 				}	
 			}
+			
+			if (isset($filters['affiliation']) && $filters['affiliation'] > 0) {
+				foreach ($results as $key=>$val) {
+					$row = pg_fetch_row(Organization::organizationAffiliationExists($val['OrgId'], $filters['affiliation']));
+					$affiliationMatch = $row[0];
+					if (strcmp($affiliationMatch, "t")) {
+						unset($results[$key]);
+					}
+				}	
+			}
 						
 		} else {
 			// If we get here, we had no search terms or filters
@@ -301,7 +312,7 @@ class Catalogue {
 						// do nothing - we already have an index for this org in the data set
 					} else {
 						$results[$pass['name']] = array(
-							//"Programs" => array(),
+							"Programs" => array(),
 							"People" =>  array(),
 							"Contact" => array(),
 							"Language" => array(),
@@ -332,7 +343,7 @@ class Catalogue {
 					if (count($val2) == 0) {
 						$indexedResults[$counter1]["content"][$counter2][strtolower($key2)][$counter3] = "";				
 					} else {
-						foreach ($val2 as $key3=>$val3) {					
+						foreach ($val2 as $key3=>$val3) {				
 							$indexedResults[$counter1]["content"][$counter2][strtolower($key2)][$counter3] = $val3;
 							$counter3++;
 						}	

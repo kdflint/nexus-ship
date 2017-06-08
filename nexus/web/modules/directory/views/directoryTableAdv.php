@@ -52,51 +52,55 @@
 					// Ugly as stink - will refactor this object altogether once requirements become more clear -kdf
 			 		for (var i = 0; i < jsonObj.orgEntry.length; i++) {
 			 			var thisContent = "";
-		 				for (var j = 0; j < jsonObj.orgEntry[i].content[1].contact.length; j++) {
-		 					if (jsonObj.orgEntry[i].content[1].contact[j].length > 0) {
+		 				if (jsonObj.orgEntry[i].content[0].programs[0].length > 0) {
+		 					// Lazy way to do this because search returns updated programs that remain in database
+ 							thisContent = thisContent + "; Program Match";
+		 				}
+		 				for (var j = 0; j < jsonObj.orgEntry[i].content[2].contact.length; j++) {
+		 					if (jsonObj.orgEntry[i].content[2].contact[j].length > 0) {
 		 						if (j == 0) {
 		 							thisContent = thisContent + "; Organizational Contact: ";
 		 						}
-		 						thisContent = thisContent + jsonObj.orgEntry[i].content[1].contact[j];
-		 						if (j < jsonObj.orgEntry[i].content[1].contact.length-1) {thisContent = thisContent + ", ";}
+		 						thisContent = thisContent + jsonObj.orgEntry[i].content[2].contact[j];
+		 						if (j < jsonObj.orgEntry[i].content[2].contact.length-1) {thisContent = thisContent + ", ";}
 		 					}
 		 				}
-		 				for (var j = 0; j < jsonObj.orgEntry[i].content[2].language.length; j++) {
-		 					if (jsonObj.orgEntry[i].content[2].language[j].length > 0) {
+		 				for (var j = 0; j < jsonObj.orgEntry[i].content[3].language.length; j++) {
+		 					if (jsonObj.orgEntry[i].content[3].language[j].length > 0) {
 		 						if (j == 0) {
 		 							thisContent = thisContent + "; Language: ";
 		 						}
-			 					thisContent = thisContent + jsonObj.orgEntry[i].content[2].language[j];
-			 					if (j < jsonObj.orgEntry[i].content[2].language.length-1) {thisContent = thisContent + ", ";}
+			 					thisContent = thisContent + jsonObj.orgEntry[i].content[3].language[j];
+			 					if (j < jsonObj.orgEntry[i].content[3].language.length-1) {thisContent = thisContent + ", ";}
 			 				}
 		 				}
-		 				for (var j = 0; j < jsonObj.orgEntry[i].content[3].topic.length; j++) {
-		 					if (jsonObj.orgEntry[i].content[3].topic[j].length > 0) {
+		 				for (var j = 0; j < jsonObj.orgEntry[i].content[4].topic.length; j++) {
+		 					if (jsonObj.orgEntry[i].content[4].topic[j].length > 0) {
 		 						if (j == 0) {
 		 							thisContent = thisContent + "; Topic: ";
 		 						}
-		 						thisContent = thisContent + jsonObj.orgEntry[i].content[3].topic[j];
-		 						if (j < jsonObj.orgEntry[i].content[3].topic.length-1) {thisContent = thisContent + ", ";}
+		 						thisContent = thisContent + jsonObj.orgEntry[i].content[4].topic[j];
+		 						if (j < jsonObj.orgEntry[i].content[4].topic.length-1) {thisContent = thisContent + ", ";}
 		 					}
 		 				}
-		 				for (var j = 0; j < jsonObj.orgEntry[i].content[4].location.length; j++) {
-		 					if (jsonObj.orgEntry[i].content[4].location[j].length > 0) {
+		 				for (var j = 0; j < jsonObj.orgEntry[i].content[5].location.length; j++) {
+		 					if (jsonObj.orgEntry[i].content[5].location[j].length > 0) {
 		 						if (j == 0) {
 		 							thisContent = thisContent + "; Location: ";
 		 						}
-		 						thisContent = thisContent + jsonObj.orgEntry[i].content[4].location[j];
-		 						if (j < jsonObj.orgEntry[i].content[4].location.length-1) {thisContent = thisContent + ", ";}
+		 						thisContent = thisContent + jsonObj.orgEntry[i].content[5].location[j];
+		 						if (j < jsonObj.orgEntry[i].content[5].location.length-1) {thisContent = thisContent + ", ";}
 		 					}
 		 				}
-		 				if (jsonObj.orgEntry[i].content[0].people[0].length > 0) {
-		 					var numPeople = jsonObj.orgEntry[i].content[0].people.length;
+		 				if (jsonObj.orgEntry[i].content[1].people[0].length > 0) {
+		 					var numPeople = jsonObj.orgEntry[i].content[1].people.length;
 							var suffix = numPeople > 1 ? "es" : ""
 							thisContent = thisContent + "; " + numPeople + " Network Member Match" + suffix;
 	 					}
 	 					var tr = document.createElement("TR");
 	 					tr.setAttribute("id", "directoryRow-" + i);
     					var td1 = document.createElement("TD");
-    						var orgId = document.createTextNode(jsonObj.orgEntry[i].content[5].orgid);
+    						var orgId = document.createTextNode(jsonObj.orgEntry[i].content[6].orgid);
     						td1.appendChild(orgId);
     					var td2 = document.createElement("TD");
     						var span1 = document.createElement("SPAN");

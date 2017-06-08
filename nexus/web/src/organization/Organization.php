@@ -378,6 +378,11 @@ class Organization {
 		$query = "select exists (select true from organization where id = $1 and type in ($2))";
 		return PgDatabase::psExecute($query, array($orgId, $types));
 	}
+
+	public static function organizationAffiliationExists($orgId, $affiliations) {
+		$query = "select exists (select true from organization_affiliation where organization_fk=$1 and affiliation_fk in ($2))";
+		return PgDatabase::psExecute($query, array($orgId, $affiliations));
+	}
 	
 	public static function getOrganizationsByNetworkId($networkId) {
 		$query = "
