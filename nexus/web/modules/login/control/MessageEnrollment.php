@@ -55,7 +55,7 @@ Content-Transfer-Encoding: 7bit
 	<body style='font-family:Oxygen,Arial,sans-serif;color:#484848;'>
 		<table style='width:90%;display:block;max-width:620px;'>
 			<tr>
-				<td colspan='2'><img src='http://northbridgetech.org/images/NB_horizontal_rgb.png' alt='Northbridge Technology Alliance Logo' width='252' height='68' style='padding-bottom:10px;padding-right:30px;'/></td>
+				<td colspan='2'><img src='https://northbridgetech.org/images/NB_horizontal_rgb.png' alt='Northbridge Technology Alliance Logo' width='252' height='68' style='padding-bottom:10px;padding-right:30px;'/></td>
 			</tr>
 			<tr>
 				<td style='vertical-align:top;padding-top:10px;'>
