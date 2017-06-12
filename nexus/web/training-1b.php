@@ -23,7 +23,7 @@ echo "htllo"; exit(0);
 	 	
 	 	<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Oswald:400,300|Open+Sans|Oxygen|Swanky+and+Moo+Moo">
 	 	<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-		<link rel="stylesheet" type="text/css" href="//yui.yahooapis.com/pure/0.6.0/pure-min.css">
+		<link rel="stylesheet" type="text/css" href="//yui-s.yahooapis.com/pure/0.6.0/pure-min.css">
 	  <link rel="stylesheet" type="text/css" href="http://northbridgetech.org/dev/new_nexus/web/styles/nexus.css" type="text/css" />
 	  
   	<!-- 	http://www.featureblend.com/javascript-flash-detection-library.html -->
