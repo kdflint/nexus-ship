@@ -142,7 +142,7 @@ class Utilities {
 	
 	public static function getHttpImagePath() { return self::getHttpPath() . "/image"; }
 	
-	public static function getForumHttpPath() { return FORUM_URL; }
+	public static function getForumHttpPath() { return ENV_PROTOCOL . FORUM_URL; }
 
 	public static function getPartnerImageRoot() { return self::getPartnerHttpPath() . "/image/"; }
 	
