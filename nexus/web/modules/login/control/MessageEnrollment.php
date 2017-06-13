@@ -50,7 +50,7 @@ Content-Transfer-Encoding: 7bit
 <!DOCTYPE html PUBLIC '-//W3C//DTD HTML 4.01//EN'>
 <html>
 	<head>
-		<link rel='stylesheet' type='text/css' href='http://fonts.googleapis.com/css?family=Oxygen'>
+		<link rel='stylesheet' type='text/css' href='//fonts.googleapis.com/css?family=Oxygen'>
 	</head>
 	<body style='font-family:Oxygen,Arial,sans-serif;color:#484848;'>
 		<table style='width:90%;display:block;max-width:620px;'>

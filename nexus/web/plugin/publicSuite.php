@@ -44,7 +44,7 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
   	<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans|Oxygen|">
   	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
    	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-		<link rel="stylesheet" href="//yui.yahooapis.com/pure/0.6.0/pure-min.css">
+		<link rel="stylesheet" href="//yui-s.yahooapis.com/pure/0.6.0/pure-min.css">
     <link rel="stylesheet" href="../styles/nexus.css" type="text/css" />
     
     <script src="../scripts/nexus.js" language="javascript"></script>
@@ -91,12 +91,17 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
         $( "#schedule-form-countryTimeZones" ).selectmenu({ change: function() { setTimeZoneDisplay(document.getElementById("schedule-form-countryTimeZones").value); } });
        	$( "#directory-form-select-specialty").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
        	$( "#directory-form-select-specialty").selectmenu().selectmenu({
-						position: { my : "left+50 top", at: "right top-80" },
+						position: { my : "left+50 top", at: "right top-260" },
 						width: 228
 				});
        	$( "#directory-form-select-type").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
        	$( "#directory-form-select-type").selectmenu().selectmenu({
-						position: { my : "left+50 top", at: "right top-130" },
+						position: { my : "left+50 top", at: "right top-220" },
+						width: 228
+				});
+        $( "#directory-form-select-affiliation").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
+       	$( "#directory-form-select-affiliation").selectmenu().selectmenu({
+						position: { my : "left+50 top", at: "right top-180" },
 						width: 228
 				});
 				toggleDisplay(<?php echo $viewId; ?>);
