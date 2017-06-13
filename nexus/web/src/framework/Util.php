@@ -102,15 +102,15 @@ class Utilities {
 	
 	private static $include_path = "/include";
 	
-	public static function getHttpPath() { return "http://" . ENV_HOST . APP_NAME . self::$web_path; }
+	public static function getHttpPath() { return ENV_PROTOCOL . ENV_HOST . APP_NAME . self::$web_path; }
 	
 	public static function getPluginPath() { return self::getHttpPath() . "/plugin"; }
 	
-	public static function getPilotPath() { return "http://" . ENV_HOST . PILOT_NAME; }
+	public static function getPilotPath() { return ENV_PROTOCOL . ENV_HOST . PILOT_NAME; }
 	
-	public static function getConfigPath() { return "http://" . ENV_HOST . APP_NAME . self::$config_path; }
+	public static function getConfigPath() { return ENV_PROTOCOL . ENV_HOST . APP_NAME . self::$config_path; }
 	
-	public static function getPartnerHttpPath() { return "http://" . ENV_HOST . APP_NAME . PTR_STC_ROOT; }
+	public static function getPartnerHttpPath() { return ENV_PROTOCOL . ENV_HOST . APP_NAME . PTR_STC_ROOT; }
 	
 	public static function getWebRoot() {	return WEB_ROOT; }
 	

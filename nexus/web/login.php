@@ -119,6 +119,10 @@ $row = pg_fetch_array($cursor);
 $networkLogo = $row['logo'];
 $networkName = $row['name'];
 
+if (!isset($networkLogo) || strlen($networkLogo) < 1) {
+	$networkLogo = "default-empty.png";
+}
+
 Utilities::setUserLanguageEnv();
 
 ?>
@@ -205,7 +209,7 @@ Utilities::setUserLanguageEnv();
 
 		</script>
 		
-		<script type="text/javascript">(function() {var walkme = document.createElement('script'); walkme.type = 'text/javascript'; walkme.async = true; walkme.src = 'http://cdn.walkme.com/users/ab3d27eee206468794b47885dfc2df46/walkme_ab3d27eee206468794b47885dfc2df46.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(walkme, s); window._walkmeConfig = {smartLoad:true}; })();</script> 
+		<script type="text/javascript">(function() {var walkme = document.createElement('script'); walkme.type = 'text/javascript'; walkme.async = true; walkme.src = 'https://cdn.walkme.com/users/ab3d27eee206468794b47885dfc2df46/walkme_ab3d27eee206468794b47885dfc2df46_https.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(walkme, s); window._walkmeConfig = {smartLoad:true}; })();</script> 
 		
 		<style>
 			<!-- override some default techCheck.php styles  -->
