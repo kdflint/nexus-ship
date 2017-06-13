@@ -162,9 +162,12 @@
     		dProgress.innerHTML = "<span class='fa fa-spinner fa-spin fa-lg'></span>";
     		window.setTimeout(MeasureDownConnectionSpeed, 1);
 			
-				var uProgress = document.getElementById("uprogress");
-				uProgress.innerHTML = "<span class='fa fa-spinner fa-spin fa-lg'></span>";
-        window.setTimeout(MeasureUpConnectionSpeed, 2);
+				// TODO - uncomment these three lines to bring upload speed back after http problem is solved 
+				// (source of problem is link in MeasureUpConnectionSpeed)
+				// Also see techCheck.php, lines 30-34
+				//var uProgress = document.getElementById("uprogress");
+				//uProgress.innerHTML = "<span class='fa fa-spinner fa-spin fa-lg'></span>";
+        //window.setTimeout(MeasureUpConnectionSpeed, 2);
         	
 			}
 			

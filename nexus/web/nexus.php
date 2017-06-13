@@ -8,6 +8,7 @@ $user->session_begin();
 
 $demoSession = "false";
 $disabled = "";
+$sessionContextAdv = "false";
 
 if (isset($_SESSION['demo']) && $_SESSION['demo']) {
 	$demoSession = "true";
@@ -37,6 +38,7 @@ if ($_SESSION['nexusContext'] == "PUB") {
 }
 
 if ($_SESSION['nexusContext'] == "ADV") {
+	$sessionContextAdv = "true";
 	require_once(Utilities::getModulesRoot() . "/forum/forum_integration.php");
 	$user->session_begin();
 	Utilities::loginForum($user, $auth);
@@ -172,7 +174,9 @@ $customProfileData = strlen($_SESSION['profile']) > 0 ? $_SESSION['profile'] : '
     	  	
 			$(document).ready(function () {	
 				
-				initOrgTable();
+				if (<?php echo $sessionContextAdv; ?>) {
+					initOrgTable();
+				}
 								
 		    if ( NETWORK_ID === "358" && $.cookie('nexusadv_lastvisit') !== 'undefined') {
 					loadPreviousTab('adv-menu-forum');
