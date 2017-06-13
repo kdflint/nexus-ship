@@ -27,15 +27,11 @@
 				<span class="techCheckCol2"><img id="download_speed" src="<?php echo(Utilities::getHttpImagePath()); ?>/fa-square-o_16_486326.png" /></span>
     		<span id="dprogress" class="techCheckCol3 descr"></span>
     	</div>
-    	<!--
-    	TODO - uncomment these lines to display upload speed
-    	See also techCheck.js, lines 168-170
     	<div style="margin-top:10px;">
      		<span class="techCheckCol1">Upload Speed</span>
      		<span class="techCheckCol2"><img id="upload_speed" src="<?php echo(Utilities::getHttpImagePath()); ?>/fa-square-o_16_486326.png" /></span>
     		<span id="uprogress" class="techCheckCol3 descr"></span>
     	</div>
-    	-->
 		</td>
     <td>
     	<div class="move-it-up">

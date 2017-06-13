@@ -165,9 +165,9 @@
 				// TODO - uncomment these three lines to bring upload speed back after http problem is solved 
 				// (source of problem is link in MeasureUpConnectionSpeed)
 				// Also see techCheck.php, lines 30-34
-				//var uProgress = document.getElementById("uprogress");
-				//uProgress.innerHTML = "<span class='fa fa-spinner fa-spin fa-lg'></span>";
-        //window.setTimeout(MeasureUpConnectionSpeed, 2);
+				var uProgress = document.getElementById("uprogress");
+				uProgress.innerHTML = "<span class='fa fa-spinner fa-spin fa-lg'></span>";
+        window.setTimeout(MeasureUpConnectionSpeed, 2);
         	
 			}
 			
@@ -177,7 +177,8 @@
 				
   			// TODO - pull this address from bbb config.php and get this resource into build/deploy cycle
   			// This file resides on jean at /var/lib/tomcat7/webapps/bigbluebutton/images, also, renamed from .jpg to .png to get around web server url filter
- 				var imageAddr = "http://ec2-50-19-215-104.compute-1.amazonaws.com/bigbluebutton/images/speedtest-8MB.png"; 
+ 				//var imageAddr = "http://ec2-50-19-215-104.compute-1.amazonaws.com/bigbluebutton/images/speedtest-8MB.png"; 
+				var imageAddr = "https://northbridgetech.org/images/speedtest-8MB.png"; 
 				var downloadSize = 7907740; //image size in Bytes				
 	    	var dProgress = document.getElementById("dprogress");
 	    	var dImage = document.getElementById("download_speed");
@@ -257,7 +258,7 @@
 
 	    			var xhr = getXmlHttpRequest();
 	    			var postSizeInMB = 4;
-          	var url = 'http://northbridgetech.org/apps/nexus/control/uploadSpeedTester.php?cache=' + Math.floor( Math.random() * 10000 ); //random number prevents url caching
+          	var url = 'https://northbridgetech.org/apps/nexus/web/modules/schedule/control/uploadSpeedTester.php?cache=' + Math.floor( Math.random() * 10000 ); //random number prevents url caching
           	// TODO - the below POST to a random jsp page throws an http 500 error. Why? Is this harmful? We should create a POST-able page just for this purpose.
           	// Leaving the resource path to Northbridge web server for now because results seem very comparable, unlike download speed results.
           	//var url = 'http://ec2-50-19-215-104.compute-1.amazonaws.com/demo/demo1.jsp?cache=' + Math.floor( Math.random() * 10000 );
