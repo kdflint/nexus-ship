@@ -31,7 +31,7 @@
     				tableRows.push(tr);
 			 	}
        	// Initialize the member DataTable (only necessary first time, but does no harm subsequently.
-       	initOrgMemberTable();
+       	// initOrgMemberTable(); - moved to document.ready
        	// Clear all rows in the member DataTable and internal memory
 				RECIPIENT_LIST = [];
        	ORG_MEMBER_TABLE.clear();

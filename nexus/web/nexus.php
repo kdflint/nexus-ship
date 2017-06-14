@@ -175,7 +175,9 @@ $customProfileData = strlen($_SESSION['profile']) > 0 ? $_SESSION['profile'] : '
 			$(document).ready(function () {	
 				
 				if (<?php echo $sessionContextAdv; ?>) {
+					initOrgMemberTable()
 					initOrgTable();
+					//initMemberTable(); NOTE - init here (instead of in groupList.php::9) causes table to show empty data and search not responsive.
 				}
 								
 		    if ( NETWORK_ID === "358" && $.cookie('nexusadv_lastvisit') !== 'undefined') {
