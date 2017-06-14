@@ -4,3 +4,5 @@
 --copy over default_empty.png to /partner/images
 
 -- .htaccess to /dev/nexus and /dev/forum
+
+ALTER TABLE contact ALTER COLUMN url TYPE varchar(200);

@@ -1354,11 +1354,12 @@ function organizationBasicValidateAndSubmit(thisForm) {
   // TODO - validate url, also in event form
   var url = urlField.value;
 	setFieldPassStyles(urlField, "Organization Web Site (http://)");
+	urlField.value = protocolize(url);
   if (url.length > 100) {
   	setFieldErrorStyles(urlField, "Organization web site max length is 100");
     pass = false;
   }  
-  
+
   var email = contactEmailField.value;
 	setFieldPassStyles(contactEmailField, "Email");
   if (false) {
@@ -2014,6 +2015,16 @@ function eventValidateAndSubmit(thisForm) {
     	pass = false;		
     }
 	}
+	
+	if (eventForm['meeting-url'] !== undefined) {
+		var url = eventForm['meeting-url'].value;
+		eventForm['meeting-url'].value = protocolize(url);
+	}
+	
+	if (eventForm['registration-url'] !== undefined) {
+		var url = eventForm['registration-url'].value;
+		eventForm['registration-url'].value = protocolize(url);
+	}
 	 
 	if (Boolean(pass)) {
  		submitButton.disabled = true;  
@@ -2238,3 +2249,13 @@ function millisecondsToFormat(formatString, ms){
   ss=(s=thisDate.getSeconds())<10?('0'+s):s;
   return formatString.replace("#hhhh#",hhhh).replace("#hhh#",hhh).replace("#hh#",hh).replace("#h#",h).replace("#mm#",mm).replace("#m#",m).replace("#ss#",ss).replace("#s#",s).replace("#ampm#",ampm).replace("#AMPM#",AMPM);
 };
+
+function protocolize(url) {
+	if (url.indexOf("://") > -1) {
+		return url;
+	} else if (url.length > 0) {
+		return "http://" + url;
+	} else {
+		return url;
+	}
+}
