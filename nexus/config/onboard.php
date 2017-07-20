@@ -16,6 +16,7 @@ require_once(dirname(__FILE__) . "/../web/src/framework/Util.php");
   		<p>Network name: <input type="text" name="org-name" width="100" required></p>
   		<p>Logo file name: <input type="text" name="org-logo" width="100" required></p>
   		<p>Administrator email: <input type="email" name="org-email" width="100" required></p>
+  		<p>CRM Contribution id: <input type="text" name="contrib-id" width="100" required placeholder="fake value if ADV onboarding!"></p>
   		<p>Submit password: <input type="text" name="password" width="20" required></p>
   		<input type="submit" value="Submit">
 		<form>

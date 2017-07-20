@@ -32,6 +32,13 @@
 	define("FORUM_HOST", "localhost");
 	define("FORUM_USER", "postgres");
 	define("FORUM_NAME", "localphpbb");
+	define("CRM_HOST", "localhost");
+	define("CRM_USER", "");
+	define("CRM_NAME", "");
+	define("CRM_ACTIVATION_TABLE", "");
+	define("CRM_ACTIVATION_ROW_OID", "");
+	define("CRM_ACTIVATION_ROW_ENROLL", "");
+	define("CRM_ACTIVATION_ROW_IS_ENROLLED", "");
 	
 // SENSITIVE
 	require_once("sensitive_config.php");

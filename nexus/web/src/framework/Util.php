@@ -53,6 +53,22 @@ class Utilities {
 
 	public static function getDbName() { return DB_NAME; }
 	
+	public static function getCrmHost() { return CRM_HOST; }
+	
+	public static function getCrmUser() { return CRM_USER; }
+	
+	public static function getCrmPassword() { return CRM_PASSWORD; }
+
+	public static function getCrmName() { return CRM_NAME; }
+	
+	public static function getCrmActivationTable() { return CRM_ACTIVATION_TABLE; }
+	
+	public static function getCrmActivationTableRow_Oid() { return CRM_ACTIVATION_ROW_OID; }
+	
+	public static function getCrmActivationTableRow_Enroll() { return CRM_ACTIVATION_ROW_ENROLL; }
+	
+	public static function getCrmActivationTableRow_IsEnrolled() { return CRM_ACTIVATION_ROW_IS_ENROLLED; }
+	
 	public static function getSmsServiceUsername() { return SMS_SERVICE_USER; }
 	
 	public static function getSmsServicePassword() { return SMS_SERVICE_PASSWORD; }
