@@ -18,8 +18,9 @@ class MysqlDatabase {
     return $con;
 	}
 	
-	public static function disconnect($con) {
-		pg_close($con);
+	public static function disconnect($stmt, $con) {
+		$stmt->close();
+		$con->close();
 	}
 		
 }
