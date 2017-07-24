@@ -34,15 +34,15 @@ $result = pg_fetch_array($cursor);
 $uuid = Utilities::newUuid();
 
 if ($clean['admin']) {
-	$logger->log("Attempting admin password reset for user" . $clean['username'] . ":" . $result['id'], PEAR_LOG_INFO);
+	$logger->log("Attempting admin password reset by " . $_SESSION['username'] . " for user " . $clean['username'] . ":" . $result['id'], PEAR_LOG_INFO);
 	if  (Utilities::validateEmail($_SESSION['email']) && isset($result['id'])) {
 		User::insertPasswordResetActivity($result['id'], $uuid);
-		sendAdminResetEmail($uuid);	
+		sendAdminResetEmail($uuid, $result['fname'], $result['lname']);	
 		header("location:" . Utilities::getHttpPath() . "/nexus.php?view=network");
 		exit(0);	
 	}
 } else if (isset($result['email']) && isset($result['id'])) {
-	$logger->log("Attempting standard password reset for user" . $clean['username'] . ":" . $result['id'], PEAR_LOG_INFO);
+	$logger->log("Attempting standard password reset for user " . $clean['username'] . ":" . $result['id'], PEAR_LOG_INFO);
 	if  (Utilities::validateEmail($result['email'])) {
 		User::insertPasswordResetActivity($result['id'], $uuid);
 		sendResetEmail($result['email'], $result['fname'], $uuid);
@@ -80,17 +80,17 @@ NorthBridge Technology Alliance";
 		
 }
 
-function sendAdminResetEmail($email, $uuid, $fname, $lname) {
+function sendAdminResetEmail($uuid, $fname, $lname) {
 	
 	$message = "Hello " . $_SESSION['fname'] . ",
 	
-Below is the link you should use to reset the password for Nexus user " . $fname . " " . $lname . "
+Below is the link you should use to reset the password for Nexus user " . $fname . " " . $lname . ".
 
 If you do not use this link, the password will remain unchanged for this user.
 
 This link will open a new Nexus session focused on the profile for this user.
 
-After you reset their password, make sure you log out of that session and inform your user of their new password. 
+After you reset the password, make sure you log out of that session and inform your user of their new password. 
 
 Note: This link will expire in 30 minutes. Also, any password reset links previously generated for this user are now void.
 
