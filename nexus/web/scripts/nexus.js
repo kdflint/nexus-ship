@@ -37,6 +37,7 @@ var DETAIL_MAP;
 var DETAIL_MARKERS = [];
 var CUSTOM_PROFILE = false;
 var CUSTOM_PROFILE_DATA = "";
+var IS_ADMIN = false;
 	
 function showPriv1() {
 	var privileged = document.getElementsByClassName("priv-1");
@@ -285,9 +286,21 @@ function post(uiContext, to, p) {
   document.body.appendChild(myForm) ;
   myForm.submit() ;
   document.body.removeChild(myForm) ;
-	disableTestMessageLink(uiContext);
-	document.getElementById(uiContext).innerHTML = "A test message has been sent!";
+	if (uiContext != "generic") {
+		disableTestMessageLink(uiContext);
+		document.getElementById(uiContext).innerHTML = "A test message has been sent!";
+	}
+}
 
+function postResetPassword(uidValue, fullname) {
+	var r = confirm("Please send a password reset link to my email for " + fullname + ".");
+	if (r != true) {
+	  return;
+	}	else {
+	  var args = {uid:'',admin:true};
+	  args["uid"] = uidValue;
+	  post("generic", "modules/login/control/recoverPasswordProcessor.php", args);
+	}
 }
 
 function formSjaxSubmit(frm) {
