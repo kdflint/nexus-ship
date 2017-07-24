@@ -168,6 +168,7 @@ $customProfileData = strlen($_SESSION['profile']) > 0 ? $_SESSION['profile'] : '
 			TRIGGER_PROFILE_MODAL = <?php echo $triggerProfileModal; ?>;
 			CUSTOM_PROFILE = <?php echo $customProfile; ?>;
 			CUSTOM_PROFILE_DATA = <?php echo $customProfileData; ?>;
+			IS_ADMIN = <?php echo $isAdmin; ?>;
 			
 			<!-- include in this manner instead of in a meta link so that php code inside this file will resolve prior to runtime -->
     	<?php include("scripts/techCheck.js"); ?>
@@ -175,7 +176,9 @@ $customProfileData = strlen($_SESSION['profile']) > 0 ? $_SESSION['profile'] : '
 			$(document).ready(function () {	
 				
 				if (<?php echo $sessionContextAdv; ?>) {
+					initOrgMemberTable()
 					initOrgTable();
+					//initMemberTable(); NOTE - init here (instead of in groupList.php::9) causes table to show empty data and search not responsive.
 				}
 								
 		    if ( NETWORK_ID === "358" && $.cookie('nexusadv_lastvisit') !== 'undefined') {
@@ -305,14 +308,14 @@ $customProfileData = strlen($_SESSION['profile']) > 0 ? $_SESSION['profile'] : '
 					INBOX_FOCUS = "/ucp.php?i=pm&mode=compose&username=<?php echo($showAdvImUsername); ?>";
 					$( "#adv-menu-inbox" ).click();					
 				}
-				if (<?php echo $isAdmin; ?>) {
+				if (IS_ADMIN) {
 					// TODO - this is far from perfect! Keep working on it...
 					showPriv1();
 				} else {
 					hidePriv1();
 				}
 				
-				if (document.getElementById('network-secondary')) {
+				if (document.getElementById('network-secondary') && !<?php echo $showNetwork; ?>) {
 					switchToOrganizationView();	
 				}
 				
@@ -354,7 +357,8 @@ $customProfileData = strlen($_SESSION['profile']) > 0 ? $_SESSION['profile'] : '
 	   				{ "orderable": false },
    					{ "orderable": false },
    					null,
-   					null
+   					null,
+	   				{ "orderable": false }
 					]
 				} );
 			}

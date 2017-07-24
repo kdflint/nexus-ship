@@ -4,6 +4,7 @@ session_start();
 
 require_once("../../../src/framework/Util.php");
 require_once(Utilities::getSrcRoot() . "/user/Invitation.php");
+require_once(Utilities::getSrcRoot() . "/user/CrmUser.php");
 require_once(Utilities::getSrcRoot() . "/group/Group.php");
 require_once(Utilities::getSrcRoot() . "/organization/Organization.php");
 require_once(Utilities::getSrcRoot() . "/message/ExternalMessage.php");
@@ -92,6 +93,10 @@ if (isset($clean['group-enroll'])) {
 } else if (isset($invitation['groupid'])) {
 	User::addUserGroupRelation($uidpk, $invitation['groupid'], $invitation['roleid']);
 	array_push($forumEnrollments, Group::getForumGroupIdByGroupId($invitation['groupid']));
+}
+
+if (Utilities::getEnvName() != "local") {
+	CrmUser::enrollCrmUser($_SESSION['invitation']);
 }
 	
 if ($invitation['type'] === 'single') {

@@ -45,7 +45,7 @@
           			"<span class='descr' style='font-size:90%;' >" + jsonObj[i].email + "</span>" +
 	          		"<p>" + 
 	          		((jsonObj[i].role == "admin") ? "<span class='fa fa-key' style='color:#004d62;padding-right:10px;'></span>" : "") +
-	          		((ssnRole == "admin" && jsonObj[i].sessionUser != jsonObj[i].uidpk) ? "<a href='" + processor + "?id=" + jsonObj[i].uidpk + "' onclick='return confirm(\"Please confirm this delete.\");'><span class='fa fa-trash-o' style='color:#d27b4b;padding-right:10px;'></span></a>" : "") +
+	          		((ssnRole == "admin" && jsonObj[i].sessionUser != jsonObj[i].uidpk) ? "<a href='" + processor + "?id=" + jsonObj[i].uidpk + "' onclick='return confirm(\"Please confirm this delete of " + jsonObj[i].fname + " " + jsonObj[i].lname + ".\");'><span class='fa fa-trash-o' style='color:#d27b4b;padding-right:10px;'></span></a>" : "") +
 	          		"</p>" +
           		"</div>" +
           	"</span>";

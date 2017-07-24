@@ -37,6 +37,7 @@ var DETAIL_MAP;
 var DETAIL_MARKERS = [];
 var CUSTOM_PROFILE = false;
 var CUSTOM_PROFILE_DATA = "";
+var IS_ADMIN = false;
 	
 function showPriv1() {
 	var privileged = document.getElementsByClassName("priv-1");
@@ -285,9 +286,21 @@ function post(uiContext, to, p) {
   document.body.appendChild(myForm) ;
   myForm.submit() ;
   document.body.removeChild(myForm) ;
-	disableTestMessageLink(uiContext);
-	document.getElementById(uiContext).innerHTML = "A test message has been sent!";
+	if (uiContext != "generic") {
+		disableTestMessageLink(uiContext);
+		document.getElementById(uiContext).innerHTML = "A test message has been sent!";
+	}
+}
 
+function postResetPassword(uidValue, fullname) {
+	var r = confirm("Please send a password reset link to my email for " + fullname + ".");
+	if (r != true) {
+	  return;
+	}	else {
+	  var args = {uid:'',admin:true};
+	  args["uid"] = uidValue;
+	  post("generic", "modules/login/control/recoverPasswordProcessor.php", args);
+	}
 }
 
 function formSjaxSubmit(frm) {
@@ -1354,11 +1367,12 @@ function organizationBasicValidateAndSubmit(thisForm) {
   // TODO - validate url, also in event form
   var url = urlField.value;
 	setFieldPassStyles(urlField, "Organization Web Site (http://)");
+	urlField.value = protocolize(url);
   if (url.length > 100) {
   	setFieldErrorStyles(urlField, "Organization web site max length is 100");
     pass = false;
   }  
-  
+
   var email = contactEmailField.value;
 	setFieldPassStyles(contactEmailField, "Email");
   if (false) {
@@ -2014,6 +2028,16 @@ function eventValidateAndSubmit(thisForm) {
     	pass = false;		
     }
 	}
+	
+	if (eventForm['meeting-url'] !== undefined) {
+		var url = eventForm['meeting-url'].value;
+		eventForm['meeting-url'].value = protocolize(url);
+	}
+	
+	if (eventForm['registration-url'] !== undefined) {
+		var url = eventForm['registration-url'].value;
+		eventForm['registration-url'].value = protocolize(url);
+	}
 	 
 	if (Boolean(pass)) {
  		submitButton.disabled = true;  
@@ -2238,3 +2262,13 @@ function millisecondsToFormat(formatString, ms){
   ss=(s=thisDate.getSeconds())<10?('0'+s):s;
   return formatString.replace("#hhhh#",hhhh).replace("#hhh#",hhh).replace("#hh#",hh).replace("#h#",h).replace("#mm#",mm).replace("#m#",m).replace("#ss#",ss).replace("#s#",s).replace("#ampm#",ampm).replace("#AMPM#",AMPM);
 };
+
+function protocolize(url) {
+	if (url.indexOf("://") > -1) {
+		return url;
+	} else if (url.length > 0) {
+		return "http://" + url;
+	} else {
+		return url;
+	}
+}

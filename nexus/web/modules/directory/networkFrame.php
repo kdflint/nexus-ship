@@ -21,7 +21,9 @@ if ($_SESSION['networkId'] == '358') {
 <span style="float:right;">
 	<a id="show_directory_detail" href="#openOrganizationView" style="display:none;" ></a>
 	<a id="add_new_org" href='javascript:void(0);' onclick="openOrganizationBasicForm(false);" class="secondaryControl priv-1" title="Add New Organization"><span class='fa fa-university fa-lg' ></span><span class='fa fa-plus' ></span></a>
-	<a id="add_new_group" href='#openGroupAdd' class="secondaryControl priv-1" title="Add New Group"><span class='fa fa-users fa-lg' ></span><span class='fa fa-plus' style="margin-left:3px;"></span></a>
+	<?php if (Utilities::isSessionAdmin()) { ?>
+		<a id="add_new_group" href='#openGroupAdd' class="secondaryControl priv-1" title="Add New Group"><span class='fa fa-users fa-lg' ></span><span class='fa fa-plus' style="margin-left:3px;"></span></a>
+	<?php } ?>		
 	<!-- TODO - move js controls from public to nexus.js -->
 	<a id='map_control' href="#" onclick="initMap();" class="secondaryControl" title="Map View" style="display:none;"><span id="directory_control" class='fa fa-globe fa-lg'></span></a>
 </span>

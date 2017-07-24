@@ -75,7 +75,11 @@ Utilities::setPublicSession($cleanNetworkId);
     			</ul>
 				</div>
 			</div>
-			<iframe src="<?php echo(Utilities::getForumHttpPath()); ?>/viewforum.php?f=<?php echo($cleanForumId); ?>" style="width:100%;border:0;margin:0;padding:0;position:absolute;height:5000px;overflow:hidden;" scrolling="no"></iframe>		
+			<?php if (strlen($cleanTopicId) > 0) { ?>
+				<iframe src="<?php echo(Utilities::getForumHttpPath()); ?>/viewtopic.php?f=<?php echo($cleanForumId); ?>&t=<?php echo($cleanTopicId); ?>" style="width:100%;border:0;margin:0;padding:0;position:absolute;height:5000px;overflow:hidden;" scrolling="no"></iframe>		
+			<?php } else { ?>
+				<iframe src="<?php echo(Utilities::getForumHttpPath()); ?>/viewforum.php?f=<?php echo($cleanForumId); ?>" style="width:100%;border:0;margin:0;padding:0;position:absolute;height:5000px;overflow:hidden;" scrolling="no"></iframe>					
+		<?php } ?>
 		</div>
 		
 	

@@ -192,6 +192,14 @@ class Organization {
 		}
 	}
 
+	public static function getOidByOrgId($orgId) {
+		$row = pg_fetch_array(self::getOrganizationById($orgId));
+		if (!$row || $row['uid'] === "NULL") {
+			return FALSE;
+		} else {
+			return $row['uid'];
+		}	
+	}
 		
 	public static function getOrganizationById($orgId) {
 		$query = "select name, type, structure, logo, status_fk as status, uid from organization where id = $1";
@@ -205,7 +213,8 @@ class Organization {
 			return FALSE;
 		} else {
 			return $row['id'];
-		}	}	
+		}	
+	}	
 	
 	public static function getNetworkForumByOrgId($orgId) {
 		$query = "select network_forum_id from organization where id = $1";

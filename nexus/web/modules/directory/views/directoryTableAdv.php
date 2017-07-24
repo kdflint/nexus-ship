@@ -121,7 +121,7 @@
 	 	   	// Initialize the org DataTable (only necessary first time, but does no harm subsequently.
 	      
 	      // LEFT OFF - check this, moved to doc ready function. Why did I put it here in the first place?
-	      //initOrgTable();
+	      //initOrgTable();  - moved to document.ready
 	      ORG_TABLE.clear();
 	      for (var i = 0; i < tableRows.length; i++) {     		
 	      	ORG_TABLE.row.add(tableRows[i]);
