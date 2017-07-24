@@ -297,7 +297,7 @@ function postResetPassword(uidValue, fullname) {
 	if (r != true) {
 	  return;
 	}	else {
-	  var args = {uid:'',admin:true};
+	  var args = {uid:'',admin:true,network:''};
 	  args["uid"] = uidValue;
 	  post("generic", "modules/login/control/recoverPasswordProcessor.php", args);
 	}
