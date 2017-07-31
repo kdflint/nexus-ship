@@ -18,9 +18,7 @@ public class InvalidLogin
 		    driver1.findElement(By.name("uid")).sendKeys("abcd");
 		    driver1.findElement(By.name("password")).sendKeys("abcd");
 		    driver1.findElement(By.id("login-form-submit")).click();
-		    	    //check for logout
-		    driver1.findElement(By.xpath("html/body/div[1]/div[1]/span[2]/a[3]/span")).click();
-		    
+		    	    
 		    Thread.sleep(5000);
 		    driver1.close();
 		}
