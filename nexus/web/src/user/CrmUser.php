@@ -13,19 +13,34 @@ class CrmUser {
 	
 	public static function getCrmActivationTableRow_IsEnrolled() { return CRM_ACTIVATION_ROW_IS_ENROLLED; }
 	
-	public static function onboardCrmUser($_oid, $_uuid, $_contrib) {
+	public static function onboardCrmUser($_oid, $_uuid, $_contrib, $_contact) {
+		$conf = array('append' => true, 'mode' => 0644, 'timeFormat' => '%X %x');
+		$logger = Log::singleton("file", Utilities::getLogRoot() . "/crm_activity.log", "", $conf, PEAR_LOG_INFO);
 		$con = MysqlDatabase::connect();
+
 		$query = "insert into civicrm_value_nexus_activation_" . Utilities::getCrmActivationTable() . 
 						 "(oid_" . Utilities::getCrmActivationTableRow_Oid() . ",  
 						 initial_enrollment_uuid_" . Utilities::getCrmActivationTableRow_Enroll() . ",  
 						 is_enrolled_" . Utilities::getCrmActivationTableRow_IsEnrolled() . ", entity_id) 
 						 values (?, ?, 0, ?)";
+		$logger->log($query, PEAR_LOG_INFO);
 		$stmt = $con->prepare($query);
 		$stmt->bind_param("sss", $oid, $uuid, $contrib);
 		$oid = $_oid;
 		$uuid = $_uuid;
 		$contrib = $_contrib;
 		$stmt->execute();
+
+		// Tag id 14 corresponds to "Nexus Authorization" which is id 14 in both DEV and PROD (see table civicrm_tag)
+		$query = "insert into civicrm_entity_tag 
+						 (entity_table, entity_id, tag_id)  
+						 values ('civicrm_contact', ?, 14)";
+		$logger->log($query, PEAR_LOG_INFO);
+		$stmt = $con->prepare($query);
+		$stmt->bind_param("s", $contact);
+		$contact = $_contact;
+		$stmt->execute();
+
 		MysqlDatabase::disconnect($stmt, $con);
 	}
 	

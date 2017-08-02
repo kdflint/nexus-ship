@@ -45,7 +45,7 @@ if (isset($_POST['password']) && $_POST['password'] === $pw && isset($_POST['acc
 		$invitationId = Invitation::addNetworkAdminInvitation($_POST['org-email'], $newGroupId, 4, $adderId, $newOrgId);
 		if (Utilities::getEnvName() != "local") {
 			$oid = Organization::getOidByOrgId($newOrgId);
-			CrmUser::onboardCrmUser($oid, $invitationId, $_POST['contrib-id']);
+			CrmUser::onboardCrmUser($oid, $invitationId, $_POST['contrib-id'], $_POST['contact-id']);
 		}
 		echo("Enrollment link: " . Utilities::getHttpPath() . "/enroll.php?invitation=" . $invitationId);
 		exit(0);

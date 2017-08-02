@@ -38,6 +38,7 @@ var DETAIL_MARKERS = [];
 var CUSTOM_PROFILE = false;
 var CUSTOM_PROFILE_DATA = "";
 var IS_ADMIN = false;
+var SESSION_ORGS = [];
 	
 function showPriv1() {
 	var privileged = document.getElementsByClassName("priv-1");

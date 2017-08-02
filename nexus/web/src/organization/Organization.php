@@ -446,6 +446,12 @@ class Organization {
 		}
 	}
 	
+	public static function suspendOrganizationByOrgId($id) {
+		$query = "update organization set status_fk = '2', suspend_dttm = now() where id = $1";
+		$cursor = PgDatabase::psExecute($query, array($id));
+		return true;
+	}
+	
 	public static function getNetworksByUsername($username) {
 		$query = "select distinct
 			oo.organization_from_fk as networkid, oa.account_type, o.name, o.forum_id as forumid, o.public_forum_id as pforumid, o.uid, o.logo

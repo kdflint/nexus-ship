@@ -13,7 +13,11 @@ $testEmail = $_SESSION['email'];
 ?>
 
 <div id="profile-secondary" class="secondaryControlContainer">
-	<a href='javascript:void(0);' id="profile_org_edit" onclick="initExtendedProfileForm();" class="secondaryControl" title="Profile Details"><span class='fa fa-plus-square fa-2x' ></span></a>
+	<?php if ($_SESSION['networkId'] === "18") { ?>
+		<a href='javascript:void(0);' id="profile_org_edit" onclick="initExtendedProfileForm();" class="secondaryControl" title="Profile Details">Add/Edit Organization</a>
+	<?php } else { ?>
+		<a href='javascript:void(0);' id="profile_org_edit" onclick="initExtendedProfileForm();" class="secondaryControl" title="Profile Details"><span class='fa fa-plus-square fa-2x' ></span></a>
+	<?php } ?>
 	<?php if ($_SESSION['networkId'] === "358") { ?>
 		<a href="http://www.idra.org/who-we-are/privacy-policy/" target="_blank" class="secondaryControl" >Privacy Policy</a>
 		<a href="#" class="secondaryControl"> | </a>
@@ -21,7 +25,7 @@ $testEmail = $_SESSION['email'];
 	<?php } ?>
 </div>
 
-<div id="profile-frame" style="height:520px;font-size:95%;">
+<div id="profile-frame" style="height:520px;font-size:95%;position:relative;">
 <form action="<?php echo(Utilities::getHttpPath()); ?>/modules/user/control/profileProcessor.php" method="post" id="profile-form" class="pure-form pure-form-aligned">
 	<div class="profileBlock1">
 			<p><b>Your Security</b><p>

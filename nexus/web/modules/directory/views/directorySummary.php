@@ -24,7 +24,10 @@
 		}
 		var searchSpecialty = document.forms[thisForm].specialty.value;
 		var searchType = document.forms[thisForm].type.value;
-		var searchAffiliation = document.forms[thisForm].affiliation.value;
+		var searchAffiliation = "";
+		if (document.forms[thisForm].affiliation !== undefined) {
+			searchAffiliation = document.forms[thisForm].affiliation.value;
+		}
 		var xmlhttp = getXmlHttpRequest();
 		xmlhttp.onreadystatechange=function() {
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {

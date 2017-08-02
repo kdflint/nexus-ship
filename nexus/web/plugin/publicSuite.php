@@ -198,15 +198,17 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 		<script>if(<?php echo $showConfirm; ?>) {	alert("Thank you! Your meeting has been submitted for approval.\n\nAn administrator will follow up with you at <?php echo($confirmEmail); ?>"); }</script>
   	 	
 		<div style="position:relative;margin:8px;height:460px;">
-			<div id="public-suite-nav" style="position:relative;width:100%;height:42px;background-color:#eeeeee;font-size:110%;">
+			<div id="public-suite-nav" style="position:relative;width:100%;height:42px;background-color:#eeeeee;font-size:110%;border-radius:8px;">
 				<div class="pure-menu pure-menu-horizontal">
 	    		<ul id="navList" class="pure-menu-list">
 	        	<li class="pure-menu-item pure-menu-selected"><a href="#" onclick="toggleDisplay('mod_event', '0')" class="pure-menu-link">Calendar</a></li>
         		<li class="pure-menu-item"><a href="#" onclick="toggleDisplay('mod_directory', '1')" class="pure-menu-link">Directory</a></li>
         		<li class="pure-menu-item"><a href="#" onclick="toggleDisplay('mod_forum', '2')" class="pure-menu-link">Forum</a></li>
         		<li class="pure-menu-item"><a id="schedule_control" href="#" onclick="showEventAdd();" class="pure-menu-link">Submit New Event</a></li>
-        		<?php if ($_SESSION['username'] === "pUser-ed787a92") { ?>
-        			<li class="pure-menu-item"><a id="schedule_control" href="https://goo.gl/forms/NInSncEodzNEMo2G3" class="pure-menu-link" target="_blank">Submit New Organization</a></li>
+        		<?php if ($_SESSION['username'] === "pUser-ed787a92") { 
+        			//https://goo.gl/forms/NInSncEodzNEMo2G3https://goo.gl/forms/NInSncEodzNEMo2G3
+        			?>
+        			<li class="pure-menu-item"><a id="schedule_control" class="pure-menu-link" href="<?php echo(Utilities::getHttpPath()); ?>/nexus.php?view=profile" onclick="return confirm('To add a new organization to our directory, please visit\nyour Nexus Advantage profile and click on New Organization.\n\nDo you wish to visit Nexus Advantage?');" target="_blank">Submit New Organization</a></li>
         		<?php } ?>
 						<?php if (isset($_SESSION['publicEnrollUuid'])) { ?>
 							<li class="pure-menu-item"><a id="schedule_control" href="<?php echo(Utilities::getHttpPath()); ?>/enroll.php?invitation=<?php echo($_SESSION['publicEnrollUuid']); ?>" class="pure-menu-link" target="_blank" style="color:#d27b4b;">Enroll in Nexus</a></li>
