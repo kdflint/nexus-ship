@@ -31,6 +31,7 @@ Use only clean input beyond this point (i.e. $clean[])
 
 
 Organization::suspendOrganizationByOrgId($clean['id']);
+Utilities::removeSessionOrg($clean['id']);
 
 if ((session_status() === PHP_SESSION_ACTIVE) && isset($_SESSION['nexusContext'])) {
  switch($_SESSION['nexusContext']) {

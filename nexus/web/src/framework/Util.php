@@ -622,6 +622,15 @@ class Utilities {
 		return true;
 	}
 	
+	public static function removeSessionOrg($orgId) {
+		for ($i = 0; $i < count($_SESSION['orgs']); $i++) {
+			if (isset($_SESSION['orgs'][$i]['id']) && $_SESSION['orgs'][$i]['id'] === $orgId) {
+				array_splice($_SESSION['orgs'],$i,1);
+				break;
+			}
+		}
+	}
+	
 	public static function setSessionOrgs($username) {
 		$_SESSION['orgs'] = Organization::getOrganizationsByUsername($username);		
 		// Filtering out networks and at the same time snagging the network role, if existent
