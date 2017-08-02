@@ -46,6 +46,7 @@ if (isset($cookieValues[0]) && strlen($cookieValues[0]) > 0) {
 }	
 
 if(Utilities::isSessionValid() && !Utilities::isSessionPublic()) {
+	// TODO - pass parm string into nexus.php. Reference directoryDetail.php:45-46, where we want to focus on an org if there is a good session open
 	header("location:" . Utilities::getHttpPath() . "/nexus.php");
 	exit(0);
 } else if (Utilities::isSessionValid() && Utilities::isSessionPublic() && isset($_SESSION['remembered']) && isset($_SESSION['password'])) {
@@ -232,11 +233,21 @@ Utilities::setUserLanguageEnv();
 					<span class="product-name" style="">Nexus</span><br/>
 					<span id="login-module-name" class="module-name" style=""><?php echo($pageTitle); ?></span>					
       	</span>  	
-  	
-      	<span id="walkme-login-anchor" class="controls" style="float:right;padding-bottom:10px;margin-top:30px;">
-      		<a href="http://northbridgetech.org/downloads/Northbridge_web_conference_center.pdf" style="color:#d27b4b;text-decoration:none;" target="_blank"><?php echo _("About"); ?></a> | 
-      		<a href="<?php echo Utilities::getSupportUrl(); ?>" style="color:#d27b4b;text-decoration:none;" target="_blank"><?php echo _("Support"); ?></a>
-      	</span>
+      	
+				<?php
+				// Toggle on CFCHT in prod, for now
+				if ($cleanNetworkId == 'ed787a92') { ?>
+      		<span class="controls" style="float:right;padding-bottom:10px;margin-top:30px;">
+	      		<b>Don't have<br/>an account?<br/></b>
+      			<!-- TODO - make this invitation dynamic -->
+      			<a href="<?php echo Utilities::getHttpPath(); ?>/enroll.php?invitation=<?php echo("66662d1f-24c3-4c89-b974-3afaa2494eb4"); ?>" style="color:#d27b4b;text-decoration:none;">Enroll</a>
+      		</span>				
+				<?php } else { ?>
+      		<span id="walkme-login-anchor" class="controls" style="float:right;padding-bottom:10px;margin-top:30px;">
+	      		<a href="http://northbridgetech.org/downloads/Northbridge_web_conference_center.pdf" style="color:#d27b4b;text-decoration:none;" target="_blank"><?php echo _("About"); ?></a> | 
+      			<a href="<?php echo Utilities::getSupportUrl(); ?>" style="color:#d27b4b;text-decoration:none;" target="_blank"><?php echo _("Support"); ?></a>
+      		</span>
+      	<?php } ?>
       </div>
 
 

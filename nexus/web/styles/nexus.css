@@ -211,13 +211,13 @@ body {
 .profileBlock3 {
 	position:absolute;
 	width:96%;
-	top:430px; 
+	top:300px; 
 }
 
 .profileBlock4 {
 	position: absolute;
-	bottom: 80px;
-	right: 0px;
+	bottom: 20px;
+	right: 10px;
 }
 
 .profileFormRow {

@@ -38,9 +38,11 @@
 			 					affiliationString += jsonObj.affiliation[i] + ", ";
 			 				}
 			 			}
+			 			var processor = "modules/directory/control/organizationDeleteProcessor.php";
 				 		tableItem = 
        					"<span class='fname detail'>" + htmlEntities(jsonObj.oname) + "</span>" +
-       					"<a id='secondary-network-edit' class='secondaryControl priv-1' href='javascript:void(0)' onclick='return populateDirectoryMultiForm();' title='Edit Organization'><span class='fa fa-pencil fa-lg' ></span></a>" +
+       					(IS_ADMIN || SESSION_ORGS.indexOf(orgId) > -1 ? "<a id='secondary-network-edit' class='secondaryControl' href='javascript:void(0)' onclick='return populateDirectoryMultiForm();' title='Edit Organization'><span class='fa fa-pencil fa-lg' ></span></a>" : "") +
+       					"<a id='secondary-network-delete' class='secondaryControl priv-1' href='" + processor + "?id=" + orgId + "' onclick='return confirm(\"Please confirm this delete of organization " + jsonObj.oname + ".\");' title='Delete Organization'><span class='fa fa-trash fa-lg' ></span></a>" +
        					(jsonObj.program ? "<span><a class='secondaryControl' href='javascript:void(0)' onclick='showOrgProgramList(\"" + orgId + "\")'>Program Details</a></span>" : "") +
        					"<div class='detail' style='width:390px;top:80px;'>" +
 										(jsonObj.member ? "<p><span><a href='javascript:void(0)' onclick='showOrgMemberList(\"" + orgId + "\", \"" + htmlEntities(jsonObj.oname) + "\")'>" + jsonObj.member.length + " network member" + (jsonObj.member.length > 1 ? "s" : "") + "</a></span></p>" : "") +

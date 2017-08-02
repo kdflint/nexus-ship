@@ -14,6 +14,8 @@
 			 			var loc2 = jsonObj.location2 ? "<span>" + jsonObj.location2 + "</span><br/>" : "";
 			 			var topicString = "";
 						var languageString ="";
+						var ethnicityString ="";
+						var affiliationString ="";
 			 			if (jsonObj.topic) {
 			 				for (var i = 0; i < jsonObj.topic.length; i++) {
 			 					topicString += jsonObj.topic[i] + ", ";
@@ -24,23 +26,36 @@
 			 					languageString += jsonObj.language[i] + ", ";
 			 				}
 			 			}
+			 			if (jsonObj.ethnicity) {
+			 				for (var i = 0; i < jsonObj.ethnicity.length; i++) {
+			 					ethnicityString += jsonObj.ethnicity[i] + ", ";
+			 				}
+			 			}
+			 			if (jsonObj.affiliation) {
+			 				for (var i = 0; i < jsonObj.affiliation.length; i++) {
+			 					affiliationString += jsonObj.affiliation[i] + ", ";
+			 				}
+			 			}
 				 		tableItem = 
 		 						"<a href='javascript:void(0);' onclick='showDirectoryResults();'><span class='fa fa-chevron-circle-left fa-3x' 	style='margin-right:10px;'></span></a>" + 
        					"<span class='fname detail'>" + jsonObj.oname + "</span>" +
-       					((typeof orgEditLinkData != "undefined") && orgEditLinkData[orgId] ? "<a href='" + orgEditLinkData[orgId] + "' target='_blank' style='margin-left:20px;' >Edit 	this Listing</a>" : "") +
+       					"<a href='<?php echo(Utilities::getHttpPath()); ?>/nexus.php?view=network' onclick=\"return confirm('To add a new organization to our directory, please visit\nyour Nexus Advantage profile and click on New Organization.\n\nDo you wish to visit Nexus Advantage?');\" target='_blank' style='margin-left:20px;' >Edit this Listing</a>" +
+       					//((typeof orgEditLinkData != "undefined") && orgEditLinkData[orgId] ? "<a href='" + orgEditLinkData[orgId] + "' target='_blank' style='margin-left:20px;' >Edit 	this Listing</a>" : "") +
        					"<div class='detail' style='width:390px;top:80px;'>" +
-										(jsonObj.member ? "<p><span>" + jsonObj.member.length + " network member" + (jsonObj.member.length > 1 ? "s" : "") + " (enroll to view)</span></p>" : "") +
+						       	(jsonObj.program ? "<br/><span><a href='<?php echo(Utilities::getHttpPath()); ?>/login.php?oid=<?php echo($_SESSION['orgUid']); ?>&view=orgid-" + orgId + "' target='_blank'>Login</a> to view program details</a></span>" : "") +
+										(jsonObj.member ? "<br/><span><a href='<?php echo(Utilities::getHttpPath()); ?>/login.php?oid=<?php echo($_SESSION['orgUid']); ?>&view=orgid-" + orgId + "' target='_blank'>Login</a> to view " + jsonObj.member.length + " network member" + (jsonObj.member.length > 1 ? "s" : "") + "</span>" : "") +
        							(jsonObj.url ? "<p><span class='tod'><a href='" + jsonObj.url + "' target='_blank'>" + jsonObj.url + "</a></span>	</p>" : "<p>&nbsp;</p>") +
 										(jsonObj.cname ? "<span>" + jsonObj.cname + "</span><br/>" : "") +
 										(jsonObj.email ? "<span>Email: " + jsonObj.email + "</span><br/>" : "") +
 										(jsonObj.phone ? "<span>Phone: " + jsonObj.phone + "</span><br/>" : "") +
 										(jsonObj.fax ? "<span>Fax: " + jsonObj.fax + "</span>" : "") +
 										(jsonObj.formatted ? "<p><span>Primary Address: " + jsonObj.formatted + "</span></p>" : "<p><span>" + loc1 + loc2 + "</span></p>") +
-								//"</div>" +
-								//"<div class='detail' style='position:absolute;top:280px;width:90%;'>" +
 										(jsonObj.type ? "<p>Organization Type: " + jsonObj.type + "</p>" : "") +
 										(topicString ? "<p>Focus Areas: " + truncateString(topicString.replace(/,\s*$/, ""),200) + "</p>" : "") +
 										(languageString ? "<p>Languages: " + truncateString(languageString.replace(/,\s*$/, ""),200) + "</p>" : "") +
+										(ethnicityString ? "<p>Ethnicities Served: " + truncateString(ethnicityString.replace(/,\s*$/, ""),200) + "</p>" : "") +
+										(affiliationString ? "<p>Denominational Affiliation: " + truncateString(affiliationString.replace(/,\s*$/, ""),200) + "</p>" : "") +
+										(jsonObj.size ? "<p>Congregation Size: " + jsonObj.size + "</p>" : "") +
 								"</div>";
 			 				document.getElementById("itemRow").innerHTML = "<div class='td-div'>" + tableItem + "<div>";
  							addDetailMarker(jsonObj);

@@ -175,6 +175,10 @@ $customProfileData = strlen($_SESSION['profile']) > 0 ? $_SESSION['profile'] : '
     	  	
 			$(document).ready(function () {	
 				
+				<?php foreach ($_SESSION['orgs'] as $key => $value) { ?>
+					SESSION_ORGS.push('<?php echo $value['id']; ?>');
+				<?php } ?>
+								
 				if (<?php echo $sessionContextAdv; ?>) {
 					initOrgMemberTable()
 					initOrgTable();
@@ -295,11 +299,11 @@ $customProfileData = strlen($_SESSION['profile']) > 0 ? $_SESSION['profile'] : '
 					document.getElementById("get-nexus-link").innerHTML = "<a href='http://northbridgetech.org/apps/waterwheel/module/core/index.php?view=apply' target='_blank'>Get Nexus</a>";
 				}	
 				if(<?php echo $showOrganizationEditBasic; ?>) {
-					showDirectoryEditBasic("<?php echo $showOrgEditDetailId; ?>");	
+					//showDirectoryEditBasic("<?php echo $showOrgEditDetailId; ?>");	
 				}			
 				if(<?php echo $showOrganizationDetail; ?>) {
 					$( "#adv-menu-network" ).click();
-					showDirectoryDetail("<?php echo $showOrgDetailId; ?>", "NWM");	
+					showDirectoryDetail("<?php echo $showOrgDetailId; ?>", "ADV");	
 				}
 				if(<?php echo $showAdvProfile; ?>) {
 					showAdvProfile("<?php echo($showAdvProfileUsername); ?>");

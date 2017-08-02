@@ -205,8 +205,10 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
         		<li class="pure-menu-item"><a href="#" onclick="toggleDisplay('mod_directory', '1')" class="pure-menu-link">Directory</a></li>
         		<li class="pure-menu-item"><a href="#" onclick="toggleDisplay('mod_forum', '2')" class="pure-menu-link">Forum</a></li>
         		<li class="pure-menu-item"><a id="schedule_control" href="#" onclick="showEventAdd();" class="pure-menu-link">Submit New Event</a></li>
-        		<?php if ($_SESSION['username'] === "pUser-ed787a92") { ?>
-        			<li class="pure-menu-item"><a id="schedule_control" href="https://goo.gl/forms/NInSncEodzNEMo2G3" class="pure-menu-link" target="_blank">Submit New Organization</a></li>
+        		<?php if ($_SESSION['username'] === "pUser-ed787a92") { 
+        			//https://goo.gl/forms/NInSncEodzNEMo2G3https://goo.gl/forms/NInSncEodzNEMo2G3
+        			?>
+        			<li class="pure-menu-item"><a id="schedule_control" class="pure-menu-link" href="<?php echo(Utilities::getHttpPath()); ?>/nexus.php?view=profile" onclick="return confirm('To add a new organization to our directory, please visit\nyour Nexus Advantage profile and click on New Organization.\n\nDo you wish to visit Nexus Advantage?');" target="_blank">Submit New Organization</a></li>
         		<?php } ?>
 						<?php if (isset($_SESSION['publicEnrollUuid'])) { ?>
 							<li class="pure-menu-item"><a id="schedule_control" href="<?php echo(Utilities::getHttpPath()); ?>/enroll.php?invitation=<?php echo($_SESSION['publicEnrollUuid']); ?>" class="pure-menu-link" target="_blank" style="color:#d27b4b;">Enroll in Nexus</a></li>

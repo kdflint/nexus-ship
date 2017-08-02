@@ -8,12 +8,12 @@
 			<span class='date detail' style="margin-top:5px;">Directory Search</span>
 		<?php } ?>
 		<p style="font-size:80%;margin-left:36px;">A keyword may be part of a name, address, or program description.</p>
-		<span class="fa fa-search" style="margin-right:20px;"></span><input type="text" name="keyword" style="width:86%;" placeholder="Keywords (up to three)"/>
+		<span class="fa fa-search" style="margin-right:20px;"></span><input type="text" name="keyword" style="width:84%;" placeholder="Keywords (up to three)"/>
 	</div>
 	<?php if ($_SESSION['networkId'] === "18") { ?>
 		<div style="margin-top:6px;margin-right:5px;">
 			<span class="searchQualifier">and</span>
-			<input type="text" name="keyword2" style="width:86%;" placeholder="Language is"/>	
+			<input type="text" name="keyword2" style="width:85%;margin-left:5px;" placeholder="Language is"/>	
 		</div>
 		<div style="margin-top:10px;">
 			<span class="searchQualifier">and&nbsp;</span>

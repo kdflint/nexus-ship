@@ -34,6 +34,9 @@ $orgId = Organization::getOrganizationByName($result['clean']['org-name']);
 if (!$orgId) {
 	$orgId = Organization::addOrganization($result['clean']['org-name'], $_SESSION['networkId']);
 	$return['status'] = "name-new";
+	//if (Utilities::isSessionAdmin()) {
+		alertAdmin();
+	//}
 }
 User::addUserOrgRelation($_SESSION['uidpk'],$orgId,88,5);
 
@@ -64,5 +67,24 @@ function validateInput($input) {
 
  	return $result;
 }
+
+function alertAdmin() {
+	$headers = "From: support@northbridgetech.org\r\nBcc: kathy.flint@northbridgetech.org";
+	$message = "Hello Administrator,
+	
+A new organization has just been added to the " . $_SESSION['networkName'] . " Organizational Directory.
+
+You may delete or edit this organization at
+
+" . Utilities::getHttpPath() . "/nexus.php?view=orgid-" . $_SESSION['orgUid'] . "
+
+Sincerely,
+
+Nexus Advantage
+on behalf of
+" . $_SESSION['networkName'];
+
+	mail(Utilities::getEventApprovalList(), "[Nexus] Directory Organization Add Notification", $message, $headers);
+}	
 
 ?>
