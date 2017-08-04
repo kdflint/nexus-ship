@@ -180,6 +180,10 @@ class Utilities {
 	
 	public static function getAdminPassword() { return ADMIN_PASSWORD; }
 	
+	public static function getFbAppId() { return FB_APP_ID; }
+	
+	public static function getFbAppSecret() { return FB_APP_SECRET; }
+	
 	private static $supportedLangs = array('en' => 'en_US.utf8','es' => 'es_ES.utf8');
 	
 	const VALIDATION_FNAME_ERROR = "Please enter a valid first name."; 
@@ -620,6 +624,15 @@ class Utilities {
 		unset($_SESSION['timezone']);
 		$_SESSION['timezone'] = (Event::isValidTimeZone($zone) ? $zone : "undefined");
 		return true;
+	}
+	
+	public static function removeSessionOrg($orgId) {
+		for ($i = 0; $i < count($_SESSION['orgs']); $i++) {
+			if (isset($_SESSION['orgs'][$i]['id']) && $_SESSION['orgs'][$i]['id'] === $orgId) {
+				array_splice($_SESSION['orgs'],$i,1);
+				break;
+			}
+		}
 	}
 	
 	public static function setSessionOrgs($username) {

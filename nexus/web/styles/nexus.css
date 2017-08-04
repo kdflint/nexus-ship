@@ -559,3 +559,22 @@ a.tooltip span:first-child
 .ui-front {
 	z-index: 10001;
 }
+
+
+/* OR separator on login */
+
+.or-separator {
+    text-align: center;
+    width: 330px;
+    margin-bottom: 10px;
+    background-image: url(../image/or-separator-line.png);
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.or-separator .or-separator-label {
+    display: inline-block;
+    padding: 4px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+}

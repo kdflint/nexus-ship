@@ -424,6 +424,7 @@ class Organization {
 		$query = "select o.id, o.name, o.uid, o.logo, uo.role_fk from organization o, user_organization uo, public.user u
 			where u.username = $1
 			and u.id = uo.user_fk
+			and o.suspend_dttm is null
 			and uo.organization_fk = o.id";
 		$cursor = PgDatabase::psExecute($query, array($username));
 			

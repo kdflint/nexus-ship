@@ -24,6 +24,7 @@
 	define("PUBLIC_GROUP", "1"); // was 7
 	define("SMS_SERVICE_USER", "kdflint");
 	define("FORUM_REGISTERED_USER_GROUP", "2"); // was 8
+	define("FB_APP_ID", "135380813711111");
 
 // DATABASE
 	define("DB_HOST", "localhost"); 

@@ -40,6 +40,16 @@ class User {
 		return PgDatabase::psExecute($query, array($email));
 	}
 	
+	public static function getSingleUsernameByEmail($email) {
+		$result = self::getUsernamesByEmail($email);
+		$rows = pg_num_rows($result);
+		if ($rows == 1) {
+			$row = pg_fetch_array($result);	
+			return $row['username'];
+		}
+		return FALSE;
+	}
+	
 	public static function getUserPasswordByUser($userId) {
 		// TODO - make usernames in db not required to be unique (or, only unique within network). Pair with network id to do authentication.
 		$query = "select password, salt, cryptimpl from public.user where username = $1";

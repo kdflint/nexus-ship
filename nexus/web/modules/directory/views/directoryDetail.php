@@ -39,8 +39,8 @@
 				 		tableItem = 
 		 						"<a href='javascript:void(0);' onclick='showDirectoryResults();'><span class='fa fa-chevron-circle-left fa-3x' 	style='margin-right:10px;'></span></a>" + 
        					"<span class='fname detail'>" + jsonObj.oname + "</span>" +
-       					"<a href='<?php echo(Utilities::getHttpPath()); ?>/nexus.php?view=network' onclick=\"return confirm('To add a new organization to our directory, please visit\nyour Nexus Advantage profile and click on New Organization.\n\nDo you wish to visit Nexus Advantage?');\" target='_blank' style='margin-left:20px;' >Edit this Listing</a>" +
-       					//((typeof orgEditLinkData != "undefined") && orgEditLinkData[orgId] ? "<a href='" + orgEditLinkData[orgId] + "' target='_blank' style='margin-left:20px;' >Edit 	this Listing</a>" : "") +
+       					"<a href='<?php echo(Utilities::getHttpPath()); ?>/nexus.php?view=network' onclick=\"return confirm('To edit an organization in our directory, please login to Nexus Advantage\\n\\nDo you wish to visit Nexus Advantage?');\" target='_blank' style='margin-left:20px;' >Edit this Listing</a>" +
+        					//((typeof orgEditLinkData != "undefined") && orgEditLinkData[orgId] ? "<a href='" + orgEditLinkData[orgId] + "' target='_blank' style='margin-left:20px;' >Edit 	this Listing</a>" : "") +
        					"<div class='detail' style='width:390px;top:80px;'>" +
 						       	(jsonObj.program ? "<br/><span><a href='<?php echo(Utilities::getHttpPath()); ?>/login.php?oid=<?php echo($_SESSION['orgUid']); ?>&view=orgid-" + orgId + "' target='_blank'>Login</a> to view program details</a></span>" : "") +
 										(jsonObj.member ? "<br/><span><a href='<?php echo(Utilities::getHttpPath()); ?>/login.php?oid=<?php echo($_SESSION['orgUid']); ?>&view=orgid-" + orgId + "' target='_blank'>Login</a> to view " + jsonObj.member.length + " network member" + (jsonObj.member.length > 1 ? "s" : "") + "</span>" : "") +

@@ -1329,6 +1329,9 @@ function organizationNameValidateAndSubmit(thisForm) {
  		submitButton.style.opacity = ".6";
  		var details = formSjaxSubmit(organizationNameForm);
 		if (details['status'] === "name-new") {
+ 			submitButton.disabled = false;  
+ 			submitButton.innerHTML = "Add"; 
+ 			submitButton.style.opacity = "1";
 			var basicForm = document.forms['organization-form-basic'];
  			basicForm['org-name'].value = details['org-name'];
  			basicForm['org-name'].readOnly = true;
