@@ -180,6 +180,10 @@ class Utilities {
 	
 	public static function getAdminPassword() { return ADMIN_PASSWORD; }
 	
+	public static function getFbAppId() { return FB_APP_ID; }
+	
+	public static function getFbAppSecret() { return FB_APP_SECRET; }
+	
 	private static $supportedLangs = array('en' => 'en_US.utf8','es' => 'es_ES.utf8');
 	
 	const VALIDATION_FNAME_ERROR = "Please enter a valid first name."; 

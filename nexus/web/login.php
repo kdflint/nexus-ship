@@ -4,23 +4,40 @@ session_start();
 require_once("src/framework/Util.php");
 require_once(Utilities::getSrcRoot() . "/organization/Organization.php");
 require_once(Utilities::getSrcRoot() . "/schedule/Event.php");
+require_once(Utilities::getLibRoot() . '/facebook/Facebook/autoload.php' );
 
-use Birke\Rememberme;
+$fb = new Facebook\Facebook([
+  'app_id' => Utilities::getFbAppId(),
+  'app_secret' => Utilities::getFbAppSecret(),
+  //'default_graph_version' => 'v2.2',
+  ]);
+
+$helper = $fb->getRedirectLoginHelper();
+$permissions = ['email'];
+
+if (!isset($_SESSION['fb_access_token'])) {
+		// Every time this login url gets generated, it creates  new FBLHR session state
+		// If we reload this page while already having an FB access token, we want to reuse the session state
+    $loginUrl = $helper->getLoginUrl(Utilities::getHttpPath() . '/fb-callback.php', $permissions);
+}
 
 // Initialize RememberMe Library with file storage
 $storagePath = Utilities::getTokenRoot();
 if ($storagePath) {
-	$storage = new Rememberme\Storage\File($storagePath);
-	$rememberMe = new Rememberme\Authenticator($storage);
+	$storage = new Birke\Rememberme\Storage\File($storagePath);
+	$rememberMe = new Birke\Rememberme\Authenticator($storage);
 }
 
 if(isset($_GET['logout'])) {
 	require_once(Utilities::getModulesRoot() . "/forum/forum_integration.php");
 	$user->session_kill();
 	$rememberMe->clearCookie(isset($_SESSION['username']) ? $_SESSION['username'] : '');
+	if (isset($_SESSION['fb_access_token'])) {
+	}
 	Utilities::destroySession();
 	session_start();
-}
+  $loginUrl = $helper->getLoginUrl(Utilities::getHttpPath() . '/fb-callback.php', $permissions);
+}	
 
 // The following method is not actually invoked. Stubbed for future use...
 if(isset($_GET['logoutAll'])) {
@@ -273,7 +290,12 @@ Utilities::setUserLanguageEnv();
         				<input id="localTz" name="timezone" type="hidden" value="">
         				<a id="login-form-submit" type="submit" class="pure-button pure-button-primary" style="width:45%;" href="javascript:void(0);" onclick="loginValidateAndSubmit();"><?php echo _("Sign In"); ?></a>
         				<a id="remember-me-toggle" class="pure-button pure-button-secondary" onclick="toggleRememberCheckbox();" style="width:45%;" <?php echo($disabled);?> ><span id="fakeCheckBox" class="fa fa-square-o" style="color:#004d62;padding-right:4px;"></span> <?php echo _("Remember Me"); ?></a>
-        				<input id="login-remember" name="login-remember" type="checkbox" style="visibility:hidden;"/>        			
+        				<input id="login-remember" name="login-remember" type="checkbox" style="visibility:hidden;"/>       
+    						<div class="or-separator">
+        					<span class="or-separator-label">OR</span>
+     						</div>
+        				<a class="pure-button pure-button-primary" href="<?php echo(htmlspecialchars($loginUrl)); ?>" style="margin-top:15px;width:94%;background-color: #4267b2 !important;"><span class="fa fa-facebook-square fa-2x" style="margin-right:10px;"></span>Sign In with Facebook</a><br/>
+        				<a class="pure-button pure-button-primary" href="" style="margin-top:15px;width:94%;background-color: #eeeeee !important;"><span class="fa fa-linkedin-square fa-2x" style="margin-right:10px;"></span>Sign In with LinkedIn</a>
      					</fieldset>
      				</form>   			
      				<form id="recover-username-form" class="pure-form pure-form-stacked" style="display:none;" autocomplete="off" action="modules/login/control/recoverEnrollmentProcessor.php" method="post">
@@ -360,6 +382,11 @@ Utilities::setUserLanguageEnv();
 			</div>
 	
     </div><!-- container -->   
+
+		<script>
+			var stateObj = { foo: "bar" };
+			history.pushState(stateObj, "", "login.php");
+		</script>
        		  	
 	</body>
 </html>

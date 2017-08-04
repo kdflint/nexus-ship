@@ -23,6 +23,7 @@ nexus/lib/Validate.php
 nexus/lib/Log.php
 nexus/lib/rememberme/*
 nexus/lib/bigbluebutton/*
+nexus/lib/facebook/*
 nexus/web/vendor/*
 nexus/web/modules/directory/views/include/*
 nexus/log/*
