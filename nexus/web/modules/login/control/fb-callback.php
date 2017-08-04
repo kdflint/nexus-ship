@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-require_once("src/framework/Util.php");
+require_once("../../../src/framework/Util.php");
 require_once(Utilities::getLibRoot() . '/facebook/Facebook/autoload.php' );
 
 $conf = array('append' => true, 'mode' => 0644, 'timeFormat' => '%X %x');	

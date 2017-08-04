@@ -16,9 +16,7 @@ $helper = $fb->getRedirectLoginHelper();
 $permissions = ['email'];
 
 if (!isset($_SESSION['fb_access_token'])) {
-		// Every time this login url gets generated, it creates  new FBLHR session state
-		// If we reload this page while already having an FB access token, we want to reuse the session state
-    $loginUrl = $helper->getLoginUrl(Utilities::getHttpPath() . '/fb-callback.php', $permissions);
+    $loginUrl = $helper->getLoginUrl(Utilities::getHttpPath() . '/modules/login/control/fb-callback.php', $permissions);
 }
 
 // Initialize RememberMe Library with file storage
@@ -36,7 +34,8 @@ if(isset($_GET['logout'])) {
 	}
 	Utilities::destroySession();
 	session_start();
-  $loginUrl = $helper->getLoginUrl(Utilities::getHttpPath() . '/fb-callback.php', $permissions);
+	// Note: every time this login url is generated, a different state is put in session to be compared by fb-callback.php
+  $loginUrl = $helper->getLoginUrl(Utilities::getHttpPath() . '/modules/login/control/fb-callback.php', $permissions);
 }	
 
 // The following method is not actually invoked. Stubbed for future use...
@@ -294,8 +293,9 @@ Utilities::setUserLanguageEnv();
     						<div class="or-separator">
         					<span class="or-separator-label">OR</span>
      						</div>
-        				<a class="pure-button pure-button-primary" href="<?php echo(htmlspecialchars($loginUrl)); ?>" style="margin-top:15px;width:94%;background-color: #4267b2 !important;"><span class="fa fa-facebook-square fa-2x" style="margin-right:10px;"></span>Sign In with Facebook</a><br/>
-        				<a class="pure-button pure-button-primary" href="" style="margin-top:15px;width:94%;background-color: #eeeeee !important;"><span class="fa fa-linkedin-square fa-2x" style="margin-right:10px;"></span>Sign In with LinkedIn</a>
+     						<!--#4267b2-->
+        				<a class="pure-button pure-button-primary" href="<?php echo(htmlspecialchars($loginUrl)); ?>" style="margin-top:15px;width:94%;height:37px;background-color: #3b5998 !important;"><span class="fa fa-facebook-square fa-2x" style="margin-left:10px;margin-top:-6px;"></span><span style="vertical-align:top;margin-left:20px;">Sign In with Facebook</span></a><br/>
+        				<!--<a class="pure-button pure-button-primary" href="#" style="margin-top:15px;width:94%;height:37px;background-color: #0084bf !important;"><span class="fa fa-linkedin-square fa-2x" style="margin-left:0px;margin-top:-6px;"></span><span style="vertical-align:top;margin-left:20px;">Sign In with LinkedIn</span></a>-->
      					</fieldset>
      				</form>   			
      				<form id="recover-username-form" class="pure-form pure-form-stacked" style="display:none;" autocomplete="off" action="modules/login/control/recoverEnrollmentProcessor.php" method="post">
