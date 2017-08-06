@@ -6,7 +6,7 @@ require_once(Utilities::getLibRoot() . '/linkedin/oauth_client.php' );
 require_once(Utilities::getLibRoot() . '/linkedin/http.php' );
 
 $conf = array('append' => true, 'mode' => 0644, 'timeFormat' => '%X %x');	
-$logger = Log::singleton("file", Utilities::getLogRoot() ."/facebook_login.log", "", $conf, PEAR_LOG_DEBUG);
+$logger = Log::singleton("file", Utilities::getLogRoot() ."/sm_login.log", "", $conf, PEAR_LOG_DEBUG);
 
 $apiKey     = Utilities::getLiAppId();
 $apiSecret  = Utilities::getLiAppSecret();
@@ -41,14 +41,10 @@ if ((isset($_GET["oauth_init"]) && $_GET["oauth_init"] == 1) || (isset($_GET['oa
         $success = $client->Finalize($success);
     }
     
-    if($client->exit) {
-			$logger->log("LinkedIn error: " . __FILE__ . ":" . __LINE__, PEAR_LOG_INFO);
-    	returnToLoginWithError("We're sorry - something went wrong with this LinkedIn login. Please use the standard sign in button.");    	
-    }
+    if($client->exit) { exit; }
     
     if($success){
        
-        //Storing user data into session
         $_SESSION['li_oauth_status'] = 'verified';
         $_SESSION['li_email'] = $userInfo->emailAddress;
         

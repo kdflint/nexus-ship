@@ -31,7 +31,7 @@ if (isset($dirty['username'])) {
 
 if (isset($dirty['password']) && Utilities::isValidPassword($dirty['password'])) {
 	$clean['password'] = $dirty['password'];
-} else if (isset($_SESSION['fb_email'])) {
+} else if (isset($_SESSION['fb_email']) || isset($_SESSION['li_email'])) {
 } else {
 	returnToLoginWithError(Utilities::AUTHENTICATION_ERROR);
 }
