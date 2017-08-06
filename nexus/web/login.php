@@ -9,15 +9,17 @@ require_once(Utilities::getLibRoot() . '/facebook/Facebook/autoload.php' );
 $fb = new Facebook\Facebook([
   'app_id' => Utilities::getFbAppId(),
   'app_secret' => Utilities::getFbAppSecret(),
-  //'default_graph_version' => 'v2.2',
+  'default_graph_version' => 'v2.10'
   ]);
 
 $helper = $fb->getRedirectLoginHelper();
 $permissions = ['email'];
 
 if (!isset($_SESSION['fb_access_token'])) {
-    $loginUrl = $helper->getLoginUrl(Utilities::getHttpPath() . '/modules/login/control/fb-callback.php', $permissions);
+    $fbLoginUrl = $helper->getLoginUrl(Utilities::getHttpPath() . '/modules/login/control/fb-callback.php', $permissions);
 }
+
+$liLoginUrl = Utilities::getHttpPath() . '/modules/login/control/li-callback.php?oauth_init=1';
 
 // Initialize RememberMe Library with file storage
 $storagePath = Utilities::getTokenRoot();
@@ -35,7 +37,7 @@ if(isset($_GET['logout'])) {
 	Utilities::destroySession();
 	session_start();
 	// Note: every time this login url is generated, a different state is put in session to be compared by fb-callback.php
-  $loginUrl = $helper->getLoginUrl(Utilities::getHttpPath() . '/modules/login/control/fb-callback.php', $permissions);
+  $fbLoginUrl = $helper->getLoginUrl(Utilities::getHttpPath() . '/modules/login/control/fb-callback.php', $permissions);
 }	
 
 // The following method is not actually invoked. Stubbed for future use...
@@ -212,6 +214,7 @@ Utilities::setUserLanguageEnv();
 					document.getElementById("username-form-submit").onclick = "";
 					document.getElementById("remember-me-toggle").onclick = "";
 					document.getElementById("login-module-name").innerHTML = "Web Meet Demo";
+					document.getElementById("social-logins").style.display = "none";
 				}
 				if (<?php echo $guestPass; ?>) {
 					techCheck();  
@@ -289,13 +292,14 @@ Utilities::setUserLanguageEnv();
         				<input id="localTz" name="timezone" type="hidden" value="">
         				<a id="login-form-submit" type="submit" class="pure-button pure-button-primary" style="width:45%;" href="javascript:void(0);" onclick="loginValidateAndSubmit();"><?php echo _("Sign In"); ?></a>
         				<a id="remember-me-toggle" class="pure-button pure-button-secondary" onclick="toggleRememberCheckbox();" style="width:45%;" <?php echo($disabled);?> ><span id="fakeCheckBox" class="fa fa-square-o" style="color:#004d62;padding-right:4px;"></span> <?php echo _("Remember Me"); ?></a>
-        				<input id="login-remember" name="login-remember" type="checkbox" style="visibility:hidden;"/>       
-    						<div class="or-separator">
-        					<span class="or-separator-label">OR</span>
-     						</div>
-     						<!--#4267b2-->
-        				<a class="pure-button pure-button-primary" href="<?php echo(htmlspecialchars($loginUrl)); ?>" style="margin-top:15px;width:94%;height:37px;background-color: #3b5998 !important;"><span class="fa fa-facebook-square fa-2x" style="margin-left:10px;margin-top:-6px;"></span><span style="vertical-align:top;margin-left:20px;">Sign In with Facebook</span></a><br/>
-        				<!--<a class="pure-button pure-button-primary" href="#" style="margin-top:15px;width:94%;height:37px;background-color: #0084bf !important;"><span class="fa fa-linkedin-square fa-2x" style="margin-left:0px;margin-top:-6px;"></span><span style="vertical-align:top;margin-left:20px;">Sign In with LinkedIn</span></a>-->
+        				<input id="login-remember" name="login-remember" type="checkbox" style="visibility:hidden;"/>      
+        				<div id="social-logins"> 
+    							<div class="or-separator">
+	        					<span class="or-separator-label">OR</span>
+     							</div>
+        					<a class="pure-button pure-button-primary" href="<?php echo(htmlspecialchars($fbLoginUrl)); ?>" style="margin-top:15px;width:94%;height:37px;background-color: #3b5998 !important;"><span class="fa fa-facebook-square fa-2x" style="margin-left:10px;margin-top:-6px;"></span><span style="vertical-align:top;margin-left:20px;">Sign In with Facebook</span></a><br/>
+        					<a class="pure-button pure-button-primary" href="<?php echo($liLoginUrl); ?>" style="margin-top:15px;width:94%;height:37px;background-color: #0084bf !important;"><span class="fa fa-linkedin-square fa-2x" style="margin-left:0px;margin-top:-6px;"></span><span style="vertical-align:top;margin-left:20px;">Sign In with LinkedIn</span></a>
+        				</div>
      					</fieldset>
      				</form>   			
      				<form id="recover-username-form" class="pure-form pure-form-stacked" style="display:none;" autocomplete="off" action="modules/login/control/recoverEnrollmentProcessor.php" method="post">

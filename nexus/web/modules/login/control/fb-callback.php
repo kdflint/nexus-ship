@@ -5,12 +5,12 @@ require_once("../../../src/framework/Util.php");
 require_once(Utilities::getLibRoot() . '/facebook/Facebook/autoload.php' );
 
 $conf = array('append' => true, 'mode' => 0644, 'timeFormat' => '%X %x');	
-$logger = Log::singleton("file", Utilities::getLogRoot() ."/facebook_login.log", "", $conf, PEAR_LOG_DEBUG);
+$logger = Log::singleton("file", Utilities::getLogRoot() ."/sm_login.log", "", $conf, PEAR_LOG_DEBUG);
 
 $fb = new Facebook\Facebook([
   'app_id' => Utilities::getFbAppId(),
-  'app_secret' => Utilities::getFbAppSecret()
-  //'default_graph_version' => 'v2.2',
+  'app_secret' => Utilities::getFbAppSecret(),
+  'default_graph_version' => 'v2.10'
   ]); 
 
 $helper = $fb->getRedirectLoginHelper();
