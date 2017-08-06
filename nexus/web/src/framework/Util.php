@@ -184,6 +184,10 @@ class Utilities {
 	
 	public static function getFbAppSecret() { return FB_APP_SECRET; }
 	
+	public static function getLiAppId() { return LI_APP_ID; }
+	
+	public static function getLiAppSecret() { return LI_APP_SECRET; }
+	
 	private static $supportedLangs = array('en' => 'en_US.utf8','es' => 'es_ES.utf8');
 	
 	const VALIDATION_FNAME_ERROR = "Please enter a valid first name."; 

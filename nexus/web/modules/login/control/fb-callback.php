@@ -9,8 +9,8 @@ $logger = Log::singleton("file", Utilities::getLogRoot() ."/facebook_login.log",
 
 $fb = new Facebook\Facebook([
   'app_id' => Utilities::getFbAppId(),
-  'app_secret' => Utilities::getFbAppSecret()
-  //'default_graph_version' => 'v2.2',
+  'app_secret' => Utilities::getFbAppSecret(),
+  'default_graph_version' => 'v2.10'
   ]); 
 
 $helper = $fb->getRedirectLoginHelper();

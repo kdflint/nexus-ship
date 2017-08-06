@@ -24,7 +24,7 @@ if (isset($dirty['username'])) {
 	} else {
 		returnToLoginWithError(Utilities::AUTHENTICATION_ERROR);
 	}
-} else if (isset($_SESSION['fb_email'])) {
+} else if (isset($_SESSION['fb_email']) || isset($_SESSION['li_email'])) {
 } else {
 	returnToLoginWithError(Utilities::AUTHENTICATION_ERROR);
 }
@@ -59,7 +59,16 @@ if ($storagePath) {
 	$rememberedUsername = $rememberMe->login();
 }
 
-if (isset($_SESSION['fb_email']) && Utilities::validateEmail($_SESSION['fb_email'])) {
+if (isset($_SESSION['li_email']) && Utilities::validateEmail($_SESSION['li_email'])) {
+	$usernameLookup = User::getSingleUsernameByEmail($_SESSION['li_email']);
+	if (!$usernameLookup) {
+		$logger->log("LinkedIn session email " . $_SESSION['li_email'] . " does not return one and only one username.", PEAR_LOG_INFO);
+		returnToLoginWithError("Your LinkedIn email does not relate to a Nexus user account.");
+	}
+	$clean['username'] = $usernameLookup;
+  $clean['password'] = "tokenized";
+  $isAuthenticated = true;
+} else if (isset($_SESSION['fb_email']) && Utilities::validateEmail($_SESSION['fb_email'])) {
 	$usernameLookup = User::getSingleUsernameByEmail($_SESSION['fb_email']);
 	if (!$usernameLookup) {
 		$logger->log("Facebook session email " . $_SESSION['fb_email'] . " does not return one and only one username.", PEAR_LOG_INFO);
