@@ -19,5 +19,21 @@
     <classes>
       <class name="DevNexus.InvalidLogin"/>
     </classes>
+    </test>
+   
+   
+    <test name="Test4">
+    <classes>
+      <class name="DevNexus.Create_New_Meeting"/>
+      
+    </classes>
+    </test>
+   
+   
+    <test name="Test5">
+    <classes>
+      <class name="DevNexus.NewEnrollment"/>
+      
+    </classes>
   </test> <!-- Test -->
 </suite> <!-- Suite1 -->
