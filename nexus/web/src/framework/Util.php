@@ -657,6 +657,12 @@ class Utilities {
 		$_SESSION['groups'] = Group::getUserGroupsByUsername($username);
 	}
 	
+	public static function setSmSessionValues($email, $provider='Social Media') {
+		$_SESSION['sm_email'] = $email;
+  	$_SESSION['sm_provider'] = $provider;
+  }
+
+	
 	public static function setSession($username, $remember, $zone = "undefined", $password = "undefined") {
 
 		// TODO - loading a PUBLIC context will wipe this one out and then screw up Nexus context

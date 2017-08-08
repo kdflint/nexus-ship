@@ -46,8 +46,11 @@ class User {
 		if ($rows == 1) {
 			$row = pg_fetch_array($result);	
 			return $row['username'];
+		} else if ($rows > 1) {
+			return -1;
+		} else {
+			return 0;
 		}
-		return FALSE;
 	}
 	
 	public static function getUserPasswordByUser($userId) {

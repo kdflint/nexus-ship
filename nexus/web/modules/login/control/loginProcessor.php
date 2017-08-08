@@ -7,7 +7,7 @@ require_once(Utilities::getSrcRoot() . "/schedule/Event.php");
 require_once(Utilities::getSrcRoot() . "/user/User.php");
 
 $conf = array('append' => true, 'mode' => 0644, 'timeFormat' => '%X %x');	
-$logger = Log::singleton("file", Utilities::getLogRoot() ."/facebook_login.log", "", $conf, PEAR_LOG_DEBUG);
+$logger = Log::singleton("file", Utilities::getLogRoot() ."/sm_login.log", "", $conf, PEAR_LOG_DEBUG);
 
 use Birke\Rememberme;
 
@@ -24,14 +24,14 @@ if (isset($dirty['username'])) {
 	} else {
 		returnToLoginWithError(Utilities::AUTHENTICATION_ERROR);
 	}
-} else if (isset($_SESSION['fb_email']) || isset($_SESSION['li_email'])) {
+} else if (isset($_SESSION['sm_email'])) {
 } else {
 	returnToLoginWithError(Utilities::AUTHENTICATION_ERROR);
 }
 
 if (isset($dirty['password']) && Utilities::isValidPassword($dirty['password'])) {
 	$clean['password'] = $dirty['password'];
-} else if (isset($_SESSION['fb_email']) || isset($_SESSION['li_email'])) {
+} else if (isset($_SESSION['sm_email'])) {
 } else {
 	returnToLoginWithError(Utilities::AUTHENTICATION_ERROR);
 }
@@ -59,20 +59,14 @@ if ($storagePath) {
 	$rememberedUsername = $rememberMe->login();
 }
 
-if (isset($_SESSION['li_email']) && Utilities::validateEmail($_SESSION['li_email'])) {
-	$usernameLookup = User::getSingleUsernameByEmail($_SESSION['li_email']);
-	if (!$usernameLookup) {
-		$logger->log("LinkedIn session email " . $_SESSION['li_email'] . " does not return one and only one username.", PEAR_LOG_INFO);
-		returnToLoginWithError("Your LinkedIn email does not relate to a Nexus user account.");
-	}
-	$clean['username'] = $usernameLookup;
-  $clean['password'] = "tokenized";
-  $isAuthenticated = true;
-} else if (isset($_SESSION['fb_email']) && Utilities::validateEmail($_SESSION['fb_email'])) {
-	$usernameLookup = User::getSingleUsernameByEmail($_SESSION['fb_email']);
-	if (!$usernameLookup) {
-		$logger->log("Facebook session email " . $_SESSION['fb_email'] . " does not return one and only one username.", PEAR_LOG_INFO);
-		returnToLoginWithError("Your Facebook email does not relate to a Nexus user account.");
+if (isset($_SESSION['sm_email']) && Utilities::validateEmail($_SESSION['sm_email'])) {
+	$usernameLookup = User::getSingleUsernameByEmail($_SESSION['sm_email']);
+	if ($usernameLookup == 0) {
+		$logger->log($_SESSION['sm_email'] . " session email " . $_SESSION['sm_email'] . " does not return one and only one username.", PEAR_LOG_INFO);
+		returnToLoginWithError("Your ". $_SESSION['sm_provider'] ." email does not relate to a Nexus user account.");
+	} else if ($usernameLookup == -1) {
+		$logger->log($_SESSION['sm_email'] . " session email " . $_SESSION['sm_email'] . " returns multiple usernames.", PEAR_LOG_INFO);
+		returnToLoginWithError("Your ". $_SESSION['sm_provider'] ." email relates to more than one Nexus user account so we cannot sign you in this way.");
 	}
 	$clean['username'] = $usernameLookup;
   $clean['password'] = "tokenized";

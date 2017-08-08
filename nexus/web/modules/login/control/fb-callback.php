@@ -65,7 +65,7 @@ $node = $response->getGraphObject();
 
 $tokenString = (string) $accessToken;
 $_SESSION['fb_access_token'] = substr($tokenString, 0, 16) . "...";
-$_SESSION['fb_email'] = $node->getProperty('email');
+Utilities::setSmSessionValues($node->getProperty('email'), 'Facebook');
 
 // User is logged in with a long-lived access token.
 // You can redirect them to a members-only page.
