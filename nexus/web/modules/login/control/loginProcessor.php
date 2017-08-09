@@ -61,12 +61,12 @@ if ($storagePath) {
 
 if (isset($_SESSION['sm_email']) && Utilities::validateEmail($_SESSION['sm_email'])) {
 	$usernameLookup = User::getSingleUsernameByEmail($_SESSION['sm_email']);
-	if ($usernameLookup == 0) {
+	if ($usernameLookup === "0") {
 		$logger->log($_SESSION['sm_email'] . " session email " . $_SESSION['sm_email'] . " does not return one and only one username.", PEAR_LOG_INFO);
 		returnToLoginWithError("Your ". $_SESSION['sm_provider'] ." email does not relate to a Nexus user account.");
-	} else if ($usernameLookup == -1) {
+	} else if ($usernameLookup === "-1") {
 		$logger->log($_SESSION['sm_email'] . " session email " . $_SESSION['sm_email'] . " returns multiple usernames.", PEAR_LOG_INFO);
-		returnToLoginWithError("Your ". $_SESSION['sm_provider'] ." email relates to more than one Nexus user account so we cannot sign you in this way.");
+		returnToLoginWithErrorAndLink("Your ". $_SESSION['sm_provider'] ." email relates to more than one Nexus user account so we cannot sign you in.");
 	}
 	$clean['username'] = $usernameLookup;
   $clean['password'] = "tokenized";
@@ -97,6 +97,12 @@ if($isAuthenticated){
 	exit(0);
 } else {
 	returnToLoginWithError("No message");
+}
+
+function returnToLoginWithErrorAndLink($errorMessage) {
+	$link = "toggleFormDisplay('recover-username-form')";
+	header("location:" . Utilities::getHttpPath() . "/login.php?logout=true&error=" . $errorMessage . "&errorlink=" . $link);
+	exit(0);
 }
 
 function returnToLoginWithError($errorMessage) {

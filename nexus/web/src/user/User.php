@@ -47,9 +47,9 @@ class User {
 			$row = pg_fetch_array($result);	
 			return $row['username'];
 		} else if ($rows > 1) {
-			return -1;
+			return "-1";
 		} else {
-			return 0;
+			return "0";
 		}
 	}
 	

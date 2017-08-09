@@ -48,7 +48,7 @@ if(isset($_GET['logoutAll'])) {
 }
 
 $remembered = $enrolled = "false";
-$cleanMessage = "";
+$cleanMessage = $cleanMessageLink = "";
 $cleanIcon = "";
 $enrolledUsername = "";
 
@@ -78,6 +78,10 @@ if(Utilities::isSessionValid() && !Utilities::isSessionPublic()) {
 
 if(isset($_GET['error']) && Utilities::isSafeCharacterSet($_GET['error'])) {
 	$cleanMessage = $_GET['error'];
+	if (isset($_GET['errorlink'])) {
+		// Hack to serve only one case
+		$cleanMessageLink = "&nbsp;&nbsp;<a href='javascript:void(0)' onclick=\"" . $_GET['errorlink'] . "\">Details</a>";
+	}
 	$cleanIcon = "fa fa-info-circle fa-2x";
 } else if(isset($_GET['logout'])) {
 	if(isset($_GET['expired'])) {
@@ -277,7 +281,7 @@ Utilities::setUserLanguageEnv();
 			  		<p><span class="fa fa-exclamation-triangle fa-2x" style="color:#d27b4b;float:left;margin-right:5px;"></span>To use Nexus it is necessary to enable JavaScript.</p>
 			  		<p>Here are the <a href="http://www.enable-javascript.com" target="_blank"> instructions how to enable JavaScript in your web browser</a></p>
 			  	</noscript>
-			  	<p id="login-user-message" class="confirmation"><span class="<?php echo $cleanIcon; ?>" style="color:#007582;float:left;margin-right:5px;"></span><?php echo _($cleanMessage); ?></p>
+			  	<p id="login-user-message" class="confirmation"><span class="<?php echo $cleanIcon; ?>" style="color:#007582;float:left;margin-right:5px;margin-bottom:30px;"></span><?php echo _($cleanMessage); ?></span><?php echo ($cleanMessageLink); ?></p>
 
 					<!-- This is a standard login, possibly in demo mode -->
 					<?php if ($guestPass === "false") { ?>
