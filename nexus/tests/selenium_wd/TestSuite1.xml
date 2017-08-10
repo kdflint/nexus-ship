@@ -23,12 +23,17 @@
 	</test>
     <test name="Test4">
     	<classes>
-      		<class name="DevNexus.Create_New_Meeting"/>
+      		<class name="DevNexus.Create_New_Meeting_Future"/>
 	    </classes>
     </test>
     <test name="Test5">
     	<classes>
 	    	<class name="DevNexus.NewEnrollment"/>
     	</classes>
-  	</test> 
+  </test> 
+  <test name="Test6">
+    	<classes>
+	    	<class name="DevNexus.Create_Meeting_Now"/>
+    	</classes>
+  </test>
 </suite> 
