@@ -5,7 +5,7 @@ import org.openqa.selenium.By;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 
-public class Create_New_Meeting extends config 
+public class Create_New_Meeting_Future extends config 
 {
 		@Test
 		public void Test4() throws InterruptedException
