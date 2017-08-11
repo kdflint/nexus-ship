@@ -133,12 +133,14 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 			function showEventDetail(eventUuid) {
 				document.getElementById("show-add").style.display='none';
 				document.getElementById("show-detail").style.display='block';				
+				document.getElementById("show-event").style.display='block';				
 				getEventDetail(eventUuid);
 			}	
 			
 			function showEventAdd() {
 				document.getElementById("show-add").style.display='block';
 				document.getElementById("show-detail").style.display='none';
+				document.getElementById("show-event").style.display='none';				
 				toggleDisplay('mod_event', '0');
 			}
 			
@@ -201,7 +203,7 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 			<div id="public-suite-nav" style="position:relative;width:100%;height:42px;background-color:#eeeeee;font-size:100%;border-radius:8px;">
 				<div class="pure-menu pure-menu-horizontal">
 	    		<ul id="navList" class="pure-menu-list">
-	        	<li class="pure-menu-item pure-menu-selected"><a href="#" onclick="toggleDisplay('mod_event', '0')" class="pure-menu-link">Calendar</a></li>
+	        	<li class="pure-menu-item pure-menu-selected"><a href="#" onclick="toggleDisplay('mod_event', '0');document.getElementById('schedule-form-cancel').click();" class="pure-menu-link">Calendar</a></li>
         		<li class="pure-menu-item"><a href="#" onclick="toggleDisplay('mod_directory', '1')" class="pure-menu-link">Directory</a></li>
         		<li class="pure-menu-item"><a href="#" onclick="toggleDisplay('mod_forum', '2')" class="pure-menu-link">Forum</a></li>
         		<li class="pure-menu-item"><a id="schedule_control" href="#" onclick="showEventAdd();" class="pure-menu-link">Submit New Event</a></li>
