@@ -395,18 +395,21 @@ function toggleRecurFormElements(override) {
   var repeatSpan = document.getElementById("repeat-span");
   var repeatEdit = document.getElementById('repeat-edit');
   var submitButton = document.getElementById("schedule-form-submit");
+  var cancelButton = document.getElementById("schedule-form-cancel");
   if(!curValue) {
  		repeatBlock.style.display = "none";
 		locationBlock.style.display = "block";
 		repeatSpan.style.visibility = "hidden";
 		repeatEdit.style.visibility = "hidden";
  		submitButton.style.visibility = "visible";
+ 		cancelButton.style.visibility = "visible";
  	} else if (Boolean(override)) {
  		repeatBlock.style.display = "none";
 		locationBlock.style.display = "block";
 		repeatSpan.style.visibility = "visible";
 		repeatEdit.style.visibility = "visible";
  		submitButton.style.visibility = "visible";
+ 		cancelButton.style.visibility = "visible";
  	} else {
   	repeatBlock.style.display = "block";
   	locationBlock.style.display = "none";
@@ -415,6 +418,7 @@ function toggleRecurFormElements(override) {
   	repeatSpan.style.visibility = "visible";
   	repeatEdit.style.visibility = "hidden";
  		submitButton.style.visibility = "hidden";
+ 		cancelButton.style.visibility = "hidden";
  	}
 }
 

@@ -736,6 +736,7 @@ class Utilities {
 		$logger = Log::singleton("file", Utilities::getLogRoot() ."/util_message.log", "", $conf, PEAR_LOG_DEBUG);
 
 		$_SESSION['nexusContext'] = "PUB";
+		$_SESSION['environment'] = self::getEnvName();
 		$_SESSION['orgUid'] = $oid;
 		$_SESSION['username'] = "pUser-" . substr($oid, 0, 8);
 		if (!$uuid) {

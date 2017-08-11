@@ -41,7 +41,7 @@
        					"<span class='fname detail'>" + jsonObj.oname + "</span>" +
        					"<a href='<?php echo(Utilities::getHttpPath()); ?>/nexus.php?view=network' onclick=\"return confirm('To edit an organization in our directory, please login to Nexus Advantage\\n\\nDo you wish to visit Nexus Advantage?');\" target='_blank' style='margin-left:20px;' >Edit this Listing</a>" +
         					//((typeof orgEditLinkData != "undefined") && orgEditLinkData[orgId] ? "<a href='" + orgEditLinkData[orgId] + "' target='_blank' style='margin-left:20px;' >Edit 	this Listing</a>" : "") +
-       					"<div class='detail' style='width:390px;top:80px;'>" +
+       					"<div class='detail' style='width:300px;top:80px;'>" +
 						       	(jsonObj.program ? "<br/><span><a href='<?php echo(Utilities::getHttpPath()); ?>/login.php?oid=<?php echo($_SESSION['orgUid']); ?>&view=orgid-" + orgId + "' target='_blank'>Login</a> to view program details</a></span>" : "") +
 										(jsonObj.member ? "<br/><span><a href='<?php echo(Utilities::getHttpPath()); ?>/login.php?oid=<?php echo($_SESSION['orgUid']); ?>&view=orgid-" + orgId + "' target='_blank'>Login</a> to view " + jsonObj.member.length + " network member" + (jsonObj.member.length > 1 ? "s" : "") + "</span>" : "") +
        							(jsonObj.url ? "<p><span class='tod'><a href='" + jsonObj.url + "' target='_blank'>" + jsonObj.url + "</a></span>	</p>" : "<p>&nbsp;</p>") +
@@ -87,7 +87,7 @@
 				<a href="javascript:void(0);" onclick="showDirectoryResults();"><span class='fa fa-chevron-circle-left fa-3x' style="margin-right:10px;margin-top:25px;"></span></a>
 				<span class='fa fa-spinner fa-spin fa-lg' style="margin-left:10px;margin-right:10px;"></span>Loading detail...
 			</div>
-			<div id="detailMapContainer" style="width:300px;height:200px;position:absolute;top:80px;left:400px;border: 0px none !important;">
+			<div id="detailMapContainer" style="width:300px;height:200px;position:absolute;top:80px;left:310px;border: 0px none !important;">
 			</div>
 		</div>
 	</div>

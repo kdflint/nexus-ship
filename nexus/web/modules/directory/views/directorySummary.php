@@ -118,14 +118,14 @@
  					}
 					var lineHeight = 40 + (lineHeightMultiple*20);
 		 			tableItem = 
-       			"<div class='td-div'>" +
+       			"<div class='td-div' style='padding: .5em !important;'>" +
        				"<div class='detail'>" +
  					  		"<a href='javascript:void(0)' onclick='showDirectoryDetail(" + jsonObj.orgEntry[i].content[6].orgid + ")'><span class='organization'>" + htmlDecode(jsonObj.orgEntry[i].name) + "</span></a>" +
  					  		"<span style='font-size:80%'>" + thisContent + "</span>" +
 							"</div>" +
      				"</div>";
     			document.getElementById("directoryRow" + i).innerHTML = tableItem;   
-    			document.getElementById("directoryRow" + i).style.height = lineHeight + "px";
+    			//document.getElementById("directoryRow" + i).style.height = lineHeight + "px";
 	   		}
 			}
 		}

@@ -34,7 +34,7 @@ if ($_SESSION['networkId'] == '358') {
 		<div class="controlCol" style="left:15px;border-right: 1px solid #eeeeee;margin-top:-10px;">
 			<?php include(Utilities::getModulesRoot() . "/directory/views/directorySearch.php"); ?>
 		</div>
-		<div id="show-directoryResults" class="displayCol" style="border:0px !important;width:630px;overflow:visible;font-size:80%;margin-top:40px;">
+		<div id="show-directoryResults" class="displayCol" style="border:0px !important;overflow:visible;font-size:80%;margin-top:40px;">
 			<?php include(Utilities::getModulesRoot() . "/directory/views/directoryTableAdv.php"); ?>
 		</div>
 	</div>
@@ -42,7 +42,7 @@ if ($_SESSION['networkId'] == '358') {
 		<div class="controlCol" style="left:15px;border-right: 1px solid #eeeeee;margin-top:-2px;">
 			<?php include(Utilities::getModulesRoot() . "/directory/views/networkSearch.php"); ?>
 		</div>
-		<div id="" class="displayCol" style="border:0px !important;width:630px;overflow:visible;font-size:80%;margin-top:20px;">
+		<div id="" class="displayCol" style="border:0px !important;overflow:visible;font-size:80%;margin-top:20px;">
 			<?php include(Utilities::getModulesRoot() . "/directory/views/groupList.php"); ?>
 		</div>		
 

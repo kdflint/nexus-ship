@@ -60,7 +60,7 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
       fieldset { border: 0; }
       label { display: block; margin: 30px 0 0 0; }
       select { width: 170px; }
-      .overflow { height: 320px; }
+      .overflow { height: 366px; }
       .overflow-short { height: 200px; }
 	  	table { border: 0px !important; margin-bottom: 0px; width: auto; }
 			body { min-width: 215px; min-height: 440px;}
@@ -91,17 +91,17 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
         $( "#schedule-form-countryTimeZones" ).selectmenu({ change: function() { setTimeZoneDisplay(document.getElementById("schedule-form-countryTimeZones").value); } });
        	$( "#directory-form-select-specialty").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
        	$( "#directory-form-select-specialty").selectmenu().selectmenu({
-						position: { my : "left+50 top", at: "right top-260" },
+						position: { my : "left top", at: "right+25 top", of: "#directory-form" },
 						width: 228
 				});
        	$( "#directory-form-select-type").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
        	$( "#directory-form-select-type").selectmenu().selectmenu({
-						position: { my : "left+50 top", at: "right top-220" },
+						position: { my : "left top", at: "right+25 top", of: "#directory-form" },
 						width: 228
 				});
         $( "#directory-form-select-affiliation").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
        	$( "#directory-form-select-affiliation").selectmenu().selectmenu({
-						position: { my : "left+50 top", at: "right top-180" },
+						position: { my : "left top", at: "right+25 top", of: "#directory-form" },
 						width: 228
 				});
 				toggleDisplay(<?php echo $viewId; ?>);
@@ -198,14 +198,14 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 		<script>if(<?php echo $showConfirm; ?>) {	alert("Thank you! Your meeting has been submitted for approval.\n\nAn administrator will follow up with you at <?php echo($confirmEmail); ?>"); }</script>
   	 	
 		<div style="position:relative;margin:8px;height:460px;">
-			<div id="public-suite-nav" style="position:relative;width:100%;height:42px;background-color:#eeeeee;font-size:110%;border-radius:8px;">
+			<div id="public-suite-nav" style="position:relative;width:100%;height:42px;background-color:#eeeeee;font-size:100%;border-radius:8px;">
 				<div class="pure-menu pure-menu-horizontal">
 	    		<ul id="navList" class="pure-menu-list">
 	        	<li class="pure-menu-item pure-menu-selected"><a href="#" onclick="toggleDisplay('mod_event', '0')" class="pure-menu-link">Calendar</a></li>
         		<li class="pure-menu-item"><a href="#" onclick="toggleDisplay('mod_directory', '1')" class="pure-menu-link">Directory</a></li>
         		<li class="pure-menu-item"><a href="#" onclick="toggleDisplay('mod_forum', '2')" class="pure-menu-link">Forum</a></li>
         		<li class="pure-menu-item"><a id="schedule_control" href="#" onclick="showEventAdd();" class="pure-menu-link">Submit New Event</a></li>
-        		<?php if ($_SESSION['username'] === "pUser-ed787a92") { 
+        		<?php if ($_SESSION['username'] === "pUser-ed787a92" || $_SESSION['environment'] === "local") { 
         			//https://goo.gl/forms/NInSncEodzNEMo2G3https://goo.gl/forms/NInSncEodzNEMo2G3
         			?>
         			<li class="pure-menu-item"><a id="schedule_control" class="pure-menu-link" href="<?php echo(Utilities::getHttpPath()); ?>/nexus.php?view=profile" onclick="return confirm('To add a new organization to our directory, please visit\nyour Nexus Advantage profile and click on New Organization.\n\nDo you wish to visit Nexus Advantage?');" target="_blank">Submit New Organization</a></li>
