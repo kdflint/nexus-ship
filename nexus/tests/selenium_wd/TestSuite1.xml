@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="Suite1">
-  <test name="Test1">
-    <classes>
-      <class name="DevNexus.goodlogin"/>
-    </classes>
-    </test>
-    
-    
-    <test name="Test2">
-    <classes>
-      <class name="DevNexus.LogoutChck"/>
-    </classes>
-   </test>
-   
-   
+	<test name="config">
+		<classes>
+			<class name="DevNexus.config"/>
+		</classes>
+	</test>
+	<test name="Test1">
+		<classes>
+			<class name="DevNexus.goodlogin"/>
+		</classes>
+	</test>
+ 	<test name="Test2">
+ 		<classes>
+ 			<class name="DevNexus.LogoutChck"/>
+    	</classes>
+   	</test>
     <test name="Test3">
-    <classes>
-      <class name="DevNexus.InvalidLogin"/>
-    </classes>
-    </test>
-   
-   
+    	<classes>
+      		<class name="DevNexus.InvalidLogin"/>
+    	</classes>
+	</test>
     <test name="Test4">
-    <classes>
-      <class name="DevNexus.Create_New_Meeting"/>
-      
-    </classes>
+    	<classes>
+      		<class name="DevNexus.Create_New_Meeting_Future"/>
+	    </classes>
     </test>
-   
-   
     <test name="Test5">
-    <classes>
-      <class name="DevNexus.NewEnrollment"/>
-      
-    </classes>
-  </test> <!-- Test -->
-</suite> <!-- Suite1 -->
+    	<classes>
+	    	<class name="DevNexus.NewEnrollment"/>
+    	</classes>
+  </test> 
+  <test name="Test6">
+    	<classes>
+	    	<class name="DevNexus.Create_Meeting_Now"/>
+    	</classes>
+  </test>
+</suite> 
