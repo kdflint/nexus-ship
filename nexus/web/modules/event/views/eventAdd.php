@@ -1,6 +1,6 @@
 
 			<form id="schedule-form" class="pure-form" action="<?php echo(Utilities::getHttpPath()); ?>/modules/schedule/control/scheduleProcessor.php" method="post" enctype="multipart/form-data">
-				<fieldset style="position:absolute;width:380px;">
+				<fieldset style="position:absolute;width:450px;">
       	<span style="font-size:130%;font-weight:bold;" class='detail'>New Event Submission Form</span></br>					
       		<div style="margin-top:10px;">
 	      		<input type="text" name="meeting-name" style="width:100%;" maxlength="100" placeholder="Meeting Name" >
@@ -18,8 +18,8 @@
 	      		<input type="text" name="registration-url" style="width:100%;" maxlength="500" placeholder="Registration Link (http://)" >
 					</div>
 				</fieldset>
-				<fieldset style="position:absolute;left:400px;width:310px;">
-
+				<fieldset style="position:absolute;left:460px;width:450px;">
+					<a href="javascript:void(0)" onclick="document.getElementById('schedule-form-cancel').click();" style="float:right;"><span class="fa fa-times-circle-o fa-2x"></span></a>
 					<div id="tz-static" style="display:block;margin-top:0px;">
 						<span style="font-size:90%;line-height:240%;"><b>Time Zone: </b><span id="local-tzDisplay"><?php echo $_SESSION['timezone']; ?></span><a href="javascript:void(0);" onclick="showTimeZoneDisplay('tz-select');" style="margin-left:10px;">Change</a></span>
 						<input id="local-tzFormField" type="hidden" name="tzone-name" value="<?php echo $_SESSION['timezone']; ?>" />
@@ -100,7 +100,7 @@
 					</div>
 		    	<input id="schedule-form-isBbb" name="isBbbMeeting" type="checkbox" style="visibility:hidden;"/>
 		      <a id="schedule-form-submit" class="pure-button button-menu" href="javascript:void(0)" onclick="eventValidateAndSubmit('schedule-form');" style="float:right;background-color:#d27b4b;width:70px;font-size:90%;margin-top:25px;color:#e6e6e6">Submit</a>
-    			<a href="<?php echo(Utilities::getPluginPath()); ?>/publicSuite.php?oid=<?php echo($_SESSION['orgUid']); ?>&amp;context=calendar" style="float:right;margin-right:20px;margin-top:28px;"><span id="cancel_link">Cancel</span></a>
+    			<a id="schedule-form-cancel" href="<?php echo(Utilities::getPluginPath()); ?>/publicSuite.php?oid=<?php echo($_SESSION['orgUid']); ?>&amp;context=calendar" style="float:right;margin-right:20px;margin-top:28px;"><span id="cancel_link">Cancel</span></a>
 				</fieldset>
 				<input type="hidden" name="meeting-edit" value="false" />
 				<input type="hidden" name="meeting-recur-duration" value="false" />

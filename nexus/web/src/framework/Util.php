@@ -657,6 +657,12 @@ class Utilities {
 		$_SESSION['groups'] = Group::getUserGroupsByUsername($username);
 	}
 	
+	public static function setSmSessionValues($email, $provider='Social Media') {
+		$_SESSION['sm_email'] = $email;
+  	$_SESSION['sm_provider'] = $provider;
+  }
+
+	
 	public static function setSession($username, $remember, $zone = "undefined", $password = "undefined") {
 
 		// TODO - loading a PUBLIC context will wipe this one out and then screw up Nexus context
@@ -730,6 +736,7 @@ class Utilities {
 		$logger = Log::singleton("file", Utilities::getLogRoot() ."/util_message.log", "", $conf, PEAR_LOG_DEBUG);
 
 		$_SESSION['nexusContext'] = "PUB";
+		$_SESSION['environment'] = self::getEnvName();
 		$_SESSION['orgUid'] = $oid;
 		$_SESSION['username'] = "pUser-" . substr($oid, 0, 8);
 		if (!$uuid) {

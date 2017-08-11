@@ -46,7 +46,7 @@ if ((isset($_GET["oauth_init"]) && $_GET["oauth_init"] == 1) || (isset($_GET['oa
     if($success){
        
         $_SESSION['li_oauth_status'] = 'verified';
-        $_SESSION['li_email'] = $userInfo->emailAddress;
+        Utilities::setSmSessionValues($userInfo->emailAddress, 'LinkedIn');
         
 				header('Location: ' . Utilities::getHttpPath() . '/modules/login/control/loginProcessor.php');
 				exit(0);

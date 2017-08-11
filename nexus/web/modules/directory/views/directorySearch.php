@@ -40,6 +40,6 @@
 			<?php include(Utilities::getPartnerCustomRoot() . "/orgtype-" . $_SESSION['networkId'] . ".html"); ?>
 		</select>
 	</div>
-  <a id="directory-form-submit" class="pure-button button-menu" href="javascript:void(0)" onclick="getDirectoryList('directory-form');" style="float:right;background-color:#d27b4b;width:70px;font-size:90%;margin-top:10px;color:#e6e6e6" >Search</a>
+  <a id="directory-form-submit" class="pure-button button-menu" href="javascript:void(0)" onclick="getDirectoryList('directory-form');showDirectoryResults();" style="float:right;background-color:#d27b4b;width:70px;font-size:90%;margin-top:10px;color:#e6e6e6" >Search</a>
   <a id="directory-form-reset" href="javascript:void(0)" onclick="resetDirectorySearchForm();" style="float:left;margin-top:20px;">Reset Form</a>
 </form>
