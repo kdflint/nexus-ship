@@ -1,3 +1,13 @@
+<table style="border:2px solid #a6c3ce !important;background: #EDF0DE none repeat scroll 0% 0%;" class="pure-table">
+	<tr>
+  	<td>
+  		<div class="event">
+  			<span class="date">New</span><br/>
+  			<span>Web Meeting</span>
+  			<span>Reservation</span>
+			</div>
+		</td>
+    <td>
 			<form id="event-add-bbb-form" class="pure-form" action="modules/schedule/control/scheduleAddBbbProcessor.php" method="post">
 				<fieldset>
 					
@@ -19,3 +29,6 @@
 		
 				</fieldset>
 			</form>  
+ 		</td>
+	</tr>
+</table> 
