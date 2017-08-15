@@ -14,26 +14,31 @@
  	<test name="Test2">
  		<classes>
  			<class name="DevNexus.LogoutChck"/>
-    	</classes>
+    	        </classes>
    	</test>
-    <test name="Test3">
-    	<classes>
-      		<class name="DevNexus.InvalidLogin"/>
-    	</classes>
+        <test name="Test3">
+    	       <classes>
+      		         <class name="DevNexus.InvalidLogin"/>
+    	       </classes>
 	</test>
-    <test name="Test4">
-    	<classes>
-      		<class name="DevNexus.Create_New_Meeting_Future"/>
-	    </classes>
-    </test>
-    <test name="Test5">
-    	<classes>
-	    	<class name="DevNexus.NewEnrollment"/>
-    	</classes>
-  </test> 
-  <test name="Test6">
-    	<classes>
-	    	<class name="DevNexus.Create_Meeting_Now"/>
-    	</classes>
-  </test>
+        <test name="Test4">
+    	        <classes>
+      		        <class name="DevNexus.Create_New_Meeting_Future"/>
+	        </classes>
+        </test>
+        <test name="Test5">
+    	       <classes>
+      		       <class name="DevNexus.Delete_Meeting_Future"/>
+	       </classes>
+        </test>
+        <test name="Test6">
+    	      <classes>
+	    	       <class name="DevNexus.NewEnrollment"/>
+    	      </classes>
+  	</test> 
+        <test name="Test7">
+    	      <classes>
+	    	      <class name="DevNexus.Create_Meeting_Now"/>
+    	      </classes>
+  	</test>
 </suite> 
