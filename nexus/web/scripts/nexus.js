@@ -39,6 +39,8 @@ var CUSTOM_PROFILE = false;
 var CUSTOM_PROFILE_DATA = "";
 var IS_ADMIN = false;
 var SESSION_ORGS = [];
+var SESSION_PGPK = "";
+var CLIPBOARD;
 	
 function showPriv1() {
 	var privileged = document.getElementsByClassName("priv-1");
@@ -797,7 +799,10 @@ function showDirectoryDetail(orgId, context) {
 	
 function showDirectoryResults() {
 	document.getElementById("show-directoryResults").style.display='block';
-	document.getElementById("show-directoryDetail").style.display='none';	
+	var detailExists = document.getElementById("show-directoryDetail");
+	if (detailExists) {
+		document.getElementById("show-directoryDetail").style.display='none';	
+	}
 	var secondaryFilterIcon = document.getElementById("secondary-network-filter");
 	if (secondaryFilterIcon) {
 		secondaryFilterIcon.className = "secondaryControl";
@@ -1797,6 +1802,27 @@ function populateCustomProfileForm() {
  	}		
 }
 
+function populateEventTypeForm(uuid,name) {
+
+	setFieldPassStyles(document.getElementById("schedule-form-type-button"), "Meeting Type");
+
+	var thisForm = document.forms['event-add-bbb-form'];
+	document.getElementById('schedule-form-meeting-name').innerHTML = name;
+	thisForm['meeting-uuid'].value = uuid;	
+	return true;
+}
+
+function populateEventFormByUuid(uuid) {
+	var j = 0;
+	for (var i = 0; i < currentEvents.length; i++) {
+    if (currentEvents[i].uuid === uuid) {
+    	j = i;
+    	break;
+    }
+	}
+	populateEventForm(j);
+}
+
 function populateEventForm(i) {
 	/* currentEvents is a global, initialized in the ajax processing */
 	var eventForm = document.forms['schedule-form'];	
@@ -1816,7 +1842,14 @@ function populateEventForm(i) {
 	if (currentEvents[i].tz_extract_name) { eventForm['tzone-name'].value = currentEvents[i].tz_extract_name; }
 	if (currentEvents[i].uuid) { eventForm['old-meeting-uuid'].value = currentEvents[i].uuid; }	
 	if (currentEvents[i].contact) { eventForm['meeting-contact'].value = currentEvents[i].contact; }
-	if (currentEvents[i].group_assoc) { eventForm['orig-group-assoc'].value = currentEvents[i].group_assoc; }
+	if (currentEvents[i].group_assoc) { 
+		//eventForm['orig-group-assoc'].value = currentEvents[i].group_assoc;
+		if (currentEvents[i].group_assoc === SESSION_PGPK) {
+			eventForm['meeting-visibility'][1].checked = true;
+		} else {
+			eventForm['meeting-visibility'][0].checked = true;
+		}
+ }
 	if (currentEvents[i].recur) { 
 		var intervals = {daily:"0", weekly:"2", weekdays:"1"}; 
 		var pattern = currentEvents[i].recur_pattern;
@@ -1886,6 +1919,27 @@ function populateEventForm(i) {
 	eventForm['meeting-uuid'].value = currentEvents[i].uuid;
 
 	return true;
+}
+
+function eventTypeAddValidateAndSubmit(thisForm) {
+		
+	pass = true;
+	var eventForm = document.forms[thisForm];
+	var submitButton = document.getElementById(thisForm + "-submit");	
+		
+	var typeField = eventForm['meeting-type'];
+	var typeValue = typeField.value;
+	if (typeValue == null || typeValue == "" || typeValue == "Meeting Type") {
+ 	setFieldErrorStyles(document.getElementById("schedule-form-type-button"), "Meeting Type");
+ 		pass = false;
+	}
+
+	if (Boolean(pass)) {
+ 		submitButton.disabled = true;  
+ 		submitButton.style.opacity = ".6";
+ 		eventForm.submit();
+ 	}
+  
 }
 	
 function eventValidateAndSubmit(thisForm) {

@@ -24,16 +24,27 @@ if (isset($dirty['mtype']) && Event::isValidMeetingType($dirty['mtype'])) {
 	$clean['mtype'] = 'collaboration';
 }
 
+if ($clean['mtype'] === "webinar" && Utilities::isSessionAdmin()) {
+	$clean['mtype'] = 'collaboration';
+}
+
 if (!Utilities::isSessionValid()) {
 	header("location:" . Utilities::getHttpPath() . "/nexus.php");
 	exit(0);
 }
 
 $bbbApi = new BigBlueButton();
-$bbbMeeting = new BbbMeeting($clean['uuid'], $_SESSION['groups'][0]['name'] . " Conference Room", $clean['mtype']);
+$roomName = $_SESSION['groups'][0]['name'];
+if ($_SESSION['nexusContext'] === "ADV" && isset($_SESSION['networkName'])) {
+	$roomName = $_SESSION['networkName'];
+}
+$bbbMeeting = new BbbMeeting($clean['uuid'], $roomName . " Conference Room", $clean['mtype']);
 
 $itsAllGood = TRUE;
 $joinerPassword = "mp";
+if ($clean['mtype'] === "webinar" && !Utilities::isSessionAdmin()) {
+	$joinerPassword = "pw";
+}
 $joinUrl = $configToken = "";
 
 // Create the meeting (if it does not exist yet)

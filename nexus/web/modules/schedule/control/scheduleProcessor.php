@@ -29,7 +29,7 @@ $dirty = array('meeting-name' => $_POST['meeting-name'],
 							'meeting-time-end' => $_POST['meeting-time-end'],
 							'meeting-contact' => $_POST['meeting-contact'],
 							'meeting-uuid' => $_POST['meeting-uuid'],
-							'meeting-group' => $_POST['orig-group-assoc'],
+							'meeting-visibility' => $_POST['meeting-visibility'],
 							'meeting-recur' => $_POST['repeat-check'],
 							'meeting-interval' => $_POST['repeat-interval'],
 							'meeting-num-occur' => $_POST['repeat-freq'],
@@ -53,7 +53,7 @@ Use only clean input beyond this point (i.e. $clean[])
 $meetingRecurPattern = array("0" => "daily", "1" => "weekdays", "2" => "weekly");
 
 $meetingType = array("1" => "video chat", "2" => "collaboration", "3" => "webinar", "4" => "video tether");
-$meetingStatus = ($_SESSION['nexusContext'] == "PUB" ? 3 : 1);
+$meetingStatus = (Utilities::isSessionAdmin() ? 1 : 3);
 $timestamp = $result['clean']['meeting-date'] . " " . $result['clean']['meeting-time'] . " " . $result['clean']['tzone-name'];
 $targetExt = "";
 $isFile = false;
@@ -115,8 +115,12 @@ if ((session_status() === PHP_SESSION_ACTIVE) && isset($_SESSION['nexusContext']
  			header("location:" . Utilities::getPluginPath() . "/publicSuite.php?oid=" . $_SESSION['orgUid'] . "&context=calendar&confirm=" . $result['clean']['meeting-contact']);
  			break;
  		default: 			
+ 			header("location:" . Utilities::getPluginPath() . "/publicSuite.php?oid=" . $_SESSION['orgUid'] . "&context=calendar&confirm=" . $result['clean']['meeting-contact']);
  	}
-}
+} else {
+ 	header("location:" . Utilities::getPluginPath() . "/publicSuite.php?oid=" . $_SESSION['orgUid'] . "&context=calendar&confirm=" . $result['clean']['meeting-contact']);
+ 	exit(0);
+}	
 
 function validateEvent($input) {
 	$result = array('clean' => array(), 'error' => array());
@@ -260,13 +264,14 @@ function validateEvent($input) {
 		$result['clean']['file-ext'] = $input['old-file-ext'];
 	}
 	
-	// MEETING GROUP
-	if (isset($input['meeting-group']) && Utilities::validateGroupId($input['meeting-group'])) {
-		$result['clean']['meeting-group'] = $input['meeting-group'];
-	} else if ($_SESSION['nexusContext'] === "ADV"){
-		// For now, all ADV events go to public
-		$result['clean']['meeting-group'] = $_SESSION['pgpk'];
-	} else {			
+	// MEETING VISIBILITY
+	if (isset($input['meeting-visibility']) && $_SESSION['nexusContext'] === "ADV") {
+		if ($input['meeting-visibility'] === "public") {
+			$result['clean']['meeting-group'] = $_SESSION['pgpk'];
+		} else {
+			$result['clean']['meeting-group'] = $_SESSION['ngpk'];
+		}
+	} else {
 		$result['clean']['meeting-group'] = $_SESSION['groups'][0]['id'];
 	}
 	

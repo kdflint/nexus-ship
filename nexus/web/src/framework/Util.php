@@ -216,6 +216,10 @@ class Utilities {
 	const DESCR_MIN = 0;
 	const DESCR_MAX = 250;
 	
+	public static function getMeetingTypes() {
+		return array("1" => "video chat", "2" => "collaboration", "3" => "webinar", "4" => "video tether");	
+	}
+	
 	public static function getHelloString($lang) {
 		$LANGUAGE_MAP = array('en' => 'Hello',	'es' => 'Hola');
 		return $LANGUAGE_MAP[$lang];
@@ -606,10 +610,13 @@ class Utilities {
 	}
 	
 	public static function isSessionAdmin() {
-		if ($_SESSION['role'] === 'user') {
-			return FALSE;
-		}
-		return TRUE;
+		if (isset($_SESSION['role']) && !self::isSessionPublic()) {
+			if ($_SESSION['role'] === 'user') {
+				return FALSE;
+			}
+			return TRUE;
+		} 
+		return FALSE;
 	}		
 
 	public static function isSessionValid() {
@@ -733,8 +740,6 @@ class Utilities {
 	
 	public static function setPublicSession($oid, $zone = "undefined", $fname = "Anonymous", $uuid = false) {
 
-		$logger = Log::singleton("file", Utilities::getLogRoot() ."/util_message.log", "", $conf, PEAR_LOG_DEBUG);
-
 		$_SESSION['nexusContext'] = "PUB";
 		$_SESSION['environment'] = self::getEnvName();
 		$_SESSION['orgUid'] = $oid;
@@ -769,8 +774,6 @@ class Utilities {
 			$_SESSION['publicEnrollUuid'] = $enrollUuid;
 		}
 		
-		$logger->log(print_r($_SESSION, TRUE), PEAR_LOG_DEBUG);
-
 	}
 	
 	public static function setDemoSession($username, $remember, $zone = "undefined") {
