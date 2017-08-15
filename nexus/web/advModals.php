@@ -6,7 +6,7 @@
 	</div>
 
 	<div id="openEventEdit" class="modalDialog">
-		<div>
+		<div style="min-height:390px;">
 			<a href="#close" title="Close" class="close">X</a>
 			<?php include("modules/event/views/eventAddAdvantage.php"); ?>
 		</div>
@@ -96,6 +96,13 @@
 				<?php include("modules/directory/views/programDetailAdv.php");
 				 ?>
 			</div>
+		</div>
+	</div>
+	
+	<div id="openBbbMeetingAdd" class="modalDialog">
+		<div style="background:#ffffff;">
+			<a href="#close" title="Close" class="close">X</a>
+			<?php include("modules/event/views/eventTypeForm.php") ?>
 		</div>
 	</div>
 	

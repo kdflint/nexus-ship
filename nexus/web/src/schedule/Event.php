@@ -185,6 +185,7 @@ class Event {
 				e.registration_url as regr_url,
 				e.contact as contact,
 				e.recur_fk as recur,
+				e.isbbbmeet as bbb,
 				er.pattern as pattern,
 				er.num_occur as num,
 				u.fname as fname, 
@@ -243,6 +244,7 @@ class Event {
 				$events[$counter]['recur'] = strlen($row['recur']) > 0 ? true : false;
 				$events[$counter]['recur_pattern'] = $row['pattern'];
 				$events[$counter]['recur_num'] = $row['num'];
+				$events[$counter]['bbb'] = ($row['bbb'] === 't' ? TRUE : FALSE);
 				$events[$counter]['sessionUser'] = $ssnUser;
 				$events[$counter]['adder'] = $row['adder'];
 				$events[$counter]['registration'] = $row['registration'];
@@ -284,6 +286,7 @@ class Event {
 				e.registration_url as regr_url,
 				e.file as file,
 				e.recur_fk as recur,
+				e.isbbbmeet as bbb,
 				er.pattern as pattern,
 				er.num_occur as num,
 				er.end_dttm as recur_end,
@@ -336,6 +339,7 @@ class Event {
 				$event[$counter]['recur_pattern'] = $row['pattern'];
 				$event[$counter]['recur_num'] = $row['num'];
 				$event[$counter]['recur_end_phrase'] = self::getDay($row['day_end']) . ", " . self::getMonth($row['month_end']-1) . " " . $row['date_end'] . " " . $row['year_end'];
+				$event[$counter]['bbb'] = ($row['bbb'] === 't' ? TRUE : FALSE);
 				$counter++;
 			}
 		}
@@ -360,11 +364,29 @@ class Event {
 	}	
 	
 	public static function deleteEvent($uuid) {
-		$query = "update event set active = false where uuid = $1";
+		$query = "update event set active = false where uuid=$1";
 		PgDatabase::psExecute($query, array($uuid));
 		return;
 	}
+
+	public static function addEventBbb($type, $uuid) {
+		if (!Utilities::validateUuid($uuid)) { 
+			return FALSE;
+		}
+		$query = "update event set isBbbMeet=true, type=$1 where uuid=$2";
+		PgDatabase::psExecute($query, array($type, $uuid));
+		return TRUE;
+	}
 	
+	public static function deleteEventBbb($uuid) {
+		if (!Utilities::validateUuid($uuid)) { 
+			return FALSE;
+		}
+		$query = "update event set isBbbMeet=false where uuid=$1";
+		PgDatabase::psExecute($query, array($uuid));
+		return TRUE;
+	}
+
 	public static function approveEvent($uuid) {
 		$query = "update event_group set status_fk = 1 where event_fk = (select id from event where uuid = $1)";
 		PgDatabase::psExecute($query, array($uuid));

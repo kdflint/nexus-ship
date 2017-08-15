@@ -18,6 +18,10 @@
 					</div>
 				</fieldset>
 				<fieldset style="position:absolute;left:430px;width:390px;top:-4px;">
+					<div style="margin-top:16px;font-size:90%;">
+						<b>Event Visibility:&nbsp;&nbsp;</b><input type="radio" name="meeting-visibility" value="network" checked>&nbsp;Network&nbsp;
+						<input type="radio" name="meeting-visibility" value="public">&nbsp;Public
+					</div>
 					<div id="tz-static" style="display:block;margin-top:10px;">
 						<span style="font-size:90%;line-height:240%;"><b>Time Zone: </b><span id="local-tzDisplay"><?php echo $_SESSION['timezone']; ?></span><a href="javascript:void(0);" onclick="showTimeZoneDisplay('tz-select');" style="margin-left:10px;">Change</a></span>
 						<input id="local-tzFormField" type="hidden" name="tzone-name" value="<?php echo $_SESSION['timezone']; ?>" />
@@ -88,11 +92,11 @@
       				<input type="text" name="meeting-loc" style="width:100%;" maxlength="200" placeholder="Location">
 						</div>	    	
 						<div style="margin-top:10px;">
-							<p id="attachment-label" style="font-size:90%;line-height:240%;"><b>Attach a file</b> (optional)</p>
+							<p id="attachment-label" style="font-size:90%;line-height:180%;"><b>Attach a file</b> (optional)</p>
 							<input type="file" name="fileToUpload" id="fileToUpload" style="width:90%;" onchange="toggleFileClear();">
 							<a id="fileClearControl" href="javascript:void(0)" onclick="clearFileInput(document.getElementById('fileToUpload'));" style="display:none;"><span class="fa fa-times" style="margin-left:10px;"></span></a>
 						</div>
-						<div style="margin-top:25px;">
+						<div style="margin-top:10px;">
 		      		<a id="schedule-form-submit" class="pure-button button-menu" href="javascript:void(0)" onclick="eventValidateAndSubmit('schedule-form');" style="float:right;background-color:#d27b4b;width:70px;font-size:90%;margin-top:-10px;color:#e6e6e6" >Add</a>
 		      		<a href="#close" style="float:right;margin-right:20px;">Cancel</a>
 		    		</div>
@@ -103,6 +107,6 @@
      		<input type="hidden" name="old-meeting-uuid" value="" />
      		<input type="hidden" name="old-file-ext" value="" />
      		<input type="hidden" name="meeting-contact" value="" />
-     		<input type="hidden" name="orig-group-assoc" value="" />
+     		<!--<input type="hidden" name="orig-group-assoc" value="" />-->
 				<input type="hidden" name="meeting-recur-duration" value="false" />
 			</form>     

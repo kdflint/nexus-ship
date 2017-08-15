@@ -126,8 +126,8 @@ $customProfileData = strlen($_SESSION['profile']) > 0 ? $_SESSION['profile'] : '
     <!--<link rel="stylesheet" href="//cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" type="text/css" />-->
     <!-- LEFT OFF - lost arrows - I think they are white -->
 		<!--<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.13/r-2.1.1/rr-1.2.0/datatables.min.css"/>		-->
-
     <link rel="stylesheet" href="styles/datatables.css" type="text/css" />
+
 
     <!-- New way to include font awesome - why?? -->
     <!--<script src="https://use.fontawesome.com/2eef5e944e.js"></script>-->
@@ -150,6 +150,7 @@ $customProfileData = strlen($_SESSION['profile']) > 0 ? $_SESSION['profile'] : '
 		<script type="text/javascript" src="//cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js" charset="utf8"></script>
 		<!--<script type="text/javascript" src="//cdn.datatables.net/v/dt/dt-1.10.13/b-1.2.4/datatables.min.js"></script>-->
 		<!--<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.13/b-1.2.4/se-1.2.0/datatables.min.js"></script>-->
+		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js"></script>
 
   	 	 	
     <title>Northbridge Nexus</title> 
@@ -158,6 +159,7 @@ $customProfileData = strlen($_SESSION['profile']) > 0 ? $_SESSION['profile'] : '
 		
     	// TODO - create a global js init script - can format this as a php file that parses into javascript, look for example...
 			NETWORK_ID = "<?php echo $_SESSION['networkId']; ?>";
+			SESSION_PGPK = "<?php echo $_SESSION['pgpk']; ?>";
 			DEFAULT_FORUM = "<?php echo $_SESSION['defaultForumId']; ?>";
 			HTTP_WEB_PATH = "<?php echo Utilities::getHttpPath(); ?>";
 			HTTP_FORUM_PATH = "<?php echo Utilities::getForumHttpPath(); ?>";
@@ -174,7 +176,7 @@ $customProfileData = strlen($_SESSION['profile']) > 0 ? $_SESSION['profile'] : '
     	<?php include("scripts/techCheck.js"); ?>
     	  	
 			$(document).ready(function () {	
-				
+						
 				<?php foreach ($_SESSION['orgs'] as $key => $value) { ?>
 					SESSION_ORGS.push('<?php echo $value['id']; ?>');
 				<?php } ?>
@@ -347,8 +349,8 @@ $customProfileData = strlen($_SESSION['profile']) > 0 ? $_SESSION['profile'] : '
       		},
       		effect: "fade"
     		});    
-  		});
-
+  		});			
+      
 			// We call these initialization when ajax delivery of initial table contents is complete
 			function initMemberTable() {
 				MEMBER_TABLE = $('#member-directory').DataTable( {

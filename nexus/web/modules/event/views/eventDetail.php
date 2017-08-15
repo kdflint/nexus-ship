@@ -7,6 +7,8 @@
 				var i = 0;	
 		 		tableEvent = 
        			"<div class='detail'>" +
+       					(IS_ADMIN ? "<a href='#openEventEdit' onclick='populateEventFormByUuid(\"" + eventUuid + "\");' title='Edit Event' style='float:right;'><span class='fa fa-pencil fa-lg' style='margin-left:10px;'></span></a>" : "") +
+      					"<a class='secondaryControl priv-1' href='<?php echo(Utilities::getHttpPath()); ?>/modules/schedule/control/eventDeleteProcessor.php?id=" + eventUuid + "' onclick='return confirm(\"Please confirm this delete of event " + jsonObj[i].purpose + ".\");' title='Delete Event' style='float:right;'><span class='fa fa-trash fa-lg' ></span></a>" +
        					"<span class='date'>" + jsonObj[i].purpose + "</span><br/>" +
        					"<span class='tod'>" + jsonObj[i].location + "</span><br/>" + 
        					"<span class='tod'>" + jsonObj[i].day + ", " + jsonObj[i].month + " " + jsonObj[i].date + " " + jsonObj[i].year + " </span></br>" +
