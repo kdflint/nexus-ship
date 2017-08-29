@@ -16,4 +16,9 @@
 			<class name="facebook_login.Fb_unrelated_to_nexus"/>
 		</classes>
 	</test>
+	<test name="Test3">
+		<classes>
+			<class name="facebook_login.SameFB_Acc_Multiple_User"/>
+		</classes>
+	</test>
 </suite> 
