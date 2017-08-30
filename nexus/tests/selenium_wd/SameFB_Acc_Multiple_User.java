@@ -39,7 +39,7 @@ public class SameFB_Acc_Multiple_User extends Config_FB
 	    driver.get("https://www.facebook.com/");
 	    driver.findElement(By.xpath(".//*[@id='userNavigationLabel']")).click();
 	    Thread.sleep(3000);
-	    driver.findElement(By.xpath("//li[16]/a/span/span")).click();
+	    driver.findElement(By.xpath("//li[14]/a/span/span")).click();
 	    Thread.sleep(3000);
 	   
 	  }
