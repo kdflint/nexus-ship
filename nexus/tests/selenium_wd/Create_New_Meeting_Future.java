@@ -29,7 +29,7 @@ public class Create_New_Meeting_Future extends config
 		    
 		     //selecting date and time
 		    driver.findElement(By.id("datepicker")).click();
-		    driver.findElement(By.linkText("31")).click();
+		    driver.findElement(By.linkText("30")).click();
 		    driver.findElement(By.cssSelector("#schedule-form-time-button > span.ui-selectmenu-text")).click();
 		    driver.findElement(By.id("ui-id-269")).click();
 		    
