@@ -7,7 +7,7 @@ require_once(Utilities::getSrcRoot() . "/schedule/Event.php");
 require_once(Utilities::getSrcRoot() . "/schedule/BbbMeeting.php");
 require_once(Utilities::getModulesRoot() . "/error/handlers.php");
 
-require_once '/home/kdflint/vendor/autoload.php';
+require_once Utilities::getComposerRoot() . '/autoload.php';
 
 use BigBlueButton\BigBlueButton; 
 use BigBlueButton\Parameters\JoinMeetingParameters;

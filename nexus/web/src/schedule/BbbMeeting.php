@@ -1,6 +1,7 @@
 <?php
 
-require_once '/home/kdflint/vendor/autoload.php';
+require_once(dirname(__FILE__) . "/../framework/PgDb.php");
+require_once Utilities::getComposerRoot() . '/autoload.php';
 
 //use BigBlueButton\BigBlueButton;
 use BigBlueButton\Parameters\CreateMeetingParameters;

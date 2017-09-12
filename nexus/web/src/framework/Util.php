@@ -144,6 +144,8 @@ class Utilities {
 	
 	public static function getLibRoot() {	return LIB_ROOT; }
 	
+	public static function getComposerRoot() { return COMPOSER_ROOT; }
+	
 	public static function getTokenRoot() {
 		if(!is_writable(TKN_ROOT) || !is_dir(TKN_ROOT)) {
 			self::log(TKN_ROOT . " does not exist or is not writable by the web server.", PEAR_LOG_ERROR);
