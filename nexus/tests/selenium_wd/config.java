@@ -12,7 +12,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 
-public class config {
+public class config 
+{
 	
 	 	public static WebDriver driver;
 	 	public static StringBuffer verificationErrors = new StringBuffer();
