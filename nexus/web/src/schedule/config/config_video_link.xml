@@ -2,13 +2,13 @@
 <config>
     <localeversion suppressWarning="false">0.9.0</localeversion>
     <version>264</version>
-    <help url="http://ec2-50-19-215-104.compute-1.amazonaws.com/help.html"/>
-    <javaTest url="http://ec2-50-19-215-104.compute-1.amazonaws.com/testjava.html"/>
+    <help url="https://conf1.nexus-bbb.org/help.html"/>
+    <javaTest url="https://conf1.nexus-bbb.org/testjava.html"/>
     <porttest host="ec2-50-19-215-104.compute-1.amazonaws.com" application="video/portTest" timeout="10000"/>    
     <bwMon server="ec2-50-19-215-104.compute-1.amazonaws.com" application="video/bwTest"/>
-    <application uri="rtmp://ec2-50-19-215-104.compute-1.amazonaws.com/bigbluebutton" host="http://ec2-50-19-215-104.compute-1.amazonaws.com/bigbluebutton/api/enter"/>
+    <application uri="rtmp://ec2-50-19-215-104.compute-1.amazonaws.com/bigbluebutton" host="https://conf1.nexus-bbb.org/bigbluebutton/api/enter"/>
     <language userSelectionEnabled="true" />
-    <skinning enabled="true" url="http://ec2-50-19-215-104.compute-1.amazonaws.com/client/branding/css/BBBDefault.css.swf" />
+    <skinning enabled="true" url="https://conf1.nexus-bbb.org/client/branding/css/BBBDefault.css.swf" />
     <shortcutKeys showButton="true" />
     <browserVersions chrome="41" firefox="36" flash="17" java="1.7.0_51" />
     <layout showLogButton="false" defaultLayout="bbb.layout.name.defaultlayout"
@@ -21,7 +21,7 @@
             
 		<modules>
 		 
-		<module name="ChatModule" url="http://ec2-50-19-215-104.compute-1.amazonaws.com/client/ChatModule.swf?v=264" 
+		<module name="ChatModule" url="https://conf1.nexus-bbb.org/client/ChatModule.swf?v=264" 
 			uri="rtmp://ec2-50-19-215-104.compute-1.amazonaws.com/bigbluebutton" 
 			dependsOn="UsersModule"	
 			privateEnabled="true"  
@@ -31,7 +31,7 @@
 			colorPickerIsVisible="false"
 		/>
 
-		<module name="UsersModule" url="http://ec2-50-19-215-104.compute-1.amazonaws.com/client/UsersModule.swf?v=264" 
+		<module name="UsersModule" url="https://conf1.nexus-bbb.org/client/UsersModule.swf?v=264" 
 			uri="rtmp://ec2-50-19-215-104.compute-1.amazonaws.com/bigbluebutton" 
 			allowKickUser="true"
 			enableRaiseHand="true"
@@ -41,7 +41,7 @@
 
 		
 		<module name="DeskShareModule" 
-			url="http://ec2-50-19-215-104.compute-1.amazonaws.com/client/DeskShareModule.swf?v=264" 
+			url="https://conf1.nexus-bbb.org/client/DeskShareModule.swf?v=264" 
 			uri="rtmp://ec2-50-19-215-104.compute-1.amazonaws.com/deskShare"
 			showButton="true"
 			autoStart="false"
@@ -49,7 +49,7 @@
 			baseTabIndex="201"
 		/>
 		
-		<module name="PhoneModule" url="http://ec2-50-19-215-104.compute-1.amazonaws.com/client/PhoneModule.swf?v=264" 
+		<module name="PhoneModule" url="https://conf1.nexus-bbb.org/client/PhoneModule.swf?v=264" 
 			uri="rtmp://ec2-50-19-215-104.compute-1.amazonaws.com/sip" 
 			autoJoin="false"
 			listenOnlyMode="true"
@@ -63,7 +63,7 @@
 			dependsOn="UsersModule"
 		/>
 
-		<module name="VideoconfModule" url="http://ec2-50-19-215-104.compute-1.amazonaws.com/client/VideoconfModule.swf?v=264" 
+		<module name="VideoconfModule" url="https://conf1.nexus-bbb.org/client/VideoconfModule.swf?v=264" 
 			uri="rtmp://ec2-50-19-215-104.compute-1.amazonaws.com/video"
 			dependson = "UsersModule"
 			videoQuality = "100"
@@ -95,17 +95,22 @@
 			glowBlurSize = "30.0"	
 		/>
 		
-		<module name="WhiteboardModule" url="http://ec2-50-19-215-104.compute-1.amazonaws.com/client/WhiteboardModule.swf?v=264" 
+		<module name="WhiteboardModule" url="https://conf1.nexus-bbb.org/client/WhiteboardModule.swf?v=264" 
 			uri="rtmp://ec2-50-19-215-104.compute-1.amazonaws.com/bigbluebutton" 
 			dependsOn="PresentModule"
 			baseTabIndex="601"
 			whiteboardAccess="presenter"
 			keepToolbarVisible="false"
 		/>
-
-		<module name="PresentModule" url="http://ec2-50-19-215-104.compute-1.amazonaws.com/client/PresentModule.swf?v=264" 
+		
+		<module name="PollingModule" url="https://conf1.nexus-bbb.org/client/PollingModule.swf?v=601" 
+			uri="rtmp://conf1.nexus-bbb.org/bigbluebutton" 
+			dependsOn="PresentModule"
+		/>
+		
+		<module name="PresentModule" url="https://conf1.nexus-bbb.org/client/PresentModule.swf?v=264" 
 			uri="rtmp://ec2-50-19-215-104.compute-1.amazonaws.com/bigbluebutton" 
-			host="http://ec2-50-19-215-104.compute-1.amazonaws.com" 
+			host="https://conf1.nexus-bbb.org" 
 			showPresentWindow="true"
 			showWindowControls="true"
 			openExternalFileUploadDialog="false"
@@ -114,7 +119,7 @@
 			maxFileSize="30"
 		/>
 
-		<module name="VideodockModule" url="http://ec2-50-19-215-104.compute-1.amazonaws.com/client/VideodockModule.swf?v=264"
+		<module name="VideodockModule" url="https://conf1.nexus-bbb.org/client/VideodockModule.swf?v=264"
 			uri="rtmp://ec2-50-19-215-104.compute-1.amazonaws.com/bigbluebutton" 
 			dependsOn="VideoconfModule, UsersModule"
 			autoDock="true"
@@ -128,9 +133,9 @@
 			baseTabIndex="401"
 		/>
 		
-		<module name="LayoutModule" url="http://ec2-50-19-215-104.compute-1.amazonaws.com/client/LayoutModule.swf?v=264"
+		<module name="LayoutModule" url="https://conf1.nexus-bbb.org/client/LayoutModule.swf?v=264"
 			uri="rtmp://ec2-50-19-215-104.compute-1.amazonaws.com/bigbluebutton"
-			layoutConfig="http://ec2-50-19-215-104.compute-1.amazonaws.com/client/conf/layout.xml"
+			layoutConfig="https://conf1.nexus-bbb.org/client/conf/layout.xml"
 			enableEdit="false"
 		/>
 

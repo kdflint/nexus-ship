@@ -3,7 +3,6 @@
 require_once(dirname(__FILE__) . "/../framework/PgDb.php");
 require_once Utilities::getComposerRoot() . '/autoload.php';
 
-//use BigBlueButton\BigBlueButton;
 use BigBlueButton\Parameters\CreateMeetingParameters;
 use BigBlueButton\Parameters\SetConfigXMLParameters;
 
@@ -45,18 +44,18 @@ class BbbMeeting {
 	}
 	
 	function getMeetingId() {
-		//return $this->creationParams['meetingId'];
+
 		return $this->creationParams->getMeetingId();
 	}
 	
 	function getMeetingConfigurationXml() {
 			
 		$inFile = "config.xml";
-		
-		/*		
+			
 		switch($this->meetingType) {
 			case self::VIDEO_CHAT:
-				$inFile = "config_video_chat.xml";
+				//$inFile = "config_video_chat.xml";
+				$inFile = "config.xml";
 				break;
 			case self::VIDEO_LINK:
 				$inFile = "config_video_link.xml";
@@ -64,10 +63,12 @@ class BbbMeeting {
 			case self::WEBINAR:
 				$inFile = "config_webinar.xml";
 				break;
-			default:
+			case self::COLLABORATION:
 				$inFile = "config_collaboration.xml";
+				break;
+			default:
+				$inFile = "config.xml";
 		}
-		*/
 		
 		$in = fopen(dirname(__FILE__) . "/config/" . $inFile, "r");
 		$configXml = "";
