@@ -150,6 +150,7 @@ $customProfileData = strlen($_SESSION['profile']) > 0 ? $_SESSION['profile'] : '
 		<script type="text/javascript" src="//cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js" charset="utf8"></script>
 		<!--<script type="text/javascript" src="//cdn.datatables.net/v/dt/dt-1.10.13/b-1.2.4/datatables.min.js"></script>-->
 		<!--<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.13/b-1.2.4/se-1.2.0/datatables.min.js"></script>-->
+		<!-- https://clipboardjs.com/ -->
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js"></script>
 
   	 	 	

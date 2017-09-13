@@ -32,6 +32,7 @@ public class NewEnrollment extends config
 	    
 	    driver.findElement(By.id("invite-form-submit")).click();
 	    Thread.sleep(5000);  
+	    driver.findElement(By.xpath("html/body/div[1]/div[1]/span[2]/a[3]/span")).click();
 	  }
 
 	  @AfterClass(alwaysRun = true)

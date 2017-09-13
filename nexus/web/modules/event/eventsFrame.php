@@ -4,10 +4,12 @@
 	  	$("input[name='event-state-filter']").change(function(e){
     		if($(this).val() === 'event-list-pending') {
 		     	getEventListPending(<?php echo (time() + 15*60); ?>);
-	  		} else if($(this).val() === 'event-list-public')  {
+	  		} else if($(this).val() === 'event-list-public') {
 	     		getEventListFilter(<?php echo (time() + 15*60); ?>, 'public');
-    		} else {
+    		} else if($(this).val() === 'event-list-network') {
     			getEventListFilter(<?php echo (time() + 15*60); ?>, 'network');
+    		} else if($(this).val() === 'event-list-recorded') {
+    			getEventListRecorded();
     		}
 			});
 		});	
@@ -27,6 +29,7 @@
 				<?php } ?>
 				<input type="radio" name="event-state-filter" onchange="toggleTertiary('event-tertiary');" value="event-list-public" <?php if(!Utilities::isSessionAdmin()) { ?>checked<?php } ?>>&nbsp;Public</br>
 				<input type="radio" name="event-state-filter" onchange="toggleTertiary('event-tertiary');" value="event-list-network">&nbsp;Network</br>
+				<input type="radio" name="event-state-filter" onchange="toggleTertiary('event-tertiary');" value="event-list-recorded">&nbsp;Recorded</br>
 			</form>
 		</div>
 	</div>
@@ -38,6 +41,7 @@
 		 <?php 
 			 	include("views/eventListPending.php");
 			 	include("views/eventListFilter.php"); 
+			 	include("views/eventListRecorded.php"); 
 		 ?>
 	</div>
 	

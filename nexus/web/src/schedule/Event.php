@@ -1,7 +1,11 @@
 <?php
 
 require_once(dirname(__FILE__) . "/../framework/PgDb.php");
-require_once(Utilities::getLibRoot() . "/bigbluebutton/bbb-api-php/includes/bbb-api.php"); 
+//require_once(Utilities::getLibRoot() . "/bigbluebutton/bbb-api-php/includes/bbb-api.php"); 
+require_once Utilities::getComposerRoot() . '/autoload.php';
+
+use BigBlueButton\BigBlueButton; 
+use BigBlueButton\Parameters\IsMeetingRunningParameters;
 
 class Event {
 	
@@ -69,7 +73,7 @@ class Event {
 	}
 	
 	private static function getMeetingTypeDisplay($in) {
-		// TODO - should leverage the constants defined in BbbMEeting.php. This is duplicated stringage
+		// TODO - should leverage the constants defined in BbbMeeting.php. This is duplicated stringage
 		switch($in) {
 			case 'video tether':
 				return 'Video Link';
@@ -88,8 +92,11 @@ class Event {
 	
 	private static function isBbbEventRunning($in) {
 		$bbbApi = new BigBlueButton();
-		$response = $bbbApi->isMeetingRunningWithXmlResponseArray($in);
-		if ($response && strcasecmp($response['returncode'], 'SUCCESS') == 0 && strcasecmp($response['running'], 'true') == 0) {
+		$parameters = new IsMeetingRunningParameters($in);
+		//$response = $bbbApi->isMeetingRunningWithXmlResponseArray($in);
+		$response = $bbbApi->isMeetingRunning($parameters);
+		//if ($response && strcasecmp($response['returncode'], 'SUCCESS') == 0 && strcasecmp($response['running'], 'true') == 0) {
+		if ($response->getReturnCode() == 'SUCCESS' && $response->isRunning()) {
 			return TRUE;
 		}
 		return FALSE;

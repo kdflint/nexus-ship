@@ -10,7 +10,7 @@ require_once(Utilities::getSrcRoot() . "/group/Group.php");
 require_once(Utilities::getSrcRoot() . "/organization/Organization.php");
 require_once(Utilities::getSrcRoot() . "/schedule/Event.php");
 require_once(Utilities::getLibRoot() . "/autoload/autoloader.php");
-require_once(Utilities::getLibRoot() . "/bigbluebutton/bbb-api-php/includes/config.php");
+//require_once(Utilities::getLibRoot() . "/bigbluebutton/bbb-api-php/includes/config.php");
 require_once(Utilities::getLibRoot() . "/rememberme/rememberme/src/Rememberme/Storage/File.php");
 require_once(Utilities::getLibRoot() . "/rememberme/rememberme/src/Rememberme/Authenticator.php");
 
@@ -144,6 +144,8 @@ class Utilities {
 	
 	public static function getLibRoot() {	return LIB_ROOT; }
 	
+	public static function getComposerRoot() { return COMPOSER_ROOT; }
+	
 	public static function getTokenRoot() {
 		if(!is_writable(TKN_ROOT) || !is_dir(TKN_ROOT)) {
 			self::log(TKN_ROOT . " does not exist or is not writable by the web server.", PEAR_LOG_ERROR);
@@ -168,7 +170,7 @@ class Utilities {
 	
 	public static function getEnvName() { return ENV_NAME; }
 	
-	public static function getBbbDomain() { return CONFIG_SERVER_BASE_URL; }
+	//public static function getBbbDomain() { return CONFIG_SERVER_BASE_URL; }
 	
 	private static function getSessionTimeout() { return SSN_TIMEOUT; }
 	
