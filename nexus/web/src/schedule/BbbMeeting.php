@@ -25,10 +25,20 @@ class BbbMeeting {
 		$this->creationParams->setAttendeePassword('ap');
 		$this->creationParams->setModeratorPassword('mp');
 		$this->creationParams->setDuration('0');
-		$this->creationParams->setRecord(true);
-		$this->creationParams->setAllowStartStopRecording(true);
+		//$this->creationParams->setRecord(true);
+		//$this->creationParams->setAllowStartStopRecording(true);
 		$this->creationParams->setAutoStartRecording(false);
 		$this->meetingType = $type;
+	}
+	
+	function setRecordingParams($isPresenter) {
+		if ($isPresenter) {
+			$this->creationParams->setRecord(true);
+			$this->creationParams->setAllowStartStopRecording(true);
+		} else {
+			$this->creationParams->setRecord(false);
+			$this->creationParams->setAllowStartStopRecording(false);			
+		}
 	}
 	
 	function setMetaParams($network, $org, $group, $initiator) {
@@ -54,8 +64,7 @@ class BbbMeeting {
 			
 		switch($this->meetingType) {
 			case self::VIDEO_CHAT:
-				//$inFile = "config_video_chat.xml";
-				$inFile = "config.xml";
+				$inFile = "config_video_chat.xml";
 				break;
 			case self::VIDEO_LINK:
 				$inFile = "config_video_link.xml";

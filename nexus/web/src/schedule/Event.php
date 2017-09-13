@@ -73,7 +73,7 @@ class Event {
 	}
 	
 	private static function getMeetingTypeDisplay($in) {
-		// TODO - should leverage the constants defined in BbbMEeting.php. This is duplicated stringage
+		// TODO - should leverage the constants defined in BbbMeeting.php. This is duplicated stringage
 		switch($in) {
 			case 'video tether':
 				return 'Video Link';

@@ -62,6 +62,12 @@ if ($clean['mtype'] === "webinar" && Utilities::isSessionPublic()) {
 }
 $joinUrl = $configToken = "";
 
+if ($joinerPassword === "mp") {
+	$bbbMeeting->setRecordingParams(true);
+} else {
+	$bbbMeeting->setRecordingParams(false);
+}
+
 // Create the meeting (if it does not exist yet)
 try {
 	$response = $bbbApi->createMeeting($bbbMeeting->getCreationParams());

@@ -10,7 +10,7 @@ require_once(Utilities::getSrcRoot() . "/group/Group.php");
 require_once(Utilities::getSrcRoot() . "/organization/Organization.php");
 require_once(Utilities::getSrcRoot() . "/schedule/Event.php");
 require_once(Utilities::getLibRoot() . "/autoload/autoloader.php");
-require_once(Utilities::getLibRoot() . "/bigbluebutton/bbb-api-php/includes/config.php");
+//require_once(Utilities::getLibRoot() . "/bigbluebutton/bbb-api-php/includes/config.php");
 require_once(Utilities::getLibRoot() . "/rememberme/rememberme/src/Rememberme/Storage/File.php");
 require_once(Utilities::getLibRoot() . "/rememberme/rememberme/src/Rememberme/Authenticator.php");
 
@@ -170,7 +170,7 @@ class Utilities {
 	
 	public static function getEnvName() { return ENV_NAME; }
 	
-	public static function getBbbDomain() { return CONFIG_SERVER_BASE_URL; }
+	//public static function getBbbDomain() { return CONFIG_SERVER_BASE_URL; }
 	
 	private static function getSessionTimeout() { return SSN_TIMEOUT; }
 	
