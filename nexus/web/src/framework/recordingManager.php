@@ -41,17 +41,14 @@ $logger = Log::singleton("file", Utilities::getLogRoot() . "/fetch_recording.log
 				$logger->log("url: " . $thisRecording->playback->format->url, PEAR_LOG_INFO);
 				$logger->log("name: " . $thisRecording->name, PEAR_LOG_INFO);
 				$logger->log("start: " . $thisRecording->startTime, PEAR_LOG_INFO);
-				//$logger->log("meta: ". $recording->metadata->network, PEAR_LOG_INFO);
-				//$logger->log("metas: ". var_dump($recording->metadata, true), PEAR_LOG_INFO);
-				//$logger->log("metas: ". var_dump($recording->metas, true), PEAR_LOG_INFO);
+				$logger->log("meta: ". $recording->metadata->network, PEAR_LOG_INFO);
 				
-				//if ($thisRecording->name === $_SESSION['groups'][0]['name']." Conference Room") {
-					$response[$counter]['state'] = $thisRecording->state;
-					$response[$counter]['participants'] = $thisRecording->participants;
-					$response[$counter]['url'] = $thisRecording->playback->format->url;
-					$response[$counter]['start'] = $thisRecording->startTime;
-					$counter++;
-				//}
+				$response[$counter]['state'] = $thisRecording->state;
+				$response[$counter]['participants'] = $thisRecording->participants;
+				$response[$counter]['url'] = $thisRecording->playback->format->url;
+				$response[$counter]['start'] = $thisRecording->startTime;
+				$counter++;
+
 			}
 			$logger->log("Loop: END", PEAR_LOG_INFO);
 		}
