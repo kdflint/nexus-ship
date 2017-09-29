@@ -8,8 +8,7 @@
 			 	var nextRecording = undefined;
 			 	var tableRows = "";
 			 	var showClipboardButton = Clipboard.isSupported();
-			 	//for (var i = 0; i < jsonObj.length; i++) { 
-			 	for (var i = 0; i <= jsonObj.length; i++) { 
+			 	for (var i = 0; i < jsonObj.length; i++) { 
 			 		tableRows = tableRows + "<div id='recordingRow" + i + "' class='div-tr' style='position:relative;'></div>";
 			 		nextRecording = i; 
 			 	}
