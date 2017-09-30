@@ -53,7 +53,13 @@ Use only clean input beyond this point (i.e. $clean[])
 $meetingRecurPattern = array("0" => "daily", "1" => "weekdays", "2" => "weekly");
 
 $meetingType = array("1" => "video chat", "2" => "collaboration", "3" => "webinar", "4" => "video tether");
+
+// Business rule: If session is PUB or session is ADV and user is non-admin, meetings should go in pending review; If session is NWM, meeting should go in active
 $meetingStatus = (Utilities::isSessionAdmin() ? 1 : 3);
+if ($_SESSION['nexusContext'] === "NWM") {
+	$meetingStatus = 1;
+}
+
 $timestamp = $result['clean']['meeting-date'] . " " . $result['clean']['meeting-time'] . " " . $result['clean']['tzone-name'];
 $targetExt = "";
 $isFile = false;
