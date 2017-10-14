@@ -38,7 +38,7 @@ if (isset($dirty['password']) && Utilities::isValidPassword($dirty['password']))
 
 if (isset($dirty['tz']) && Event::isValidTimeZone($dirty['tz'])) {
 	$clean['tz'] = $dirty['tz'];
-} else if (isset($_SESSION['timezone']) && Event::isValidTimeZone($_SESSION['timezone']) {
+} else if (isset($_SESSION['timezone']) && Event::isValidTimeZone($_SESSION['timezone'])) {
 	// The timezone will come in to this processor via form submit, except in case of sm login when we pick it up from session
 	$clean['tz'] = $_SESSION['timezone'];
 } else {
