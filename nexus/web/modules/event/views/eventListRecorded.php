@@ -29,10 +29,11 @@
 					document.getElementById("reservationTable").innerHTML = tableRow
 				} else {
 			 		for (var i = 0; i < jsonObj.length; i++) {
+			 			var d = new Date(parseInt(jsonObj[i].start[0]));
 			 			tableEvent = 
        				"<div class='td-div'>" +
 	       				"<div class='event'>" +
-  					  		"<span class='day'>" + jsonObj[i].start[0] + "</span><br/>" +
+  					  		"<span class='day'>" + d.toLocaleString() + "</span><br/>" +
 								"</div>" +
       				"</div>" +
       				 
@@ -44,7 +45,7 @@
           			"</div>" +
           		"</div>";
       			document.getElementById("recordingRow" + i).innerHTML = tableEvent;	
-      		}
+      		}      		
       	}		 			
 			}
 		}
