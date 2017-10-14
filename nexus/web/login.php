@@ -200,7 +200,7 @@ Utilities::setUserLanguageEnv();
     			}
 				});
 				document.getElementById("localTz").value = getLocalTz();
-				setSessionTimezone("/");
+				setSessionTimezone("");
 				var loginForm = document.forms["login-form"];
 				$( '#tech_check_control' ).click(function() {
 	  			$( "#tech_check_display" ).toggle( "blind" ); 			
