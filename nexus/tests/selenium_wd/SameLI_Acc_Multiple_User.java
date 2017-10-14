@@ -46,6 +46,4 @@ public class SameLI_Acc_Multiple_User extends Config_LI
 	      fail(verificationErrorString);
 	    }
 	  }
-
-
 }

@@ -17,9 +17,7 @@ public class Config_LI
 	public static WebDriver driver;
  	public static StringBuffer verificationErrors = new StringBuffer();
  	
- 	
- 	//Path of property file in local - Need to be replaced 
- 	static File property_file = new File("C:\\Users\\Arvind\\Desktop\\hema practie selenium\\Story 2 - LI Login\\datafile_LI.properties");
+ 	static File property_file = new File("./datafile_LI.properties");
   
  	static FileInputStream fileInput = null;
  	static Properties prop = new Properties();
@@ -47,18 +45,13 @@ public class Config_LI
 		  ChromeOptions options = new ChromeOptions();
 		  options.addArguments("--disable-notifications");
 		  
-		  
 		  System.setProperty("webdriver.chrome.driver",prop.getProperty("chromedriver"));
 		  driver=new ChromeDriver(options);
-		  
-		 
 	  }
- 	
  	
  	@AfterSuite
  	public void closeBrowser() 
  	{
  		driver.quit();
  	}
-
 }
