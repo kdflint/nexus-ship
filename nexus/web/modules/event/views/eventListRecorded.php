@@ -30,6 +30,11 @@
 			 		for (var i = 0; i < jsonObj.length; i++) {
 			 			var d = new Date(parseInt(jsonObj[i].start[0]));
 			 			var d_parts = d.toLocaleString().split(',');
+			 			var playHtmlString = 
+			 				(jsonObj[i].state[0] == 'published' ? 
+			 					"<a href='" + jsonObj[i].url[0] + "' target='_blank'><span class='fa fa-play-circle fa-2x'></span></a> " : 
+			 					"<span class='fa fa-play-circle fa-2x' style='color:#cccccc;'></span> "
+			 				);
 			 			tableEvent = 
        				"<div class='td-div'>" +
 	       				"<div class='event'>" +
@@ -39,8 +44,7 @@
       				 
        				"<div id='nowEventDetail' class='td-div' style='position:absolute;left:140px;top:5px;height:70px;'>" +	  	       				
 				       	"<div class='meeting'>" +
-          				"<span class='day'>" + jsonObj[i].name + " | Participant Count: " + jsonObj[i].participants[0] + " | " +
-          				(jsonObj[i].state[0] == 'published' ? "<a href='" + jsonObj[i].url[0] + "' target='_blank'>Stream Presentation</a>" : "Presentation link pending") +
+          				"<span class='day'>" + playHtmlString + jsonObj[i].name + " | Attendees: " + jsonObj[i].participants[0] +
           				"</span>" +
           			"</div>" +
           		"</div>";

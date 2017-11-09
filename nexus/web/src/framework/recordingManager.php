@@ -59,7 +59,7 @@ $logger = Log::singleton("file", Utilities::getLogRoot() . "/fetch_recording.log
 				if (Event::isValidEventUuid($thisRecording->metadata->uuid)) {
 					$response[$counter]['name'] = Event::getEventName($thisRecording->metadata->uuid);
 				} else {
-					$response[$counter]['name'] = "(Name unknown)";
+					$response[$counter]['name'] = "";
 				}
 				$counter++;
 			}
