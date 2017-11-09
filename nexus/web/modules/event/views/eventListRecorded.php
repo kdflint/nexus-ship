@@ -7,7 +7,6 @@
 				var jsonObj = JSON.parse(xmlhttp.responseText);
 			 	var nextRecording = undefined;
 			 	var tableRows = "";
-			 	var showClipboardButton = Clipboard.isSupported();
 			 	for (var i = 0; i < jsonObj.length; i++) { 
 			 		tableRows = tableRows + "<div id='recordingRow" + i + "' class='div-tr' style='position:relative;'></div>";
 			 		nextRecording = i; 
@@ -30,17 +29,18 @@
 				} else {
 			 		for (var i = 0; i < jsonObj.length; i++) {
 			 			var d = new Date(parseInt(jsonObj[i].start[0]));
+			 			var d_parts = d.toLocaleString().split(',');
 			 			tableEvent = 
        				"<div class='td-div'>" +
 	       				"<div class='event'>" +
-  					  		"<span class='day'>" + d.toLocaleString() + "</span><br/>" +
+  					  		"<span class='day'>" + d_parts[0] + "<br/>" + d_parts[1] + "</span><br/>" +
 								"</div>" +
       				"</div>" +
       				 
        				"<div id='nowEventDetail' class='td-div' style='position:absolute;left:140px;top:5px;height:70px;'>" +	  	       				
 				       	"<div class='meeting'>" +
-          				"<span class='day'>Participants: " + jsonObj[i].participants[0] + " | " +
-          				(jsonObj[i].state[0] == 'published' ? "<a href='" + jsonObj[i].url[0] + "' target='_blank'>View Presentation</a>" : "Presentation link pending") +
+          				"<span class='day'>" + jsonObj[i].name + " | Participant Count: " + jsonObj[i].participants[0] + " | " +
+          				(jsonObj[i].state[0] == 'published' ? "<a href='" + jsonObj[i].url[0] + "' target='_blank'>Stream Presentation</a>" : "Presentation link pending") +
           				"</span>" +
           			"</div>" +
           		"</div>";

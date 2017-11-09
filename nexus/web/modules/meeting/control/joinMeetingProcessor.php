@@ -53,7 +53,7 @@ if ($_SESSION['nexusContext'] === "ADV" && isset($_SESSION['networkName'])) {
 }
 
 $bbbMeeting = new BbbMeeting($clean['uuid'], $roomName . " Conference Room", $clean['mtype']);
-$bbbMeeting->setMetaParams($_SESSION['networkId'], $_SESSION['orgUid'], $_SESSION['groups'][0]['id'], $_SESSION['uidpk']);
+$bbbMeeting->setMetaParams($_SESSION['networkId'], $_SESSION['orgUid'], $_SESSION['groups'][0]['id'], $_SESSION['uidpk'], $clean['uuid']);
 
 $itsAllGood = TRUE;
 $joinerPassword = "mp";

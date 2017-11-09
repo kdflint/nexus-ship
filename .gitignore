@@ -19,11 +19,7 @@ timeZoneData.js
 pilot/view/include/scrapToggleCode.php
 pilot/guidestar/*
 new_nexus
-nexus/lib/Validate.php
-nexus/lib/Log.php
-nexus/lib/rememberme/*
-nexus/lib/bigbluebutton/*
-nexus/lib/facebook/*
+nexus/lib/*
 nexus/web/vendor/*
 nexus/web/modules/directory/views/include/*
 nexus/log/*

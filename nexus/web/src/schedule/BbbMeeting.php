@@ -41,11 +41,12 @@ class BbbMeeting {
 		}
 	}
 	
-	function setMetaParams($network, $org, $group, $initiator) {
+	function setMetaParams($network, $org, $group, $initiator, $uuid) {
 		$this->creationParams->addMeta("network", $network);
-		//$this->creationParams->addMeta("organization", $org);
-		//$this->creationParams->addMeta("group", $group);
-		//$this->creationParams->addMeta("initiator", $initiator);		
+		$this->creationParams->addMeta("organization", $org);
+		$this->creationParams->addMeta("group", $group);
+		$this->creationParams->addMeta("initiator", $initiator);	
+		$this->creationParams->addMeta("uuid", $uuid);	
 		return true;		
 	}
 	
