@@ -119,6 +119,7 @@ class Event {
 	}
 	
 	public static function isValidEventUuid($in) {
+		if (!$in) {return FALSE;}
 		$query = "select exists (select uuid from event where uuid = $1)";		
 		$row = pg_fetch_row(PgDatabase::psExecute($query, array($in)));
 		if (!strcmp($row[0], "t")) {
@@ -370,8 +371,18 @@ class Event {
 		return $uuid;
 	}	
 	
+	public static function getEventName($uuid) {
+		$query = "select name from event where uuid = $1";
+		$row = pg_fetch_row(PgDatabase::psExecute($query, array($uuid)));
+		if ($row[0]) {
+			return $row[0];
+		} else {
+			return false;
+		}
+	}
+	
 	public static function deleteEvent($uuid) {
-		$query = "update event set active = false where uuid=$1";
+		$query = "update event set active = false where uuid = $1";
 		PgDatabase::psExecute($query, array($uuid));
 		return;
 	}

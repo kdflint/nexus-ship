@@ -3,6 +3,7 @@
 session_start();
 
 require_once("Util.php");
+require_once(Utilities::getSrcRoot() . "/schedule/Event.php");
 require_once Utilities::getComposerRoot() . '/autoload.php';
 
 use BigBlueButton\BigBlueButton;
@@ -25,6 +26,7 @@ $logger = Log::singleton("file", Utilities::getLogRoot() . "/fetch_recording.log
 		$counter = 0;
 		$bbbApi = new BigBlueButton();
 		$recordingParams = new GetRecordingsParameters();
+		// Below act as a filter for which meetings to retrieve
 		if ($_SESSION['nexusContext'] === "NWM") {
 			$recordingParams->addMeta("organization", $_SESSION['orgUid']);
 		} else {
@@ -42,16 +44,24 @@ $logger = Log::singleton("file", Utilities::getLogRoot() . "/fetch_recording.log
 				$logger->log("state: " . $thisRecording->state[0], PEAR_LOG_INFO);
 				$logger->log("participants: " . $thisRecording->participants, PEAR_LOG_INFO);
 				$logger->log("url: " . $thisRecording->playback->format->url, PEAR_LOG_INFO);
-				$logger->log("name: " . $thisRecording->name, PEAR_LOG_INFO);
+				$logger->log("room: " . $thisRecording->name, PEAR_LOG_INFO);
 				$logger->log("start: " . $thisRecording->startTime, PEAR_LOG_INFO);
-				$logger->log("meta: ". $recording->metadata->network, PEAR_LOG_INFO);
-				
+				$logger->log("network: " . $thisRecording->metadata->network, PEAR_LOG_INFO);
+				$logger->log("organization: " . $thisRecording->metadata->organization, PEAR_LOG_INFO);
+				$logger->log("group: " . $thisRecording->metadata->group, PEAR_LOG_INFO);
+				$logger->log("initiator: " . $thisRecording->metadata->initiator, PEAR_LOG_INFO);
+				$logger->log("uuid: " . $thisRecording->metadata->uuid, PEAR_LOG_INFO);
+							
 				$response[$counter]['state'] = $thisRecording->state;
 				$response[$counter]['participants'] = $thisRecording->participants;
 				$response[$counter]['url'] = $thisRecording->playback->format->url;
 				$response[$counter]['start'] = $thisRecording->startTime;
+				if (Event::isValidEventUuid($thisRecording->metadata->uuid)) {
+					$response[$counter]['name'] = Event::getEventName($thisRecording->metadata->uuid);
+				} else {
+					$response[$counter]['name'] = "(Name unknown)";
+				}
 				$counter++;
-
 			}
 			$logger->log("Loop: END", PEAR_LOG_INFO);
 		}
