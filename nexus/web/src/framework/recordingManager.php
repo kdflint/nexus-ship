@@ -25,8 +25,11 @@ $logger = Log::singleton("file", Utilities::getLogRoot() . "/fetch_recording.log
 		$counter = 0;
 		$bbbApi = new BigBlueButton();
 		$recordingParams = new GetRecordingsParameters();
-		$recordingParams->addMeta("network", $_SESSION['networkId']);
-		//$recordingParams->addMeta("organization", $_SESSION['orgUid']);
+		if ($_SESSION['nexusContext'] === "NWM") {
+			$recordingParams->addMeta("organization", $_SESSION['orgUid']);
+		} else {
+			$recordingParams->addMeta("network", $_SESSION['networkId']);
+		}
 		//$recordingParams->addMeta("group", $_SESSION['groups'][0]['id']);
 		//$recordingParams->addMeta("initiator", $_SESSION['uidpk']);
 		

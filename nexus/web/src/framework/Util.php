@@ -168,6 +168,8 @@ class Utilities {
 	
 	public static function getSupportUrl() { return SUPPORT_URL; }
 	
+	public static function getMemberUrl() { return MEMBER_URL; }
+	
 	public static function getEnvName() { return ENV_NAME; }
 	
 	//public static function getBbbDomain() { return CONFIG_SERVER_BASE_URL; }

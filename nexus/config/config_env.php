@@ -17,6 +17,7 @@
 	define("ENV_NAME", "local");
 	define("ENV_HOST", "localhost");
 	define("SUPPORT_URL", "http://northbridgetech.org/dev/support");
+	define("MEMBER_URL", "https://northbridgetech.org/dev/members/?q=login");
 	define("FORUM_URL", "localhost/phpBB3");
 	define("ENV_PROTOCOL", "http://");
 

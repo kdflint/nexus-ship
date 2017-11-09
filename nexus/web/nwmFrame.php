@@ -15,6 +15,10 @@
 						</div>
 					</div>
 					
+					<div id="recordList" style="display:none;">
+						<?php include("modules/schedule/views/reservationsListRecorded.php"); ?>
+					</div>
+					
 					<div id="fatalError" style="display:none;">
 						<?php include("modules/error/views/error.php"); ?>
 					</div>
