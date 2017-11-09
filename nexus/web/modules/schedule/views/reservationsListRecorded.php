@@ -12,7 +12,7 @@
 			 		tableRows = tableRows + "<div id='recordingRow" + i + "' class='div-tr' style='position:relative;'></div>";
 			 		nextRecording = i; 
 			 	}
-			 	document.getElementById("reservationTable").innerHTML = tableRows;
+			 	document.getElementById("recordingsTable").innerHTML = tableRows;
 				if (nextRecording === undefined) {
 					tableRow = "<div id='reservationRow0' class='div-tr' style='position:relative;'>" + 
        			"<div class='td-div'>" +
@@ -26,7 +26,7 @@
           		"</div>" +
           	"</div>" +
 					"</div>";
-					document.getElementById("reservationTable").innerHTML = tableRow
+					document.getElementById("recordingsTable").innerHTML = tableRow
 				} else {
 			 		for (var i = 0; i < jsonObj.length; i++) {
 			 			var d = new Date(parseInt(jsonObj[i].start[0]));
@@ -54,6 +54,10 @@
 		xmlhttp.send();  		
 	}
 </script>
+
+<div id="recordingsTable" class="table-div">
+	<script> getEventListRecorded(); </script>
+</div>
 					
 
 	

@@ -17,7 +17,8 @@
      		<span class="techCheckCol2"><img id="flash_status" src="<?php echo(Utilities::getHttpImagePath()); ?>/fa-square-o_16_486326.png" /></span>
     		<span id="flash_version" class="techCheckCol3 descr"></span>
     	</div>
-    	<div style="margin-top:10px;">
+    	<div style="margin-top:10px;display:none;">
+    		<!-- This java check is outdated with latest version of BBB. How should we replace it? -->
      		<span class="techCheckCol1">Java Plugin</span>
      		<span class="techCheckCol2"><img id="java_status" src="<?php echo(Utilities::getHttpImagePath()); ?>/fa-square-o_16_486326.png" /></span>
     		<span id="java_version" class="techCheckCol3 descr"></span>
