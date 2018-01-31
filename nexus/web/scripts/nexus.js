@@ -206,7 +206,6 @@ function getXmlHttpRequest() {
 
 function resetSessionLanguage(lang) {
 	if (lang != 'xx') {
-		var x = document.getElementById("fname");
 		var xmlhttp = getXmlHttpRequest();
 		xmlhttp.onreadystatechange=function() {
 			if (xmlhttp.readyState == 4) {

@@ -268,7 +268,7 @@ Utilities::setUserLanguageEnv();
       		</span>				
 				<?php } else { ?>
       		<span id="walkme-login-anchor" class="controls" style="float:right;padding-bottom:10px;margin-top:30px;">
-	      		<a href="http://northbridgetech.org/downloads/Northbridge_web_conference_center.pdf" style="color:#d27b4b;text-decoration:none;" target="_blank"><?php echo _("About"); ?></a> | 
+	      		<a href="http://northbridgetech.org/downloads/Whitepaper_NexusWebMeet.pdf" style="color:#d27b4b;text-decoration:none;" target="_blank"><?php echo _("About"); ?></a> | 
       			<a href="<?php echo Utilities::getSupportUrl(); ?>" style="color:#d27b4b;text-decoration:none;" target="_blank"><?php echo _("Support"); ?></a>
       		</span>
       	<?php } ?>

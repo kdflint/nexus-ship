@@ -98,6 +98,8 @@ if(file_exists($customProfileForm)) {
 
 $customProfileData = strlen($_SESSION['profile']) > 0 ? $_SESSION['profile'] : '""';
 
+Utilities::setUserLanguageEnv();
+
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">

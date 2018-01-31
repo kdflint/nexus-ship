@@ -56,3 +56,16 @@ msgstr ""
 "Por favor, introduzca su identidad de usuario para que podemos enviar por "
 "correo electr&oacute;nico con un enlace de restablecimiento de "
 "contrase&ntilde;a."
+
+msgid "Hello"
+msgstr "Hola"
+
+msgid "Select Language"
+msgstr "Cambiar idioma"
+
+msgid "English"
+msgstr "Ingl&egrave;s"
+
+msgid "Spanish"
+msgstr "Espa&ntilde;ol"
+

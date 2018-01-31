@@ -574,6 +574,9 @@ class Utilities {
 	}
 	
 	public static function getUserLangagePreference() {
+		if (isset($_SESSION['language']) && strlen($_SESSION['language']) > 0) {
+			return $_SESSION['language'];
+		}
 		$languages = explode(',',$_SERVER['HTTP_ACCEPT_LANGUAGE']);
 		foreach($languages as $lang) {
 			$languageSlice = substr($lang, 0, 2);
@@ -605,7 +608,7 @@ class Utilities {
 	public static function setUserLanguagePreference($lang) {
 		$_SESSION['language'] = $lang;
 	}
-
+	
 	public static function isSessionPublic() {
 		if (strcasecmp($_SESSION['nexusContext'], "PUB") == 0) {
 			return TRUE;

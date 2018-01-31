@@ -30,8 +30,9 @@
       	</span>
       	<a id="profile_control" href="javascript:void(0);"><span id="profile_control_icon" style="clear:right;float:right;padding-top:10px;margin:0px;color:#d27b4b;" class="fa fa-lg fa-plus-square" ></span></a>
 				<span style="float:right;padding:10px;">
-					Hello <?php echo $_SESSION['fname']; ?>
-					<!--<?php echo(Utilities::getHelloString($_SESSION['language'])); ?> <?php echo $_SESSION['fname']; ?>-->
+					<!--Hello <?php echo $_SESSION['fname']; ?>-->
+					<?php echo _("Hello"); ?> <?php echo $_SESSION['fname']; ?>
+					
 				</span>
 				
 				<div id="openTrainModal" class="modalDialog">
