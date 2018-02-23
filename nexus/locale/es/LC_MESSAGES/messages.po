@@ -64,7 +64,7 @@ msgid "Select Language"
 msgstr "Cambiar idioma"
 
 msgid "English"
-msgstr "Ingl&egrave;s"
+msgstr "Ingl&eacute;s"
 
 msgid "Spanish"
 msgstr "Espa&ntilde;ol"

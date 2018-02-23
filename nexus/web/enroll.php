@@ -130,17 +130,20 @@ if(isset($_GET['error']) && Utilities::isSafeCharacterSet($_GET['error'])) {
               		</span>
               	</div>
 							<?php } ?>
-							<?php if($showGroupEnrollRead && $enrollGroup && $accountType == "Advantage") { ?>
+							<?php if($showGroupEnrollRead && $enrollGroup) { 
+								if ($accountType == "Advantage") { ?>
 								<div style="margin-bottom:20px">
 									<b>
 										<p>Keep the conversation going! You have been invited to enroll in </p>
 	 									<span style="font-size:90%;">
 		 									<?php echo($enrollGroup[0]['name']); ?> discussion forum
-	 										<input type="hidden" name="group-enroll[]" value="<?php echo($enrollGroup[0]['id']); ?>"
+	 										<input type="hidden" name="group-enroll[]" value="<?php echo($enrollGroup[0]['id']); ?>" >
               			</span>
               		</b>
               	</div>
-							<?php } ?>
+              <?php } else { ?>
+              	<input type="hidden" name="group-enroll[]" value="<?php echo($enrollGroup[0]['id']); ?>" >
+							<?php } } ?>
 							<input class="form-input" type="text" name="uid"  maxlength="25" title="7-25 characters. May not contain spaces" placeholder="Choose your username"/><span class="required"> *</span>	
 							<input class="form-input" type="password" name="password1" maxlength="25" title="7-25 characters. Must contain at least 1 digit." placeholder="Choose your password"/><span class="required"> *</span>
 							<input class="form-input" type="password" name="password2" maxlength="25" title="Must match previous password entry." placeholder="Confirm your password"/><span class="required"> *</span>

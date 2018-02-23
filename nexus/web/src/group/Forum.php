@@ -85,6 +85,25 @@ class Forum {
 	
 	public static function updateUserPassword($username, $password) {
 	}
+	
+	public static function createNewGroupAndForum($groupName, $parentForumId) {
+		$query = "insert into phpbb_groups (group_name, group_type) values ($1, 0)";
+		$groupid = pg_fetch_row(ForumDatabase::psExecute($query, array($groupName)));
+		
+		$query = "insert into phpbb_forums (forum_name, forum_type, parent_id, display_on_index, enable_icons) values ($1, 1, $2, 1, 1) returning forum_id";
+		$forumId = pg_fetch_row(ForumDatabase::psExecute($query, array($groupName)));
+		if ($forumId) {
+			return $forumId[0];
+		} else {
+			return FALSE;
+		}
+		
+		// add user to group
+		
+		// add group to forum
+		
+		// relevant tables: phpbb_acl_groups
+	}
 
 }
 
