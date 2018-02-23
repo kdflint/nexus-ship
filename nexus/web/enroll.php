@@ -119,7 +119,7 @@ if(isset($_GET['error']) && Utilities::isSafeCharacterSet($_GET['error'])) {
 			  	<p id="enroll-user-message" class="confirmation"><span class="<?php echo $cleanIcon; ?>" style="color:#007582;float:left;margin-right:5px;"></span><?php echo $cleanMessage; ?></p>
 					<form id="enroll-form" class="pure-form" autocomplete="off" action="modules/login/control/enrollProcessor.php" method="post">
 	    			<fieldset>
-							<?php if($showGroupEnrollWrite && count($publicGroups) > 0) { ?>
+							<?php if($showGroupEnrollWrite && count($publicGroups) > 0 && $accountType == "Advantage") { ?>
 							<!-- TODO - This is very bad! Assumes that there will *always* be one public group named "Public Group" -->
 								<div style="margin-bottom:20px">
 									<p>Which group(s) would you like to join?</p>
@@ -130,7 +130,7 @@ if(isset($_GET['error']) && Utilities::isSafeCharacterSet($_GET['error'])) {
               		</span>
               	</div>
 							<?php } ?>
-							<?php if($showGroupEnrollRead && $enrollGroup) { ?>
+							<?php if($showGroupEnrollRead && $enrollGroup && $accountType == "Advantage") { ?>
 								<div style="margin-bottom:20px">
 									<b>
 										<p>Keep the conversation going! You have been invited to enroll in </p>
