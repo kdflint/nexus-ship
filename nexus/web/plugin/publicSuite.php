@@ -104,7 +104,7 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 						position: { my : "left top", at: "right+25 top", of: "#directory-form" },
 						width: 228
 				});
-				toggleDisplay(<?php echo $viewId; ?>);
+				//toggleDisplay(<?php echo $viewId; ?>);
 			});
 		</script>
 		
@@ -229,10 +229,11 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 			
 			<div id="mod_event"><?php include(Utilities::getModulesRoot() . "/event/mod_controller.php"); ?></div>
 			<div id="mod_directory"><?php include(Utilities::getModulesRoot() . "/directory/mod_controller.php"); ?></div>
-			<div id="mod_forum"><?php include(Utilities::getModulesRoot() . "/forum/mod_controller.php"); ?></div>		
+			<div id="mod_forum"><?php include(Utilities::getModulesRoot() . "/forum/mod_controller.php"); ?></div>
 		</div>
 
 		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-tLX5TYQhwxQQNx5-UF0VajixUwGGkJQ" async defer></script>
+		<script>console.log("Chrome problem debug marker.");toggleDisplay(<?php echo $viewId; ?>);</script>
 		
 	</body>
 </html>
