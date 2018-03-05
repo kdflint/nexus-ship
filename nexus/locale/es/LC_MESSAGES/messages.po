@@ -69,3 +69,69 @@ msgstr "Ingl&eacute;s"
 msgid "Spanish"
 msgstr "Espa&ntilde;ol"
 
+msgid "Confirm password"
+msgstr "Confirme la contrase&ntilde;a"
+
+msgid "First name"
+msgstr "Primer Nombre"
+
+msgid "Last name"
+msgstr "Apellido"
+
+msgid "Now"
+msgstr "Ahora"
+
+msgid "Soon"
+msgstr "Pronto"
+
+msgid "Future"
+msgstr "Futuro"
+
+msgid "Team Pass"
+msgstr "Pase de equipo"
+
+msgid "Guest Pass"
+msgstr "Pase de invitado"
+
+msgid "Your enrolled team members can use that link to schedule and attend any Nexus Web Meet event."
+msgstr "Tus miembros del equipo inscritos puedan usar ese enlace para programar y asistir a cualquier Nexus Web Meet evento."
+
+msgid "Good news! Your room is available right now."
+msgstr "Buenas Noticias! Tu sala de inform&aacute;tica esta lista ahora."
+
+msgid "New reservation"
+msgstr "Nueva reserva"
+
+msgid "Click the calendar to reserve this room for a future date."
+msgstr "Haga clic en el calendario para reservar la sala de inform&aacute;tica para una fecha futura."
+
+msgid "Reserved by"
+msgstr "Reservado por"
+
+msgid "Time Zone"
+msgstr "Zona horaria"
+
+msgid "Date"
+msgstr "Fecha"
+
+msgid "Time"
+msgstr "Horario"
+
+msgid "Duration"
+msgstr "Duraci&oacute;n"
+
+msgid "Reserve"
+msgstr "Reserva"
+
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgid "Close"
+msgstr "Cerrar"
+
+msgid "Your system is compatible to participate in this meeting"
+msgstr "Tu sistema es compatible para participar en esta reunion" 
+
+msgid "Details"
+msgstr "Detalles" 
+
