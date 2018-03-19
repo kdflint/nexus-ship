@@ -18,7 +18,7 @@
 		<div style="margin-top:10px;">
 			<span class="searchQualifier">and&nbsp;</span>
 			<select id="directory-form-select-affiliation" name="affiliation">
-				<option value="0" selected>Denomination is</option>	
+				<option value="0" selected>Religious Affiliation is</option>	
 				<option value="0" >------------</option>	
 	    	<?php include(Utilities::getPartnerCustomRoot() . "/orgaffiliation-" . $_SESSION['networkId'] . ".html"); ?>
     	</select>

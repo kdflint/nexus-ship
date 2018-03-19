@@ -137,7 +137,8 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 				getEventDetail(eventUuid);
 			}	
 			
-			function showEventAdd() {
+			function showEventAdd(networkId) {
+				setPublicSession2(networkId, "", "../");
 				document.getElementById("show-add").style.display='block';
 				document.getElementById("show-detail").style.display='none';
 				document.getElementById("show-event").style.display='none';				
@@ -206,7 +207,7 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 	        	<li class="pure-menu-item pure-menu-selected"><a href="#" onclick="toggleDisplay('mod_event', '0');document.getElementById('schedule-form-cancel').click();" class="pure-menu-link">Calendar</a></li>
         		<li class="pure-menu-item"><a href="#" onclick="toggleDisplay('mod_directory', '1')" class="pure-menu-link">Directory</a></li>
         		<li class="pure-menu-item"><a href="#" onclick="toggleDisplay('mod_forum', '2')" class="pure-menu-link">Forum</a></li>
-        		<li class="pure-menu-item"><a id="schedule_control" href="#" onclick="showEventAdd();" class="pure-menu-link">Submit New Event</a></li>
+        		<li class="pure-menu-item"><a id="schedule_control" href="#" onclick="showEventAdd('<?php echo $cleanNetworkId; ?>');" class="pure-menu-link">Submit New Event</a></li>
         		<?php if ($_SESSION['username'] === "pUser-ed787a92" || $_SESSION['environment'] === "local") { 
         			//https://goo.gl/forms/NInSncEodzNEMo2G3https://goo.gl/forms/NInSncEodzNEMo2G3
         			?>

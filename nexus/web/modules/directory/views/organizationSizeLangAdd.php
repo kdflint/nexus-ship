@@ -1,6 +1,6 @@
 <form id="organization-form-size-lang" class="pure-form modal-form" action="<?php echo(Utilities::getHttpPath()); ?>/modules/directory/control/organizationSizeLangProcessor.php" method="post">
 	<fieldset>
-		<label>Denomination Affil (Ctrl-click to select multiple) </label>
+		<label>Religious Affil (Ctrl-click to select multiple) </label>
 		<select id="directory-form-select-affiliation-in" name="affiliation[]" style="height:330px;width:360px;" multiple>
 	    <?php include(Utilities::getPartnerCustomRoot() . "/orgaffiliation-" . $_SESSION['networkId'] . ".html"); ?>
     </select>

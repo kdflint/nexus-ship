@@ -54,7 +54,7 @@
 										(topicString ? "<p>Focus Areas: " + truncateString(topicString.replace(/,\s*$/, ""),200) + "</p>" : "") +
 										(languageString ? "<p>Languages: " + truncateString(languageString.replace(/,\s*$/, ""),200) + "</p>" : "") +
 										(ethnicityString ? "<p>Ethnicities Served: " + truncateString(ethnicityString.replace(/,\s*$/, ""),200) + "</p>" : "") +
-										(affiliationString ? "<p>Denominational Affiliation: " + truncateString(affiliationString.replace(/,\s*$/, ""),200) + "</p>" : "") +
+										(affiliationString ? "<p>Religious Affiliation: " + truncateString(affiliationString.replace(/,\s*$/, ""),200) + "</p>" : "") +
 										(jsonObj.size ? "<p>Congregation Size: " + jsonObj.size + "</p>" : "") +
 								"</div>";
 			 				document.getElementById("itemRow").innerHTML = "<div class='td-div'>" + tableItem + "<div>";
