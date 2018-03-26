@@ -13,21 +13,24 @@
 			 	}
 			 	document.getElementById("reservationTable").innerHTML = tableRows;
 				if (nextRecording === undefined) {
+					message1 = '<?php echo _("Recordings"); ?>';
+					message2 = '<?php echo _("There are no recordings available."); ?>';
 					tableRow = "<div id='reservationRow0' class='div-tr' style='position:relative;'>" + 
        			"<div class='td-div'>" +
 		      		"<div class='event'>" +		
-	       				"<span class='date' style='font-size:140%;'>Recordings</span><br/>" + 				
+	       				"<span class='date' style='font-size:140%;'>" + message1 + "</span><br/>" + 				
           		"</div>" +
           	"</div>" +
        			"<div id='nowEventDetail' class='td-div' style='position:absolute;left:140px;top:5px;height:70px;'>" +	  	       				
 			       	"<div class='meeting'>" +
-          			"<span class='purpose'>There are no recordings available.</span>" + 
+          			"<span class='purpose'>" + message2 + "</span>" + 
           		"</div>" +
           	"</div>" +
 					"</div>";
 					document.getElementById("reservationTable").innerHTML = tableRow
 				} else {
 			 		for (var i = 0; i < jsonObj.length; i++) {
+			 			message1 = '<?php echo _("Attendees"); ?>';
 			 			var d = new Date(parseInt(jsonObj[i].start[0]));
 			 			var d_parts = d.toLocaleString().split(',');
 			 			var playHtmlString = 
@@ -44,7 +47,7 @@
       				 
        				"<div id='nowEventDetail' class='td-div' style='position:absolute;left:140px;top:5px;height:70px;'>" +	  	       				
 				       	"<div class='meeting'>" +
-          				"<span class='day'>" + playHtmlString + jsonObj[i].name + " | Attendees: " + jsonObj[i].participants[0] +
+          				"<span class='day'>" + playHtmlString + jsonObj[i].name + " | " + message1 + ": " + jsonObj[i].participants[0] +
           				"</span>" +
           			"</div>" +
           		"</div>";

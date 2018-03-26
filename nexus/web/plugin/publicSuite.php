@@ -47,7 +47,7 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 		<link rel="stylesheet" href="//yui-s.yahooapis.com/pure/0.6.0/pure-min.css">
     <link rel="stylesheet" href="../styles/nexus.css" type="text/css" />
     
-    <script src="../scripts/nexus.js" language="javascript"></script>
+    <script src="../scripts/javascriptHandler.php" type="text/javascript" ></script>
   	<script src="<?php echo(Utilities::getConfigPath()); ?>/timeZoneData.js" language="javascript"></script>
   	<!-- Following is temporary - remove when directory refresh is done. Also remove from directoryDetail view -->
   	<script src="<?php echo(Utilities::getConfigPath()); ?>/cfchtOrgEditLinks.js" language="javascript"></script>

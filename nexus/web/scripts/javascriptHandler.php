@@ -1,23 +1,48 @@
+<?php
+header("Content-Type: application/javascript");
+header("Cache-Control: max-age=604800, public");
+
+$USERNAME_REQUIRED = _("Username is required.");
+$PASSWORD_REQUIRED = _("Password is required.");
+$VALID_EMAIL_REQUIRED = _("Valid email is required.");
+$VALID_USERNAME_REQUIRED = _("Valid username is required.");
+$USERNAME_TAKEN = _("This username is already taken.");
+$VALID_PASSWORD_REQUIRED = _("Valid password is required.");
+$MATCHING_PASSWORD_REQUIRED = _("Matching confirmation password is required.");
+$VALID_FIRST_NAME_REQUIRED = _("Valid first name is required.");
+$NAME_REQUIRED = _("Name is required.");
+$EMAIL_REQUIRED = _("Email is required.");
+$ONE_MOMENT = _("One Moment");
+$TO_TEST = _("To test, save your changes");
+$PASSWORD_RESET = _("Please send a password reset link to my email for");
+$OUR_BAD = _("Our bad, something goofed");
+$TRY_AGAIN = _("Please try again.");
+$EMAIL = _("Email");
+
+?>
+
 var errorBackground = "rgba(247,248,239,0.6) url('') no-repeat right top";
 
 var currentEvents;
 var CURRENT_ORG;
 var CURRENT_PROG;
 
-/*
-Would like to avoid initializing these and force the including php page to do so, but that might break something right now. 
-So, we've got redundand code for the moment
-See login.php:142
-*/
-var USERNAME_REQUIRED = '<?php echo _("Username is required"); ?>';
-var PASSWORD_REQUIRED = '<?php echo _("Password is required"; ?>';
-var VALID_EMAIL_REQUIRED = '<?php echo _("Valid email is required"; ?>';
-var VALID_USERNAME_REQUIRED = '<?php echo _("Valid username is required."; ?>';
-var USERNAME_TAKEN = '<?php echo _("This username is already taken."; ?>';
-var VALID_PASSWORD_REQUIRED = '<?php echo _("Valid password is required."; ?>';
-var MATCHING_PASSWORD_REQUIRED = '<?php echo _("Matching confirmation password is required."); ?>';
-var VALID_FIRST_NAME_REQUIRED = '<?php echo _("Valid first name is required."); ?>';
-var ONE_MOMENT = '<?php echo _("One Moment"); ?>';
+var USERNAME_REQUIRED = "<?php echo $USERNAME_REQUIRED; ?>";
+var PASSWORD_REQUIRED = "<?php echo $PASSWORD_REQUIRED; ?>";
+var VALID_EMAIL_REQUIRED = "<?php echo $VALID_EMAIL_REQUIRED; ?>";
+var VALID_USERNAME_REQUIRED = "<?php echo $VALID_USERNAME_REQUIRED; ?>";
+var USERNAME_TAKEN = "<?php echo $USERNAME_TAKEN; ?>";
+var VALID_PASSWORD_REQUIRED = "<?php echo $VALID_PASSWORD_REQUIRED; ?>";
+var MATCHING_PASSWORD_REQUIRED = "<?php echo $MATCHING_PASSWORD_REQUIRED; ?>";
+var VALID_FIRST_NAME_REQUIRED = "<?php echo $VALID_FIRST_NAME_REQUIRED; ?>";
+var ONE_MOMENT = "<?php echo $ONE_MOMENT; ?>";
+var TO_TEST = "<?php echo $TO_TEST; ?>";
+var PASSWORD_RESET = 	"<?php echo $PASSWORD_RESET; ?>";
+var NAME_REQUIRED = "<?php echo $NAME_REQUIRED; ?>";
+var OUR_BAD = "<?php echo $OUR_BAD; ?>";
+var TRY_AGAIN = "<?php echo $TRY_AGAIN; ?>";
+var EMAIL = "<?php echo $EMAIL; ?>";
+var EMAIL_REQUIRED = "<?php echo $EMAIL_REQUIRED; ?>";
 
 var MEETING_INFO_NEXT_REFRESH = "60000";
 var NEXT_MEETING_START;
@@ -278,7 +303,7 @@ function disableTestMessageLink(linkId) {
    var link=document.getElementById(linkId);
    link.style.color="#899d70";
    link.setAttribute("href", "#");
-   link.innerHTML = 'To test, save your changes';
+   link.innerHTML = TO_TEST;
 }
 
 function post(uiContext, to, p) {
@@ -301,7 +326,7 @@ function post(uiContext, to, p) {
 }
 
 function postResetPassword(uidValue, fullname) {
-	var r = confirm("Please send a password reset link to my email for " + fullname + ".");
+	var r = confirm(PASSWORD_RESET + " " + fullname + ".");
 	if (r != true) {
 	  return;
 	}	else {
@@ -915,7 +940,7 @@ function guestValidateAndSubmit(oid, mid) {
   var username = usernameField.value;
   setFieldPassStyles(usernameField, "");
   if (username == null || username == "") {
-    setFieldErrorStyles(usernameField, "Name is required.");
+    setFieldErrorStyles(usernameField, NAME_REQUIRED);
     pass = false;
   }
   
@@ -932,8 +957,8 @@ function guestValidateAndSubmit(oid, mid) {
  			document.getElementById('public-meeting-join').click();
  		} else {
  			usernameField.value = emailField.value = null;
- 			setFieldErrorStyles(usernameField, "Our bad, something goofed :(");
- 			setFieldErrorStyles(emailField, "Please try again.");
+ 			setFieldErrorStyles(usernameField, OUR_BAD + " :(");
+ 			setFieldErrorStyles(emailField, TRY_AGAIN);
  		}
 	}
 }
@@ -948,7 +973,7 @@ function demoValidateAndSubmit() {
   var username = usernameField.value;
   setFieldPassStyles(usernameField, "");
   if (username == null || username == "") {
-    setFieldErrorStyles(usernameField, "Name is required.");
+    setFieldErrorStyles(usernameField, NAME_REQUIRED);
     pass = false;
   }
   
@@ -968,7 +993,7 @@ function usernameValidateAndSubmit() {
 	
   var emailField = usernameForm["email"];
   var email = emailField.value;
-  setFieldPassStyles(emailField, "Email");
+  setFieldPassStyles(emailField, EMAIL);
 	pass = validateEmail(emailField);
   
  	if (Boolean(pass)) {
@@ -1009,7 +1034,7 @@ function inviteValidateAndSubmit() {
 	var submitButton = document.getElementById("invite-form-submit");
 	
 	var emailField = inviteForm["email"];
-	setFieldPassStyles(emailField, "Email");
+	setFieldPassStyles(emailField, EMAIL);
 	pass = validateEmail(emailField);
 
  	if (Boolean(pass)) {
@@ -1092,7 +1117,7 @@ function enrollValidateAndSubmit() {
 function validateEmail(emailField) {
 	var email = emailField.value;
 	if (email == null || email == "") {
-    setFieldErrorStyles(emailField, "Email is required.");
+    setFieldErrorStyles(emailField, EMAIL_REQUIRED);
     return false;
   } else if (!isValidEmail(email)) {
     setFieldErrorStyles(emailField, VALID_EMAIL_REQUIRED);

@@ -21,7 +21,7 @@ class BbbMeeting {
 	function __construct($id, $name, $type) {	
 		require_once(dirname(__FILE__) . "/../framework/Util.php");
 		$this->creationParams = new CreateMeetingParameters($id, $name);
-		$this->creationParams->setLogoutUrl(Utilities::getHttpPath() . '/roomLogout.html');
+		$this->creationParams->setLogoutUrl(Utilities::getHttpPath() . '/roomLogout.php');
 		$this->creationParams->setAttendeePassword('ap');
 		$this->creationParams->setModeratorPassword('mp');
 		$this->creationParams->setDuration('0');

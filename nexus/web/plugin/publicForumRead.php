@@ -36,7 +36,7 @@ Utilities::setPublicSession($cleanNetworkId);
 		<link rel="stylesheet" href="//yui-s.yahooapis.com/pure/0.6.0/pure-min.css">
     <link rel="stylesheet" href="../styles/nexus.css" type="text/css" />
     
-    <script src="../scripts/nexus.js" language="javascript"></script>
+    <script src="../scripts/javascriptHandler.php" type="text/javascript" ></script>
  		<script src="//code.jquery.com/jquery-1.10.2.js" language="javascript"></script>
   	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js" language="javascript"></script>
  	  	

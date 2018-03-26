@@ -133,7 +133,8 @@ Utilities::setUserLanguageEnv();
 
     <!-- New way to include font awesome - why?? -->
     <!--<script src="https://use.fontawesome.com/2eef5e944e.js"></script>-->
-    <script src="scripts/nexus.js" language="javascript"></script>
+    <!--<script src="scripts/nexus.js" language="javascript"></script>-->
+    <script src="scripts/javascriptHandler.php" type="text/javascript" ></script>
   	<script src="<?php echo(Utilities::getConfigPath()); ?>/timeZoneData.js" language="javascript"></script>
   	<script src="<?php echo(Utilities::getConfigPath()); ?>/geoDataCfcht.js" language="javascript"></script>
   	<script src="<?php echo(Utilities::getConfigPath()); ?>/stateData.js" language="javascript"></script>
