@@ -13,7 +13,7 @@
 	      		<input type="text" name="meeting-name" style="width:396px;" maxlength="50" placeholder="<?php echo _("Meeting Name"); ?>" >
 					</div>
 					<div id="tz-static" style="display:block;margin-top:10px;">
-						<span style="font-size:90%;line-height:240%;"><b><?php echo _("Time Zone"); ?>: </b><span id="local-tzDisplay"><?php echo $_SESSION['timezone']; ?></span><a href="javascript:void(0);" onclick="showTimeZoneDisplay('tz-select');" style="margin-left:10px;">Change</a></span>
+						<span style="font-size:90%;line-height:240%;"><b><?php echo _("Time Zone"); ?>: </b><span id="local-tzDisplay"><?php echo $_SESSION['timezone']; ?></span><a href="javascript:void(0);" onclick="showTimeZoneDisplay('tz-select');" style="margin-left:10px;"><?php echo _("Change"); ?></a></span>
 						<input id="local-tzFormField" type="hidden" name="tzone-name" value="<?php echo $_SESSION['timezone']; ?>" />
 						<input id="local-tzFormChange" type="hidden" name="tzone-change" value="false" />
 					</div>

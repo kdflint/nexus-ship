@@ -292,8 +292,8 @@ Utilities::setUserLanguageEnv();
     							<div class="or-separator">
 	        					<span class="or-separator-label">OR</span>
      							</div>
-        					<a class="pure-button pure-button-primary" href="<?php echo(htmlspecialchars($fbLoginUrl)); ?>" style="margin-top:15px;width:94%;height:37px;background-color: #3b5998 !important;"><span class="fa fa-facebook-square fa-2x" style="margin-left:10px;margin-top:-6px;"></span><span style="vertical-align:top;margin-left:20px;">Sign In with <b>Facebook</b></span></a><br/>
-        					<a class="pure-button pure-button-primary" href="<?php echo($liLoginUrl); ?>" style="margin-top:15px;width:94%;height:37px;background-color: #0084bf !important;"><span class="fa fa-linkedin-square fa-2x" style="margin-left:0px;margin-top:-6px;"></span><span style="vertical-align:top;margin-left:20px;">Sign In with <b>LinkedIn</b></span></a>
+        					<a class="pure-button pure-button-primary" href="<?php echo(htmlspecialchars($fbLoginUrl)); ?>" style="margin-top:15px;width:94%;height:37px;background-color: #3b5998 !important;"><span class="fa fa-facebook-square fa-2x" style="margin-left:10px;margin-top:-6px;"></span><span style="vertical-align:top;margin-left:20px;"><?php echo _("Sign In with"); ?> <b><?php echo _("Facebook"); ?></b></span></a><br/>
+        					<a class="pure-button pure-button-primary" href="<?php echo($liLoginUrl); ?>" style="margin-top:15px;width:94%;height:37px;background-color: #0084bf !important;"><span class="fa fa-linkedin-square fa-2x" style="margin-left:0px;margin-top:-6px;"></span><span style="vertical-align:top;margin-left:20px;"><?php echo _("Sign In with"); ?> <b><?php echo _("LinkedIn"); ?></b></span></a>
         				</div>
      					</fieldset>
      				</form>   			

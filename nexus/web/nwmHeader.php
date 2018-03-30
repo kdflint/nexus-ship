@@ -24,9 +24,9 @@
   	
       	<span class="controls" style="float:right;padding-bottom:10px;margin-top:30px;">
 					<!--<a href="javascript:void(0)" onclick="if(typeof Formilla != 'undefined'){Formilla.initFormillaChat();}">Problem?</a> | -->
-					<a href="#openTrainModal" onclick=""><span class="fa fa-graduation-cap fa-2x" style="margin-left:8px;" title="Training"></span></a>
-					<a href="<?php echo Utilities::getSupportUrl(); ?>" target="_blank"><span class="fa fa-question-circle fa-2x" style="margin-left:8px;" title="Support"></span></a>
-      		<a href="login.php?oid=<?php echo $_SESSION['orgUid']; ?>&logout=true" style="color:#d27b4b;text-decoration:none;" title="Logout"><span class="fa fa-sign-out fa-2x" style="margin-left:8px;"></span></a>
+					<a href="#openTrainModal" onclick=""><span class="fa fa-graduation-cap fa-2x" style="margin-left:8px;" title="<?php echo _("Training"); ?>"></span></a>
+					<a href="<?php echo Utilities::getSupportUrl(); ?>" target="_blank"><span class="fa fa-question-circle fa-2x" style="margin-left:8px;" title="<?php echo _("Support"); ?>"></span></a>
+      		<a href="login.php?oid=<?php echo $_SESSION['orgUid']; ?>&logout=true" style="color:#d27b4b;text-decoration:none;" title="<?php echo _("Logout"); ?>"><span class="fa fa-sign-out fa-2x" style="margin-left:8px;"></span></a>
       	</span>
       	<a id="profile_control" href="javascript:void(0);"><span id="profile_control_icon" style="clear:right;float:right;padding-top:10px;margin:0px;color:#d27b4b;" class="fa fa-lg fa-plus-square" ></span></a>
 				<span style="float:right;padding:10px;">

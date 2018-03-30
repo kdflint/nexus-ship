@@ -98,6 +98,7 @@
 				} else {
 			 		for (var i = 0; i < jsonObj.length; i++) {
 			 			message1 = '<?php echo _("Guest Pass"); ?>';
+			 			message2 = '<?php echo _("Please confirm this delete."); ?>';
 			 			tableEvent = 
        			"<div class='td-div'>" +
 	       				"<div class='event'>" +
@@ -116,7 +117,7 @@
           					jsonObj[i].mtypdisplay + " reserved by " + 
           					((jsonObj[i].adder == <?php echo(Utilities::getDemoUidpk()); ?>) ? '<?php echo($_SESSION['fname']); ?>' : jsonObj[i].fname) + " " +  
           					((jsonObj[i].adder == <?php echo(Utilities::getDemoUidpk()); ?>) ? '<?php echo($_SESSION['lname']); ?>' : jsonObj[i].lname) + 
-          					(((IS_ADMIN || jsonObj[i].adder == jsonObj[i].sessionUser) && jsonObj[i].sessionUser != <?php echo(Utilities::getDemoUidpk()); ?>) ? "<a href='modules/schedule/control/eventDeleteProcessor.php?id=" + jsonObj[i].uuid + "' onclick='return confirm(\"Please confirm this delete.\");'><span class='fa fa-trash-o' style='margin-left:10px;color:#d27b4b;'></span></a>" : " ") +
+          					(((IS_ADMIN || jsonObj[i].adder == jsonObj[i].sessionUser) && jsonObj[i].sessionUser != <?php echo(Utilities::getDemoUidpk()); ?>) ? "<a href='modules/schedule/control/eventDeleteProcessor.php?id=" + jsonObj[i].uuid + "' onclick='return confirm(\"" + message2 + "\");'><span class='fa fa-trash-o' style='margin-left:10px;color:#d27b4b;'></span></a>" : " ") +
 										"</p>" +
          						"<p>" + message1 + ":</p>" +
          						"<span id='guest-pass" + i + "' class='descr'><p><?php echo Utilities::getHttpPath(); ?>/login.php?oid=<?php echo $_SESSION['orgUid']; ?>&mid=" + jsonObj[i].uuid + "</p></span>" +
