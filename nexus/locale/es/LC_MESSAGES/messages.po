@@ -30,6 +30,63 @@ msgstr "EQUIPO"
 msgid "#: web/nwmHeader.php:12"
 msgstr "ARCHIVO"
 
+msgid "#: web/nwmHeader.php"
+msgstr "Formación"
+
+msgid "#: web/nwmHeader.php:28"
+msgstr "Apoyo"
+
+msgid "#: web/nwmHeader.php:29"
+msgstr "Cerrar Sesión"
+
+msgid "#:meetingTypeOptions.html:1"
+msgstr "Tipo de reunión"
+
+msgid "#:meetingDurationOptions.html:1"
+msgstr "Duración"
+
+msgid "#:meetingDurationOptions.html:2"
+msgstr "minutos"
+
+msgid "#:meetingDurationOptions.html:5"
+msgstr "horas"
+
+msgid "#:meetingDurationOptions.html:8"
+msgstr "min"
+
+msgid "#:meetingDurationOptions.html:10"
+msgstr "hora"
+
+msgid "#:reservationAdd:16"
+msgstr "Cambiar"
+
+msgid "#:userList.php:48"
+msgstr "Por favor confirme esta eliminación de"
+
+msgid "#:reservationsList:119"
+msgstr "Confirma esta eliminación"
+
+msgid "#:login.php:295"
+msgstr "Inicia sesión con"
+
+msgid "#:profile.html:13"
+msgstr "Reajustar"
+
+msgid "#:profile.html:12"
+msgstr "Actualización"
+
+msgid "#:listUsers.php"
+msgstr "Pendiente"
+
+msgid "#: web/login.php:295"
+msgstr "Facebook"
+
+msgid "#: web/login.php:296"
+msgstr "LinkedIn"
+
+msgid "#:Group.php"
+msgstr "Inscripción"
+
 #: web/login.php:90
 msgid "You have signed out successfully."
 msgstr "Has salido exitosamente."
@@ -310,6 +367,10 @@ msgid "Reserve"
 msgstr "Reserva"
 
 #: web/modules/schedule/views/meetingTypeTooltip.php:5
+msgid "Video Chat"
+msgstr "Chat de video"
+
+#: web/modules/schedule/views/meetingTypeTooltip.php:5
 msgid "Shows web camera displays prominently."
 msgstr "Muestra que la cámara web se muestra prominentemente."
 
@@ -361,6 +422,10 @@ msgstr "Grabaciones"
 #: web/modules/event/views/eventListRecorded.php:17
 msgid "There are no recordings available."
 msgstr "No hay grabaciones disponibles"
+
+#: web/modules/event/views/eventListRecorded.php:33
+msgid "Attendees"
+msgstr "Los asistentes"
 
 #: web/nwmHeader.php:34
 msgid "Hello"
