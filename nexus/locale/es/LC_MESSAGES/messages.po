@@ -21,72 +21,6 @@ msgstr ""
 msgid "Your session has timed out."
 msgstr "Tu sesión ha expirado."
 
-msgid "#: web/nwmHeader.php:14"
-msgstr "HABITACIÓN"
-
-msgid "#: web/nwmHeader:13"
-msgstr "EQUIPO"
-
-msgid "#: web/nwmHeader.php:12"
-msgstr "ARCHIVO"
-
-msgid "#: web/nwmHeader.php"
-msgstr "Formación"
-
-msgid "#: web/nwmHeader.php:28"
-msgstr "Apoyo"
-
-msgid "#: web/nwmHeader.php:29"
-msgstr "Cerrar Sesión"
-
-msgid "#:meetingTypeOptions.html:1"
-msgstr "Tipo de reunión"
-
-msgid "#:meetingDurationOptions.html:1"
-msgstr "Duración"
-
-msgid "#:meetingDurationOptions.html:2"
-msgstr "minutos"
-
-msgid "#:meetingDurationOptions.html:5"
-msgstr "horas"
-
-msgid "#:meetingDurationOptions.html:8"
-msgstr "min"
-
-msgid "#:meetingDurationOptions.html:10"
-msgstr "hora"
-
-msgid "#:reservationAdd:16"
-msgstr "Cambiar"
-
-msgid "#:userList.php:48"
-msgstr "Por favor confirme esta eliminación de"
-
-msgid "#:reservationsList:119"
-msgstr "Confirma esta eliminación"
-
-msgid "#:login.php:295"
-msgstr "Inicia sesión con"
-
-msgid "#:profile.html:13"
-msgstr "Reajustar"
-
-msgid "#:profile.html:12"
-msgstr "Actualización"
-
-msgid "#:listUsers.php"
-msgstr "Pendiente"
-
-msgid "#: web/login.php:295"
-msgstr "Facebook"
-
-msgid "#: web/login.php:296"
-msgstr "LinkedIn"
-
-msgid "#:Group.php"
-msgstr "Inscripción"
-
 #: web/login.php:90
 msgid "You have signed out successfully."
 msgstr "Has salido exitosamente."
@@ -98,10 +32,6 @@ msgstr "Su reunión ha terminado."
 #: web/login.php:264 web/roomLogout.php:20
 msgid "About"
 msgstr "Acerca De"
-
-#: web/login.php:265
-msgid "Support"
-msgstr "Apoyo"
 
 #: web/login.php:282 web/login.php:315 test/esTranslationTest.php:24
 msgid "Username"
@@ -454,3 +384,95 @@ msgstr "Inglés"
 #: web/nwmFrame.php:35
 msgid "Spanish"
 msgstr "Español"
+
+#: web/nwmHeader.php:14
+msgid "ROOM"
+msgstr "HABITACIÓN"
+
+#: web/nwmHeader:13
+msgid "TEAM"
+msgstr "EQUIPO"
+
+#: web/nwmHeader.php:12
+msgid "ARCHIVE"
+msgstr "ARCHIVO"
+
+#: web/nwmHeader.php
+msgid "Training"
+msgstr "Formación"
+
+#: web/nwmHeader.php:28
+msgid "Support"
+msgstr "Apoyo"
+
+#: web/nwmHeader.php:29
+msgid "Logout"
+msgstr "Cerrar Sesión"
+
+#: meetingTypeOptions.html:1
+msgid "Meeting Type"
+msgstr "Tipo de reunión"
+
+#: meetingDurationOptions.html:1
+msgid "Duration"
+msgstr "Duración"
+
+#: meetingDurationOptions.html:2
+msgid "minutes"
+msgstr "minutos"
+
+#: meetingDurationOptions.html:5
+msgid "hours"
+msgstr "horas"
+
+#: meetingDurationOptions.html:8
+msgid "min"
+msgstr "min"
+
+#: meetingDurationOptions.html:10
+msgid "hour"
+msgstr "hora"
+
+#: reservationAdd:16
+msgid "Change"
+msgstr "Cambiar"
+
+#: userList.php:48
+msgid "Please confirm this delete of"
+msgstr "Por favor confirme esta eliminación de"
+
+#: reservationsList:119
+msgid "Please confirm this delete."
+msgstr "Por favor confirme esta eliminación."
+
+#: login.php:295
+msgid "Sign In with"
+msgstr "Inicia sesión con"
+
+#: profile.php:13
+msgid "Reset"
+msgstr "Reajustar"
+
+#: profile.php:12
+msgid "Update"
+msgstr "Actualización"
+
+#: listUsers.php
+msgid "Pending"
+msgstr "Pendiente"
+
+#: web/login.php:295
+msgid "Facebook"
+msgstr "Facebook"
+
+#: web/login.php:296
+msgid "LinkedIn"
+msgstr "LinkedIn"
+
+#: Group.php
+msgid "Enrollment"
+msgstr "Inscripción"
+
+#: profile.php:5
+msgid "Last Name"
+msgstr "Apellido"
