@@ -15,7 +15,11 @@ $VALID_USERNAME_REQUIRED = _("Valid username is required.");
 $USERNAME_TAKEN = _("This username is already taken.");
 $VALID_PASSWORD_REQUIRED = _("Valid password is required.");
 $MATCHING_PASSWORD_REQUIRED = _("Matching confirmation password is required.");
+$CONFIRM_PASSWORD = _("Please confirm your new password.");
+$PASSWORD_RULES = _("7-25 characters please");
+$UNMATCHED_PASSWORDS = _("Your passwords do not match.");
 $VALID_FIRST_NAME_REQUIRED = _("Valid first name is required.");
+$FIRST_NAME_REQUIRED = _("First name is required.");
 $NAME_REQUIRED = _("Name is required.");
 $EMAIL_REQUIRED = _("Email is required.");
 $ONE_MOMENT = _("One Moment");
@@ -55,8 +59,12 @@ var VALID_EMAIL_REQUIRED = "<?php echo $VALID_EMAIL_REQUIRED; ?>";
 var VALID_USERNAME_REQUIRED = "<?php echo $VALID_USERNAME_REQUIRED; ?>";
 var USERNAME_TAKEN = "<?php echo $USERNAME_TAKEN; ?>";
 var VALID_PASSWORD_REQUIRED = "<?php echo $VALID_PASSWORD_REQUIRED; ?>";
+var CONFIRM_PASSWORD = "<?php echo $CONFIRM_PASSWORD; ?>";
+var PASSWORD_RULES = "<?php echo $PASSWORD_RULES; ?>";
 var MATCHING_PASSWORD_REQUIRED = "<?php echo $MATCHING_PASSWORD_REQUIRED; ?>";
+var UNMATCHED_PASSWORDS = "<?php echo $UNMATCHED_PASSWORDS; ?>";
 var VALID_FIRST_NAME_REQUIRED = "<?php echo $VALID_FIRST_NAME_REQUIRED; ?>";
+var FIRST_NAME_REQUIRED = "<?php echo $FIRST_NAME_REQUIRED; ?>";
 var ONE_MOMENT = "<?php echo $ONE_MOMENT; ?>";
 var TO_TEST = "<?php echo $TO_TEST; ?>";
 var PASSWORD_RESET = 	"<?php echo $PASSWORD_RESET; ?>";
@@ -1215,7 +1223,7 @@ function resetScheduleForm() {
 	}
 	var scheduleForm = document.forms['schedule-form'];
 	scheduleForm.reset();
-	setFieldPassStyles(scheduleForm['meeting-name'], "Meeting Name");
+	setFieldPassStyles(scheduleForm['meeting-name'], MEETING_NAME);
 	setFieldPassStyles(scheduleForm['meeting-date'], "Date");
 	setFieldPassStyles(document.getElementById("schedule-form-time-button"), "Time");
 	setFieldPassStyles(document.getElementById("schedule-form-duration-button"), "Duration");
@@ -1253,7 +1261,7 @@ function resetNowForm() {
 	document.getElementById('join_control').click();
 	var nowForm = document.forms['now-form'];
 	nowForm.reset();
-	setFieldPassStyles(nowForm['meeting-name'], "Meeting Name");
+	setFieldPassStyles(nowForm['meeting-name'], MEETING_NAME);
 	setFieldPassStyles(document.getElementById("now-form-duration-button"), "Duration");
 	setFieldPassStyles(document.getElementById("now-form-type-button"), "Meeting Type");
 	$( "#now-form-duration" ).selectmenu( "refresh" );
@@ -1296,16 +1304,16 @@ function profileValidateAndSubmit() {
   	// don't run any more password validations
   } else {
   	if (password1.length < 7 || password1.length > 25) {
-  		setFieldErrorStyles(password1Field, "7-25 characters please");
+  		setFieldErrorStyles(password1Field, PASSWORD_RULES);
   		password1Field.value = "";
    	 	pass = false;
    	}
     if (pass && (password2 == null || password2 == "")) {
-    	setFieldErrorStyles(password2Field, "Please confirm your new password.");
+    	setFieldErrorStyles(password2Field, CONFIRM_PASSWORD);
     	pass = false;
   	}
   	if (pass && (password1 !== password2)) {
-  		setFieldErrorStyles(password2Field, "Your passwords do not match.");
+  		setFieldErrorStyles(password2Field, UNMATCHED_PASSWORDS);
   		password2Field.value = "";
     	pass = false;
   	}
@@ -1315,7 +1323,7 @@ function profileValidateAndSubmit() {
   var fname = fnameField.value;
   setFieldPassStyles(fnameField, "First Name");
   if (fname == null || fname == "" || fname.length < 1) {
-    setFieldErrorStyles(fnameField, "First name is required.");
+    setFieldErrorStyles(fnameField, FIRST_NAME_REQUIRED);
     pass = false;
   }
 

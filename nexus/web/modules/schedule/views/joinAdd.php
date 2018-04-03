@@ -15,10 +15,10 @@
 					<div style="margin-top:10px;">
 						<?php include("meetingTypeTooltip.php"); ?>
       			<select id="now-form-type" name="meeting-type" style="width:204px;vertical-align:middle;">
-	      			<?php include("meetingTypeOptions.html"); ?>			
+	      			<?php include("meetingTypeOptions.php"); ?>			
       			</select>	 
       			<select id="now-form-duration" name="meeting-duration" style="width:132px;vertical-align:middle;">
-	      			<?php include("meetingDurationOptions.html"); ?>
+	      			<?php include("meetingDurationOptions.php"); ?>
       			</select>
 		    	</div> 	
 		    	<input type="hidden" name="meeting-date" value="today" />

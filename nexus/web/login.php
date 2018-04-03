@@ -6,6 +6,8 @@ require_once(Utilities::getSrcRoot() . "/organization/Organization.php");
 require_once(Utilities::getSrcRoot() . "/schedule/Event.php");
 require_once(Utilities::getLibRoot() . '/facebook/Facebook/autoload.php' );
 
+Utilities::setUserLanguageEnv();
+
 $fb = new Facebook\Facebook([
   'app_id' => Utilities::getFbAppId(),
   'app_secret' => Utilities::getFbAppSecret(),
@@ -145,8 +147,6 @@ $networkName = $row['name'];
 if (!isset($networkLogo) || strlen($networkLogo) < 1) {
 	$networkLogo = "default-empty.png";
 }
-
-Utilities::setUserLanguageEnv();
 
 ?>
 

@@ -34,13 +34,13 @@
 	      			<?php include("meetingTimeOptions.html"); ?>
       			</select>	 
       			<select id="schedule-form-duration" name="meeting-duration" style="width:135px;vertical-align:middle;">
-	      			<?php include("meetingDurationOptions.html"); ?>
+	      			<?php include("meetingDurationOptions.php"); ?>
       			</select>
 		    	</div>
 		    	<div style="margin-top:10px;">
-		    		<?php include("meetingTypeTooltip.html"); ?>
+		    		<?php include("meetingTypeTooltip.php"); ?>
 		    		<select id="schedule-form-type" name="meeting-type" style="width:370px;vertical-align:middle;">
-		    			<?php include("meetingTypeOptions.html"); ?>
+		    			<?php include("meetingTypeOptions.php"); ?>
 		    		</select>
 		    	</div> 			
 				</fieldset>

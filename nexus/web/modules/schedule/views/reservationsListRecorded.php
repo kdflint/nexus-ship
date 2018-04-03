@@ -44,7 +44,7 @@
       				 
        				"<div id='nowEventDetail' class='td-div' style='position:absolute;left:140px;top:5px;height:70px;'>" +	  	       				
 				       	"<div class='meeting'>" +
-          				"<span class='day'>" + playHtmlString + jsonObj[i].name + " | Attendees: " + jsonObj[i].participants[0] +
+          				"<span class='day'>" + playHtmlString + jsonObj[i].name + " | " + message1 + ": " + jsonObj[i].participants[0] +
           				"</span>" +
           			"</div>" +
           		"</div>";

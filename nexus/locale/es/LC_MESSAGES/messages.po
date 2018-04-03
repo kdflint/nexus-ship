@@ -110,6 +110,10 @@ msgstr "Elige tu contraseña"
 msgid "Confirm your password"
 msgstr "Confirmar la contraseña"
 
+#: profile.php
+msgid "Confirm Password"
+msgstr "Confirmar contraseña"
+
 #: web/enroll.php:147
 msgid "Your email"
 msgstr "Tu correo electrónico"
@@ -388,6 +392,48 @@ msgstr "Español"
 #: web/nwmHeader.php:14
 msgid "ROOM"
 msgstr "HABITACIÓN"
+
+msgid "Please confirm your new password."
+msgstr "Por favor confirma tu nueva contraseña"
+
+msgid "7-25 characters please"
+msgstr "7-25 caracteres por favor"
+
+msgid "Your passwords do not match."
+msgstr "Tus contraseñas no coinciden."
+
+msgid "First name is required."
+msgstr "Se requiere el primer nombre."
+
+msgid "A meeting cannot be longer than 24 hours."
+msgstr "Una reunión no puede durar más de 24 horas."
+
+msgid "Bad duration"
+msgstr "Mala duración"
+
+msgid "Contact Email"
+msgstr "Email de contacto"
+
+msgid "Meeting name is required"
+msgstr "Se requiere el nombre de la reunión"
+
+msgid "Description"
+msgstr "Descripción"
+
+msgid "Meeting description is required"
+msgstr "La descripción de la reunión es obligatoria"
+
+msgid "End Time"
+msgstr "Hora de finalización"
+
+msgid "End Date"
+msgstr "Fecha Final"
+
+msgid "Start Time"
+msgstr "Hora de inicio"
+
+msgid "Start Date"
+msgstr "Fecha de inicio"
 
 #: web/nwmHeader:13
 msgid "TEAM"

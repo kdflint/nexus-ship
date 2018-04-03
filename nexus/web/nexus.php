@@ -6,6 +6,8 @@ require_once(Utilities::getModulesRoot() . "/forum/forum_integration.php");
 session_start();
 $user->session_begin();
 
+Utilities::setUserLanguageEnv();
+
 $demoSession = "false";
 $disabled = "";
 $sessionContextAdv = "false";
@@ -97,8 +99,6 @@ if(file_exists($customProfileForm)) {
 }
 
 $customProfileData = strlen($_SESSION['profile']) > 0 ? $_SESSION['profile'] : '""';
-
-Utilities::setUserLanguageEnv();
 
 ?>
 
