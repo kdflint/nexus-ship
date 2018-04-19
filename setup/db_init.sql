@@ -12,6 +12,12 @@ SET client_min_messages = warning;
 SET search_path = public, pg_catalog;
 
 --
+-- Name: meeting_type; Type: ENUM; Schema: public; Owner: northbri_devnexus
+--
+
+CREATE TYPE meeting_type AS ENUM ('video chat', 'collaboration', 'webinar', 'video tether');
+
+--
 -- Name: affiliation_id_seq; Type: SEQUENCE; Schema: public; Owner: northbri_devnexus
 --
 
@@ -6962,30 +6968,6 @@ ALTER TABLE ONLY "user"
 
 
 --
--- Name: geometry_columns_delete; Type: RULE; Schema: public; Owner: northbri_devnexus
---
-
-CREATE RULE geometry_columns_delete AS
-    ON DELETE TO geometry_columns DO INSTEAD NOTHING;
-
-
---
--- Name: geometry_columns_insert; Type: RULE; Schema: public; Owner: northbri_devnexus
---
-
-CREATE RULE geometry_columns_insert AS
-    ON INSERT TO geometry_columns DO INSTEAD NOTHING;
-
-
---
--- Name: geometry_columns_update; Type: RULE; Schema: public; Owner: northbri_devnexus
---
-
-CREATE RULE geometry_columns_update AS
-    ON UPDATE TO geometry_columns DO INSTEAD NOTHING;
-
-
---
 -- Name: category_topic_category_fk_fkey; Type: FK CONSTRAINT; Schema: public; Owner: northbri_devnexus
 --
 
@@ -7411,7 +7393,6 @@ REVOKE ALL ON TABLE affiliation FROM PUBLIC;
 REVOKE ALL ON TABLE affiliation FROM northbri_devnexus;
 GRANT ALL ON TABLE affiliation TO northbri_devnexus;
 GRANT SELECT,INSERT,REFERENCES,UPDATE ON TABLE affiliation TO northbri_web WITH GRANT OPTION;
-GRANT ALL ON TABLE affiliation TO northbri_nbnexus;
 
 
 --
@@ -7460,7 +7441,6 @@ REVOKE ALL ON TABLE ethnicity FROM PUBLIC;
 REVOKE ALL ON TABLE ethnicity FROM northbri_devnexus;
 GRANT ALL ON TABLE ethnicity TO northbri_devnexus;
 GRANT SELECT,INSERT,REFERENCES,UPDATE ON TABLE ethnicity TO northbri_web WITH GRANT OPTION;
-GRANT ALL ON TABLE ethnicity TO northbri_nbnexus;
 
 
 --
@@ -7530,7 +7510,6 @@ GRANT SELECT,INSERT,UPDATE ON TABLE event_recur TO northbri_web;
 REVOKE ALL ON TABLE forum_poll FROM PUBLIC;
 REVOKE ALL ON TABLE forum_poll FROM northbri_devnexus;
 GRANT ALL ON TABLE forum_poll TO northbri_devnexus;
-GRANT ALL ON TABLE forum_poll TO northbri_nbnexus;
 GRANT SELECT,INSERT,REFERENCES,UPDATE ON TABLE forum_poll TO northbri_web WITH GRANT OPTION;
 
 
@@ -7723,7 +7702,6 @@ REVOKE ALL ON TABLE organization_affiliation FROM PUBLIC;
 REVOKE ALL ON TABLE organization_affiliation FROM northbri_devnexus;
 GRANT ALL ON TABLE organization_affiliation TO northbri_devnexus;
 GRANT SELECT,INSERT,REFERENCES,DELETE,UPDATE ON TABLE organization_affiliation TO northbri_web WITH GRANT OPTION;
-GRANT ALL ON TABLE organization_affiliation TO northbri_nbnexus;
 
 
 --
@@ -7764,7 +7742,6 @@ REVOKE ALL ON TABLE organization_ethnicity FROM PUBLIC;
 REVOKE ALL ON TABLE organization_ethnicity FROM northbri_devnexus;
 GRANT ALL ON TABLE organization_ethnicity TO northbri_devnexus;
 GRANT SELECT,INSERT,REFERENCES,DELETE,UPDATE ON TABLE organization_ethnicity TO northbri_web WITH GRANT OPTION;
-GRANT ALL ON TABLE organization_ethnicity TO northbri_nbnexus;
 
 
 --
@@ -7924,7 +7901,6 @@ GRANT SELECT,UPDATE ON SEQUENCE program_contact_id_seq TO northbri_web;
 REVOKE ALL ON TABLE program_contact FROM PUBLIC;
 REVOKE ALL ON TABLE program_contact FROM northbri_devnexus;
 GRANT ALL ON TABLE program_contact TO northbri_devnexus;
-GRANT ALL ON TABLE program_contact TO northbri_nbnexus;
 GRANT SELECT,INSERT,REFERENCES,DELETE,UPDATE ON TABLE program_contact TO northbri_web WITH GRANT OPTION;
 
 
@@ -7954,28 +7930,7 @@ GRANT SELECT,UPDATE ON SEQUENCE program_location_id_seq TO northbri_web;
 REVOKE ALL ON TABLE program_location FROM PUBLIC;
 REVOKE ALL ON TABLE program_location FROM northbri_devnexus;
 GRANT ALL ON TABLE program_location TO northbri_devnexus;
-GRANT ALL ON TABLE program_location TO northbri_nbnexus;
 GRANT SELECT,INSERT,REFERENCES,DELETE,UPDATE ON TABLE program_location TO northbri_web WITH GRANT OPTION;
-
-
---
--- Name: raster_columns; Type: ACL; Schema: public; Owner: northbri_devnexus
---
-
-REVOKE ALL ON TABLE raster_columns FROM PUBLIC;
-REVOKE ALL ON TABLE raster_columns FROM northbri_devnexus;
-GRANT ALL ON TABLE raster_columns TO northbri_devnexus;
-GRANT SELECT ON TABLE raster_columns TO PUBLIC;
-
-
---
--- Name: raster_overviews; Type: ACL; Schema: public; Owner: northbri_devnexus
---
-
-REVOKE ALL ON TABLE raster_overviews FROM PUBLIC;
-REVOKE ALL ON TABLE raster_overviews FROM northbri_devnexus;
-GRANT ALL ON TABLE raster_overviews TO northbri_devnexus;
-GRANT SELECT ON TABLE raster_overviews TO PUBLIC;
 
 
 --
