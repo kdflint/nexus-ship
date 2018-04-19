@@ -745,7 +745,7 @@ class Utilities {
 		$_SESSION['ngpk'] = $returnArray[0]['id'];
 	}
 	
-	public static function setPublicSession($oid, $zone = "undefined", $fname = "Anonymous", $uuid = false) {
+	public static function setPublicSession($oid, $zone = "undefined", $fname = "Anonymous", $uuid = false, $email = "undefined") {
 
 		$_SESSION['nexusContext'] = "PUB";
 		$_SESSION['environment'] = self::getEnvName();
@@ -762,6 +762,7 @@ class Utilities {
 		self::setSessionTimezone($zone);
 		$_SESSION['fname'] = $fname;
 		$_SESSION['lname'] = "";
+		$_SESSION['email'] = $email;
 
 		$org = pg_fetch_array(Organization::getOrganizationByUid($oid));
 	

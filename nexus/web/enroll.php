@@ -1,10 +1,12 @@
 <?php
 
+session_start();
+
 require_once("src/framework/Util.php");
 require_once(Utilities::getSrcRoot() . "/user/Invitation.php");
 require_once(Utilities::getSrcRoot() . "/organization/Organization.php");
 
-session_start();
+Utilities::setUserLanguageEnv();
 
 $inviteId = $networkName = $networkLogo = $cleanMessage = $cleanIcon = $networkOid = "";
 $validInvitation = false;
