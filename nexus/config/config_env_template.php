@@ -1,16 +1,25 @@
 <?php
 
-// PATHS
-	define("PHP_ROOT", "/home/kdflint/projects/nexus-community/nexus/lib");
-	define("WEB_ROOT", "/home/kdflint/projects/nexus-community/nexus/web");
-	define("TKN_ROOT", "/home/kdflint/projects/nexus-community/nexus/token");
-	define("LIB_ROOT", "/home/kdflint/projects/nexus-community/nexus/lib");
-	define("PTR_ROOT", "/home/kdflint/projects/nexus-community/nexus/partner");
-	define("LCL_ROOT", "/home/kdflint/projects/nexus-community/nexus/locale");
-	define("INC_ROOT", "/home/kdflint/projects/nexus-community/nexus/include");
+// PATH ROOTS - must be configured per environment
+	
+	// Nexus source code root
+	define("CODE_ROOT", "/home/kdflint/projects/nexus-community/nexus");
+	
+	// phppBB installation root
 	define("PHPBB3_ROOT", "/home/kdflint/phpBB3");
+	
+	// Composer root
 	define("COMPOSER_ROOT", "/home/kdflint/vendor");
-	define("LOG_ROOT", "/home/kdflint/projects/nexus-community/nexus/log");
+
+// RELATIVE PATHS
+	define("PHP_ROOT", CODE_ROOT . "/lib");
+	define("WEB_ROOT", CODE_ROOT . "/web");
+	define("TKN_ROOT", CODE_ROOT . "/token");
+	define("LIB_ROOT", CODE_ROOT . "/lib");
+	define("PTR_ROOT", CODE_ROOT . "/partner");
+	define("LCL_ROOT", CODE_ROOT . "/locale");
+	define("INC_ROOT", CODE_ROOT . "/include");
+	define("LOG_ROOT", CODE_ROOT . "/log");
 	define("PTR_STC_ROOT", "/partner");
 	define("APP_NAME", "/nexus/nexus");
 	define("PILOT_NAME", "/nexus/pilot");
