@@ -34,7 +34,7 @@
 			 			var d = new Date(parseInt(jsonObj[i].start[0]));
 			 			var d_parts = d.toLocaleString().split(',');
 			 			var playHtmlString = 
-			 				(jsonObj[i].state[0] == 'published' ? 
+			 				(jsonObj[i].published[0] == 'true' ?
 			 					"<a href='" + jsonObj[i].url[0] + "' target='_blank'><span class='fa fa-play-circle fa-2x'></span></a> " : 
 			 					"<span class='fa fa-play-circle fa-2x' style='color:#cccccc;'></span> "
 			 				);
@@ -47,7 +47,7 @@
       				 
        				"<div id='nowEventDetail' class='td-div' style='position:absolute;left:140px;top:5px;height:70px;'>" +	  	       				
 				       	"<div class='meeting'>" +
-          				"<span class='day'>" + playHtmlString + jsonObj[i].name + " | " + message1 + ": " + jsonObj[i].participants[0] +
+          				"<span class='day'>" + playHtmlString + jsonObj[i].name + //" | " + message1 + ": " + jsonObj[i].participants[0] +
           				"</span>" +
           			"</div>" +
           		"</div>";
