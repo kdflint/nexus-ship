@@ -39,4 +39,4 @@ CREATE DATABASE localphpbb
        CONNECTION LIMIT = -1;
 GRANT CONNECT, TEMPORARY ON DATABASE localphpbb TO public;
 GRANT ALL ON DATABASE localphpbb TO postgres;
-GRANT ALL ON DATABASE localphpbb TO northbr6_web;
+GRANT ALL ON DATABASE localphpbb TO northbri_web;
