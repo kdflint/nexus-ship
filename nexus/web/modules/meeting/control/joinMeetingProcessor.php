@@ -110,6 +110,7 @@ if ($itsAllGood) {
 
 $logger->log("Config token: " . $configToken, PEAR_LOG_INFO);
 $logger->log("Room configured: " . var_export($itsAllGood, true), PEAR_LOG_INFO);
+$logger->log("Recording parameters: " . var_export(print_r($bbbMeeting)). PEAR_LOG_INFO);
 
 $joinMeetingParams = new JoinMeetingParameters($bbbMeeting->getMeetingId(), $_SESSION['fname'] . " " . $_SESSION['lname'], $joinerPassword);
 $joinMeetingParams->setConfigToken($configToken);

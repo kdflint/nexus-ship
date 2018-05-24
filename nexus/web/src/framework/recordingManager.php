@@ -29,14 +29,22 @@ $logger = Log::singleton("file", Utilities::getLogRoot() . "/fetch_recording.log
 		// Below act as a filter for which meetings to retrieve
 		if ($_SESSION['nexusContext'] === "NWM") {
 			$recordingParams->addMeta("organization", $_SESSION['orgUid']);
+			$recordingParams->addMeta("network", "n/a");
+			$logger->log("org meta: " . $recordingParams->getMeta("organization"), PEAR_LOG_INFO);
 		} else {
+			$recordingParams->addMeta("organization", "n/a");
 			$recordingParams->addMeta("network", $_SESSION['networkId']);
+			$logger->log("network meta: " . $recordingParams->getMeta("network"), PEAR_LOG_INFO);
 		}
 		//$recordingParams->addMeta("group", $_SESSION['groups'][0]['id']);
 		//$recordingParams->addMeta("initiator", $_SESSION['uidpk']);
 		
+		$logger->log("org meta: " . $recordingParams->getMeta("organization"), PEAR_LOG_INFO);
+		$logger->log("network meta: " . $recordingParams->getMeta("network"), PEAR_LOG_INFO);
+
 		$recordings = $bbbApi->getRecordings($recordingParams);
 		$logger->log("response: " . $recordings->getReturnCode(), PEAR_LOG_INFO);
+
 
 		if ($recordings->getReturnCode() == 'SUCCESS') {
 			foreach ($recordings->getRawXml()->recordings->recording as $thisRecording) {
@@ -50,19 +58,23 @@ $logger = Log::singleton("file", Utilities::getLogRoot() . "/fetch_recording.log
 				$logger->log("group: " . $thisRecording->metadata->group, PEAR_LOG_INFO);
 				$logger->log("initiator: " . $thisRecording->metadata->initiator, PEAR_LOG_INFO);
 				$logger->log("uuid: " . $thisRecording->metadata->uuid, PEAR_LOG_INFO);
-							
-				$response[$counter]['published'] = $thisRecording->published;
-				$response[$counter]['url'] = $thisRecording->playback->format->url;
-				$response[$counter]['start'] = $thisRecording->startTime;
-				if (Event::isValidEventUuid($thisRecording->metadata->uuid)) {
-					$response[$counter]['name'] = Event::getEventName($thisRecording->metadata->uuid);
-				} else {
-					$response[$counter]['name'] = "";
+				
+				/* Temporary client-side filter because API is not working as expected post-migration to blindside */
+				if ($thisRecording->metadata->organization == $_SESSION['orgUid'] || $thisRecording->metadata->network == $_SESSION['networkId']) {
+					$response[$counter]['published'] = $thisRecording->published;
+					$response[$counter]['url'] = $thisRecording->playback->format->url;
+					$response[$counter]['start'] = $thisRecording->startTime;
+					if (Event::isValidEventUuid($thisRecording->metadata->uuid)) {
+						$response[$counter]['name'] = Event::getEventName($thisRecording->metadata->uuid);
+					} else {
+						$response[$counter]['name'] = "";
+					}
+					$logger->log("name: " . $response[$counter]['name'], PEAR_LOG_INFO);
+					$counter++;
 				}
-				$logger->log("name: " . $response[$counter]['name'], PEAR_LOG_INFO);
-				$counter++;
 			}
-			// Temporary patch in for archived recordings, post Blindside transfer
+			
+			// Patch in for archived recordings, created pre Blindside transfer
 			
 			if ($_SESSION['orgUid'] == 'ed787a92') {
 				$response[$counter]['published'] = array("0" => "true");
