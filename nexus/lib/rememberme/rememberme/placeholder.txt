@@ -1,0 +1,3 @@
+Convenient to force source control to create this directory.
+
+We will place a soft link to another sourced project here.
