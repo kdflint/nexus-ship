@@ -21,7 +21,7 @@
 	define("INC_ROOT", CODE_ROOT . "/include");
 	define("LOG_ROOT", CODE_ROOT . "/log");
 	define("PTR_STC_ROOT", "/partner");
-	define("APP_NAME", "/nexus/nexus");
+	define("APP_NAME", "/nexus");
 	define("PILOT_NAME", "/nexus/pilot");
 	define("ENV_NAME", "local");
 	define("ENV_HOST", "localhost");
@@ -41,7 +41,7 @@
 
 // DATABASE
 	define("DB_HOST", "localhost"); 
-	define("DB_USER", "northbr6_web"); 
+	define("DB_USER", "northbri_web"); 
 	define("DB_NAME", "localnexus");	
 	define("FORUM_HOST", "localhost");
 	define("FORUM_USER", "postgres");
