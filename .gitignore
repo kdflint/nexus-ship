@@ -20,12 +20,7 @@ timeZoneData.js
 pilot/view/include/scrapToggleCode.php
 pilot/guidestar/*
 new_nexus
-nexus/lib/Log/*
-nexus/lib/autoload/*
 nexus/lib/bigbluebutton-depr/*
-nexus/lib/facebook/*
-nexus/lib/linkedin/*
-nexus/lib/rememberme/*
 nexus/web/vendor/*
 nexus/web/modules/directory/views/include/*
 nexus/log/*
@@ -40,5 +35,6 @@ pilot/view/include/download/tmpResults/*
 pilot/model/test/*
 pilot/batch/messageQueue/recover*
 pilot/migration/Util.php
+pilot/*
 flash_scripts/*
 database_models/*
