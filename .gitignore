@@ -21,6 +21,7 @@ pilot/view/include/scrapToggleCode.php
 pilot/guidestar/*
 new_nexus
 nexus/lib/bigbluebutton-depr/*
+nexus/lib/rememberme/rememberme/src
 nexus/web/vendor/*
 nexus/web/modules/directory/views/include/*
 nexus/log/*
