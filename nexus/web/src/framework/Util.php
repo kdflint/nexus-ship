@@ -10,29 +10,30 @@ require_once(Utilities::getSrcRoot() . "/group/Group.php");
 require_once(Utilities::getSrcRoot() . "/organization/Organization.php");
 require_once(Utilities::getSrcRoot() . "/schedule/Event.php");
 require_once(Utilities::getLibRoot() . "/autoload/autoloader.php");
-//require_once(Utilities::getLibRoot() . "/bigbluebutton/bbb-api-php/includes/config.php");
-require_once(Utilities::getLibRoot() . "/rememberme/rememberme/src/Rememberme/Storage/File.php");
-require_once(Utilities::getLibRoot() . "/rememberme/rememberme/src/Rememberme/Authenticator.php");
 
 // set config settings
 autoloader(array(array(
-      'debug' => false, // turn on debug mode (by default debug mode is off)
+      'debug' => true, // turn on debug mode (by default debug mode is off)
       'basepath' => Utilities::getLibRoot(), // basepath is used to define where your project is located
       'extensions' => array('.php'), // allowed class file extensions
-      // 'extensions' => array('.php', '.php4', '.php5'), // example of multiple extensions
+      'verbose' => false,
 )));
 
 // now we can set class autoload paths
 autoloader(array(
-      //'rememberme/rememberme/src/Rememberme',
-      //'rememberme/rememberme/src/Rememberme/Storage'
+      'rememberme/rememberme/src/Storage',
+      'facebook'
 ));
+
 
 // useful when in debug mode
 //$cached_paths = autoloader();
 
 // print array of class autoload paths:
-// print_r($cached_paths); exit(0);
+//print_r($cached_paths); exit(0);
+
+require_once(Utilities::getLibRoot() . "/rememberme/rememberme/src/Storage/FileStorage.php");
+require_once(Utilities::getLibRoot() . "/rememberme/rememberme/src/Authenticator.php");
 
 /* Support phpBB3 session integration */
 //$request->enable_super_globals();
@@ -148,7 +149,7 @@ class Utilities {
 	
 	public static function getTokenRoot() {
 		if(!is_writable(TKN_ROOT) || !is_dir(TKN_ROOT)) {
-			self::log(TKN_ROOT . " does not exist or is not writable by the web server.", PEAR_LOG_ERROR);
+			self::log(TKN_ROOT . " does not exist or is not writable by the web server.", PEAR_LOG_ERR);
 			return false;
 		} 
 		return TKN_ROOT; 
