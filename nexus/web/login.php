@@ -26,7 +26,7 @@ $liLoginUrl = Utilities::getHttpPath() . '/modules/login/control/li-callback.php
 // Initialize RememberMe Library with file storage
 $storagePath = Utilities::getTokenRoot();
 if ($storagePath) {
-	$storage = new Birke\Rememberme\Storage\File($storagePath);
+	$storage = new Birke\Rememberme\Storage\FileStorage($storagePath);
 	$rememberMe = new Birke\Rememberme\Authenticator($storage);
 }
 
@@ -60,8 +60,11 @@ if (isset($_SESSION['username']) && substr($_SESSION['username'], 0, 6 ) !== "pU
 	$enrolledUsername = (isset($_SESSION['invitation']) && (isset($_SESSION['username'])) ? $_SESSION['username'] : false);
 }
 
-$cookieValues = $rememberMe->getCookieValues();
-if (isset($cookieValues[0]) && strlen($cookieValues[0]) > 0) {
+$rememberedLoginResult = $rememberMe->login();
+
+//$cookieValues = $rememberMe->getCookieValues();
+//if (isset($cookieValues[0]) && strlen($cookieValues[0]) > 0) {
+if ($rememberedLoginResult->isSuccess()) {
 	$remembered = "true";
 }	
 

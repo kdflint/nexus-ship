@@ -3,6 +3,7 @@
 require_once(dirname(__FILE__) . "/../../../config/config_env.php");
 require_once(PHP_ROOT . "/Log.php");
 require_once(PHPBB3_ROOT . "/config.php");
+require_once(COMPOSER_ROOT . '/autoload.php');
 require_once(Utilities::getModulesRoot() . "/error/handlers.php");
 require_once(Utilities::getPhpRoot() . "/Validate.php");
 require_once(Utilities::getSrcRoot() . "/user/User.php");
@@ -10,22 +11,20 @@ require_once(Utilities::getSrcRoot() . "/group/Group.php");
 require_once(Utilities::getSrcRoot() . "/organization/Organization.php");
 require_once(Utilities::getSrcRoot() . "/schedule/Event.php");
 require_once(Utilities::getLibRoot() . "/autoload/autoloader.php");
-//require_once(Utilities::getLibRoot() . "/bigbluebutton/bbb-api-php/includes/config.php");
-require_once(Utilities::getLibRoot() . "/rememberme/rememberme/src/Rememberme/Storage/File.php");
-require_once(Utilities::getLibRoot() . "/rememberme/rememberme/src/Rememberme/Authenticator.php");
+require_once(Utilities::getLibRoot() . "/rememberme/rememberme/src/Storage/FileStorage.php");
+require_once(Utilities::getLibRoot() . "/rememberme/rememberme/src/Authenticator.php");
 
 // set config settings
 autoloader(array(array(
       'debug' => false, // turn on debug mode (by default debug mode is off)
       'basepath' => Utilities::getLibRoot(), // basepath is used to define where your project is located
       'extensions' => array('.php'), // allowed class file extensions
-      // 'extensions' => array('.php', '.php4', '.php5'), // example of multiple extensions
 )));
 
 // now we can set class autoload paths
 autoloader(array(
-      //'rememberme/rememberme/src/Rememberme',
-      //'rememberme/rememberme/src/Rememberme/Storage'
+      'rememberme/rememberme/src/',
+      'rememberme/rememberme/src/Storage'
 ));
 
 // useful when in debug mode
