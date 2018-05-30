@@ -33,7 +33,7 @@ if ($storagePath) {
 if(isset($_GET['logout'])) {
 	require_once(Utilities::getModulesRoot() . "/forum/forum_integration.php");
 	$user->session_kill();
-	$rememberMe->clearCookie(isset($_SESSION['username']) ? $_SESSION['username'] : '');
+	//$rememberMe->clearCookie(isset($_SESSION['username']) ? $_SESSION['username'] : '');
 	if (isset($_SESSION['fb_access_token'])) {
 	}
 	Utilities::destroySession();
@@ -44,7 +44,7 @@ if(isset($_GET['logout'])) {
 
 // The following method is not actually invoked. Stubbed for future use...
 if(isset($_GET['logoutAll'])) {
-  $storage->cleanAllTriplets($_SESSION['username']);
+  //$storage->cleanAllTriplets($_SESSION['username']);
 	Utilities::destroySession();
 	session_start();
 }
@@ -61,7 +61,6 @@ if (isset($_SESSION['username']) && substr($_SESSION['username'], 0, 6 ) !== "pU
 }
 
 $rememberedLoginResult = $rememberMe->login();
-
 //$cookieValues = $rememberMe->getCookieValues();
 //if (isset($cookieValues[0]) && strlen($cookieValues[0]) > 0) {
 if ($rememberedLoginResult->isSuccess()) {

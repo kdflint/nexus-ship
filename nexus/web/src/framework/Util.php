@@ -16,22 +16,28 @@ require_once(Utilities::getLibRoot() . "/rememberme/rememberme/src/Authenticator
 
 // set config settings
 autoloader(array(array(
-      'debug' => false, // turn on debug mode (by default debug mode is off)
+      'debug' => true, // turn on debug mode (by default debug mode is off)
       'basepath' => Utilities::getLibRoot(), // basepath is used to define where your project is located
       'extensions' => array('.php'), // allowed class file extensions
+      'verbose' => false,
 )));
 
 // now we can set class autoload paths
 autoloader(array(
       'rememberme/rememberme/src/',
       'rememberme/rememberme/src/Storage'
+      'facebook'
 ));
+
 
 // useful when in debug mode
 //$cached_paths = autoloader();
 
 // print array of class autoload paths:
-// print_r($cached_paths); exit(0);
+//print_r($cached_paths); exit(0);
+
+require_once(Utilities::getLibRoot() . "/rememberme/rememberme/src/Storage/FileStorage.php");
+require_once(Utilities::getLibRoot() . "/rememberme/rememberme/src/Authenticator.php");
 
 /* Support phpBB3 session integration */
 //$request->enable_super_globals();
@@ -147,7 +153,7 @@ class Utilities {
 	
 	public static function getTokenRoot() {
 		if(!is_writable(TKN_ROOT) || !is_dir(TKN_ROOT)) {
-			self::log(TKN_ROOT . " does not exist or is not writable by the web server.", PEAR_LOG_ERROR);
+			self::log(TKN_ROOT . " does not exist or is not writable by the web server.", PEAR_LOG_ERR);
 			return false;
 		} 
 		return TKN_ROOT; 
