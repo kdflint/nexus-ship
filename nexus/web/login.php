@@ -24,16 +24,16 @@ if (!isset($_SESSION['fb_access_token'])) {
 $liLoginUrl = Utilities::getHttpPath() . '/modules/login/control/li-callback.php?oauth_init=1';
 
 // Initialize RememberMe Library with file storage
-$storagePath = Utilities::getTokenRoot();
-if ($storagePath) {
-	$storage = new Birke\Rememberme\Storage\File($storagePath);
-	$rememberMe = new Birke\Rememberme\Authenticator($storage);
-}
+//$storagePath = Utilities::getTokenRoot();
+//if ($storagePath) {
+//	$storage = new Birke\Rememberme\Storage\FileStorage($storagePath);
+//	$rememberMe = new Birke\Rememberme\Authenticator($storage);
+//}
 
 if(isset($_GET['logout'])) {
 	require_once(Utilities::getModulesRoot() . "/forum/forum_integration.php");
 	$user->session_kill();
-	$rememberMe->clearCookie(isset($_SESSION['username']) ? $_SESSION['username'] : '');
+	//$rememberMe->clearCookie(isset($_SESSION['username']) ? $_SESSION['username'] : '');
 	if (isset($_SESSION['fb_access_token'])) {
 	}
 	Utilities::destroySession();
@@ -44,7 +44,7 @@ if(isset($_GET['logout'])) {
 
 // The following method is not actually invoked. Stubbed for future use...
 if(isset($_GET['logoutAll'])) {
-  $storage->cleanAllTriplets($_SESSION['username']);
+  //$storage->cleanAllTriplets($_SESSION['username']);
 	Utilities::destroySession();
 	session_start();
 }
@@ -60,10 +60,10 @@ if (isset($_SESSION['username']) && substr($_SESSION['username'], 0, 6 ) !== "pU
 	$enrolledUsername = (isset($_SESSION['invitation']) && (isset($_SESSION['username'])) ? $_SESSION['username'] : false);
 }
 
-$cookieValues = $rememberMe->getCookieValues();
-if (isset($cookieValues[0]) && strlen($cookieValues[0]) > 0) {
-	$remembered = "true";
-}	
+//$cookieValues = $rememberMe->getCookieValues();
+//if (isset($cookieValues[0]) && strlen($cookieValues[0]) > 0) {
+//	$remembered = "true";
+//}	
 
 if(Utilities::isSessionValid() && !Utilities::isSessionPublic()) {
 	// TODO - pass parm string into nexus.php. Reference directoryDetail.php:45-46, where we want to focus on an org if there is a good session open
