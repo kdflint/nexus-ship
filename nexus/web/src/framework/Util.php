@@ -25,7 +25,7 @@ autoloader(array(array(
 // now we can set class autoload paths
 autoloader(array(
       'rememberme/rememberme/src/',
-      'rememberme/rememberme/src/Storage'
+      'rememberme/rememberme/src/Storage',
       'facebook'
 ));
 
