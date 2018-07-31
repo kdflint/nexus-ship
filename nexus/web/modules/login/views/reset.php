@@ -45,7 +45,7 @@ function returnToLoginWithMessage($message) {
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <html>
   <head>
-    <script src="../../../scripts/nexus.js" language="javascript"></script>
+    <script src="../../../scripts/javascriptHandler.php" type="text/javascript"></script>
   	<script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js"></script>
   </head>
   <body>

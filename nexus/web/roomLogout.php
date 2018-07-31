@@ -17,16 +17,15 @@
 					<span class="module-name" style="">Web Meet</span>					
       	</span>  		
       	<span class="controls" style="float:right;padding-bottom:10px;margin-top:30px;">
-      		<a href="http://northbridgetech.org/downloads/Northbridge_web_conference_center.pdf" style="color:#d27b4b;text-decoration:none;" target="_blank">About</a>
+      		<a href="http://northbridgetech.org/downloads/Northbridge_web_conference_center.pdf" style="color:#d27b4b;text-decoration:none;" target="_blank"><?php echo _("About"); ?></a>
       	</span>
       </div>
       <div class="frame" style="padding-top:40px;">
-      	You are logged out of your Web Conference Room.
+      	<?php echo _("You are logged out of your Web Conference Room."); ?>
       </div>
       <div class="footer" style="clear:both;position:relative;bottom:-10px;">
-        powered by<br/>
-    		<a href="http://northbridgetech.org/index.php" target="_blank"><img src="https://northbridgetech.org/images/NB_horizontal_rgb.png" height="45" width="166" border="0" alt="Northbridge Technology Alliance"/></a>
-			</div>
+      	<?php include("nwmFooter.php"); ?>
+ 			</div>
     </div>       		  	
 	</body>
 </html>

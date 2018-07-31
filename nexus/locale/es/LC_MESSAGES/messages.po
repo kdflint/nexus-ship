@@ -1,58 +1,524 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-03-26 13:06-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Content-Type: text/plain; charset=UTF-8"
+
+#: web/login.php:88
+msgid "Your session has timed out."
+msgstr "Tu sesión ha expirado."
+
+#: web/login.php:90
+msgid "You have signed out successfully."
+msgstr "Has salido exitosamente."
+
+#: web/login.php:135
+msgid "Your meeting is over."
+msgstr "Su reunión ha terminado."
+
+#: web/login.php:264 web/roomLogout.php:20
+msgid "About"
+msgstr "Acerca De"
+
+#: web/login.php:282 web/login.php:315 test/esTranslationTest.php:24
 msgid "Username"
 msgstr "Nombre de usuario"
 
-msgid "Password"
-msgstr "Contrase&ntilde;a"
-
-msgid "Email"
-msgstr "Correo electr&oacute;nico"
-
+#: web/login.php:282 web/login.php:285 web/login.php:315
 msgid "I forgot"
-msgstr "Olvide"
+msgstr "Olvidé"
 
+#: web/login.php:285
+msgid "Password"
+msgstr "Contraseña"
+
+#: web/login.php:288
 msgid "Sign In"
 msgstr "Ingresar"
 
+#: web/login.php:289
 msgid "Remember Me"
-msgstr "Recu&eacute;rdeme"
+msgstr "Acuérdate de mí"
 
-msgid "About"
-msgstr "Acerca de"
-
-msgid "Support"
-msgstr "Apoyo"
-
+#: web/login.php:302 web/login.php:306
 msgid "Recover Username"
 msgstr "Recuperar nombre de usuario"
 
-msgid "Password Reset"
-msgstr "Restablecer la contrase&ntilde;a"
-
-msgid "Reset Password"
-msgstr "Restablecer la contrase&ntilde;a"
-
-msgid "Return to Login"
-msgstr "Volver a inicio"
-
-msgid "Username is required"
-msgstr "Se requiere el nombre de usuario"
-
-msgid "Password is required"
-msgstr "Se require la contrase&ntilde;a"
-
-msgid "Valid email is required"
-msgstr "Valid email is required"
-
-msgid "Your account is not located."
-msgstr "Su cuenta no se encuentra."
-
+#: web/login.php:303
 msgid "Please enter your email address and we will resend your username."
 msgstr ""
-"Por favor, introduzca su direcci&oacute;n de correo electr&oacute;nico y "
-"vamos a volver a enviar su nombre de usuario."
+"Por favor ingrese su dirección de correo electrónico y le volveremos a "
+"enviar su nombre de usuario."
 
+#: web/login.php:304 web/scripts/javascriptHandler.php:20
+#: web/modules/user/views/userAdd.php:21
+msgid "Email"
+msgstr "Email"
+
+#: web/login.php:307 web/login.php:318
+msgid "Return to Login"
+msgstr "Regrese a Login"
+
+#: web/login.php:313
+msgid "Password Reset"
+msgstr "Restablecimiento De Contraseña"
+
+#: web/login.php:314
 msgid "Please enter your user id so we can email you a password reset link."
 msgstr ""
-"Por favor, introduzca su identidad de usuario para que podemos enviar por "
-"correo electr&oacute;nico con un enlace de restablecimiento de "
-"contrase&ntilde;a."
+"Ingrese su identificación de usuario para que podamos enviarle un enlace de "
+"restablecimiento de contraseña."
+
+#: web/login.php:317
+msgid "Reset Password"
+msgstr "Restablecer la contraseña"
+
+#: web/roomLogout.php:24
+msgid "You are logged out of your Web Conference Room."
+msgstr "Has cerrado la sesión de tu sala de conferencias web."
+
+#: web/enroll.php:109
+msgid "Login"
+msgstr "Iniciar Sesión"
+
+#: web/enroll.php:122
+msgid "Which group(s) would you like to join?"
+msgstr "¿A qué grupo (s) te gustaría unirte?"
+
+#: web/enroll.php:144
+msgid "Choose your username"
+msgstr "Elige tu nombre de usuario"
+
+#: web/enroll.php:145
+msgid "Choose your password"
+msgstr "Elige tu contraseña"
+
+#: web/enroll.php:146
+msgid "Confirm your password"
+msgstr "Confirmar la contraseña"
+
+#: profile.php
+msgid "Confirm Password"
+msgstr "Confirmar contraseña"
+
+#: web/enroll.php:147
+msgid "Your email"
+msgstr "Tu correo electrónico"
+
+#: web/enroll.php:148
+msgid "Your first name"
+msgstr "Su nombre"
+
+#: web/enroll.php:149
+msgid "Your last name"
+msgstr "Tu apellido"
+
+#: web/enroll.php:150 web/modules/user/views/userAdd.php:28
+msgid "Enroll"
+msgstr "Inscribirse"
+
+#: web/scripts/noscript.php:4
+msgid "To use Nexus it is necessary to enable JavaScript."
+msgstr "Para usar Nexus es necesario habilitar JavaScript."
+
+#: web/scripts/noscript.php:4
+msgid "Help"
+msgstr "Ayuda"
+
+#: web/scripts/javascriptHandler.php:5
+msgid "Username is required."
+msgstr "Se requiere nombre de usuario."
+
+#: web/scripts/javascriptHandler.php:6
+msgid "Password is required."
+msgstr "Se requiere contraseña."
+
+#: web/scripts/javascriptHandler.php:7
+msgid "Valid email is required."
+msgstr "Se requiere un correo electrónico válido."
+
+#: web/scripts/javascriptHandler.php:8
+msgid "Valid username is required."
+msgstr "Se requiere nombre de usuario válido."
+
+#: web/scripts/javascriptHandler.php:9
+msgid "This username is already taken."
+msgstr "Este nombre de usuario ya está en uso."
+
+#: web/scripts/javascriptHandler.php:10
+msgid "Valid password is required."
+msgstr "Se requiere una contraseña válida."
+
+#: web/scripts/javascriptHandler.php:11
+msgid "Matching confirmation password is required."
+msgstr "Se requiere una contraseña de confirmación coincidente."
+
+#: web/scripts/javascriptHandler.php:12
+msgid "Valid first name is required."
+msgstr "El primer nombre es obligatorio."
+
+#: web/scripts/javascriptHandler.php:13
+msgid "Name is required."
+msgstr "Se requiere el nombre."
+
+#: web/scripts/javascriptHandler.php:14
+msgid "Email is required."
+msgstr "Correo electronico es requerido."
+
+#: web/scripts/javascriptHandler.php:15
+msgid "One Moment"
+msgstr "Un momento"
+
+#: web/scripts/javascriptHandler.php:16
+msgid "To test, save your changes"
+msgstr "Para probar, guarda tus cambios"
+
+#: web/scripts/javascriptHandler.php:17
+msgid "Please send a password reset link to my email for"
+msgstr ""
+"Por favor, envíe un enlace de restablecimiento de contraseña a mi correo "
+"electrónico para"
+
+#: web/scripts/javascriptHandler.php:18
+msgid "Our bad, something goofed"
+msgstr "Nuestra mala, algo tonto"
+
+#: web/scripts/javascriptHandler.php:19
+msgid "Please try again."
+msgstr "Por favor, vuelva a intentarlo."
+
+#: web/modules/user/views/userAdd.php:5
+#: web/modules/schedule/views/reservationAdd.php:5
+msgid "New"
+msgstr "Nuevo"
+
+#: web/modules/user/views/userAdd.php:6
+msgid "User"
+msgstr "Usuario"
+
+#: web/modules/user/views/userAdd.php:13
+msgid "An enrollment packet will be emailed to this new user."
+msgstr ""
+"Un paquete de inscripción será enviado por correo electrónico a este nuevo "
+"usuario."
+
+#: web/modules/user/views/userAdd.php:16
+msgid "First Name"
+msgstr "Nombre"
+
+#: web/modules/user/views/userAdd.php:17
+msgid "Administrator"
+msgstr "Administrador"
+
+#: web/modules/user/views/userAdd.php:27
+#: web/modules/schedule/views/reservationAdd.php:50
+#: web/modules/schedule/views/joinAdd.php:33
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: web/modules/schedule/views/reservationsList.php:25
+#: web/modules/schedule/views/reservationsList.php:48
+#: web/modules/schedule/views/joinAdd.php:6
+msgid "Now"
+msgstr "Ahora"
+
+#: web/modules/schedule/views/reservationsList.php:26
+msgid "Good news! Your room is available right now."
+msgstr "¡Buenas noticias! Tu habitación está disponible ahora."
+
+#: web/modules/schedule/views/reservationsList.php:47
+#: web/modules/schedule/views/reservationsList.php:100
+msgid "Guest Pass"
+msgstr "Pase de invitado"
+
+#: web/modules/schedule/views/reservationsList.php:49
+msgid "Soon"
+msgstr "Pronto"
+
+#: web/modules/schedule/views/reservationsList.php:82
+msgid "Future"
+msgstr "Futuro"
+
+#: web/modules/schedule/views/reservationsList.php:83
+msgid "Click the calendar to reserve this room for a future date."
+msgstr ""
+"Haga clic en el calendario para reservar esta sala para una fecha futura."
+
+#: web/modules/schedule/views/reservationsList.php:168
+msgid "Team Pass"
+msgstr "Pase de equipo"
+
+#: web/modules/schedule/views/reservationsList.php:171
+msgid ""
+"Your enrolled team members can use that link to schedule and attend any "
+"Nexus Web Meet event."
+msgstr ""
+"Los miembros de su equipo inscrito pueden usar ese enlace para programar y "
+"asistir a cualquier evento Nexus Web Meet."
+
+#: web/modules/schedule/views/reservationAdd.php:6
+msgid "Reservation"
+msgstr "Reserva"
+
+#: web/modules/schedule/views/reservationAdd.php:13
+#: web/modules/schedule/views/joinAdd.php:13
+msgid "Meeting Name"
+msgstr "Nombre de la reunión"
+
+#: web/modules/schedule/views/reservationAdd.php:16
+#: web/modules/schedule/views/reservationAdd.php:21
+#: web/modules/schedule/views/reservationAdd.php:27
+msgid "Time Zone"
+msgstr "Zona horaria"
+
+#: web/modules/schedule/views/reservationAdd.php:23
+msgid "Country"
+msgstr "País"
+
+#: web/modules/schedule/views/reservationAdd.php:31
+msgid "Date"
+msgstr "Fecha"
+
+#: web/modules/schedule/views/reservationAdd.php:33
+msgid "Time"
+msgstr "Hora"
+
+#: web/modules/schedule/views/reservationAdd.php:51
+msgid "Reserve"
+msgstr "Reserva"
+
+#: web/modules/schedule/views/meetingTypeTooltip.php:5
+msgid "Video Chat"
+msgstr "Chat de video"
+
+#: web/modules/schedule/views/meetingTypeTooltip.php:5
+msgid "Shows web camera displays prominently."
+msgstr "Muestra que la cámara web se muestra prominentemente."
+
+#: web/modules/schedule/views/meetingTypeTooltip.php:6
+msgid "Collaboration"
+msgstr "Colaboración"
+
+#: web/modules/schedule/views/meetingTypeTooltip.php:6
+msgid ""
+"Use for a formal presentation or fully collaborative meeting, with access to "
+"all conference tools (presentation screen, chat, cameras, etc.)"
+msgstr ""
+"Úselo para una presentación formal o una reunión totalmente colaborativa, "
+"con acceso a todas las herramientas de la conferencia (pantalla de "
+"presentación, chat, cámaras, etc.)"
+
+#: web/modules/schedule/views/meetingTypeTooltip.php:7
+msgid "Video Link"
+msgstr "Enlace de video"
+
+#: web/modules/schedule/views/meetingTypeTooltip.php:7
+msgid ""
+"Enhance a telephone meeting with cameras and visual components (presentation "
+"screen, chat room, etc.)"
+msgstr ""
+"Mejore una reunión telefónica con cámaras y componentes visuales (pantalla "
+"de presentación, sala de chat, etc.)"
+
+#: web/modules/schedule/views/meetingTypeTooltip.php:8
+msgid "Webinar"
+msgstr "Seminario web"
+
+#: web/modules/schedule/views/meetingTypeTooltip.php:8
+msgid "Broadcast a presentation in \"listen-only\" mode for guests."
+msgstr "Transmita una presentación en modo \"solo escuchar\" para invitados."
+
+#: web/modules/schedule/views/joinAdd.php:5
+msgid "Start"
+msgstr "Empezar"
+
+#: web/modules/schedule/views/joinAdd.php:34
+msgid "Open Room"
+msgstr "Habitación abierta"
+
+#: web/modules/event/views/eventListRecorded.php:16
+msgid "Recordings"
+msgstr "Grabaciones"
+
+#: web/modules/event/views/eventListRecorded.php:17
+msgid "There are no recordings available."
+msgstr "No hay grabaciones disponibles"
+
+#: web/modules/event/views/eventListRecorded.php:33
+msgid "Attendees"
+msgstr "Los asistentes"
+
+#: web/nwmHeader.php:34
+msgid "Hello"
+msgstr "Hola"
+
+#: web/nwmHeader.php:41
+msgid "Register for Nexus Web Meet training at the"
+msgstr "Regístrese para la capacitación de Nexus Web Meet en"
+
+#: web/nwmHeader.php:41
+msgid "Northbridge Member Portal"
+msgstr "Portal para miembros de Northbridge"
+
+#: web/nwmFooter.php:1
+msgid "powered by"
+msgstr "energizado por"
+
+#: web/nwmFrame.php:33
+msgid "Select Language"
+msgstr "Seleccione Idioma"
+
+#: web/nwmFrame.php:34
+msgid "English"
+msgstr "Inglés"
+
+#: web/nwmFrame.php:35
+msgid "Spanish"
+msgstr "Español"
+
+#: web/nwmHeader.php:14
+msgid "ROOM"
+msgstr "HABITACIÓN"
+
+msgid "Please confirm your new password."
+msgstr "Por favor confirma tu nueva contraseña"
+
+msgid "7-25 characters please"
+msgstr "7-25 caracteres por favor"
+
+msgid "Your passwords do not match."
+msgstr "Tus contraseñas no coinciden."
+
+msgid "First name is required."
+msgstr "Se requiere el primer nombre."
+
+msgid "A meeting cannot be longer than 24 hours."
+msgstr "Una reunión no puede durar más de 24 horas."
+
+msgid "Bad duration"
+msgstr "Mala duración"
+
+msgid "Contact Email"
+msgstr "Email de contacto"
+
+msgid "Meeting name is required"
+msgstr "Se requiere el nombre de la reunión"
+
+msgid "Description"
+msgstr "Descripción"
+
+msgid "Meeting description is required"
+msgstr "La descripción de la reunión es obligatoria"
+
+msgid "End Time"
+msgstr "Hora de finalización"
+
+msgid "End Date"
+msgstr "Fecha Final"
+
+msgid "Start Time"
+msgstr "Hora de inicio"
+
+msgid "Start Date"
+msgstr "Fecha de inicio"
+
+#: web/nwmHeader:13
+msgid "TEAM"
+msgstr "EQUIPO"
+
+#: web/nwmHeader.php:12
+msgid "ARCHIVE"
+msgstr "ARCHIVO"
+
+#: web/nwmHeader.php
+msgid "Training"
+msgstr "Formación"
+
+#: web/nwmHeader.php:28
+msgid "Support"
+msgstr "Apoyo"
+
+#: web/nwmHeader.php:29
+msgid "Logout"
+msgstr "Cerrar Sesión"
+
+#: meetingTypeOptions.html:1
+msgid "Meeting Type"
+msgstr "Tipo de reunión"
+
+#: meetingDurationOptions.html:1
+msgid "Duration"
+msgstr "Duración"
+
+#: meetingDurationOptions.html:2
+msgid "minutes"
+msgstr "minutos"
+
+#: meetingDurationOptions.html:5
+msgid "hours"
+msgstr "horas"
+
+#: meetingDurationOptions.html:8
+msgid "min"
+msgstr "min"
+
+#: meetingDurationOptions.html:10
+msgid "hour"
+msgstr "hora"
+
+#: reservationAdd:16
+msgid "Change"
+msgstr "Cambiar"
+
+#: userList.php:48
+msgid "Please confirm this delete of"
+msgstr "Por favor confirme esta eliminación de"
+
+#: reservationsList:119
+msgid "Please confirm this delete."
+msgstr "Por favor confirme esta eliminación."
+
+#: login.php:295
+msgid "Sign In with"
+msgstr "Inicia sesión con"
+
+#: profile.php:13
+msgid "Reset"
+msgstr "Reajustar"
+
+#: profile.php:12
+msgid "Update"
+msgstr "Actualización"
+
+#: listUsers.php
+msgid "Pending"
+msgstr "Pendiente"
+
+#: web/login.php:295
+msgid "Facebook"
+msgstr "Facebook"
+
+#: web/login.php:296
+msgid "LinkedIn"
+msgstr "LinkedIn"
+
+#: Group.php
+msgid "Enrollment"
+msgstr "Inscripción"
+
+#: profile.php:5
+msgid "Last Name"
+msgstr "Apellido"

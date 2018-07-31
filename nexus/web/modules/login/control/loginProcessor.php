@@ -9,8 +9,6 @@ require_once(Utilities::getSrcRoot() . "/user/User.php");
 $conf = array('append' => true, 'mode' => 0644, 'timeFormat' => '%X %x');	
 $logger = Log::singleton("file", Utilities::getLogRoot() ."/sm_login.log", "", $conf, PEAR_LOG_DEBUG);
 
-use Birke\Rememberme;
-
 $dirty = array('username' => $_POST['uid'], 'password' => (isset($_POST['password']) ? $_POST['password'] : ''), 'tz' => $_POST['timezone']);
 
 $clean = array();
@@ -57,9 +55,12 @@ Use only clean input beyond this point (i.e. $clean[])
 $storagePath = Utilities::getTokenRoot();
 $rememberedUsername = false;
 if ($storagePath) {
-	$storage = new Rememberme\Storage\File($storagePath);
-	$rememberMe = new Rememberme\Authenticator($storage);
-	$rememberedUsername = $rememberMe->login();
+	$storage = new Birke\Rememberme\Storage\FileStorage($storagePath);
+	$rememberMe = new Birke\Rememberme\Authenticator($storage);
+	$rememberedLoginResult = $rememberMe->login();
+	if ($rememberedLoginResult->isSuccess()) {
+  	$rememberedUsername = $rememberedLoginResult->getCredential();
+	}
 }
 
 if (isset($_SESSION['sm_email']) && Utilities::validateEmail($_SESSION['sm_email'])) {

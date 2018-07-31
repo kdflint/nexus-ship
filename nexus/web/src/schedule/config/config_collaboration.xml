@@ -50,7 +50,7 @@
     
 		<module name="PhoneModule" url="https://conf1.nexus-bbb.org/client/PhoneModule.swf?v=601" 
 			uri="rtmp://conf1.nexus-bbb.org/sip" 
-			autoJoin="true"
+			autoJoin="false"
 			listenOnlyMode="true"
 			skipCheck="false"
 			showButton="true"

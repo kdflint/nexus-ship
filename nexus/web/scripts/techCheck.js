@@ -58,8 +58,8 @@
         			"	<table>" +
         			"		<tr><td>" + 
         			"			<p>In order to use the conference room, Flash version 11.2 or higher is required</p>" + 
-        			"			<p><a href='https://get.adobe.com/flashplayer/' target='_blank'>Download Flash</a></p>" +
-        			"			<p>Note: Most desktop browsers are compatible with Flash but some tablet and phone-based browsers are not. Northbridge recommends <a href='http://www.mozilla.org/firefox' target='_blank'>Firefox</a>, Safari or Internet Explorer.</p>" +
+        			"			<p><a href='https://helpx.adobe.com/flash-player.html' target='_blank'>Get Flash</a></p>" +
+        			"			<p>Note: Most desktop browsers are compatible with Flash but some tablet and phone-based browsers are not. Northbridge recommends <a href='http://www.mozilla.org/firefox' target='_blank'>Firefox</a>, Chrome, Safari or Internet Explorer.</p>" +
         			"			</td></tr>" +
         			"	 </table>" +
     					"	</span>" +

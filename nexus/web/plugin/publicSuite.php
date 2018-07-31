@@ -47,7 +47,7 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 		<link rel="stylesheet" href="//yui-s.yahooapis.com/pure/0.6.0/pure-min.css">
     <link rel="stylesheet" href="../styles/nexus.css" type="text/css" />
     
-    <script src="../scripts/nexus.js" language="javascript"></script>
+    <script src="../scripts/javascriptHandler.php" type="text/javascript" ></script>
   	<script src="<?php echo(Utilities::getConfigPath()); ?>/timeZoneData.js" language="javascript"></script>
   	<!-- Following is temporary - remove when directory refresh is done. Also remove from directoryDetail view -->
   	<script src="<?php echo(Utilities::getConfigPath()); ?>/cfchtOrgEditLinks.js" language="javascript"></script>
@@ -104,7 +104,7 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 						position: { my : "left top", at: "right+25 top", of: "#directory-form" },
 						width: 228
 				});
-				toggleDisplay(<?php echo $viewId; ?>);
+				//toggleDisplay(<?php echo $viewId; ?>);
 			});
 		</script>
 		
@@ -137,7 +137,8 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 				getEventDetail(eventUuid);
 			}	
 			
-			function showEventAdd() {
+			function showEventAdd(networkId) {
+				setPublicSession2(networkId, "", "../");
 				document.getElementById("show-add").style.display='block';
 				document.getElementById("show-detail").style.display='none';
 				document.getElementById("show-event").style.display='none';				
@@ -206,7 +207,7 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 	        	<li class="pure-menu-item pure-menu-selected"><a href="#" onclick="toggleDisplay('mod_event', '0');document.getElementById('schedule-form-cancel').click();" class="pure-menu-link">Calendar</a></li>
         		<li class="pure-menu-item"><a href="#" onclick="toggleDisplay('mod_directory', '1')" class="pure-menu-link">Directory</a></li>
         		<li class="pure-menu-item"><a href="#" onclick="toggleDisplay('mod_forum', '2')" class="pure-menu-link">Forum</a></li>
-        		<li class="pure-menu-item"><a id="schedule_control" href="#" onclick="showEventAdd();" class="pure-menu-link">Submit New Event</a></li>
+        		<li class="pure-menu-item"><a id="schedule_control" href="#" onclick="showEventAdd('<?php echo $cleanNetworkId; ?>');" class="pure-menu-link">Submit New Event</a></li>
         		<?php if ($_SESSION['username'] === "pUser-ed787a92" || $_SESSION['environment'] === "local") { 
         			//https://goo.gl/forms/NInSncEodzNEMo2G3https://goo.gl/forms/NInSncEodzNEMo2G3
         			?>
@@ -229,10 +230,11 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 			
 			<div id="mod_event"><?php include(Utilities::getModulesRoot() . "/event/mod_controller.php"); ?></div>
 			<div id="mod_directory"><?php include(Utilities::getModulesRoot() . "/directory/mod_controller.php"); ?></div>
-			<div id="mod_forum"><?php include(Utilities::getModulesRoot() . "/forum/mod_controller.php"); ?></div>		
+			<div id="mod_forum"><?php include(Utilities::getModulesRoot() . "/forum/mod_controller.php"); ?></div>
 		</div>
 
 		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-tLX5TYQhwxQQNx5-UF0VajixUwGGkJQ" async defer></script>
+		<script>console.log("Chrome problem debug marker.");toggleDisplay(<?php echo $viewId; ?>);</script>
 		
 	</body>
 </html>

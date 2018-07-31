@@ -16,9 +16,9 @@
 	      	</div>
 
 		    	<div style="margin-top:10px;">
-		    		<?php include(Utilities::getModulesRoot() . "/schedule/views/meetingTypeTooltip.html"); ?>
+		    		<?php include(Utilities::getModulesRoot() . "/schedule/views/meetingTypeTooltip.php"); ?>
 		    		<select id="schedule-form-type" name="meeting-type" style="width:370px;vertical-align:middle;">
-		    			<?php include(Utilities::getModulesRoot() . "/schedule/views/meetingTypeOptions.html"); ?>
+		    			<?php include(Utilities::getModulesRoot() . "/schedule/views/meetingTypeOptions.php"); ?>
 		    		</select>
 		    	</div>
 		    	

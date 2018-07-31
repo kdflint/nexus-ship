@@ -3,6 +3,7 @@
 require_once(dirname(__FILE__) . "/../../../config/config_env.php");
 require_once(PHP_ROOT . "/Log.php");
 require_once(PHPBB3_ROOT . "/config.php");
+require_once(COMPOSER_ROOT . '/autoload.php');
 require_once(Utilities::getModulesRoot() . "/error/handlers.php");
 require_once(Utilities::getPhpRoot() . "/Validate.php");
 require_once(Utilities::getSrcRoot() . "/user/User.php");
@@ -10,29 +11,33 @@ require_once(Utilities::getSrcRoot() . "/group/Group.php");
 require_once(Utilities::getSrcRoot() . "/organization/Organization.php");
 require_once(Utilities::getSrcRoot() . "/schedule/Event.php");
 require_once(Utilities::getLibRoot() . "/autoload/autoloader.php");
-//require_once(Utilities::getLibRoot() . "/bigbluebutton/bbb-api-php/includes/config.php");
-require_once(Utilities::getLibRoot() . "/rememberme/rememberme/src/Rememberme/Storage/File.php");
-require_once(Utilities::getLibRoot() . "/rememberme/rememberme/src/Rememberme/Authenticator.php");
+require_once(Utilities::getLibRoot() . "/rememberme/rememberme/src/Storage/FileStorage.php");
+require_once(Utilities::getLibRoot() . "/rememberme/rememberme/src/Authenticator.php");
 
 // set config settings
 autoloader(array(array(
-      'debug' => false, // turn on debug mode (by default debug mode is off)
+      'debug' => true, // turn on debug mode (by default debug mode is off)
       'basepath' => Utilities::getLibRoot(), // basepath is used to define where your project is located
       'extensions' => array('.php'), // allowed class file extensions
-      // 'extensions' => array('.php', '.php4', '.php5'), // example of multiple extensions
+      'verbose' => false,
 )));
 
 // now we can set class autoload paths
 autoloader(array(
-      //'rememberme/rememberme/src/Rememberme',
-      //'rememberme/rememberme/src/Rememberme/Storage'
+      'rememberme/rememberme/src/',
+      'rememberme/rememberme/src/Storage',
+      'facebook'
 ));
+
 
 // useful when in debug mode
 //$cached_paths = autoloader();
 
 // print array of class autoload paths:
-// print_r($cached_paths); exit(0);
+//print_r($cached_paths); exit(0);
+
+require_once(Utilities::getLibRoot() . "/rememberme/rememberme/src/Storage/FileStorage.php");
+require_once(Utilities::getLibRoot() . "/rememberme/rememberme/src/Authenticator.php");
 
 /* Support phpBB3 session integration */
 //$request->enable_super_globals();
@@ -148,7 +153,7 @@ class Utilities {
 	
 	public static function getTokenRoot() {
 		if(!is_writable(TKN_ROOT) || !is_dir(TKN_ROOT)) {
-			self::log(TKN_ROOT . " does not exist or is not writable by the web server.", PEAR_LOG_ERROR);
+			self::log(TKN_ROOT . " does not exist or is not writable by the web server.", PEAR_LOG_ERR);
 			return false;
 		} 
 		return TKN_ROOT; 
@@ -278,9 +283,9 @@ class Utilities {
 	
 	public static function validateUserId($in) {
 		if(self::validateUserIdFormat($in)) {
-			if (PgDatabase::userIdExists($in)) {	
+			//if (PgDatabase::userIdExists($in)) {	
 				return TRUE;
-			}
+			//}
 		}
 		return FALSE;
 	}
@@ -320,6 +325,15 @@ class Utilities {
     } else {
     	return FALSE;
     }
+  }
+  
+  public static function validateUsername($in) {
+		if(self::validateUsernameFormat($in)) {
+			if (User::userNameExists($in)) {	
+				return TRUE;
+			}
+		}
+		return FALSE;
   }
   
 	public static function isValidPassword($in) {
@@ -574,6 +588,9 @@ class Utilities {
 	}
 	
 	public static function getUserLangagePreference() {
+		if (isset($_SESSION['language']) && strlen($_SESSION['language']) > 0) {
+			return $_SESSION['language'];
+		}
 		$languages = explode(',',$_SERVER['HTTP_ACCEPT_LANGUAGE']);
 		foreach($languages as $lang) {
 			$languageSlice = substr($lang, 0, 2);
@@ -605,7 +622,7 @@ class Utilities {
 	public static function setUserLanguagePreference($lang) {
 		$_SESSION['language'] = $lang;
 	}
-
+	
 	public static function isSessionPublic() {
 		if (strcasecmp($_SESSION['nexusContext'], "PUB") == 0) {
 			return TRUE;
@@ -742,7 +759,7 @@ class Utilities {
 		$_SESSION['ngpk'] = $returnArray[0]['id'];
 	}
 	
-	public static function setPublicSession($oid, $zone = "undefined", $fname = "Anonymous", $uuid = false) {
+	public static function setPublicSession($oid, $zone = "undefined", $fname = "Anonymous", $uuid = false, $email = "undefined") {
 
 		$_SESSION['nexusContext'] = "PUB";
 		$_SESSION['environment'] = self::getEnvName();
@@ -759,6 +776,7 @@ class Utilities {
 		self::setSessionTimezone($zone);
 		$_SESSION['fname'] = $fname;
 		$_SESSION['lname'] = "";
+		$_SESSION['email'] = $email;
 
 		$org = pg_fetch_array(Organization::getOrganizationByUid($oid));
 	

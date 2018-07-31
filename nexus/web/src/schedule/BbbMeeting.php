@@ -21,7 +21,7 @@ class BbbMeeting {
 	function __construct($id, $name, $type) {	
 		require_once(dirname(__FILE__) . "/../framework/Util.php");
 		$this->creationParams = new CreateMeetingParameters($id, $name);
-		$this->creationParams->setLogoutUrl(Utilities::getHttpPath() . '/roomLogout.html');
+		$this->creationParams->setLogoutUrl(Utilities::getHttpPath() . '/roomLogout.php');
 		$this->creationParams->setAttendeePassword('ap');
 		$this->creationParams->setModeratorPassword('mp');
 		$this->creationParams->setDuration('0');
@@ -88,18 +88,35 @@ class BbbMeeting {
 			}
 		}
 		fclose($in);
-		//return $configXml;
-		
-
-		//$asdkjfhaskdj = simplexml_load_file(dirname(__FILE__) . "/config/" . $inFile, 'SimpleXMLElement', LIBXML_NOCDATA | LIBXML_NOBLANKS);
-		
-		//$jackedup = new SimpleXMLElement($asdkjfhaskdj);
-		
-		$asdkjfhaskdj = new SimpleXMLElement($configXml);
-		
+			
+		$rawXml = new SimpleXMLElement($configXml);
 		$configXmlParameters = new SetConfigXMLParameters($this->getMeetingId());
-		$configXmlParameters->setRawXml($asdkjfhaskdj);
+		$configXmlParameters->setRawXml($rawXml);
+		
 		return $configXmlParameters;
+		
+	}
+	
+function getMeetingConfigurationTokenProxy() {
+					
+		switch($this->meetingType) {
+			case self::VIDEO_CHAT:
+				$token_proxy = "northbridgetech_config_video_chat.xml";
+				break;
+			case self::VIDEO_LINK:
+				$token_proxy = "northbridgetech_config_video_link.xml";
+				break;
+			case self::WEBINAR:
+				$token_proxy = "northbridgetech_config_webinar.xml";
+				break;
+			case self::COLLABORATION:
+				$token_proxy = "northbridgetech_config_collaboration.xml";
+				break;
+			default:
+				$token_proxy = "northbridgetech_config_collaboration.xml";
+		}
+			
+		return $token_proxy;
 		
 	}
 	

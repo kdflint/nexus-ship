@@ -85,25 +85,32 @@ $logger->log("Meeting created: " . var_export($itsAllGood, true), PEAR_LOG_INFO)
 // Set the room configuration for this user
 if ($itsAllGood) {
 	$logger->log("Meeting id: " . $bbbMeeting->getMeetingId(), PEAR_LOG_INFO);
-	try {
-		$response = $bbbApi->setConfigXML($bbbMeeting->getMeetingConfigurationXml());
-		$logger->log("Token: " . $response->getToken(), PEAR_LOG_INFO);
-		if (strcasecmp($response->getReturnCode(), 'SUCCESS') != 0 || strlen($response->getToken()) < 1) {
+	if (true) {
+		// use below for sending meetings to Blindside
+		$configToken = $bbbMeeting->getMeetingConfigurationTokenProxy();
+	} else {
+		// below is how we serve a complete xml file, but incompatible with Blindside
+		try {
+			$response = $bbbApi->setConfigXML($bbbMeeting->getMeetingConfigurationXml());
+			$logger->log("Token: " . $response->getToken(), PEAR_LOG_INFO);
+			if (strcasecmp($response->getReturnCode(), 'SUCCESS') != 0 || strlen($response->getToken()) < 1) {
+				$itsAllGood = FALSE;
+				// TODO - use the default config?
+				$configToken = "";
+			} else {
+				$configToken = $response->getToken();
+			}
+			} catch (Exception $e) {
+			$logger->log("ERROR: " . $e->getMessage(), PEAR_LOG_INFO);
+			trigger_error("Cannot set configuration: " . $e->getMessage() . "\n", E_USER_ERROR);
 			$itsAllGood = FALSE;
-			// TODO - use the default config?
-			$configToken = "";
-		} else {
-			$configToken = $response->getToken();
 		}
-		} catch (Exception $e) {
-		$logger->log("ERROR: " . $e->getMessage(), PEAR_LOG_INFO);
-		trigger_error("Cannot set configuration: " . $e->getMessage() . "\n", E_USER_ERROR);
-		$itsAllGood = FALSE;
 	}	
 }
 
 $logger->log("Config token: " . $configToken, PEAR_LOG_INFO);
 $logger->log("Room configured: " . var_export($itsAllGood, true), PEAR_LOG_INFO);
+$logger->log("Recording parameters: " . var_export(print_r($bbbMeeting)). PEAR_LOG_INFO);
 
 $joinMeetingParams = new JoinMeetingParameters($bbbMeeting->getMeetingId(), $_SESSION['fname'] . " " . $_SESSION['lname'], $joinerPassword);
 $joinMeetingParams->setConfigToken($configToken);

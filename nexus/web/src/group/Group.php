@@ -65,8 +65,8 @@ class Group {
 		while ($row = pg_fetch_array($cursor)) {
 			$users[$counter]['id'] = "0";
 			$users[$counter]['username'] = "";
-			$users[$counter]['fname'] = "Pending";
-			$users[$counter]['lname'] = "Enrollment";
+			$users[$counter]['fname'] = _("Pending");
+			$users[$counter]['lname'] = _("Enrollment");
 			$users[$counter]['title'] = "";
 			$users[$counter]['descr'] = "";
 			$users[$counter]['email'] = $row['email'];

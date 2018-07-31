@@ -7,6 +7,7 @@
 			 	
 			 	// put row containers in the table, 1 for each user
 			 	var tableRows = "";
+			 	var message1 = '<?php echo _("Please confirm this delete of"); ?>';
 			 	for (var i = 0; i < jsonObj.length; i++) { 
 			 		//tableRows = tableRows + "<tr id='userRow" + i + "'></tr>"; 
 			 		tableRows = tableRows + "<div id='userRow" + i + "' class='tr-div'></div>";
@@ -45,7 +46,7 @@
           			"<span class='descr' style='font-size:90%;' >" + jsonObj[i].email + "</span>" +
 	          		"<p>" + 
 	          		((jsonObj[i].role == "admin") ? "<span class='fa fa-key' style='color:#004d62;padding-right:10px;'></span>" : "") +
-	          		((IS_ADMIN && jsonObj[i].sessionUser != jsonObj[i].uidpk) ? "<a href='" + processor + "?id=" + jsonObj[i].uidpk + "' onclick='return confirm(\"Please confirm this delete of " + jsonObj[i].fname + " " + jsonObj[i].lname + ".\");'><span class='fa fa-trash-o' style='color:#d27b4b;padding-right:10px;'></span></a>" : "") +
+	          		((IS_ADMIN && jsonObj[i].sessionUser != jsonObj[i].uidpk) ? "<a href='" + processor + "?id=" + jsonObj[i].uidpk + "' onclick='return confirm(\"" + message1 + " " + jsonObj[i].fname + " " + jsonObj[i].lname + ".\");'><span class='fa fa-trash-o' style='color:#d27b4b;padding-right:10px;'></span></a>" : "") +
 	          		"</p>" +
           		"</div>" +
           	"</span>";

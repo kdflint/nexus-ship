@@ -1,18 +1,27 @@
 <?php
 
-// PATHS
-	define("PHP_ROOT", "/home/kdflint/projects/nexus-community/nexus/lib");
-	define("WEB_ROOT", "/home/kdflint/projects/nexus-community/nexus/web");
-	define("TKN_ROOT", "/home/kdflint/projects/nexus-community/nexus/token");
-	define("LIB_ROOT", "/home/kdflint/projects/nexus-community/nexus/lib");
-	define("PTR_ROOT", "/home/kdflint/projects/nexus-community/nexus/partner");
-	define("LCL_ROOT", "/home/kdflint/projects/nexus-community/nexus/locale");
-	define("INC_ROOT", "/home/kdflint/projects/nexus-community/nexus/include");
-	define("PHPBB3_ROOT", "/home/kdflint/phpBB3");
-	define("COMPOSER_ROOT", "/home/kdflint/vendor");
-	define("LOG_ROOT", "/home/kdflint/projects/nexus-community/nexus/log");
+// PATH ROOTS - must be configured per environment
+	
+	// Nexus source code root
+	define("CODE_ROOT", "<northbridge-home>/nexus-community/nexus");
+	
+	// phppBB installation root
+	define("PHPBB3_ROOT", "<northbridge-home>/phpBB3");
+	
+	// Composer root
+	define("COMPOSER_ROOT", "<northbridge-home>/vendor");
+
+// RELATIVE PATHS
+	define("PHP_ROOT", CODE_ROOT . "/lib");
+	define("WEB_ROOT", CODE_ROOT . "/web");
+	define("TKN_ROOT", CODE_ROOT . "/token");
+	define("LIB_ROOT", CODE_ROOT . "/lib");
+	define("PTR_ROOT", CODE_ROOT . "/partner");
+	define("LCL_ROOT", CODE_ROOT . "/locale");
+	define("INC_ROOT", CODE_ROOT . "/include");
+	define("LOG_ROOT", CODE_ROOT . "/log");
 	define("PTR_STC_ROOT", "/partner");
-	define("APP_NAME", "/nexus/nexus");
+	define("APP_NAME", "/nexus");
 	define("PILOT_NAME", "/nexus/pilot");
 	define("ENV_NAME", "local");
 	define("ENV_HOST", "localhost");
@@ -32,7 +41,7 @@
 
 // DATABASE
 	define("DB_HOST", "localhost"); 
-	define("DB_USER", "northbr6_web"); 
+	define("DB_USER", "northbri_web"); 
 	define("DB_NAME", "localnexus");	
 	define("FORUM_HOST", "localhost");
 	define("FORUM_USER", "postgres");

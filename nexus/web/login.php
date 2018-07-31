@@ -6,6 +6,8 @@ require_once(Utilities::getSrcRoot() . "/organization/Organization.php");
 require_once(Utilities::getSrcRoot() . "/schedule/Event.php");
 require_once(Utilities::getLibRoot() . '/facebook/Facebook/autoload.php' );
 
+Utilities::setUserLanguageEnv();
+
 $fb = new Facebook\Facebook([
   'app_id' => Utilities::getFbAppId(),
   'app_secret' => Utilities::getFbAppSecret(),
@@ -24,14 +26,14 @@ $liLoginUrl = Utilities::getHttpPath() . '/modules/login/control/li-callback.php
 // Initialize RememberMe Library with file storage
 $storagePath = Utilities::getTokenRoot();
 if ($storagePath) {
-	$storage = new Birke\Rememberme\Storage\File($storagePath);
+	$storage = new Birke\Rememberme\Storage\FileStorage($storagePath);
 	$rememberMe = new Birke\Rememberme\Authenticator($storage);
 }
 
 if(isset($_GET['logout'])) {
 	require_once(Utilities::getModulesRoot() . "/forum/forum_integration.php");
 	$user->session_kill();
-	$rememberMe->clearCookie(isset($_SESSION['username']) ? $_SESSION['username'] : '');
+	//$rememberMe->clearCookie(isset($_SESSION['username']) ? $_SESSION['username'] : '');
 	if (isset($_SESSION['fb_access_token'])) {
 	}
 	Utilities::destroySession();
@@ -42,7 +44,7 @@ if(isset($_GET['logout'])) {
 
 // The following method is not actually invoked. Stubbed for future use...
 if(isset($_GET['logoutAll'])) {
-  $storage->cleanAllTriplets($_SESSION['username']);
+  //$storage->cleanAllTriplets($_SESSION['username']);
 	Utilities::destroySession();
 	session_start();
 }
@@ -58,8 +60,10 @@ if (isset($_SESSION['username']) && substr($_SESSION['username'], 0, 6 ) !== "pU
 	$enrolledUsername = (isset($_SESSION['invitation']) && (isset($_SESSION['username'])) ? $_SESSION['username'] : false);
 }
 
-$cookieValues = $rememberMe->getCookieValues();
-if (isset($cookieValues[0]) && strlen($cookieValues[0]) > 0) {
+$rememberedLoginResult = $rememberMe->login();
+//$cookieValues = $rememberMe->getCookieValues();
+//if (isset($cookieValues[0]) && strlen($cookieValues[0]) > 0) {
+if ($rememberedLoginResult->isSuccess()) {
 	$remembered = "true";
 }	
 
@@ -85,9 +89,9 @@ if(isset($_GET['error']) && Utilities::isSafeCharacterSet($_GET['error'])) {
 	$cleanIcon = "fa fa-info-circle fa-2x";
 } else if(isset($_GET['logout'])) {
 	if(isset($_GET['expired'])) {
-		$cleanMessage = "Your session has timed out.";
+		$cleanMessage = _("Your session has timed out.");
 	} else {
-		$cleanMessage = "You have signed out successfully.";
+		$cleanMessage = _("You have signed out successfully.");
 	}
 	$cleanIcon = "fa fa-info-circle fa-2x";
 }
@@ -132,7 +136,7 @@ if(isset($_GET['mid'])) {
  		$techCheckInclude = "scripts/techCheck.js";
  		// TODO - react to remembered user?
  	} else {
- 		$cleanMessage = "Your meeting is over.";
+ 		$cleanMessage = _("Your meeting is over.");
  		$cleanIcon = "fa fa-info-circle fa-2x";
  	}
 }
@@ -145,8 +149,6 @@ $networkName = $row['name'];
 if (!isset($networkLogo) || strlen($networkLogo) < 1) {
 	$networkLogo = "default-empty.png";
 }
-
-Utilities::setUserLanguageEnv();
 
 ?>
 
@@ -167,8 +169,7 @@ Utilities::setUserLanguageEnv();
   	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 		<link rel="stylesheet" href="//yui-s.yahooapis.com/pure/0.6.0/pure-min.css">
     <link rel="stylesheet" href="styles/nexus.css" type="text/css" />
-    <script src="scripts/nexus.js" language="javascript"></script>
-    <script src="scripts/js_lang.php" type="text/javascript"></script>
+    <script src="scripts/javascriptHandler.php" type="text/javascript" ></script>
   	<!-- http://www.featureblend.com/javascript-flash-detection-library.html -->
  		<script src="scripts/lib/flash_detect.js"></script>
  		<script src="//code.jquery.com/jquery-1.12.4.js"></script>
@@ -182,12 +183,6 @@ Utilities::setUserLanguageEnv();
     <link rel="icon" href="images/NB_icon.png" />
     <title>Northbridge Nexus | Login</title> 
     
-    <script>
-    	USERNAME_REQUIRED = "<?php echo _("Username is required"); ?>";
-    	PASSWORD_REQUIRED = "<?php echo _("Password is required"); ?>";
-    	EMAIL_REQUIRED = "<?php echo _("Valid email is required"); ?>";
-    </script>
- 
    	<script> 
    		
    		<!-- include in this manner instead of in a meta link so that php code inside this file will resolve prior to runtime -->
@@ -268,7 +263,7 @@ Utilities::setUserLanguageEnv();
       		</span>				
 				<?php } else { ?>
       		<span id="walkme-login-anchor" class="controls" style="float:right;padding-bottom:10px;margin-top:30px;">
-	      		<a href="http://northbridgetech.org/downloads/Northbridge_web_conference_center.pdf" style="color:#d27b4b;text-decoration:none;" target="_blank"><?php echo _("About"); ?></a> | 
+	      		<a href="http://northbridgetech.org/downloads/Whitepaper_NexusWebMeet.pdf" style="color:#d27b4b;text-decoration:none;" target="_blank"><?php echo _("About"); ?></a> | 
       			<a href="<?php echo Utilities::getSupportUrl(); ?>" style="color:#d27b4b;text-decoration:none;" target="_blank"><?php echo _("Support"); ?></a>
       		</span>
       	<?php } ?>
@@ -278,11 +273,8 @@ Utilities::setUserLanguageEnv();
 			<div class="frame"> 
 				
 			  <div class="loginColLeft">
-			  	<noscript>
-			  		<p><span class="fa fa-exclamation-triangle fa-2x" style="color:#d27b4b;float:left;margin-right:5px;"></span>To use Nexus it is necessary to enable JavaScript.</p>
-			  		<p>Here are the <a href="http://www.enable-javascript.com" target="_blank"> instructions how to enable JavaScript in your web browser</a></p>
-			  	</noscript>
-			  	<p id="login-user-message" class="confirmation"><span class="<?php echo $cleanIcon; ?>" style="color:#007582;float:left;margin-right:5px;margin-bottom:30px;"></span><?php echo _($cleanMessage); ?></span><?php echo ($cleanMessageLink); ?></p>
+			  	<?php include("scripts/noscript.php"); ?>		
+			  	<p id="login-user-message" class="confirmation"><span class="<?php echo $cleanIcon; ?>" style="color:#007582;float:left;margin-right:5px;margin-bottom:30px;"></span><?php echo $cleanMessage; ?></span><?php echo ($cleanMessageLink); ?></p>
 
 					<!-- This is a standard login, possibly in demo mode -->
 					<?php if ($guestPass === "false") { ?>
@@ -302,8 +294,8 @@ Utilities::setUserLanguageEnv();
     							<div class="or-separator">
 	        					<span class="or-separator-label">OR</span>
      							</div>
-        					<a class="pure-button pure-button-primary" href="<?php echo(htmlspecialchars($fbLoginUrl)); ?>" style="margin-top:15px;width:94%;height:37px;background-color: #3b5998 !important;"><span class="fa fa-facebook-square fa-2x" style="margin-left:10px;margin-top:-6px;"></span><span style="vertical-align:top;margin-left:20px;">Sign In with <b>Facebook</b></span></a><br/>
-        					<a class="pure-button pure-button-primary" href="<?php echo($liLoginUrl); ?>" style="margin-top:15px;width:94%;height:37px;background-color: #0084bf !important;"><span class="fa fa-linkedin-square fa-2x" style="margin-left:0px;margin-top:-6px;"></span><span style="vertical-align:top;margin-left:20px;">Sign In with <b>LinkedIn</b></span></a>
+        					<a class="pure-button pure-button-primary" href="<?php echo(htmlspecialchars($fbLoginUrl)); ?>" style="margin-top:15px;width:94%;height:37px;background-color: #3b5998 !important;"><span class="fa fa-facebook-square fa-2x" style="margin-left:10px;margin-top:-6px;"></span><span style="vertical-align:top;margin-left:20px;"><?php echo _("Sign In with"); ?> <b><?php echo _("Facebook"); ?></b></span></a><br/>
+        					<a class="pure-button pure-button-primary" href="<?php echo($liLoginUrl); ?>" style="margin-top:15px;width:94%;height:37px;background-color: #0084bf !important;"><span class="fa fa-linkedin-square fa-2x" style="margin-left:0px;margin-top:-6px;"></span><span style="vertical-align:top;margin-left:20px;"><?php echo _("Sign In with"); ?> <b><?php echo _("LinkedIn"); ?></b></span></a>
         				</div>
      					</fieldset>
      				</form>   			
@@ -386,8 +378,7 @@ Utilities::setUserLanguageEnv();
       </div>
       
       <div class="footer" style="clear:both;position:relative;bottom:-40px;">
-        powered by<br/>
-    		<a href="http://northbridgetech.org/index.php" target="_blank"><img src="https://northbridgetech.org/images/NB_horizontal_rgb.png" height="45" width="166" border="0" alt="Northbridge Technology Alliance"/></a>
+      	<?php include("nwmFooter.php"); ?>
 			</div>
 	
     </div><!-- container -->   

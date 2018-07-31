@@ -13,13 +13,15 @@
 *.ico
 *.mo
 bbb-test.sh
+config_env.php
 sensitive_config.php
 error_log
 timeZoneData.js
 pilot/view/include/scrapToggleCode.php
 pilot/guidestar/*
 new_nexus
-nexus/lib/*
+nexus/lib/bigbluebutton-depr/*
+nexus/lib/rememberme/rememberme/src
 nexus/web/vendor/*
 nexus/web/modules/directory/views/include/*
 nexus/log/*
@@ -34,5 +36,6 @@ pilot/view/include/download/tmpResults/*
 pilot/model/test/*
 pilot/batch/messageQueue/recover*
 pilot/migration/Util.php
+pilot/*
 flash_scripts/*
 database_models/*

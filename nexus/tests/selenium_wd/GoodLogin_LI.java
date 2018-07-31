@@ -7,6 +7,7 @@ import org.testng.annotations.Test;
 
 public class GoodLogin_LI extends Config_LI
 {
+
 	 @Test
 		  public void testGoodLoginFB() throws Exception 
 		  {
@@ -14,9 +15,9 @@ public class GoodLogin_LI extends Config_LI
 			driver.manage().window().maximize();
 		    driver.findElement(By.linkText("Sign In with LinkedIn")).click();
 		    driver.findElement(By.id("session_key-oauthAuthorizeForm")).clear();
-		    driver.findElement(By.id("session_key-oauthAuthorizeForm")).sendKeys(prop.getProperty("email"));
+		    driver.findElement(By.id("session_key-oauthAuthorizeForm")).sendKeys("hemnam24@gmail.com");
 		    driver.findElement(By.id("session_password-oauthAuthorizeForm")).clear();
-		    driver.findElement(By.id("session_password-oauthAuthorizeForm")).sendKeys(prop.getProperty("password"));
+		    driver.findElement(By.id("session_password-oauthAuthorizeForm")).sendKeys("Shreepriya2111");
 		    driver.findElement(By.name("authorize")).click();
 		    driver.findElement(By.xpath("//a[3]/span")).click();
 		    Thread.sleep(3000);
@@ -31,4 +32,5 @@ public class GoodLogin_LI extends Config_LI
 		      fail(verificationErrorString);
 		    }
 		  }		 
+
 }

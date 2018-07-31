@@ -1,17 +1,95 @@
+<?php
+header("Content-Type: application/javascript");
+header("Cache-Control: max-age=604800, public");
+
+require_once("../src/framework/Util.php");
+
+session_start();
+
+Utilities::setUserLanguageEnv();
+
+$USERNAME_REQUIRED = _("Username is required.");
+$PASSWORD_REQUIRED = _("Password is required.");
+$VALID_EMAIL_REQUIRED = _("Valid email is required.");
+$VALID_USERNAME_REQUIRED = _("Valid username is required.");
+$USERNAME_TAKEN = _("This username is already taken.");
+$VALID_PASSWORD_REQUIRED = _("Valid password is required.");
+$MATCHING_PASSWORD_REQUIRED = _("Matching confirmation password is required.");
+$CONFIRM_PASSWORD = _("Please confirm your new password.");
+$PASSWORD_RULES = _("7-25 characters please");
+$UNMATCHED_PASSWORDS = _("Your passwords do not match.");
+$VALID_FIRST_NAME_REQUIRED = _("Valid first name is required.");
+$FIRST_NAME_REQUIRED = _("First name is required.");
+$NAME_REQUIRED = _("Name is required.");
+$EMAIL_REQUIRED = _("Email is required.");
+$ONE_MOMENT = _("One Moment");
+$TO_TEST = _("To test, save your changes");
+$PASSWORD_RESET = _("Please send a password reset link to my email for");
+$OUR_BAD = _("Our bad, something goofed");
+$TRY_AGAIN = _("Please try again.");
+$EMAIL = _("Email");
+$TIME = _("Time");
+$DURATION = _("Duration");
+$START_DATE = _("Start Date");
+$START_TIME = _("Start Time");
+$END_DATE = _("End Date");
+$END_TIME = _("End Time");
+$TWENTY_FOUR_HOUR = _("A meeting cannot be longer than 24 hours.");
+$BAD_DURATION = _("Bad duration");
+$MEETING_NAME = _("Meeting Name");
+$MEETING_TYPE = _("Meeting Type");
+$COUNTRY = _("Country");
+$TIME_ZONE = _("Time Zone");
+$CONTACT_EMAIL = _("Contact Email");
+$DESCRIPTION = _("Description");
+$MEETING_NAME_REQUIRED = _("Meeting name is required");
+$MEETING_DESCR_REQUIRED = _("Meeting description is required");
+
+?>
+
 var errorBackground = "rgba(247,248,239,0.6) url('') no-repeat right top";
 
 var currentEvents;
 var CURRENT_ORG;
 var CURRENT_PROG;
 
-/*
-Would like to avoid initializing these and force the including php page to do so, but that might break something right now. 
-So, we've got redundand code for the moment
-See login.php:142
-*/
-var USERNAME_REQUIRED = "Username is required";
-var PASSWORD_REQUIRED = "Password is required";
-var EMAIL_REQUIRED = "Valid email is required";
+var USERNAME_REQUIRED = "<?php echo $USERNAME_REQUIRED; ?>";
+var PASSWORD_REQUIRED = "<?php echo $PASSWORD_REQUIRED; ?>";
+var VALID_EMAIL_REQUIRED = "<?php echo $VALID_EMAIL_REQUIRED; ?>";
+var VALID_USERNAME_REQUIRED = "<?php echo $VALID_USERNAME_REQUIRED; ?>";
+var USERNAME_TAKEN = "<?php echo $USERNAME_TAKEN; ?>";
+var VALID_PASSWORD_REQUIRED = "<?php echo $VALID_PASSWORD_REQUIRED; ?>";
+var CONFIRM_PASSWORD = "<?php echo $CONFIRM_PASSWORD; ?>";
+var PASSWORD_RULES = "<?php echo $PASSWORD_RULES; ?>";
+var MATCHING_PASSWORD_REQUIRED = "<?php echo $MATCHING_PASSWORD_REQUIRED; ?>";
+var UNMATCHED_PASSWORDS = "<?php echo $UNMATCHED_PASSWORDS; ?>";
+var VALID_FIRST_NAME_REQUIRED = "<?php echo $VALID_FIRST_NAME_REQUIRED; ?>";
+var FIRST_NAME_REQUIRED = "<?php echo $FIRST_NAME_REQUIRED; ?>";
+var ONE_MOMENT = "<?php echo $ONE_MOMENT; ?>";
+var TO_TEST = "<?php echo $TO_TEST; ?>";
+var PASSWORD_RESET = 	"<?php echo $PASSWORD_RESET; ?>";
+var NAME_REQUIRED = "<?php echo $NAME_REQUIRED; ?>";
+var OUR_BAD = "<?php echo $OUR_BAD; ?>";
+var TRY_AGAIN = "<?php echo $TRY_AGAIN; ?>";
+var EMAIL = "<?php echo $EMAIL; ?>";
+var EMAIL_REQUIRED = "<?php echo $EMAIL_REQUIRED; ?>";
+var TIME = "<?php echo $TIME; ?>";
+var DURATION = "<?php echo $DURATION; ?>";
+var START_DATE = "<?php echo $START_DATE; ?>";
+var START_TIME = "<?php echo $START_TIME; ?>";
+var END_DATE = "<?php echo $END_DATE; ?>";
+var END_TIME = "<?php echo $END_TIME; ?>";
+var TWENTY_FOUR_HOUR = "<?php echo $TWENTY_FOUR_HOUR; ?>";
+var BAD_DURATION = "<?php echo $BAD_DURATION; ?>";
+var MEETING_NAME = "<?php echo $MEETING_NAME; ?>";
+var MEETING_TYPE = "<?php echo $MEETING_TYPE; ?>";
+var COUNTRY = "<?php echo $COUNTRY; ?>";
+var TIME_ZONE = "<?php echo $TIME_ZONE; ?>";
+var CONTACT_EMAIL = "<?php echo $CONTACT_EMAIL; ?>";
+var MEETING_NAME_REQUIRED = "<?php echo $MEETING_NAME_REQUIRED; ?>";
+var DESCRIPTION = "<?php echo $DESCRIPTION; ?>";
+var MEETING_DESCR_REQUIRED = "<?php echo $MEETING_DESCR_REQUIRED; ?>";
+
 
 var MEETING_INFO_NEXT_REFRESH = "60000";
 var NEXT_MEETING_START;
@@ -206,7 +284,6 @@ function getXmlHttpRequest() {
 
 function resetSessionLanguage(lang) {
 	if (lang != 'xx') {
-		var x = document.getElementById("fname");
 		var xmlhttp = getXmlHttpRequest();
 		xmlhttp.onreadystatechange=function() {
 			if (xmlhttp.readyState == 4) {
@@ -273,7 +350,7 @@ function disableTestMessageLink(linkId) {
    var link=document.getElementById(linkId);
    link.style.color="#899d70";
    link.setAttribute("href", "#");
-   link.innerHTML = 'To test, save your changes';
+   link.innerHTML = TO_TEST;
 }
 
 function post(uiContext, to, p) {
@@ -296,7 +373,7 @@ function post(uiContext, to, p) {
 }
 
 function postResetPassword(uidValue, fullname) {
-	var r = confirm("Please send a password reset link to my email for " + fullname + ".");
+	var r = confirm(PASSWORD_RESET + " " + fullname + ".");
 	if (r != true) {
 	  return;
 	}	else {
@@ -578,10 +655,12 @@ function toggleFrameDisplay(frameId) {
 function toggleAdvFrameDisplay(menuItem) {
 	var menuItems = document.getElementById("advMenu").children;
 	var showButton = document.getElementById(menuItem.id);
+	var meetButton = document.getElementById("adv-menu-meet");
   for (var i=0; i<menuItems.length; i++) {
 		menuItems[i].style.backgroundColor='#dae0bc';
 	}
 	showButton.style.backgroundColor='rgba(137, 157, 112, 1)';
+	meetButton.style.backgroundColor='#ffffff';
 	document.cookie = "nexusadv_lastvisit=" + menuItem.id;
 	loadAdvPage(menuItem.id);
 }
@@ -865,7 +944,7 @@ function groupAddValidateAndSubmit() {
 
  	if (Boolean(pass)) {
  		submitButton.disabled = true;  
- 		submitButton.innerHTML = "One Moment"; 
+ 		submitButton.innerHTML = ONE_MOMENT; 
  		submitButton.style.opacity = ".6";
  		groupForm.submit();
  	}
@@ -895,7 +974,7 @@ function loginValidateAndSubmit() {
 
  	if (Boolean(pass)) {
  		submitButton.disabled = true;  
- 		submitButton.innerHTML = "One Moment"; 
+ 		submitButton.innerHTML = ONE_MOMENT; 
  		submitButton.style.opacity = ".6";
  		loginForm.submit();
  	}
@@ -910,14 +989,14 @@ function guestValidateAndSubmit(oid, mid) {
   var username = usernameField.value;
   setFieldPassStyles(usernameField, "");
   if (username == null || username == "") {
-    setFieldErrorStyles(usernameField, "Name is required.");
+    setFieldErrorStyles(usernameField, NAME_REQUIRED);
     pass = false;
   }
   
 	var emailField = joinForm["email"];
 	setFieldPassStyles(emailField, "");
   if (!isValidEmail(emailField.value)) {
-  	setFieldErrorStyles(emailField, EMAIL_REQUIRED);
+  	setFieldErrorStyles(emailField, VALID_EMAIL_REQUIRED);
   	emailField.value = "";
   	pass = false;
   }
@@ -927,8 +1006,8 @@ function guestValidateAndSubmit(oid, mid) {
  			document.getElementById('public-meeting-join').click();
  		} else {
  			usernameField.value = emailField.value = null;
- 			setFieldErrorStyles(usernameField, "Our bad, something goofed :(");
- 			setFieldErrorStyles(emailField, "Please try again.");
+ 			setFieldErrorStyles(usernameField, OUR_BAD + " :(");
+ 			setFieldErrorStyles(emailField, TRY_AGAIN);
  		}
 	}
 }
@@ -943,13 +1022,13 @@ function demoValidateAndSubmit() {
   var username = usernameField.value;
   setFieldPassStyles(usernameField, "");
   if (username == null || username == "") {
-    setFieldErrorStyles(usernameField, "Name is required.");
+    setFieldErrorStyles(usernameField, NAME_REQUIRED);
     pass = false;
   }
   
  	if (Boolean(pass)) {
  		submitButton.disabled = true;  
- 		submitButton.innerHTML = "One Moment"; 
+ 		submitButton.innerHTML = ONE_MOMENT; 
  		submitButton.style.opacity = ".6";
  		loginForm.submit();
  	}
@@ -963,12 +1042,12 @@ function usernameValidateAndSubmit() {
 	
   var emailField = usernameForm["email"];
   var email = emailField.value;
-  setFieldPassStyles(emailField, "Email");
+  setFieldPassStyles(emailField, EMAIL);
 	pass = validateEmail(emailField);
   
  	if (Boolean(pass)) {
  		submitButton.disabled = true;  
- 		submitButton.innerHTML = "One Moment"; 
+ 		submitButton.innerHTML = ONE_MOMENT; 
  		submitButton.style.opacity = ".6";
  		usernameForm.submit();
  	}
@@ -990,7 +1069,7 @@ function passwordValidateAndSubmit() {
   
  	if (Boolean(pass)) {
  		submitButton.disabled = true;  
- 		submitButton.innerHTML = "One Moment"; 
+ 		submitButton.innerHTML = ONE_MOMENT; 
  		submitButton.style.opacity = ".6";
  		passwordForm.submit();
  	}
@@ -1004,7 +1083,7 @@ function inviteValidateAndSubmit() {
 	var submitButton = document.getElementById("invite-form-submit");
 	
 	var emailField = inviteForm["email"];
-	setFieldPassStyles(emailField, "Email");
+	setFieldPassStyles(emailField, EMAIL);
 	pass = validateEmail(emailField);
 
  	if (Boolean(pass)) {
@@ -1024,7 +1103,7 @@ function enrollValidateAndSubmit() {
 	var emailField = enrollForm["email"];
 	setFieldPassStyles(emailField, "");
   if (!isValidEmail(emailField.value)) {
-  	setFieldErrorStyles(emailField, EMAIL_REQUIRED);
+  	setFieldErrorStyles(emailField, VALID_EMAIL_REQUIRED);
   	emailField.value = "";
   	pass = false;
   }
@@ -1036,12 +1115,12 @@ function enrollValidateAndSubmit() {
 	switch(result) {
 		case "invalid":
 		case "undefined":
-    	setFieldErrorStyles(usernameField, "Valid username is required.");
+    	setFieldErrorStyles(usernameField, VALID_USERNAME_REQUIRED);
     	usernameField.value = "";
     	pass = false;		
     	break;
     case "dupe":
-    	setFieldErrorStyles(usernameField, "This username is already taken: " + username);
+    	setFieldErrorStyles(usernameField, USERNAME_TAKEN + ": " + username);
     	usernameField.value = "";
     	pass = false;		
     	break;  
@@ -1053,7 +1132,7 @@ function enrollValidateAndSubmit() {
   var password = passwordField.value;
   setFieldPassStyles(passwordField, "");
   if (password == null || password == "" || password.length < 7 || password.length > 25 || !re.test(password)) {
-    setFieldErrorStyles(passwordField, "Valid password is required.");
+    setFieldErrorStyles(passwordField, VALID_PASSWORD_REQUIRED);
     passwordField.value = "";
     pass = false;
   }
@@ -1062,7 +1141,7 @@ function enrollValidateAndSubmit() {
   var password2 = passwordField2.value;
   setFieldPassStyles(passwordField2, "");
   if (password2 == null || password2 == "" || password != password2) {
-    setFieldErrorStyles(passwordField2, "Matching confirmation password is required.");
+    setFieldErrorStyles(passwordField2, MATCHING_PASSWORD_REQUIRED);
     passwordField2.value = "";
     pass = false;
   }	
@@ -1071,13 +1150,13 @@ function enrollValidateAndSubmit() {
   var fname = fnameField.value;
   setFieldPassStyles(fnameField, "");
   if (fname == null || fname == "" || fname.length > 25) {
-    setFieldErrorStyles(fnameField, "Valid first name is required.");
+    setFieldErrorStyles(fnameField, VALID_FIRST_NAME_REQUIRED);
     pass = false;
   }
     	
  	if (Boolean(pass)) {
  		submitButton.disabled = true;  
- 		submitButton.innerHTML = "One Moment";
+ 		submitButton.innerHTML = ONE_MOMENT;
  		submitButton.style.opacity = ".6";
  		enrollForm.submit();
  	}
@@ -1087,10 +1166,10 @@ function enrollValidateAndSubmit() {
 function validateEmail(emailField) {
 	var email = emailField.value;
 	if (email == null || email == "") {
-    setFieldErrorStyles(emailField, "Email is required.");
+    setFieldErrorStyles(emailField, EMAIL_REQUIRED);
     return false;
   } else if (!isValidEmail(email)) {
-    setFieldErrorStyles(emailField, EMAIL_REQUIRED);
+    setFieldErrorStyles(emailField, VALID_EMAIL_REQUIRED);
     emailField.value = "";
   	return false;
   }
@@ -1146,7 +1225,7 @@ function resetScheduleForm() {
 	}
 	var scheduleForm = document.forms['schedule-form'];
 	scheduleForm.reset();
-	setFieldPassStyles(scheduleForm['meeting-name'], "Meeting Name");
+	setFieldPassStyles(scheduleForm['meeting-name'], MEETING_NAME);
 	setFieldPassStyles(scheduleForm['meeting-date'], "Date");
 	setFieldPassStyles(document.getElementById("schedule-form-time-button"), "Time");
 	setFieldPassStyles(document.getElementById("schedule-form-duration-button"), "Duration");
@@ -1184,7 +1263,7 @@ function resetNowForm() {
 	document.getElementById('join_control').click();
 	var nowForm = document.forms['now-form'];
 	nowForm.reset();
-	setFieldPassStyles(nowForm['meeting-name'], "Meeting Name");
+	setFieldPassStyles(nowForm['meeting-name'], MEETING_NAME);
 	setFieldPassStyles(document.getElementById("now-form-duration-button"), "Duration");
 	setFieldPassStyles(document.getElementById("now-form-type-button"), "Meeting Type");
 	$( "#now-form-duration" ).selectmenu( "refresh" );
@@ -1227,16 +1306,16 @@ function profileValidateAndSubmit() {
   	// don't run any more password validations
   } else {
   	if (password1.length < 7 || password1.length > 25) {
-  		setFieldErrorStyles(password1Field, "7-25 characters please");
+  		setFieldErrorStyles(password1Field, PASSWORD_RULES);
   		password1Field.value = "";
    	 	pass = false;
    	}
     if (pass && (password2 == null || password2 == "")) {
-    	setFieldErrorStyles(password2Field, "Please confirm your new password.");
+    	setFieldErrorStyles(password2Field, CONFIRM_PASSWORD);
     	pass = false;
   	}
   	if (pass && (password1 !== password2)) {
-  		setFieldErrorStyles(password2Field, "Your passwords do not match.");
+  		setFieldErrorStyles(password2Field, UNMATCHED_PASSWORDS);
   		password2Field.value = "";
     	pass = false;
   	}
@@ -1246,7 +1325,7 @@ function profileValidateAndSubmit() {
   var fname = fnameField.value;
   setFieldPassStyles(fnameField, "First Name");
   if (fname == null || fname == "" || fname.length < 1) {
-    setFieldErrorStyles(fnameField, "First name is required.");
+    setFieldErrorStyles(fnameField, FIRST_NAME_REQUIRED);
     pass = false;
   }
 
@@ -1281,7 +1360,7 @@ function profileValidateAndSubmit() {
   
  	if (Boolean(pass)) {
  		submitButton.disabled = true;  
- 		submitButton.innerHTML = "One Moment"; 
+ 		submitButton.innerHTML = ONE_MOMENT; 
  		submitButton.style.opacity = ".6";
  		profileForm.submit();
  	}
@@ -1394,7 +1473,7 @@ function organizationBasicValidateAndSubmit(thisForm) {
   var email = contactEmailField.value;
 	setFieldPassStyles(contactEmailField, "Email");
   if (false) {
-  	setFieldErrorStyles(contactEmailField, EMAIL_REQUIRED);
+  	setFieldErrorStyles(contactEmailField, VALID_EMAIL_REQUIRED);
   	contactEmailField.value = "";
   	pass = false;
   }
@@ -1965,7 +2044,7 @@ function eventValidateAndSubmit(thisForm) {
 	var isTimeEnd = (eventForm['meeting-time-end'] !== undefined ? true : false);
 	var isDateEnd = (eventForm['meeting-date-end'] !== undefined ? true : false);
   
-  setFieldPassStyles(dateField, "Start Date");
+  setFieldPassStyles(dateField, START_DATE);
 	if (validateDateFormat(dateField)) {
 		if (!validateTimeFuture(dateField, time, timeZoneOffset)) {
 			pass = false;
@@ -1974,30 +2053,30 @@ function eventValidateAndSubmit(thisForm) {
 		pass = false;
 	}
 	
-	setFieldPassStyles(document.getElementById(thisForm + "-time-button"), "Start Time");
-	if (time == null || time == "" || time.indexOf("Time") > -1) {
-   	setFieldErrorStyles(document.getElementById(thisForm + "-time-button"), "Start Time");
+	setFieldPassStyles(document.getElementById(thisForm + "-time-button"), START_TIME);
+	if (time == null || time == "" || time.indexOf(TIME) > -1) {
+   	setFieldErrorStyles(document.getElementById(thisForm + "-time-button"), START_TIME);
     pass = false;
   }
  
 	if (Boolean(isDateEnd)) {
 		dateFieldEnd = eventForm['meeting-date-end'];
-  	setFieldPassStyles(dateFieldEnd, "End Date");
+  	setFieldPassStyles(dateFieldEnd, END_DATE);
   	if (validateDateFormat(dateFieldEnd)) {
   		if (Boolean(isTimeEnd)) {
   			timeEnd = eventForm['meeting-time-end'].value;
-				setFieldPassStyles(document.getElementById(thisForm + "-time-end-button"), "End Time");
-				if (timeEnd == null || timeEnd == "" || timeEnd == "End Time" || !validateTimeFuture(dateFieldEnd, timeEnd, timeZoneOffset)) {
-					setFieldErrorStyles(document.getElementById(thisForm + "-time-end-button"), "End Time");
+				setFieldPassStyles(document.getElementById(thisForm + "-time-end-button"), END_TIME);
+				if (timeEnd == null || timeEnd == "" || timeEnd == END_TIME || !validateTimeFuture(dateFieldEnd, timeEnd, timeZoneOffset)) {
+					setFieldErrorStyles(document.getElementById(thisForm + "-time-end-button"), END_TIME);
 					pass = false;
 				}	
   		}
 		} else {
 			if (Boolean(isTimeEnd)) {
 				timeEnd = eventForm['meeting-time-end'].value;
-				setFieldPassStyles(document.getElementById(thisForm + "-time-end-button"), "End Time");
-				if (timeEnd == null || timeEnd == "" || timeEnd == "End Time") {
-					setFieldErrorStyles(document.getElementById(thisForm + "-time-end-button"), "End Time");
+				setFieldPassStyles(document.getElementById(thisForm + "-time-end-button"), END_TIME);
+				if (timeEnd == null || timeEnd == "" || timeEnd == END_TIME) {
+					setFieldErrorStyles(document.getElementById(thisForm + "-time-end-button"), END_TIME);
 				}	
 			}				
 			setFieldErrorStyles(eventForm['meeting-date-end'], "mm/dd/yyyy");
@@ -2014,7 +2093,7 @@ function eventValidateAndSubmit(thisForm) {
   		var secondEpoch = Date.parse(createTimeStampString(eventForm['meeting-date-end'].value, eventForm['meeting-time-end'].value));
  			var epochDiff = secondEpoch - firstEpoch;
  			if (epochDiff/1000 > 86400) {
- 				alert("A meeting cannot be longer than 24 hours");
+ 				alert(TWENTY_FOUR_HOUR);
  				setFieldErrorStyles(setFieldErrorStyles(eventForm['meeting-date-end'], "mm/dd/yyyy"));
  				pass = false;
  			} else {
@@ -2024,12 +2103,12 @@ function eventValidateAndSubmit(thisForm) {
 	}
 
   var duration = durationField.value;
-	setFieldPassStyles(document.getElementById(thisForm + "-duration-button"), "Duration");
-  if (duration == null || duration == "" || duration == "Duration") {
- 		setFieldErrorStyles(document.getElementById(thisForm + "-duration-button"), "Duration");
+	setFieldPassStyles(document.getElementById(thisForm + "-duration-button"), DURATION);
+  if (duration == null || duration == "" || duration == DURATION) {
+ 		setFieldErrorStyles(document.getElementById(thisForm + "-duration-button"), DURATION);
    	pass = false;
  	} else if (!validateTimeFormat(duration)) {
- 		alert("Bad duration: " + duration);
+ 		alert(BAD_DURATION + ": " + duration);
  		pass = false;
 	}
   
@@ -2047,16 +2126,16 @@ function eventValidateAndSubmit(thisForm) {
 	
  	var nameField = eventForm['meeting-name'];
   var name = nameField.value;
-	setFieldPassStyles(nameField, "Meeting Name");
+	setFieldPassStyles(nameField, MEETING_NAME);
   if (name == null || name == "" || name.length > 100) {
-  	setFieldErrorStyles(nameField, "Meeting name is required");
+  	setFieldErrorStyles(nameField, MEETING_NAME_REQUIRED);
     pass = false;
   }
 
 	var tzChangeValue = eventForm['tzone-change'].value;
 	if (tzChangeValue == "true") {
-		setFieldErrorStyles(document.getElementById(thisForm + "-country-button"), "Country");
-		setFieldErrorStyles(document.getElementById(thisForm + "-countryTimeZones-button"), "Time Zone");
+		setFieldErrorStyles(document.getElementById(thisForm + "-country-button"), COUNTRY);
+		setFieldErrorStyles(document.getElementById(thisForm + "-countryTimeZones-button"), TIME_ZONE);
 		showTimeZoneDisplay('tz-select');
 		pass = false;
 	}
@@ -2064,9 +2143,9 @@ function eventValidateAndSubmit(thisForm) {
 	if (eventForm['meeting-type'] !== undefined) {
   	var typeField = eventForm['meeting-type'];
   	var typeValue = typeField.value;
-  	setFieldPassStyles(document.getElementById(thisForm + "-type-button"), "Meeting Type");
-  	if (typeValue == null || typeValue == "" || typeValue == "Meeting Type") {
-	  	setFieldErrorStyles(document.getElementById(thisForm + "-type-button"), "Meeting Type");
+  	setFieldPassStyles(document.getElementById(thisForm + "-type-button"), MEETING_TYPE);
+  	if (typeValue == null || typeValue == "" || typeValue == MEETING_TYPE) {
+	  	setFieldErrorStyles(document.getElementById(thisForm + "-type-button"), MEETING_TYPE);
     	pass = false;
   	}
   }
@@ -2078,9 +2157,9 @@ function eventValidateAndSubmit(thisForm) {
   	forApproval = true;
   	var contactField = eventForm['meeting-contact'];
   	contact = contactField.value;
-  	setFieldPassStyles(contactField, "Contact Email");
+  	setFieldPassStyles(contactField, CONTACT_EMAIL);
   	if (!isValidEmail(contact)) {
-  		setFieldErrorStyles(contactField, EMAIL_REQUIRED);
+  		setFieldErrorStyles(contactField, VALID_EMAIL_REQUIRED);
   		contactField.value = "";
   		pass = false;
   	}  	
@@ -2089,9 +2168,9 @@ function eventValidateAndSubmit(thisForm) {
 	if (eventForm['meeting-descr'] !== undefined) {
  		var descrField = eventForm['meeting-descr'];
  		var descr = descrField.value;
-		setFieldPassStyles(descrField, "Description");
+		setFieldPassStyles(descrField, DESCRIPTION);
   	if (descr == null || descr == "" || descr.length > 1500) {
-	  	setFieldErrorStyles(descrField, "Meeting description is required");
+	  	setFieldErrorStyles(descrField, MEETING_DESCR_REQUIRED);
     	pass = false;		
     }
 	}
