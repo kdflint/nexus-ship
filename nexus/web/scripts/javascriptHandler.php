@@ -655,10 +655,12 @@ function toggleFrameDisplay(frameId) {
 function toggleAdvFrameDisplay(menuItem) {
 	var menuItems = document.getElementById("advMenu").children;
 	var showButton = document.getElementById(menuItem.id);
+	var meetButton = document.getElementById("adv-menu-meet");
   for (var i=0; i<menuItems.length; i++) {
 		menuItems[i].style.backgroundColor='#dae0bc';
 	}
 	showButton.style.backgroundColor='rgba(137, 157, 112, 1)';
+	meetButton.style.backgroundColor='#ffffff';
 	document.cookie = "nexusadv_lastvisit=" + menuItem.id;
 	loadAdvPage(menuItem.id);
 }

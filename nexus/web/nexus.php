@@ -191,12 +191,11 @@ $customProfileData = strlen($_SESSION['profile']) > 0 ? $_SESSION['profile'] : '
 					//initMemberTable(); NOTE - init here (instead of in groupList.php::9) causes table to show empty data and search not responsive.
 				}
 								
-		    if ( NETWORK_ID === "358" && $.cookie('nexusadv_lastvisit') !== 'undefined') {
-					loadPreviousTab('adv-menu-forum');
-				} else if ( $.cookie('nexusadv_lastvisit') !== 'undefined' ) {
-					loadPreviousTab($.cookie('nexusadv_lastvisit'));
+		    if ( $.cookie('nexusadv_lastvisit') !== 'undefined') {
+		        loadPreviousTab($.cookie('nexusadv_lastvisit'));		
 				} else {
-					// default view implemented by tab style load settings
+				    loadPreviousTab('adv-menu-forum');
+					  // What should the default view be - implemented by tab style load settings?
 				}
 				
 				$( "#organization-name-autocomplete" ).autocomplete({

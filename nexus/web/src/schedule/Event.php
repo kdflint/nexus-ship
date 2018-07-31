@@ -120,6 +120,9 @@ class Event {
 	
 	public static function isValidEventUuid($in) {
 		if (!$in) {return FALSE;}
+		if (!strcmp($in, "CfchtCommonMeeting")) {
+			return TRUE;
+		}
 		$query = "select exists (select uuid from event where uuid = $1)";		
 		$row = pg_fetch_row(PgDatabase::psExecute($query, array($in)));
 		if (!strcmp($row[0], "t")) {
