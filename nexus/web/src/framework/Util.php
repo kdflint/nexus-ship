@@ -25,7 +25,7 @@ autoloader(array(array(
 // now we can set class autoload paths
 autoloader(array(
       'rememberme/rememberme/src/',
-      'rememberme/rememberme/src/Storage'
+      'rememberme/rememberme/src/Storage',
       'facebook'
 ));
 
@@ -283,9 +283,9 @@ class Utilities {
 	
 	public static function validateUserId($in) {
 		if(self::validateUserIdFormat($in)) {
-			if (PgDatabase::userIdExists($in)) {	
+			//if (PgDatabase::userIdExists($in)) {	
 				return TRUE;
-			}
+			//}
 		}
 		return FALSE;
 	}
@@ -325,6 +325,15 @@ class Utilities {
     } else {
     	return FALSE;
     }
+  }
+  
+  public static function validateUsername($in) {
+		if(self::validateUsernameFormat($in)) {
+			if (User::userNameExists($in)) {	
+				return TRUE;
+			}
+		}
+		return FALSE;
   }
   
 	public static function isValidPassword($in) {
