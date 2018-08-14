@@ -283,9 +283,7 @@ class Utilities {
 	
 	public static function validateUserId($in) {
 		if(self::validateUserIdFormat($in)) {
-			//if (PgDatabase::userIdExists($in)) {	
 				return TRUE;
-			//}
 		}
 		return FALSE;
 	}

@@ -216,9 +216,37 @@ class User {
 			}
 	}
 	
+	public static function updateToNetworkAdminbyUserId($uid) {
+			$query1 = "update user_group set role_fk = 1 where user_fk = $1";
+			$result1 = PgDatabase::psExecute($query1, array($uid));		
+			$query2 = "update user_organization set role_fk = 1 where user_fk = $1";
+			$result2 = PgDatabase::psExecute($query2, array($uid));		
+			if ($result1 && $result2) {
+				return true;
+			}
+			return false; 
+	}
+	
 	public static function getUserOrgRelationsByUserId($userId) {
 			$query = "select o.name, o.id from user_organization uo, organization o where uo.user_fk = $1 and uo.organization_fk = o.id";
 			return PgDatabase::psExecute($query, array($userId));
+	}
+	
+	public static function getMembershipAdminByOrgUid($uid) {
+			$query = 	"select username from public.user u, user_organization uo, organization o 
+			  where uo.user_fk = u.id and 
+			  uo.grantor_fk = 88 and 
+			  u.username not like 'pUser-%' and 
+			  u.status_fk = 1 and
+			  o.id = uo.organization_fk and
+			  o.uid = $1
+			  order by u.create_dttm asc limit 1
+			  ";
+			  $result = pg_fetch_array(PgDatabase::psExecute($query, array($uid)));
+			  if ($result and $result['username'] != NULL) {
+					return $result['username'];
+				}
+				return "";
 	}
 	
 	public static function isUserMessageEnabled($userId) {
