@@ -26,7 +26,7 @@
       	</div>
       	
       	<div class="frameColRight">
-      		<?php if ($_SESSION['environment'] != "prod") { ?>
+      		<?php if (true) { ?>
 					<form id="language-form-1">
 						<span style="clear:right;float:right;margin-top:5px;font-size:90%;margin-right:-10px;">
        				<select id="language-form-lang" name="language" style="width:160px;vertical-align:middle;text-align:left;" onchange="resetSessionLanguage(this.value);">
