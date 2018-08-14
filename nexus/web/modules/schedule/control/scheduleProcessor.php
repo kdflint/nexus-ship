@@ -29,11 +29,12 @@ $dirty = array('meeting-name' => $_POST['meeting-name'],
 							'meeting-time-end' => $_POST['meeting-time-end'],
 							'meeting-contact' => $_POST['meeting-contact'],
 							'meeting-uuid' => $_POST['meeting-uuid'],
-							'meeting-group' => $_POST['orig-group-assoc'],
+							'meeting-visibility' => $_POST['meeting-visibility'],
 							'meeting-recur' => $_POST['repeat-check'],
 							'meeting-interval' => $_POST['repeat-interval'],
 							'meeting-num-occur' => $_POST['repeat-freq'],
-							'meeting-recur-dttm' => $_POST['meeting-recur-duration']
+							'meeting-recur-dttm' => $_POST['meeting-recur-duration'],
+							'old-file-ext' => $_POST['old-file-ext']
 							);
 										
 $result = validateEvent($dirty);
@@ -52,7 +53,16 @@ Use only clean input beyond this point (i.e. $clean[])
 $meetingRecurPattern = array("0" => "daily", "1" => "weekdays", "2" => "weekly");
 
 $meetingType = array("1" => "video chat", "2" => "collaboration", "3" => "webinar", "4" => "video tether");
-$meetingStatus = ($_SESSION['nexusContext'] == "PUB" ? 3 : 1);
+
+// Business rule: If session is PUB or session is ADV and user is non-admin, meetings should go in pending review; If session is NWM, meeting should go in active
+$meetingStatus = 1;
+if ($_SESSION['nexusContext'] == "PUB") {
+	$meetingStatus = 3;
+}
+if ($_SESSION['nexusContext'] == "ADV" && !Utilities::isSessionAdmin()) {
+	$meetingStatus = 3;
+}
+
 $timestamp = $result['clean']['meeting-date'] . " " . $result['clean']['meeting-time'] . " " . $result['clean']['tzone-name'];
 $targetExt = "";
 $isFile = false;
@@ -61,6 +71,8 @@ if (isset($_FILES) && isset($_FILES["fileToUpload"]["name"]) && strlen($_FILES["
 	$isFile = true;
 	$inputFile = basename($_FILES["fileToUpload"]["name"]);
 	$targetExt = pathinfo($inputFile,PATHINFO_EXTENSION);
+} else if (isset($result['clean']['file-ext'])) {
+	$targetExt = $result['clean']['file-ext'];
 }
 
 $recurId = null;
@@ -82,8 +94,21 @@ if ($isFile) {
 }
 
 if ($meetingStatus == "3") {
-	$headers = "From: kathy.flint@northbridgetech.org";
-	$message = "Hello Olga,\r\n\r\nA new event has just been submitted to the Center for Faith and Community Health Transformation Public Calendar.\r\n\r\nPlease approve this event for publication at\r\n\r\nhttp://nexus.northbridgetech.org/web/login?oid=ed787a92\r\n\r\nLet me know if you have any questions!\r\n\r\nKathy Flint\r\nkathy.flint@northbridgetech.org";
+	$headers = "From: support@northbridgetech.org\r\nBcc: kathy.flint@northbridgetech.org";
+	$message = "Hello Administrator,
+	
+A new event has just been submitted to the " . $_SESSION['networkName'] . " Public Calendar.
+
+You may approve this event for publication at
+
+" . Utilities::getHttpPath() . "/login.php?oid=" . $_SESSION['orgUid'] . "
+
+Sincerely,
+
+Nexus Advantage
+on behalf of
+" . $_SESSION['networkName'];
+
 	mail(Utilities::getEventApprovalList(), "[Nexus] Public Calendar Event Approval", $message, $headers);
 }	
 
@@ -99,8 +124,12 @@ if ((session_status() === PHP_SESSION_ACTIVE) && isset($_SESSION['nexusContext']
  			header("location:" . Utilities::getPluginPath() . "/publicSuite.php?oid=" . $_SESSION['orgUid'] . "&context=calendar&confirm=" . $result['clean']['meeting-contact']);
  			break;
  		default: 			
+ 			header("location:" . Utilities::getPluginPath() . "/publicSuite.php?oid=" . $_SESSION['orgUid'] . "&context=calendar&confirm=" . $result['clean']['meeting-contact']);
  	}
-}
+} else {
+ 	header("location:" . Utilities::getPluginPath() . "/publicSuite.php?oid=" . $_SESSION['orgUid'] . "&context=calendar&confirm=" . $result['clean']['meeting-contact']);
+ 	exit(0);
+}	
 
 function validateEvent($input) {
 	$result = array('clean' => array(), 'error' => array());
@@ -182,6 +211,7 @@ function validateEvent($input) {
  	// MEETING DESCR
 	if (isset($input['meeting-descr'])) {
 		if (strlen($input['meeting-descr']) <= 1500) {
+			// TODO - replace this with Utilities::encodeLineBreaks
 			$result['clean']['meeting-descr'] = str_replace(["\r\n", "\r", "\n"], "~", Utilities::sanitize($input['meeting-descr']));	
 		} else {
 			$result['error']['meeting-descr'] = "error";
@@ -237,13 +267,22 @@ function validateEvent($input) {
 	} else {
 		$result['clean']['meeting-uuid'] = "";
 	}
+
+	// MEETING FILE
+	if (isset($input['old-file-ext']) && strlen($input['old-file-ext']) > 0 ) {
+		$result['clean']['file-ext'] = $input['old-file-ext'];
+	}
 	
-	// MEETING GROUP
-	if (isset($input['meeting-group']) && Utilities::validateGroupId($input['meeting-group'])) {
-		$result['clean']['meeting-group'] = $input['meeting-group'];
+	// MEETING VISIBILITY
+	if (isset($input['meeting-visibility']) && $_SESSION['nexusContext'] === "ADV") {
+		if ($input['meeting-visibility'] === "public") {
+			$result['clean']['meeting-group'] = $_SESSION['pgpk'];
+		} else {
+			$result['clean']['meeting-group'] = $_SESSION['ngpk'];
+		}
 	} else {
-		$result['clean']['meeting-group'] = array_keys($_SESSION['groups'])[0];
-	}	
+		$result['clean']['meeting-group'] = $_SESSION['groups'][0]['id'];
+	}
 	
 	// MEETING RECURRENCE
 	if (isset($input['meeting-recur'])) {

@@ -13,7 +13,7 @@ h1 {
 }
 
 h2 {
-	color: #004D62;
+	color: #105289;
 }
 
 h3 {
@@ -89,7 +89,7 @@ table.zebra-list tr:nth-child(odd) td, ul.zebra-list li:nth-child(odd) {
 }
 
 .bg2 {
-	background-color: #EDF0DE;
+	background-color: #edf0de;
 }
 
 table.zebra-list tr:nth-child(even) td, ul.zebra-list li:nth-child(even) {
@@ -97,7 +97,11 @@ table.zebra-list tr:nth-child(even) td, ul.zebra-list li:nth-child(even) {
 }
 
 .bg3	{
-	background-color: #ABC3CE;
+	background-color: #a6c3ce;
+}
+
+.bg4	{
+	background-color: #ffffff;
 }
 
 .ucprowbg {
@@ -354,7 +358,7 @@ li.row strong {
 }
 
 li.row:hover {
-	background-color: #F6F4D0;
+	background-color: #F0F2F2;
 }
 
 li.row:hover dd {
@@ -838,15 +842,15 @@ ul.cplist {
 
 /* Link styles for the sub-section links */
 #navigation a {
-	color: #333;
-	background: #B4C4D1;
-	background: -moz-linear-gradient(left, #B4C4D1 50%, #CADCEB 100%);
-	background: -webkit-gradient(left top, right top, color-stop(50%, #B4C4D1), color-stop(100%, #CADCEB));
-	background: -webkit-linear-gradient(left, #B4C4D1 50%, #CADCEB 100%);
-	background: -o-linear-gradient(left, #B4C4D1 50%, #CADCEB 100%);
-	background: -ms-linear-gradient(left, #B4C4D1 50%, #CADCEB 100%);
-	background: linear-gradient(to right, #B4C4D1 50%, #CADCEB 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#B4C4D1', endColorstr='#CADCEB', GradientType=1 );
+	color: #004d62;
+	background: #edf0de;
+	background: -moz-linear-gradient(left, #edf0de 50%, #f7f8ef 100%);
+	background: -webkit-gradient(left top, right top, color-stop(50%, #edf0de), color-stop(100%, #f7f8ef));
+	background: -webkit-linear-gradient(left, #edf0de 50%, #f7f8ef 100%);
+	background: -o-linear-gradient(left, #edf0de 50%, #f7f8ef 100%);
+	background: -ms-linear-gradient(left, #edf0de 50%, #f7f8ef 100%);
+	background: linear-gradient(to right, #edf0de 50%, #f7f8ef 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#edf0de', endColorstr='#f7f8ef', GradientType=1 );
 }
 
 .rtl #navigation a {
@@ -861,19 +865,18 @@ ul.cplist {
 }
 
 #navigation a:hover {
-	background: #AABAC6;
-	color: #BC2A4D;
+	background: #486c7a;
+	color: #f7f8ef;
 	filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
 }
 
 #navigation #active-subsection a {
-	background: #F9F9F9;
-	color: #D31141;
+	background: #899d70;
 	filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
 }
 
 #navigation #active-subsection a:hover {
-	color: #D31141;
+	color: #f7f8ef;
 }
 
 @media only screen and (max-width: 900px), only screen and (max-device-width: 900px)
@@ -890,7 +893,8 @@ ul.cplist {
 }
 
 .panel-container .panel {
-	background-color: #F9F9F9;
+	//background-color: #F9F9F9;
+	background-color: #ffffff;
 }
 
 #cp-main .pm {
@@ -899,7 +903,8 @@ ul.cplist {
 
 /* Friends list */
 .cp-mini {
-	background-color: #eef5f9;
+	background-color: #dde4e6;
+	border: 1px solid #486326
 }
 
 dl.mini dt {
@@ -920,7 +925,7 @@ dl.mini dt {
 }
 
 .pmlist li.pm_marked_colour, .pm_marked_colour {
-	border-color: #FF6600;
+	border-color: #d27b4b;
 }
 
 .pmlist li.pm_replied_colour, .pm_replied_colour {

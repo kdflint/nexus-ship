@@ -32,7 +32,21 @@ Use only clean input beyond this point (i.e. $clean[])
 
 User::deleteUser($clean['id']);
 
-header("location:" . Utilities::getHttpPath() . "/nexus.php?view=team");
+if ((session_status() === PHP_SESSION_ACTIVE) && isset($_SESSION['nexusContext'])) {
+ switch($_SESSION['nexusContext']) {
+ 		case "NWM":
+			header("location:" . Utilities::getHttpPath() . "/nexus.php?view=team");
+ 			break;
+ 		case "ADV":
+			header("location:" . Utilities::getHttpPath() . "/nexus.php?view=network");
+ 			break;
+ 		case "PUB":
+ 			header("location:" . Utilities::getPluginPath() . "/publicSuite.php?oid=" . $_SESSION['orgUid'] . "&context=directory");
+ 			break;
+ 		default: 			
+ 	}
+}
+
 exit(0);
 
 function forceLogout() {

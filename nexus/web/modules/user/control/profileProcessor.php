@@ -4,7 +4,6 @@ session_start();
 
 require_once("../../../src/framework/Util.php");
 require_once(Utilities::getSrcRoot() . "/user/User.php");
-//require_once($_SESSION['appRoot'] . "control/error/handlers.php");
 
 // TODO - put authorization checker, session checker, error handling, etc. in a central place. These should go at the top of every processor.
 
@@ -27,8 +26,8 @@ $input = array('email' => $_POST['email'],
 							'lname' => $_POST['lname'],
 							'password1' => $_POST['password1'],
 							'password2' => $_POST['password2'],
-							'sms' => "",
-							'phone' => "",
+							'sms' => $_POST['sms'],
+							'phone' => $_POST['phone'],
 							'descr' => ""
 							);
 							
@@ -49,12 +48,12 @@ Recently the email address was updated on your Nexus Web Meet account.
 If you did not request this change, please contact our support team at support@northbridgetech.org.
 
 The Support Team at
-NorthBridge Technology Alliance";
+Northbridge Technology Alliance";
 
 	mail($_SESSION['email'], "[Nexus] Profile Update", $message, "From: noreply@northbridgetech.org\r\nCc: " . $result['good']['email']);
 }
 
-User::updateUserById($_SESSION['uidpk'], 
+$forumUpdateGo = User::updateUserById($_SESSION['uidpk'], 
 											$result['good']['fname'], 
 											$result['good']['lname'], 
 											$result['good']['sms'], 
@@ -67,8 +66,11 @@ User::updateUserById($_SESSION['uidpk'],
 											$result['good']['phone'],
 											$phonePublic);
 
+$forumPasswordGo = false;
+$forumUsername = $_SESSION['username'];
+
 if (isset($result['good']['password']) && strlen($result['good']['password']) > 0) {
-	Utilities::storeSecurePasswordImplA($result['good']['password'], $_SESSION['uidpk']);
+	$forumPasswordGo = Utilities::storeSecurePasswordImplA($result['good']['password'], $_SESSION['uidpk']);
 	
 	$message = "Hello " . $result['good']['fname'] . ",
 	
@@ -77,22 +79,44 @@ Recently the password was updated on your Nexus Web Meet account.
 If you did not request this change, please contact our support team at support@northbridgetech.org.
 
 The Support Team at
-NorthBridge Technology Alliance";
+Northbridge Technology Alliance";
 
 	mail($_SESSION['email'], "[Nexus] Profile Update", $message, "From: noreply@northbridgetech.org\r\nCc: " . $result['good']['email']);
 }
 
 $cursor = User::getUserById($_SESSION['uidpk']);
 
-$_SESSION['email'] = $_SESSION['fname'] = $_SESSION['lname'] = ""; // = $_SESSION['sms'] = $_SESSION['phone'];
+$_SESSION['email'] = $_SESSION['fname'] = $_SESSION['lname'] = $_SESSION['sms'] = $_SESSION['phone'] = "";
 
 while ($row = pg_fetch_array($cursor)) {
 	$_SESSION['email'] = $row['email'];
-  //$_SESSION['sms'] = Utilities::prettyPrintPhone($row['cell']);
-  //$_SESSION['phone'] = Utilities::prettyPrintPhone($row['phone']);
+  $_SESSION['sms'] = Utilities::prettyPrintPhone($row['cell']);
+  $_SESSION['phone'] = Utilities::prettyPrintPhone($row['phone']);
   $_SESSION['fname'] = $row['first']; 
   $_SESSION['lname'] = $row['last'];
 }
+
+// This is jacked up. We should bundle this functionality into User::updateUserProfile. But phpBB restriction on global access makes us push to down here, after all our globals are accessed. There is no time now to refactor. Eventually we will and organize these methods properly into classes.
+
+$forumSms = ($smsPublic === 'true' ? $_SESSION['sms'] : "");
+$forumPhone = ($phonePublic === 'true' ? $_SESSION['phone'] : "");
+$forumEmail = ($emailPublic === 'true' ? $_SESSION['email'] : "");
+$forumFname = $_SESSION['fname'];
+$forumLname = $_SESSION['lname'];
+
+if ($forumUpdateGo && $_SESSION['nexusContext'] === "ADV") {
+	require_once(Utilities::getSrcRoot() . "/group/Forum.php");	
+	Forum::updateUserProfile($forumUsername, $forumFname, $forumLname, $forumSms, $forumEmail, $forumPhone);
+}
+
+/*
+if ($forumPasswordGo) {
+	$result = Forum::updateUserPasword($forumUsername, $result['good']['password']);
+	if (!$result) {
+		trigger_error("Fail to update user " . $forumUsername " forum password to " . $result['good']['password'], E_USER_ERROR);
+	}		
+}
+*/
 
 header("location:" . Utilities::getHttpPath() . "/nexus.php?view=profile");
 exit(0);

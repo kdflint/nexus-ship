@@ -16,7 +16,7 @@ session_start();
 	 	
 	 	<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Oswald:400,300|Open+Sans|Oxygen|Swanky+and+Moo+Moo">
 	 	<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-		<link rel="stylesheet" type="text/css" href="//yui.yahooapis.com/pure/0.6.0/pure-min.css">
+		<link rel="stylesheet" type="text/css" href="//yui-s.yahooapis.com/pure/0.6.0/pure-min.css">
 	  <link rel="stylesheet" type="text/css" href="http://northbridgetech.org/dev/new_nexus/web/styles/nexus.css" type="text/css" />
 	  
   	<!-- 	http://www.featureblend.com/javascript-flash-detection-library.html -->
@@ -170,7 +170,7 @@ session_start();
       
       <div class="footer">
         powered by<br/>
-    		<a href="http://northbridgetech.org/index.php" target="_blank"><img src="http://northbridgetech.org/images/NB_horizontal_rgb.png" height="45" width="166" border="0" alt="Northbridge Technology Alliance"/></a>
+    		<a href="http://northbridgetech.org/index.php" target="_blank"><img src="https://northbridgetech.org/images/NB_horizontal_rgb.png" height="45" width="166" border="0" alt="Northbridge Technology Alliance"/></a>
 			</div>			  	
 		</div>
 	</body>

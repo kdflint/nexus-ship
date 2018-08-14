@@ -58,8 +58,8 @@
         			"	<table>" +
         			"		<tr><td>" + 
         			"			<p>In order to use the conference room, Flash version 11.2 or higher is required</p>" + 
-        			"			<p><a href='https://get.adobe.com/flashplayer/' target='_blank'>Download Flash</a></p>" +
-        			"			<p>Note: Most desktop browsers are compatible with Flash but some tablet and phone-based browsers are not. Northbridge recommends <a href='http://www.mozilla.org/firefox' target='_blank'>Firefox</a>, Safari or Internet Explorer.</p>" +
+        			"			<p><a href='https://helpx.adobe.com/flash-player.html' target='_blank'>Get Flash</a></p>" +
+        			"			<p>Note: Most desktop browsers are compatible with Flash but some tablet and phone-based browsers are not. Northbridge recommends <a href='http://www.mozilla.org/firefox' target='_blank'>Firefox</a>, Chrome, Safari or Internet Explorer.</p>" +
         			"			</td></tr>" +
         			"	 </table>" +
     					"	</span>" +
@@ -86,7 +86,8 @@
         		if (has_java) {
          			document.getElementById("tech_check_summary").innerHTML = "<span class='fa fa-check-square-o fa-lg' style='margin-right:10px;color:#486326;'></span>Your system is compatible to participate in this meeting.";
          		} else {
-         			document.getElementById("tech_check_summary").innerHTML = "<span class='fa fa-check-square-o fa-lg' style='margin-right:10px;color:#486326;'></span>Your system is compatible to participate in this meeting, with restriction on desktop sharing.";
+         			//document.getElementById("tech_check_summary").innerHTML = "<span class='fa fa-check-square-o fa-lg' style='margin-right:10px;color:#486326;'></span>Your system is compatible to participate in this meeting, with restriction on desktop sharing.";
+         			document.getElementById("tech_check_summary").innerHTML = "<span class='fa fa-check-square-o fa-lg' style='margin-right:10px;color:#486326;'></span>Your system is compatible to participate in this meeting.";
 						}
          		clearInterval(id);
         	} else {
@@ -162,6 +163,9 @@
     		dProgress.innerHTML = "<span class='fa fa-spinner fa-spin fa-lg'></span>";
     		window.setTimeout(MeasureDownConnectionSpeed, 1);
 			
+				// TODO - uncomment these three lines to bring upload speed back after http problem is solved 
+				// (source of problem is link in MeasureUpConnectionSpeed)
+				// Also see techCheck.php, lines 30-34
 				var uProgress = document.getElementById("uprogress");
 				uProgress.innerHTML = "<span class='fa fa-spinner fa-spin fa-lg'></span>";
         window.setTimeout(MeasureUpConnectionSpeed, 2);
@@ -174,7 +178,8 @@
 				
   			// TODO - pull this address from bbb config.php and get this resource into build/deploy cycle
   			// This file resides on jean at /var/lib/tomcat7/webapps/bigbluebutton/images, also, renamed from .jpg to .png to get around web server url filter
- 				var imageAddr = "http://ec2-50-19-215-104.compute-1.amazonaws.com/bigbluebutton/images/speedtest-8MB.png"; 
+ 				//var imageAddr = "http://ec2-50-19-215-104.compute-1.amazonaws.com/bigbluebutton/images/speedtest-8MB.png"; 
+				var imageAddr = "https://northbridgetech.org/images/speedtest-8MB.png"; 
 				var downloadSize = 7907740; //image size in Bytes				
 	    	var dProgress = document.getElementById("dprogress");
 	    	var dImage = document.getElementById("download_speed");
@@ -254,7 +259,7 @@
 
 	    			var xhr = getXmlHttpRequest();
 	    			var postSizeInMB = 4;
-          	var url = 'http://northbridgetech.org/apps/nexus/control/uploadSpeedTester.php?cache=' + Math.floor( Math.random() * 10000 ); //random number prevents url caching
+          	var url = 'https://northbridgetech.org/apps/nexus/web/modules/schedule/control/uploadSpeedTester.php?cache=' + Math.floor( Math.random() * 10000 ); //random number prevents url caching
           	// TODO - the below POST to a random jsp page throws an http 500 error. Why? Is this harmful? We should create a POST-able page just for this purpose.
           	// Leaving the resource path to Northbridge web server for now because results seem very comparable, unlike download speed results.
           	//var url = 'http://ec2-50-19-215-104.compute-1.amazonaws.com/demo/demo1.jsp?cache=' + Math.floor( Math.random() * 10000 );

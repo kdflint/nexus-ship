@@ -6,15 +6,13 @@ require_once(Utilities::getSrcRoot() . "/organization/Organization.php");
 
 class Catalogue {
 	
-	public static function getEntries($groupId, $orgId, $inputString, $filters) {
+	public static function getEntries($groupId, $networkId, $inputString, $filters) {
+		
+		$conf = array('append' => true, 'mode' => 0644, 'timeFormat' => '%X %x');	
+		$logger = Log::singleton("file", Utilities::getLogRoot() ."/web.log", "", $conf, PEAR_LOG_DEBUG);
 				
 		$results = array();
 		$terms = trim(Utilities::strip2($inputString));
-		$networkId = "";
-		$row = pg_fetch_row(Organization::getNetworkFromOrgId($orgId));
-		if (isset($row) && count($row) > 0) {
-			$networkId = $row[0];
-		}
 					
 		// TODO: Escape apostrophes instead of stripping
 		// TODO: solve for 2 orgs with same name
@@ -55,8 +53,8 @@ class Catalogue {
 							// do nothing - we already have an index for this org in the data set
 						} else {
 							$results[$pass1['name']] = array(
-								//"Programs" => array(),
-								//"People" =>  array(),
+								"Programs" => array(),
+								"People" =>  array(),
 								"Contact" => array(),
 								"Language" => array(),
 								"Topic" => array(),
@@ -77,8 +75,6 @@ class Catalogue {
 				// 		Set a Person associative index inside the $results record, where User Id is key, Person name is value
 				// Otherwise create a new index for this organization inside $results and include this Person
 			
-				// For public view, skip Persons
-				/*
 				while ($pass2 = pg_fetch_array($cursor2)) { 
 					if (!strcmp($pass2['type'], "Person")) {
 						$innerCursor2 = User::getUserOrgRelationsByUserId($pass2['id']);
@@ -91,7 +87,7 @@ class Catalogue {
 								$results[$inner2['name']] = array(
 									"Programs" => array(),
 									"People" => array($pass2['id'] => $pass2['name']),
-							   	"Contact" => array(),
+						   		"Contact" => array(),
 									"Language" => array(),
 									"Topic" => array(),
 									"Location" => array(),
@@ -101,7 +97,6 @@ class Catalogue {
 						}
 					}
 				}
-				*/
 		
 				while ($pass5 = pg_fetch_array($cursor5)) { 
 					if (!strcmp($pass5['type'], "Contact")) {
@@ -113,8 +108,8 @@ class Catalogue {
 								}
 							} else {
 								$results[$inner5['name']] = array(
-									//"Programs" => array(),
-									//"People" => array(),
+									"Programs" => array(),
+									"People" => array(),
 							  	"Contact" => array($pass5['name']),
 									"Language" => array(),
 									"Topic" => array(),
@@ -136,8 +131,8 @@ class Catalogue {
 								}
 							} else {
 								$results[$inner3['name']] = array(
-									//"Programs" => array(),
-									//"People" => array(),
+									"Programs" => array(),
+									"People" => array(),
 									"Contact" => array(),
 									"Language" => array($pass3['name']),
 									"Topic" => array(),
@@ -149,8 +144,7 @@ class Catalogue {
 					}
 				}
 		
-				// For Public view, skip Programs
-				/*
+				// When this opens up, adjust directorySummary.php: indexes inside loop at line 62-ish
 				while ($pass4 = pg_fetch_array($cursor4)) { 
 					if (!strcmp($pass4['type'], "Program")) {
 						$innerCursor4 = Organization::getOrganizationByProgramId($pass4['id']);
@@ -173,7 +167,6 @@ class Catalogue {
 						}
 					}
 				}
-				*/
 			
 				while ($pass7 = pg_fetch_array($cursor7)) { 
 					if (!strcmp($pass7['type'], "Topic")) {
@@ -185,8 +178,8 @@ class Catalogue {
 								}
 							} else {
 								$results[$inner7['name']] = array(
-									//"Programs" => array(),
-									//"People" => array(),
+									"Programs" => array(),
+									"People" => array(),
 							  	"Contact" => array(),
 									"Language" => array(),
 									"Topic" => array($pass7['name']),
@@ -208,8 +201,8 @@ class Catalogue {
 								}
 							} else {
 								$results[$inner6['name']] = array(
-									//"Programs" => array(),
-									//"People" => array(),
+									"Programs" => array(),
+									"People" => array(),
 							  	"Contact" => array(),
 									"Language" => array(),
 									"Topic" => array(),
@@ -244,6 +237,17 @@ class Catalogue {
 				}	
 			}
 			
+			if (isset($filters['affiliation']) && $filters['affiliation'] > 0) {
+				foreach ($results as $key=>$val) {
+					$row = pg_fetch_row(Organization::organizationAffiliationExists($val['OrgId'], $filters['affiliation']));
+					$affiliationMatch = $row[0];
+					if (strcmp($affiliationMatch, "t")) {
+						unset($results[$key]);
+					}
+				}	
+			}
+
+			
 		} else if (isset($filters) && count($filters) > 0) {
 		// We get here if there are no free search terms. So, run filters against the entire network
 		
@@ -255,8 +259,8 @@ class Catalogue {
 						// do nothing - we already have an index for this org in the data set
 					} else {
 						$results[$pass['name']] = array(
-							//"Programs" => array(),
-							//"People" =>  array(),
+							"Programs" => array(),
+							"People" =>  array(),
 							"Contact" => array(),
 							"Language" => array(),
 							"Topic" => array(),
@@ -266,18 +270,7 @@ class Catalogue {
 					}
 				}
 			}
-				
-			// TODO - extract all this into a function - it is copied code
-			/*
-			if (isset($filters['org']) && count($filters['org']) > 0) {
-				foreach ($results as $key=>$val) {
-					if (!in_array($val['OrgId'], $filters['org'])) {
-						unset($results[$key]);
-					}
-				}
-			}
-			*/
-				
+								
 			if (isset($filters['specialty']) && $filters['specialty'] > 0) {
 				foreach ($results as $key=>$val) {
 					$row = pg_fetch_row(Organization::organizationTopicExists($val['OrgId'], $filters['specialty']));
@@ -287,8 +280,6 @@ class Catalogue {
 					}
 				}	
 			}
-			
-
 	
 			if (isset($filters['type']) && strcmp($filters['type'], "0")) {
 				foreach ($results as $key=>$val) {
@@ -299,26 +290,60 @@ class Catalogue {
 					}
 				}	
 			}
+			
+			if (isset($filters['affiliation']) && $filters['affiliation'] > 0) {
+				foreach ($results as $key=>$val) {
+					$row = pg_fetch_row(Organization::organizationAffiliationExists($val['OrgId'], $filters['affiliation']));
+					$affiliationMatch = $row[0];
+					if (strcmp($affiliationMatch, "t")) {
+						unset($results[$key]);
+					}
+				}	
+			}
 						
 		} else {
-			// We get here if we had no free search terms or filter. 
+			// If we get here, we had no search terms or filters
+			
+			$cursor = Organization::getOrganizationsByNetworkId($networkId);
+			
+			while ($pass = pg_fetch_array($cursor)) { 
+				if (!strcmp($pass['type'], "Organization")) {
+					if (array_key_exists($pass['name'], $results)) {
+						// do nothing - we already have an index for this org in the data set
+					} else {
+						$results[$pass['name']] = array(
+							"Programs" => array(),
+							"People" =>  array(),
+							"Contact" => array(),
+							"Language" => array(),
+							"Topic" => array(),
+							"Location" => array(),
+							"OrgId" => $pass['id']
+						);
+					}
+				}
+			}
 		}
 				
 		// We do this to be JSON-friendly
 		$indexedResults = array();
+		$orgIdList = array();
+		ksort($results, SORT_NATURAL | SORT_FLAG_CASE);
 		$counter1 = 0;
 		foreach ($results as $key1=>$val1) {
 			$indexedResults[$counter1]["name"] = $key1;
 			$counter2 = 0;
 			foreach ($val1 as $key2=>$val2) {
-				if ($counter2 == 4) {
+				// If this is the OrgId item
+				if ($key2 === "OrgId") {
 					$indexedResults[$counter1]["content"][$counter2][strtolower($key2)] = $val2;
+					array_push($orgIdList, $val2);
 				} else {
 					$counter3 = 0;
 					if (count($val2) == 0) {
 						$indexedResults[$counter1]["content"][$counter2][strtolower($key2)][$counter3] = "";				
 					} else {
-						foreach ($val2 as $key3=>$val3) {					
+						foreach ($val2 as $key3=>$val3) {				
 							$indexedResults[$counter1]["content"][$counter2][strtolower($key2)][$counter3] = $val3;
 							$counter3++;
 						}	
@@ -329,8 +354,23 @@ class Catalogue {
 			}
 			$counter1++;
 		}
-				
-		return $indexedResults;
+					
+		/* Yes, this code keeps getting more and more awesome... */	
+		$result = Organization::getGeoByOrgIds($orgIdList);
+
+		$geoResults = array();
+		
+		while ($row = pg_fetch_array($result)) {
+			$orgId = $row['oid'];
+			$geoResults[$orgId]['lat'] = $row['lat'];
+			$geoResults[$orgId]['lng'] = $row['long'];
+			$geoResults[$orgId]['title'] = $row['name'];
+		}
+
+		$multiObjectResults = array();		
+		$multiObjectResults['orgEntry'] = $indexedResults;
+		$multiObjectResults['geoEntry'] = $geoResults;
+		return $multiObjectResults;
 
 	}
 	
@@ -346,10 +386,11 @@ class Catalogue {
 			and o.id = oo.organization_to_fk
 			and oo.organization_from_fk = $2
 			and oo.relationship ='parent'
+			and o.suspend_dttm is null
 			
 			union
 			
-			select 'Person' as type, u.id as id, (u.fname || ' ' || u.mname || ' ' || u.lname) as name
+			select distinct 'Person' as type, u.id as id, (u.fname || ' ' || u.mname || ' ' || u.lname || '::' || u.username) as name
 			from public.user u, organization_organization oo, user_organization uo
 			where (
 				lower(u.fname) like lower('%' || $1 || '%')
@@ -361,10 +402,10 @@ class Catalogue {
 			and uo.organization_fk = oo.organization_to_fk
 			and oo.organization_from_fk = $2
 			and oo.relationship ='parent'
-			
+		
 			union
 			
-			select 'Contact' as type, c.id as id, c.name as name
+			select distinct 'Contact' as type, c.id as id, c.name as name
 			from contact c, organization_organization oo, organization_contact oc
 			where (
 				lower(c.name) like lower('%' || $1 || '%')
@@ -377,7 +418,7 @@ class Catalogue {
 			
 			union
 			
-			select 'Program' as type, p.id as id, p.name as name
+			select distinct 'Program' as type, p.id as id, p.name as name
 			from program p, organization_organization oo, organization_program op
 			where (
 				lower(p.name) like lower('%' || $1 || '%')
@@ -412,7 +453,7 @@ class Catalogue {
 					
 			union
 			
-			select 'Location' as type, loc.id as id, loc.municipality || ', ' || loc.region2 as name
+			select distinct 'Location' as type, loc.id as id, loc.municipality || ', ' || loc.region2 as name
 			from location loc, organization_organization oo, organization_location oloc
 			where (
 				lower(loc.address1) like lower('%' || $1 || '%')

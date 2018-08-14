@@ -17,13 +17,19 @@ if (isset($_GET['resetCode']) && Utilities::validateUuid($_GET['resetCode'])) {
 
 if ($cleanCode) {	
 	$cursor = User::getUserPasswordResetActivityByUuid($cleanCode);
-	$result = pg_fetch_array($cursor);
-	if (isset($result['uidpk']) && isset($result['username']) && isset($result['id'])) {
-		Utilities::setSession($result['username'], false, "undefined");
-		//Utilities::setSession($result['username'], false, "America/Chicago");
-		Utilities::setLogin($_SESSION['uidpk']);
-		User::updateUserPasswordResetActivityById($result['id']);
-		$success = "true";
+	if (!$cursor) {
+		returnToLoginWithMessage(Utilities::RESET_ERROR);
+	} else {
+		$result = pg_fetch_array($cursor);
+		if (isset($result['uidpk']) && isset($result['username']) && isset($result['id'])) {
+			Utilities::setSession($result['username'], false, "undefined");
+			//Utilities::setSession($result['username'], false, "America/Chicago");
+			Utilities::setLogin($_SESSION['uidpk']);
+			User::updateUserPasswordResetActivityById($result['id']);
+			$success = "true";
+		} else {
+			returnToLoginWithMessage(Utilities::RESET_ERROR);
+		}
 	}
 } else {
 	returnToLoginWithMessage(Utilities::RESET_ERROR);
@@ -39,7 +45,7 @@ function returnToLoginWithMessage($message) {
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <html>
   <head>
-    <script src="../../../scripts/nexus.js" language="javascript"></script>
+    <script src="../../../scripts/javascriptHandler.php" type="text/javascript"></script>
   	<script src="//cdnjs.cloudflare.com/ajax/libs/jstimezonedetect/1.0.4/jstz.min.js"></script>
   </head>
   <body>
@@ -50,6 +56,8 @@ function returnToLoginWithMessage($message) {
 				// This is a synchronous call
 				setSessionTimezone("../../../");
 				window.location = '<?php echo($successUrl); ?>';		
+			} else { 
+				window.location = '<?php echo($errorUrl); ?>';
 			}
 		</script>		
   </body>

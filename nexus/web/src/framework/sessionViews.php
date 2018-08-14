@@ -20,12 +20,14 @@ $user->session_begin();
  			<p><b>Current PHP Session View</b></p>
   		<table border="1" cellpadding="5" style="width:350px;">
   		<?php
+				ksort($_SESSION);
 		    foreach ($_SESSION as $key=>$val) {
     			echo "<tr><td>" . $key . "</td><td>" . $val ."</td></tr>";
     		}
     	?>
+    	<tr><td>Groups Detail: </td><td><?php print_r($_SESSION['groups']); ?></td></tr>
+    	<tr><td>Orgs Detail: </td><td><?php print_r($_SESSION['orgs']); ?></td></tr>
   		</table>
-  		<?php print_r($_SESSION['groups']); ?>	
   	</div>
   			
 		<div style="width:350px;position:absolute;left:400px;">

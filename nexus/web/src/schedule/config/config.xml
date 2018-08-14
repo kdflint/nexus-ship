@@ -1,0 +1,145 @@
+<?xml version="1.0" ?>
+<config>
+    <localeversion suppressWarning="false">0.9.0</localeversion>
+    <version>601</version>
+    <help url="https://conf1.nexus-bbb.org/help.html"/>
+    <javaTest url="https://conf1.nexus-bbb.org/testjava.html"/>
+    <porttest host="conf1.nexus-bbb.org" application="video/portTest" timeout="10000"/>    
+    <bwMon server="10.185.196.101" application="video/bwTest"/>
+    <application uri="rtmp://conf1.nexus-bbb.org/bigbluebutton" host="https://conf1.nexus-bbb.org/bigbluebutton/api/enter"/>
+    <language userSelectionEnabled="true" />
+    <skinning enabled="true" url="https://conf1.nexus-bbb.org/client/branding/css/BBBDefault.css.swf?v=601" />
+    <shortcutKeys showButton="true" />
+    <browserVersions chrome="55" firefox="51" flash="23" java="1.7.0_51" />
+    <layout showLogButton="false" defaultLayout="bbb.layout.name.defaultlayout"
+            showToolbar="true" showFooter="true" showMeetingName="true" showHelpButton="true" 
+            showLogoutWindow="true" showLayoutTools="true" confirmLogout="true"
+            showRecordingNotification="true" logoutOnStopRecording="false"/>
+    <meeting muteOnStart="false" />
+    <breakoutRooms enabled="true" record="false" />
+    <logging enabled="true" target="trace" level="info" format="{dateUTC} {time} :: {name} :: [{logLevel}] {message}" uri="https://conf1.nexus-bbb.org/log" logPattern=".*"/>
+    <lock disableCamForLockedUsers="false" disableMicForLockedUsers="false" disablePrivateChatForLockedUsers="false" 
+          disablePublicChatForLockedUsers="false" lockLayoutForLockedUsers="false" lockOnJoin="true" lockOnJoinConfigurable="false"/>
+            
+		<modules>
+		 
+		<module name="ChatModule" url="https://conf1.nexus-bbb.org/client/ChatModule.swf?v=601" 
+			uri="rtmp://conf1.nexus-bbb.org/bigbluebutton" 
+			dependsOn="UsersModule"	
+			privateEnabled="true"  
+			fontSize="12"
+			position="top-right"
+			baseTabIndex="801"
+			colorPickerIsVisible="false"
+			maxMessageLength="1024"
+		/>
+
+		<module name="UsersModule" url="https://conf1.nexus-bbb.org/client/UsersModule.swf?v=601" 
+			uri="rtmp://conf1.nexus-bbb.org/bigbluebutton" 
+			allowKickUser="true"
+			enableEmojiStatus="false"
+			enableSettingsButton="true"
+			baseTabIndex="301"
+		/>
+
+		<module name="ScreenshareModule"
+			url="https://conf1.nexus-bbb.org/client/ScreenshareModule.swf?v=601"
+			uri="rtmp://conf1.nexus-bbb.org/screenshare"
+			showButton="true"
+			baseTabIndex="201"
+			help="https://conf1.nexus-bbb.org/client/help/screenshare-help.html"
+		/>
+    
+		<module name="PhoneModule" url="https://conf1.nexus-bbb.org/client/PhoneModule.swf?v=601" 
+			uri="rtmp://conf1.nexus-bbb.org/sip" 
+			autoJoin="true"
+			listenOnlyMode="true"
+			skipCheck="false"
+			showButton="true"
+			enabledEchoCancel="true"
+			useWebRTCIfAvailable="true"
+			showPhoneOption="false"
+			showWebRTCStats="false"
+			echoTestApp="9196"
+			dependsOn="UsersModule"
+		/>
+
+		<module name="VideoconfModule" url="https://conf1.nexus-bbb.org/client/VideoconfModule.swf?v=601" 
+			uri="rtmp://conf1.nexus-bbb.org/video"
+			dependson = "UsersModule"
+			baseTabIndex="401"
+			controlsForPresenter = "false"
+			autoStart = "false"
+			skipCamSettingsCheck="false"
+			showButton = "true"
+			showCloseButton = "true"
+			publishWindowVisible = "true"
+			viewerWindowMaxed = "false"
+			viewerWindowLocation = "top"
+			smoothVideo="false"
+			applyConvolutionFilter="false"
+			convolutionFilter="-1, 0, -1, 0, 6, 0, -1, 0, -1"
+			filterBias="0"
+			filterDivisor="4"
+			displayAvatar = "false"
+			focusTalking = "false"
+			glowColor = "0x4A931D"
+			glowBlurSize = "30.0"
+			priorityRatio = "0.67"
+		/>
+		
+		<module name="WhiteboardModule" url="https://conf1.nexus-bbb.org/client/WhiteboardModule.swf?v=601" 
+			uri="rtmp://conf1.nexus-bbb.org/bigbluebutton" 
+			dependsOn="PresentModule"
+			baseTabIndex="601"
+			whiteboardAccess="presenter"
+			keepToolbarVisible="false"
+		/>
+		
+		<module name="PollingModule" url="https://conf1.nexus-bbb.org/client/PollingModule.swf?v=601" 
+			uri="rtmp://conf1.nexus-bbb.org/bigbluebutton" 
+			dependsOn="PresentModule"
+		/>
+		
+		<module name="PresentModule" url="https://conf1.nexus-bbb.org/client/PresentModule.swf?v=601" 
+			uri="rtmp://conf1.nexus-bbb.org/bigbluebutton" 
+			host="https://conf1.nexus-bbb.org" 
+			showPresentWindow="true"
+			showWindowControls="true"
+			openExternalFileUploadDialog="false"
+			dependsOn="UsersModule"
+			baseTabIndex="501"
+			maxFileSize="30"
+		/>
+		
+		<module name="CaptionModule" url="https://conf1.nexus-bbb.org/client/CaptionModule.swf?v=601" 
+			uri="rtmp://conf1.nexus-bbb.org/bigbluebutton" 
+			dependsOn="UsersModule"
+			maxPasteLength="1024"
+			baseTabIndex="701"
+		/>
+
+		<module name="LayoutModule" url="https://conf1.nexus-bbb.org/client/LayoutModule.swf?v=601"
+			uri="rtmp://conf1.nexus-bbb.org/bigbluebutton"
+			layoutConfig="https://conf1.nexus-bbb.org/client/conf/layout.xml"
+			enableEdit="false"
+		/>
+
+<!--
+    <module name="NotesModule" url="https://conf1.nexus-bbb.org/client/NotesModule.swf?v=601"
+      saveURL="https://conf1.nexus-bbb.org"
+      position="top-left"
+    />
+    
+    <module name="BroadcastModule" url="https://conf1.nexus-bbb.org/client/BroadcastModule.swf?v=601"
+      uri="rtmp://conf1.nexus-bbb.org/bigbluebutton"
+      streamsUri="https://conf1.nexus-bbb.org/streams.xml"
+      position="top-left"
+      showStreams="true"
+      autoPlay="false"
+      dependsOn="UsersModule"
+    />
+-->
+    		
+	</modules>
+</config>

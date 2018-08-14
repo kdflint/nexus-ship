@@ -13,6 +13,10 @@ body {
 	height: 100%;
 }
 
+.priv-1 {
+	display: none;
+}
+
 .container {
 	/* top level container for all content, left aligned inside a centered body   *
 	 * optimized for a tablet -kdf																								*/
@@ -99,14 +103,21 @@ body {
 	padding-top: 10px;
 	padding-right: 10px;
 	position: relative;
+	margin-bottom: 22px;
 }	
 
-.secondaryControl {
+.secondaryControl, .secondaryControlDisabled {
 	position: relative;
 	float: right;
 	margin-left: 20px;
 	z-index: 10;
 }
+
+.secondaryControlDisabled {
+	opacity: .5;
+	pointer-events: none;
+}
+
 
 /* patterned from phpBB .dropdownContainer */
 .tertiaryControlContainer {
@@ -144,7 +155,7 @@ body {
 .displayCol { 
 	position:absolute;
 	left:290px;
-	width:700px;
+	width:630px;
 	height:400px;
 	margin-top:10px;
 	border: 1px solid #A6C3CE !important;
@@ -154,10 +165,95 @@ body {
 
 .displayDetail { 
 	font-size:90%;
-	padding-left:10px;
-	padding-right:10px; 
 }
 
+.modal-form {
+	position: relative;
+	width: 100%;
+	height: 380px;
+}
+
+.modal-form > fieldset:nth-of-type(1) {
+	position: relative;
+	width: 380px;
+}
+
+.modal-form > fieldset:nth-of-type(2) {
+	position: absolute;
+	left: 410px;
+	width: 390px;
+	top: 0px;
+}
+
+.modal-form > fieldset:nth-of-type(3) {
+	position: absolute;
+	bottom: 0px;
+	right: 0px;
+}
+
+.profileBlock1 {
+	position:absolute;
+	left:15px;
+	width:420px;
+	height:400px;
+	margin-top: -10px;
+}	
+
+.profileBlock2 {
+	position:absolute;
+	left:460px;
+	height:400px;
+	margin-top: -10px;
+}	
+
+.profileBlock3 {
+	position:absolute;
+	width:96%;
+	top:300px; 
+}
+
+.profileBlock4 {
+	position: absolute;
+	bottom: 20px;
+	right: 10px;
+}
+
+.profileFormRow {
+	margin-top:5px;
+	position: relative;
+}
+
+.profileCol1 {
+	position:absolute;
+	left: 15px;
+	width: 160px;
+}
+
+.profileCol2 {
+	position:absolute;
+	left: 170px;
+}
+
+.messageCol1 {
+	position:absolute;
+	left: 15px;
+	width: 160px;
+}
+
+.messageCol2 {
+	position:absolute;
+	left: 170px;
+}
+
+.messageCol3 {
+	position:absolute;
+	left: 460px;
+}
+
+.messageCol4 {
+	position:absolute;
+	left: 500px;
+}
 
 /* TEXT */
 
@@ -169,6 +265,12 @@ body {
 	font-size:90%;
 	color:#007582;
 	width:90%;
+}
+
+.required {
+	color: #f68620;
+	font-weight: bold;
+	vertical-align: top;	
 }
 
 .product-name {
@@ -212,7 +314,18 @@ form {
 	margin-bottom:20px !important;
 }
 
+.form-field {
+	margin-top:10px;
+	margin-left:15px;
+}
+
 /* BUTTONS */
+
+#compose_pm {
+	font-size: 80%;
+	margin-left: 40px;
+	float:left;
+}
 
 .pure-button-primary {
 	background: rgba(0, 77, 98, 1) !important;
@@ -366,7 +479,7 @@ td .techCheckCol3 {
 
 /* BLINDS */
 
-#profile_display {
+.profile_display {
 	background: #EDF0DE none repeat scroll 0% 0%;
 	padding: 10px;
 	height: 315px;
@@ -443,4 +556,23 @@ a.tooltip span:first-child
 
 .ui-front {
 	z-index: 10001;
+}
+
+
+/* OR separator on login */
+
+.or-separator {
+    text-align: center;
+    width: 330px;
+    margin-bottom: 10px;
+    background-image: url(../image/or-separator-line.png);
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.or-separator .or-separator-label {
+    display: inline-block;
+    padding: 4px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
 }

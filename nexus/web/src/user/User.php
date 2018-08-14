@@ -6,8 +6,19 @@ require_once(dirname(__FILE__) . "/../framework/Util.php");
 class User {
 	
 	public static function getActiveUserByUsername($uid) {
-		$query = "select u.id as id, u.email as email, u.fname as fname, u.lname as lname, u.password as password from public.user u where u.username = $1 and suspend_dttm is NULL limit 1";
+		$query = "select u.id as id, u.email as email, u.fname as fname, u.lname as lname, u.password as password, u.custom_profile as profile from public.user u where u.username = $1 and suspend_dttm is NULL limit 1";
 		return PgDatabase::psExecute($query, array($uid));	
+	}
+	
+	public static function isFirstLogin($uid) {
+		//method untested
+		$query = "select count(*) from user_session where user_fk = $1";
+		$loginCount = pg_fetch_row(PgDatabase::psExecute($query, array($uid)));
+		if ($loginCount[0] == 1) {
+			return TRUE;
+		} else {
+			return FALSE;
+		}
 	}
 	
 	public static function insertPasswordResetActivity($userId, $uuid) {
@@ -29,6 +40,19 @@ class User {
 		return PgDatabase::psExecute($query, array($email));
 	}
 	
+	public static function getSingleUsernameByEmail($email) {
+		$result = self::getUsernamesByEmail($email);
+		$rows = pg_num_rows($result);
+		if ($rows == 1) {
+			$row = pg_fetch_array($result);	
+			return $row['username'];
+		} else if ($rows > 1) {
+			return "-1";
+		} else {
+			return "0";
+		}
+	}
+	
 	public static function getUserPasswordByUser($userId) {
 		// TODO - make usernames in db not required to be unique (or, only unique within network). Pair with network id to do authentication.
 		$query = "select password, salt, cryptimpl from public.user where username = $1";
@@ -38,25 +62,6 @@ class User {
 	public static function countActiveUsers($uid, $password) {
 		$query = "select id from public.user where username=$1 and password=$2 and status_fk='1' and suspend_dttm is NULL";
 		return pg_num_rows(PgDatabase::psExecute($query, array($uid, $password)));
-	}
-	
-	public static function getUserSessionByUsername($uid) {
-		// TODO: add active check?
-		// TODO: fix up network id determination (parent, god, etc)
-		// TODO - this will fail if user in > 1 group
-		$query = "
-			select u.id as id, u.fname as fname, u.lname as lname, u.password as password, u.conference_link as link, u.email as email, ug.role_fk as roleid, o1.name as affiliation, o1.id as affiliationid, o1.uid as affiliationuid, o1.logo as logo, o2.name as network, o2.id as networkid, o2.forum_id as forumid, o2.public_forum_id as publicforumid, uo.role_fk as role, oa.account_type as account
-			from public.user u, user_organization uo, user_group ug, organization o1, organization o2, organization_organization oo, organization_account oa
-			where u.username = $1
-			and uo.user_fk = u.id
-			and ug.user_fk = u.id
-			and uo.organization_fk = o1.id
-			and oa.organization_fk = o1.id
-			and oo.organization_to_fk = o1.id 
-			and oo.organization_from_fk = o2.id
-			and oo.relationship in ('parent', 'god')
-			";
-		return PgDatabase::psExecute($query, array($uid));	
 	}
 	
 	public static function setLoginByIp($ip, $userId) {
@@ -77,10 +82,21 @@ class User {
 			publish_sms = $8,
 			descr = $9,
 			phone = $10,
-			publish_phone = $11
+			publish_phone = $11,
+			update_dttm = now()
 			where id = $12
 			";
-		return PgDatabase::psExecute($query, array($fname, $lname, $sms, $email, $emailEnabled, $smsEnabled, $emailPublic, $smsPublic, $descr, $phone, $phonePublic, $userId));
+		$result = PgDatabase::psExecute($query, array($fname, $lname, $sms, $email, $emailEnabled, $smsEnabled, $emailPublic, $smsPublic, $descr, $phone, $phonePublic, $userId));
+		if ($result) {
+			return true;
+		}
+		return false; 
+	}
+	
+	public static function updateExtendedProfileById ($userId, $profile) {
+		// TODO - this only allows one custom profile for a user, encoded with network. Breaks if user belongs to multiple networks.
+		$query = "update public.user set custom_profile = $1, update_dttm = now() where id = $2";
+		return PgDatabase::psExecute($query, array($profile, $userId));
 	}
 	
 	public static function getUserById($userId) {
@@ -151,21 +167,86 @@ class User {
 			$row = pg_fetch_row(PgDatabase::psExecute($query, array($uuid, $username)));
 			return $row[0];
 	}
-
+	
+	public static function addNetworkUser($username) {
+			$uuid = Utilities::newUuid();
+			$query = "insert into public.user (uuid, username, fname, lname, email, status_fk, create_dttm, activate_dttm) values ($1, $2, 'Network', 'User', '', '1', now(), now()) returning id"; 
+			$row = pg_fetch_row(PgDatabase::psExecute($query, array($uuid, $username)));
+			return $row[0];
+	}
 	
 	public static function addUserOrgRelation($userId, $orgId, $grantorId, $roleId) {
+		$query = "select exists (select true from user_organization where user_fk = $1 and organization_fk = $2)";
+		$row = pg_fetch_row(PgDatabase::psExecute($query, array($userId, $orgId)));
+		if (!strcmp($row[0], "f")) {
 			$query = "insert into user_organization (user_fk, organization_fk, grantor_fk, role_fk, create_dttm) values ($1, $2, $3, $4, now()) returning id";
-			return PgDatabase::psExecute($query, array($userId, $orgId, $grantorId, $roleId));		
+			PgDatabase::psExecute($query, array($userId, $orgId, $grantorId, $roleId));		
+		}
+		return;
+	}
+	
+	public static function removeUserOrgRelation($userId, $orgId) {
+		$query = "delete from user_organization where user_fk = $1 and organization_fk = $2";
+		return PgDatabase::psExecute($query, array($userId, $orgId));	
 	}
 	
 	public static function addUserGroupRelation($userId, $groupId, $roleId) {
 			$query = "insert into user_group (user_fk, group_fk, role_fk, create_dttm) values ($1, $2, $3, now())";
-			return PgDatabase::psExecute($query, array($userId, $groupId, $roleId));		
+			return PgDatabase::psExecute($query, array($userId, $groupId, $roleId));	
+	}
+	
+	public static function removeUserGroupRelation($userId, $groupId) {
+			$query = "delete from user_group where user_fk = $1 and group_fk = $2";
+			return PgDatabase::psExecute($query, array($userId, $groupId));	
+	}
+	
+	public static function addUserGroupRelationbyUsername($username, $groupId, $roleId) {
+			$query = "select id from public.user where username = $1";
+			$row = pg_fetch_row(PgDatabase::psExecute($query, array($username)));
+			if ($row and $row[0] != NULL) {
+				self::addUserGroupRelation($row[0], $groupId, $roleId);
+			}
+	}
+	
+	public static function removeUserGroupRelationbyUsername($username, $groupId) {
+			$query = "select id from public.user where username = $1";
+			$row = pg_fetch_row(PgDatabase::psExecute($query, array($username)));
+			if ($row and $row[0] != NULL) {
+				self::removeUserGroupRelation($row[0], $groupId);
+			}
+	}
+	
+	public static function updateToNetworkAdminbyUserId($uid) {
+			$query1 = "update user_group set role_fk = 1 where user_fk = $1";
+			$result1 = PgDatabase::psExecute($query1, array($uid));		
+			$query2 = "update user_organization set role_fk = 1 where user_fk = $1";
+			$result2 = PgDatabase::psExecute($query2, array($uid));		
+			if ($result1 && $result2) {
+				return true;
+			}
+			return false; 
 	}
 	
 	public static function getUserOrgRelationsByUserId($userId) {
 			$query = "select o.name, o.id from user_organization uo, organization o where uo.user_fk = $1 and uo.organization_fk = o.id";
 			return PgDatabase::psExecute($query, array($userId));
+	}
+	
+	public static function getMembershipAdminByOrgUid($uid) {
+			$query = 	"select username from public.user u, user_organization uo, organization o 
+			  where uo.user_fk = u.id and 
+			  uo.grantor_fk = 88 and 
+			  u.username not like 'pUser-%' and 
+			  u.status_fk = 1 and
+			  o.id = uo.organization_fk and
+			  o.uid = $1
+			  order by u.create_dttm asc limit 1
+			  ";
+			  $result = pg_fetch_array(PgDatabase::psExecute($query, array($uid)));
+			  if ($result and $result['username'] != NULL) {
+					return $result['username'];
+				}
+				return "";
 	}
 	
 	public static function isUserMessageEnabled($userId) {

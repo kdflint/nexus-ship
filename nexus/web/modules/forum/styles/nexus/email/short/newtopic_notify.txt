@@ -1,0 +1,13 @@
+Subject: New topic notification - "{FORUM_NAME}"
+
+Hello {USERNAME},
+
+You are receiving this notification because you are watching the forum "{FORUM_NAME}" at Nexus Advantage. 
+
+This forum has received a new topic<!-- IF AUTHOR_NAME != '' --> by {AUTHOR_NAME}<!-- ENDIF --> since your last visit, "{TOPIC_TITLE}". You can use the following link to view the forum. No more notifications will be sent until you visit the forum.
+
+http://www.faithhealthtransformation.org/forum/
+
+If you no longer wish to watch this forum, please reply to this email with "unsubscribe" in the Subject line.
+
+{EMAIL_SIG}

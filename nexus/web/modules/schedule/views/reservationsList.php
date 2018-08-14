@@ -22,18 +22,21 @@
        	document.getElementById("reservationTable").innerHTML = tableRows;       	
 
        	// write the current meeting into its row container, or default content if none
+       	message1 = '<?php echo _("Now"); ?>';
+       	message2 = '<?php echo _("Good news! Your room is available right now."); ?>';
+       	console.log(message1);
 				nowEvent = "";
 				if (nowMeeting === undefined) {
 					IS_NOW = false;
        		nowEvent =  
        			"<div class='td-div'>" +
 		      		"<div class='event'>" +
-	       				"<span class='date'>Now</span><br/>" + 
+	       				"<span class='date'>" + message1 + "</span><br/>" + 
 	       			"</div>" +
        			"</div>" +
        			"<div id='nowEventDetail' class='td-div' style='position:absolute;left:140px;top:5px;height:70px;'>" +	       				
 			       	"<div class='meeting'>" +
-          			"<span class='purpose'>Good news! Your room is available right now.</span>" + 
+          			"<span class='purpose'>" + message2 + "</span>" + 
           		"</div>" +
           	"</div>";	 
        	}	else {
@@ -41,7 +44,10 @@
        			playSound('demonstrative');
        			IS_NOW = true;
 					}
-					indicator = (Math.floor(new Date()/1000) < nowMeeting.epoch ) ? "Soon" : "Now";
+					message1 = '<?php echo _("Guest Pass"); ?>';
+					message2 = '<?php echo _("Now"); ?>';
+					message3 = '<?php echo _("Soon"); ?>';
+					indicator = (Math.floor(new Date()/1000) < nowMeeting.epoch ) ? message3 : message2;
 					// If this is a demo session, show the session user name as the now meeting reserver instead of the placeholder name that is in the database
 					reservedBy = nowMeeting.adder == <?php echo(Utilities::getDemoUidpk()); ?> ? '<?php echo($_SESSION['fname'] . " " . $_SESSION['lname']); ?>' : nowMeeting.fname + " " + nowMeeting.lname;
 				 	nowEvent =  
@@ -52,13 +58,13 @@
 	       				"<span class='month'>" + nowMeeting.hour_end + ":" + nowMeeting.minute_end + "</span><span class='period'> " + nowMeeting.period_end + " " + nowMeeting.abbrev + "</span>" +
 							"</div>" +
        			"</div>" +
-       			"<div id='nowEventDetail' class='td-div' style='position:absolute;left:140px;top:5px;height:210px;'>" +     				
+       			"<div id='nowEventDetail' class='td-div' style='position:absolute;left:140px;top:5px;height:220px;'>" +     				
 			        "<div class='meeting'>" +
           			"<span class='purpose'>" + nowMeeting.purpose + "</span><br/>" +
           			"<span class='descr'>" +
           				"<p>" + nowMeeting.mtypdisplay + " reserved by " + reservedBy +
-	        				((nowMeeting.adder == nowMeeting.sessionUser && nowMeeting.sessionUser != <?php echo(Utilities::getDemoUidpk()); ?>) ? "<a href='modules/schedule/control/eventDeleteProcessor.php?id=" + nowMeeting.uuid + "' onclick='return confirm(\"Please confirm this delete.\");'><span class='fa fa-trash-o' style='color:#d27b4b;margin-left:10px;'></span></a></p>" : " ") +
-         					"<p>Guest Pass:</p>" +
+	        				(((IS_ADMIN || nowMeeting.adder == nowMeeting.sessionUser) && nowMeeting.sessionUser != <?php echo(Utilities::getDemoUidpk()); ?>) ? "<a href='modules/schedule/control/eventDeleteProcessor.php?id=" + nowMeeting.uuid + "' onclick='return confirm(\"Please confirm this delete.\");'><span class='fa fa-trash-o' style='color:#d27b4b;margin-left:10px;'></span></a></p>" : " ") +
+         					"<p>" + message1 + ":</p>" +
          						// Flaw! We may have two items with id=='guest-pass0'. This accomodates WalkMe tutorials but not strictly correct :)
          						"<span id='guest-pass0' class='descr'><p><?php echo Utilities::getHttpPath(); ?>/login.php?oid=<?php echo $_SESSION['orgUid']; ?>&mid=" + nowMeeting.uuid + "</p></span>" +
 	        				"<p><span id='tech_check_summary' style='font-style:italic;' ><span class='fa fa-spinner fa-spin fa-lg'></span> Checking your system compatibility... one moment</span><a href='javascript:void(0);' onclick='document.getElementById(\"tech_check_control\").click();' style='font-size:90%;margin-left:5px;'> Details</a></p>" + 
@@ -73,15 +79,17 @@
        	
        	// write each future event into its row container
 				if (nextMeetings === undefined) {
+					message1 = '<?php echo _("Future"); ?>';
+					message2 = '<?php echo _("Click the calendar to reserve this room for a future date."); ?>' ;
 					tableRow = "<div id='reservationRow0' class='tr-div' style='position:relative;'>" + 
        			"<div class='td-div'>" +
 		      		"<div class='event'>" +		
-	       				"<span class='date'>Future</span><br/>" + 				
+	       				"<span class='date'>" + message1 + "</span><br/>" + 				
           		"</div>" +
           	"</div>" +
           	"<div id='futureEventDetail' class='td-div' style='position:absolute;left:140px;top:5px;height:70px;'>" +	       				
 			       	"<div class='meeting'>" +
-          			"<span id='guest-pass0' class='purpose'>Click the calendar to reserve this room for a future date.</span>" + 
+          			"<span id='guest-pass0' class='purpose'>" + message2 + "</span>" + 
           		"</div>" +
           	"</div>" +
 					"</div>";
@@ -89,6 +97,8 @@
 					document.getElementById('reservationTable').style.height = "70px";
 				} else {
 			 		for (var i = 0; i < jsonObj.length; i++) {
+			 			message1 = '<?php echo _("Guest Pass"); ?>';
+			 			message2 = '<?php echo _("Please confirm this delete."); ?>';
 			 			tableEvent = 
        			"<div class='td-div'>" +
 	       				"<div class='event'>" +
@@ -107,9 +117,9 @@
           					jsonObj[i].mtypdisplay + " reserved by " + 
           					((jsonObj[i].adder == <?php echo(Utilities::getDemoUidpk()); ?>) ? '<?php echo($_SESSION['fname']); ?>' : jsonObj[i].fname) + " " +  
           					((jsonObj[i].adder == <?php echo(Utilities::getDemoUidpk()); ?>) ? '<?php echo($_SESSION['lname']); ?>' : jsonObj[i].lname) + 
-          					((jsonObj[i].adder == jsonObj[i].sessionUser && jsonObj[i].sessionUser != <?php echo(Utilities::getDemoUidpk()); ?>) ? "<a href='modules/schedule/control/eventDeleteProcessor.php?id=" + jsonObj[i].uuid + "' onclick='return confirm(\"Please confirm this delete.\");'><span class='fa fa-trash-o' style='margin-left:10px;color:#d27b4b;'></span></a>" : " ") +
+          					(((IS_ADMIN || jsonObj[i].adder == jsonObj[i].sessionUser) && jsonObj[i].sessionUser != <?php echo(Utilities::getDemoUidpk()); ?>) ? "<a href='modules/schedule/control/eventDeleteProcessor.php?id=" + jsonObj[i].uuid + "' onclick='return confirm(\"" + message2 + "\");'><span class='fa fa-trash-o' style='margin-left:10px;color:#d27b4b;'></span></a>" : " ") +
 										"</p>" +
-         						"<p>Guest Pass:</p>" +
+         						"<p>" + message1 + ":</p>" +
          						"<span id='guest-pass" + i + "' class='descr'><p><?php echo Utilities::getHttpPath(); ?>/login.php?oid=<?php echo $_SESSION['orgUid']; ?>&mid=" + jsonObj[i].uuid + "</p></span>" +
          					"</span>" +
          				"</div>" +
@@ -156,10 +166,10 @@
 		<td><div class='event'><span class="fa fa-map-marker fa-2x"></span></div></td>
 		<td>
 			<div class="meeting">
-				<span class='purpose'>Team Pass:</span><br/>
+				<span class='purpose'><?php echo _("Team Pass"); ?>:</span><br/>
 				<span class='descr' style='font-size:90%;' >
 					<p id="team-pass"><?php echo Utilities::getHttpPath(); ?>/login.php?oid=<?php echo $_SESSION['orgUid']; ?></p>
-					<p>Your enrolled team members can use that link to schedule and attend any Nexus Web Meet event.</p>
+					<p><?php echo _("Your enrolled team members can use that link to schedule and attend any Nexus Web Meet event."); ?></p>
 				</span>
 			</div>
 		</td>

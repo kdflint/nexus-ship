@@ -1,6 +1,6 @@
 
 			<form id="schedule-form" class="pure-form" action="<?php echo(Utilities::getHttpPath()); ?>/modules/schedule/control/scheduleProcessor.php" method="post" enctype="multipart/form-data">
-				<fieldset style="position:absolute;width:380px;">
+				<fieldset style="position:absolute;width:450px;">
       	<span style="font-size:130%;font-weight:bold;" class='detail'>New Event Submission Form</span></br>					
       		<div style="margin-top:10px;">
 	      		<input type="text" name="meeting-name" style="width:100%;" maxlength="100" placeholder="Meeting Name" >
@@ -18,8 +18,8 @@
 	      		<input type="text" name="registration-url" style="width:100%;" maxlength="500" placeholder="Registration Link (http://)" >
 					</div>
 				</fieldset>
-				<fieldset style="position:absolute;left:400px;width:310px;">
-
+				<fieldset style="position:absolute;left:460px;width:450px;">
+					<a href="javascript:void(0)" onclick="document.getElementById('schedule-form-cancel').click();" style="float:right;"><span class="fa fa-times-circle-o fa-2x"></span></a>
 					<div id="tz-static" style="display:block;margin-top:0px;">
 						<span style="font-size:90%;line-height:240%;"><b>Time Zone: </b><span id="local-tzDisplay"><?php echo $_SESSION['timezone']; ?></span><a href="javascript:void(0);" onclick="showTimeZoneDisplay('tz-select');" style="margin-left:10px;">Change</a></span>
 						<input id="local-tzFormField" type="hidden" name="tzone-name" value="<?php echo $_SESSION['timezone']; ?>" />
@@ -54,14 +54,14 @@
       				<input id="repeat-check" name="repeat-check" onchange="toggleRecurFormElements(0);" type="checkbox"> <b>Repeat</b>
       			</span>
       			<span id="repeat-span" style="margin-left:5px;font-size:90%;visibility:hidden;">
-      				Repeats <span id="repeat-descr">daily</span> for <span id="repeat-quantity">2</span> <span class="repeat-unit">days</span>
+      				Occurs <span id="repeat-descr">daily</span> for <span id="repeat-quantity">2</span> <span class="repeat-unit">days</span>
       				<span id="repeat-edit" style="margin-left:10px;"><a href="#" onclick="toggleRecurFormElements(0);">Change</a></span>
       			</span>
 		    	</div>
 					<div style="min-height:160px;">
 						<div id="repeat-block" style="display:none;">
       				<p style="margin-top:10px;">
-	      				Repeats <select id="repeat-interval" name="repeat-interval" onchange="updateRepeatDescr(this);" style="position:absolute;left:70px;width:208px;height: 2.5em;">
+	      				Occurs <select id="repeat-interval" name="repeat-interval" onchange="updateRepeatDescr(this);" style="position:absolute;left:70px;width:208px;height: 2.5em;">
 	      					<option value="0" selected>Daily</option>
       						<option value="1">Weekdays</option>
       						<option value="2">Weekly</option>
@@ -87,7 +87,7 @@
  						</div>
 						<div id="location-block" style="display:block;">
 	      			<div style="margin-top:5px;">
-	      				<input type="text" name="meeting-loc" style="width:100%;" maxlength="200" placeholder="Location"></textarea>
+	      				<input type="text" name="meeting-loc" style="width:100%;" maxlength="200" placeholder="Location">
 							</div>
       				<div style="margin-top:10px;">
 		      			<input type="text" name="meeting-contact" style="width:100%" maxlength="50" placeholder="Contact Email" >
@@ -100,7 +100,7 @@
 					</div>
 		    	<input id="schedule-form-isBbb" name="isBbbMeeting" type="checkbox" style="visibility:hidden;"/>
 		      <a id="schedule-form-submit" class="pure-button button-menu" href="javascript:void(0)" onclick="eventValidateAndSubmit('schedule-form');" style="float:right;background-color:#d27b4b;width:70px;font-size:90%;margin-top:25px;color:#e6e6e6">Submit</a>
-    			<a href="<?php echo(Utilities::getPluginPath()); ?>/publicSuite.php?oid=<?php echo($_SESSION['orgUid']); ?>&amp;context=calendar" style="float:right;margin-right:20px;margin-top:28px;"><span id="cancel_link">Cancel</span></a>
+    			<a id="schedule-form-cancel" href="<?php echo(Utilities::getPluginPath()); ?>/publicSuite.php?oid=<?php echo($_SESSION['orgUid']); ?>&amp;context=calendar" style="float:right;margin-right:20px;margin-top:28px;"><span id="cancel_link">Cancel</span></a>
 				</fieldset>
 				<input type="hidden" name="meeting-edit" value="false" />
 				<input type="hidden" name="meeting-recur-duration" value="false" />

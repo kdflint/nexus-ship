@@ -64,7 +64,7 @@
      		}
 			}
 		}
-		xmlhttp.open("GET", "<?php echo(Utilities::getHttpPath()); ?>" + "/src/framework/reservationManagerPublic.php");
+		xmlhttp.open("GET", "<?php echo(Utilities::getHttpPath()); ?>" + "/src/framework/reservationManager.php");
 		xmlhttp.send();  		
 	}
 </script>

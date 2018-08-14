@@ -1,0 +1,120 @@
+<!-- INCLUDE overall_header_profile.html -->
+
+<!-- 
+
+**********  MASSIVE TODO ************
+In time crunch, I created a new file overall_header_profile.html that is exactly like
+overall_header.html except it leaves out the navbar include around line 95.
+
+Also adds custom style on #wrap
+
+Pretty sure I should use the preceding event to filter out the unwanted contents in the navbar
+
+Or something, just not this!
+
+-->
+
+<!--<h2 class="memberlist-title">{PAGE_TITLE}</h2>-->
+
+<!-- EVENT memberlist_view_content_prepend -->
+
+<form method="post" action="{S_PROFILE_ACTION}" id="viewprofile">
+<div class="panel bg1<!-- IF S_ONLINE --> online<!-- ENDIF -->">
+	<div class="inner">
+		<div class="column1">
+			<h3>USER</h3>
+
+			<!-- IF AVATAR_IMG -->
+			<dl class="left-box">
+				<dt id="avatar-container-2" class="profile-avatar">{AVATAR_IMG}</dt>
+			</dl>
+			<!-- ENDIF -->
+
+			<dl class="left-box details profile-details" style="width:auto;margin-left:10px;">
+				<dt style="width:auto;">{L_USERNAME}{L_COLON}</dt>
+				<dd style="width:auto;">
+					<!-- IF USER_COLOR --><span style="color: {USER_COLOR}; font-weight: bold;"><!-- ELSE --><span><!-- ENDIF -->{USERNAME}</span>
+				</dd>
+				<!-- IF not AVATAR_IMG -->
+				<!-- ENDIF -->
+				<!-- EVENT memberlist_view_non_contact_custom_fields_before -->
+				<!-- BEGIN custom_fields -->
+					<!-- IF not custom_fields.S_PROFILE_CONTACT -->
+						<dt>{custom_fields.PROFILE_FIELD_NAME}{L_COLON}</dt> <dd>{custom_fields.PROFILE_FIELD_VALUE}</dd>
+					<!-- ENDIF -->
+				<!-- END custom_fields -->
+				<!-- EVENT memberlist_view_non_contact_custom_fields_after -->
+			</dl>
+		</div>
+		<div class="column2">
+			<h3>USER NETWORK</h3>
+			<dl class="details">
+				<dt>Groups</dt>
+				<dd id="nexus-group-list"></dd>		
+				<dt>Organizations</dt>
+				<dd id="nexus-org-list">TBD</dd>		
+			</dl>
+		</div>
+	</div>
+</div>
+
+<!-- EVENT memberlist_view_contact_before -->
+<div class="panel bg2">
+	<div class="inner">
+		<div class="column1">
+			<!--<h3>{L_CONTACT_USER}</h3>-->
+			<h3>USER CONTACT</h3>
+			<!-- List orgs, groups, collaborations from Nexus here -->
+	
+			<dl class="details">
+			<!-- IF U_EMAIL --><dt>{L_EMAIL_ADDRESS}{L_COLON}</dt> <dd><a href="{U_EMAIL}">{L_SEND_EMAIL_USER}</a></dd><!-- ENDIF -->
+			<!-- IF U_PM -->
+				<!--<dt>{L_PM}{L_COLON}</dt> <dd><a href="{U_PM}">{L_SEND_PRIVATE_MESSAGE}</a></dd>-->
+				<dt>{L_PM}{L_COLON}</dt> <dd><a href="#" onclick="breakinUserMessage('{USERNAME}')">{L_SEND_PRIVATE_MESSAGE}</a></dd>
+			<!-- ENDIF -->
+			<!-- IF U_JABBER and S_JABBER_ENABLED --><dt>{L_JABBER}{L_COLON}</dt> <dd><a href="{U_JABBER}" onclick="popup(this.href, 750, 320); return false;">{L_SEND_JABBER_MESSAGE}</a></dd><!-- ELSEIF USER_JABBER --><dt>{L_JABBER}{L_COLON}</dt> <dd>{USER_JABBER}</dd><!-- ENDIF -->
+			<!-- EVENT memberlist_view_contact_custom_fields_before -->
+			<!-- BEGIN custom_fields -->
+				<!-- IF custom_fields.S_PROFILE_CONTACT -->
+					<dt>{custom_fields.PROFILE_FIELD_NAME}{L_COLON}</dt>
+					<!-- IF custom_fields.PROFILE_FIELD_CONTACT -->
+						<dd><a href="{custom_fields.PROFILE_FIELD_CONTACT}">{custom_fields.PROFILE_FIELD_DESC}</a></dd>
+					<!-- ELSE -->
+						<dd>{custom_fields.PROFILE_FIELD_VALUE}</dd>
+					<!-- ENDIF -->
+				<!-- ENDIF -->
+			<!-- END custom_fields -->
+			<!-- EVENT memberlist_view_contact_custom_fields_after -->
+			<!-- IF S_PROFILE_FIELD1 -->
+				<!-- NOTE: Use a construct like this to include admin defined profile fields. Replace FIELD1 with the name of your field. -->
+				<dt>{PROFILE_FIELD1_NAME}{L_COLON}</dt> <dd>{PROFILE_FIELD1_VALUE}</dd>
+			<!-- ENDIF -->
+			</dl>
+		</div>
+
+		<div class="column2">
+			<h3>USER ACTIVITY</h3>
+			<dl class="details">
+				<!-- EVENT memberlist_view_user_statistics_before -->
+				<dt>{L_JOINED}{L_COLON}</dt> <dd>{JOINED}</dd>
+				<dt>{L_LAST_ACTIVE}{L_COLON}</dt> <dd>{LAST_ACTIVE}</dd>
+				<!-- IF S_SHOW_ACTIVITY and POSTS -->
+					<dt>{L_ACTIVE_IN_FORUM}{L_COLON}</dt> <dd><!-- IF ACTIVE_FORUM != '' --><strong>{ACTIVE_FORUM}</strong><br />({ACTIVE_FORUM_POSTS} / {ACTIVE_FORUM_PCT})<!-- ELSE --> - <!-- ENDIF --></dd>
+				<!-- ENDIF -->
+				<!-- EVENT memberlist_view_user_statistics_after -->
+			</dl>
+		</div>
+	
+	</div>
+</div>
+<!-- EVENT memberlist_view_contact_after -->
+
+</form>
+
+<script>
+	sizeAvatar('avatar-container-2', 'avatar');	
+</script>
+
+<!-- EVENT memberlist_view_content_append -->
+
+<!-- INCLUDE overall_footer.html -->

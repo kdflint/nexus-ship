@@ -1,7 +1,11 @@
 <?php
 
 require_once(dirname(__FILE__) . "/../framework/PgDb.php");
-require_once(Utilities::getLibRoot() . "/bigbluebutton/bbb-api-php/includes/bbb-api.php"); 
+//require_once(Utilities::getLibRoot() . "/bigbluebutton/bbb-api-php/includes/bbb-api.php"); 
+require_once Utilities::getComposerRoot() . '/autoload.php';
+
+use BigBlueButton\BigBlueButton; 
+use BigBlueButton\Parameters\IsMeetingRunningParameters;
 
 class Event {
 	
@@ -69,7 +73,7 @@ class Event {
 	}
 	
 	private static function getMeetingTypeDisplay($in) {
-		// TODO - should leverage the constants defined in BbbMEeting.php. This is duplicated stringage
+		// TODO - should leverage the constants defined in BbbMeeting.php. This is duplicated stringage
 		switch($in) {
 			case 'video tether':
 				return 'Video Link';
@@ -88,8 +92,11 @@ class Event {
 	
 	private static function isBbbEventRunning($in) {
 		$bbbApi = new BigBlueButton();
-		$response = $bbbApi->isMeetingRunningWithXmlResponseArray($in);
-		if ($response && strcasecmp($response['returncode'], 'SUCCESS') == 0 && strcasecmp($response['running'], 'true') == 0) {
+		$parameters = new IsMeetingRunningParameters($in);
+		//$response = $bbbApi->isMeetingRunningWithXmlResponseArray($in);
+		$response = $bbbApi->isMeetingRunning($parameters);
+		//if ($response && strcasecmp($response['returncode'], 'SUCCESS') == 0 && strcasecmp($response['running'], 'true') == 0) {
+		if ($response->getReturnCode() == 'SUCCESS' && $response->isRunning()) {
 			return TRUE;
 		}
 		return FALSE;
@@ -112,6 +119,10 @@ class Event {
 	}
 	
 	public static function isValidEventUuid($in) {
+		if (!$in) {return FALSE;}
+		if (!strcmp($in, "CfchtCommonMeeting")) {
+			return TRUE;
+		}
 		$query = "select exists (select uuid from event where uuid = $1)";		
 		$row = pg_fetch_row(PgDatabase::psExecute($query, array($in)));
 		if (!strcmp($row[0], "t")) {
@@ -185,6 +196,7 @@ class Event {
 				e.registration_url as regr_url,
 				e.contact as contact,
 				e.recur_fk as recur,
+				e.isbbbmeet as bbb,
 				er.pattern as pattern,
 				er.num_occur as num,
 				u.fname as fname, 
@@ -243,6 +255,7 @@ class Event {
 				$events[$counter]['recur'] = strlen($row['recur']) > 0 ? true : false;
 				$events[$counter]['recur_pattern'] = $row['pattern'];
 				$events[$counter]['recur_num'] = $row['num'];
+				$events[$counter]['bbb'] = ($row['bbb'] === 't' ? TRUE : FALSE);
 				$events[$counter]['sessionUser'] = $ssnUser;
 				$events[$counter]['adder'] = $row['adder'];
 				$events[$counter]['registration'] = $row['registration'];
@@ -284,6 +297,7 @@ class Event {
 				e.registration_url as regr_url,
 				e.file as file,
 				e.recur_fk as recur,
+				e.isbbbmeet as bbb,
 				er.pattern as pattern,
 				er.num_occur as num,
 				er.end_dttm as recur_end,
@@ -335,7 +349,8 @@ class Event {
 				$event[$counter]['recur'] = strlen($row['recur']) > 0 ? true : false;
 				$event[$counter]['recur_pattern'] = $row['pattern'];
 				$event[$counter]['recur_num'] = $row['num'];
-				$event[$counter]['recur_end_phrase'] = self::getDay($row['day_end']) . ", " . self::getMonth($row['month_end']) . " " . $row['date_end'] . " " . $row['year_end'];
+				$event[$counter]['recur_end_phrase'] = self::getDay($row['day_end']) . ", " . self::getMonth($row['month_end']-1) . " " . $row['date_end'] . " " . $row['year_end'];
+				$event[$counter]['bbb'] = ($row['bbb'] === 't' ? TRUE : FALSE);
 				$counter++;
 			}
 		}
@@ -359,12 +374,40 @@ class Event {
 		return $uuid;
 	}	
 	
+	public static function getEventName($uuid) {
+		$query = "select name from event where uuid = $1";
+		$row = pg_fetch_row(PgDatabase::psExecute($query, array($uuid)));
+		if ($row[0]) {
+			return $row[0];
+		} else {
+			return false;
+		}
+	}
+	
 	public static function deleteEvent($uuid) {
 		$query = "update event set active = false where uuid = $1";
 		PgDatabase::psExecute($query, array($uuid));
 		return;
 	}
+
+	public static function addEventBbb($type, $uuid) {
+		if (!Utilities::validateUuid($uuid)) { 
+			return FALSE;
+		}
+		$query = "update event set isBbbMeet=true, type=$1 where uuid=$2";
+		PgDatabase::psExecute($query, array($type, $uuid));
+		return TRUE;
+	}
 	
+	public static function deleteEventBbb($uuid) {
+		if (!Utilities::validateUuid($uuid)) { 
+			return FALSE;
+		}
+		$query = "update event set isBbbMeet=false where uuid=$1";
+		PgDatabase::psExecute($query, array($uuid));
+		return TRUE;
+	}
+
 	public static function approveEvent($uuid) {
 		$query = "update event_group set status_fk = 1 where event_fk = (select id from event where uuid = $1)";
 		PgDatabase::psExecute($query, array($uuid));

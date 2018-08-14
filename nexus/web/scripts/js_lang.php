@@ -1,1 +1,0 @@
-word_hello = "<?php echo _("Username is required"); ?>"

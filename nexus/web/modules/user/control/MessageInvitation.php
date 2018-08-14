@@ -49,12 +49,12 @@ Content-Transfer-Encoding: 7bit
 <!DOCTYPE html PUBLIC '-//W3C//DTD HTML 4.01//EN'>
 <html>
 	<head>
-		<link rel='stylesheet' type='text/css' href='http://fonts.googleapis.com/css?family=Oxygen'>
+		<link rel='stylesheet' type='text/css' href='//fonts.googleapis.com/css?family=Oxygen'>
 	</head>
 	<body style='font-family:Oxygen,Arial,sans-serif;color:#484848;'>
 		<table style='width:90%;display:block;max-width:620px;'>
 			<tr>
-				<td colspan='2'><img src='http://northbridgetech.org/images/NB_horizontal_rgb.png' alt='Northbridge Technology Alliance Logo' width='252' height='68' style='padding-bottom:10px;padding-right:30px;'/></td>
+				<td colspan='2'><img src='https://northbridgetech.org/images/NB_horizontal_rgb.png' alt='Northbridge Technology Alliance Logo' width='252' height='68' style='padding-bottom:10px;padding-right:30px;'/></td>
 			</tr>
 			<tr>
 				<td style='vertical-align:top;padding-top:10px;'>

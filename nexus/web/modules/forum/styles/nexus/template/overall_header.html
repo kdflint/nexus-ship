@@ -31,6 +31,18 @@
 	Modified by:
 -->
 
+<script>
+function breakoutProfile(username) {
+	var environ = "/apps";
+	var path = window.location.pathname;
+	if (window.top != window.self) {
+		if (path.startsWith("/phpBB3")) { environ = "/nexus"; }
+		if (path.startsWith("/dev")) { environ = "/dev"; }
+  	window.top.location = "http://" + window.location.hostname + environ + "/nexus/web/nexus.php?view=profileuser-" + username;
+	}
+}
+</script>
+
 <!-- IF S_ALLOW_CDN -->
 <script>
 	WebFontConfig = {
@@ -51,6 +63,7 @@
 <link href="{T_STYLESHEET_LANG_LINK}" rel="stylesheet">
 <link href="{T_THEME_PATH}/responsive.css?assets_version={T_ASSETS_VERSION}" rel="stylesheet" media="all and (max-width: 700px)">
 <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" >
+<script src="{T_TEMPLATE_PATH}/scripts/phpBB.js" language="javascript"></script>
 
 
 <!-- IF S_CONTENT_DIRECTION eq 'rtl' -->
