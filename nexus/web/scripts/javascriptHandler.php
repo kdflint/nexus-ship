@@ -467,6 +467,35 @@ function showAdvProfile(username, fullname) {
   window.location.assign(HTTP_WEB_PATH + "/nexus.php#openProfile");
 }
 
+function showUserEdit(username, fullname, uid) {
+
+ 	var anchorPwContainer = document.getElementById("change-user-password-container");
+ 	var oldAnchorPw = document.getElementById("change-user-password-anchor");
+ 	if (oldAnchorPw) { anchorPwContainer.removeChild(oldAnchorPw); }
+  var anchorPw = document.createElement("A");
+  anchorPw.setAttribute("id", "change-user-password-anchor");
+ 	anchorPw.setAttribute("href", "javascript:void(0)");
+ 	anchorPw.setAttribute("style", "padding-left:20px;");
+  anchorPw.setAttribute("onclick", "postResetPassword(\"" + username + "\", \"" + fullname + "\");");
+  anchorPwContainer.appendChild(anchorPw);
+  
+  var roleProcessor = "modules/user/control/userRoleToAdminProcessor.php";
+  var anchorRoleContainer = document.getElementById("update-user-role-container");
+  var oldAnchorRole = document.getElementById("update-user-role-anchor");
+  if (oldAnchorRole) { anchorRoleContainer.removeChild(oldAnchorRole) };
+ 	var anchorRole = document.createElement("A");
+  anchorRole.setAttribute("id", "update-user-role-anchor");
+ 	anchorRole.setAttribute("href", roleProcessor + "?id=" + uid);
+ 	anchorRole.setAttribute("style", "padding-left:20px;");
+ 	anchorRole.setAttribute("onclick", "return confirm(\"Please confirm elevating user " + fullname + " to network administrator role.\");");
+ 	anchorRoleContainer.appendChild(anchorRole);
+
+  document.getElementById("change-user-password-anchor").innerHTML = "Reset User Password";
+  document.getElementById("update-user-role-anchor").innerHTML = "Make Network Administrator";  
+  document.getElementById("change-user-name").innerHTML = fullname;
+	window.location.assign(HTTP_WEB_PATH + "/nexus.php#openUserEdit");
+}
+
 function toggleRecurFormElements(override) {
 	var curValue = document.getElementById('repeat-check').checked;
 	var repeatBlock = document.getElementById("repeat-block");

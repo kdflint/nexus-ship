@@ -78,6 +78,13 @@
 			<iframe id="adv-profile-frame" src="loading_placeholder.html" style="height:260px;width:100%;border:0;margin:0;padding:0;overflow:hidden;" scrolling="no"></iframe>
 		</div>
 	</div>
+	
+	<div id="openUserEdit" class="modalDialog">
+		<div>
+			<a href="#close" title="Skip" class="close">X</a>
+			<?php include("modules/directory/views/userEdit.php") ?>
+		</div>
+	</div>
 
 	<div id="openOrganizationView" class="modalDialog">
 		<div>

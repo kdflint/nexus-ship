@@ -40,7 +40,7 @@
  							var anchorEdit = document.createElement("A");
  							anchorEdit.setAttribute("href", "javascript:void(0)");
  							anchorEdit.setAttribute("style", "padding-left:20px;");
- 							anchorEdit.setAttribute("onclick", "postResetPassword(\"" + jsonObj[i].username + "\", \"" + jsonObj[i].fname + " " + jsonObj[i].lname + "\");");
+ 							anchorEdit.setAttribute("onclick", "showUserEdit(\"" + jsonObj[i].username + "\", \"" + jsonObj[i].fname + " " + jsonObj[i].lname + "\", \"" + jsonObj[i].uidpk + "\");");
  							var spanEdit = document.createElement("SPAN");
  							spanEdit.setAttribute("class", "fa fa-pencil");
  							anchorEdit.appendChild(spanEdit);
