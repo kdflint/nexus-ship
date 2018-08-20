@@ -33,7 +33,9 @@ if ($storagePath) {
 if(isset($_GET['logout'])) {
 	require_once(Utilities::getModulesRoot() . "/forum/forum_integration.php");
 	$user->session_kill();
-	//$rememberMe->clearCookie(isset($_SESSION['username']) ? $_SESSION['username'] : '');
+	$rememberMe->clearCookie(isset($_SESSION['username']) ? $_SESSION['username'] : '');
+	unset($_COOKIE['member_transfer_oid']);
+  setcookie('member_transfer_oid', null, -1, '/');
 	if (isset($_SESSION['fb_access_token'])) {
 	}
 	Utilities::destroySession();
@@ -49,10 +51,10 @@ if(isset($_GET['logoutAll'])) {
 	session_start();
 }
 
-$remembered = $enrolled = "false";
+$remembered = $enrolled = $xferred = "false";
 $cleanMessage = $cleanMessageLink = "";
 $cleanIcon = "";
-$enrolledUsername = "";
+$enrolledUsername = $xferUsername = "";
 
 // TODO - this is definitely not right. Need to not let in a public session user that otherwise passes these tests.
 if (isset($_SESSION['username']) && substr($_SESSION['username'], 0, 6 ) !== "pUser-") {
@@ -61,8 +63,6 @@ if (isset($_SESSION['username']) && substr($_SESSION['username'], 0, 6 ) !== "pU
 }
 
 $rememberedLoginResult = $rememberMe->login();
-//$cookieValues = $rememberMe->getCookieValues();
-//if (isset($cookieValues[0]) && strlen($cookieValues[0]) > 0) {
 if ($rememberedLoginResult->isSuccess()) {
 	$remembered = "true";
 }	
@@ -117,6 +117,16 @@ if ($cleanNetworkId == 'userdemo') {
 	$disabled = "disabled";
 	$_SESSION['demo'] = "true";
 	// TODO - react to existing session or remembered user?
+}
+
+if (isset($_GET['member']) && isset($_COOKIE['member_transfer_oid'])) {
+	// Use the sanitized oid from the _$GET param, not the cookie. Cookie set in Drupal view contains html markup and I can't predict how it will process across browsers... -kdf
+	//$xferOid = $_COOKIE['member_transfer_oid']; //substr($_COOKIE['member_transfer_oid'],7,8);
+	if (Utilities::validateOrganizationUidFormat($cleanNetworkId)) {
+		$xferUsername = User::getMembershipAdminByOrgUid($cleanNetworkId);
+		$xferred = "true";
+		$_SESSION['xfer'] = "true";
+	}
 }
 
 // Toggle on CFCHT in prod, for now
@@ -224,6 +234,11 @@ if (!isset($networkLogo) || strlen($networkLogo) < 1) {
 					loginForm.elements['password'].value = "passthru1";
 					loginForm.elements['login-remember'].checked = false;
 					document.getElementById("login-form-submit").click();
+				} else if (<?php echo $xferred; ?>){
+					loginForm.elements['uid'].value = "<?php echo $xferUsername; ?>";
+					loginForm.elements['password'].value = "passthru1";
+					loginForm.elements['login-remember'].checked = true;
+					document.getElementById("login-form-submit").click();					
 				}
 			});
 
@@ -232,7 +247,7 @@ if (!isset($networkLogo) || strlen($networkLogo) < 1) {
 		<script type="text/javascript">(function() {var walkme = document.createElement('script'); walkme.type = 'text/javascript'; walkme.async = true; walkme.src = 'https://cdn.walkme.com/users/ab3d27eee206468794b47885dfc2df46/walkme_ab3d27eee206468794b47885dfc2df46_https.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(walkme, s); window._walkmeConfig = {smartLoad:true}; })();</script> 
 		
 		<style>
-			<!-- override some default techCheck.php styles  -->
+			// override some default techCheck.php styles 
 			.event {width:auto;}
 			td .techCheckCol1 {font-size:90%;}
 			td .techCheckCol2 {left:295px;}
@@ -280,24 +295,23 @@ if (!isset($networkLogo) || strlen($networkLogo) < 1) {
 					<?php if ($guestPass === "false") { ?>
 
 						<form id="login-form" class="pure-form pure-form-stacked" action="modules/login/control/loginProcessor.php" method="post">
-		    			<fieldset>
-	    					<span id="username-field-label"><?php echo(_("Username")); ?></span><span class="instruction form-instruction"><a href="javascript:void(0)" onclick="toggleFormDisplay('recover-username-form')"><span id="username-instruction-field-label"><?php echo _("I forgot"); ?></span></a></span>
-	    					
-        				<input class="form-input" name="uid" value="" maxlength="25" autofocus>	        		
-        				<?php echo(_("Password")); ?><span class="instruction form-instruction"><a href="javascript:void(0)" onclick="toggleFormDisplay('recover-password-form')"><?php echo _("I forgot"); ?></a></span>
-        				<input class="form-input" type="password" name="password" value="" maxlength="25"/>	
-        				<input id="localTz" name="timezone" type="hidden" value="">
-        				<a id="login-form-submit" type="submit" class="pure-button pure-button-primary" style="width:45%;" href="javascript:void(0);" onclick="loginValidateAndSubmit();"><?php echo _("Sign In"); ?></a>
-        				<a id="remember-me-toggle" class="pure-button pure-button-secondary" onclick="toggleRememberCheckbox();" style="width:45%;" <?php echo($disabled);?> ><span id="fakeCheckBox" class="fa fa-square-o" style="color:#004d62;padding-right:4px;"></span> <?php echo _("Remember Me"); ?></a>
-        				<input id="login-remember" name="login-remember" type="checkbox" style="visibility:hidden;"/>      
-        				<div id="social-logins"> 
-    							<div class="or-separator">
-	        					<span class="or-separator-label">OR</span>
-     							</div>
-        					<a class="pure-button pure-button-primary" href="<?php echo(htmlspecialchars($fbLoginUrl)); ?>" style="margin-top:15px;width:94%;height:37px;background-color: #3b5998 !important;"><span class="fa fa-facebook-square fa-2x" style="margin-left:10px;margin-top:-6px;"></span><span style="vertical-align:top;margin-left:20px;"><?php echo _("Sign In with"); ?> <b><?php echo _("Facebook"); ?></b></span></a><br/>
-        					<a class="pure-button pure-button-primary" href="<?php echo($liLoginUrl); ?>" style="margin-top:15px;width:94%;height:37px;background-color: #0084bf !important;"><span class="fa fa-linkedin-square fa-2x" style="margin-left:0px;margin-top:-6px;"></span><span style="vertical-align:top;margin-left:20px;"><?php echo _("Sign In with"); ?> <b><?php echo _("LinkedIn"); ?></b></span></a>
-        				</div>
-     					</fieldset>
+    					<span id="username-field-label"><?php echo(_("Username")); ?></span><span class="instruction form-instruction"><a href="javascript:void(0)" onclick="toggleFormDisplay('recover-username-form')"><span id="username-instruction-field-label"><?php echo _("I forgot"); ?></span></a></span>
+       				<input class="form-input" name="uid" value="" maxlength="25" autofocus>	        		
+       				<?php echo(_("Password")); ?><span class="instruction form-instruction"><a href="javascript:void(0)" onclick="toggleFormDisplay('recover-password-form')"><?php echo _("I forgot"); ?></a></span>
+       			  <fieldset id="login-form-password">
+       				  <input class="form-input" type="password" name="password" value="" maxlength="25"/>	
+       				</fieldset>
+       				<input id="localTz" name="timezone" type="hidden" value="">
+       				<a id="login-form-submit" type="submit" class="pure-button pure-button-primary" style="width:45%;" href="javascript:void(0);" onclick="loginValidateAndSubmit();"><?php echo _("Sign In"); ?></a>
+        			<a id="remember-me-toggle" class="pure-button pure-button-secondary" onclick="toggleRememberCheckbox();" style="width:45%;" <?php echo($disabled);?> ><span id="fakeCheckBox" class="fa fa-square-o" style="color:#004d62;padding-right:4px;"></span> <?php echo _("Remember Me"); ?></a>
+        			<input id="login-remember" name="login-remember" type="checkbox" style="visibility:hidden;"/>      
+        			<div id="social-logins"> 
+    						<div class="or-separator">
+	        				<span class="or-separator-label">OR</span>
+     						</div>
+        				<a class="pure-button pure-button-primary" href="<?php echo(htmlspecialchars($fbLoginUrl)); ?>" style="margin-top:15px;width:94%;height:37px;background-color: #3b5998 !important;"><span class="fa fa-facebook-square fa-2x" style="margin-left:10px;margin-top:-6px;"></span><span style="vertical-align:top;margin-left:20px;"><?php echo _("Sign In with"); ?> <b><?php echo _("Facebook"); ?></b></span></a><br/>
+        				<a class="pure-button pure-button-primary" href="<?php echo($liLoginUrl); ?>" style="margin-top:15px;width:94%;height:37px;background-color: #0084bf !important;"><span class="fa fa-linkedin-square fa-2x" style="margin-left:0px;margin-top:-6px;"></span><span style="vertical-align:top;margin-left:20px;"><?php echo _("Sign In with"); ?> <b><?php echo _("LinkedIn"); ?></b></span></a>
+        			</div>
      				</form>   			
      				<form id="recover-username-form" class="pure-form pure-form-stacked" style="display:none;" autocomplete="off" action="modules/login/control/recoverEnrollmentProcessor.php" method="post">
 	     				<fieldset>
