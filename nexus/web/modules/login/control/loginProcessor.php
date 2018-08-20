@@ -17,6 +17,11 @@ if (isset($dirty['username'])) {
 	if (isset($_SESSION['demo']) && $_SESSION['demo']) {
 		$clean['username'] = Utilities::sanitize($dirty['username']);
 		$dirty['password'] = Utilities::getDemoPassword();
+	} else if (isset($_SESSION['xfer']) && $_SESSION['xfer']) {
+		if (Utilities::validateUsername($dirty['username'])) {
+			$clean['username'] = $dirty['username'];
+			$clean['password'] = "tokenized";
+		}
 	} else if (Utilities::validateUsernameFormat($dirty['username'])) {
 		$clean['username'] = $dirty['username'];
 	} else {
@@ -81,6 +86,8 @@ if (isset($_SESSION['sm_email']) && Utilities::validateEmail($_SESSION['sm_email
   	$clean['username'] = $rememberedUsername;
   	$clean['password'] = "tokenized";
   	$isAuthenticated = true;
+} else if (isset($_SESSION['xfer']) && $_SESSION['xfer']) {
+	$isAuthenticated = true;
 } else {
 	$isAuthenticated = Utilities::authenticate($clean['username'], $clean['password']);
 }
@@ -89,7 +96,7 @@ if($isAuthenticated){
 	if (isset($_SESSION['demo']) && $_SESSION['demo']) {
 		Utilities::setDemoSession($clean['username'], $clean['remember'], $clean['tz']);
 	} else {
-		// TODO - how does a remembered session interact with a FB session?
+		// TODO - how does a remembered session interact with a FB session and/or a transferred session?
 		Utilities::setSession($clean['username'], $clean['remember'], $clean['tz'], $clean['password']);
 		if ($clean['remember']) {
 			$rememberMe->getCookie()->setPath("/");
@@ -97,6 +104,8 @@ if($isAuthenticated){
 		}
 	}
 	Utilities::setLogin($_SESSION['uidpk']);
+	//unset($_COOKIE['member_transfer_oid']);
+  //setcookie('member_transfer_oid', null, -1, '/');
 	header("location:" . Utilities::getHttpPath() . "/nexus.php");
 	exit(0);
 } else {
