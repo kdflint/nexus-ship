@@ -621,6 +621,11 @@ class Utilities {
 		$_SESSION['language'] = $lang;
 	}
 	
+	public static function setUserEmailConfirm() {
+		$_SESSION['emailConfirmed'] = "true";
+		User::updateUserEmailConfirmedById($_SESSION['uidpk']);
+	}
+	
 	public static function isSessionPublic() {
 		if (strcasecmp($_SESSION['nexusContext'], "PUB") == 0) {
 			return TRUE;
@@ -721,6 +726,7 @@ class Utilities {
   		$_SESSION['lname'] = $row['lname'];
   		$_SESSION['email'] = $row['email'];
 			$_SESSION['profile'] = $row['profile'];
+			$_SESSION['emailConfirmed'] = ($row['email_confirmed'] == "t" ? "true" : "false");
 		}
 		
 		$_SESSION['firstLogin'] = User::isFirstLogin($_SESSION['uidpk']);

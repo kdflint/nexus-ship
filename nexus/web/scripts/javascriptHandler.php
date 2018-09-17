@@ -106,6 +106,7 @@ var DEFAULT_INBOX_FOCUS = "/ucp.php?i=pm&folder=inbox";
 var INBOX_FOCUS = "";
 var RECIPIENT_LIST = [];
 var TRIGGER_PROFILE_MODAL = false;
+var TRIGGER_EMAIL_CONFIRM_MODAL = false;
 var MEMBER_TABLE;
 var ORG_MEMBER_TABLE;
 var ORG_TABLE;
@@ -651,6 +652,28 @@ function recordActivity() {
 	activityFlag = 0;
 }
 
+function confirmEmail() {
+	var x = document.forms['emailConfirmForm'];
+	var confirmValue = x['confirm-code'].value;
+	if (confirmValue.toUpperCase() == "JUSTICE") {
+		var xmlhttp = getXmlHttpRequest();
+		xmlhttp.onreadystatechange=function() {
+			if (xmlhttp.readyState == 4) {
+				if (xmlhttp.status == 200) { 
+					window.location.assign(HTTP_WEB_PATH + "/nexus.php"); 
+				} else {
+					return false;			
+				}
+			}
+		};
+		xmlhttp.open("GET", "src/framework/setSessionEmailConfirm.php");
+		xmlhttp.send();
+	} else {
+		x['confirm-code'].placeholder = "Incorrect Confirmation Code: Please try again.";
+		x['confirm-code'].value = "";
+	}
+}
+
 function toggleFrameDisplay(frameId) {
 	var showFrame = document.getElementById(frameId);
 	var recordListButton = document.getElementById("menu-recordList");
@@ -682,6 +705,9 @@ function toggleFrameDisplay(frameId) {
 }
 
 function toggleAdvFrameDisplay(menuItem) {
+	if(Boolean(TRIGGER_EMAIL_CONFIRM_MODAL)) {
+		window.location.assign(HTTP_WEB_PATH + "/nexus.php#enrollmentConfirmation");
+	}
 	var menuItems = document.getElementById("advMenu").children;
 	var showButton = document.getElementById(menuItem.id);
 	var meetButton = document.getElementById("adv-menu-meet");

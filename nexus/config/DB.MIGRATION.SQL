@@ -1,3 +1,3 @@
--- copy over lib/facebook
+alter table public.user add column email_confirmed boolean not null default false;
 
--- add FB_APP_ID, SECRET
+update public.user set email_confirmed = true;

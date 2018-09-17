@@ -86,6 +86,11 @@ if (count($_SESSION['orgs']) < 1) {
 		$triggerProfileModal = "true";
 }	
 
+$triggerEmailConfirmModal = "false";
+if ($_SESSION['nexusContext'] == "ADV" && $_SESSION['emailConfirmed'] === "false") {
+		$triggerEmailConfirmModal = "true";
+}	
+
 $isAdmin = "false";
 if (Utilities::isSessionAdmin()) {
 	$isAdmin = "true";
@@ -172,6 +177,7 @@ $customProfileData = strlen($_SESSION['profile']) > 0 ? $_SESSION['profile'] : '
 			INBOX_FOCUS = DEFAULT_INBOX_FOCUS;
 			RECIPIENT_LIST = [];
 			TRIGGER_PROFILE_MODAL = <?php echo $triggerProfileModal; ?>;
+			TRIGGER_EMAIL_CONFIRM_MODAL = <?php echo $triggerEmailConfirmModal; ?>;
 			CUSTOM_PROFILE = <?php echo $customProfile; ?>;
 			CUSTOM_PROFILE_DATA = <?php echo $customProfileData; ?>;
 			IS_ADMIN = <?php echo $isAdmin; ?>;
@@ -563,6 +569,9 @@ $customProfileData = strlen($_SESSION['profile']) > 0 ? $_SESSION['profile'] : '
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-tLX5TYQhwxQQNx5-UF0VajixUwGGkJQ" async defer></script>
 
 	<script>
+		if(Boolean(TRIGGER_EMAIL_CONFIRM_MODAL)) {
+			window.location.assign(HTTP_WEB_PATH + "/nexus.php#enrollmentConfirmation");
+		}
 		var stateObj = { foo: "bar" };
 		if(window.location.hash) {
 			// In everything but FF, a processor return "location:" value that uses a hash to display a modal 
