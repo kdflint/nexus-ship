@@ -173,7 +173,7 @@ function sendConfirmationEmail($email, $fname, $username, $allUsernames, $groupN
 	if (strlen($allUsernames) > 3) {
 		$multiples = '\r\n\r\nNote: There are other usernames currently enrolled with this email address: ' . Utilities::stripTrailingComma($allUsernames);
 	}
-	$messageBody = 'Welcome ' . $fname . '!\r\n\r\nYour ' . $orgName . ' enrollment is complete for username: ' . $username . $multiples . '\r\n\r\nYou are now enabled to collaborate with your colleagues.\r\n\r\nYou can login to Nexus using this link.\r\n\r\n' . Utilities::getHttpPath() . '/login.php?oid=' . $orgid . '\r\n\r\nSincerely,\r\n\r\nThe Development Team at\r\nNorthBridge Technology Alliance';
+	$messageBody = 'Welcome ' . $fname . '!\r\n\r\nYour ' . $orgName . ' enrollment is complete for username: ' . $username . '\r\n\r\nConfirmation Code: JUSTICE\r\n\r\n' . $multiples . '\r\n\r\nYou can login to Nexus using this link.\r\n\r\n' . Utilities::getHttpPath() . '/login.php?oid=' . $orgid . '\r\n\r\nSincerely,\r\n\r\nThe Development Team at\r\nNorthBridge Technology Alliance';
 	$message = new MessageEnrollment($email, $messageBody);
 	$message->send();
 		

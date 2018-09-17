@@ -6,7 +6,7 @@ require_once(dirname(__FILE__) . "/../framework/Util.php");
 class User {
 	
 	public static function getActiveUserByUsername($uid) {
-		$query = "select u.id as id, u.email as email, u.fname as fname, u.lname as lname, u.password as password, u.custom_profile as profile from public.user u where u.username = $1 and suspend_dttm is NULL limit 1";
+		$query = "select u.id as id, u.email as email, u.fname as fname, u.lname as lname, u.password as password, u.custom_profile as profile, u.email_confirmed as email_confirmed from public.user u where u.username = $1 and suspend_dttm is NULL limit 1";
 		return PgDatabase::psExecute($query, array($uid));	
 	}
 	
@@ -91,6 +91,12 @@ class User {
 			return true;
 		}
 		return false; 
+	}
+	
+	public static function updateUserEmailConfirmedById($uid) {
+		$query = "update public.user set email_confirmed = true where id = $1";
+		PgDatabase::psExecute($query, array($uid));
+		return;
 	}
 	
 	public static function updateExtendedProfileById ($userId, $profile) {

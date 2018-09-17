@@ -121,6 +121,7 @@ if(isset($_GET['error']) && Utilities::isSafeCharacterSet($_GET['error'])) {
 							<?php if($showGroupEnrollWrite && count($publicGroups) > 0 && $accountType == "Advantage") { ?>
 							<!-- TODO - This is very bad! Assumes that there will *always* be one public group named "Public Group" -->
 								<div style="margin-bottom:20px">
+									<p>Welcome to our online community!</p>
 									<p><?php echo _("Which group(s) would you like to join?"); ?></p>
 	 								<span style="font-size:90%;">
 									<?php foreach($publicGroups as $group) { ?>
@@ -133,7 +134,7 @@ if(isset($_GET['error']) && Utilities::isSafeCharacterSet($_GET['error'])) {
 								if ($accountType == "Advantage") { ?>
 								<div style="margin-bottom:20px">
 									<b>
-										<p>Keep the conversation going! You have been invited to enroll in </p>
+										<p>You have been invited to enroll in </p>
 	 									<span style="font-size:90%;">
 		 									<?php echo($enrollGroup[0]['name']); ?> discussion forum
 	 										<input type="hidden" name="group-enroll[]" value="<?php echo($enrollGroup[0]['id']); ?>" >
