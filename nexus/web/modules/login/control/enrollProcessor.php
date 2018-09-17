@@ -176,7 +176,6 @@ function sendConfirmationEmail($email, $fname, $username, $allUsernames, $groupN
 	$messageBody = 'Welcome ' . $fname . '!\r\n\r\nYour ' . $orgName . ' enrollment is complete for username: ' . $username . '\r\n\r\nConfirmation Code: JUSTICE\r\n\r\n' . $multiples . '\r\n\r\nYou can login to Nexus using this link.\r\n\r\n' . Utilities::getHttpPath() . '/login.php?oid=' . $orgid . '\r\n\r\nSincerely,\r\n\r\nThe Development Team at\r\nNorthBridge Technology Alliance';
 	$message = new MessageEnrollment($email, $messageBody);
 	$message->send();
-	$logger->log("Sent = " . $message.toString(), PEAR_LOG_INFO);
 		
 }
 
