@@ -9,9 +9,9 @@
 					<span id="get-nexus-link" style="float:right;margin-top:20px;"></span><br/>
 					<span id="index-module-name" class="module-name" style="">Web Meet</span>		
 					
-					<a id="menu-recordList" class="pure-button button-menu-adv" href="javascript:void(0)" onclick="toggleFrameDisplay('recordList')" style="float:right;background-color:#dae0bc;"><?php echo _("ARCHIVE"); ?></a> 			
-					<a id="menu-userList" class="pure-button button-menu-adv" href="javascript:void(0)" onclick="toggleFrameDisplay('userList')" style="float:right;background-color:#dae0bc;margin-right:-7px;" ><?php echo _("TEAM"); ?></a>
-					<a id="menu-reserveList" class="pure-button button-menu-adv active" href="javascript:void(0)" onclick="toggleFrameDisplay('reserveList')" style="float:right;background-color:rgba(137, 157, 112, 1);margin-right:-7px;"><?php echo _("ROOM"); ?></a> 
+					<a id="menu-recordList" class="pure-button button-menu-adv" href="javascript:void(0)" onclick="toggleNwmFrameDisplay('recordList')" style="float:right;background-color:#dae0bc;"><?php echo _("ARCHIVE"); ?></a> 			
+					<a id="menu-userList" class="pure-button button-menu-adv" href="javascript:void(0)" onclick="toggleNwmFrameDisplay('userList')" style="float:right;background-color:#dae0bc;margin-right:-7px;" ><?php echo _("TEAM"); ?></a>
+					<a id="menu-reserveList" class="pure-button button-menu-adv active" href="javascript:void(0)" onclick="toggleNwmFrameDisplay('reserveList')" style="float:right;background-color:rgba(137, 157, 112, 1);margin-right:-7px;"><?php echo _("ROOM"); ?></a> 
 					<!--
 					Here we place a dummy image, edited from the original walkme png. The real WalkMe launcher is pinned to this image id and offset to sit right on top of it.
 					So, while we wait for the real image to locate the anchor point, which changes when the user clicks the tab, a dummy image indicates that the function is there but inactive

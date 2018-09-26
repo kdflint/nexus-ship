@@ -674,7 +674,10 @@ function confirmEmail() {
 	}
 }
 
-function toggleFrameDisplay(frameId) {
+function toggleNwmFrameDisplay(frameId) {
+	if(Boolean(TRIGGER_EMAIL_CONFIRM_MODAL)) {
+		window.location.assign(HTTP_WEB_PATH + "/nexus.php#enrollmentConfirmation");
+	}
 	var showFrame = document.getElementById(frameId);
 	var recordListButton = document.getElementById("menu-recordList");
 	var userListButton = document.getElementById("menu-userList");

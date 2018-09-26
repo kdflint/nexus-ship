@@ -57,6 +57,15 @@ class Forum {
 		}
 		return $result;
 	}
+	
+	public static function getUserIdByUsername($username) {
+		$query = "select user_id from phpbb_users where username = $1";
+		$row = pg_fetch_row(ForumDatabase::psExecute($query, array($username)));		
+		if ($row) {
+			return $row[0];
+		}
+		return false;
+	}
 		
 	// TODO - move Forum db interactions from ExternalMessage to here
 
@@ -83,28 +92,201 @@ class Forum {
 		return ForumDatabase::psExecute($query, array($fname, $lname, $sms, $email, $phone, $userid[0]));
 	}
 	
-	public static function updateUserPassword($username, $password) {
+	public static function createNewGroupAndForum($groupName, $parentForumId, $isPublic, $networkForumGroupId) {
+		// get ordering from parent
+		$query = "update phpbb_forums set right_id = right_id+2 where forum_id = $1 returning right_id";
+		$parentRightId = pg_fetch_row(ForumDatabase::psExecute($query, array($parentForumId)));
+		
+		// add group to phpbb
+		$query = "insert into phpbb_groups (group_id, group_type, group_name, group_receive_pm) values (DEFAULT, 0, $1, 1) returning group_id";
+		$privateForumGroupid = pg_fetch_row(ForumDatabase::psExecute($query, array($groupName)));
+		
+		// add forum to phpbb
+		$query = "insert into phpbb_forums (forum_id,parent_id,left_id,right_id,forum_name,forum_desc,forum_type,forum_flags) values (DEFAULT,$1,$3,$4,$2, '',1,48) returning forum_id";
+		$forumid = pg_fetch_row(ForumDatabase::psExecute($query, array($parentForumId,$groupName,$parentRightId[0]-2,$parentRightId[0]-1)));
+		
+		// map group-forum permissions to phpbb
+		$acl = self::getAcl($isPublic);
+		foreach ($acl as $static_groupid => $permissionList) {
+			foreach ($permissionList as $permission) { 
+				$query = "insert into phpbb_acl_groups (forum_id, group_id, auth_option_id, auth_role_id, auth_setting) values ($1,$2,$3,$4,$5)";
+				if ($static_groupid === 'group') {
+					ForumDatabase::psExecute($query, array($forumid[0], $privateForumGroupid[0], $permission[0], $permission[1], $permission[2]));
+				} else if ($static_groupid === 'network'){
+					ForumDatabase::psExecute($query, array($forumid[0], $networkForumGroupId, $permission[0], $permission[1], $permission[2]));
+				} else {
+					ForumDatabase::psExecute($query, array($forumid[0], $static_groupid, $permission[0], $permission[1], $permission[2]));
+				}
+			}
+		}		
+		return array($privateForumGroupid, $forumid);
 	}
 	
-	public static function createNewGroupAndForum($groupName, $parentForumId) {
-		$query = "insert into phpbb_groups (group_name, group_type) values ($1, 0)";
-		$groupid = pg_fetch_row(ForumDatabase::psExecute($query, array($groupName)));
+	public static function getAcl($isPublic) {
+			// key is the group id in phpbb; value is the acl array for that group. These can always be tweaked at runtime from phpbb console. 
+			// These will be dumped into phpbb_acl_groups
+			// These were taken from CFCHT production examples of public and private forums
+			// TODO - Hard-coded groups 1 and 5 probably belong on env_config next to FORUM_REGISTERED_USER_GROUP
+			$acl_private = array(
+			'1' => array(
+				array(6,0,1),
+				array(8,0,1),
+				array(12,0,1),
+				array(15,0,1),
+				array(17,0,1),
+				array(18,0,1),
+				array(21,0,1),
+				array(31,0,1),
+				array(26,0,1),
+				array(3,0,1),
+				array(4,0,1),
+				array(10,0,1),
+				array(11,0,1),
+				array(13,0,1),
+				array(24,0,1),
+				array(25,0,1),
+				array(5,0,1),
+				array(7,0,1),
+				array(9,0,1),
+				array(14,0,1),
+				array(19,0,1),
+				array(20,0,1),
+				array(22,0,1),
+				array(23,0,1),
+				array(27,0,1),
+				array(28,0,1),
+				array(16,0,1),
+				array(29,0,1),
+				array(30,0,1),
+				array(1,0,1)
+				),
+			'5'	=> array(
+				array(0,14,0)
+				),
+			'network'	=> array( // placeholder for network forum group
+				array(6,0,1),
+				array(8,0,1),
+				array(12,0,1),
+				array(15,0,1),
+				array(17,0,1),
+				array(18,0,1),
+				array(21,0,1),
+				array(31,0,1),
+				array(26,0,1),
+				array(3,0,1),
+				array(4,0,1),
+				array(10,0,1),
+				array(11,0,1),
+				array(13,0,1),
+				array(24,0,1),
+				array(25,0,1),
+				array(5,0,1),
+				array(7,0,1),
+				array(9,0,1),
+				array(14,0,1),
+				array(19,0,1),
+				array(20,0,1),
+				array(22,0,1),
+				array(23,0,1),
+				array(27,0,1),
+				array(28,0,1),
+				array(16,0,1),
+				array(29,0,1),
+				array(30,0,1),
+				array(1,0,1)
+				),
+			'group' => array( // placeholder for private forum group
+				array(2,0,1),
+				array(6,0,1),
+				array(8,0,1),
+				array(12,0,1),
+				array(15,0,1),
+				array(17,0,1),
+				array(18,0,1),
+				array(21,0,1),
+				array(31,0,1),
+				array(26,0,1),
+				array(3,0,1),
+				array(4,0,1),
+				array(10,0,1),
+				array(11,0,1),
+				array(13,0,1),
+				array(24,0,1),
+				array(25,0,1),
+				array(5,0,1),
+				array(7,0,1),
+				array(9,0,1),
+				array(14,0,1),
+				array(19,0,1),
+				array(20,0,1),
+				array(22,0,1),
+				array(23,0,1),
+				array(27,0,1),
+				array(28,0,1),
+				array(16,0,1),
+				array(29,0,1),
+				array(30,0,1),
+				array(1,0,1)		
+				)	
+			);
+			
+			$acl_public = array(
+			'1' => array(
+				array(15,0,1),
+				array(21,0,1),
+				array(7,0,1),
+				array(9,0,1),
+				array(14,0,1),
+				array(19,0,1),
+				array(20,0,1),
+				array(27,0,1),
+				array(29,0,1),
+				array(1,0,1)
+				),
+			'5'	=> array(
+				array(0,14,0)
+				),
+			'network' => array( // placeholder for network forum group
+				array(6,0,1),
+				array(8,0,1),
+				array(12,0,1),
+				array(15,0,1),
+				array(17,0,1),
+				array(18,0,1),
+				array(21,0,1),
+				array(31,0,1),
+				array(26,0,1),
+				array(3,0,1),
+				array(4,0,1),
+				array(10,0,1),
+				array(11,0,1),
+				array(13,0,1),
+				array(24,0,1),
+				array(25,0,1),
+				array(5,0,1),
+				array(7,0,1),
+				array(9,0,1),
+				array(14,0,1),
+				array(19,0,1),
+				array(20,0,1),
+				array(22,0,1),
+				array(23,0,1),
+				array(27,0,1),
+				array(28,0,1),
+				array(16,0,1),
+				array(29,0,1),
+				array(30,0,1),
+				array(1,0,1)
+				)
+			);
 		
-		$query = "insert into phpbb_forums (forum_name, forum_type, parent_id, display_on_index, enable_icons) values ($1, 1, $2, 1, 1) returning forum_id";
-		$forumId = pg_fetch_row(ForumDatabase::psExecute($query, array($groupName)));
-		if ($forumId) {
-			return $forumId[0];
-		} else {
-			return FALSE;
-		}
-		
-		// add user to group
-		
-		// add group to forum
-		
-		// relevant tables: phpbb_acl_groups
+			if ($isPublic) {
+				return $acl_public;
+			}
+			return $acl_private;
 	}
 
 }
 
 ?>
+

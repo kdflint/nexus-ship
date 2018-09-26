@@ -217,7 +217,16 @@ class Organization {
 	}	
 	
 	public static function getNetworkForumByOrgId($orgId) {
-		$query = "select network_forum_id from organization where id = $1";
+		self::getParentForumByOrgId($orgId, false);
+	}
+	
+	public static function getParentForumByOrgId($orgId, $isPublic) {
+		$query = "";
+		if ($isPublic) {
+			$query = "select public_forum_id from organization where id = $1";
+		} else {
+			$query = "select network_forum_id from organization where id = $1";
+		}
 		$row = pg_fetch_row(PgDatabase::psExecute($query, array($orgId)));
 		if ($row[0] === "NULL") {
 			return FALSE;

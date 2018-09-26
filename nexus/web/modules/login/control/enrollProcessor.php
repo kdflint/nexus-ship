@@ -122,6 +122,7 @@ if (isset($invitation['account_type']) && $invitation['account_type'] === "ADV")
 		$groupId = Organization::getForumUserGroupByOrgId($invitation['orgid']);
 		$groupResult = Forum::addUserToGroupById($addedUserId, $groupId);
 		if (!$groupResult) {
+			// TODO - Why is this line logging on a good add?
 			$logger->log("Fail on add user " . $addedUserId . ":" . $clean['username'] . " to NETWORK group ", PEAR_LOG_INFO);
 		}
 		

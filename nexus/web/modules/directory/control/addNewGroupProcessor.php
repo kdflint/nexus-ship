@@ -5,6 +5,7 @@ session_start();
 require_once("../../../src/framework/Util.php");
 require_once(Utilities::getSrcRoot() . "/group/Group.php");
 require_once(Utilities::getSrcRoot() . "/user/Invitation.php");
+require_once(Utilities::getSrcRoot() . "/message/ExternalMessage.php");
 
 // TODO - put authorization checker, session checker, error handling, etc. in a central place. These should go at the top of every processor.
 
@@ -34,7 +35,7 @@ if (isset($result['clean']['group-name'])) {
 	foreach ($admins as $admin) {
 		User::addUserGroupRelation($admin, $groupId, '4');
 	}
-	if (isset($result['clean']['group-public']))	{
+	if ($result['clean']['group-public'])	{
 		User::addUserGroupRelationbyUsername('pUser-' . $_SESSION['orgUid'], $groupId, '5');
 	}
 
@@ -42,12 +43,14 @@ if (isset($result['clean']['group-name'])) {
 	
 	Utilities::setSessionGroups($_SESSION['username']);
 	
-	//$parentForum = Organization::getNetworkForumByOrgId($_SESSION['networkId']);
-	$parentForum = false;
+	$parentForum = Organization::getParentForumByOrgId($_SESSION['networkId'], $result['clean']['group-public']);
 	
 	if ($parentForum) {
 		require_once(Utilities::getSrcRoot() . "/group/Forum.php");
-		Forum::createNewGroupAndForum($result['clean']['group-name'], $parentForum);
+		$return = Forum::createNewGroupAndForum($result['clean']['group-name'], $parentForum, $result['clean']['group-public'], Organization::getForumUserGroupByOrgId($_SESSION['networkId']));
+		$forumUserId = Forum::getUserIdByUsername($_SESSION['username']);
+		Forum::addUserToGroupById($forumUserId, $return[0][0]);
+		ExternalMessage::addForumSubscription($forumUserId, $return[1][0]);
 	}
 }
 

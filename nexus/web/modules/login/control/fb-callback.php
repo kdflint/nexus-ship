@@ -16,7 +16,7 @@ $fb = new Facebook\Facebook([
 $helper = $fb->getRedirectLoginHelper();
 
 try {
-  $accessToken = $helper->getAccessToken(Utilities::getHttpPath() + "/modules/login/control/fb-callback.php");
+  $accessToken = $helper->getAccessToken(Utilities::getHttpPath() . "/modules/login/control/fb-callback.php");
 } catch(Facebook\Exceptions\FacebookResponseException $e) {
   // When Graph returns an error
 	$logger->log("Facebook Graph returned an error: " . $e->getMessage(), PEAR_LOG_INFO);
