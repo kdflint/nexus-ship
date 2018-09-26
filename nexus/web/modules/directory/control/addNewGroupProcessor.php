@@ -42,12 +42,11 @@ if (isset($result['clean']['group-name'])) {
 	
 	Utilities::setSessionGroups($_SESSION['username']);
 	
-	//$parentForum = Organization::getNetworkForumByOrgId($_SESSION['networkId']);
-	$parentForum = false;
+	$parentForum = Organization::getParentForumByOrgId($_SESSION['networkId'], $result['clean']['group-public']);
 	
 	if ($parentForum) {
 		require_once(Utilities::getSrcRoot() . "/group/Forum.php");
-		Forum::createNewGroupAndForum($result['clean']['group-name'], $parentForum);
+		Forum::createNewGroupAndForum($result['clean']['group-name'], $parentForum, $result['clean']['group-public'], Organization::getForumUserGroupByOrgId($_SESSION['orgId']));
 	}
 }
 
