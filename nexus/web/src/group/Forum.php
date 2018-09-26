@@ -93,13 +93,17 @@ class Forum {
 	}
 	
 	public static function createNewGroupAndForum($groupName, $parentForumId, $isPublic, $networkForumGroupId) {
+		// get ordering from parent
+		$query = "update phpbb_forums set right_id = right_id+2 where forum_id = $1 returning right_id";
+		$parentRightId = pg_fetch_row(ForumDatabase::psExecute($query, array($parentForumId)));
+		
 		// add group to phpbb
 		$query = "insert into phpbb_groups (group_id, group_type, group_name, group_receive_pm) values (DEFAULT, 0, $1, 1) returning group_id";
 		$privateForumGroupid = pg_fetch_row(ForumDatabase::psExecute($query, array($groupName)));
 		
 		// add forum to phpbb
-		$query = "insert into phpbb_forums (forum_id,parent_id,forum_name,forum_desc,forum_type,forum_flags) values (DEFAULT,$1, $2, '',1,48) returning forum_id";
-		$forumid = pg_fetch_row(ForumDatabase::psExecute($query, array($parentForumId,$groupName)));
+		$query = "insert into phpbb_forums (forum_id,parent_id,left_id,right_id,forum_name,forum_desc,forum_type,forum_flags) values (DEFAULT,$1,$3,$4,$2, '',1,48) returning forum_id";
+		$forumid = pg_fetch_row(ForumDatabase::psExecute($query, array($parentForumId,$groupName,$parentRightId[0]-2,$parentRightId[0]-1)));
 		
 		// map group-forum permissions to phpbb
 		$acl = self::getAcl($isPublic);

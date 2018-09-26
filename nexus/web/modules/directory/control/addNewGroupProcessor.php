@@ -35,7 +35,7 @@ if (isset($result['clean']['group-name'])) {
 	foreach ($admins as $admin) {
 		User::addUserGroupRelation($admin, $groupId, '4');
 	}
-	if (isset($result['clean']['group-public']))	{
+	if ($result['clean']['group-public'])	{
 		User::addUserGroupRelationbyUsername('pUser-' . $_SESSION['orgUid'], $groupId, '5');
 	}
 
@@ -49,8 +49,8 @@ if (isset($result['clean']['group-name'])) {
 		require_once(Utilities::getSrcRoot() . "/group/Forum.php");
 		$return = Forum::createNewGroupAndForum($result['clean']['group-name'], $parentForum, $result['clean']['group-public'], Organization::getForumUserGroupByOrgId($_SESSION['networkId']));
 		$forumUserId = Forum::getUserIdByUsername($_SESSION['username']);
-		Forum::addUserToGroupById($forumUserId, $return[0]);
-		ExternalMessage::addForumSubscription($forumUserId, $return[1]);
+		Forum::addUserToGroupById($forumUserId, $return[0][0]);
+		ExternalMessage::addForumSubscription($forumUserId, $return[1][0]);
 	}
 }
 

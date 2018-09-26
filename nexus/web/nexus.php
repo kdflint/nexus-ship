@@ -87,7 +87,7 @@ if (count($_SESSION['orgs']) < 1) {
 }	
 
 $triggerEmailConfirmModal = "false";
-if ($_SESSION['nexusContext'] == "ADV" && $_SESSION['emailConfirmed'] === "false") {
+if (/*$_SESSION['nexusContext'] == "ADV" && */$_SESSION['emailConfirmed'] === "false") {
 		$triggerEmailConfirmModal = "true";
 }	
 
@@ -176,8 +176,9 @@ $customProfileData = strlen($_SESSION['profile']) > 0 ? $_SESSION['profile'] : '
 			FORUM_SESSION_REFRESH_COUNTER = 0;
 			INBOX_FOCUS = DEFAULT_INBOX_FOCUS;
 			RECIPIENT_LIST = [];
-			TRIGGER_PROFILE_MODAL = <?php echo $triggerProfileModal; ?>;
+			//TRIGGER_PROFILE_MODAL = <?php echo $triggerProfileModal; ?>;
 			TRIGGER_EMAIL_CONFIRM_MODAL = <?php echo $triggerEmailConfirmModal; ?>;
+			TRIGGER_PROFILE_MODAL = Boolean(TRIGGER_EMAIL_CONFIRM_MODAL) ? false : <?php echo $triggerProfileModal; ?>;
 			CUSTOM_PROFILE = <?php echo $customProfile; ?>;
 			CUSTOM_PROFILE_DATA = <?php echo $customProfileData; ?>;
 			IS_ADMIN = <?php echo $isAdmin; ?>;
@@ -561,6 +562,8 @@ $customProfileData = strlen($_SESSION['profile']) > 0 ? $_SESSION['profile'] : '
 				case "ADV":
 				 	include("advModals.php");
 	 				break;
+	 			case "NWM":
+	 			  include("nwmModals.php");
  				default: 			
  				}
 			} 				
