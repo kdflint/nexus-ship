@@ -57,6 +57,15 @@ class Forum {
 		}
 		return $result;
 	}
+	
+	public static function getUserIdByUsername($username) {
+		$query = "select user_id from phpbb_users where username = $1";
+		$row = pg_fetch_row(ForumDatabase::psExecute($query, array($username)));		
+		if ($row) {
+			return $row[0];
+		}
+		return false;
+	}
 		
 	// TODO - move Forum db interactions from ExternalMessage to here
 
@@ -98,14 +107,15 @@ class Forum {
 			foreach ($permissionList as $permission) { 
 				$query = "insert into phpbb_acl_groups (forum_id, group_id, auth_option_id, auth_role_id, auth_setting) values ($1,$2,$3,$4,$5)";
 				if ($static_groupid === 'group') {
-					ForumDatabase::psExecute($query, array($forumid, $privateForumGroupid, $permission[0], $permission[1], $permission[2]));
+					ForumDatabase::psExecute($query, array($forumid[0], $privateForumGroupid[0], $permission[0], $permission[1], $permission[2]));
 				} else if ($static_groupid === 'network'){
-					ForumDatabase::psExecute($query, array($forumid, $networkForumGroupId, $permission[0], $permission[1], $permission[2]));
+					ForumDatabase::psExecute($query, array($forumid[0], $networkForumGroupId, $permission[0], $permission[1], $permission[2]));
 				} else {
-					ForumDatabase::psExecute($query, array($forumid, $static_groupid, $permission[0], $permission[1], $permission[2]));
+					ForumDatabase::psExecute($query, array($forumid[0], $static_groupid, $permission[0], $permission[1], $permission[2]));
 				}
 			}
 		}		
+		return array($privateForumGroupid, $forumid);
 	}
 	
 	public static function getAcl($isPublic) {
@@ -114,7 +124,7 @@ class Forum {
 			// These were taken from CFCHT production examples of public and private forums
 			// TODO - Hard-coded groups 1 and 5 probably belong on env_config next to FORUM_REGISTERED_USER_GROUP
 			$acl_private = array(
-			'1' => (
+			'1' => array(
 				array(6,0,1),
 				array(8,0,1),
 				array(12,0,1),
@@ -146,10 +156,10 @@ class Forum {
 				array(30,0,1),
 				array(1,0,1)
 				),
-			'5'	=> (
+			'5'	=> array(
 				array(0,14,0)
 				),
-			'network'	=> ( // placeholder for network forum group
+			'network'	=> array( // placeholder for network forum group
 				array(6,0,1),
 				array(8,0,1),
 				array(12,0,1),
@@ -181,7 +191,7 @@ class Forum {
 				array(30,0,1),
 				array(1,0,1)
 				),
-			'group' => ( // placeholder for private forum group
+			'group' => array( // placeholder for private forum group
 				array(2,0,1),
 				array(6,0,1),
 				array(8,0,1),
@@ -217,7 +227,7 @@ class Forum {
 			);
 			
 			$acl_public = array(
-			'1' => (
+			'1' => array(
 				array(15,0,1),
 				array(21,0,1),
 				array(7,0,1),
@@ -229,10 +239,10 @@ class Forum {
 				array(29,0,1),
 				array(1,0,1)
 				),
-			'5'	=> (
+			'5'	=> array(
 				array(0,14,0)
 				),
-			'network' => ( // placeholder for network forum group
+			'network' => array( // placeholder for network forum group
 				array(6,0,1),
 				array(8,0,1),
 				array(12,0,1),

@@ -5,6 +5,7 @@ session_start();
 require_once("../../../src/framework/Util.php");
 require_once(Utilities::getSrcRoot() . "/group/Group.php");
 require_once(Utilities::getSrcRoot() . "/user/Invitation.php");
+require_once(Utilities::getSrcRoot() . "/message/ExternalMessage.php");
 
 // TODO - put authorization checker, session checker, error handling, etc. in a central place. These should go at the top of every processor.
 
@@ -46,7 +47,10 @@ if (isset($result['clean']['group-name'])) {
 	
 	if ($parentForum) {
 		require_once(Utilities::getSrcRoot() . "/group/Forum.php");
-		Forum::createNewGroupAndForum($result['clean']['group-name'], $parentForum, $result['clean']['group-public'], Organization::getForumUserGroupByOrgId($_SESSION['orgId']));
+		$return = Forum::createNewGroupAndForum($result['clean']['group-name'], $parentForum, $result['clean']['group-public'], Organization::getForumUserGroupByOrgId($_SESSION['networkId']));
+		$forumUserId = Forum::getUserIdByUsername($_SESSION['username']);
+		Forum::addUserToGroupById($forumUserId, $return[0]);
+		ExternalMessage::addForumSubscription($forumUserId, $return[1]);
 	}
 }
 
