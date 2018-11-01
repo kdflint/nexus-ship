@@ -62,9 +62,9 @@
 		          			(IS_ADMIN ? "<a href='<?php echo(Utilities::getHttpPath()); ?>/modules/schedule/control/scheduleDeleteBbbProcessor.php?uuid=" + jsonObj[i].uuid + "' onclick='return confirm(\"Please confirm this room reservation delete. (Your event will stay on the calendar.)\");' style='float:right;'><span class='fa fa-trash-o'</span></a>" : "") +
 		          			"</p><p><span style='font-size:80%'><b>Guest Pass</b> (Share this link with your attendees)" + 
 		          			(showClipboardButton
-		          				? "<br/><button class='guest-pass-button' id='guest-pass-button0' data-clipboard-text='" + guestPass + "' onclick='' title='Copied!'>Copy Pass to Clipboard</button>" +
-				          			"&nbsp;<button onclick='alert(\"" + guestPass + "\");'>Show Pass</button></p>"
-		          				: "<br/><button onclick='alert(\"" + guestPass + "\");'>Show Pass</button></p>"
+		          				? "<br/><button class='guest-pass-button' id='guest-pass-button0' data-clipboard-text='" + guestPass + "' onclick='' title='Click to copy'>Copy Pass to Clipboard</button>" +
+				          			"&nbsp;<button onclick='alert(\"" + guestPass + "\");' title='Click to show pass'>Show Pass</button></p>"
+		          				: "<br/><button onclick='alert(\"" + guestPass + "\");' title='Click to show pass'>Show Pass</button></p>"
 		          			)
 		          		: ""
 		          	) +
@@ -74,11 +74,7 @@
      			}
      			CLIPBOARD = new Clipboard('.guest-pass-button');
 					CLIPBOARD.on('success', function(e) {
-						// TODO - remove tooltips that were previously opened
-						//var tips = $(".guest-pass-button").tooltip();
-						//alert(tips.length);
-						// iterate tips and fire remove action?
-						$(e.trigger).tooltip();
+						$(e.trigger).tooltip({content: "Copied!"});
   					$(e.trigger).tooltip("open");
 					});
      		}

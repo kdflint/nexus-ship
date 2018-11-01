@@ -1,9 +1,18 @@
 <script>
 	function getReservationList(referenceTime) {
 		var xmlhttp = getXmlHttpRequest();
+		// TODO - move below into javascriptHandler.php and remove duplicate code in eventListFilter.php 
+		CLIPBOARD = new Clipboard('.guest-pass-button');
+		CLIPBOARD.on('success', function(e) {
+			// iterate tips and fire remove action?
+			//var tips = $(".guest-pass-button").tooltip({content: "Copied!"});
+			$(e.trigger).tooltip({content: "Copied!"});
+  		$(e.trigger).tooltip("open");
+		});
 		xmlhttp.onreadystatechange=function() {
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 			 	var jsonObj = JSON.parse(xmlhttp.responseText);	
+			 	var showClipboardButton = Clipboard.isSupported();
 			 	// put row container in the now, 1 row always
 			 	var nowMeeting = undefined;	
 			 	if (jsonObj.length > 0 && jsonObj[0].epoch < referenceTime) {
@@ -47,6 +56,7 @@
 					message1 = '<?php echo _("Guest Pass"); ?>';
 					message2 = '<?php echo _("Now"); ?>';
 					message3 = '<?php echo _("Soon"); ?>';
+					guestPass = "<?php echo Utilities::getHttpPath(); ?>/login.php?oid=<?php echo $_SESSION['orgUid']; ?>&mid=" + nowMeeting.uuid;
 					indicator = (Math.floor(new Date()/1000) < nowMeeting.epoch ) ? message3 : message2;
 					// If this is a demo session, show the session user name as the now meeting reserver instead of the placeholder name that is in the database
 					reservedBy = nowMeeting.adder == <?php echo(Utilities::getDemoUidpk()); ?> ? '<?php echo($_SESSION['fname'] . " " . $_SESSION['lname']); ?>' : nowMeeting.fname + " " + nowMeeting.lname;
@@ -64,9 +74,15 @@
           			"<span class='descr'>" +
           				"<p>" + nowMeeting.mtypdisplay + " reserved by " + reservedBy +
 	        				(((IS_ADMIN || nowMeeting.adder == nowMeeting.sessionUser) && nowMeeting.sessionUser != <?php echo(Utilities::getDemoUidpk()); ?>) ? "<a href='modules/schedule/control/eventDeleteProcessor.php?id=" + nowMeeting.uuid + "' onclick='return confirm(\"Please confirm this delete.\");'><span class='fa fa-trash-o' style='color:#d27b4b;margin-left:10px;'></span></a></p>" : " ") +
-         					"<p>" + message1 + ":</p>" +
+         					"<p style='font-size:90%;'><b>" + message1 + "</b> (Share this link with your attendees)</p>" +	        				
+	        				
+		          			(showClipboardButton
+		          				? "<button id='guest-pass0' class='guest-pass-button' id='guest-pass-button0' data-clipboard-text='" + guestPass + "' onclick='' title='Click to copy'>Copy Pass to Clipboard</button>" +
+				          			"&nbsp;<button class='show-pass-button' onclick='alert(\"" + guestPass + "\");' title='Click to show pass'>Show Pass</button></p>"
+		          				: "<br/><button class='show-pass-button' onclick='alert(\"" + guestPass + "\");' title='Click to show pass'>Show Pass</button></p>"	        				
+	        					) +
+
          						// Flaw! We may have two items with id=='guest-pass0'. This accomodates WalkMe tutorials but not strictly correct :)
-         						"<span id='guest-pass0' class='descr'><p><?php echo Utilities::getHttpPath(); ?>/login.php?oid=<?php echo $_SESSION['orgUid']; ?>&mid=" + nowMeeting.uuid + "</p></span>" +
 	        				"<p><span id='tech_check_summary' style='font-style:italic;' ><span class='fa fa-spinner fa-spin fa-lg'></span> Checking your system compatibility... one moment</span><a href='javascript:void(0);' onclick='document.getElementById(\"tech_check_control\").click();' style='font-size:90%;margin-left:5px;'> Details</a></p>" + 
 	        			"</span>" +
           		"</div>" +
@@ -99,6 +115,7 @@
 			 		for (var i = 0; i < jsonObj.length; i++) {
 			 			message1 = '<?php echo _("Guest Pass"); ?>';
 			 			message2 = '<?php echo _("Please confirm this delete."); ?>';
+			 			guestPass = "<?php echo Utilities::getHttpPath(); ?>/login.php?oid=<?php echo $_SESSION['orgUid']; ?>&mid=" + jsonObj[i].uuid;
 			 			tableEvent = 
        			"<div class='td-div'>" +
 	       				"<div class='event'>" +
@@ -119,9 +136,17 @@
           					((jsonObj[i].adder == <?php echo(Utilities::getDemoUidpk()); ?>) ? '<?php echo($_SESSION['lname']); ?>' : jsonObj[i].lname) + 
           					(((IS_ADMIN || jsonObj[i].adder == jsonObj[i].sessionUser) && jsonObj[i].sessionUser != <?php echo(Utilities::getDemoUidpk()); ?>) ? "<a href='modules/schedule/control/eventDeleteProcessor.php?id=" + jsonObj[i].uuid + "' onclick='return confirm(\"" + message2 + "\");'><span class='fa fa-trash-o' style='margin-left:10px;color:#d27b4b;'></span></a>" : " ") +
 										"</p>" +
-         						"<p>" + message1 + ":</p>" +
-         						"<span id='guest-pass" + i + "' class='descr'><p><?php echo Utilities::getHttpPath(); ?>/login.php?oid=<?php echo $_SESSION['orgUid']; ?>&mid=" + jsonObj[i].uuid + "</p></span>" +
+         						"<p style='font-size:90%;'><b>" + message1 + "</b> (Share this link with your attendees)</p>" +	
+         						
+         						(showClipboardButton
+		          				? "<button class='guest-pass-button' id='guest-pass-button0' data-clipboard-text='" + guestPass + "' onclick='' title='Click to copy' >Copy Pass to Clipboard</button>" +
+				          			"&nbsp;<button class='show-pass-button' onclick='alert(\"" + guestPass + "\");' title='Click to show pass'>Show Pass</button></p>"
+		          				: "<br/><button class='show-pass-button' onclick='alert(\"" + guestPass + "\");' title='Click to show pass'>Show Pass</button></p>"	        				
+	        					) +
+         						
          					"</span>" +
+         					
+         					
          				"</div>" +
          			"</div>";
      				document.getElementById("reservationRow" + i).innerHTML = tableEvent; 
@@ -136,6 +161,7 @@
 		xmlhttp.open("GET","src/framework/reservationManager.php", true);
 		xmlhttp.send();  		
 	}
+	
 </script>
 
 <div id="join_control_mode">
@@ -166,10 +192,10 @@
 		<td><div class='event'><span class="fa fa-map-marker fa-2x"></span></div></td>
 		<td>
 			<div class="meeting">
-				<span class='purpose'><?php echo _("Team Pass"); ?>:</span><br/>
+				<span class='purpose'><?php echo _("Team Pass"); ?></span><br/>
 				<span class='descr' style='font-size:90%;' >
+					<p><?php echo _("Enrolled team members can use this link to schedule and attend any event in this Nexus Web Meet room."); ?></p>
 					<p id="team-pass"><?php echo Utilities::getHttpPath(); ?>/login.php?oid=<?php echo $_SESSION['orgUid']; ?></p>
-					<p><?php echo _("Your enrolled team members can use that link to schedule and attend any Nexus Web Meet event."); ?></p>
 				</span>
 			</div>
 		</td>
