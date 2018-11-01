@@ -21,7 +21,7 @@
         			"	<img class='callout' src='image/callout.gif' />	" +
         			"	<table>" +
         			"		<tr><td>" + 
-        			"			<p>For best results, Northbridge recommends Firefox, Safari Desktop or Internet Explorer.</p>" + 
+        			"			<p>For the fullest feature set, Northbridge recommends using Firefox, Safari Desktop or Internet Explorer on a laptop or desktop computer.</p>" + 
         			"			<p><a href='http://www.mozilla.org/firefox' target='_blank'>Download Firefox</a></p>" +
         			"			</td></tr>" +
         			"	 </table>" +
@@ -36,7 +36,7 @@
         			"	<img class='callout' src='image/callout.gif' />	" +
         			"	<table>" +
         			"		<tr><td>" + 
-        			"			<p>For best results, Northbridge recommends Firefox, Safari Desktop or Internet Explorer.</p>" + 
+        			"			<p>For the fullest feature set, Northbridge recommends using Firefox, Safari Desktop or Internet Explorer on a laptop or desktop computer.</p>" + 
         			"			<p><a href='http://www.mozilla.org/firefox' target='_blank'>Download Firefox</a></p>" +
         			"			</td></tr>" +
         			"	 </table>" +
@@ -57,9 +57,9 @@
         			"	<img class='callout' src='image/callout.gif' />	" +
         			"	<table>" +
         			"		<tr><td>" + 
-        			"			<p>In order to use the conference room, Flash version 11.2 or higher is required</p>" + 
+        			"			<p>For the fullest feature set, Flash version 11.2 or higher is recommended</p>" + 
         			"			<p><a href='https://helpx.adobe.com/flash-player.html' target='_blank'>Get Flash</a></p>" +
-        			"			<p>Note: Most desktop browsers are compatible with Flash but some tablet and phone-based browsers are not. Northbridge recommends <a href='http://www.mozilla.org/firefox' target='_blank'>Firefox</a>, Chrome, Safari or Internet Explorer.</p>" +
+        			"			<p>Note: Most desktop and laptop browsers are compatible with Flash but some tablet and phone-based browsers are not.</p>" +
         			"			</td></tr>" +
         			"	 </table>" +
     					"	</span>" +
@@ -78,7 +78,8 @@
 				document.getElementById("tech_check_summary").innerHTML = "<span class='fa fa-spinner fa-spin fa-lg'></span> Checking your system compatibility... one moment</span>";
 				startSpeedChecks();
 				displayCheckSummary();
-			}					
+			}
+									
 
 			function displayCheckSummary() {
       	var id = setInterval(function() {
@@ -92,7 +93,8 @@
          		clearInterval(id);
         	} else {
         		if (has_flash === false) {
-         			document.getElementById("tech_check_summary").innerHTML = "<span class='fa fa-exclamation-triangle fa-lg' style='margin-right:10px;color:#f64620;'></span>Your system is not compatible to participate in this meeting.";
+         			//document.getElementById("tech_check_summary").innerHTML = "<span class='fa fa-exclamation-triangle fa-lg' style='margin-right:10px;color:#f64620;'></span>Your system is not compatible to participate in this meeting.";
+         			document.getElementById("tech_check_summary").innerHTML = "<span class='fa fa-check-square-o fa-lg' style='margin-right:10px;color:#f68620;'></span>Your system may not provide certain user management features.";
          			clearInterval(id);
          		} else if (dspeed === false || uspeed === false) {
          			document.getElementById("tech_check_summary").innerHTML = "<span class='fa fa-check-square-o fa-lg' style='margin-right:10px;color:#f68620;'></span>Your system may show connection quality limitations.";
@@ -220,7 +222,7 @@
         		"		<tr><td>" + 
         		"			<p>Your download speed meets basic recommendations</p>" +
         		"			<p>If there is fluctuation in your download speed, you may experience some connectivity problems.</p>" +
-        		"			<p>For best results, avoid a public wifi connection as these tend to be sporadic in quality. If possible, consider using a wired connection.</p>" +
+        		"			<p>For best results, avoid a public wifi connection as these tend to be sporadic in quality. Consider using a wired connection, if possible.</p>" +
         		"			</td></tr>" +
         		"	 </table>" +
     				"	</span>" +
@@ -237,7 +239,7 @@
         		"		<tr><td>" + 
         		"			<p>Your download speed is slower than recommended.</p>" + 
         		"			<p>You will probably experience connectivity problems.</p>" +
-        		"			<p>For best results, avoid a public wifi connection as these tend to be sporadic in quality. If possible, consider using a wired connection.</p>" +
+        		"			<p>For best results, avoid a public wifi connection as these tend to be sporadic in quality. Consider using a wired connection, if possible.</p>" +
         		"			</td></tr>" +
         		"	 </table>" +
     				"	</span>" +
@@ -309,7 +311,7 @@
         		"			<p>Your upload speed meets basic recommendations</p>" +
         		"			<p>If there is fluctuation in your upload speed, you may experience some connectivity problems.</p>" +
         		" 		<p>Consider limiting your media connection to microphone-only (no camera)</p>" +
-        		"			<p>For best results, avoid a public wifi connection as these tend to be sporadic in quality. If possible, consider using a wired connection.</p>" +
+        		"			<p>For best results, avoid a public wifi connection as these tend to be sporadic in quality. Consider using a wired connection, if possible.</p>" +
         		"			</td></tr>" +
         		"	 </table>" +
     				"	</span>" +
@@ -327,7 +329,7 @@
         		"			<p>Your upload speed is slower than recommended.</p>" + 
         		"			<p>You will probably experience connectivity problems.</p>" +
         		"			<p>Consider limiting your media connection to listen-only.</p>" +
-        		"			<p>For best results, avoid a public wifi connection as these tend to be sporadic in quality. If possible, consider using a wired connection.</p>" +
+        		"			<p>For best results, avoid a public wifi connection as these tend to be sporadic in quality. Consider using a wired connection, if possible.</p>" +
         		"			</td></tr>" +
         		"	 </table>" +
     				"	</span>" +
@@ -416,7 +418,7 @@
         		"		<tr><td>" + 
         		"			<p>Your download speed meets basic recommendations</p>" +
         		"			<p>If there is fluctuation in your download speed, you may experience some connectivity problems.</p>" +
-        		"			<p>For best results, avoid a public wifi connection as these tend to be sporadic in quality. If possible, consider using a wired connection.</p>" +
+        		"			<p>For best results, avoid a public wifi connection as these tend to be sporadic in quality. Consider using a wired connection, if possible.</p>" +
         		"			</td></tr>" +
         		"	 </table>" +
     				"	</span>" +
@@ -433,7 +435,7 @@
         		"		<tr><td>" + 
         		"			<p>Your download speed is slower than recommended.</p>" + 
         		"			<p>You will probably experience connectivity problems.</p>" +
-        		"			<p>For best results, avoid a public wifi connection as these tend to be sporadic in quality. If possible, consider using a wired connection.</p>" +
+        		"			<p>For best results, avoid a public wifi connection as these tend to be sporadic in quality. Consider using a wired connection, if possible.</p>" +
         		"			</td></tr>" +
         		"	 </table>" +
     				"	</span>" +

@@ -384,6 +384,11 @@ form {
 	border-right:3px solid #d27b4b;
 }
 
+.guest-pass-button,
+.show-pass-button {
+	font-size:90%;
+}
+
 /* DATE */
 
 .event, .user {
