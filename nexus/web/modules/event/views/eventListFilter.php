@@ -74,6 +74,7 @@
      			}
      			CLIPBOARD = new Clipboard('.guest-pass-button');
 					CLIPBOARD.on('success', function(e) {
+						$(".guest-pass-button").tooltip({content: ""});
 						$(e.trigger).tooltip({content: "Copied!"});
   					$(e.trigger).tooltip("open");
 					});

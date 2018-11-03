@@ -4,8 +4,7 @@
 		// TODO - move below into javascriptHandler.php and remove duplicate code in eventListFilter.php 
 		CLIPBOARD = new Clipboard('.guest-pass-button');
 		CLIPBOARD.on('success', function(e) {
-			// iterate tips and fire remove action?
-			//var tips = $(".guest-pass-button").tooltip({content: "Copied!"});
+			$(".guest-pass-button").tooltip({content: ""});
 			$(e.trigger).tooltip({content: "Copied!"});
   		$(e.trigger).tooltip("open");
 		});
