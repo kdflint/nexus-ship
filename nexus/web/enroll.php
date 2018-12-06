@@ -170,6 +170,10 @@ if(isset($_GET['error']) && Utilities::isSafeCharacterSet($_GET['error'])) {
     </div><!-- container -->       		  	
 
   <script>
+    $("#enroll-form :input").on("blur", function() {
+        $(this).tooltip( "close" );
+    });
+
   $(function() {
     //var tooltips = $( "[title]" ).tooltip({
     var tooltips = $( "#enroll-form :input" ).tooltip({
@@ -179,14 +183,6 @@ if(isset($_GET['error']) && Utilities::isSafeCharacterSet($_GET['error'])) {
       },
       effect: "fade"
     });
-    
-    //$( "<button>" )
-    //  .text( "Show help" )
-    //  .button()
-    //  .click(function() {
-    //    tooltips.tooltip( "open" );
-    //  })
-    //  .insertAfter( "form" );
     
   });
   </script>
