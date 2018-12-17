@@ -6,19 +6,28 @@
 				console.log(xmlhttp.responseText);
 				var jsonObj = JSON.parse(xmlhttp.responseText);
 			 	var nextRecording = undefined;
-			 	var tableRows = "";
+			 	message1 = '<?php echo _("Recordings"); ?>';
+			 	var tableRows = "<div id='headerRow' class='div-tr' style='position:relative;'>" + 
+       			"<div class='td-div'>" +
+		      		"<div class='event' style='border-right:0px;'>" +		
+	       				"<span class='detail' style='font-size:140%;'>" + message1 + "</span><br/>" +			
+          		"</div>" +
+          	"</div>" +
+          	"<div class='td-div'>" +
+          	"</div>" + 
+					"</div>";
 			 	for (var i = 0; i < jsonObj.length; i++) { 
 			 		tableRows = tableRows + "<div id='recordingRow" + i + "' class='div-tr' style='position:relative;'></div>";
 			 		nextRecording = i; 
 			 	}
 			 	document.getElementById("reservationTable").innerHTML = tableRows;
 				if (nextRecording === undefined) {
-					message1 = '<?php echo _("Recordings"); ?>';
+
 					message2 = '<?php echo _("There are no recordings available."); ?>';
 					tableRow = "<div id='reservationRow0' class='div-tr' style='position:relative;'>" + 
        			"<div class='td-div'>" +
-		      		"<div class='event'>" +		
-	       				"<span class='date' style='font-size:140%;'>" + message1 + "</span><br/>" + 				
+		      		"<div class=''>" +		
+	       				"<span class='date'></span><br/>" + 				
           		"</div>" +
           	"</div>" +
        			"<div id='nowEventDetail' class='td-div' style='position:absolute;left:140px;top:5px;height:70px;'>" +	  	       				
@@ -27,7 +36,7 @@
           		"</div>" +
           	"</div>" +
 					"</div>";
-					document.getElementById("reservationTable").innerHTML = tableRow
+					document.getElementById("reservationTable").innerHTML = tableRows + tableRow
 				} else {
 			 		for (var i = 0; i < jsonObj.length; i++) {
 			 			message1 = '<?php echo _("Attendees"); ?>';

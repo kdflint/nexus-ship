@@ -7,7 +7,15 @@
 			 	currentEvents = jsonObj;
 			 	// put row containers in the reservation table, 1 for each event
 			 	var nextMeetings = undefined;
-			 	var tableRows = "";
+			 	var tableRows = "<div id='headerRow' class='div-tr' style='position:relative;'>" + 
+       			"<div class='td-div'>" +
+		      		"<div class='event' style='border-right:0px;'>" +		
+	       				"<span class='detail' style='font-size:140%;'>" + capitalize(filter) + "&nbsp;Events</span><br/>" +			
+          		"</div>" +
+          	"</div>" +
+          	"<div class='td-div'>" +
+          	"</div>" + 
+					"</div>";
 			 	var showClipboardButton = Clipboard.isSupported();
 			 	for (var i = 0; i < jsonObj.length; i++) { 
 			 		tableRows = tableRows + "<div id='reservationRow" + i + "' class='div-tr' style='position:relative;'></div>";
@@ -16,14 +24,13 @@
        	document.getElementById("reservationTable").innerHTML = tableRows;
 
 				// write the current meeting into its row container, or default content if none
-				nowEvent = "";
-    	
+				nowEvent = "";  	
        	// write each future event into its row container
 				if (nextMeetings === undefined) {
 					tableRow = "<div id='reservationRow0' class='div-tr' style='position:relative;'>" + 
        			"<div class='td-div'>" +
-		      		"<div class='event'>" +		
-	       				"<span class='date'>Upcoming</span><br/>" + 				
+		      		"<div class=''>" +		
+	       				"<span class='date'></span><br/>" + 				
           		"</div>" +
           	"</div>" +
        			"<div id='nowEventDetail' class='td-div' style='position:absolute;left:140px;top:5px;height:70px;'>" +	  	       				
@@ -32,7 +39,7 @@
           		"</div>" +
           	"</div>" +
 					"</div>";
-					document.getElementById("reservationTable").innerHTML = tableRow
+					document.getElementById("reservationTable").innerHTML = tableRows + tableRow
 				} else {
 			 		for (var i = 0; i < jsonObj.length; i++) {
 			 			var meetingPass = "modules/meeting/control/joinMeetingProcessor.php?id=" + jsonObj[i].uuid + "&type=" + jsonObj[i].mtype;

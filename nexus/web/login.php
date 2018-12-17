@@ -55,6 +55,13 @@ $remembered = $enrolled = $xferred = "false";
 $cleanMessage = $cleanMessageLink = "";
 $cleanIcon = "";
 $enrolledUsername = $xferUsername = "";
+$logo = "";
+$disabled = "";
+$networkLogo = $networkName = $cleanMeetingId = "";	
+$techCheckInclude = "scripts/techCheckDummy.js";
+$cleanNetworkId = "1"; // TODO: create default network in db, that includes default logo?
+$demoSession = $guestPass = "false";
+unset($_SESSION['demo']);
 
 // TODO - this is definitely not right. Need to not let in a public session user that otherwise passes these tests.
 if (isset($_SESSION['username']) && substr($_SESSION['username'], 0, 6 ) !== "pUser-") {
@@ -66,19 +73,6 @@ $rememberedLoginResult = $rememberMe->login();
 if ($rememberedLoginResult->isSuccess()) {
 	$remembered = "true";
 }	
-
-if(Utilities::isSessionValid() && !Utilities::isSessionPublic()) {
-	// TODO - pass parm string into nexus.php. Reference directoryDetail.php:45-46, where we want to focus on an org if there is a good session open
-	header("location:" . Utilities::getHttpPath() . "/nexus.php");
-	exit(0);
-} else if (Utilities::isSessionValid() && Utilities::isSessionPublic() && isset($_SESSION['remembered']) && isset($_SESSION['password'])) {
-	// transition a public session to authenticated session
-	Utilities::setSession($_SESSION['remembered'], $_SESSION['remember'], $_SESSION['timezone'], $_SESSION['password']);
-	header("location:" . Utilities::getHttpPath() . "/nexus.php");
-	exit(0);
-} else if ($enrolledUsername) {
-	$_SESSION['remember'] = "true";
-}
 
 if(isset($_GET['error']) && Utilities::isSafeCharacterSet($_GET['error'])) {
 	$cleanMessage = $_GET['error'];
@@ -100,14 +94,6 @@ if ($cleanMessage === "No message") {
 	$cleanMessage = $cleanIcon = "";
 }
 
-$logo = "";
-$disabled = "";
-$networkLogo = $networkName = $cleanMeetingId = "";	
-$techCheckInclude = "scripts/techCheckDummy.js";
-$cleanNetworkId = "1"; // TODO: create default network in db, that includes default logo?
-$demoSession = $guestPass = "false";
-unset($_SESSION['demo']);
-
 if(isset($_GET['oid']) && Organization::validateOrganizationUid($_GET['oid'])) {
  	$cleanNetworkId = $_GET['oid'];		
 }
@@ -121,7 +107,6 @@ if ($cleanNetworkId == 'userdemo') {
 
 if (isset($_GET['member']) && isset($_COOKIE['member_transfer_oid'])) {
 	// Use the sanitized oid from the _$GET param, not the cookie. Cookie set in Drupal view contains html markup and I can't predict how it will process across browsers... -kdf
-	//$xferOid = $_COOKIE['member_transfer_oid']; //substr($_COOKIE['member_transfer_oid'],7,8);
 	if (Utilities::validateOrganizationUidFormat($cleanNetworkId)) {
 		$xferUsername = User::getMembershipAdminByOrgUid($cleanNetworkId);
 		$xferred = "true";
@@ -137,13 +122,13 @@ if ($cleanNetworkId == 'ed787a92' || $cleanNetworkId == '2ab2f516') {
 
 if(isset($_GET['mid'])) {
 	if (Utilities::validateUuid($_GET['mid']) && Event::isValidFutureEvent($_GET['mid'], $cleanNetworkId)) {
-		Utilities::destroySession();
+		// Utilities::destroySession();
 		// guest context overrides demo context
+ 		$cleanMeetingId = $_GET['mid'];
 		$demoSession = "false";
 		$disabled = "";
 		$guestPass = "true";
- 		$cleanMeetingId = $_GET['mid'];
- 		$techCheckInclude = "scripts/techCheck.js";
+ 		$techCheckInclude = "scripts/techCheckGuest.js";
  		// TODO - react to remembered user?
  	} else {
  		$cleanMessage = _("Your meeting is over.");
@@ -158,6 +143,23 @@ $networkName = $row['name'];
 
 if (!isset($networkLogo) || strlen($networkLogo) < 1) {
 	$networkLogo = "default-empty.png";
+}
+
+if(Utilities::isSessionValid() && !Utilities::isSessionPublic()) {
+	// TODO - pass parm string into nexus.php. Reference directoryDetail.php:45-46, where we want to focus on an org if there is a good session open
+	if ($guestPass === "false" ) {
+		header("location:" . Utilities::getHttpPath() . "/nexus.php");
+		exit(0);
+	} else if ($guestPass === "true") {
+		Utilities::destroySession();
+	}
+} else if (Utilities::isSessionValid() && Utilities::isSessionPublic() && isset($_SESSION['remembered']) && isset($_SESSION['password'])) {
+	// transition a public session to authenticated session
+	Utilities::setSession($_SESSION['remembered'], $_SESSION['remember'], $_SESSION['timezone'], $_SESSION['password']);
+	header("location:" . Utilities::getHttpPath() . "/nexus.php");
+	exit(0);
+} else if ($enrolledUsername) {
+	$_SESSION['remember'] = "true";
 }
 
 ?>
@@ -361,7 +363,7 @@ if (!isset($networkLogo) || strlen($networkLogo) < 1) {
      				</form> 
       			<a id='tech_check_control' href='javascript:void(0);' style="display:none;"></a>
 						<div id="tech_check_display" style="display:none;width:560px;">
-							<?php include("modules/schedule/views/techCheck.php"); ?>	
+							<?php include("modules/schedule/views/techCheckGuest.php"); ?>	
 						</div>
 						<div id="notification"></div>	
      				<script> 
