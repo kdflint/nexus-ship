@@ -218,6 +218,10 @@ function countdownTimer() {
 	}
 }
 
+function capitalize(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 /**
  * @param {string} filename The name of the file WITHOUT ending
  */

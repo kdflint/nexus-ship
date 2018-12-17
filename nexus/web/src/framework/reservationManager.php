@@ -6,13 +6,16 @@ require_once("Util.php");
 require_once(Utilities::getSrcRoot() . "/schedule/Event.php");
 
 $clean['status'] = "1";
-if (isset($_GET['status']) && $_GET['status'] === "pending") {
-	$clean['status'] = "3";
-}
+//if (isset($_GET['status']) && $_GET['status'] === "pending") {
+//	$clean['status'] = "3";
+//}
 
 $clean['filter'] = $_SESSION['pgpk'];
 if (isset($_GET['filter']) && $_GET['filter'] === "network") {
-	$clean['filter'] = $_SESSION['ngpk'];;
+	$clean['filter'] = $_SESSION['ngpk'];
+}
+if (isset($_GET['filter']) && $_GET['filter'] === "pending") {
+	$clean['status'] = "3";
 }
 
 // TODO - this check causes JSON object parse to be thrown from javascript -- better to tokenize it anyway
