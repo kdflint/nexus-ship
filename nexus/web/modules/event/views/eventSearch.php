@@ -2,7 +2,7 @@
   	$(function() { 
 	  	$("input[name='event-state-filter']").change(function(e){
     		if($(this).val() === 'event-list-pending') {
-		     	getEventListPending(<?php echo (time() + 15*60); ?>);
+		     	getEventListFilter(<?php echo (time() + 15*60); ?>, 'pending');
 	  		} else if($(this).val() === 'event-list-public') {
 	     		getEventListFilter(<?php echo (time() + 15*60); ?>, 'public');
     		} else if($(this).val() === 'event-list-network') {
@@ -18,16 +18,16 @@
 <form id="calendar-form" class="pure-form" action="#" method="post" id="">
 	<?php if(Utilities::isSessionAdmin()) { ?>
 		<div style="margin-top:10px;">
-			<input type="radio" name="event-state-filter" onchange="toggleTertiary('event-tertiary');" value="event-list-pending" checked>&nbsp;Pending</br>
+			<input type="radio" name="event-state-filter" value="event-list-pending" checked>&nbsp;Pending</br>
 		</div>
 	<?php } ?>
 	<div style="margin-top:10px;">
-		<input type="radio" name="event-state-filter" onchange="toggleTertiary('event-tertiary');" value="event-list-public" <?php if(!Utilities::isSessionAdmin()) { ?>checked<?php } ?>>&nbsp;Public</br>
+		<input type="radio" name="event-state-filter" value="event-list-public" <?php if(!Utilities::isSessionAdmin()) { ?>checked<?php } ?>>&nbsp;Public</br>
 	</div>
 	<div style="margin-top:10px;">
-		<input type="radio" name="event-state-filter" onchange="toggleTertiary('event-tertiary');" value="event-list-network">&nbsp;Network</br>
+		<input type="radio" name="event-state-filter" value="event-list-network">&nbsp;Network</br>
 	</div>
 	<div style="margin-top:10px;">
-		<input type="radio" name="event-state-filter" onchange="toggleTertiary('event-tertiary');" value="event-list-recorded">&nbsp;Recorded</br>
+		<input type="radio" name="event-state-filter" value="event-list-recorded">&nbsp;Recorded</br>
 	</div>	
 </form>

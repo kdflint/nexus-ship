@@ -4,14 +4,14 @@
 		<?php } ?>
 	</div>
 	<!-- TODO - move this div id out to advFrame.php? -->
-	<div id="event-frame">
+	<div id="event-frame" style="height:420px;clear:left;">
 		<div class="controlCol" style="left:15px;border-right: 1px solid #eeeeee;margin-top:-10px;">
-			<?php include(Utilities::getModulesRoot() . "/event/views/calendarSearch.php"); ?>
+			<?php include(Utilities::getModulesRoot() . "/event/views/eventSearch.php"); ?>
 		</div>
-		<div id="current_schedule_display" class="displayCol" style="border:0px !important;overflow:visible;font-size:80%;margin-top:40px;">
+		<div id="current_schedule_display" class="displayCol" style="border:0px !important;overflow:visible;font-size:90%;">
 				<div id="reservationTable" class=""></div>
 		 	<?php 
-			 		include("views/eventListPending.php");
+			 		//include("views/eventListPending.php");
 			 		include("views/eventListFilter.php"); 
 			 		include("views/eventListRecorded.php"); 
 		 	?>
@@ -19,7 +19,7 @@
 	</div>
 	
 	<?php if(Utilities::isSessionAdmin()) { ?>
-		<script> getEventListPending(<?php echo (time() + 15*60); ?>); </script>
+		<script> getEventListFilter(<?php echo (time() + 15*60); ?>, 'pending'); </script>
 	<?php } else { ?>
 		<script> getEventListFilter(<?php echo (time() + 15*60); ?>, 'public'); </script>
 	<?php } ?>
