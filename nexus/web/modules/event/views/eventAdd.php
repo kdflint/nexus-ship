@@ -104,6 +104,7 @@
 				</fieldset>
 				<input type="hidden" name="meeting-edit" value="false" />
 				<input type="hidden" name="meeting-recur-duration" value="false" />
+				<input type="hidden" name="meeting-visibility" value="<?php echo($_SESSION['pgpk']); ?>" />
 			</form>     
 			
 <?php if (!isset($_SESSION['timezone']) || $_SESSION['timezone'] == "undefined") { ?>

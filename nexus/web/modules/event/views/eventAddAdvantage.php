@@ -19,9 +19,14 @@
 				</fieldset>
 				<fieldset style="position:absolute;left:430px;width:390px;top:-4px;">
 					<div style="margin-top:16px;font-size:90%;">
-						<b>Event Visibility:&nbsp;&nbsp;</b><input type="radio" name="meeting-visibility" value="network" checked>&nbsp;Network&nbsp;
-						<input type="radio" name="meeting-visibility" value="public">&nbsp;Public
+						<b>Event Visibility: </b><span id="vizDisplay">All Network</span><a href='javascript:void(0);' id="event-group-change" onclick="showEventGroupFormElements();" style="margin-left:10px;">Change</a>
+						<input type="hidden" name="meeting-visibility" value="<?php echo($_SESSION['ngpk']); ?>" />
 					</div>
+					<fieldset id="event-group-block" style="display:none;font-size:90%;height:340px;overflow-y:auto;">
+						<?php include(Utilities::getModulesRoot() . "/directory/views/groupCheckboxList.php"); ?>
+						<a id="event-group-done" class="pure-button button-menu" href="javascript:void(0)" onclick="hideEventGroupFormElements();" style="float:right;background-color:transparent;width:70px;font-size:90%;margin-top:25px;color:#d27b4b;border:2px solid #999999;">Set</a>
+					</fieldset>
+					<fieldset id="not-event-group-block">
 					<div id="tz-static" style="display:block;margin-top:10px;">
 						<span style="font-size:90%;line-height:240%;"><b>Time Zone: </b><span id="local-tzDisplay"><?php echo $_SESSION['timezone']; ?></span><a href="javascript:void(0);" onclick="showTimeZoneDisplay('tz-select');" style="margin-left:10px;">Change</a></span>
 						<input id="local-tzFormField" type="hidden" name="tzone-name" value="<?php echo $_SESSION['timezone']; ?>" />
@@ -84,7 +89,7 @@
       						</select>
 	      				</span>
 	      				<span class="repeat-unit" style="position:absolute;left:130px;">days</span>
-		      			<a id="repeat-done" class="pure-button button-menu" href="javascript:void(0)" onclick="toggleRecurFormElements(1);" style="float:right;background-color:#bbbbbb;width:70px;font-size:90%;margin-top:25px;color:#e6e6e6">Set</a>
+		      			<a id="repeat-done" class="pure-button button-menu" href="javascript:void(0)" onclick="toggleRecurFormElements(1);" style="float:right;background-color:transparent;width:70px;font-size:90%;margin-top:25px;color:#d27b4b;border:2px solid #999999;">Set</a>
 		      		</p>
  						</div>
 						<div id="location-block" style="display:block;">
@@ -101,6 +106,7 @@
 		      		<a href="#close" style="float:right;margin-right:20px;">Cancel</a>
 		    		</div>
 		    	</div>
+		    	</fieldset>
 		    	<input id="schedule-form-isBbb" name="isBbbMeeting" type="checkbox" style="visibility:hidden;"/>
 				</fieldset>		    	
 	    	<input type="hidden" name="meeting-uuid" value="" />
@@ -109,4 +115,4 @@
      		<input type="hidden" name="meeting-contact" value="" />
      		<!--<input type="hidden" name="orig-group-assoc" value="" />-->
 				<input type="hidden" name="meeting-recur-duration" value="false" />
-			</form>     
+			</form>   

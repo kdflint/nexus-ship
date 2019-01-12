@@ -164,8 +164,16 @@ class Event {
 		return FALSE;	
 	}
 	
-	// TODO - this only returns actives - rename method?
-	public static function getFutureEvents($groupId, $localTz = "Greenwich", $ssnUser, $status = "1") {	
+	public static function getFuturePendingEvents($idList, $localTz = "Greenwich", $ssnUser) {
+		return self::getFutureEventsByGroupIdList($idList, $localTz, $ssnUser, "3");
+	}
+	
+	public static function getFutureNetworkEvents($idList, $localTz = "Greenwich", $ssnUser, $status = "1") {
+		return self::getFutureEventsByGroupIdList($idList, $localTz, $ssnUser, $status);
+	}
+	
+	public static function getFutureEventsByGroupIdList($groupIdList, $localTz = "Greenwich", $ssnUser, $status = "1") {	
+		
 		$events = array();
 		if (self::isValidTimeZone($localTz)) {
 			$query = "select 
@@ -197,8 +205,10 @@ class Event {
 				e.contact as contact,
 				e.recur_fk as recur,
 				e.isbbbmeet as bbb,
+				g.name as group_name,
 				er.pattern as pattern,
 				er.num_occur as num,
+				eg.group_fk as group_fk,
 				u.fname as fname, 
 				u.lname as lname,
 				pg.abbrev as abbrev,
@@ -207,8 +217,9 @@ class Event {
 				left outer join event_recur er on e.recur_fk = er.id
 				join public.user u on u.id = e.reserved_user_fk
 				join event_group eg on eg.event_fk = e.id
+				join public.group g on eg.group_fk = g.id 
 				join pg_timezone_names pg on pg.name = $2
-				where eg.group_fk = $1		
+				where eg.group_fk=ANY($1::int[])
 				and eg.status_fk = $3
 				and e.active = true
 				and (
@@ -217,8 +228,8 @@ class Event {
 					((COALESCE(er.end_dttm,now()) > now()))
 				)
 			order by e.start_dttm";
-				
-			$cursor = PgDatabase::psExecute($query, array($groupId, $localTz, $status));
+						
+			$cursor = PgDatabase::psExecute($query, array($groupIdList, $localTz, $status));
 			$counter = 0;
 			while ($row = pg_fetch_array($cursor)) {
 				$events[$counter]['date'] = $row['date'];
@@ -261,7 +272,8 @@ class Event {
 				$events[$counter]['registration'] = $row['registration'];
 				$events[$counter]['url'] = $row['url'];
 				$events[$counter]['regr_url'] = $row['regr_url'];
-				$events[$counter]['group_assoc'] = $groupId;
+				$events[$counter]['group_assoc'] = $row['group_fk'];
+				$events[$counter]['group_name'] = ($row['group_name'] === 'Network Group' ? 'All Network' : $row['group_name']);
 				$counter++;
 			}
 		}
