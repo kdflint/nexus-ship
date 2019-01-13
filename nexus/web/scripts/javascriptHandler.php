@@ -119,6 +119,7 @@ var CUSTOM_PROFILE_DATA = "";
 var IS_ADMIN = false;
 var SESSION_ORGS = [];
 var SESSION_PGPK = "";
+var SESSION_NGPK = "";
 var CLIPBOARD;
 	
 function showPriv1() {
@@ -239,7 +240,7 @@ function truncateString(str, length, ending) {
     if (ending == null) {  
       ending = '...';  
     }  
-    if (str.length > length) {  
+    if (typeof str !== 'undefined' && str.length > length) {  
       firstCut = str.substring(0, length);
       lastSpace = firstCut.lastIndexOf(splitChar);
       if (lastSpace > 0) {
@@ -499,6 +500,31 @@ function showUserEdit(username, fullname, uid) {
   document.getElementById("update-user-role-anchor").innerHTML = "Make Network Administrator";  
   document.getElementById("change-user-name").innerHTML = fullname;
 	window.location.assign(HTTP_WEB_PATH + "/nexus.php#openUserEdit");
+}
+
+function hideEventGroupFormElements() {
+	var eventElements = document.getElementById("event-group-block");
+	var notEventElements = document.getElementById("not-event-group-block");
+	var eventChangeButton = document.getElementById("event-group-change");
+	eventElements.style.display = "none";
+	notEventElements.style.display = "block";	
+	eventChangeButton.style.display = "inline";
+}
+
+function showEventGroupFormElements() {
+	var eventElements = document.getElementById("event-group-block");
+	var notEventElements = document.getElementById("not-event-group-block");
+	var eventChangeButton = document.getElementById("event-group-change");
+	eventElements.style.display = "block";
+	notEventElements.style.display = "none";	
+	eventChangeButton.style.display = "none";
+}
+
+function updateEventGroup(name, id) {
+	var eventGroupDisplay = document.getElementById("vizDisplay");
+	eventGroupDisplay.innerHTML = truncateString(name, 30, '...');
+	document.forms['schedule-form']['meeting-visibility'].value = id;
+	document.forms['schedule-form']['meeting-visibility-stub-' + id].checked = true;
 }
 
 function toggleRecurFormElements(override) {
@@ -831,7 +857,6 @@ function usernameValidCheck(input) {
 	xmlhttp.send();
 	return status;  					
 }
-
 
 function getLocalTz() {
 	// https://bitbucket.org/pellepim/jstimezonedetect
@@ -1312,8 +1337,11 @@ function resetEventForm() {
 	setFieldPassStyles(scheduleForm['registration-url'], "Registration Link (http://)");
 	setFieldPassStyles(scheduleForm['meeting-loc'], "Location");
 	setFieldPassStyles(scheduleForm['meeting-date-end'], "End Date");
+	hideEventGroupFormElements();
 	clearFileInput(document.getElementById('fileToUpload'));
+	document.getElementById('vizDisplay').innerHTML = "All Network";
 	document.getElementById('schedule-form-submit').innerHTML = "Add";
+	scheduleForm['meeting-visibility'].value = SESSION_NGPK;
 	scheduleForm['meeting-descr'].innerHTML = "";
 	scheduleForm['meeting-registr'].innerHTML = "";
 	scheduleForm['meeting-uuid'].value = "";
@@ -1988,14 +2016,8 @@ function populateEventForm(i) {
 	if (currentEvents[i].tz_extract_name) { eventForm['tzone-name'].value = currentEvents[i].tz_extract_name; }
 	if (currentEvents[i].uuid) { eventForm['old-meeting-uuid'].value = currentEvents[i].uuid; }	
 	if (currentEvents[i].contact) { eventForm['meeting-contact'].value = currentEvents[i].contact; }
-	if (currentEvents[i].group_assoc) { 
-		//eventForm['orig-group-assoc'].value = currentEvents[i].group_assoc;
-		if (currentEvents[i].group_assoc === SESSION_PGPK) {
-			eventForm['meeting-visibility'][1].checked = true;
-		} else {
-			eventForm['meeting-visibility'][0].checked = true;
-		}
- }
+	if (currentEvents[i].group_assoc) {	eventForm['meeting-visibility'].value = currentEvents[i].group_assoc; }
+	updateEventGroup(currentEvents[i].group_name, currentEvents[i].group_assoc);
 	if (currentEvents[i].recur) { 
 		var intervals = {daily:"0", weekly:"2", weekdays:"1"}; 
 		var pattern = currentEvents[i].recur_pattern;
@@ -2059,8 +2081,7 @@ function populateEventForm(i) {
 		currentEvents[i].year_end;
 	eventForm['meeting-date'].value = startDate;
 	eventForm['meeting-date-end'].value = endDate;
-	//document.getElementById('schedule-form-submit').innerHTML = "Update";
-	document.getElementById('schedule-form-submit').innerHTML = "Approve";
+	document.getElementById('schedule-form-submit').innerHTML = (currentEvents[i].status === "3" ? "Approve" : "Update");
 	document.getElementById('schedule-form-submit').disabled = false;
 	eventForm['meeting-uuid'].value = currentEvents[i].uuid;
 
@@ -2193,7 +2214,7 @@ function eventValidateAndSubmit(thisForm) {
   	setFieldErrorStyles(nameField, MEETING_NAME_REQUIRED);
     pass = false;
   }
-
+  
 	var tzChangeValue = eventForm['tzone-change'].value;
 	if (tzChangeValue == "true") {
 		setFieldErrorStyles(document.getElementById(thisForm + "-country-button"), COUNTRY);
