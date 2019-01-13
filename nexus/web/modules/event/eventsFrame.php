@@ -8,10 +8,9 @@
 		<div class="controlCol" style="left:15px;border-right: 1px solid #eeeeee;margin-top:-10px;">
 			<?php include(Utilities::getModulesRoot() . "/event/views/eventSearch.php"); ?>
 		</div>
-		<div id="current_schedule_display" class="displayCol" style="border:0px !important;overflow:visible;font-size:90%;">
+		<div id="current_schedule_display" class="displayCol" style="border:0px !important;overflow:visible;font-size:90%;margin-top:-18px;">
 				<div id="reservationTable" class=""></div>
 		 	<?php 
-			 		//include("views/eventListPending.php");
 			 		include("views/eventListFilter.php"); 
 			 		include("views/eventListRecorded.php"); 
 		 	?>

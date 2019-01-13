@@ -4,6 +4,7 @@ session_start();
 
 require_once("../../../src/framework/Util.php");
 require_once(Utilities::getSrcRoot() . "/schedule/Event.php");
+require_once(Utilities::getSrcRoot() . "/group/Group.php");
 
 // TODO - put authorization checker, session checker, error handling, etc. in a central place. These should go at the top of every processor.
 
@@ -274,15 +275,13 @@ function validateEvent($input) {
 	}
 	
 	// MEETING VISIBILITY
-	if (isset($input['meeting-visibility']) && $_SESSION['nexusContext'] === "ADV") {
-		if ($input['meeting-visibility'] === "public") {
-			$result['clean']['meeting-group'] = $_SESSION['pgpk'];
-		} else {
-			$result['clean']['meeting-group'] = $_SESSION['ngpk'];
-		}
+	if (isset($input['meeting-visibility']) && Utilities::validateGroupId($input['meeting-visibility'])) {
+		$result['clean']['meeting-group'] = $input['meeting-visibility'];
 	} else {
+		// TODO - breaks if we want to assign multiple network groups to a meeting. Also, obviously, breaks if index 0 is not the right group.
 		$result['clean']['meeting-group'] = $_SESSION['groups'][0]['id'];
 	}
+
 	
 	// MEETING RECURRENCE
 	if (isset($input['meeting-recur'])) {

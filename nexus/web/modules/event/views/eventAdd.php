@@ -82,7 +82,7 @@
       						</select>
 	      				</span>
 	      				<span class="repeat-unit" style="position:absolute;left:130px;">days</span>
-		      			<a id="repeat-done" class="pure-button button-menu" href="javascript:void(0)" onclick="toggleRecurFormElements(1);" style="float:right;background-color:#bbbbbb;width:70px;font-size:90%;margin-top:25px;color:#e6e6e6">Set</a>
+		      			<a id="repeat-done" class="pure-button button-menu" href="javascript:void(0)" onclick="toggleRecurFormElements(1);" style="float:right;background-color:transparent;width:70px;font-size:90%;margin-top:25px;color:#d27b4b;border:2px solid #999999;">OK</a>
 		      		</p>
  						</div>
 						<div id="location-block" style="display:block;">
@@ -104,6 +104,7 @@
 				</fieldset>
 				<input type="hidden" name="meeting-edit" value="false" />
 				<input type="hidden" name="meeting-recur-duration" value="false" />
+				<input type="hidden" name="meeting-visibility" value="<?php echo($_SESSION['pgpk']); ?>" />
 			</form>     
 			
 <?php if (!isset($_SESSION['timezone']) || $_SESSION['timezone'] == "undefined") { ?>

@@ -13,13 +13,13 @@
 	       				"<span class='detail' style='font-size:140%;'>" + message1 + "</span><br/>" +			
           		"</div>" +
           	"</div>" +
-          	"<div class='td-div'>" +
-          	"</div>" + 
-					"</div>";
+					"</div>" +
+					"<div id='body-rows' style='width:598px;'>";;
 			 	for (var i = 0; i < jsonObj.length; i++) { 
 			 		tableRows = tableRows + "<div id='recordingRow" + i + "' class='div-tr' style='position:relative;'></div>";
 			 		nextRecording = i; 
 			 	}
+			 	tableRows = tableRows + "</div>";
 			 	document.getElementById("reservationTable").innerHTML = tableRows;
 				if (nextRecording === undefined) {
 
@@ -38,6 +38,7 @@
 					"</div>";
 					document.getElementById("reservationTable").innerHTML = tableRows + tableRow
 				} else {
+					document.getElementById('body-rows').style = "width:598px;height:350px;overflow-y:auto;";
 			 		for (var i = 0; i < jsonObj.length; i++) {
 			 			message1 = '<?php echo _("Attendees"); ?>';
 			 			var d = new Date(parseInt(jsonObj[i].start[0]));

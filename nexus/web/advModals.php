@@ -122,4 +122,4 @@
 			<?php include("modules/login/views/emailConfirmForm.php") ?>
 		</div>
 	</div>
-	
+		
