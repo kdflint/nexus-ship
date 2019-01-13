@@ -169,6 +169,7 @@ $customProfileData = strlen($_SESSION['profile']) > 0 ? $_SESSION['profile'] : '
     	// TODO - create a global js init script - can format this as a php file that parses into javascript, look for example...
 			NETWORK_ID = "<?php echo $_SESSION['networkId']; ?>";
 			SESSION_PGPK = "<?php echo $_SESSION['pgpk']; ?>";
+			SESSION_NGPK = "<?php echo $_SESSION['ngpk']; ?>";
 			DEFAULT_FORUM = "<?php echo $_SESSION['defaultForumId']; ?>";
 			HTTP_WEB_PATH = "<?php echo Utilities::getHttpPath(); ?>";
 			HTTP_FORUM_PATH = "<?php echo Utilities::getForumHttpPath(); ?>";

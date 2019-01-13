@@ -72,24 +72,28 @@
 										  ? "<p style='font-size:90%'><span>Hosted for: " + jsonObj[i].group_name + "</span></p>" 
 										  : "<p style='font-size:90%'><span>Approved by: " + jsonObj[i].fname + " " + jsonObj[i].lname + "</span></p>")
 										) +
-										(jsonObj[i].bbb ? "" : "<p style='font-size:90%'><a href='#openBbbMeetingAdd' onclick='return populateEventTypeForm(\"" + jsonObj[i].uuid + "\",\"" + jsonObj[i].purpose + "\");'>Reserve Web Meeting</a></p>") +
+										(jsonObj[i].bbb 
+										? "<p style='font-size:90%'>" +
+										  (IS_ADMIN 
+										  ? "<a href='<?php echo(Utilities::getHttpPath()); ?>/modules/schedule/control/scheduleDeleteBbbProcessor.php?uuid=" + jsonObj[i].uuid + "' onclick='return confirm(\"Please confirm this Nexus Web Meet room reservation deletion.\\r\\n (Your event will stay on the calendar.)\");' style='margin-right:10px;'><span class='fa fa-trash-o'</span></a>" 
+										  : "") +
+										  "<a href='" + meetingPass + "' target='_blank'><b>Start/Join Web Meeting</b></a>" +
+										  "<span style='margin-left:20px;margin-right:20px;'><b></b></span>" +
+		          			    //(showClipboardButton
+		          			    (false
+		          			    ? "<button class='guest-pass-button' id='guest-pass-button0' data-clipboard-text='" + guestPass + "' onclick='' title='Click to copy'>Copy Guest Pass to Clipboard</button>"
+		          			    : "<button onclick='alert(\"Share this link to invite a guest to this meeting.\\r\\n\\r\\n" + guestPass + "\");' title='Click to show pass'>Show Guest Pass</button>"
+		          			    ) +
+		          			    "</p>"										
+										: "<p style='font-size:90%'><a href='#openBbbMeetingAdd' onclick='return populateEventTypeForm(\"" + jsonObj[i].uuid + "\",\"" + jsonObj[i].purpose + "\");'>Reserve Web Meeting</a></p>"
+										) +
          					"</span>" +
          				"</div>" +
 		          "</div>" +
+		          
 		          "<div class='td-div' style='position:absolute;left:530px;top:-10px;'>" +
-		          	(jsonObj[i].bbb 
-		          		? "<p><a href='" + meetingPass + "' target='_blank'>Start/Join Web Meeting</a>" +
-		          			(IS_ADMIN ? "<a href='<?php echo(Utilities::getHttpPath()); ?>/modules/schedule/control/scheduleDeleteBbbProcessor.php?uuid=" + jsonObj[i].uuid + "' onclick='return confirm(\"Please confirm this room reservation delete. (Your event will stay on the calendar.)\");' style='float:right;'><span class='fa fa-trash-o'</span></a>" : "") +
-		          			"</p><p><span style='font-size:80%'><b>Guest Pass</b> (Share this link with your attendees)" + 
-		          			(showClipboardButton
-		          				? "<br/><button class='guest-pass-button' id='guest-pass-button0' data-clipboard-text='" + guestPass + "' onclick='' title='Click to copy'>Copy Pass to Clipboard</button>" +
-				          			"&nbsp;<button onclick='alert(\"" + guestPass + "\");' title='Click to show pass'>Show Pass</button></p>"
-		          				: "<br/><button onclick='alert(\"" + guestPass + "\");' title='Click to show pass'>Show Pass</button></p>"
-		          			)
-		          		: ""
-		          	) +
 		          "</div>";
-       						// +
+
      				document.getElementById("reservationRow" + i).innerHTML = tableEvent; 
      			}
      			CLIPBOARD = new Clipboard('.guest-pass-button');

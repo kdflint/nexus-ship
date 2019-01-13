@@ -119,6 +119,7 @@ var CUSTOM_PROFILE_DATA = "";
 var IS_ADMIN = false;
 var SESSION_ORGS = [];
 var SESSION_PGPK = "";
+var SESSION_NGPK = "";
 var CLIPBOARD;
 	
 function showPriv1() {
@@ -523,6 +524,7 @@ function updateEventGroup(name, id) {
 	var eventGroupDisplay = document.getElementById("vizDisplay");
 	eventGroupDisplay.innerHTML = truncateString(name, 30, '...');
 	document.forms['schedule-form']['meeting-visibility'].value = id;
+	document.forms['schedule-form']['meeting-visibility-stub-' + id].checked = true;
 }
 
 function toggleRecurFormElements(override) {
@@ -1335,8 +1337,11 @@ function resetEventForm() {
 	setFieldPassStyles(scheduleForm['registration-url'], "Registration Link (http://)");
 	setFieldPassStyles(scheduleForm['meeting-loc'], "Location");
 	setFieldPassStyles(scheduleForm['meeting-date-end'], "End Date");
+	hideEventGroupFormElements();
 	clearFileInput(document.getElementById('fileToUpload'));
+	document.getElementById('vizDisplay').innerHTML = "All Network";
 	document.getElementById('schedule-form-submit').innerHTML = "Add";
+	scheduleForm['meeting-visibility'].value = SESSION_NGPK;
 	scheduleForm['meeting-descr'].innerHTML = "";
 	scheduleForm['meeting-registr'].innerHTML = "";
 	scheduleForm['meeting-uuid'].value = "";
@@ -2076,8 +2081,7 @@ function populateEventForm(i) {
 		currentEvents[i].year_end;
 	eventForm['meeting-date'].value = startDate;
 	eventForm['meeting-date-end'].value = endDate;
-	//document.getElementById('schedule-form-submit').innerHTML = "Update";
-	document.getElementById('schedule-form-submit').innerHTML = "Approve";
+	document.getElementById('schedule-form-submit').innerHTML = (currentEvents[i].status === "3" ? "Approve" : "Update");
 	document.getElementById('schedule-form-submit').disabled = false;
 	eventForm['meeting-uuid'].value = currentEvents[i].uuid;
 
