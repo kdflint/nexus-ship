@@ -50,6 +50,7 @@
        	}	else {
        		if (!IS_NOW) {
        			playSound('demonstrative');
+       			
        			IS_NOW = true;
 					}
 					message1 = '<?php echo _("Guest Pass"); ?>';
@@ -86,11 +87,12 @@
 	        			"</span>" +
           		"</div>" +
           	"</div>";	
-          document.getElementById("join_control_mode").innerHTML = "<a href='modules/meeting/control/joinMeetingProcessor.php?id=" + nowMeeting.uuid + "&type=" + nowMeeting.mtype + "' target='_blank'  class='level1-control'><span class='fa fa-sign-in fa-3x' ></span></a>";
+          document.getElementById("join_control_mode").innerHTML = "<a href='modules/meeting/control/joinMeetingProcessor.php?id=" + nowMeeting.uuid + "&type=" + nowMeeting.mtype + "' target='_blank' class='join_meeting_button level1-control'>JOIN<br/>MEETING</a>";
+          //<span class='fa fa-sign-in fa-3x' ></span>
        	}  
        	document.getElementById("nowRow0").innerHTML = nowEvent;  
         var eventHeight = document.getElementById('nowEventDetail').style.height;
-				document.getElementById('nowTable').style.height = eventHeight;    			
+				document.getElementById('nowTable').style.height = eventHeight;    	
        	
        	// write each future event into its row container
 				if (nextMeetings === undefined) {
