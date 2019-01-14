@@ -389,6 +389,32 @@ form {
 	font-size:90%;
 }
 
+.join_meeting_button {
+  background-color: #d27b4b;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 10px;
+  margin-left: 550px !important;
+  /*transition: 0.5s;*/
+  border-radius: 6px;
+  opacity: .9;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+.join_meeting_button:hover {
+  /*background-color: #f7f8ef;*/
+  /*background-color: #d27b4b;*/
+  /*color: #d27b4b;*/
+  opacity: 1;
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
 /* DATE */
 
 .event, .user {
