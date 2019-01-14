@@ -1,3 +1,11 @@
+<?php
+header("Content-Type: text/css");
+header("Cache-Control: max-age=604800, public");
+
+session_start();
+
+?>
+
 /* CORE LAYOUT                                                                    *
  * http://matthewjamestaylor.com/blog/keeping-footers-at-the-bottom-of-the-page   */
 

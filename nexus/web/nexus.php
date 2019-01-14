@@ -128,7 +128,7 @@ $customProfileData = strlen($_SESSION['profile']) > 0 ? $_SESSION['profile'] : '
 		<link rel="stylesheet" href="//yui-s.yahooapis.com/pure/0.6.0/pure-min.css">
 		<!-- TODO - grids-responsive (below) still used? -->
 		<link rel="stylesheet" href="//yui-s.yahooapis.com/pure/0.6.0/grids-responsive-min.css">
-    <link rel="stylesheet" href="styles/nexus.css" type="text/css" />
+    <link rel="stylesheet" href="styles/nexusCssHandler.php" type="text/css" />
     <link rel="stylesheet" href="styles/modal.css" type="text/css" />
     <!--<link rel="stylesheet" href="//cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css" type="text/css" />-->
     <!-- LEFT OFF - lost arrows - I think they are white -->
