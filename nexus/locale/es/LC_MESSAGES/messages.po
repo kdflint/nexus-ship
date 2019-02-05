@@ -21,6 +21,15 @@ msgstr ""
 msgid "Your session has timed out."
 msgstr "Tu sesión ha expirado."
 
+msgid "SCHEDULE"
+msgstr "PROGRAMAR"
+
+msgid "SEATS"
+msgstr "ASIENTOS"
+
+msgid "Broadcast a presentation or online class"
+msgstr "Transmite una presentación o clase en línea."
+
 msgid "Confirm password"
 msgstr "Confirmar contraseña"
 
@@ -335,10 +344,6 @@ msgstr ""
 #: web/modules/schedule/views/meetingTypeTooltip.php:8
 msgid "Webinar"
 msgstr "Seminario web"
-
-#: web/modules/schedule/views/meetingTypeTooltip.php:8
-msgid "Broadcast a presentation in \"listen-only\" mode for guests."
-msgstr "Transmite una presentación en modo \"solo escuchar\" para invitados."
 
 #: web/modules/schedule/views/joinAdd.php:5
 msgid "Start"

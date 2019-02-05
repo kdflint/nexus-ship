@@ -95,7 +95,7 @@ if ($cleanMessage === "No message") {
 }
 
 if(isset($_GET['oid']) && Organization::validateOrganizationUid($_GET['oid'])) {
- 	$cleanNetworkId = $_GET['oid'];		
+ 	$cleanNetworkId = $_GET['oid'];	
 }
 
 if ($cleanNetworkId == 'userdemo') {
@@ -180,7 +180,8 @@ if(Utilities::isSessionValid() && !Utilities::isSessionPublic()) {
   	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 		<link rel="stylesheet" href="//yui-s.yahooapis.com/pure/0.6.0/pure-min.css">
-    <link rel="stylesheet" href="styles/nexus.css" type="text/css" />
+    <link rel="stylesheet" href="styles/nexusCssHandler.php" type="text/css" />
+    <link rel="shortcut icon" href="//northbridgetech.org/images/favicon.ico" type="image/x-icon" />
     <script src="scripts/javascriptHandler.php" type="text/javascript" ></script>
   	<!-- http://www.featureblend.com/javascript-flash-detection-library.html -->
  		<script src="scripts/lib/flash_detect.js"></script>
@@ -193,7 +194,7 @@ if(Utilities::isSessionValid() && !Utilities::isSessionPublic()) {
   	<script src="scripts/lib/jquery.cookie.js" language="javascript"></script>
 
     <link rel="icon" href="images/NB_icon.png" />
-    <title>Northbridge Nexus | Login</title> 
+    <title>Nexus Login</title> 
     
    	<script> 
    		
@@ -218,6 +219,7 @@ if(Utilities::isSessionValid() && !Utilities::isSessionPublic()) {
 				if (<?php echo $demoSession; ?>) {
 					loginForm.elements['password'].disabled = true;
 					loginForm.elements['password'].placeholder = "demo";
+					loginForm.elements['login-remember'].checked = false;
 					document.getElementById("username-field-label").innerHTML = "Your Name";
 					document.getElementById("username-instruction-field-label").innerHTML = "";
 					document.getElementById("login-form-submit").innerHTML = "View Demo";
@@ -239,7 +241,6 @@ if(Utilities::isSessionValid() && !Utilities::isSessionPublic()) {
 				} else if (<?php echo $xferred; ?>){
 					loginForm.elements['uid'].value = "<?php echo $xferUsername; ?>";
 					loginForm.elements['password'].value = "passthru1";
-					loginForm.elements['login-remember'].checked = true;
 					document.getElementById("login-form-submit").click();					
 				}
 			});
@@ -304,9 +305,9 @@ if(Utilities::isSessionValid() && !Utilities::isSessionPublic()) {
        				  <input class="form-input" type="password" name="password" value="" maxlength="25"/>	
        				</fieldset>
        				<input id="localTz" name="timezone" type="hidden" value="">
-       				<a id="login-form-submit" type="submit" class="pure-button pure-button-primary" style="width:45%;" href="javascript:void(0);" onclick="loginValidateAndSubmit();"><?php echo _("Sign In"); ?></a>
-        			<a id="remember-me-toggle" class="pure-button pure-button-secondary" onclick="toggleRememberCheckbox();" style="width:45%;" <?php echo($disabled);?> ><span id="fakeCheckBox" class="fa fa-square-o" style="color:#004d62;padding-right:4px;"></span> <?php echo _("Remember Me"); ?></a>
-        			<input id="login-remember" name="login-remember" type="checkbox" style="visibility:hidden;"/>      
+       				<a id="login-form-submit" type="submit" class="pure-button pure-button-primary" style="width:94%;" href="javascript:void(0);" onclick="loginValidateAndSubmit();"><?php echo _("Sign In"); ?></a>
+        			<!--<a id="remember-me-toggle" class="pure-button pure-button-secondary" onclick="toggleRememberCheckbox();" style="width:45%;" <?php echo($disabled);?> ><span id="fakeCheckBox" class="fa fa-square-o" style="color:#004d62;padding-right:4px;"></span> <?php echo _("Remember Me"); ?></a>-->
+        			<input id="login-remember" name="login-remember" type="checkbox" style="visibility:hidden;" checked />      
         			<div id="social-logins"> 
     						<div class="or-separator">
 	        				<span class="or-separator-label">OR</span>
