@@ -149,7 +149,7 @@ class User {
 		$query = "update public.user set suspend_dttm = now(), status_fk = '2', update_dttm = now(), username = username || '__' || id where id = $1";
 		return PgDatabase::psExecute($query, array($id));
 	}
-
+	
 	public static function userNameExists($name) {
 		$query = "select exists (select true from public.user where lower(username) = lower($1) and status_fk in (1,3))";
 		$row = pg_fetch_row(PgDatabase::psExecute($query, array($name)));

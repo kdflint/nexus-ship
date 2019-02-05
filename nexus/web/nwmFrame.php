@@ -1,5 +1,6 @@
 				<div class="frameColLeft">
-					<?php include("scripts/noscript.php"); ?>				
+					<?php include("scripts/noscript.php"); ?>		
+
 					<div id="reserveList" style="display:block;">
 						<div id="schedule_display">
 							<?php include("modules/schedule/views/reservationsList.php"); ?>
