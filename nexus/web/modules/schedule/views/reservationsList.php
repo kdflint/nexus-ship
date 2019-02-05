@@ -74,7 +74,7 @@
           			"<span class='descr'>" +
           				"<p>" + nowMeeting.mtypdisplay + " reserved by " + reservedBy +
 	        				(((IS_ADMIN || nowMeeting.adder == nowMeeting.sessionUser) && nowMeeting.sessionUser != <?php echo(Utilities::getDemoUidpk()); ?>) ? "<a href='modules/schedule/control/eventDeleteProcessor.php?id=" + nowMeeting.uuid + "' onclick='return confirm(\"Please confirm this delete.\");'><span class='fa fa-trash-o' style='color:#d27b4b;margin-left:10px;'></span></a></p>" : " ") +
-         					"<p style='font-size:90%;'><b>" + message1 + "</b> (Share this link with your attendees)</p>" +	        				
+         					"<p style='font-size:90%;'><b>" + message1 + "</b> (Share this link with your guests.)</p>" +	        				
 	        				
 		          			(showClipboardButton
 		          				? "<button id='guest-pass0' class='guest-pass-button' id='guest-pass-button0' data-clipboard-text='" + guestPass + "' onclick='' title='Click to copy'>Copy Pass to Clipboard</button>" +
@@ -137,7 +137,7 @@
           					((jsonObj[i].adder == <?php echo(Utilities::getDemoUidpk()); ?>) ? '<?php echo($_SESSION['lname']); ?>' : jsonObj[i].lname) + 
           					(((IS_ADMIN || jsonObj[i].adder == jsonObj[i].sessionUser) && jsonObj[i].sessionUser != <?php echo(Utilities::getDemoUidpk()); ?>) ? "<a href='modules/schedule/control/eventDeleteProcessor.php?id=" + jsonObj[i].uuid + "' onclick='return confirm(\"" + message2 + "\");'><span class='fa fa-trash-o' style='margin-left:10px;color:#d27b4b;'></span></a>" : " ") +
 										"</p>" +
-         						"<p style='font-size:90%;'><b>" + message1 + "</b> (Share this link with your attendees)</p>" +	
+         						"<p style='font-size:90%;'><b>" + message1 + "</b> (Share this link with your guests.)</p>" +	
          						
          						(showClipboardButton
 		          				? "<button class='guest-pass-button' id='guest-pass-button0' data-clipboard-text='" + guestPass + "' onclick='' title='Click to copy' >Copy Pass to Clipboard</button>" +
@@ -188,20 +188,7 @@
 <div id="reservationTable" class="table-div">
 </div>
 
-<table class="pure-table">
-	<tr>
-		<td><div class='event'><span class="fa fa-map-marker fa-2x"></span></div></td>
-		<td>
-			<div class="meeting">
-				<span class='purpose'><?php echo _("Team Pass"); ?></span><br/>
-				<span class='descr' style='font-size:90%;' >
-					<p><?php echo _("Enrolled team members can use this link to schedule and attend any event in this Nexus Web Meet room."); ?></p>
-					<p id="team-pass"><?php echo Utilities::getHttpPath(); ?>/login.php?oid=<?php echo $_SESSION['orgUid']; ?></p>
-				</span>
-			</div>
-		</td>
-	</tr>
-</table>
+<?php include("modules/schedule/views/one-click-join-table.php"); ?>
 
 <script> 
 	// Set the refresh interval to the default for the first refresh

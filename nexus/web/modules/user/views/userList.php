@@ -78,3 +78,6 @@
 <div id="userTable" class="table-div">
 	<script> getUserList('<?php echo $_SESSION['role']; ?>'); </script>
 </div>
+
+<?php include("modules/schedule/views/one-click-join-table.php"); ?>
+

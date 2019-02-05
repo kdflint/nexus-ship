@@ -34,12 +34,15 @@ if (!Utilities::isSessionValid()) {
 	}
 }
 
+$pageTitle = "Web Meet";
+
 if ($_SESSION['nexusContext'] == "PUB") {
 	header("location:login.php?oid=" . $_SESSION['orgUid']);
 	exit(0);	
 }
 
 if ($_SESSION['nexusContext'] == "ADV") {
+	$pageTitle = "Advantage";
 	$sessionContextAdv = "true";
 	require_once(Utilities::getModulesRoot() . "/forum/forum_integration.php");
 	$user->session_begin();
@@ -134,6 +137,7 @@ $customProfileData = strlen($_SESSION['profile']) > 0 ? $_SESSION['profile'] : '
     <!-- LEFT OFF - lost arrows - I think they are white -->
 		<!--<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.13/r-2.1.1/rr-1.2.0/datatables.min.css"/>		-->
     <link rel="stylesheet" href="styles/datatables.css" type="text/css" />
+    <link rel="shortcut icon" href="//northbridgetech.org/images/favicon.ico" type="image/x-icon" />
 
 
     <!-- New way to include font awesome - why?? -->
@@ -162,7 +166,7 @@ $customProfileData = strlen($_SESSION['profile']) > 0 ? $_SESSION['profile'] : '
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js"></script>
 
   	 	 	
-    <title>Northbridge Nexus</title> 
+    <title>Nexus <?php echo($pageTitle ); ?></title> 
 
     <script type="text/javascript">
 		
