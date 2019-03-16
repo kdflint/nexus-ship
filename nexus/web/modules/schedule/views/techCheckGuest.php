@@ -2,8 +2,8 @@
 	<tr>
   	<td>
   		<div class="event">
-  			<span class="date">System</span><br/>
-  			<span>Details</span>
+  			<span class="date"><?php echo _('system'); ?></span><br/>
+  			<span><?php echo _('details'); ?></span>
 			</div>
 		</td>
     <td>
@@ -36,7 +36,7 @@
 		</td>
     <td>
     	<div class="move-it-up">
-      <a href="javascript:void(0)" onclick="document.getElementById('tech_check_control').click();" style="float:right;margin-right:15px;">Close</a>
+      <a href="javascript:void(0)" onclick="document.getElementById('tech_check_control').click();" style="float:right;margin-right:15px;"><?php echo _('close'); ?></a>
       <a href="javascript:void(0)" onclick="refreshCheckSummary();" style="float:right;margin-right:15px;"><span class="fa fa-refresh fa-lg"></span></a>
     </div>
  		</td>

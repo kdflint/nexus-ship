@@ -6,8 +6,6 @@ require_once(Utilities::getSrcRoot() . "/organization/Organization.php");
 require_once(Utilities::getSrcRoot() . "/schedule/Event.php");
 require_once(Utilities::getLibRoot() . '/facebook/Facebook/autoload.php' );
 
-Utilities::setUserLanguageEnv();
-
 $fb = new Facebook\Facebook([
   'app_id' => Utilities::getFbAppId(),
   'app_secret' => Utilities::getFbAppSecret(),
@@ -51,6 +49,8 @@ if(isset($_GET['logoutAll'])) {
 	session_start();
 }
 
+Utilities::setUserLanguageEnv();
+
 $remembered = $enrolled = $xferred = "false";
 $cleanMessage = $cleanMessageLink = "";
 $cleanIcon = "";
@@ -78,7 +78,7 @@ if(isset($_GET['error']) && Utilities::isSafeCharacterSet($_GET['error'])) {
 	$cleanMessage = $_GET['error'];
 	if (isset($_GET['errorlink'])) {
 		// Hack to serve only one case
-		$cleanMessageLink = "&nbsp;&nbsp;<a href='javascript:void(0)' onclick=\"" . $_GET['errorlink'] . "\">Details</a>";
+		$cleanMessageLink = "&nbsp;&nbsp;<a href='javascript:void(0)' onclick=\"" . $_GET['errorlink'] . "\">" . _("details") . "</a>";
 	}
 	$cleanIcon = "fa fa-info-circle fa-2x";
 } else if(isset($_GET['logout'])) {
@@ -220,14 +220,15 @@ if(Utilities::isSessionValid() && !Utilities::isSessionPublic()) {
 					loginForm.elements['password'].disabled = true;
 					loginForm.elements['password'].placeholder = "demo";
 					loginForm.elements['login-remember'].checked = false;
-					document.getElementById("username-field-label").innerHTML = "Your Name";
+					//document.getElementById("username-field-label").innerHTML = "Your Name";
+					document.getElementById("username-field-label").innerHTML = "<?php echo(_('demo_name')); ?>";
 					document.getElementById("username-instruction-field-label").innerHTML = "";
-					document.getElementById("login-form-submit").innerHTML = "View Demo";
+					document.getElementById("login-form-submit").innerHTML = "<span id='view-demo'></span><?php echo(_('view_demo')); ?>";
 					document.getElementById("login-form-submit").onclick = demoValidateAndSubmit;
 					document.getElementById("password-form-submit").onclick = "";
 					document.getElementById("username-form-submit").onclick = "";
-					document.getElementById("remember-me-toggle").onclick = "";
 					document.getElementById("login-module-name").innerHTML = "Web Meet Demo";
+					document.getElementById("network-name").innerHTML = "<?php echo $networkName; ?> <?php echo(_('demo')); ?>";
 					document.getElementById("social-logins").style.display = "none";
 				}
 				if (<?php echo $guestPass; ?>) {
@@ -356,7 +357,7 @@ if(Utilities::isSessionValid() && !Utilities::isSessionPublic()) {
         				<input class="form-input" name="uid" value="" maxlength="25" style="width:100%;margin-bottom:10px !important;" autofocus>
         				<span id="username-email-label">Email</span>
      						<input class="form-input" type="email" name="email" maxlength="50" style="width:100%;margin-bottom:10px !important;">
-     						<p style="min-height:40px;"><span id='tech_check_summary' class='descr' style='font-style:italic;' ><span class='fa fa-spinner fa-spin fa-lg'></span> Checking your system compatibility...</span><a href='javascript:void(0);' onclick='document.getElementById("tech_check_control").click();' style='font-size:90%;margin-left:5px;'> Details</a></p>
+     						<p style="min-height:40px;"><span id='tech_check_summary' class='descr' style='font-style:italic;' ><span class='fa fa-spinner fa-spin fa-lg'></span> <?php echo _('checking'); ?>...</span><a href='javascript:void(0);' onclick='document.getElementById("tech_check_control").click();' style='font-size:90%;margin-left:5px;'> <?php echo _('details'); ?></a></p>
         				<a id="login-form-submit" class="pure-button pure-button-primary pure-button-disabled" style="width:100%;border-radius:6px;min-height:38px;" href="javascript:void(0);" onclick="guestValidateAndSubmit('<?php echo $cleanNetworkId; ?>', '<?php echo $cleanMeetingId; ?>');" >Fetching...</a>  
         				<input id="localTz" name="timezone" type="hidden" value="">     		
              		<?php include(Utilities::getModulesRoot() . "/event/views/eventDetailSummary.php"); ?>	
@@ -384,7 +385,7 @@ if(Utilities::isSessionValid() && !Utilities::isSessionPublic()) {
      		</div>
      		
      		<div id="customization-area" class="loginColRight">
-      		<span style="clear:right;float:right;text-align:right;margin-top:20px;"><?php echo $networkName; ?></span>
+      		<span id="network-name" style="clear:right;float:right;text-align:right;margin-top:20px;"><?php echo $networkName; ?></span>
       		<span style="clear:right;float:right;margin-top:20px;"><img src="<?php echo Utilities::getPartnerImageRoot(); ?><?php echo $networkLogo; ?>" /></span>
       		<?php if ($cleanNetworkId === "2ab2f516") { ?>
       			<p style="clear:right;float:right;text-align:right;margin-top:20px;"><a href="http://www.idra.org/who-we-are/privacy-policy/" target="_blank" >IDRA Privacy Policy</a></p>

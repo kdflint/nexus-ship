@@ -21,6 +21,102 @@ msgstr ""
 msgid "Your session has timed out."
 msgstr "Your session has timed out."
 
+msgid "Schedule"
+msgstr "SCHEDULE"
+
+msgid "Seats"
+msgstr "SEATS"
+
+msgid "join_link_text"
+msgstr "Seat holders can use this link to schedule and attend any meeting."
+
+msgid "pass_label"
+msgstr "One-Click Join"
+
+msgid "bookmark_notice"
+msgstr "One-Click Join (Ctrl-D to bookmark)"
+
+msgid "format_webinar"
+msgstr "Broadcast a presentation or online class."
+
+msgid "confirm_pass"
+msgstr "Confirm password"
+
+msgid "pending_enroll"
+msgstr "Pending Enrollment"
+
+msgid "Already have an account"
+msgstr "Already have an account?"
+
+msgid "demo_name"
+msgstr "Your name"
+
+msgid "meeting_time_past"
+msgstr "Your meeting time is in the past."
+
+msgid "view_demo"
+msgstr "View Demo"
+
+msgid "demo"
+msgstr "Demonstration"
+
+msgid "featuring"
+msgstr "Featuring"
+
+msgid "bookmark_shortcut"
+msgstr "Ctrl-D to bookmark"
+
+msgid "join"
+msgstr "JOIN"
+
+msgid "meeting"
+msgstr "MEETING"
+
+msgid "show_pass"
+msgstr "Show Pass"
+
+msgid "share_link"
+msgstr "Share this link with your guests."
+
+msgid "details"
+msgstr "Details"
+
+msgid "close"
+msgstr "Close"
+
+msgid "pending"
+msgstr "Pending"
+
+msgid "enrollment"
+msgstr "Enrollment"
+
+msgid "compatible_message"
+msgstr "Your system is compatible to participate in this meeting."
+
+msgid "missing_features"
+msgstr "Your system may not provide certain meeting management features."
+
+msgid "connection_quality"
+msgstr "Your system may show connection quality limitations."
+
+msgid "system"
+msgstr "System"
+
+msgid "checking"
+msgstr "Checking your system compatibility"
+
+msgid "copy_pass"
+msgstr "Copy pass to clipboard."
+
+msgid "reserved_by"
+msgstr "reserved by"
+
+msgid "confirm_delete"
+msgstr "Please confirm this delete."
+
+msgid "copied"
+msgstr "Copied"
+
 msgid "Confirm password"
 msgstr "Confirm password"
 
@@ -175,7 +271,7 @@ msgstr "Email is required."
 
 #: web/scripts/javascriptHandler.php:15
 msgid "One Moment"
-msgstr "One Moment"
+msgstr "One moment"
 
 #: web/scripts/javascriptHandler.php:16
 msgid "To test, save your changes"
@@ -251,14 +347,6 @@ msgstr "Click the calendar to reserve this room for a future date."
 msgid "Team Pass"
 msgstr "Team Pass"
 
-#: web/modules/schedule/views/reservationsList.php:171
-msgid ""
-"Your enrolled team members can use that link to schedule and attend any "
-"Nexus Web Meet event."
-msgstr ""
-"Your enrolled team members can use that link to schedule and attend any "
-"Nexus Web Meet event."
-
 #: web/modules/schedule/views/reservationAdd.php:6
 msgid "Reservation"
 msgstr "Reservation"
@@ -325,10 +413,6 @@ msgstr ""
 #: web/modules/schedule/views/meetingTypeTooltip.php:8
 msgid "Webinar"
 msgstr "Webinar"
-
-#: web/modules/schedule/views/meetingTypeTooltip.php:8
-msgid "Broadcast a presentation in \"listen-only\" mode for guests."
-msgstr "Broadcast a presentation in \"listen-only\" mode for guests."
 
 #: web/modules/schedule/views/joinAdd.php:5
 msgid "Start"
