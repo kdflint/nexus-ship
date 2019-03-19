@@ -2348,7 +2348,7 @@ function validateTimeFuture(dateField, time, zoneOffset) {
   var nowEpoch = Date.now();
   var reserveEpoch = Date.parse(createTimeStampString(dateField.value, time + zoneOffset));
   if (nowEpoch > reserveEpoch) {
-  	alert("Your meeting time is in the past.");
+  	alert("<?php echo(_('meeting_time_past')); ?>");
   	setFieldErrorStyles(dateField, "mm/dd/yyyy");
   	return false;
 	}

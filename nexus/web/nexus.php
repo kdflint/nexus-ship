@@ -344,7 +344,7 @@ $customProfileData = strlen($_SESSION['profile']) > 0 ? $_SESSION['profile'] : '
 			
 			function toggleJoinDisplay() {
 	  		$( "#join_display" ).toggle( "blind" );
-	  		$( "#join_control" ).toggle();
+	  		$( "#join_control_real" ).toggle();
 	  	}		
 	  	
 	  	function toggleNewEventDisplay() {

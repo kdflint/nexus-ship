@@ -21,14 +21,105 @@ msgstr ""
 msgid "Your session has timed out."
 msgstr "Tu sesión ha expirado."
 
-msgid "SCHEDULE"
+msgid "Schedule"
 msgstr "PROGRAMAR"
 
-msgid "SEATS"
+msgid "Seats"
 msgstr "ASIENTOS"
 
-msgid "Broadcast a presentation or online class"
+msgid "join_link_text"
+msgstr ""
+"Los miembros de tu equipo inscritos pueden usar ese enlace para programar y "
+"asistir a cualquier evento Nexus Web Meet."
+
+msgid "pass_label"
+msgstr "Un clic en Unirse"
+
+msgid "bookmark_notice"
+msgstr "Un clic en Unirse (Ctrl-D para marcar)"
+
+msgid "format_webinar"
 msgstr "Transmite una presentación o clase en línea."
+
+msgid "confirm_pass"
+msgstr "Confirmar contraseña"
+
+msgid "pending_enroll"
+msgstr "Inscripción pendiente"
+
+msgid "Already have an account"
+msgstr "Ya tienes una cuenta?"
+
+msgid "demo_name"
+msgstr "Su nombre"
+
+msgid "meeting_time_past"
+msgstr "Su tiempo de reunión es en el pasado."
+
+msgid "view_demo"
+msgstr "Ver demostración"
+
+msgid "demo"
+msgstr "Demostración"
+
+msgid "featuring"
+msgstr "Ofreciendo"
+
+msgid "bookmark_shortcut"
+msgstr "Ctrl-D para marcar"
+
+msgid "join"
+msgstr "UNIRSE"
+
+msgid "meeting"
+msgstr "REUNIÓN"
+
+msgid "show_pass"
+msgstr "Mostrar pase"
+
+msgid "share_link"
+msgstr "Comparte este enlace con tus invitados."
+
+msgid "details"
+msgstr "Detalles"
+
+msgid "close"
+msgstr "Cerca"
+
+msgid "pending"
+msgstr "Pendiente"
+
+msgid "enrollment"
+msgstr "Inscripción"
+
+msgid "compatible_message"
+msgstr "Su sistema es compatible para participar en esta reunión."
+
+msgid "missing_features"
+msgstr ""
+"Es posible que su sistema no proporcione ciertas funciones de gestión de "
+"reuniones."
+
+msgid "connection_quality"
+msgstr "Su sistema puede mostrar limitaciones de calidad de conexión."
+
+msgid "system"
+msgstr "Sistema"
+
+msgid "checking"
+msgstr "Comprobando la compatibilidad de su sistema"
+
+msgid "copy_pass"
+msgstr "Copiar pase al portapapeles."
+
+msgid "reserved_by"
+msgstr "reservado por"
+
+msgid "confirm_delete"
+msgstr "Por favor confirma esta eliminación."
+
+msgid "copied"
+msgstr "Copiado"
 
 msgid "Confirm password"
 msgstr "Confirmar contraseña"
@@ -268,14 +359,6 @@ msgstr ""
 #: web/modules/schedule/views/reservationsList.php:168
 msgid "Team Pass"
 msgstr "Pase de equipo"
-
-#: web/modules/schedule/views/reservationsList.php:171
-msgid ""
-"Your enrolled team members can use that link to schedule and attend any "
-"Nexus Web Meet event."
-msgstr ""
-"Los miembros de tu equipo inscritos pueden usar ese enlace para programar y "
-"asistir a cualquier evento Nexus Web Meet."
 
 #: web/modules/schedule/views/reservationAdd.php:6
 msgid "Reservation"

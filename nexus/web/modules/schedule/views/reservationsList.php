@@ -1,11 +1,12 @@
 <script>
 	function getReservationList(referenceTime) {
+	    console.log("refreshing at " + referenceTime);
 		var xmlhttp = getXmlHttpRequest();
 		// TODO - move below into javascriptHandler.php and remove duplicate code in eventListFilter.php 
 		CLIPBOARD = new Clipboard('.guest-pass-button');
 		CLIPBOARD.on('success', function(e) {
 			$(".guest-pass-button").tooltip({content: ""});
-			$(e.trigger).tooltip({content: "Copied!"});
+			$(e.trigger).tooltip({content: "<?php echo _('copied'); ?>!"});
   		$(e.trigger).tooltip("open");
 		});
 		xmlhttp.onreadystatechange=function() {
@@ -46,7 +47,12 @@
 			       	"<div class='meeting'>" +
           			"<span class='purpose'>" + message2 + "</span>" + 
           		"</div>" +
-          	"</div>";	 
+          	"</div>";
+            document.getElementById("join_control_real").className = "level1-control";
+            document.getElementById("join_control_real").innerHTML = "<span class='fa fa-circle-o-notch fa-2x' ></span>";
+            document.getElementById("join_control_real").href = "javascript:void(0);";
+            document.getElementById("join_control_real").setAttribute('target','');
+            document.getElementById("join_control_real").setAttribute('onclick',"$('#join_control').trigger('click');")
        	}	else {
        		if (!IS_NOW) {
        			playSound('demonstrative');
@@ -72,23 +78,26 @@
 			        "<div class='meeting'>" +
           			"<span class='purpose'>" + nowMeeting.purpose + "</span><br/>" +
           			"<span class='descr'>" +
-          				"<p>" + nowMeeting.mtypdisplay + " reserved by " + reservedBy +
-	        				(((IS_ADMIN || nowMeeting.adder == nowMeeting.sessionUser) && nowMeeting.sessionUser != <?php echo(Utilities::getDemoUidpk()); ?>) ? "<a href='modules/schedule/control/eventDeleteProcessor.php?id=" + nowMeeting.uuid + "' onclick='return confirm(\"Please confirm this delete.\");'><span class='fa fa-trash-o' style='color:#d27b4b;margin-left:10px;'></span></a></p>" : " ") +
-         					"<p style='font-size:90%;'><b>" + message1 + "</b> (Share this link with your guests.)</p>" +	        				
+          				"<p>" + nowMeeting.mtypdisplay + " <?php echo _('reserved_by'); ?> " + reservedBy +
+	        				(((IS_ADMIN || nowMeeting.adder == nowMeeting.sessionUser) && nowMeeting.sessionUser != <?php echo(Utilities::getDemoUidpk()); ?>) ? "<a href='modules/schedule/control/eventDeleteProcessor.php?id=" + nowMeeting.uuid + "' onclick='return confirm(\"<?php echo _('confirm_delete'); ?>\");'><span class='fa fa-trash-o' style='color:#d27b4b;margin-left:10px;'></span></a></p>" : " ") +
+         					"<p style='font-size:90%;'><b>" + message1 + "</b> (<?php echo _('share_link'); ?>)</p>" +	        				
 	        				
 		          			(showClipboardButton
-		          				? "<button id='guest-pass0' class='guest-pass-button' id='guest-pass-button0' data-clipboard-text='" + guestPass + "' onclick='' title='Click to copy'>Copy Pass to Clipboard</button>" +
-				          			"&nbsp;<button class='show-pass-button' onclick='alert(\"" + guestPass + "\");' title='Click to show pass'>Show Pass</button></p>"
-		          				: "<br/><button class='show-pass-button' onclick='alert(\"" + guestPass + "\");' title='Click to show pass'>Show Pass</button></p>"	        				
+		          				? "<button id='guest-pass0' class='guest-pass-button' id='guest-pass-button0' data-clipboard-text='" + guestPass + "' onclick='' title='<?php echo _('copy_pass'); ?>'><?php echo _('copy_pass'); ?></button>" +
+				          			"&nbsp;<button class='show-pass-button' onclick='alert(\"" + guestPass + "\");' title='<?php echo _('show_pass'); ?>'><?php echo _('show_pass'); ?></button></p>"
+		          				: "<br/><button class='show-pass-button' onclick='alert(\"" + guestPass + "\");' title='<?php echo _('show_pass'); ?>'><?php echo _('show_pass'); ?></button></p>"	        				
 	        					) +
 
          						// Flaw! We may have two items with id=='guest-pass0'. This accomodates WalkMe tutorials but not strictly correct :)
-	        				"<p><span id='tech_check_summary' style='font-style:italic;' ><span class='fa fa-spinner fa-spin fa-lg'></span> Checking your system compatibility... one moment</span><a href='javascript:void(0);' onclick='document.getElementById(\"tech_check_control\").click();' style='font-size:90%;margin-left:5px;'> Details</a></p>" + 
+	        				"<p><span id='tech_check_summary' style='font-style:italic;' ><span class='fa fa-spinner fa-spin fa-lg'></span> <?php echo _('checking'); ?>... <?php echo _('One Moment'); ?></span><a href='javascript:void(0);' onclick='document.getElementById(\"tech_check_control\").click();' style='font-size:90%;margin-left:5px;'> <?php echo _('details'); ?></a></p>" + 
 	        			"</span>" +
           		"</div>" +
           	"</div>";	
-          document.getElementById("join_control_mode").innerHTML = "<a href='modules/meeting/control/joinMeetingProcessor.php?id=" + nowMeeting.uuid + "&type=" + nowMeeting.mtype + "' target='_blank' class='join_meeting_button level1-control'>JOIN<br/>MEETING</a>";
-          //<span class='fa fa-sign-in fa-3x' ></span>
+            document.getElementById("join_control_real").href = "modules/meeting/control/joinMeetingProcessor.php?id=" + nowMeeting.uuid + "&type=" + nowMeeting.mtype;
+            document.getElementById("join_control_real").className = "join_meeting_button level1-control";
+            document.getElementById("join_control_real").innerHTML = "<?php echo _('join'); ?><br/><?php echo _('meeting'); ?>";
+            document.getElementById("join_control_real").setAttribute('target','_blank');
+            document.getElementById("join_control_real").setAttribute('onclick','');
        	}  
        	document.getElementById("nowRow0").innerHTML = nowEvent;  
         var eventHeight = document.getElementById('nowEventDetail').style.height;
@@ -105,7 +114,7 @@
           		"</div>" +
           	"</div>" +
           	"<div id='futureEventDetail' class='td-div' style='position:absolute;left:140px;top:5px;height:70px;'>" +	       				
-			       	"<div class='meeting'>" +
+			       	"<div class='meeting' style='width:480px'>" +
           			"<span id='guest-pass0' class='purpose'>" + message2 + "</span>" + 
           		"</div>" +
           	"</div>" +
@@ -115,7 +124,7 @@
 				} else {
 			 		for (var i = 0; i < jsonObj.length; i++) {
 			 			message1 = '<?php echo _("Guest Pass"); ?>';
-			 			message2 = '<?php echo _("Please confirm this delete."); ?>';
+			 			message2 = '<?php echo _("confirm_delete"); ?>';
 			 			guestPass = "<?php echo Utilities::getHttpPath(); ?>/login.php?oid=<?php echo $_SESSION['orgUid']; ?>&mid=" + jsonObj[i].uuid;
 			 			tableEvent = 
        			"<div class='td-div'>" +
@@ -132,17 +141,17 @@
          					"<span class='purpose'>" + jsonObj[i].purpose + "</span><br/>" +
          					"<span class='descr'>" + jsonObj[i].descr + 
           					"<p>" + 
-          					jsonObj[i].mtypdisplay + " reserved by " + 
+          					jsonObj[i].mtypdisplay + " <?php echo _('reserved_by'); ?> " + 
           					((jsonObj[i].adder == <?php echo(Utilities::getDemoUidpk()); ?>) ? '<?php echo($_SESSION['fname']); ?>' : jsonObj[i].fname) + " " +  
           					((jsonObj[i].adder == <?php echo(Utilities::getDemoUidpk()); ?>) ? '<?php echo($_SESSION['lname']); ?>' : jsonObj[i].lname) + 
           					(((IS_ADMIN || jsonObj[i].adder == jsonObj[i].sessionUser) && jsonObj[i].sessionUser != <?php echo(Utilities::getDemoUidpk()); ?>) ? "<a href='modules/schedule/control/eventDeleteProcessor.php?id=" + jsonObj[i].uuid + "' onclick='return confirm(\"" + message2 + "\");'><span class='fa fa-trash-o' style='margin-left:10px;color:#d27b4b;'></span></a>" : " ") +
 										"</p>" +
-         						"<p style='font-size:90%;'><b>" + message1 + "</b> (Share this link with your guests.)</p>" +	
+         						"<p style='font-size:90%;'><b>" + message1 + "</b> (<?php echo _('share_link'); ?>)</p>" +	
          						
          						(showClipboardButton
-		          				? "<button class='guest-pass-button' id='guest-pass-button0' data-clipboard-text='" + guestPass + "' onclick='' title='Click to copy' >Copy Pass to Clipboard</button>" +
-				          			"&nbsp;<button class='show-pass-button' onclick='alert(\"" + guestPass + "\");' title='Click to show pass'>Show Pass</button></p>"
-		          				: "<br/><button class='show-pass-button' onclick='alert(\"" + guestPass + "\");' title='Click to show pass'>Show Pass</button></p>"	        				
+		          				? "<button class='guest-pass-button' id='guest-pass-button0' data-clipboard-text='" + guestPass + "' onclick='' title='<?php echo _('copy_pass'); ?>' ><?php echo _('copy_pass'); ?></button>" +
+				          			"&nbsp;<button class='show-pass-button' onclick='alert(\"" + guestPass + "\");' title='<?php echo _('show_pass'); ?>'><?php echo _('show_pass'); ?></button></p>"
+		          				: "<br/><button class='show-pass-button' onclick='alert(\"" + guestPass + "\");' title='<?php echo _('show_pass'); ?>'><?php echo _('show_pass'); ?></button></p>"	        				
 	        					) +
          						
          					"</span>" +
@@ -166,8 +175,8 @@
 </script>
 
 <div id="join_control_mode">
-	<!-- These link parameters are altered if there is a meeting currently running. See the construction of 'nowRow0' in json processing script above -->
-	<a id='join_control' href='javascript:void(0);' class='level1-control'><span class='fa fa-circle-o-notch fa-2x' ></span></a>
+	<a id='join_control' href='javascript:void(0);' class='level1-control' style="visibility:hidden;"><span class='fa fa-circle-o-notch fa-2x' ></span></a>
+	<a id='join_control_real' href='' target='' class=''></a>
 </div>
 <div id="nowTable" class="table-div">
 </div>
@@ -195,13 +204,11 @@
 	window.setTimeout(refreshEventList, MEETING_INFO_NEXT_REFRESH);
 	// Load the event list (based on server time)
 	getReservationList(<?php echo (time() + 21*60); ?>);
-	console.log("refreshing on: " + <?php echo (time() + 21*60); ?>);
 	function refreshEventList() {
 		if(MEETING_INFO_NEXT_REFRESH) {
 			// Refresh the event list (based on client time) and set the next refresh interval
 			var d = new Date();
 			var now = Math.ceil(d.getTime()/1000);
-			console.log("refreshing on: " + now+21*60);
 			getReservationList(now+21*60);
 			window.setTimeout(refreshEventList, MEETING_INFO_NEXT_REFRESH);
 		}
