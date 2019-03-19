@@ -1,5 +1,6 @@
 <script>
 	function getReservationList(referenceTime) {
+	    console.log("refreshing at " + referenceTime);
 		var xmlhttp = getXmlHttpRequest();
 		// TODO - move below into javascriptHandler.php and remove duplicate code in eventListFilter.php 
 		CLIPBOARD = new Clipboard('.guest-pass-button');
@@ -46,8 +47,12 @@
 			       	"<div class='meeting'>" +
           			"<span class='purpose'>" + message2 + "</span>" + 
           		"</div>" +
-          	"</div>";	 
-          document.getElementById("join_control_mode").innerHTML = "<a id='join_control' href='javascript:void(0);' class='level1-control'><span class='fa fa-circle-o-notch fa-2x' ></span></a>";
+          	"</div>";
+            document.getElementById("join_control_real").className = "level1-control";
+            document.getElementById("join_control_real").innerHTML = "<span class='fa fa-circle-o-notch fa-2x' ></span>";
+            document.getElementById("join_control_real").href = "javascript:void(0);";
+            document.getElementById("join_control_real").setAttribute('target','');
+            document.getElementById("join_control_real").setAttribute('onclick',"$('#join_control').trigger('click');")
        	}	else {
        		if (!IS_NOW) {
        			playSound('demonstrative');
@@ -88,7 +93,11 @@
 	        			"</span>" +
           		"</div>" +
           	"</div>";	
-          document.getElementById("join_control_mode").innerHTML = "<a href='modules/meeting/control/joinMeetingProcessor.php?id=" + nowMeeting.uuid + "&type=" + nowMeeting.mtype + "' target='_blank' class='join_meeting_button level1-control'><?php echo _('join'); ?><br/><?php echo _('meeting'); ?></a>";
+            document.getElementById("join_control_real").href = "modules/meeting/control/joinMeetingProcessor.php?id=" + nowMeeting.uuid + "&type=" + nowMeeting.mtype;
+            document.getElementById("join_control_real").className = "join_meeting_button level1-control";
+            document.getElementById("join_control_real").innerHTML = "<?php echo _('join'); ?><br/><?php echo _('meeting'); ?>";
+            document.getElementById("join_control_real").setAttribute('target','_blank');
+            document.getElementById("join_control_real").setAttribute('onclick','');
        	}  
        	document.getElementById("nowRow0").innerHTML = nowEvent;  
         var eventHeight = document.getElementById('nowEventDetail').style.height;
@@ -166,6 +175,8 @@
 </script>
 
 <div id="join_control_mode">
+	<a id='join_control' href='javascript:void(0);' class='level1-control' style="visibility:hidden;"><span class='fa fa-circle-o-notch fa-2x' ></span></a>
+	<a id='join_control_real' href='' target='' class=''></a>
 </div>
 <div id="nowTable" class="table-div">
 </div>
@@ -193,13 +204,11 @@
 	window.setTimeout(refreshEventList, MEETING_INFO_NEXT_REFRESH);
 	// Load the event list (based on server time)
 	getReservationList(<?php echo (time() + 21*60); ?>);
-	console.log("refreshing on: " + <?php echo (time() + 21*60); ?>);
 	function refreshEventList() {
 		if(MEETING_INFO_NEXT_REFRESH) {
 			// Refresh the event list (based on client time) and set the next refresh interval
 			var d = new Date();
 			var now = Math.ceil(d.getTime()/1000);
-			console.log("refreshing on: " + now+21*60);
 			getReservationList(now+21*60);
 			window.setTimeout(refreshEventList, MEETING_INFO_NEXT_REFRESH);
 		}
