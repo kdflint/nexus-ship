@@ -75,7 +75,7 @@
 				};	
 				
 			function refreshCheckSummary() {
-				document.getElementById("tech_check_summary").innerHTML = "<span class='fa fa-spinner fa-spin fa-lg'></span> Checking your system compatibility... one moment</span>";
+				document.getElementById("tech_check_summary").innerHTML = "<span class='fa fa-spinner fa-spin fa-lg'></span> <?php echo _('checking'); ?>... <?php echo _('One Moment'); ?></span>";
 				startSpeedChecks();
 				displayCheckSummary();
 			}
@@ -85,22 +85,22 @@
       	var id = setInterval(function() {
       		if (dspeed && uspeed && has_flash) {
         		if (has_java) {
-         			document.getElementById("tech_check_summary").innerHTML = "<span class='fa fa-check-square-o fa-lg' style='margin-right:10px;color:#486326;'></span>Your system is compatible to participate in this meeting.";
+         			document.getElementById("tech_check_summary").innerHTML = "<span class='fa fa-check-square-o fa-lg' style='margin-right:10px;color:#486326;'></span><?php echo _('compatible_message'); ?>";
          		} else {
-         			document.getElementById("tech_check_summary").innerHTML = "<span class='fa fa-check-square-o fa-lg' style='margin-right:10px;color:#486326;'></span>Your system is compatible to participate in this meeting.";
+         			document.getElementById("tech_check_summary").innerHTML = "<span class='fa fa-check-square-o fa-lg' style='margin-right:10px;color:#486326;'></span><?php echo _('compatible_message'); ?>";
 						}
          		clearInterval(id);
         	} else {
         		if (has_flash === false) {
-         			document.getElementById("tech_check_summary").innerHTML = "<span class='fa fa-check-square-o fa-lg' style='margin-right:10px;color:#486326;'></span>Your system is compatible to participate in this meeting.";
+         			document.getElementById("tech_check_summary").innerHTML = "<span class='fa fa-check-square-o fa-lg' style='margin-right:10px;color:#486326;'></span><?php echo _('compatible_message'); ?>";
          			clearInterval(id);
          		} else if (dspeed === false || uspeed === false) {
-         			document.getElementById("tech_check_summary").innerHTML = "<span class='fa fa-check-square-o fa-lg' style='margin-right:10px;color:#f68620;'></span>Your system may show connection quality limitations.";
+         			document.getElementById("tech_check_summary").innerHTML = "<span class='fa fa-check-square-o fa-lg' style='margin-right:10px;color:#f68620;'></span><?php echo _('connection_quality'); ?>";
          			clearInterval(id);     			
          		}
          	}
        		if (brake > 30) {
-       			document.getElementById("tech_check_summary").innerHTML = "<span class='fa fa-check-square-o fa-lg' style='margin-right:10px;color:#f68620;'></span>Your system may show connection quality limitations.";
+       			document.getElementById("tech_check_summary").innerHTML = "<span class='fa fa-check-square-o fa-lg' style='margin-right:10px;color:#f68620;'></span><?php echo _('connection_quality'); ?>";
        			clearInterval(id);
        		}
        		brake++;

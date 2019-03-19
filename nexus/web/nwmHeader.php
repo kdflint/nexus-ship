@@ -6,13 +6,13 @@
 	     	<img class="banner-image" src="image/nexus4.png" />
        	<span class="banner">
 					<span class="product-name" style="">Nexus</span>
-					<span style="float:right;margin-top:10px;color:#004d62;"><span class="fa fa-bookmark fa-2x" style="margin-right:10px;" ></span><span style="font-size:90%;">Featuring</span><span style="font-weight:bold;"> One-Click Join </span><span style="font-size:80%;">(Ctrl-D to bookmark)</span></span>
+					<span style="float:right;margin-top:10px;color:#004d62;"><span class="fa fa-bookmark fa-2x" style="margin-right:10px;" ></span><span style="font-size:90%;"><?php echo _("featuring"); ?></span><span style="font-weight:bold;"> <?php echo _("pass_label"); ?> </span><span style="font-size:80%;">(<?php echo _("bookmark_shortcut"); ?>)</span></span>
 					<span id="get-nexus-link" style="float:right;margin-top:20px;"></span><br/>
 					<span id="index-module-name" class="module-name" style="">Web Meet</span>		
 					
 					<a id="menu-recordList" class="pure-button button-menu-adv" href="javascript:void(0)" onclick="toggleNwmFrameDisplay('recordList')" style="float:right;background-color:#dae0bc;"><?php echo _("ARCHIVE"); ?></a> 			
-					<a id="menu-userList" class="pure-button button-menu-adv" href="javascript:void(0)" onclick="toggleNwmFrameDisplay('userList')" style="float:right;background-color:#dae0bc;margin-right:-7px;" ><?php echo _("SEATS"); ?></a>
-					<a id="menu-reserveList" class="pure-button button-menu-adv active" href="javascript:void(0)" onclick="toggleNwmFrameDisplay('reserveList')" style="float:right;background-color:rgba(137, 157, 112, 1);margin-right:-7px;"><?php echo _("SCHEDULE"); ?></a> 
+					<a id="menu-userList" class="pure-button button-menu-adv" href="javascript:void(0)" onclick="toggleNwmFrameDisplay('userList')" style="float:right;background-color:#dae0bc;margin-right:-7px;" ><?php echo _("Seats"); ?></a>
+					<a id="menu-reserveList" class="pure-button button-menu-adv active" href="javascript:void(0)" onclick="toggleNwmFrameDisplay('reserveList')" style="float:right;background-color:rgba(137, 157, 112, 1);margin-right:-7px;"><?php echo _("Schedule"); ?></a> 
 					<!--
 					Here we place a dummy image, edited from the original walkme png. The real WalkMe launcher is pinned to this image id and offset to sit right on top of it.
 					So, while we wait for the real image to locate the anchor point, which changes when the user clicks the tab, a dummy image indicates that the function is there but inactive
@@ -31,14 +31,13 @@
       	</span>
       	<a id="profile_control" href="javascript:void(0);"><span id="profile_control_icon" style="clear:right;float:right;padding-top:10px;margin:0px;color:#d27b4b;" class="fa fa-lg fa-plus-square" ></span></a>
 				<span style="float:right;padding:10px;">
-					<!--Hello <?php echo $_SESSION['fname']; ?>-->
 					<?php echo _("Hello"); ?> <?php echo $_SESSION['fname']; ?>
 					
 				</span>
 				
 				<div id="openTrainModal" class="modalDialog">
 					<div>
-						<a href="#close" title="Close" class="close">X</a>
+						<a href="#close" title="<?php echo _('close'); ?>" class="close">X</a>
 						<p><?php echo _("Register for Nexus Web Meet training at the") ?> <a href="<?php echo Utilities::getMemberUrl(); ?>" target="_blank"><?php echo _("Northbridge Member Portal"); ?></a>.</p>
 						<!--
 						<p style="margin-top:10px;margin-bottom:30px;font-size:90%;margin-left:10px;">Virtual Collaboration for Social Nonprofits<a id="training-register1" class="pure-button button-menu" href="http://northbridge-training-01.eventbrite.com" target="_blank" style="float:right;background-color:#d27b4b;width:70px;font-size:90%;color:#e6e6e6;margin-bottom:0px;" <?php echo($disabled); ?>>Register</a></p>

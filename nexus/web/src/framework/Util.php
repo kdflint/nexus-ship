@@ -197,7 +197,7 @@ class Utilities {
 	
 	public static function getLiAppSecret() { return LI_APP_SECRET; }
 	
-	private static $supportedLangs = array('en' => 'en_US.utf8','es' => 'es_ES.utf8');
+	private static $supportedLangs = array('en' => 'en_US.utf8','es' => 'es_ES.utf8', 'ta' => 'ta_IN.utf8');
 	
 	const VALIDATION_FNAME_ERROR = "Please enter a valid first name."; 
 	const VALIDATION_LNAME_ERROR = "Please enter a valid last name (or none)."; 
@@ -230,7 +230,7 @@ class Utilities {
 	}
 	
 	public static function getHelloString($lang) {
-		$LANGUAGE_MAP = array('en' => 'Hello',	'es' => 'Hola');
+		$LANGUAGE_MAP = array('en' => 'Hello',	'es' => 'Hola', 'ta' => "Hello");
 		return $LANGUAGE_MAP[$lang];
 	}
 
@@ -610,8 +610,10 @@ class Utilities {
 		$results = setlocale(LC_ALL, self::$supportedLangs[$displayLang]);
 		if (!$results) {
 			// TODO - log proper, and trigger error
-			echo "setlocale() failed: locale function is not available on this platform, or the given local does not exist in this environment</br>";
+			echo "setlocale() failed: locale function is not available on this platform environment</br>";
+			echo "Looking for: " . self::$supportedLangs[$displayLang] . "</br>";
 			echo "Tip: run 'locale -a' on the runtime machine, It must contain your locale value</br>";
+			echo "Tip: if your locale is missing, run 'sudo locale-gen &lt;name of locale here&gt;.UTF-8' then 'sudo update-locale'</br>";
 		}
 		bindtextdomain($domain, Utilities::getLocaleRoot());
 		textdomain($domain);
@@ -619,6 +621,7 @@ class Utilities {
 	
 	public static function setUserLanguagePreference($lang) {
 		$_SESSION['language'] = $lang;
+		self::setUserLanguageEnv();
 	}
 	
 	public static function setUserEmailConfirm() {

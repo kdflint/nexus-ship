@@ -105,8 +105,8 @@ if(isset($_GET['error']) && Utilities::isSafeCharacterSet($_GET['error'])) {
 					<span class="product-name">Nexus</span><br/>
 					<span class="module-name"><?php echo($accountType); ?> Enrollment</span>					
       	</span>  	
-      	<span class="controls" style="float:right;padding-bottom:10px;margin-top:30px;">
-      		<b>Already have<br/>an account?<br/></b>
+      	<span class="controls" style="float:right;padding-bottom:10px;margin-top:30px;width:120px;">
+      		<b><?php echo _("Already have an account"); ?></b>
       		<!-- TODO - make this oid dynamic -->
       		<a href="<?php echo Utilities::getHttpPath(); ?>/login.php?oid=<?php echo($networkOid); ?>" style="color:#d27b4b;text-decoration:none;"><?php echo _("Login"); ?></a>
       	</span>
