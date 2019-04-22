@@ -1,6 +1,12 @@
 <script>
 	function getEventListFilter(referenceTime,filter) {
 		var xmlhttp = getXmlHttpRequest();
+		CLIPBOARD = new Clipboard('.guest-pass-button');
+		CLIPBOARD.on('success', function(e) {
+			$(".guest-pass-button").tooltip({content: ""});
+			$(e.trigger).tooltip({content: "Copied!"});
+  			$(e.trigger).tooltip("open");
+		});
 		xmlhttp.onreadystatechange=function() {
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 			 	var jsonObj = JSON.parse(xmlhttp.responseText);		 	
@@ -57,7 +63,7 @@
  									"<span>" + jsonObj[i].hour + ":" + jsonObj[i].minute + "</span><span class='period'> " + jsonObj[i].period + " " + jsonObj[i].abbrev + "</span>" +
 								"</div>" +
       				"</div>" +
-       				"<div class='td-div' id='nowEventDetail' style='position:absolute;left:140px;top:5px;width:370px;'>" + 
+       				"<div class='td-div' id='nowEventDetail' style='position:absolute;left:140px;top:5px;width:420px;'>" + 
 		          	"<div class='meeting'>" +		          	
        			      "<a href='#openEventDetail' onclick='getEventDetail(\"" + jsonObj[i].uuid + "\");' '<span style='padding-right:10px;color:#d27b4b;' class='fa fa-plus-square'></span></a>" +
          					"<span class='purpose'>" + truncateString(jsonObj[i].purpose, '70') + "</span>" +
@@ -79,8 +85,8 @@
 										  : "") +
 										  "<a href='" + meetingPass + "' target='_blank'><b>Start/Join Web Meeting</b></a>" +
 										  "<span style='margin-left:20px;margin-right:20px;'><b></b></span>" +
-		          			    //(showClipboardButton
-		          			    (false
+		          			    (showClipboardButton
+		          			    //(false
 		          			    ? "<button class='guest-pass-button' id='guest-pass-button0' data-clipboard-text='" + guestPass + "' onclick='' title='Click to copy'>Copy Guest Pass to Clipboard</button>"
 		          			    : "<button onclick='alert(\"Share this link to invite a guest to this meeting.\\r\\n\\r\\n" + guestPass + "\");' title='Click to show pass'>Show Guest Pass</button>"
 		          			    ) +
@@ -96,12 +102,6 @@
 
      				document.getElementById("reservationRow" + i).innerHTML = tableEvent; 
      			}
-     			CLIPBOARD = new Clipboard('.guest-pass-button');
-					CLIPBOARD.on('success', function(e) {
-						$(".guest-pass-button").tooltip({content: ""});
-						$(e.trigger).tooltip({content: "Copied!"});
-  					$(e.trigger).tooltip("open");
-					});
      		}
 			};
 		}
