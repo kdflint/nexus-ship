@@ -122,6 +122,8 @@ class Utilities {
 	private static $config_path = "/config";
 	
 	private static $include_path = "/include";
+
+	public static function getEnvHost() { return ENV_HOST; }
 	
 	public static function getHttpPath() { return ENV_PROTOCOL . ENV_HOST . APP_NAME . self::$web_path; }
 	

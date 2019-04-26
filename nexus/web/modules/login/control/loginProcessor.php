@@ -105,7 +105,14 @@ if($isAuthenticated){
 	}
 	Utilities::setLogin($_SESSION['uidpk']);
 	//unset($_COOKIE['member_transfer_oid']);
-  //setcookie('member_transfer_oid', null, -1, '/');
+	if(isset($_COOKIE['member_channel_oid'])) {
+		$oids = explode (",", $_COOKIE['member_channel_oid']); 
+		array_push($oids, $_SESSION['orgUid']); 
+		// TODO - make a cookie factory to get rid of redundant code and set cookies to secure in https-enabled environments
+		setcookie('member_channel_oid', implode(",", $oids), time() + (10 * 365 * 24 * 60 * 60), '/', Utilities::getEnvHost(), 0, 0);
+	} else {
+		setcookie('member_channel_oid', $_SESSION['orgUid'], time() + (10 * 365 * 24 * 60 * 60), '/', Utilities::getEnvHost(), 0, 0);
+	}
 	header("location:" . Utilities::getHttpPath() . "/nexus.php");
 	exit(0);
 } else {

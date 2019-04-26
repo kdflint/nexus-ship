@@ -5,7 +5,8 @@ session_start();
 require_once("Util.php");
 require_once(Utilities::getSrcRoot() . "/organization/Catalogue.php");
 
-if (Utilities::isSessionValid()) {
+//if (Utilities::isSessionValid()) {
+if (true) {
 
 	$string = "";
 	$filters = array();

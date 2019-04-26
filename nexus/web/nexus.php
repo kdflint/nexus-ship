@@ -123,7 +123,6 @@ $customProfileData = strlen($_SESSION['profile']) > 0 ? $_SESSION['profile'] : '
 		<meta http-equiv="Cache-directive" content="no-cache">				
   	<meta id="meta" name="viewport" content="width=device-width; initial-scale=1.0" />   
 
-	  <link rel="icon" href="images/NB_icon.png" />
   		
   	<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Oswald:400,300|Open+Sans|Oxygen|Swanky+and+Moo+Moo">
   	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -137,8 +136,9 @@ $customProfileData = strlen($_SESSION['profile']) > 0 ? $_SESSION['profile'] : '
     <!-- LEFT OFF - lost arrows - I think they are white -->
 		<!--<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.13/r-2.1.1/rr-1.2.0/datatables.min.css"/>		-->
     <link rel="stylesheet" href="styles/datatables.css" type="text/css" />
-    <link rel="shortcut icon" href="//northbridgetech.org/images/favicon.ico" type="image/x-icon" />
 
+    <link rel="shortcut icon" href="//northbridgetech.org/images/favicon.ico" type="image/x-icon" />
+		<link rel="icon" href="//northbridgetech.org/images/thumbnail.png" type='image/png' sizes='256x256'/>
 
     <!-- New way to include font awesome - why?? -->
     <!--<script src="https://use.fontawesome.com/2eef5e944e.js"></script>-->
