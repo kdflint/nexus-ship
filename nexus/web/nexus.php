@@ -218,6 +218,9 @@ $customProfileData = strlen($_SESSION['profile']) > 0 ? $_SESSION['profile'] : '
 				$('#group-list-table-rows').on( 'click', 'tr', function (event) {
     			if (event.target.type !== 'checkbox') {
     				$(':checkbox', this).trigger('click');
+					} else if (event.target.className && !event.target.className.includes("fa fa-")) {
+						// Don't react to the clickable icons. Dependent on classNames set in groupList.php.
+						$(':checkbox', this).trigger('click');
     			} else if ($(':checkbox', this).prop('checked')==true) {
 						var keyval = $(':checkbox', this).val().split("::");
 						if (keyval.length == 2) {
@@ -379,6 +382,7 @@ $customProfileData = strlen($_SESSION['profile']) > 0 ? $_SESSION['profile'] : '
    					{ "orderable": false },
    					null,
    					null,
+						null,
 	   				{ "orderable": false }
 					]
 				} );
