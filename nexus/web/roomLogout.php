@@ -3,7 +3,8 @@
 <html>
   <head>  	  		
   	<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
-    <link rel="stylesheet" href="styles/nexus.css" type="text/css" />
+    <!--<link rel="stylesheet" href="styles/nexus.css" type="text/css" />-->
+    <link rel="stylesheet" href="styles/nexusCssHandler.php" type="text/css" />
     <link rel="shortcut icon" href="image/northbridge-ico.png" />
     <title>Nexus</title>    	
   </head>      
