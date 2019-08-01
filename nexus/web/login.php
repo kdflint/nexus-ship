@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 
 require_once("src/framework/Util.php");
@@ -29,8 +30,10 @@ if ($storagePath) {
 }
 
 if(isset($_GET['logout'])) {
-	require_once(Utilities::getModulesRoot() . "/forum/forum_integration.php");
-	$user->session_kill();
+    if ($_SESSION['nexusContext'] == "ADV") {
+	    require_once(Utilities::getModulesRoot() . "/forum/forum_integration.php");
+	    $user->session_kill();
+    }
 	$rememberMe->clearCookie(isset($_SESSION['username']) ? $_SESSION['username'] : '');
 	unset($_COOKIE['member_transfer_oid']);
   setcookie('member_transfer_oid', null, -1, '/');

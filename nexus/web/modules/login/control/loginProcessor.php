@@ -104,14 +104,22 @@ if($isAuthenticated){
 		}
 	}
 	Utilities::setLogin($_SESSION['uidpk']);
-	//unset($_COOKIE['member_transfer_oid']);
-	if(isset($_COOKIE['member_channel_oid'])) {
-		$oids = explode (",", $_COOKIE['member_channel_oid']); 
-		array_push($oids, $_SESSION['orgUid']); 
-		// TODO - make a cookie factory to get rid of redundant code and set cookies to secure in https-enabled environments
-		setcookie('member_channel_oid', implode(",", $oids), time() + (10 * 365 * 24 * 60 * 60), '/', Utilities::getEnvHost(), 0, 0);
-	} else {
-		setcookie('member_channel_oid', $_SESSION['orgUid'], time() + (10 * 365 * 24 * 60 * 60), '/', Utilities::getEnvHost(), 0, 0);
+	if (isset($_SESSION['orgUid'])){
+		if(isset($_COOKIE['member_channel_oid'])) {
+			$oids = explode (",", $_COOKIE['member_channel_oid']); 
+			array_push($oids, $_SESSION['orgUid']); 
+			// TODO - make a cookie factory to get rid of redundant code and set cookies to secure in https-enabled environments
+			setcookie('member_channel_oid', implode(",", $oids), time() + (10 * 365 * 24 * 60 * 60), '/', Utilities::getEnvHost(), 0, 0);
+		} else {
+			setcookie('member_channel_oid', $_SESSION['orgUid'], time() + (10 * 365 * 24 * 60 * 60), '/', Utilities::getEnvHost(), 0, 0);
+		}
+		if(isset($_COOKIE['remembered_oids'])) {
+			$roids = explode (",", $_COOKIE['remembered_oids']); 
+			array_push($roids, $_SESSION['orgUid']); 
+			setcookie('remembered_oids', implode(",", $roids), time() + (10 * 365 * 24 * 60 * 60), '/', Utilities::getEnvHost(), 0, 0);
+		} else {
+			setcookie('remembered_oids', $_SESSION['orgUid'], time() + (10 * 365 * 24 * 60 * 60), '/', Utilities::getEnvHost(), 0, 0);
+		}
 	}
 	header("location:" . Utilities::getHttpPath() . "/nexus.php");
 	exit(0);
