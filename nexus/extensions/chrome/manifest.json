@@ -2,8 +2,13 @@
     "manifest_version": 2,
     "name": "Nexus Web Meet Channel Manager",
     "short_name": "Nexus-X",
-    "version": "1.6",
+    "version": "1.7",
     "description": "Nexus Web Meet is the leading meeting tool for the social justice community. This extension speeds up your meeting join experience.",
+    "permissions": [
+        "alarms",
+        "cookies"
+        "*//*.northbridgetech.org"
+      ],
     "icons": {
         "128": "icon128.png",
         "48": "icon48.png",
@@ -17,4 +22,5 @@
     "background": {
         "scripts": ["vendor/js/jquery-3.4.1.min.js", "vendor/js/bootstrap.bundle.min.js", "background.js"]
     }
+
 }

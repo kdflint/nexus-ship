@@ -104,6 +104,7 @@ if($isAuthenticated){
 		}
 	}
 	Utilities::setLogin($_SESSION['uidpk']);
+	// TODO - filter out 'userdemo'
 	if (isset($_SESSION['orgUid'])){
 		if(isset($_COOKIE['member_channel_oid'])) {
 			$oids = explode (",", $_COOKIE['member_channel_oid']); 
@@ -115,7 +116,9 @@ if($isAuthenticated){
 		}
 		if(isset($_COOKIE['remembered_oids'])) {
 			$roids = explode (",", $_COOKIE['remembered_oids']); 
-			array_push($roids, $_SESSION['orgUid']); 
+			if(!in_array($_SESSION['orgUid'], $roids, true)){
+				array_push($roids, $_SESSION['orgUid']); 
+			}
 			setcookie('remembered_oids', implode(",", $roids), time() + (10 * 365 * 24 * 60 * 60), '/', Utilities::getEnvHost(), 0, 0);
 		} else {
 			setcookie('remembered_oids', $_SESSION['orgUid'], time() + (10 * 365 * 24 * 60 * 60), '/', Utilities::getEnvHost(), 0, 0);
