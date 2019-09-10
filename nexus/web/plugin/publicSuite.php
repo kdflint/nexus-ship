@@ -105,14 +105,13 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 						position: { my : "left top", at: "right+25 top", of: "#directory-form" },
 						width: 228
 				});
-				//toggleDisplay(<?php echo $viewId; ?>);
 			});
 		</script>
 		
 		<script> setPublicSession2("<?php echo $cleanNetworkId; ?>", "", "../");</script>
 
 		<script>
-							
+
 			function toggleDisplay(displayId, selectNdx) {
 				// page content
 				document.getElementById("mod_event").style.display='none';
@@ -205,9 +204,9 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 			<div id="public-suite-nav" style="position:relative;width:100%;height:42px;background-color:#eeeeee;font-size:100%;border-radius:8px;">
 				<div class="pure-menu pure-menu-horizontal">
 	    		<ul id="navList" class="pure-menu-list">
-	        	<li class="pure-menu-item pure-menu-selected"><a href="#" onclick="toggleDisplay('mod_event', '0');document.getElementById('schedule-form-cancel').click();" class="pure-menu-link">Calendar</a></li>
-        		<li class="pure-menu-item"><a href="#" onclick="toggleDisplay('mod_directory', '1')" class="pure-menu-link">Directory</a></li>
-        		<li class="pure-menu-item"><a href="#" onclick="toggleDisplay('mod_forum', '2')" class="pure-menu-link">Forum</a></li>
+	        	<li class="pure-menu-item pure-menu-selected"><a id="event-tab" href="#" onclick="toggleDisplay('mod_event', '0');document.getElementById('schedule-form-cancel').click();" class="pure-menu-link">Calendar</a></li>
+        		<li class="pure-menu-item"><a id="directory-tab" href="#" onclick="toggleDisplay('mod_directory', '1')" class="pure-menu-link">Directory</a></li>
+        		<li class="pure-menu-item"><a id="forum-tab" href="#" onclick="toggleDisplay('mod_forum', '2')" class="pure-menu-link">Forum</a></li>
         		<li class="pure-menu-item"><a id="schedule_control" href="#" onclick="showEventAdd('<?php echo $cleanNetworkId; ?>');" class="pure-menu-link">Submit New Event</a></li>
         		<?php if ($_SESSION['username'] === "pUser-ed787a92" || $_SESSION['environment'] === "local") { 
         			//https://goo.gl/forms/NInSncEodzNEMo2G3https://goo.gl/forms/NInSncEodzNEMo2G3

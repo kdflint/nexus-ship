@@ -140,11 +140,11 @@ class Group {
 	}
 
 	public static function getUserGroupsByUsername($username) {
-		$query = "select distinct g.id as id, g.name as name, g.forum_group_id as forumid from public.group g, public.user u, user_group ug where u.username = $1 and ug.user_fk = u.id and ug.group_fk = g.id";
+		$query = "select distinct g.id as id, g.uid as uid, g.name as name, g.forum_group_id as forumid from public.group g, public.user u, user_group ug where u.username = $1 and ug.user_fk = u.id and ug.group_fk = g.id";
 		$cursor = PgDatabase::psExecute($query, array($username));
 	  $resultArray = array();
 	  while ($row = pg_fetch_array($cursor)) {
-	  	array_push($resultArray, array("id" => $row['id'], "name" => $row['name'], "forum" => $row['forumid']));
+	  	array_push($resultArray, array("id" => $row['id'], "uid" => $row['uid'], "name" => $row['name'], "forum" => $row['forumid']));
 	  }		
 	  return $resultArray;
 	}

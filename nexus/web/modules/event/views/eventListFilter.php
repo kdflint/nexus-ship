@@ -23,7 +23,7 @@
 					"<div id='body-rows' style='width:598px;'>";
 			 	var showClipboardButton = Clipboard.isSupported();
 			 	for (var i = 0; i < jsonObj.length; i++) { 
-			 		tableRows = tableRows + "<div id='reservationRow" + i + "' class='div-tr' style='position:relative;margin-bottom:10px;'></div>";
+			 		tableRows = tableRows + "<div id='reservationRow" + i + "' class='div-tr' style='position:relative;'></div>";
 			 		nextMeetings = i; 
 			 	}
 			 	tableRows = tableRows + "</div>";
@@ -74,25 +74,25 @@
          						    (jsonObj[i].group_assoc === SESSION_PGPK ? "Public" : "Network") + 
          						  " Calendar</b></a>" : " ") +
          						  (true ? "<a href='<?php echo(Utilities::getHttpPath()); ?>/modules/schedule/control/eventDeleteProcessor.php?id=" + jsonObj[i].uuid + "' onclick='return confirm(\"Please confirm this delete.\");' title='Delete'><span class='fa fa-trash-o' style='color:#d27b4b;margin-left:10px;'></span></a></p>" : " ")
-								: (filter === "network" 
-								  ? "<p style='font-size:90%'><span>Hosted for: " + jsonObj[i].group_name + "</span></p>" 
-								  : "<p style='font-size:90%'><span>Approved by: " + jsonObj[i].fname + " " + jsonObj[i].lname + "</span></p>")
-								) +
-								(jsonObj[i].bbb 
-								? "<p style='font-size:90%'>" +
-								    (IS_ADMIN 
-								    ? "<a href='<?php echo(Utilities::getHttpPath()); ?>/modules/schedule/control/scheduleDeleteBbbProcessor.php?uuid=" + jsonObj[i].uuid + "' onclick='return confirm(\"Please confirm this Nexus Web Meet room reservation deletion.\\r\\n (Your event will stay on the calendar.)\");' style='margin-right:10px;'><span class='fa fa-trash-o'</span></a>" 
-								    : "") +
-								    "<a href='" + meetingPass + "' target='_blank'><b>Start/Join Web Meeting</b></a>" +
-								    "<span style='margin-left:20px;margin-right:20px;'><b></b></span>" +
-		          			        (showClipboardButton
-		          			        ? "<button class='guest-pass-button' id='guest-pass-button0' data-clipboard-text='" + guestPass + "' onclick='' title='Click to copy'>Copy Guest Pass to Clipboard</button>"
-		          			    	: "<button onclick='alert(\"Share this link to invite a guest to this meeting.\\r\\n\\r\\n" + guestPass + "\");' title='Click to show pass'>Show Guest Pass</button>") +
-		          			    	"</p>"										
-								:   (filter === "pending"
-								    ? "" 
-								    : "<p style='font-size:90%'><a href='#openBbbMeetingAdd' onclick='return populateEventTypeForm(\"" + jsonObj[i].uuid + "\",\"" + jsonObj[i].purpose + "\");'>Reserve Web Meeting</a></p>")
-								) +
+										: (filter === "network" 
+										  ? "<p style='font-size:90%'><span>Hosted for: " + jsonObj[i].group_name + "</span></p>" 
+										  : "<p style='font-size:90%'><span>Approved by: " + jsonObj[i].fname + " " + jsonObj[i].lname + "</span></p>")
+										) +
+										(jsonObj[i].bbb 
+										? "<p style='font-size:90%'>" +
+										  (IS_ADMIN 
+										  ? "<a href='<?php echo(Utilities::getHttpPath()); ?>/modules/schedule/control/scheduleDeleteBbbProcessor.php?uuid=" + jsonObj[i].uuid + "' onclick='return confirm(\"Please confirm this Nexus Web Meet room reservation deletion.\\r\\n (Your event will stay on the calendar.)\");' style='margin-right:10px;'><span class='fa fa-trash-o'</span></a>" 
+										  : "") +
+										  "<a href='" + meetingPass + "' target='_blank'><b>Start/Join Web Meeting</b></a>" +
+										  "<span style='margin-left:20px;margin-right:20px;'><b></b></span>" +
+		          			    (showClipboardButton
+		          			    //(false
+		          			    ? "<button class='guest-pass-button' id='guest-pass-button0' data-clipboard-text='" + guestPass + "' onclick='' title='Click to copy'>Copy Guest Pass to Clipboard</button>"
+		          			    : "<button onclick='alert(\"Share this link to invite a guest to this meeting.\\r\\n\\r\\n" + guestPass + "\");' title='Click to show pass'>Show Guest Pass</button>"
+		          			    ) +
+		          			    "</p>"										
+										: "<p style='font-size:90%'><a href='#openBbbMeetingAdd' onclick='return populateEventTypeForm(\"" + jsonObj[i].uuid + "\",\"" + jsonObj[i].purpose + "\");'>Reserve Web Meeting</a></p>"
+										) +
          					"</span>" +
          				"</div>" +
 		          "</div>" +

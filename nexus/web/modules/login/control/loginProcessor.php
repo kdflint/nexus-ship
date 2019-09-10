@@ -124,6 +124,24 @@ if($isAuthenticated){
 			setcookie('remembered_oids', $_SESSION['orgUid'], time() + (10 * 365 * 24 * 60 * 60), '/', Utilities::getEnvHost(), 0, 0);
 		}
 	}
+	// TODO - only pulls first group in session list, which works for NWM at the current time because there is only 1 group per session
+	if (isset($_SESSION['groups']) && isset($_SESSION['groups'][0]['uid'])){
+		if(isset($_COOKIE['remembered_gids'])) {
+			$groups = json_decode($_COOKIE['remembered_gids']);
+			$guids = array();
+			foreach ($groups as $group) {
+				array_push($guids, $group->uid);
+			}
+			if(!in_array($_SESSION['groups'][0]['uid'], $guids, true)){
+				array_push($groups, $_SESSION['groups'][0]);
+			}
+			setcookie('remembered_gids', json_encode($groups), time() + (10 * 365 * 24 * 60 * 60), '/', Utilities::getEnvHost(), 0, 0);
+		} else {
+			$groups = array();
+			array_push($groups, $_SESSION['groups'][0]);
+			setcookie('remembered_gids', json_encode($groups), time() + (10 * 365 * 24 * 60 * 60), '/', Utilities::getEnvHost(), 0, 0);
+		}
+	}
 	header("location:" . Utilities::getHttpPath() . "/nexus.php");
 	exit(0);
 } else {

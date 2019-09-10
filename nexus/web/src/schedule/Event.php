@@ -164,15 +164,21 @@ class Event {
 		return FALSE;	
 	}
 	
-	public static function getFuturePendingEvents($idList, $localTz = "Greenwich", $ssnUser) {
+	public static function getFuturePendingEvents($idList, $ssnUser, $localTz = "Greenwich") {
 		return self::getFutureEventsByGroupIdList($idList, $localTz, $ssnUser, "3");
 	}
 	
-	public static function getFutureNetworkEvents($idList, $localTz = "Greenwich", $ssnUser, $status = "1") {
+	public static function getFutureNetworkEvents($idList, $ssnUser, $localTz = "Greenwich", $status = "1") {
 		return self::getFutureEventsByGroupIdList($idList, $localTz, $ssnUser, $status);
 	}
+
+	public static function getRunningMeetingsByGroupIdList($idList) {
+		// LEFT OFF - grumpiness on this $idList
+		// Also, Event.php and getRunningMeetings.php put into DEV
+		return self::getFutureEventsByGroupIdList($idList, 0);
+	}
 	
-	public static function getFutureEventsByGroupIdList($groupIdList, $localTz = "Greenwich", $ssnUser, $status = "1") {	
+	public static function getFutureEventsByGroupIdList($groupIdList, $ssnUser, $localTz = "Greenwich", $status = "1") {	
 		
 		$events = array();
 		if (self::isValidTimeZone($localTz)) {

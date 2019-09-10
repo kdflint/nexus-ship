@@ -16,10 +16,10 @@ $logger = Log::singleton("file", Utilities::getLogRoot() . "/fetch_recording.log
 // TODO - this check causes JSON object parse to be thrown from javascript -- better to tokenize it anyway
 	if (Utilities::isSessionValid()) {
 		if ($_SESSION['nexusContext'] === "ADV") {
-			//$data = Event::getFutureEventsByGroupIdList($clean['filter'], $_SESSION['timezone'], $_SESSION['uidpk'], $clean['status']);	
+			//$data = Event::getFutureEventsByGroupIdList($clean['filter'], $_SESSION['uidpk'], $_SESSION['timezone'], $clean['status']);	
 		} else {	
 			// TODO - this will break if user has > 1 group
-			//$data = Event::getFutureEventsByGroupIdList($_SESSION['groups'][0]['id'], $_SESSION['timezone'], $_SESSION['uidpk']);
+			//$data = Event::getFutureEventsByGroupIdList($_SESSION['groups'][0]['id'], $_SESSION['uidpk'], $_SESSION['timezone']);
 		}
 		$logger->log("======================", PEAR_LOG_INFO);
 		$response = array();

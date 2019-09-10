@@ -12,16 +12,16 @@ if (Utilities::isSessionValid()) {
 	if ($_SESSION['nexusContext'] === "ADV" && isset($_GET['filter'])) {
 		if ($_GET['filter'] === "public") {
 			$idList = "{" . $_SESSION['pgpk'] . "}";
-			$data = Event::getFutureEventsByGroupIdList($idList, $_SESSION['timezone'], $_SESSION['uidpk'], $clean['status']);	
+			$data = Event::getFutureEventsByGroupIdList($idList, $_SESSION['uidpk'], $_SESSION['timezone'], $clean['status']);	
 		} else if ($_GET['filter'] === "network") {
-			$data = Event::getFutureNetworkEvents(getFormattedNetworkGroupList(), $_SESSION['timezone'], $_SESSION['uidpk'], $clean['status']);			
+			$data = Event::getFutureNetworkEvents(getFormattedNetworkGroupList(), $_SESSION['uidpk'], $_SESSION['timezone'], $clean['status']);			
 		} else if ($_GET['filter'] === "pending") {
-			$data = Event::getFuturePendingEvents(getFormattedAllGroupsList(), $_SESSION['timezone'], $_SESSION['uidpk']);
+			$data = Event::getFuturePendingEvents(getFormattedAllGroupsList(), $_SESSION['uidpk'], $_SESSION['timezone']);
 		}
 	} else {	
 		// TODO - this will break if user has > 1 group. Only works for now becuse NWM context only has one session group.
 		$idList = "{" . $_SESSION['groups'][0]['id'] . "}";
-		$data = Event::getFutureEventsByGroupIdList($idList, $_SESSION['timezone'], $_SESSION['uidpk']);
+		$data = Event::getFutureEventsByGroupIdList($idList, $_SESSION['uidpk'], $_SESSION['timezone'], $clean['status']);
 	}
 	header('Content-Type: application/json');			
 	echo json_encode($data);
