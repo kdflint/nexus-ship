@@ -125,12 +125,12 @@ if($isAuthenticated){
 				array_push($roids, $org->uid);
 			}
 			if(!in_array($_SESSION['orgs'][0]['uid'], $roids, true)){
-				array_push($orgs, $_SESSION['org'][0]); 
+				array_push($orgs, $_SESSION['orgs'][0]); 
 			}
 			setcookie('remembered_orgs', json_encode($orgs), time() + (10 * 365 * 24 * 60 * 60), '/', Utilities::getEnvHost(), 0, 0);
 		} else {
 			$orgs = array();
-			array_push($orgs, $_SESSION['org'][0]);
+			array_push($orgs, $_SESSION['orgs'][0]);
 			setcookie('remembered_orgs', json_encode($orgs), time() + (10 * 365 * 24 * 60 * 60), '/', Utilities::getEnvHost(), 0, 0);
 		}
 	}
