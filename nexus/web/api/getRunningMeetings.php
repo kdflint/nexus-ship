@@ -3,6 +3,10 @@
 require_once("../src/framework/Util.php");
 require_once(Utilities::getSrcRoot() . "/schedule/Event.php");
 
+$conf = array('append' => true, 'mode' => 0644, 'timeFormat' => '%X %x');
+$logger = Log::singleton("file", Utilities::getLogRoot() . "/api.log", "", $conf, PEAR_LOG_INFO);
+$logger->log(print_r($_COOKIE, true), PEAR_LOG_INFO);
+
 if (isset($_COOKIE['REMEMBERME'])) {
 //if (true) {
 	if (isset($_COOKIE['remembered_gids'])) {
@@ -25,7 +29,7 @@ function getFormattedGroupListFromCookie($groupList) {
 	foreach ($groupListArray as $group) {
 		$idList = $group->id . "," . $idList;
 	}
-	return "{" . $idList . "}";
+	return "{" . rtrim($idList, ",") . "}";
 }
 
 ?>

@@ -8,7 +8,7 @@ use BigBlueButton\BigBlueButton;
 use BigBlueButton\Parameters\IsMeetingRunningParameters;
 
 class Event {
-	
+
 	private static function getDay($in) {
 		$dayMap = array("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
 		if (0 <= $in && $in < 7) {
@@ -173,14 +173,23 @@ class Event {
 	}
 
 	public static function getRunningMeetingsByGroupIdList($idList) {
-		// LEFT OFF - grumpiness on this $idList
-		// Also, Event.php and getRunningMeetings.php put into DEV
-		return self::getFutureEventsByGroupIdList($idList, 0);
+		$now = time();
+		$running = array();
+		$events = self::getFutureEventsByGroupIdList($idList, 0);
+		foreach ($events as $event) {
+			if ($event['epoch'] <= $now && $event['epoch_end'] > $now) {
+				array_push($running, $event);
+			}
+		}
+		return $running;
 	}
 	
-	public static function getFutureEventsByGroupIdList($groupIdList, $ssnUser, $localTz = "Greenwich", $status = "1") {	
-		
-		$events = array();
+	public static function getFutureEventsByGroupIdList($groupIdList, $ssnUser, $localTz = "Greenwich", $status = "1") {
+		$conf = array('append' => true, 'mode' => 0644, 'timeFormat' => '%X %x');
+		$logger = Log::singleton("file", Utilities::getLogRoot() . "/event.log", "", $conf, PEAR_LOG_INFO);	
+		//$logger->log("hello group => " . $groupIdList, PEAR_LOG_INFO);
+		//$logger->log("hello now => " . time(), PEAR_LOG_INFO);
+		//$events = array();
 		if (self::isValidTimeZone($localTz)) {
 			$query = "select 
 				extract(day from (select e.start_dttm at time zone $2)) as date, 
@@ -195,7 +204,7 @@ class Event {
 				extract(hour from (select (e.start_dttm + e.duration) at time zone $2)) as hour_end, 
 				extract(minute from (select (e.start_dttm + e.duration) at time zone $2)) as minute_end, 
 				extract(year from (select (e.start_dttm + e.duration) at time zone $2)) as year_end,
-				extract(epoch from (select (e.start_dttm + e.duration) at time zone $2)) as epoch_end,
+				extract(epoch from (select (e.start_dttm + e.duration))) as epoch_end,
 				e.tz_name as tzname, 
 				e.duration as duration, 
 				e.name as name, 
@@ -235,7 +244,9 @@ class Event {
 					((COALESCE(er.end_dttm,now()) > now()))
 				)
 			order by e.start_dttm";
-						
+			
+			//$logger->log(print_r($query, true), PEAR_LOG_INFO);
+
 			$cursor = PgDatabase::psExecute($query, array($groupIdList, $localTz, $status));
 			$counter = 0;
 			while ($row = pg_fetch_array($cursor)) {
@@ -257,6 +268,7 @@ class Event {
 				$events[$counter]['month_num_end'] = self::getMonthNum($row['month_end']);
 				$events[$counter]['year_end'] = $row['year_end'];
 				$events[$counter]['period_end'] = self::getPeriod($row['hour_end']);
+				$events[$counter]['epoch_end'] = $row['epoch_end'];
 				$events[$counter]['tzname'] = $row['tzname'];
 				$events[$counter]['abbrev'] = $row['abbrev'];
 				$events[$counter]['tz_extract_name'] = $row['tz_extract_name'];
@@ -284,7 +296,9 @@ class Event {
 				$events[$counter]['status'] = $row['status_fk'];
 				$counter++;
 			}
+			$logger->log($counter, PEAR_LOG_INFO);
 		}
+		$logger->log(print_r($events, true), PEAR_LOG_INFO);
 		return $events;
 	}
 	
@@ -301,7 +315,7 @@ class Event {
 				extract(epoch from (select e.start_dttm)) as epoch,
 				extract(hour from (select (e.start_dttm + e.duration) at time zone $2)) as hour_end, 
 				extract(minute from (select (e.start_dttm + e.duration) at time zone $2)) as minute_end, 
-				extract(epoch from (select (e.start_dttm + e.duration) at time zone $2)) as epoch_end,
+				extract(epoch from (select (e.start_dttm + e.duration))) as epoch_end,
 				e.tz_name as tzname, 
 				e.duration as duration, 
 				e.name as name, 
@@ -354,6 +368,7 @@ class Event {
 				$event[$counter]['epoch'] = $row['epoch'];
 				$event[$counter]['period'] = self::getPeriod($row['hour']);
 				$event[$counter]['period_end'] = self::getPeriod($row['hour_end']);
+				$event[$counter]['epoch_end'] = $row['epoch_end'];
 				$event[$counter]['abbrev'] = $row['abbrev'];
 				$event[$counter]['purpose'] = $row['name'];
 				$event[$counter]['descr'] = $row['descr'];
