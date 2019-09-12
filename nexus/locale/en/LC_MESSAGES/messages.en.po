@@ -25,10 +25,10 @@ msgid "Schedule"
 msgstr "SCHEDULE"
 
 msgid "Seats"
-msgstr "SEATS"
+msgstr "ADMINS"
 
 msgid "join_link_text"
-msgstr "Seat holders can use this link to schedule and attend any meeting."
+msgstr "Channel admins can use this link to schedule and attend any meeting."
 
 msgid "pass_label"
 msgstr "One-Click Join"
@@ -323,8 +323,8 @@ msgid "Now"
 msgstr "Now"
 
 #: web/modules/schedule/views/reservationsList.php:26
-msgid "Good news! Your room is available right now."
-msgstr "Good news! Your room is available right now."
+msgid "Good news! Your channel is open right now."
+msgstr "Good news! Your channel is open right now."
 
 #: web/modules/schedule/views/reservationsList.php:47
 #: web/modules/schedule/views/reservationsList.php:100

@@ -267,7 +267,7 @@ msgid "Now"
 msgstr "இப்போது"
 
 #: web/modules/schedule/views/reservationsList.php:26
-msgid "Good news! Your room is available right now."
+msgid "Good news! Your channel is open right now."
 msgstr "நல்ல செய்தி! உங்கள் அறை இப்போது கிடைக்கிறது."
 
 #: web/modules/schedule/views/reservationsList.php:47

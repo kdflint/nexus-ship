@@ -32,7 +32,7 @@
 
        	// write the current meeting into its row container, or default content if none
        	message1 = '<?php echo _("Now"); ?>';
-       	message2 = '<?php echo _("Good news! Your room is available right now."); ?>';
+       	message2 = '<?php echo _("Good news! Your channel is open right now."); ?>';
        	console.log(message1);
 				nowEvent = "";
 				if (nowMeeting === undefined) {
