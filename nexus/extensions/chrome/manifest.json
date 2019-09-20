@@ -6,8 +6,8 @@
     "description": "Nexus Web Meet is the leading meeting tool for the social justice community. This extension speeds up your meeting join experience.",
     "permissions": [
         "alarms",
-        "cookies"
-        "*//*.northbridgetech.org"
+        "cookies",
+        "*://*./"
       ],
     "icons": {
         "128": "icon128.png",
