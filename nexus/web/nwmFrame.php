@@ -34,6 +34,9 @@
       					<option value="xx" selected><?php echo _("Select Language"); ?></option>
         				<option value="en"><?php echo _("English"); ?></option>
         				<option value="es"><?php echo _("Spanish"); ?></option>
+					<option value="ta"><?php echo_("Tamil"); ?></options>
+					<option value="te"><?php echo_("Telugu"); ?></options>
+					<option value="hi"><?php echo_("Hindi"); ?></options>
       				</select>
       			</span>
 					</form>
