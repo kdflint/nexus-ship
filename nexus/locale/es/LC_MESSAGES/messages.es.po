@@ -25,12 +25,12 @@ msgid "Schedule"
 msgstr "PROGRAMAR"
 
 msgid "Seats"
-msgstr "ASIENTOS"
+msgstr "ADMINS"
 
 msgid "join_link_text"
 msgstr ""
-"Los miembros de tu equipo inscritos pueden usar ese enlace para programar y "
-"asistir a cualquier evento Nexus Web Meet."
+"Los administradores del canal pueden usar este enlace para programar y "
+"asistir a cualquier reunión."
 
 msgid "pass_label"
 msgstr "Un clic en Unirse"
@@ -120,6 +120,15 @@ msgstr "Por favor confirma esta eliminación."
 
 msgid "copied"
 msgstr "Copiado"
+
+msgid "Tamil"
+msgstr "Tamil"
+
+msgid "Telugu"
+msgstr "Telugu"
+
+msgid "Hindi"
+msgstr "Hindi"
 
 msgid "Confirm password"
 msgstr "Confirmar contraseña"
@@ -335,8 +344,8 @@ msgid "Now"
 msgstr "Ahora"
 
 #: web/modules/schedule/views/reservationsList.php:26
-msgid "Good news! Your channel is open right now."
-msgstr "¡Buenas noticias! Tu sala está disponible ahora."
+msgid "Good news! Your room is available right now."
+msgstr "¡Buenas noticias! Tu canal está abierto en este momento."
 
 #: web/modules/schedule/views/reservationsList.php:47
 #: web/modules/schedule/views/reservationsList.php:100
