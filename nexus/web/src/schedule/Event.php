@@ -173,6 +173,7 @@ class Event {
 	}
 
 	public static function getRunningMeetingsByGroupIdList($idList) {
+		// Also, Event.php and getRunningMeetings.php put into DEV
 		$now = time();
 		$running = array();
 		$events = self::getFutureEventsByGroupIdList($idList, 0);
@@ -189,7 +190,7 @@ class Event {
 		$logger = Log::singleton("file", Utilities::getLogRoot() . "/event.log", "", $conf, PEAR_LOG_INFO);	
 		//$logger->log("hello group => " . $groupIdList, PEAR_LOG_INFO);
 		//$logger->log("hello now => " . time(), PEAR_LOG_INFO);
-		//$events = array();
+		$events = array();
 		if (self::isValidTimeZone($localTz)) {
 			$query = "select 
 				extract(day from (select e.start_dttm at time zone $2)) as date, 
@@ -296,7 +297,7 @@ class Event {
 				$events[$counter]['status'] = $row['status_fk'];
 				$counter++;
 			}
-			$logger->log($counter, PEAR_LOG_INFO);
+			//$logger->log($counter, PEAR_LOG_INFO);
 		}
 		$logger->log(print_r($events, true), PEAR_LOG_INFO);
 		return $events;
