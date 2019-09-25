@@ -34,7 +34,8 @@ Utilities::setPublicSession($cleanNetworkId);
   	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
    	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 		<link rel="stylesheet" href="//yui-s.yahooapis.com/pure/0.6.0/pure-min.css">
-    <link rel="stylesheet" href="../styles/nexus.css" type="text/css" />
+    <!--<link rel="stylesheet" href="../styles/nexus.css" type="text/css" />-->
+    <link rel="stylesheet" href="../styles/nexusCssHandler.php" type="text/css" />
     
     <script src="../scripts/javascriptHandler.php" type="text/javascript" ></script>
  		<script src="//code.jquery.com/jquery-1.10.2.js" language="javascript"></script>

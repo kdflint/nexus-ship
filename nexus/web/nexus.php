@@ -1,10 +1,10 @@
 <?php 
 
 require_once("src/framework/Util.php");
-require_once(Utilities::getModulesRoot() . "/forum/forum_integration.php");
+//require_once(Utilities::getModulesRoot() . "/forum/forum_integration.php");
 
 session_start();
-$user->session_begin();
+//$user->session_begin();
 
 Utilities::setUserLanguageEnv();
 

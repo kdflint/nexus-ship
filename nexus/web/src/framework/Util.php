@@ -122,6 +122,8 @@ class Utilities {
 	private static $config_path = "/config";
 	
 	private static $include_path = "/include";
+
+	public static function getEnvHost() { return ENV_HOST; }
 	
 	public static function getHttpPath() { return ENV_PROTOCOL . ENV_HOST . APP_NAME . self::$web_path; }
 	
@@ -197,7 +199,13 @@ class Utilities {
 	
 	public static function getLiAppSecret() { return LI_APP_SECRET; }
 	
-	private static $supportedLangs = array('en' => 'en_US.utf8','es' => 'es_ES.utf8', 'ta' => 'ta_IN.utf8');
+	private static $supportedLangs = array(
+		'en' => 'en_US.utf8',
+		'es' => 'es_ES.utf8',
+		'ta' => 'ta_IN.utf8',
+		'te' => 'te_IN.utf8',
+		'hi' => 'hi_IN.utf8'
+	);
 	
 	const VALIDATION_FNAME_ERROR = "Please enter a valid first name."; 
 	const VALIDATION_LNAME_ERROR = "Please enter a valid last name (or none)."; 

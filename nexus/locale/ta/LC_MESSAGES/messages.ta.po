@@ -25,8 +25,7 @@ msgid "Schedule"
 msgstr "அட்டவணை"
 
 msgid "Seats"
-msgstr "இருக்கை\n"
-" \n"
+msgstr "நிர்வாகிகள்"
 
 msgid "join_link_text"
 msgstr ""
@@ -37,7 +36,7 @@ msgid "pass_label"
 msgstr "ஒரே கிளிக்கில்  இணைய "
 
 msgid "bookmark_notice"
-msgstr "ஒரே கிளிக்கில் சேர் (Ctrl-D புக்மார்க் செய்ய)"
+msgstr "ஒரே கிளிக்கில் சேர் (புக்மார்க் செய்ய Ctrl-Dஐ  அழுத்தவும் )"
 
 msgid "format_webinar"
 msgstr "ஒரு காட்சியளிப்பு அல்லது ஆன்லைன்   வகுப்புயை ஒளிபரப்பவும் ."
@@ -56,6 +55,78 @@ msgstr "உங்கள் பெயர்"
 
 msgid "meeting_time_past"
 msgstr "உங்கள் சந்திப்பு நேரம் கடந்த காலத்தில் உள்ளது."
+
+msgid "view_demo"
+msgstr "டெமோவைக் காண்க"
+
+msgid "demo"
+msgstr "செயல்விளக்க"
+
+msgid "featuring"
+msgstr " சிறப்பியல்பு"
+
+msgid "bookmark_shortcut"
+msgstr "(புக்மார்க் செய்ய Ctrl-Dஐ  அழுத்தவும் )"
+
+msgid "join"
+msgstr "சேர்க"
+
+msgid "meeting"
+msgstr "சந்திப்பு"
+
+msgid "show_pass"
+msgstr "காண்பிக்கவும்"
+
+msgid "share_link"
+msgstr "இந்த இணைப்பை மற்றவர்களுடன்   பகிர்ந்து கொள்ளுங்கள்."
+
+msgid "details"
+msgstr "விவரங்கள்"
+
+msgid "close"
+msgstr "அடைக்கப்பட்ட"
+
+msgid "pending"
+msgstr " நிலுவையிலுள்ள"
+
+msgid "enrollment"
+msgstr "பதிவு செய்தல்"
+
+msgid "compatible_message"
+msgstr "இந்த கூட்டத்தில் கலந்துகொள்ள உங்கள் அமைப்பு இணக்கமானது."
+
+msgid "missing_features"
+msgstr "உங்கள் அமைப்பு சில கூட்டமைப்பின் நிர்வாக அம்சங்களை வழங்காது."
+
+msgid "connection_quality"
+msgstr "உங்கள் கணினி இணைப்பு தர வரம்புகளைக் காண்பிக்கலாம்."
+
+msgid "system"
+msgstr "கணினி"
+
+msgid "checking"
+msgstr "உங்கள் கணினி இணக்கத்தன்மையை சரிபார்க்கிறது"
+
+msgid "copy_pass"
+msgstr "கிளிப்போர்டுக்கு அனுப்பவும்."
+
+msgid "reserved_by"
+msgstr "ஒதுக்கப்பட்டுள்ளது"
+
+msgid "confirm_delete"
+msgstr "தயவுசெய்து இந்த நீக்கத்தை உறுதிப்படுத்தவும்."
+
+msgid "copied"
+msgstr "நகலெடுக்கப்பட்டன"
+
+msgid "Tamil"
+msgstr "தமிழ்"
+
+msgid "Telugu"
+msgstr "தெலுங்கு"
+
+msgid "Hindi"
+msgstr "இந்தி"
 
 msgid "Confirm password"
 msgstr "கடவுச்சொல்லை உறுதிப்படுத்தவும்"
@@ -490,8 +561,7 @@ msgstr "நிமிடங்கள்"
 
 #: meetingDurationOptions.html:5
 msgid "hours"
-msgstr "மணிநேரம்\n"
-" \n"
+msgstr "மணிநேரம்"
 
 #: meetingDurationOptions.html:8
 msgid "min"

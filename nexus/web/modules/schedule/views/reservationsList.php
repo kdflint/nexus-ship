@@ -17,7 +17,7 @@
 			 	var nowMeeting = undefined;	
 			 	if (jsonObj.length > 0 && jsonObj[0].epoch < referenceTime) {
 			 		nowMeeting = jsonObj.shift();
-			 		techCheck();
+			 		//techCheck();
 			 	}
        	document.getElementById("nowTable").innerHTML = "<div id='nowRow0' class='tr-div' style='position:relative;'></div>";
        	
@@ -74,7 +74,7 @@
 	       				"<span class='month'>" + nowMeeting.hour_end + ":" + nowMeeting.minute_end + "</span><span class='period'> " + nowMeeting.period_end + " " + nowMeeting.abbrev + "</span>" +
 							"</div>" +
        			"</div>" +
-       			"<div id='nowEventDetail' class='td-div' style='position:absolute;left:140px;top:5px;height:220px;'>" +     				
+       			"<div id='nowEventDetail' class='td-div' style='position:absolute;left:140px;top:5px;height:180px;'>" +     				
 			        "<div class='meeting'>" +
           			"<span class='purpose'>" + nowMeeting.purpose + "</span><br/>" +
           			"<span class='descr'>" +
@@ -89,7 +89,7 @@
 	        					) +
 
          						// Flaw! We may have two items with id=='guest-pass0'. This accomodates WalkMe tutorials but not strictly correct :)
-	        				"<p><span id='tech_check_summary' style='font-style:italic;' ><span class='fa fa-spinner fa-spin fa-lg'></span> <?php echo _('checking'); ?>... <?php echo _('One Moment'); ?></span><a href='javascript:void(0);' onclick='document.getElementById(\"tech_check_control\").click();' style='font-size:90%;margin-left:5px;'> <?php echo _('details'); ?></a></p>" + 
+	        				//"<p><span id='tech_check_summary' style='font-style:italic;' ><span class='fa fa-spinner fa-spin fa-lg'></span> <?php echo _('checking'); ?>... <?php echo _('One Moment'); ?></span><a href='javascript:void(0);' onclick='document.getElementById(\"tech_check_control\").click();' style='font-size:90%;margin-left:5px;'> <?php echo _('details'); ?></a></p>" + 
 	        			"</span>" +
           		"</div>" +
           	"</div>";	

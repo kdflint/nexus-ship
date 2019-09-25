@@ -1,0 +1,611 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-03-26 13:06-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: hi\n"
+"MIME-Version: 1.0\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Content-Type: text/plain; charset=UTF-8"
+
+#: web/login.php:88
+msgid "Your session has timed out."
+msgstr "आपका अधिवेशन  समाप्त हो गया है।"
+
+msgid "Schedule"
+msgstr "अनुसूची"
+
+msgid "Seats"
+msgstr "सीटें"
+
+msgid "join_link_text"
+msgstr ""
+"सीट धारक इस लिंक का उपयोग किसी भी बैठक को निर्धारित करने और उपस्थित होने के "
+"लिए कर सकते हैं।"
+
+msgid "pass_label"
+msgstr "वन-क्लिक ज्वाइन करें"
+
+msgid "bookmark_notice"
+msgstr "वन-क्लिक जॉइन करें (बुकमार्क करने के लिए Ctrl-D)"
+
+msgid "format_webinar"
+msgstr "एक प्रस्तुति या ऑनलाइन कक्षा प्रसारित करें।"
+
+msgid "confirm_pass"
+msgstr "पासवर्ड की पुष्टि कीजिये"
+
+msgid "pending_enroll"
+msgstr "लंबित नामांकन"
+
+msgid "Already have an account"
+msgstr "क्या आपके पास पहले से एक खाता मौजूद है?"
+
+msgid "demo_name"
+msgstr "आपका नाम"
+
+msgid "meeting_time_past"
+msgstr "आपकी मुलाकात का समय अतीत में है।"
+
+msgid "view_demo"
+msgstr "डेमो देखें"
+
+msgid "demo"
+msgstr "प्रदर्शन"
+
+msgid "featuring"
+msgstr "की विशेषता"
+
+msgid "bookmark_shortcut"
+msgstr "बुकमार्क करने के लिए Ctrl-D"
+
+msgid "join"
+msgstr "शामिल हों"
+
+msgid "meeting"
+msgstr "मुलाकात"
+
+msgid "show_pass"
+msgstr "पास दिखाओ"
+
+msgid "share_link"
+msgstr "इस लिंक को अपने मेहमानों के साथ साझा करें।"
+
+msgid "details"
+msgstr "विवरण"
+
+msgid "close"
+msgstr "बंद करे"
+
+msgid "pending"
+msgstr "अपूर्ण"
+
+msgid "enrollment"
+msgstr "उपस्थिति पंजी"
+
+msgid "compatible_message"
+msgstr "इस मीटिंग में भाग लेने के लिए आपका सिस्टम संगत है।"
+
+msgid "missing_features"
+msgstr "आपका सिस्टम कुछ मीटिंग प्रबंधन सुविधाएँ प्रदान नहीं कर सकता है।"
+
+msgid "connection_quality"
+msgstr "आपका सिस्टम कनेक्शन गुणवत्ता सीमाएँ दिखा सकता है।"
+
+msgid "system"
+msgstr "प्रणाली"
+
+msgid "checking"
+msgstr "आपके सिस्टम की संगतता की जाँच करना"
+
+msgid "copy_pass"
+msgstr "क्लिपबोर्ड में कॉपी पास।"
+
+msgid "reserved_by"
+msgstr "द्वारा आरक्षित है"
+
+msgid "confirm_delete"
+msgstr "कृपया इस डिलीट की पुष्टि करें।"
+
+msgid "copied"
+msgstr "कॉपी किया गया"
+
+msgid "Tamil"
+msgstr "तामिल"
+
+msgid "Telugu"
+msgstr "तेलुगू"
+
+msgid "Hindi"
+msgstr "हिंदी"
+
+msgid "Confirm password"
+msgstr "पासवर्ड की पुष्टि कीजिये"
+
+#: web/login.php:90
+msgid "You have signed out successfully."
+msgstr "आपने सफलतापूर्वक साइन आउट कर दिया है।"
+
+#: web/login.php:135
+msgid "Your meeting is over."
+msgstr "आपकी मुलाकात खत्म हो गई है।"
+
+#: web/login.php:264 web/roomLogout.php:20
+msgid "About"
+msgstr "के बारे में"
+
+#: web/login.php:282 web/login.php:315 test/esTranslationTest.php:24
+msgid "Username"
+msgstr "उपयोगकर्ता नाम"
+
+#: web/login.php:282 web/login.php:285 web/login.php:315
+msgid "I forgot"
+msgstr "मैं भूल गया"
+
+#: web/login.php:285
+msgid "Password"
+msgstr "पासवर्ड"
+
+#: web/login.php:288
+msgid "Sign In"
+msgstr "साइन इन करें"
+
+#: web/login.php:289
+msgid "Remember Me"
+msgstr "मुझे याद रखना"
+
+#: web/login.php:302 web/login.php:306
+msgid "Recover Username"
+msgstr "उपयोगकर्ता नाम पुनर्प्राप्त करें"
+
+#: web/login.php:303
+msgid "Please enter your email address and we will resend your username."
+msgstr "कृपया अपना ईमेल पता दर्ज करें और हम आपके उपयोगकर्ता नाम को भेज देंगे।"
+
+#: web/login.php:304 web/scripts/javascriptHandler.php:20
+#: web/modules/user/views/userAdd.php:21
+msgid "Email"
+msgstr "ईमेल"
+
+#: web/login.php:307 web/login.php:318
+msgid "Return to Login"
+msgstr "लॉगिन पर लौटे"
+
+#: web/login.php:313
+msgid "Password Reset"
+msgstr "पासवर्ड रीसेट"
+
+#: web/login.php:314
+msgid "Please enter your user id so we can email you a password reset link."
+msgstr ""
+"कृपया अपना उपयोगकर्ता आईडी दर्ज करें ताकि हम आपको पासवर्ड रीसेट लिंक ईमेल कर "
+"सकें।"
+
+#: web/login.php:317
+msgid "Reset Password"
+msgstr "पासवर्ड रीसेट"
+
+#: web/roomLogout.php:24
+msgid "You are logged out of your Web Conference Room."
+msgstr "आप अपने वेब कॉन्फ्रेंस रूम से लॉग आउट हैं।"
+
+#: web/enroll.php:109
+msgid "Login"
+msgstr "लॉग इन करें"
+
+#: web/enroll.php:122
+msgid "Which group(s) would you like to join?"
+msgstr "आप किस समूह में शामिल होना चाहते हैं?"
+
+#: web/enroll.php:144
+msgid "Choose your username"
+msgstr "अपना उपयोगकर्ता नाम चुनें"
+
+#: web/enroll.php:145
+msgid "Choose your password"
+msgstr "अपना पासवर्ड चुनें"
+
+#: web/enroll.php:146
+msgid "Confirm your password"
+msgstr "अपने पासवर्ड की पुष्टि करें"
+
+#: web/enroll.php:147
+msgid "Your email"
+msgstr "तुम्हारा ईमेल"
+
+#: web/enroll.php:148
+msgid "Your first name"
+msgstr "आपका पहला नाम"
+
+#: web/enroll.php:149
+msgid "Your last name"
+msgstr "आपका अंतिम नाम"
+
+#: web/enroll.php:150 web/modules/user/views/userAdd.php:28
+msgid "Enroll"
+msgstr "नामांकन करें"
+
+#: web/scripts/noscript.php:4
+msgid "To use Nexus it is necessary to enable JavaScript."
+msgstr "Nexus का उपयोग करने के लिए जावास्क्रिप्ट सक्षम करना आवश्यक है।"
+
+#: web/scripts/noscript.php:4
+msgid "Help"
+msgstr "मदद"
+
+#: web/scripts/javascriptHandler.php:5
+msgid "Username is required."
+msgstr "उपयोगकर्ता नाम आवश्यक है।"
+
+#: web/scripts/javascriptHandler.php:6
+msgid "Password is required."
+msgstr "पासवर्ड की आवश्यकता है।"
+
+#: web/scripts/javascriptHandler.php:7
+msgid "Valid email is required."
+msgstr "वैध ईमेल की आवश्यकता है।"
+
+#: web/scripts/javascriptHandler.php:8
+msgid "Valid username is required."
+msgstr "मान्य उपयोगकर्ता नाम आवश्यक है।"
+
+#: web/scripts/javascriptHandler.php:9
+msgid "This username is already taken."
+msgstr "यह उपयोगकर्ता नाम पहले ही ले लिया है।"
+
+#: web/scripts/javascriptHandler.php:10
+msgid "Valid password is required."
+msgstr "मान्य पासवर्ड आवश्यक है।"
+
+#: web/scripts/javascriptHandler.php:11
+msgid "Matching confirmation password is required."
+msgstr "पुष्टि पुष्टिकरण पासवर्ड की आवश्यकता है।"
+
+#: web/scripts/javascriptHandler.php:12
+msgid "Valid first name is required."
+msgstr "मान्य प्रथम नाम आवश्यक है।"
+
+#: web/scripts/javascriptHandler.php:13
+msgid "Name is required."
+msgstr "नाम आवश्यक है।"
+
+#: web/scripts/javascriptHandler.php:14
+msgid "Email is required."
+msgstr "ईमेल जरुरी है।"
+
+#: web/scripts/javascriptHandler.php:15
+msgid "One Moment"
+msgstr "एक क्षण"
+
+#: web/scripts/javascriptHandler.php:16
+msgid "To test, save your changes"
+msgstr "परीक्षण करने के लिए, अपने परिवर्तनों को सहेजें"
+
+#: web/scripts/javascriptHandler.php:17
+msgid "Please send a password reset link to my email for"
+msgstr "कृपया मेरे ईमेल के लिए एक पासवर्ड रीसेट लिंक भेजें"
+
+#: web/scripts/javascriptHandler.php:18
+msgid "Our bad, something goofed"
+msgstr "कोई काम नहीं होगा "
+
+#: web/scripts/javascriptHandler.php:19
+msgid "Please try again."
+msgstr "कृपया प्रयास करें।"
+
+#: web/modules/user/views/userAdd.php:5
+#: web/modules/schedule/views/reservationAdd.php:5
+msgid "New"
+msgstr "नया"
+
+#: web/modules/user/views/userAdd.php:6
+msgid "User"
+msgstr "उपयोगकर्ता"
+
+#: web/modules/user/views/userAdd.php:13
+msgid "An enrollment packet will be emailed to this new user."
+msgstr "इस नए उपयोगकर्ता को एक नामांकन पैकेट ईमेल किया जाएगा।"
+
+#: web/modules/user/views/userAdd.php:16
+msgid "First Name"
+msgstr "पहला नाम"
+
+#: web/modules/user/views/userAdd.php:17
+msgid "Administrator"
+msgstr "प्रशासक"
+
+#: web/modules/user/views/userAdd.php:27
+#: web/modules/schedule/views/reservationAdd.php:50
+#: web/modules/schedule/views/joinAdd.php:33
+msgid "Cancel"
+msgstr "रद्द करना"
+
+#: web/modules/schedule/views/reservationsList.php:25
+#: web/modules/schedule/views/reservationsList.php:48
+#: web/modules/schedule/views/joinAdd.php:6
+msgid "Now"
+msgstr "अभी व"
+
+#: web/modules/schedule/views/reservationsList.php:26
+msgid "Good news! Your room is available right now."
+msgstr "खुशखबरी! अभी आपका कमरा उपलब्ध है।"
+
+#: web/modules/schedule/views/reservationsList.php:47
+#: web/modules/schedule/views/reservationsList.php:100
+msgid "Guest Pass"
+msgstr "अतिथि पास"
+
+#: web/modules/schedule/views/reservationsList.php:49
+msgid "Soon"
+msgstr "शीघ्र"
+
+#: web/modules/schedule/views/reservationsList.php:82
+msgid "Future"
+msgstr "भविष्य"
+
+#: web/modules/schedule/views/reservationsList.php:83
+msgid "Click the calendar to reserve this room for a future date."
+msgstr ""
+"भविष्य की तारीख के लिए इस कमरे को आरक्षित करने के लिए कैलेंडर पर क्लिक करें।"
+
+#: web/modules/schedule/views/reservationsList.php:168
+msgid "Team Pass"
+msgstr "टीम पास"
+
+#: web/modules/schedule/views/reservationAdd.php:6
+msgid "Reservation"
+msgstr "आरक्षण"
+
+#: web/modules/schedule/views/reservationAdd.php:13
+#: web/modules/schedule/views/joinAdd.php:13
+msgid "Meeting Name"
+msgstr "बैठक का नाम"
+
+#: web/modules/schedule/views/reservationAdd.php:16
+#: web/modules/schedule/views/reservationAdd.php:21
+#: web/modules/schedule/views/reservationAdd.php:27
+msgid "Time Zone"
+msgstr "समय क्षेत्र"
+
+#: web/modules/schedule/views/reservationAdd.php:23
+msgid "Country"
+msgstr "देश"
+
+#: web/modules/schedule/views/reservationAdd.php:31
+msgid "Date"
+msgstr "तारीख"
+
+#: web/modules/schedule/views/reservationAdd.php:33
+msgid "Time"
+msgstr "पहर"
+
+#: web/modules/schedule/views/reservationAdd.php:51
+msgid "Reserve"
+msgstr "रिज़र्व"
+
+#: web/modules/schedule/views/meetingTypeTooltip.php:5
+msgid "Video Chat"
+msgstr "वीडियो चैट"
+
+#: web/modules/schedule/views/meetingTypeTooltip.php:5
+msgid "Shows web camera displays prominently."
+msgstr "शो वेब कैमरा प्रमुखता से दिखाता है।"
+
+#: web/modules/schedule/views/meetingTypeTooltip.php:6
+msgid "Collaboration"
+msgstr "सहयोग"
+
+#: web/modules/schedule/views/meetingTypeTooltip.php:6
+msgid ""
+"Use for a formal presentation or fully collaborative meeting, with access to "
+"all conference tools (presentation screen, chat, cameras, etc.)"
+msgstr ""
+"सभी औपचारिक टूल (प्रेजेंटेशन स्क्रीन, चैट, कैमरा, आदि) तक पहुंच के साथ एक "
+"औपचारिक प्रस्तुति या पूरी तरह से सहयोगात्मक बैठक के लिए उपयोग करें।"
+
+#: web/modules/schedule/views/meetingTypeTooltip.php:7
+msgid "Video Link"
+msgstr "वीडियो लिंक"
+
+#: web/modules/schedule/views/meetingTypeTooltip.php:7
+msgid ""
+"Enhance a telephone meeting with cameras and visual components (presentation "
+"screen, chat room, etc.)"
+msgstr ""
+"कैमरे और दृश्य घटकों (प्रस्तुति स्क्रीन, चैट रूम, आदि) के साथ एक टेलीफोन "
+"बैठक बढ़ाएं"
+
+#: web/modules/schedule/views/meetingTypeTooltip.php:8
+msgid "Webinar"
+msgstr "वेबिनार"
+
+#: web/modules/schedule/views/joinAdd.php:5
+msgid "Start"
+msgstr "शुरु"
+
+#: web/modules/schedule/views/joinAdd.php:34
+msgid "Open Room"
+msgstr "खुला कमरा"
+
+#: web/modules/event/views/eventListRecorded.php:16
+msgid "Recordings"
+msgstr "रिकॉर्डिंग"
+
+#: web/modules/event/views/eventListRecorded.php:17
+msgid "There are no recordings available."
+msgstr "कोई रिकॉर्डिंग उपलब्ध नहीं हैं।"
+
+#: web/modules/event/views/eventListRecorded.php:33
+msgid "Attendees"
+msgstr "सहभागी"
+
+#: web/nwmHeader.php:34
+msgid "Hello"
+msgstr "नमस्ते"
+
+#: web/nwmHeader.php:41
+msgid "Register for Nexus Web Meet training at the"
+msgstr "नेक्सस वेब मीट प्रशिक्षण के लिए रजिस्टर करें"
+
+#: web/nwmHeader.php:41
+msgid "Northbridge Member Portal"
+msgstr "नॉर्थब्रिज सदस्य पोर्टल"
+
+#: web/nwmFooter.php:1
+msgid "powered by"
+msgstr "द्वारा संचालित"
+
+#: web/nwmFrame.php:33
+msgid "Select Language"
+msgstr "भाषा चुनिए"
+
+#: web/nwmFrame.php:34
+msgid "English"
+msgstr "अंग्रेज़ी"
+
+#: web/nwmFrame.php:35
+msgid "Spanish"
+msgstr "स्पेनिश"
+
+#: web/nwmHeader.php:14
+msgid "ROOM"
+msgstr "कक्ष"
+
+msgid "Please confirm your new password."
+msgstr "कृपया अपने नए पासवर्ड की पुष्टि करें।"
+
+msgid "7-25 characters please"
+msgstr "7-25 अक्षर कृपया"
+
+msgid "Your passwords do not match."
+msgstr "आपके पासवर्ड मेल नहीं खाते।"
+
+msgid "First name is required."
+msgstr "पहला नाम आवश्यक है।"
+
+msgid "A meeting cannot be longer than 24 hours."
+msgstr "एक बैठक 24 घंटे से अधिक लंबी नहीं हो सकती है।"
+
+msgid "Bad duration"
+msgstr "खराब अवधि"
+
+msgid "Contact Email"
+msgstr "ई - मेल से संपर्क करे"
+
+msgid "Meeting name is required"
+msgstr "बैठक का नाम आवश्यक है"
+
+msgid "Description"
+msgstr "विवरण"
+
+msgid "Meeting description is required"
+msgstr "बैठक विवरण आवश्यक है"
+
+msgid "End Time"
+msgstr "अंतिम समय"
+
+msgid "End Date"
+msgstr "अंतिम तिथि"
+
+msgid "Start Time"
+msgstr "समय शुरू"
+
+msgid "Start Date"
+msgstr "आरंभ करने की तिथि"
+
+#: web/nwmHeader:13
+msgid "TEAM"
+msgstr "टीम"
+
+#: web/nwmHeader.php:12
+msgid "ARCHIVE"
+msgstr "पुरालेख"
+
+#: web/nwmHeader.php
+msgid "Training"
+msgstr "प्रशिक्षण"
+
+#: web/nwmHeader.php:28
+msgid "Support"
+msgstr "समर्थन"
+
+#: web/nwmHeader.php:29
+msgid "Logout"
+msgstr "लोग आउट"
+
+#: meetingTypeOptions.html:1
+msgid "Meeting Type"
+msgstr "बैठक का प्रकार"
+
+#: meetingDurationOptions.html:1
+msgid "Duration"
+msgstr "अवधि"
+
+#: meetingDurationOptions.html:2
+msgid "minutes"
+msgstr "मिनट"
+
+#: meetingDurationOptions.html:5
+msgid "hours"
+msgstr "घंटे"
+
+#: meetingDurationOptions.html:8
+msgid "min"
+msgstr "मिनट"
+
+#: meetingDurationOptions.html:10
+msgid "hour"
+msgstr "घंटा"
+
+#: reservationAdd:16
+msgid "Change"
+msgstr "परिवर्तन"
+
+#: userList.php:48
+msgid "Please confirm this delete of"
+msgstr "कृपया इस हटाने की पुष्टि करें"
+
+#: reservationsList:119
+msgid "Please confirm this delete."
+msgstr "कृपया इस डिलीट की पुष्टि करें।"
+
+#: login.php:295
+msgid "Sign In with"
+msgstr "के साथ साइन इन करें"
+
+#: profile.php:13
+msgid "Reset"
+msgstr "रीसेट"
+
+#: profile.php:12
+msgid "Update"
+msgstr "अद्यतन"
+
+#: listUsers.php
+msgid "Pending"
+msgstr "अपूर्ण"
+
+#: web/login.php:295
+msgid "Facebook"
+msgstr "फेसबुक"
+
+#: web/login.php:296
+msgid "LinkedIn"
+msgstr "लिंक्डइन"
+
+#: Group.php
+msgid "Enrollment"
+msgstr "उपस्थिति पंजी"
+
+#: profile.php:5
+msgid "Last Name"
+msgstr "अंतिम नाम"

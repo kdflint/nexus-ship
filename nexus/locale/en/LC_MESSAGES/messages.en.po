@@ -25,10 +25,10 @@ msgid "Schedule"
 msgstr "SCHEDULE"
 
 msgid "Seats"
-msgstr "SEATS"
+msgstr "ADMINS"
 
 msgid "join_link_text"
-msgstr "Seat holders can use this link to schedule and attend any meeting."
+msgstr "Channel admins can use this link to schedule and attend any meeting."
 
 msgid "pass_label"
 msgstr "One-Click Join"
@@ -116,6 +116,15 @@ msgstr "Please confirm this delete."
 
 msgid "copied"
 msgstr "Copied"
+
+msgid "Tamil"
+msgstr "Tamil"
+
+msgid "Telugu"
+msgstr "Telugu"
+
+msgid "Hindi"
+msgstr "Hindi"
 
 msgid "Confirm password"
 msgstr "Confirm password"
@@ -324,7 +333,7 @@ msgstr "Now"
 
 #: web/modules/schedule/views/reservationsList.php:26
 msgid "Good news! Your room is available right now."
-msgstr "Good news! Your room is available right now."
+msgstr "Good news! Your channel is open right now."
 
 #: web/modules/schedule/views/reservationsList.php:47
 #: web/modules/schedule/views/reservationsList.php:100

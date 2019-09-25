@@ -1,0 +1,600 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-03-26 13:06-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: te\n"
+"MIME-Version: 1.0\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Content-Type: text/plain; charset=UTF-8"
+
+#: web/login.php:88
+msgid "Your session has timed out."
+msgstr "మీ కాలపరిమితి అయిపోయింది."
+
+msgid "Schedule"
+msgstr "షెడ్యూలు"
+
+msgid "Seats"
+msgstr "సీట్లు"
+
+msgid "join_link_text"
+msgstr ""
+"సీట్ హోల్డర్లు ఈ సమావేశాన్ని షెడ్యూల్ చేయడానికి మరియు ఏదైనా సమావేశానికి "
+"హాజరు కావడానికి ఉపయోగించవచ్చు."
+
+msgid "pass_label"
+msgstr "ఒక క్లిక్ చేరండి"
+
+msgid "bookmark_notice"
+msgstr "ఒక-క్లిక్ చేరండి కలిగి (Ctrl-D బుక్మార్క్ కు)"
+
+msgid "format_webinar"
+msgstr "ప్రెజెంటేషన్ లేదా ఆన్లైన్ క్లాస్ను ప్రసారం చేయండి."
+
+msgid "confirm_pass"
+msgstr "పాస్వర్డ్ని నిర్ధారించండి"
+
+msgid "pending_enroll"
+msgstr "పెండింగ్ నమోదు"
+
+msgid "Already have an account"
+msgstr "ఖాతా కలిగి ఉన్నారా?"
+
+msgid "demo_name"
+msgstr "నీ పేరు"
+
+msgid "meeting_time_past"
+msgstr "మీ సమావేశం సమయం గతంలో ఉంది."
+
+msgid "featuring"
+msgstr "నటించిన"
+
+msgid "bookmark_shortcut"
+msgstr "(Ctrl-D బుక్మార్క్ కు)"
+
+msgid "meeting"
+msgstr "సమావేశం"
+
+msgid "show_pass"
+msgstr "పాస్ చూపించు"
+
+msgid "share_link"
+msgstr "ఈ లింక్‌ను మీ అతిథులతో పంచుకోండి."
+
+msgid "details"
+msgstr "వివరాలు"
+
+msgid "pending"
+msgstr "పెండింగ్"
+
+msgid "enrollment"
+msgstr "నమోదు"
+
+msgid "compatible_message"
+msgstr "ఈ సమావేశంలో పాల్గొనడానికి మీ సిస్టమ్ అనుకూలంగా ఉంటుంది."
+
+msgid "missing_features"
+msgstr "మీ సిస్టమ్ నిర్దిష్ట సమావేశ నిర్వహణ లక్షణాలను అందించలేకపోవచ్చు."
+
+msgid "connection_quality"
+msgstr "మీ సిస్టమ్ కనెక్షన్ నాణ్యత పరిమితులను చూపవచ్చు."
+
+msgid "system"
+msgstr "వ్యవస్థ"
+
+msgid "checking"
+msgstr "మీ సిస్టమ్ అనుకూలతను తనిఖీ చేస్తోంది"
+
+msgid "copy_pass"
+msgstr "క్లిప్‌బోర్డ్‌కు పాస్‌ను కాపీ చేయండి."
+
+msgid "reserved_by"
+msgstr "ద్వారా రిజర్వు చేయబడింది"
+
+msgid "confirm_delete"
+msgstr "దయచేసి ఈ తొలగింపుని నిర్ధారించండి."
+
+msgid "copied"
+msgstr "కాపీ చెయ్యబడ్డాయి"
+
+msgid "Tamil"
+msgstr "తమిళ"
+
+msgid "Telugu"
+msgstr "తెలుగు"
+
+msgid "Hindi"
+msgstr "హిందీ"
+
+msgid "Confirm password"
+msgstr "పాస్వర్డ్ని నిర్ధారించండి"
+
+#: web/login.php:90
+msgid "You have signed out successfully."
+msgstr "మీరు విజయవంతంగా సైన్ అవుట్ చేసారు."
+
+#: web/login.php:135
+msgid "Your meeting is over."
+msgstr "మీ సమావేశం ముగిసింది."
+
+#: web/login.php:264 web/roomLogout.php:20
+msgid "About"
+msgstr "గురించి"
+
+#: web/login.php:282 web/login.php:315 test/esTranslationTest.php:24
+msgid "Username"
+msgstr "యూజర్ పేరు"
+
+#: web/login.php:282 web/login.php:285 web/login.php:315
+msgid "I forgot"
+msgstr "నేను మరచిపోయాను"
+
+#: web/login.php:285
+msgid "Password"
+msgstr "పాస్వర్డ్"
+
+#: web/login.php:288
+msgid "Sign In"
+msgstr "సైన్ ఇన్ చేయండి"
+
+#: web/login.php:289
+msgid "Remember Me"
+msgstr "నన్ను గుర్తు పెట్టుకో"
+
+#: web/login.php:302 web/login.php:306
+msgid "Recover Username"
+msgstr "యూజర్ పేరుని పునరుద్ధరించండి"
+
+#: web/login.php:303
+msgid "Please enter your email address and we will resend your username."
+msgstr ""
+"దయచేసి మీ ఇమెయిల్ చిరునామాను నమోదు చేయండి మరియు మేము మీ యూజర్ పేరును మళ్ళీ "
+"పంపుతాము."
+
+#: web/login.php:304 web/scripts/javascriptHandler.php:20
+#: web/modules/user/views/userAdd.php:21
+msgid "Email"
+msgstr "ఇమెయిల్"
+
+#: web/login.php:307 web/login.php:318
+msgid "Return to Login"
+msgstr "లాగిన్కు తిరిగి వెళ్ళు"
+
+#: web/login.php:313
+msgid "Password Reset"
+msgstr "పాస్వర్డ్ రీసెట్  చేసుకోండి "
+
+#: web/login.php:314
+msgid "Please enter your user id so we can email you a password reset link."
+msgstr ""
+"దయచేసి మీ యూజర్ ఐడిని ఎంటర్ చెయ్యండి, కనుక మీకు పాస్వర్డ్ రీసెట్ లింకు "
+"ఇమెయిల్ చేయగలము "
+
+#: web/login.php:317
+msgid "Reset Password"
+msgstr "పాస్వర్డ్  మార్చుకోండి "
+
+#: web/roomLogout.php:24
+msgid "You are logged out of your Web Conference Room."
+msgstr "మీరు మీ వెబ్ కాన్ఫరెన్స్ రూమ్ నుండి లాగ్ అవుట్ అయ్యారు."
+
+#: web/enroll.php:109
+msgid "Login"
+msgstr "లాగిన్"
+
+#: web/enroll.php:122
+msgid "Which group(s) would you like to join?"
+msgstr "ఏ గ్రూపు (లు) మీరు చేరాలనుకుంటున్నారు?"
+
+#: web/enroll.php:144
+msgid "Choose your username"
+msgstr "మీ వాడుకరి పేరు ఎన్నుకోండి"
+
+#: web/enroll.php:145
+msgid "Choose your password"
+msgstr "మీ పాస్వర్డ్ను ఎంచుకోండి"
+
+#: web/enroll.php:146
+msgid "Confirm your password"
+msgstr "పాస్స్వర్డ్ను  ధృవీకరించండి "
+
+#: web/enroll.php:147
+msgid "Your email"
+msgstr "మీ ఇమెయిల్"
+
+#: web/enroll.php:148
+msgid "Your first name"
+msgstr "మీ మొదటి పేరు"
+
+#: web/enroll.php:149
+msgid "Your last name"
+msgstr "మీ చివరి పేరు "
+
+#: web/enroll.php:150 web/modules/user/views/userAdd.php:28
+msgid "Enroll"
+msgstr "నమోదు చేసుకోండి "
+
+#: web/scripts/noscript.php:4
+msgid "To use Nexus it is necessary to enable JavaScript."
+msgstr "నెక్సస్ను  ఉపయోగించడానికి  జావాస్క్రిప్టును ఎన్బల్  చేయడం అవసరం "
+
+#: web/scripts/noscript.php:4
+msgid "Help"
+msgstr "సహాయం"
+
+#: web/scripts/javascriptHandler.php:5
+msgid "Username is required."
+msgstr "యూసర్ పేరు అవసరం."
+
+#: web/scripts/javascriptHandler.php:6
+msgid "Password is required."
+msgstr "పాస్వర్డ్ అవసరం."
+
+#: web/scripts/javascriptHandler.php:7
+msgid "Valid email is required."
+msgstr "చెల్లుబాటు అయ్యే ఇమెయిల్ అవసరం."
+
+#: web/scripts/javascriptHandler.php:8
+msgid "Valid username is required."
+msgstr "చెల్లుబాటు అయ్యే యూజర్ పేరు అవసరం."
+
+#: web/scripts/javascriptHandler.php:9
+msgid "This username is already taken."
+msgstr "ఈ యూజర్ పేరు ఇదివరకే తీసుకొన బడింది."
+
+#: web/scripts/javascriptHandler.php:10
+msgid "Valid password is required."
+msgstr "చెల్లుబాటు అయ్యే పాస్వర్డ్ అవసరం."
+
+#: web/scripts/javascriptHandler.php:11
+msgid "Matching confirmation password is required."
+msgstr "సరిపోలే నిర్ధారణ పాస్వర్డ్ అవసరం."
+
+#: web/scripts/javascriptHandler.php:12
+msgid "Valid first name is required."
+msgstr "చెల్లుబాటు అయ్యే మొదటి పేరు అవసరం."
+
+#: web/scripts/javascriptHandler.php:13
+msgid "Name is required."
+msgstr "పేరు అవసరం."
+
+#: web/scripts/javascriptHandler.php:14
+msgid "Email is required."
+msgstr "ఇమెయిల్ అవసరం."
+
+#: web/scripts/javascriptHandler.php:15
+msgid "One Moment"
+msgstr "ఒక క్షణం"
+
+#: web/scripts/javascriptHandler.php:16
+msgid "To test, save your changes"
+msgstr "పరీక్షించడానికి, మీ మార్పులను సేవ్ చేయండి"
+
+#: web/scripts/javascriptHandler.php:17
+msgid "Please send a password reset link to my email for"
+msgstr "దయచేసి నా ఇమెయిల్ కు పాస్వర్డ్ రీసెట్ లింకు పంపండి"
+
+#: web/scripts/javascriptHandler.php:18
+msgid "Our bad, something goofed"
+msgstr "మా చెడు, క్షమించండి "
+
+#: web/scripts/javascriptHandler.php:19
+msgid "Please try again."
+msgstr "దయచేసి మళ్లీ ప్రయత్నించండి."
+
+#: web/modules/user/views/userAdd.php:5
+#: web/modules/schedule/views/reservationAdd.php:5
+msgid "New"
+msgstr "కొత్త "
+
+#: web/modules/user/views/userAdd.php:6
+msgid "User"
+msgstr "వాడుకరి"
+
+#: web/modules/user/views/userAdd.php:13
+msgid "An enrollment packet will be emailed to this new user."
+msgstr "ఈ క్రొత్త వినియోగదారుకు ఒక నమోదు ప్యాకెట్ ఇమెయిల్ చేయబడుతుంది."
+
+#: web/modules/user/views/userAdd.php:16
+msgid "First Name"
+msgstr "మొదటి పేరు"
+
+#: web/modules/user/views/userAdd.php:17
+msgid "Administrator"
+msgstr "నిర్వాహకుడు"
+
+#: web/modules/user/views/userAdd.php:27
+#: web/modules/schedule/views/reservationAdd.php:50
+#: web/modules/schedule/views/joinAdd.php:33
+msgid "Cancel"
+msgstr "రధ్ధించు "
+
+#: web/modules/schedule/views/reservationsList.php:25
+#: web/modules/schedule/views/reservationsList.php:48
+#: web/modules/schedule/views/joinAdd.php:6
+msgid "Now"
+msgstr "ప్రస్తుతం"
+
+#: web/modules/schedule/views/reservationsList.php:26
+msgid "Good news! Your room is available right now."
+msgstr "శుభవార్త! మీ గది ప్రస్తుతం అందుబాటులో ఉంది."
+
+#: web/modules/schedule/views/reservationsList.php:47
+#: web/modules/schedule/views/reservationsList.php:100
+msgid "Guest Pass"
+msgstr "అతిథి పాస్"
+
+#: web/modules/schedule/views/reservationsList.php:49
+msgid "Soon"
+msgstr "త్వరలో"
+
+#: web/modules/schedule/views/reservationsList.php:82
+msgid "Future"
+msgstr "భవిష్యత్తు"
+
+#: web/modules/schedule/views/reservationsList.php:83
+msgid "Click the calendar to reserve this room for a future date."
+msgstr "భవిష్యత్ తేదీ కోసం ఈ గదిని ఉంచడానికి క్యాలెండర్ క్లిక్ చేయండి."
+
+#: web/modules/schedule/views/reservationsList.php:168
+msgid "Team Pass"
+msgstr "జట్టు పాస్"
+
+#: web/modules/schedule/views/reservationAdd.php:6
+msgid "Reservation"
+msgstr "రిజర్వేషన్"
+
+#: web/modules/schedule/views/reservationAdd.php:13
+#: web/modules/schedule/views/joinAdd.php:13
+msgid "Meeting Name"
+msgstr "సమావేశం పేరు"
+
+#: web/modules/schedule/views/reservationAdd.php:16
+#: web/modules/schedule/views/reservationAdd.php:21
+#: web/modules/schedule/views/reservationAdd.php:27
+msgid "Time Zone"
+msgstr "సమయమండలం"
+
+#: web/modules/schedule/views/reservationAdd.php:23
+msgid "Country"
+msgstr "దేశము "
+
+#: web/modules/schedule/views/reservationAdd.php:31
+msgid "Date"
+msgstr "తేదీ"
+
+#: web/modules/schedule/views/reservationAdd.php:33
+msgid "Time"
+msgstr "సమయం"
+
+#: web/modules/schedule/views/reservationAdd.php:51
+msgid "Reserve"
+msgstr "రిజర్వ్"
+
+#: web/modules/schedule/views/meetingTypeTooltip.php:5
+msgid "Video Chat"
+msgstr "వీడియో చాట్"
+
+#: web/modules/schedule/views/meetingTypeTooltip.php:5
+msgid "Shows web camera displays prominently."
+msgstr "వెబ్ కెమెరా డిస్ప్లేలు ప్రముఖంగా చూపుతుంది."
+
+#: web/modules/schedule/views/meetingTypeTooltip.php:6
+msgid "Collaboration"
+msgstr "సహకారం"
+
+#: web/modules/schedule/views/meetingTypeTooltip.php:6
+msgid ""
+"Use for a formal presentation or fully collaborative meeting, with access to "
+"all conference tools (presentation screen, chat, cameras, etc.)"
+msgstr ""
+"అన్ని సమావేశ సాధనాలకు (ప్రెజెంటేషన్ స్క్రీన్, చాట్, కెమెరాలు, మొదలైనవి) "
+"ప్రాప్యతతో అధికారిక ప్రదర్శన లేదా పూర్తి సహకార సమావేశం కోసం ఉపయోగించండి."
+
+#: web/modules/schedule/views/meetingTypeTooltip.php:7
+msgid "Video Link"
+msgstr "వీడియో లింక్"
+
+#: web/modules/schedule/views/meetingTypeTooltip.php:7
+msgid ""
+"Enhance a telephone meeting with cameras and visual components (presentation "
+"screen, chat room, etc.)"
+msgstr ""
+"కెమెరాలు మరియు విజువల్ భాగాలు (ప్రెజెంటేషన్ స్క్రీన్, చాట్ రూమ్, మొదలైనవి) "
+"తో టెలిఫోన్ సమావేశాలను మెరుగుపరచండి."
+
+#: web/modules/schedule/views/meetingTypeTooltip.php:8
+msgid "Webinar"
+msgstr "వెబ్ సమావేశం "
+
+#: web/modules/schedule/views/joinAdd.php:5
+msgid "Start"
+msgstr "ప్రారంభం"
+
+#: web/modules/schedule/views/joinAdd.php:34
+msgid "Open Room"
+msgstr "బహిరంగ గది  "
+
+#: web/modules/event/views/eventListRecorded.php:16
+msgid "Recordings"
+msgstr "నమోదులు"
+
+#: web/modules/event/views/eventListRecorded.php:17
+msgid "There are no recordings available."
+msgstr "రికార్డింగ్లు అందుబాటులో లేవు."
+
+#: web/modules/event/views/eventListRecorded.php:33
+msgid "Attendees"
+msgstr "హాజరుదార్లు  "
+
+#: web/nwmHeader.php:34
+msgid "Hello"
+msgstr "నమస్కారం "
+
+#: web/nwmHeader.php:41
+msgid "Register for Nexus Web Meet training at the"
+msgstr "నెక్సస్ వెబ్ కోసం శిక్షణను నమోదు చేయండి"
+
+#: web/nwmHeader.php:41
+msgid "Northbridge Member Portal"
+msgstr "నార్త్బ్రిడ్జ్ సభ్యుల పోర్టల్"
+
+#: web/nwmFooter.php:1
+msgid "powered by"
+msgstr "ద్వారా ఆధారితం"
+
+#: web/nwmFrame.php:33
+msgid "Select Language"
+msgstr "భాషను ఎంచుకోండి"
+
+#: web/nwmFrame.php:34
+msgid "English"
+msgstr "ఇంగ్లీష్"
+
+#: web/nwmFrame.php:35
+msgid "Spanish"
+msgstr "స్పానిష్"
+
+#: web/nwmHeader.php:14
+msgid "ROOM"
+msgstr "గది"
+
+msgid "Please confirm your new password."
+msgstr "దయచేసి మీ క్రొత్త పాస్వర్డ్ని నిర్ధారించండి."
+
+msgid "7-25 characters please"
+msgstr "దయచేసి 7-25 అక్షరాలు ఎంచుకోండి "
+
+msgid "Your passwords do not match."
+msgstr "మీ ప్రవేశ పదాలు సరి కావట్లేదు."
+
+msgid "First name is required."
+msgstr "మొదటి పేరు అవసరం."
+
+msgid "A meeting cannot be longer than 24 hours."
+msgstr "24 గంటల కంటే ఎక్కువ సమావేశాలు ఉండవు."
+
+msgid "Bad duration"
+msgstr "దుర్వ్యవధి "
+
+msgid "Contact Email"
+msgstr "ఇమెయిల్ సంప్రదించండి"
+
+msgid "Meeting name is required"
+msgstr "సమావేశం పేరు అవసరం"
+
+msgid "Description"
+msgstr "వివరణ"
+
+msgid "Meeting description is required"
+msgstr "సమావేశ వివరణ అవసరం"
+
+msgid "End Time"
+msgstr "ముగింపు సమయం"
+
+msgid "End Date"
+msgstr "ఆఖరి తేది"
+
+msgid "Start Time"
+msgstr "సమయం ప్రారంభమైనది"
+
+msgid "Start Date"
+msgstr "ప్రారంబపు తేది"
+
+#: web/nwmHeader:13
+msgid "TEAM"
+msgstr "జట్టు"
+
+#: web/nwmHeader.php:12
+msgid "ARCHIVE"
+msgstr "ఆర్కైవ్"
+
+#: web/nwmHeader.php
+msgid "Training"
+msgstr "శిక్షణ"
+
+#: web/nwmHeader.php:28
+msgid "Support"
+msgstr "మద్దతు"
+
+#: web/nwmHeader.php:29
+msgid "Logout"
+msgstr "లాగౌట్"
+
+#: meetingTypeOptions.html:1
+msgid "Meeting Type"
+msgstr "సమావేశం రకం"
+
+#: meetingDurationOptions.html:1
+msgid "Duration"
+msgstr "వ్యవధి"
+
+#: meetingDurationOptions.html:2
+msgid "minutes"
+msgstr "నిమిషాల"
+
+#: meetingDurationOptions.html:5
+msgid "hours"
+msgstr "గంటల"
+
+#: meetingDurationOptions.html:8
+msgid "min"
+msgstr "min"
+
+#: meetingDurationOptions.html:10
+msgid "hour"
+msgstr "గంట"
+
+#: reservationAdd:16
+msgid "Change"
+msgstr "మార్చు"
+
+#: userList.php:48
+msgid "Please confirm this delete of"
+msgstr "దయచేసి ఈ తొలగింపుని నిర్ధారించండి"
+
+#: reservationsList:119
+msgid "Please confirm this delete."
+msgstr "దయచేసి ఈ తొలగింపుని నిర్ధారించండి."
+
+#: login.php:295
+msgid "Sign In with"
+msgstr "సైన్ ఇన్ చేయండి"
+
+#: profile.php:13
+msgid "Reset"
+msgstr "రీసెట్"
+
+#: profile.php:12
+msgid "Update"
+msgstr "నవీకరణ"
+
+#: listUsers.php
+msgid "Pending"
+msgstr "పెండింగ్"
+
+#: web/login.php:295
+msgid "Facebook"
+msgstr "ఫేస్బుక్"
+
+#: web/login.php:296
+msgid "LinkedIn"
+msgstr "లింక్డ్ఇన్"
+
+#: Group.php
+msgid "Enrollment"
+msgstr "నమోదు"
+
+#: profile.php:5
+msgid "Last Name"
+msgstr "చివరి పేరు"

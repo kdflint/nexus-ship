@@ -67,6 +67,7 @@ class Group {
 			$users[$counter]['username'] = "";
 			$users[$counter]['fname'] = _("Pending");
 			$users[$counter]['lname'] = _("Enrollment");
+			$users[$counter]['join_date'] = "";
 			$users[$counter]['title'] = "";
 			$users[$counter]['descr'] = "";
 			$users[$counter]['email'] = $row['email'];
@@ -77,7 +78,7 @@ class Group {
 			$counter++;
 		}
 
-		$query = "select distinct u.id as id, u.username, u.fname, u.lname, u.email, ug.role_fk as roleid
+		$query = "select distinct u.id as id, u.username, u.fname, u.lname, u.email, to_char(u.create_dttm, 'MM-DD-YYYY') as join_date, ug.role_fk as roleid
 			from public.user u, user_group ug
 			where u.id = ug.user_fk
 			and u.suspend_dttm is NULL
@@ -92,6 +93,7 @@ class Group {
 				$users[$counter]['username'] = $row['username'];
 				$users[$counter]['fname'] = $row['fname'];
 				$users[$counter]['lname'] = $row['lname'];
+				$users[$counter]['join_date'] = $row['join_date'];
 				$users[$counter]['title'] = "";
 				$users[$counter]['descr'] = "";
 				$users[$counter]['email'] = $row['email'];
@@ -107,7 +109,7 @@ class Group {
 
 	public static function getNetworkMembersbyNetworkId($id, $ssnUser) {
 		$users = array();
-		$query = "select distinct u.id as id, u.username, u.fname, u.lname, u.email
+		$query = "select distinct u.id as id, u.username, u.fname, u.lname, u.email, to_char(u.create_dttm, 'MM-DD-YYYY') as join_date
 			from public.user u, user_organization uo
 			where u.id = uo.user_fk
 			and u.suspend_dttm is NULL
@@ -123,6 +125,7 @@ class Group {
 			$users[$counter]['username'] = $row['username'];
 			$users[$counter]['fname'] = $row['fname'];
 			$users[$counter]['lname'] = $row['lname'];
+			$users[$counter]['join_date'] = $row['join_date'];
 			$users[$counter]['title'] = "";
 			$users[$counter]['descr'] = "";
 			$users[$counter]['email'] = $row['email'];
@@ -137,11 +140,11 @@ class Group {
 	}
 
 	public static function getUserGroupsByUsername($username) {
-		$query = "select distinct g.id as id, g.name as name, g.forum_group_id as forumid from public.group g, public.user u, user_group ug where u.username = $1 and ug.user_fk = u.id and ug.group_fk = g.id";
+		$query = "select distinct g.id as id, g.uid as uid, g.name as name, g.forum_group_id as forumid from public.group g, public.user u, user_group ug where u.username = $1 and ug.user_fk = u.id and ug.group_fk = g.id";
 		$cursor = PgDatabase::psExecute($query, array($username));
 	  $resultArray = array();
 	  while ($row = pg_fetch_array($cursor)) {
-	  	array_push($resultArray, array("id" => $row['id'], "name" => $row['name'], "forum" => $row['forumid']));
+	  	array_push($resultArray, array("id" => $row['id'], "uid" => $row['uid'], "name" => $row['name'], "forum" => $row['forumid']));
 	  }		
 	  return $resultArray;
 	}

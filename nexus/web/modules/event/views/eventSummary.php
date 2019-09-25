@@ -10,7 +10,7 @@
 			 	for (var i = 0; i < jsonObj.length; i++) { 
 			 		// increment class name every 5 items to faciliate pagination
 			 		n = (i % viewSetSize == 0 ? n + 1 : n); 
-			 		tableRows = tableRows + "<div id='reservationRow" + i + "' class='tr-div viewSet" + n + "' style='position:relative;'></div>";
+			 		tableRows = tableRows + "<div id='reservationRow" + i + "' class='tr-div viewSet" + n + "' style='position:relative;margin-bottom:40px;'></div>";
 			 	}
        	document.getElementById("reservationTable").innerHTML = tableRows;   	
 
@@ -74,6 +74,6 @@
 <script> 
 	getEventList(<?php echo (time() + 15*60); ?>);
 	var curViewSet = -1;
-	var viewSetSize = 4;
+	var viewSetSize = 3;
 </script>
 	

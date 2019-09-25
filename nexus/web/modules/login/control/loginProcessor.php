@@ -104,8 +104,54 @@ if($isAuthenticated){
 		}
 	}
 	Utilities::setLogin($_SESSION['uidpk']);
-	//unset($_COOKIE['member_transfer_oid']);
-  //setcookie('member_transfer_oid', null, -1, '/');
+	// TODO - filter out 'userdemo'
+	if (isset($_SESSION['orgs']) && isset($_SESSION['orgs'][0]['uid'])){
+		/*
+		if(isset($_COOKIE['member_channel_oid'])) {
+			$oids = explode (",", $_COOKIE['member_channel_oid']); 
+			if(!in_array($_SESSION['orgUid'], $oids, true)){
+				array_push($oids, $_SESSION['orgUid']); 
+			}
+			// TODO - make a cookie factory to get rid of redundant code and set cookies to secure in https-enabled environments
+			setcookie('member_channel_oid', implode(",", $oids), time() + (10 * 365 * 24 * 60 * 60), '/', Utilities::getEnvHost(), 0, 0);
+		} else {
+			setcookie('member_channel_oid', $_SESSION['orgUid'], time() + (10 * 365 * 24 * 60 * 60), '/', Utilities::getEnvHost(), 0, 0);
+		}
+		*/
+		if(isset($_COOKIE['remembered_orgs'])) {
+			$orgs = json_decode($_COOKIE['remembered_orgs']);
+			$roids = array(); 
+			foreach ($orgs as $org) {
+				array_push($roids, $org->uid);
+			}
+			if(!in_array($_SESSION['orgs'][0]['uid'], $roids, true)){
+				array_push($orgs, $_SESSION['orgs'][0]); 
+			}
+			setcookie('remembered_orgs', json_encode($orgs), time() + (10 * 365 * 24 * 60 * 60), '/', Utilities::getEnvHost(), 0, 0);
+		} else {
+			$orgs = array();
+			array_push($orgs, $_SESSION['orgs'][0]);
+			setcookie('remembered_orgs', json_encode($orgs), time() + (10 * 365 * 24 * 60 * 60), '/', Utilities::getEnvHost(), 0, 0);
+		}
+	}
+	// TODO - only pulls first group in session list, which works for NWM at the current time because there is only 1 group per session
+	if (isset($_SESSION['groups']) && isset($_SESSION['groups'][0]['uid'])){
+		if(isset($_COOKIE['remembered_groups'])) {
+			$groups = json_decode($_COOKIE['remembered_groups']);
+			$guids = array();
+			foreach ($groups as $group) {
+				array_push($guids, $group->uid);
+			}
+			if(!in_array($_SESSION['groups'][0]['uid'], $guids, true)){
+				array_push($groups, $_SESSION['groups'][0]);
+			}
+			setcookie('remembered_groups', json_encode($groups), time() + (10 * 365 * 24 * 60 * 60), '/', Utilities::getEnvHost(), 0, 0);
+		} else {
+			$groups = array();
+			array_push($groups, $_SESSION['groups'][0]);
+			setcookie('remembered_groups', json_encode($groups), time() + (10 * 365 * 24 * 60 * 60), '/', Utilities::getEnvHost(), 0, 0);
+		}
+	}
 	header("location:" . Utilities::getHttpPath() . "/nexus.php");
 	exit(0);
 } else {

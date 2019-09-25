@@ -29,11 +29,14 @@
       	<div class="frameColRight">
       		<?php if (true) { ?>
 					<form id="language-form-1">
-						<span style="clear:right;float:right;margin-top:5px;font-size:90%;margin-right:-10px;">
+					<span style="clear:right;float:right;margin-top:5px;font-size:90%;margin-right:-10px;">
        				<select id="language-form-lang" name="language" style="width:160px;vertical-align:middle;text-align:left;" onchange="resetSessionLanguage(this.value);">
       					<option value="xx" selected><?php echo _("Select Language"); ?></option>
         				<option value="en"><?php echo _("English"); ?></option>
         				<option value="es"><?php echo _("Spanish"); ?></option>
+						<option value="ta"><?php echo _("Tamil"); ?></option>
+						<option value="te"><?php echo _("Telugu"); ?></option>
+						<option value="hi"><?php echo _("Hindi"); ?></option>
       				</select>
       			</span>
 					</form>
