@@ -894,7 +894,7 @@ function displayTimeZones() {
 	for (a in timeZone.options) { timeZone.options.remove(0); }
   var countryTimeZones = timeZoneData[countryCode];
   var option = document.createElement("option");
-  option.text = _("Time Zone");
+  option.text = TIME_ZONE;
   option.selected = true;
   timeZone.add(option);
   if (countryTimeZones === undefined) {
