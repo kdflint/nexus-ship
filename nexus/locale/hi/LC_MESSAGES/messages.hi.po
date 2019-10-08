@@ -25,12 +25,12 @@ msgid "Schedule"
 msgstr "अनुसूची"
 
 msgid "Seats"
-msgstr "सीटें"
+msgstr "प्रशासकों"
 
 msgid "join_link_text"
 msgstr ""
-"सीट धारक इस लिंक का उपयोग किसी भी बैठक को निर्धारित करने और उपस्थित होने के "
-"लिए कर सकते हैं।"
+" चैनल प्रशासकों इस लिंक का उपयोग किसी भी बैठक को निर्धारित करने और उपस्थित "
+"होने के लिए कर सकते हैं।"
 
 msgid "pass_label"
 msgstr "वन-क्लिक ज्वाइन करें"
@@ -72,7 +72,7 @@ msgid "join"
 msgstr "शामिल हों"
 
 msgid "meeting"
-msgstr "मुलाकात"
+msgstr "बैठक"
 
 msgid "show_pass"
 msgstr "पास दिखाओ"
@@ -120,7 +120,7 @@ msgid "copied"
 msgstr "कॉपी किया गया"
 
 msgid "Tamil"
-msgstr "तामिल"
+msgstr "तमिल "
 
 msgid "Telugu"
 msgstr "तेलुगू"
@@ -137,7 +137,7 @@ msgstr "आपने सफलतापूर्वक साइन आउट �
 
 #: web/login.php:135
 msgid "Your meeting is over."
-msgstr "आपकी मुलाकात खत्म हो गई है।"
+msgstr "आपकी बैठक खत्म हो गई है।"
 
 #: web/login.php:264 web/roomLogout.php:20
 msgid "About"
@@ -313,7 +313,7 @@ msgstr "उपयोगकर्ता"
 
 #: web/modules/user/views/userAdd.php:13
 msgid "An enrollment packet will be emailed to this new user."
-msgstr "इस नए उपयोगकर्ता को एक नामांकन पैकेट ईमेल किया जाएगा।"
+msgstr " नए उपयोगकर्ता को एक नामांकन पैकेट ईमेल किया जाएगा।"
 
 #: web/modules/user/views/userAdd.php:16
 msgid "First Name"
@@ -333,11 +333,11 @@ msgstr "रद्द करना"
 #: web/modules/schedule/views/reservationsList.php:48
 #: web/modules/schedule/views/joinAdd.php:6
 msgid "Now"
-msgstr "अभी व"
+msgstr "अभी "
 
 #: web/modules/schedule/views/reservationsList.php:26
 msgid "Good news! Your room is available right now."
-msgstr "खुशखबरी! अभी आपका कमरा उपलब्ध है।"
+msgstr "खुशखबरी! अभी आपका चैनल खुला है।"
 
 #: web/modules/schedule/views/reservationsList.php:47
 #: web/modules/schedule/views/reservationsList.php:100
@@ -390,7 +390,7 @@ msgstr "पहर"
 
 #: web/modules/schedule/views/reservationAdd.php:51
 msgid "Reserve"
-msgstr "रिज़र्व"
+msgstr "सुरक्षित"
 
 #: web/modules/schedule/views/meetingTypeTooltip.php:5
 msgid "Video Chat"
@@ -430,11 +430,11 @@ msgstr "वेबिनार"
 
 #: web/modules/schedule/views/joinAdd.php:5
 msgid "Start"
-msgstr "शुरु"
+msgstr "शुरु करें "
 
 #: web/modules/schedule/views/joinAdd.php:34
 msgid "Open Room"
-msgstr "खुला कमरा"
+msgstr "खुला  चैनल"
 
 #: web/modules/event/views/eventListRecorded.php:16
 msgid "Recordings"
@@ -568,7 +568,7 @@ msgstr "घंटा"
 
 #: reservationAdd:16
 msgid "Change"
-msgstr "परिवर्तन"
+msgstr "बदलने के लिए "
 
 #: userList.php:48
 msgid "Please confirm this delete of"
@@ -588,7 +588,7 @@ msgstr "रीसेट"
 
 #: profile.php:12
 msgid "Update"
-msgstr "अद्यतन"
+msgstr "अपडेट करें "
 
 #: listUsers.php
 msgid "Pending"
