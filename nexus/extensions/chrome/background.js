@@ -7,18 +7,11 @@ function buttonClicked(tab)
     chrome.tabs.create({url: action_url});
 }
 
-function createAlarm() 
-{
-    chrome.alarms.create("1min", {
-      delayInMinutes: 0.1, periodInMinutes: 0.1});
-}
-
-
 chrome.alarms.onAlarm.addListener(function(alarm) 
 {
-  //if (alarm.name === "1min") {
-  //  alert("alarm bells");
-  //}
+  if (alarm.name === "meetingPoll") {
+    console.log("Check for running meeting...", alarm);
+  }
 });
 
 chrome.runtime.onMessage.addListener(gotMessage);
@@ -32,3 +25,4 @@ function gotMessage(request, sender, sendResponse){
   });
   */
 }
+

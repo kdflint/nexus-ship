@@ -1,4 +1,5 @@
 window.addEventListener("load", populateWebMeetUrls);
+window.addEventListener("load", createAlarm);
 
 function populateWebMeetUrls(){
   var desktopUrl = "https://northbridgetech.org/apps/nexus/";
@@ -24,6 +25,11 @@ function populateWebMeetUrls(){
     });
 
   });
+}
+
+function createAlarm() {
+  chrome.alarms.create('meetingPoll', {
+    delayInMinutes: .1, periodInMinutes: .1});
 }
 
 function getCookies(cname, cookies) {
