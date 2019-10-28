@@ -9,9 +9,9 @@ $logger->log(print_r($_COOKIE, true), PEAR_LOG_INFO);
 
 if (isset($_COOKIE['REMEMBERME'])) {
 //if (true) {
-	if (isset($_COOKIE['remembered_gids'])) {
+	if (isset($_COOKIE['remembered_groups'])) {
 	//if (false) {
-		$idList = getFormattedGroupListFromCookie($_COOKIE['remembered_gids']);
+		$idList = getFormattedGroupListFromCookie($_COOKIE['remembered_groups']);
 		$data = Event::getRunningMeetingsByGroupIdList($idList);
 		header('Content-Type: application/json');
 		echo json_encode($data);
@@ -33,4 +33,3 @@ function getFormattedGroupListFromCookie($groupList) {
 }
 
 ?>
-

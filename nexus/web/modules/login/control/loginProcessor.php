@@ -127,11 +127,11 @@ if($isAuthenticated){
 			if(!in_array($_SESSION['orgs'][0]['uid'], $roids, true)){
 				array_push($orgs, $_SESSION['orgs'][0]); 
 			}
-			setcookie('remembered_orgs', json_encode($orgs), time() + (10 * 365 * 24 * 60 * 60), '/', Utilities::getEnvHost(), 0, 0);
+			setcookie('remembered_orgs', json_encode($orgs), time() + (10 * 365 * 24 * 60 * 60), '/', Utilities::getEnvHost(), 1, 0);
 		} else {
 			$orgs = array();
 			array_push($orgs, $_SESSION['orgs'][0]);
-			setcookie('remembered_orgs', json_encode($orgs), time() + (10 * 365 * 24 * 60 * 60), '/', Utilities::getEnvHost(), 0, 0);
+			setcookie('remembered_orgs', json_encode($orgs), time() + (10 * 365 * 24 * 60 * 60), '/', Utilities::getEnvHost(), 1, 0);
 		}
 	}
 	// TODO - only pulls first group in session list, which works for NWM at the current time because there is only 1 group per session
