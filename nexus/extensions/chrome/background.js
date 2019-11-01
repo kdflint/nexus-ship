@@ -22,7 +22,8 @@ chrome.alarms.onAlarm.addListener(function(alarm) {
             data: {
                 uuid: value.uuid,
                 type: value.mtype,
-                purpose: value.purpose
+                purpose: value.purpose,
+                group_name: value.group_name
             }
           });
         });

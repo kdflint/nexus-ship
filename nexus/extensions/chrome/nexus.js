@@ -15,16 +15,10 @@ function createAlarm() {
 
 function populateJoinMeetingUrl(data) {
   if (!document.getElementById(data.uuid) && data.purpose != "Demo Meeting") {
-    var linkDiv = document.getElementById("running_meeting_list");
-    var p = document.createElement("p");
-    var a = document.createElement("a");
-    // TODO - make link url dynamic to environment
-    a.setAttribute("href", "https://northbridgetech.org/apps/nexus/web/modules/meeting/control/joinMeetingProcessor.php?id=" + data.uuid + "&type=" + data.type);
-    a.setAttribute("target", "_blank");
-    a.setAttribute("id", data.uuid);
-    a.innerHTML = data.purpose; 
-    p.appendChild(a);
-    linkDiv.appendChild(p);
+    var a = document.getElementById(data.group_name);
+    a.href = "https://northbridgetech.org/apps/nexus/web/modules/meeting/control/joinMeetingProcessor.php?id=" + data.uuid + "&type=" + data.type;
+    a.innerHTML = data.group_name + 
+    "<span class='badge badge-primary badge-pill'>Join</span>"; 
   }
 }
 
@@ -55,21 +49,21 @@ function populateWebMeetUrls(){
     if (orgs && orgs.length > 0) {
       orgs.forEach(function(value, index, array) {
         if (value['uid'] != 'userdemo') {
-          var a = document.createElement("a");
-          channelItems.appendChild(configureChannelLink(a, value['name'], desktopUrl + "web/login.php?oid=" + value['uid']));
+          channelItems.appendChild(configureChannelLink(value['name'], desktopUrl + "web/login.php?oid=" + value['uid'], value['name']));
         }
       });
     } else {
-      var a = document.createElement("a");
-      channelItems.appendChild(configureChannelLink(a, 'Demo Channel', desktopUrl + "web/login.php?oid=userdemo"));      
+      channelItems.appendChild(configureChannelLink('Demo Channel', desktopUrl + "web/login.php?oid=userdemo"), 'userdemo');
     }
 
   });
 }
 
-function configureChannelLink(a, label, url) {
+function configureChannelLink(label, url, id) {
+  var a = document.createElement("a");
+  a.setAttribute("id", id);
   a.setAttribute("href", url);
-  a.setAttribute("class", "list-group-item list-group-item-action");
+  a.setAttribute("class", "list-group-item d-flex justify-content-between align-items-center list-group-item-action");
   a.setAttribute("target", "_blank");
   a.innerHTML = label; 
   return a;
