@@ -1,9 +1,18 @@
 window.addEventListener("load", populateWebMeetUrls);
+var domain = "northbridgetech.org";
+var path = "/apps";
 
 function populateWebMeetUrls(){
   var desktopUrl = "https://northbridgetech.org/apps/nexus/";
-  chrome.cookies.getAll({"url":desktopUrl}, function(cookies){
-
+  
+  chrome.management.get(chrome.runtime.id, function(extnInfo){
+	var extnInstallType = extnInfo.installType;
+	if(extnInstallType === "development"){
+		path = "/dev";
+	}
+  });
+  
+	chrome.cookies.getAll({"domain":domain, "path":path}, function(cookies){
     var channelItems = document.getElementById("channel_list");
     var cookieVals;
 
