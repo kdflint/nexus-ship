@@ -7,8 +7,8 @@
     "permissions": [
         "alarms",
         "cookies",
-        "notifications", 
-        "*://*./"
+        "notifications",
+        "management"
       ],
     "icons": {
         "128": "icon128.png",

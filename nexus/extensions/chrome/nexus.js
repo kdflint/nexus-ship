@@ -42,11 +42,13 @@ function populateWebMeetUrls() {
 
   var domain = "northbridgetech.org";
   var path = "/apps";
-  var extnInstallType = extnInfo.installType;
 
-  if(extnInstallType === "development"){
-		path = "/dev";
-  }
+  chrome.management.get(chrome.runtime.id, function(extnInfo) {
+    var extnInstallType = extnInfo.installType;
+    if(extnInstallType === "development"){
+      path = "/dev";
+    }
+  });
   
   var desktopUrl = "https://" + domain + path + "/nexus/web/login.php";
 
