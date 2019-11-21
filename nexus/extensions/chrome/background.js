@@ -15,18 +15,25 @@ chrome.alarms.onAlarm.addListener(function(alarm) {
     xhr.open('GET', 'https://northbridgetech.org/apps/nexus/web/api/getRunningMeetings.php', true)
     xhr.onload = function() {
       if (this.status === 200) {
-        var payload = JSON.parse(this.responseText);
-        payload.forEach(function(value, index, array) {
-          chrome.runtime.sendMessage({
-            msg: "join_meeting", 
-            data: {
-                uuid: value.uuid,
-                type: value.mtype,
-                purpose: value.purpose,
-                group_name: value.group_name
-            }
+        if (this.responseText.length > 0 && this.responseText.indexOf('unauthenticated') < 0) {
+        //if (false) {
+          var payload = JSON.parse(this.responseText);
+          payload.forEach(function(value, index, array) {
+            chrome.runtime.sendMessage({
+              msg: "join_meeting", 
+              data: {
+                  uuid: value.uuid,
+                  type: value.mtype,
+                  purpose: value.purpose,
+                  group_name: value.group_name
+              }
+            });
           });
-        });
+        } else {
+          chrome.runtime.sendMessage({
+            msg: "clear_meetings"
+          });
+        }
       }
     }
     xhr.send();

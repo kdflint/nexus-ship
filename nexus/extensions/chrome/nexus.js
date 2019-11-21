@@ -4,9 +4,16 @@ window.addEventListener("load", populateWebMeetUrls);
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
     // TODO - remove link when meeting is no longer in the list
-    populateJoinMeetingUrl(request.data);
+    if (request.msg == "join_meeting") {
+      populateJoinMeetingUrl(request.data);
+    }
+    if (request.msg == "clear_meetings") {
+      console.log("hi!");
+    }
   }
 );
+
+var anchorStash = new Array();
 
 function createAlarm() {
   chrome.alarms.create('meeting-poll', {
@@ -14,11 +21,16 @@ function createAlarm() {
 }
 
 function populateJoinMeetingUrl(data) {
+  // when do we set a element id = data.uuid. Is below a mistake?
   if (!document.getElementById(data.uuid) && data.purpose != "Demo Meeting") {
     var a = document.getElementById(data.group_name);
-    a.href = "https://northbridgetech.org/apps/nexus/web/modules/meeting/control/joinMeetingProcessor.php?id=" + data.uuid + "&type=" + data.type;
-    a.innerHTML = data.group_name + 
-    "<span class='badge badge-primary badge-pill'>Join</span>"; 
+    if (a) {
+      // LEFT OFF - is this right? Hmmm, must reset the href on this anchor and remove the span element
+      anchorStash.push(a);
+      a.href = "https://northbridgetech.org/apps/nexus/web/modules/meeting/control/joinMeetingProcessor.php?id=" + data.uuid + "&type=" + data.type;
+      a.innerHTML = data.group_name + 
+      "<span class='badge badge-primary badge-pill'>Join</span>"; 
+    }
   }
 }
 
