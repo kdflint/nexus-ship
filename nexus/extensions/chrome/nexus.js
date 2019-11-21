@@ -20,6 +20,10 @@ function createAlarm() {
     when: 0, periodInMinutes: 1});
 }
 
+
+
+
+
 function populateJoinMeetingUrl(data) {
   // when do we set a element id = data.uuid. Is below a mistake?
   if (!document.getElementById(data.uuid) && data.purpose != "Demo Meeting") {
@@ -34,10 +38,19 @@ function populateJoinMeetingUrl(data) {
   }
 }
 
-function populateWebMeetUrls(){
-  // TODO - make link url dynamic to environment
-  var desktopUrl = "https://northbridgetech.org/apps/nexus/";
-  chrome.cookies.getAll({"url":desktopUrl}, function(cookies){
+function populateWebMeetUrls() {
+
+  var domain = "northbridgetech.org";
+  var path = "/apps";
+  var extnInstallType = extnInfo.installType;
+
+  if(extnInstallType === "development"){
+		path = "/dev";
+  }
+  
+  var desktopUrl = "https://" + domain + path + "/nexus/web/login.php";
+
+  chrome.cookies.getAll({"domain":domain, "path":path}, function(cookies){
 
     var channelItems = document.getElementById("channel_list");
     var groups;
@@ -61,11 +74,11 @@ function populateWebMeetUrls(){
     if (orgs && orgs.length > 0) {
       orgs.forEach(function(value, index, array) {
         if (value['uid'] != 'userdemo') {
-          channelItems.appendChild(configureChannelLink(value['name'], desktopUrl + "web/login.php?oid=" + value['uid'], value['name']));
+          channelItems.appendChild(configureChannelLink(value['name'], desktopUrl + "?oid=" + value['uid'], value['name']));
         }
       });
     } else {
-      channelItems.appendChild(configureChannelLink('Demo Channel', desktopUrl + "web/login.php?oid=userdemo"), 'userdemo');
+      channelItems.appendChild(configureChannelLink('Demo Channel', desktopUrl + "?oid=userdemo"), 'userdemo');
     }
 
   });
