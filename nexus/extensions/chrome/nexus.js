@@ -1,7 +1,5 @@
 window.addEventListener("load", createAlarm);
 window.addEventListener("load", populateWebMeetUrls);
-var domain = "northbridgetech.org";
-var path = "/apps";
 
 chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
@@ -22,10 +20,6 @@ function createAlarm() {
     when: 0, periodInMinutes: 1});
 }
 
-
-
-
-
 function populateJoinMeetingUrl(data) {
   // when do we set a element id = data.uuid. Is below a mistake?
   if (!document.getElementById(data.uuid) && data.purpose != "Demo Meeting") {
@@ -42,8 +36,9 @@ function populateJoinMeetingUrl(data) {
 
 function populateWebMeetUrls() {
 
-  var domain = "northbridgetech.org";
-  var path = "/apps";
+  var domain = ".northbridgetech.org";
+  // var path = "/apps";
+  var path = "/dev";
 
   chrome.management.get(chrome.runtime.id, function(extnInfo) {
     var extnInstallType = extnInfo.installType;
@@ -53,21 +48,23 @@ function populateWebMeetUrls() {
   });
   
   var desktopUrl = "https://" + domain + path + "/nexus/web/login.php";
+  var cookieParms = {"domain":domain, "path":path};
 
-  chrome.cookies.getAll({"domain":domain, "path":path}, function(cookies){
+  chrome.cookies.getAll(cookieParms, function(cookies){
 
     var channelItems = document.getElementById("channel_list");
     var groups;
     var orgs;
 
     cookies.forEach(function(value, index, array) {
-      if (cookies[index].name == 'remembered_groups') {
+      console.log(value);
+      if (cookies[index].name === 'remembered_groups') {
         var dec = decodeURI(cookies[index].value).replace(/%3A/g,":").replace(/\+/g, " ").replace(/%2C/g, ",");
         try {
           groups = JSON.parse(dec);
         } catch {}
       }
-      if (cookies[index].name == 'remembered_orgs') {
+      if (cookies[index].name === 'remembered_orgs') {
         var dec = decodeURI(cookies[index].value).replace(/%3A/g,":").replace(/\+/g, " ").replace(/%2C/g, ",");
         try {
           orgs = JSON.parse(dec);
