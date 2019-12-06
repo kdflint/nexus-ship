@@ -1,3 +1,5 @@
+var background = chrome.extension.getBackgroundPage(); 
+
 window.addEventListener("load", createAlarm);
 window.addEventListener("load", populateWebMeetUrls);
 
@@ -27,7 +29,7 @@ function populateJoinMeetingUrl(data) {
     if (a) {
       // LEFT OFF - is this right? Hmmm, must reset the href on this anchor and remove the span element
       anchorStash.push(a);
-      a.href = "https://northbridgetech.org/apps/nexus/web/modules/meeting/control/joinMeetingProcessor.php?id=" + data.uuid + "&type=" + data.type;
+      a.href = "https://northbridgetech.org" + background.urlPath + "/nexus/web/modules/meeting/control/joinMeetingProcessor.php?id=" + data.uuid + "&type=" + data.type;
       a.innerHTML = data.group_name + 
       "<span class='badge badge-primary badge-pill'>Join</span>"; 
     }
@@ -35,22 +37,15 @@ function populateJoinMeetingUrl(data) {
 }
 
 function populateWebMeetUrls() {
-
-  var domain = ".northbridgetech.org";
-  // var path = "/apps";
-  var path = "/dev";
-
-  chrome.management.get(chrome.runtime.id, function(extnInfo) {
-    var extnInstallType = extnInfo.installType;
-    if(extnInstallType === "development"){
-      path = "/dev";
-    }
-  });
-  
-  var desktopUrl = "https://" + domain + path + "/nexus/web/login.php";
-  var cookieParms = {"domain":domain, "path":path};
+ 
+  var desktopUrl = "https://" + background.domain + background.urlPath + "/nexus/web/login.php";
+  var cookieParms = {"domain":background.domain, "path":background.cookiePath};
+  background.console.log("Cookie parms: " + JSON.stringify(cookieParms));
 
   chrome.cookies.getAll(cookieParms, function(cookies){
+  //chrome.cookies.getAll({"url":"https://northbridgetech.org"}, function(cookies){
+  
+    background.console.log("Cookie list: " + JSON.stringify(cookies));
 
     var channelItems = document.getElementById("channel_list");
     var groups;
@@ -83,6 +78,7 @@ function populateWebMeetUrls() {
     }
 
   });
+  background.console.log("Page formatted.");
 }
 
 function configureChannelLink(label, url, id) {

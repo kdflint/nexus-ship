@@ -1,3 +1,18 @@
+var domain = ".northbridgetech.org";
+var cookiePath = "/prod";
+var urlPath = "/apps";
+//var cookiePath = "/dev";
+//var urlPath = "/dev";
+
+chrome.management.get(chrome.runtime.id, function(extnInfo) {
+  var extnInstallType = extnInfo.installType;
+  console.log("Install mode: " + extnInstallType);
+  if(extnInstallType == "development"){
+    cookiePath = "/dev";
+    urlpath = "/dev";
+  }
+});
+
 chrome.browserAction.onClicked.addListener(buttonClicked);
 
 function buttonClicked(tab)
