@@ -7,10 +7,11 @@ chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
     // TODO - remove link when meeting is no longer in the list
     if (request.msg == "join_meeting") {
+      background.console.log("Got message to join meeting.");
       populateJoinMeetingUrl(request.data);
     }
     if (request.msg == "clear_meetings") {
-      console.log("hi!");
+      background.console.log("Got message to clear meeting.");
     }
   }
 );
@@ -23,7 +24,7 @@ function createAlarm() {
 }
 
 function populateJoinMeetingUrl(data) {
-  // when do we set a element id = data.uuid. Is below a mistake?
+  // If we haven't already set a Join badge
   if (!document.getElementById(data.uuid) && data.purpose != "Demo Meeting") {
     var a = document.getElementById(data.group_name);
     if (a) {
@@ -43,7 +44,6 @@ function populateWebMeetUrls() {
   background.console.log("Cookie parms: " + JSON.stringify(cookieParms));
 
   chrome.cookies.getAll(cookieParms, function(cookies){
-  //chrome.cookies.getAll({"url":"https://northbridgetech.org"}, function(cookies){
   
     background.console.log("Cookie list: " + JSON.stringify(cookies));
 
@@ -52,7 +52,7 @@ function populateWebMeetUrls() {
     var orgs;
 
     cookies.forEach(function(value, index, array) {
-      console.log(value);
+      background.console.log(value);
       if (cookies[index].name === 'remembered_groups') {
         var dec = decodeURI(cookies[index].value).replace(/%3A/g,":").replace(/\+/g, " ").replace(/%2C/g, ",");
         try {

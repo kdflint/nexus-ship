@@ -1,8 +1,8 @@
 var domain = ".northbridgetech.org";
-var cookiePath = "/prod";
-var urlPath = "/apps";
-//var cookiePath = "/dev";
-//var urlPath = "/dev";
+//var cookiePath = "/prod";
+//var urlPath = "/apps";
+var cookiePath = "/dev";
+var urlPath = "/dev";
 
 chrome.management.get(chrome.runtime.id, function(extnInfo) {
   var extnInstallType = extnInfo.installType;
@@ -18,7 +18,7 @@ chrome.browserAction.onClicked.addListener(buttonClicked);
 function buttonClicked(tab)
 {
     console.log(tab);
-    var action_url = "https://northbridgetech.org/apps/nexus/web/login.php";
+    var action_url = "https://northbridgetech.org" + urlPath + "/nexus/web/login.php";
     chrome.tabs.create({url: action_url});
 }
 
@@ -26,12 +26,13 @@ chrome.alarms.onAlarm.addListener(function(alarm) {
   if (alarm.name === "meeting-poll") {
     console.log("Check for running meeting...", alarm);
     let xhr = new XMLHttpRequest;
-    // TODO - make api url dynamic on environment
-    xhr.open('GET', 'https://northbridgetech.org/apps/nexus/web/api/getRunningMeetings.php', true)
+    let apiUrl = 'https://northbridgetech.org' + urlPath + '/nexus/web/api/getRunningMeetings.php';
+    console.log(apiUrl);
+    xhr.open('GET', apiUrl, true)
     xhr.onload = function() {
       if (this.status === 200) {
-        if (this.responseText.length > 0 && this.responseText.indexOf('unauthenticated') < 0) {
-        //if (false) {
+        console.log("got a response of 200: " + this.responseText);
+        if (this.responseText.length > 0 && this.responseText.indexOf('unauthenticated') < 0  && this.responseText.indexOf('none') < 0) {
           var payload = JSON.parse(this.responseText);
           payload.forEach(function(value, index, array) {
             chrome.runtime.sendMessage({
@@ -45,6 +46,7 @@ chrome.alarms.onAlarm.addListener(function(alarm) {
             });
           });
         } else {
+          // TODO - this isn't right but on the right track
           chrome.runtime.sendMessage({
             msg: "clear_meetings"
           });
