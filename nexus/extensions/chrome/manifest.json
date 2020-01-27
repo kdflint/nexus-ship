@@ -9,7 +9,7 @@
         "cookies",
         "notifications",
         "management",
-        "http://*.northbridgetech.org/"
+        "*://*.northbridgetech.org/"
       ],
     "icons": {
         "128": "icon128.png",

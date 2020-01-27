@@ -1,4 +1,4 @@
-var domain = ".northbridgetech.org";
+var domain = "northbridgetech.org";
 //var cookiePath = "/prod";
 //var urlPath = "/apps";
 var cookiePath = "/dev";
@@ -23,6 +23,7 @@ function buttonClicked(tab)
 }
 
 chrome.alarms.onAlarm.addListener(function(alarm) {
+  // TODO - api should not respond if auth token is not set
   if (alarm.name === "meeting-poll") {
     console.log("Check for running meeting...", alarm);
     let xhr = new XMLHttpRequest;
@@ -56,3 +57,4 @@ chrome.alarms.onAlarm.addListener(function(alarm) {
     xhr.send();
   }
 });
+
