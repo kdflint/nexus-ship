@@ -30,6 +30,7 @@ function populateJoinMeetingUrl(data) {
       var a = document.getElementById(data.group_name);
       if (a) {
         // LEFT OFF - is this right? Hmmm, must reset the href on this anchor and remove the span element
+        // (Figuring out how to remove a meeting link when the meeting stops coming back on the API call.)
         anchorStash.push(a);
         a.href = "https://northbridgetech.org" + background.urlPath + "/nexus/web/modules/meeting/control/joinMeetingProcessor.php?id=" + data.uuid + "&type=" + data.type;
         a.innerHTML = data.group_name + 

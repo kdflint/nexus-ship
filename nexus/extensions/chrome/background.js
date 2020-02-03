@@ -1,8 +1,6 @@
 var domain = "northbridgetech.org";
-//var cookiePath = "/prod";
-//var urlPath = "/apps";
-var cookiePath = "/dev";
-var urlPath = "/dev";
+var cookiePath = "/prod";
+var urlPath = "/apps";
 
 chrome.management.get(chrome.runtime.id, function(extnInfo) {
   var extnInstallType = extnInfo.installType;
