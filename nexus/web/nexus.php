@@ -113,9 +113,9 @@ $customProfileData = strlen($_SESSION['profile']) > 0 ? $_SESSION['profile'] : '
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <html>
 	
-  <head>
+  <head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<!-- TODO - localize all scripts and stylesheets -->
-  	<meta http-equiv="Content-type" content="text/html;charset=UTF-8"> 	
+  	 	
 		<meta http-equiv="Cache-control" content="no-cache">
 		<meta http-equiv="Pragma" content="no-cache">
 		<meta http-equiv="Expires" content="0">
@@ -164,12 +164,15 @@ $customProfileData = strlen($_SESSION['profile']) > 0 ? $_SESSION['profile'] : '
 		<!--<script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.13/b-1.2.4/se-1.2.0/datatables.min.js"></script>-->
 		<!-- https://clipboardjs.com/ -->
 		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js"></script>
+		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
 
   	 	 	
     <title>Nexus <?php echo($pageTitle ); ?></title> 
 
     <script type="text/javascript">
-		
+    
+            moment().format();
+
     	// TODO - create a global js init script - can format this as a php file that parses into javascript, look for example...
 			NETWORK_ID = "<?php echo $_SESSION['networkId']; ?>";
 			SESSION_PGPK = "<?php echo $_SESSION['pgpk']; ?>";

@@ -36,7 +36,33 @@
       			<select id="schedule-form-duration" name="meeting-duration" style="width:135px;vertical-align:middle;">
 	      			<?php include("meetingDurationOptions.php"); ?>
       			</select>
-		    	</div>
+				</div>
+				
+
+				<div style="margin-top:10px;">
+					
+						<input id="repeat-check" name="repeat-check" onchange="toggleRecurNWMFormElements();" type="checkbox"> <b>Repeat</b>
+						<span id="repeat-span" style="visibility:hidden;">				
+							Occurs <select id="repeat-interval" name="repeat-interval" style="width:135px;">
+								<option value="0" selected>Daily</option>
+								<option value="1">Weekdays</option>
+								<option value="2">Weekly</option>
+								</select>	
+							For <select id="repeat-freq" name="repeat-freq" style="width:50px;">
+									<option value="2" selected>2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+									<option value="5">5</option>
+									<option value="6">6</option>
+									<option value="7">7</option>
+									<option value="8">8</option>
+									<option value="9">9</option>
+									<option value="10">10</option>
+								</select>
+						</span>
+ 				</div>
+
+
 		    	<div style="margin-top:10px;">
 		    		<?php include("meetingTypeTooltip.php"); ?>
 		    		<select id="schedule-form-type" name="meeting-type" style="width:370px;vertical-align:middle;">
@@ -44,6 +70,7 @@
 		    		</select>
 		    	</div> 			
 				</fieldset>
+				<input type="hidden" name="meeting-recur-duration" value="false" />
 			</form>  
 		</td>
     <td>
