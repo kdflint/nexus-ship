@@ -1,8 +1,11 @@
 
 			<form id="schedule-form" class="pure-form" action="<?php echo(Utilities::getHttpPath()); ?>/modules/schedule/control/scheduleProcessor.php" method="post" enctype="multipart/form-data">
 				<fieldset style="position:absolute;width:450px;">
-      	<span style="font-size:130%;font-weight:bold;" class='detail'>New Event Submission Form</span></br>					
-      		<div style="margin-top:10px;">
+      	<span style="font-size:130%;font-weight:bold;" class='detail'>New Event Submission Form</span></br>	
+      	    <div style="margin-top:20px;">
+	      		<input name="bbb-request" type="checkbox"> <b>Please add a virtual gathering to this event.</b>
+	        </div>
+      		<div style="margin-top:20px;">
 	      		<input type="text" name="meeting-name" style="width:100%;" maxlength="100" placeholder="Meeting Name" >
 					</div>
        		<div style="margin-top:10px;">
