@@ -92,7 +92,7 @@
 		          			    ) +
 		          			    "</p>"										
 										//: "<p style='font-size:90%'><a href='#openBbbMeetingAdd' onclick='return populateEventTypeForm(\"" + jsonObj[i].uuid + "\",\"" + jsonObj[i].purpose + "\");'>Reserve Web Meeting</a></p>"
-										: (jsonObj[i].recur
+										: (jsonObj[i].recur || filter === "pending"
 										  ? '' 
 										  : "<p style='font-size:90%'><a href='#openBbbMeetingAdd' onclick='return populateEventTypeForm(\"" + jsonObj[i].uuid + "\",\"" + jsonObj[i].purpose + "\");'>Reserve Web Meeting</a></p>")
 										) +
