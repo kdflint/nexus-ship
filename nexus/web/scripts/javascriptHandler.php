@@ -2466,7 +2466,7 @@ function getDaysPassing(num, freq, start) {
         var dayOfWeek = curDate.getDay();
         if ((dayOfWeek > 0) && (dayOfWeek < 6)) {
            weekdayCount++;
-         }
+        }
         loopCount++;
     	}
     	return loopCount - 1;
@@ -2504,7 +2504,7 @@ function htmlDecode(str) {
 }
 
 function millisecondsToFormat(formatString, ms){
-	var thisDate = new Date(ms);
+  var thisDate = new Date(ms);
   var YYYY,YY,MMMM,MMM,MM,M,DDDD,DDD,DD,D,hhhh,hhh,hh,h,mm,m,ss,s,ampm,AMPM,dMod,th;
   YY = ((YYYY=thisDate.getFullYear())+"").slice(-2);
   MM = (M=thisDate.getMonth()+1)<10?('0'+M):M;
