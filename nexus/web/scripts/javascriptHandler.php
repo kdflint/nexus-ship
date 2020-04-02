@@ -2303,7 +2303,7 @@ function eventValidateAndSubmit(thisForm) {
 	if (Boolean(pass)) {
  		submitButton.disabled = true;  
  		submitButton.style.opacity = ".6";
- 		//eventForm.submit();
+ 		eventForm.submit();
  	}
 }
 
