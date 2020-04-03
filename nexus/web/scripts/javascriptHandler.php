@@ -2265,19 +2265,20 @@ function eventValidateAndSubmit(thisForm) {
   	}
   }
   
-	// Find a better way to do this. Why am I doing this? It's a hidden field...
   var forApproval = false;
   var contact = "";
-  if (eventForm['meeting-contact'] !== undefined && eventForm['meeting-contact'].value.length > 0) {
-  	forApproval = true;
-  	var contactField = eventForm['meeting-contact'];
-  	contact = contactField.value;
-  	setFieldPassStyles(contactField, CONTACT_EMAIL);
-  	if (!isValidEmail(contact)) {
-  		setFieldErrorStyles(contactField, VALID_EMAIL_REQUIRED);
+  // If we have a contact field and this is the public add form
+  if (eventForm['meeting-contact'] !== undefined && eventForm['meeting-public-form'] !== undefined) {
+	var contactField = eventForm['meeting-contact'];
+	if (contactField.value.length > 0 && isValidEmail(contactField.value)) {
+		forApproval = true;
+		contact = contactField.value;
+		setFieldPassStyles(contactField, CONTACT_EMAIL);
+	} else {
+		setFieldErrorStyles(contactField, VALID_EMAIL_REQUIRED);
   		contactField.value = "";
-  		pass = false;
-  	}  	
+  		pass = false;		
+	}
   }
    
 	if (eventForm['meeting-descr'] !== undefined) {
