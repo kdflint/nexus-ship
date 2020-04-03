@@ -165,11 +165,11 @@ class Event {
 	}
 	
 	public static function getFuturePendingEvents($idList, $ssnUser, $localTz = "Greenwich") {
-		return self::getFutureEventsByGroupIdList($idList, $localTz, $ssnUser, "3");
+		return self::getFutureEventsByGroupIdList($idList, $ssnUser, $localTz, "3");
 	}
 	
 	public static function getFutureNetworkEvents($idList, $ssnUser, $localTz = "Greenwich", $status = "1") {
-		return self::getFutureEventsByGroupIdList($idList, $localTz, $ssnUser, $status);
+		return self::getFutureEventsByGroupIdList($idList, $ssnUser, $localTz, $status);
 	}
 
 	public static function getRunningMeetingsByGroupIdList($idList) {
@@ -192,20 +192,21 @@ class Event {
 		//$logger->log("hello now => " . time(), PEAR_LOG_INFO);
 		$events = array();
 		if (self::isValidTimeZone($localTz)) {
-			$query = "select 
-				extract(day from (select e.start_dttm at time zone $2)) as date, 
-				extract(dow from (select e.start_dttm at time zone $2)) as day, 
-				extract(month from (select e.start_dttm at time zone $2)) as month, 
-				extract(hour from (select e.start_dttm at time zone $2)) as hour, 
-				extract(minute from (select e.start_dttm at time zone $2)) as minute, 
-				extract(year from (select e.start_dttm at time zone $2)) as year,
-				extract(epoch from (select e.start_dttm)) as epoch,
-				extract(day from (select (e.start_dttm + e.duration) at time zone $2)) as date_end,
-				extract(month from (select (e.start_dttm + e.duration) at time zone $2)) as month_end,
-				extract(hour from (select (e.start_dttm + e.duration) at time zone $2)) as hour_end, 
-				extract(minute from (select (e.start_dttm + e.duration) at time zone $2)) as minute_end, 
-				extract(year from (select (e.start_dttm + e.duration) at time zone $2)) as year_end,
-				extract(epoch from (select (e.start_dttm + e.duration))) as epoch_end,
+			$query = 
+			"select 
+				extract(day from (select coalesce(ec.start_dttm,e.start_dttm) at time zone $2)) as date, 
+				extract(dow from (select coalesce(ec.start_dttm,e.start_dttm) at time zone $2)) as day, 
+				extract(month from (select coalesce(ec.start_dttm,e.start_dttm) at time zone $2)) as month, 
+				extract(hour from (select coalesce(ec.start_dttm,e.start_dttm) at time zone $2)) as hour, 
+				extract(minute from (select coalesce(ec.start_dttm,e.start_dttm) at time zone $2)) as minute, 
+				extract(year from (select coalesce(ec.start_dttm,e.start_dttm) at time zone $2)) as year,
+				extract(epoch from (select coalesce(ec.start_dttm,e.start_dttm))) as epoch,
+				extract(day from (select (coalesce(ec.start_dttm,e.start_dttm) + e.duration) at time zone $2)) as date_end,
+				extract(month from (select (coalesce(ec.start_dttm,e.start_dttm) + e.duration) at time zone $2)) as month_end,
+				extract(hour from (select (coalesce(ec.start_dttm,e.start_dttm) + e.duration) at time zone $2)) as hour_end, 
+				extract(minute from (select (coalesce(ec.start_dttm,e.start_dttm) + e.duration) at time zone $2)) as minute_end, 
+				extract(year from (select (coalesce(ec.start_dttm,e.start_dttm) + e.duration) at time zone $2)) as year_end,
+				extract(epoch from (select (coalesce(ec.start_dttm,e.start_dttm) + e.duration))) as epoch_end,
 				e.tz_name as tzname, 
 				e.duration as duration, 
 				e.name as name, 
@@ -224,6 +225,10 @@ class Event {
 				g.name as group_name,
 				er.pattern as pattern,
 				er.num_occur as num,
+				extract(dow from (select er.end_dttm at time zone $2)) as total_day_end,
+				extract(day from (select er.end_dttm at time zone $2)) as total_date_end, 
+				extract(month from (select er.end_dttm at time zone $2)) as total_month_end,  
+				extract(year from (select er.end_dttm at time zone $2)) as total_year_end,
 				eg.group_fk as group_fk,
 				eg.status_fk as status_fk,
 				u.fname as fname, 
@@ -232,6 +237,13 @@ class Event {
 				pg.name as tz_extract_name 
 			from event e
 				left outer join event_recur er on e.recur_fk = er.id
+				left outer join event_children ec on ec.event_fk = e.id
+					and ec.start_dttm = (
+						select min(start_dttm)
+						from event_children ec1
+						where ec1.event_fk = e.id
+						and ec1.start_dttm > (e.start_dttm + e.duration)
+					)
 				join public.user u on u.id = e.reserved_user_fk
 				join event_group eg on eg.event_fk = e.id
 				join public.group g on eg.group_fk = g.id 
@@ -242,9 +254,9 @@ class Event {
 				and (
 					((e.start_dttm + e.duration) > now())
 					or
-					((COALESCE(er.end_dttm,now()) > now()))
+					((coalesce(er.end_dttm,now()) > now()))
 				)
-			order by e.start_dttm";
+			order by coalesce(ec.start_dttm,e.start_dttm)";
 			
 			//$logger->log(print_r($query, true), PEAR_LOG_INFO);
 
@@ -286,6 +298,7 @@ class Event {
 				$events[$counter]['recur'] = strlen($row['recur']) > 0 ? true : false;
 				$events[$counter]['recur_pattern'] = $row['pattern'];
 				$events[$counter]['recur_num'] = $row['num'];
+				$events[$counter]['recur_end_phrase'] = self::getDay($row['total_day_end']) . ", " . self::getMonth($row['total_month_end']-1) . " " . $row['total_date_end'] . " " . $row['total_year_end'];
 				$events[$counter]['bbb'] = ($row['bbb'] === 't' ? TRUE : FALSE);
 				$events[$counter]['sessionUser'] = $ssnUser;
 				$events[$counter]['adder'] = $row['adder'];
@@ -307,16 +320,16 @@ class Event {
 		$event = array();
 		if (self::isValidEventUuid($uuid)) {
 			$query = "select 
-				extract(day from (select e.start_dttm at time zone $2)) as date, 
-				extract(dow from (select e.start_dttm at time zone $2)) as day, 
-				extract(month from (select e.start_dttm at time zone $2)) as month, 
-				extract(hour from (select e.start_dttm at time zone $2)) as hour, 
-				extract(year from (select e.start_dttm at time zone $2)) as year, 
-				extract(minute from (select e.start_dttm at time zone $2)) as minute, 
-				extract(epoch from (select e.start_dttm)) as epoch,
-				extract(hour from (select (e.start_dttm + e.duration) at time zone $2)) as hour_end, 
-				extract(minute from (select (e.start_dttm + e.duration) at time zone $2)) as minute_end, 
-				extract(epoch from (select (e.start_dttm + e.duration))) as epoch_end,
+				extract(day from (select coalesce(ec.start_dttm,e.start_dttm) at time zone $2)) as date, 
+				extract(dow from (select coalesce(ec.start_dttm,e.start_dttm) at time zone $2)) as day, 
+				extract(month from (select coalesce(ec.start_dttm,e.start_dttm) at time zone $2)) as month, 
+				extract(hour from (select coalesce(ec.start_dttm,e.start_dttm) at time zone $2)) as hour, 
+				extract(year from (select coalesce(ec.start_dttm,e.start_dttm) at time zone $2)) as year,
+				extract(minute from (select coalesce(ec.start_dttm,e.start_dttm) at time zone $2)) as minute, 
+				extract(epoch from (select coalesce(ec.start_dttm,e.start_dttm))) as epoch,
+				extract(hour from (select (coalesce(ec.start_dttm,e.start_dttm) + e.duration) at time zone $2)) as hour_end, 
+				extract(minute from (select (coalesce(ec.start_dttm,e.start_dttm) + e.duration) at time zone $2)) as minute_end, 
+				extract(epoch from (select (coalesce(ec.start_dttm,e.start_dttm) + e.duration))) as epoch_end,
 				e.tz_name as tzname, 
 				e.duration as duration, 
 				e.name as name, 
@@ -348,6 +361,12 @@ class Event {
 				pg.abbrev as abbrev 
 				from event e
 				left outer join event_recur er on e.recur_fk = er.id
+				left outer join event_children ec on ec.event_fk = e.id
+					and ec.start_dttm = (
+						select min(start_dttm)
+						from event_children ec1
+						where ec1.event_fk = e.id
+					)
 				join public.user u on u.id = e.reserved_user_fk
 				join event_group eg on eg.event_fk = e.id
 				join public.group g on eg.group_fk = g.id 

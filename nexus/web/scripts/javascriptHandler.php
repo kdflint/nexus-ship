@@ -527,6 +527,16 @@ function updateEventGroup(name, id) {
 	document.forms['schedule-form']['meeting-visibility-stub-' + id].checked = true;
 }
 
+function toggleRecurNWMFormElements() {
+	var curValue = document.getElementById('repeat-check').checked;
+	var repeatSpan = document.getElementById("repeat-span");
+	if(!curValue) {
+		repeatSpan.style.visibility = "hidden";
+	} else {
+		repeatSpan.style.visibility = "visible";
+	}
+}
+
 function toggleRecurFormElements(override) {
 	var curValue = document.getElementById('repeat-check').checked;
 	var repeatBlock = document.getElementById("repeat-block");
@@ -2121,7 +2131,7 @@ function eventValidateAndSubmit(thisForm) {
   var time = eventForm['meeting-time'].value;
 	var dateField = eventForm['meeting-date'];
 	var date = dateField.value;
-	
+
   var timeEnd;
 	var dateFieldEnd;
 	var dateEnd;  
@@ -2196,14 +2206,34 @@ function eventValidateAndSubmit(thisForm) {
  		alert(BAD_DURATION + ": " + duration);
  		pass = false;
 	}
-  
+	
 	if (eventForm['repeat-check'] !== undefined) {
 		if (eventForm['repeat-check'].checked) {
-			// TODO - validate repeat-freq and repeat-interval
-  		var eventEndEpoch = Date.parse(createTimeStampString(eventForm['meeting-date-end'].value, eventForm['meeting-time-end'].value));
-  		var numRealDaysToPass = getDaysPassing(eventForm['repeat-freq'].value, eventForm['repeat-interval'].value, eventForm['meeting-date-end'].value);
-  		var epochSpan = numRealDaysToPass*24*60*60*1000;
-  		eventForm['meeting-recur-duration'].value = millisecondsToFormat("#MM#/#DD#/#YYYY# #hh#:#mm#:#ss#", eventEndEpoch+epochSpan);
+			if (Boolean(isDateEnd) && Boolean(isTimeEnd)) {
+				var eventEndEpoch = Date.parse(createTimeStampString(eventForm['meeting-date-end'].value, eventForm['meeting-time-end'].value));
+  				var numRealDaysToPass = getDaysPassing(eventForm['repeat-freq'].value, eventForm['repeat-interval'].value, eventForm['meeting-date-end'].value);
+  				var epochSpan = numRealDaysToPass*24*60*60*1000;
+  				eventForm['meeting-recur-duration'].value = millisecondsToFormat("#MM#/#DD#/#YYYY# #hh#:#mm#:#ss#", eventEndEpoch+epochSpan);
+			} else {
+
+				// Using moment.js library, imported in nexus.php 
+
+				var _start = moment(createTimeStampString(date, time), "YYYY-MM-DDTHH:mm:ss");
+				var _duration = moment.duration(duration);
+				var _end = moment(moment(createTimeStampString(date, time), "YYYY-MM-DDTHH:mm:ss").add(_duration));
+				console.log("=======\nThese dates and times are literal from the form input and NOT adjusted for the form time zone value. The database calculation does the time zone work. Also, time is in 24-hour format.");
+				console.log("This meeting will end at");
+				console.log(_end.format("MM/DD/YYYY HH:mm:ss"));
+				var _start = moment(createTimeStampString(date, time), "YYYY-MM-DDTHH:mm:ss");
+				var _duration = moment.duration(duration);
+				var _end = moment(moment(createTimeStampString(date, time), "YYYY-MM-DDTHH:mm:ss").add(_duration));
+				var eventEndEpoch = Date.parse(_end.format("YYYY-MM-DDTHH:mm:ss"));
+				var numRealDaysToPass = getDaysPassing(eventForm['repeat-freq'].value, eventForm['repeat-interval'].value, _end.format("YYYY-MM-DD"));
+				var epochSpan = numRealDaysToPass*24*60*60*1000;
+				eventForm['meeting-recur-duration'].value = millisecondsToFormat("#MM#/#DD#/#YYYY# #hh#:#mm#:#ss#", eventEndEpoch+epochSpan);
+				console.log("The last meeting in the series will end at");
+				console.log(eventForm['meeting-recur-duration'].value);
+			}
 		} else {
 			eventForm['meeting-recur-duration'].value = 0;
 		}
@@ -2235,19 +2265,20 @@ function eventValidateAndSubmit(thisForm) {
   	}
   }
   
-	// Find a better way to do this. Why am I doing this? It's a hidden field...
   var forApproval = false;
   var contact = "";
-  if (eventForm['meeting-contact'] !== undefined && eventForm['meeting-contact'].value.length > 0) {
-  	forApproval = true;
-  	var contactField = eventForm['meeting-contact'];
-  	contact = contactField.value;
-  	setFieldPassStyles(contactField, CONTACT_EMAIL);
-  	if (!isValidEmail(contact)) {
-  		setFieldErrorStyles(contactField, VALID_EMAIL_REQUIRED);
+  // If we have a contact field and this is the public add form
+  if (eventForm['meeting-contact'] !== undefined && eventForm['meeting-public-form'] !== undefined) {
+	var contactField = eventForm['meeting-contact'];
+	if (contactField.value.length > 0 && isValidEmail(contactField.value)) {
+		forApproval = true;
+		contact = contactField.value;
+		setFieldPassStyles(contactField, CONTACT_EMAIL);
+	} else {
+		setFieldErrorStyles(contactField, VALID_EMAIL_REQUIRED);
   		contactField.value = "";
-  		pass = false;
-  	}  	
+  		pass = false;		
+	}
   }
    
 	if (eventForm['meeting-descr'] !== undefined) {
@@ -2422,12 +2453,12 @@ function validateTimeFormat(t) {
 
 function getDaysPassing(num, freq, start) {
 	var curDate = new Date(start);
-	// Note: Subtract 1 from each calculation to remove the first event date from the days passed calculation
+	// Note: Subtract from each calculation to remove the first event date from the days passed calculation
 	switch(parseInt(freq)) {
 		case 0:
 			return parseInt(num) - 1;
 		case 2:
-			return parseInt(num * 7) - 1;
+			return parseInt(num * 7) - 7;
 		case 1:
 			var loopCount = 0;
 			var weekdayCount = 0;
@@ -2436,7 +2467,7 @@ function getDaysPassing(num, freq, start) {
         var dayOfWeek = curDate.getDay();
         if ((dayOfWeek > 0) && (dayOfWeek < 6)) {
            weekdayCount++;
-         }
+        }
         loopCount++;
     	}
     	return loopCount - 1;
@@ -2474,7 +2505,7 @@ function htmlDecode(str) {
 }
 
 function millisecondsToFormat(formatString, ms){
-	var thisDate = new Date(ms);
+  var thisDate = new Date(ms);
   var YYYY,YY,MMMM,MMM,MM,M,DDDD,DDD,DD,D,hhhh,hhh,hh,h,mm,m,ss,s,ampm,AMPM,dMod,th;
   YY = ((YYYY=thisDate.getFullYear())+"").slice(-2);
   MM = (M=thisDate.getMonth()+1)<10?('0'+M):M;
@@ -2484,8 +2515,10 @@ function millisecondsToFormat(formatString, ms){
   th=(D>=10&&D<=20)?'th':((dMod=D%10)==1)?'st':(dMod==2)?'nd':(dMod==3)?'rd':'th';
   formatString = formatString.replace("#YYYY#",YYYY).replace("#YY#",YY).replace("#MMMM#",MMMM).replace("#MMM#",MMM).replace("#MM#",MM).replace("#M#",M).replace("#DDDD#",DDDD).replace("#DDD#",DDD).replace("#DD#",DD).replace("#D#",D).replace("#th#",th);
   h=(hhh=thisDate.getHours());
-  if (h==0) h=24;
-  if (h>12) h-=12;
+  //if (h==0) h=24;
+  if (h==0) h=0;
+  //if (h>12) h-=12;
+  if (h>12) h=h;
   hh = h<10?('0'+h):h;
   hhhh = hhh<10?('0'+hhh):hhh;
   AMPM=(ampm=hhh<12?'am':'pm').toUpperCase();

@@ -35,7 +35,8 @@ $dirty = array('meeting-name' => $_POST['meeting-name'],
 							'meeting-interval' => $_POST['repeat-interval'],
 							'meeting-num-occur' => $_POST['repeat-freq'],
 							'meeting-recur-dttm' => $_POST['meeting-recur-duration'],
-							'old-file-ext' => $_POST['old-file-ext']
+							'old-file-ext' => $_POST['old-file-ext'],
+							'bbb-request' => $_POST['bbb-request']
 							);
 										
 $result = validateEvent($dirty);
@@ -99,6 +100,10 @@ if ($meetingStatus == "3") {
 	$message = "Hello Administrator,
 	
 A new event has just been submitted to the " . $_SESSION['networkName'] . " Public Calendar.
+
+Meeting name: " . $result['clean']['meeting-name'] . "
+
+Virtual gathering request? " .  $result['clean']['bbb-request'] . "
 
 You may approve this event for publication at
 
@@ -281,6 +286,14 @@ function validateEvent($input) {
 		// TODO - breaks if we want to assign multiple network groups to a meeting. Also, obviously, breaks if index 0 is not the right group.
 		$result['clean']['meeting-group'] = $_SESSION['groups'][0]['id'];
 	}
+	
+	// BBB REQUEST
+	if (isset($input['bbb-request'])) {
+	    $result['clean']['bbb-request'] = "YES";
+	} else {
+	    $result['clean']['bbb-request'] = "NO";
+	}
+
 
 	
 	// MEETING RECURRENCE

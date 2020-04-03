@@ -65,7 +65,7 @@ body {
     max-height: 560px;
 	color:#333333;
     font-family:'Oxygen',sans-serif; 
-    background-image: url(images/sidebar.png);
+    /*background-image: url(images/sidebar.png);*/
     background-repeat: no-repeat;
     background-size: 22px 400px;
 }
@@ -87,7 +87,7 @@ header,
 }
 
 .content {
-    padding-left: 40px;
+    padding-left: 16px;
     position: relative;
     top: 20px;
 }

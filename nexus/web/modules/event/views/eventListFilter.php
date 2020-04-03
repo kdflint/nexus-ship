@@ -91,7 +91,10 @@
 		          			    : "<button onclick='alert(\"Share this link to invite a guest to this meeting.\\r\\n\\r\\n" + guestPass + "\");' title='Click to show pass'>Show Guest Pass</button>"
 		          			    ) +
 		          			    "</p>"										
-										: "<p style='font-size:90%'><a href='#openBbbMeetingAdd' onclick='return populateEventTypeForm(\"" + jsonObj[i].uuid + "\",\"" + jsonObj[i].purpose + "\");'>Reserve Web Meeting</a></p>"
+										//: "<p style='font-size:90%'><a href='#openBbbMeetingAdd' onclick='return populateEventTypeForm(\"" + jsonObj[i].uuid + "\",\"" + jsonObj[i].purpose + "\");'>Reserve Web Meeting</a></p>"
+										: (jsonObj[i].recur || filter === "pending"
+										  ? '' 
+										  : "<p style='font-size:90%'><a href='#openBbbMeetingAdd' onclick='return populateEventTypeForm(\"" + jsonObj[i].uuid + "\",\"" + jsonObj[i].purpose + "\");'>Reserve Web Meeting</a></p>")
 										) +
          					"</span>" +
          				"</div>" +

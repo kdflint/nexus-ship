@@ -22,24 +22,24 @@ msgid "Your session has timed out."
 msgstr "మీ కాలపరిమితి అయిపోయింది."
 
 msgid "Schedule"
-msgstr "షెడ్యూలు"
+msgstr " జాబితా"
 
 msgid "Seats"
-msgstr "సీట్లు"
+msgstr "నిర్వాహకులు"
 
 msgid "join_link_text"
 msgstr ""
-"సీట్ హోల్డర్లు ఈ సమావేశాన్ని షెడ్యూల్ చేయడానికి మరియు ఏదైనా సమావేశానికి "
-"హాజరు కావడానికి ఉపయోగించవచ్చు."
+"మీ ఛానెల్ నిర్వాహకులు ప్రస్తుతం తెరిచి ఉంది ఈ సమావేశాన్ని  జాబితా చేయడానికి "
+"మరియు ఏదైనా సమావేశానికి హాజరు కావడానికి ఉపయోగించవచ్చు."
 
 msgid "pass_label"
-msgstr "ఒక క్లిక్ చేరండి"
+msgstr "ఒకే క్లిక్‌తో చేరండి"
 
 msgid "bookmark_notice"
-msgstr "ఒక-క్లిక్ చేరండి కలిగి (Ctrl-D బుక్మార్క్ కు)"
+msgstr "ఒకే క్లిక్‌తో చేరండి(Ctrl-D బుక్మార్క్ కు)"
 
 msgid "format_webinar"
-msgstr "ప్రెజెంటేషన్ లేదా ఆన్లైన్ క్లాస్ను ప్రసారం చేయండి."
+msgstr "ప్రదర్శన లేదా ఆన్‌లైన్ తరగతిని ప్రసారం చేయండి."
 
 msgid "confirm_pass"
 msgstr "పాస్వర్డ్ని నిర్ధారించండి"
@@ -61,6 +61,9 @@ msgstr "నటించిన"
 
 msgid "bookmark_shortcut"
 msgstr "(Ctrl-D బుక్మార్క్ కు)"
+
+msgid "join"
+msgstr "చేరడానికి"
 
 msgid "meeting"
 msgstr "సమావేశం"
@@ -226,7 +229,7 @@ msgstr "నమోదు చేసుకోండి "
 
 #: web/scripts/noscript.php:4
 msgid "To use Nexus it is necessary to enable JavaScript."
-msgstr "నెక్సస్ను  ఉపయోగించడానికి  జావాస్క్రిప్టును ఎన్బల్  చేయడం అవసరం "
+msgstr "నెక్సస్‌ను ఉపయోగించడానికి జావాస్క్రిప్ట్‌ను ప్రారంభించడం అవసరం."
 
 #: web/scripts/noscript.php:4
 msgid "Help"
@@ -317,7 +320,7 @@ msgstr "నిర్వాహకుడు"
 #: web/modules/schedule/views/reservationAdd.php:50
 #: web/modules/schedule/views/joinAdd.php:33
 msgid "Cancel"
-msgstr "రధ్ధించు "
+msgstr "రద్దుచేయడం "
 
 #: web/modules/schedule/views/reservationsList.php:25
 #: web/modules/schedule/views/reservationsList.php:48
@@ -327,7 +330,7 @@ msgstr "ప్రస్తుతం"
 
 #: web/modules/schedule/views/reservationsList.php:26
 msgid "Good news! Your room is available right now."
-msgstr "శుభవార్త! మీ గది ప్రస్తుతం అందుబాటులో ఉంది."
+msgstr "శుభవార్త! మీ ఛానెల్ ప్రస్తుతం తెరిచి ఉంది"
 
 #: web/modules/schedule/views/reservationsList.php:47
 #: web/modules/schedule/views/reservationsList.php:100
@@ -344,7 +347,7 @@ msgstr "భవిష్యత్తు"
 
 #: web/modules/schedule/views/reservationsList.php:83
 msgid "Click the calendar to reserve this room for a future date."
-msgstr "భవిష్యత్ తేదీ కోసం ఈ గదిని ఉంచడానికి క్యాలెండర్ క్లిక్ చేయండి."
+msgstr "భవిష్యత్ తేదీ కోసం ఈ ఛానల్ని ఉంచడానికి క్యాలెండర్ క్లిక్ చేయండి."
 
 #: web/modules/schedule/views/reservationsList.php:168
 msgid "Team Pass"
@@ -352,7 +355,7 @@ msgstr "జట్టు పాస్"
 
 #: web/modules/schedule/views/reservationAdd.php:6
 msgid "Reservation"
-msgstr "రిజర్వేషన్"
+msgstr "నిలుపుకోవడము"
 
 #: web/modules/schedule/views/reservationAdd.php:13
 #: web/modules/schedule/views/joinAdd.php:13
@@ -415,7 +418,7 @@ msgstr ""
 
 #: web/modules/schedule/views/meetingTypeTooltip.php:8
 msgid "Webinar"
-msgstr "వెబ్ సమావేశం "
+msgstr "వెబ్నార్ "
 
 #: web/modules/schedule/views/joinAdd.php:5
 msgid "Start"
@@ -517,7 +520,7 @@ msgstr "జట్టు"
 
 #: web/nwmHeader.php:12
 msgid "ARCHIVE"
-msgstr "ఆర్కైవ్"
+msgstr "భాండాగారం "
 
 #: web/nwmHeader.php
 msgid "Training"

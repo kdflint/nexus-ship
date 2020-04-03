@@ -15,10 +15,15 @@
 			 	var showClipboardButton = Clipboard.isSupported();
 			 	// put row container in the now, 1 row always
 			 	var nowMeeting = undefined;	
-			 	if (jsonObj.length > 0 && jsonObj[0].epoch < referenceTime) {
+			 	console.log("referenceTime  " + referenceTime);
+				var d2 = new Date();
+				var now2 = Math.ceil(d2.getTime()/1000);
+				console.log(now2);
+			 	if (jsonObj.length > 0 && (jsonObj[0].epoch < referenceTime || jsonObj[0].epochEnd > now2)) {
 			 		nowMeeting = jsonObj.shift();
 			 		//techCheck();
 			 	}
+			 	console.log(nowMeeting);
        	document.getElementById("nowTable").innerHTML = "<div id='nowRow0' class='tr-div' style='position:relative;'></div>";
        	
 			 	// put row containers in the reservation table, 1 for each future event
@@ -72,11 +77,21 @@
 	       				"<span class='date'>" + indicator + "</span><br/>" +
 	       				"<span class='month'>" + nowMeeting.hour + ":" + nowMeeting.minute + "</span><span class='period'> " + nowMeeting.period + " -</span><br/>" +
 	       				"<span class='month'>" + nowMeeting.hour_end + ":" + nowMeeting.minute_end + "</span><span class='period'> " + nowMeeting.period_end + " " + nowMeeting.abbrev + "</span>" +
+						   (nowMeeting.recur 
+        						?
+        						"<p class='tod' style='background-color:#dddddd;width:100px;padding:4px;border-radius:5px;margin-top:3px;font-size:80%;'>Recurring Event</p>"
+        						: 
+								""
+							) +
 							"</div>" +
        			"</div>" +
        			"<div id='nowEventDetail' class='td-div' style='position:absolute;left:140px;top:5px;height:180px;'>" +     				
 			        "<div class='meeting'>" +
           			"<span class='purpose'>" + nowMeeting.purpose + "</span><br/>" +
+					(nowMeeting.recur 
+							? "<p style='background-color:#dddddd;padding:4px;border-radius:5px;margin-top:3px;margin-bottom:5px;font-size:80%;'>Occurs " + nowMeeting.recur_pattern + " through " + nowMeeting.recur_end_phrase + "</p>" 
+							: ""
+							) + 
           			"<span class='descr'>" +
           				"<p>" + nowMeeting.mtypdisplay + " <?php echo _('reserved_by'); ?> " + reservedBy +
 	        				(((IS_ADMIN || nowMeeting.adder == nowMeeting.sessionUser) && nowMeeting.sessionUser != <?php echo(Utilities::getDemoUidpk()); ?>) ? "<a href='modules/schedule/control/eventDeleteProcessor.php?id=" + nowMeeting.uuid + "' onclick='return confirm(\"<?php echo _('confirm_delete'); ?>\");'><span class='fa fa-trash-o' style='color:#d27b4b;margin-left:10px;'></span></a></p>" : " ") +
@@ -130,24 +145,33 @@
        			"<div class='td-div'>" +
 	       				"<div class='event'>" +
   					  		"<span class='day'>" + jsonObj[i].day + "</span><br/>" +
- 									"<span class='date'>" + jsonObj[i].date + "</span><br/>" +
- 									"<span class='month'>" + jsonObj[i].month + "</span><br/>" +
- 									"<span>" + jsonObj[i].hour + ":" + jsonObj[i].minute + "</span><span class='period'> " + jsonObj[i].period + " " + jsonObj[i].abbrev + "</span>" +
-								"</div>" +
+ 							"<span class='date'>" + jsonObj[i].date + "</span><br/>" +
+ 							"<span class='month'>" + jsonObj[i].month + "</span><br/>" +
+ 							"<span>" + jsonObj[i].hour + ":" + jsonObj[i].minute + "</span><span class='period'> " + jsonObj[i].period + " " + jsonObj[i].abbrev + "</span>" +
+							(jsonObj[i].recur 
+        						?
+        						"<p class='tod' style='background-color:#dddddd;width:100px;padding:4px;border-radius:5px;margin-top:3px;font-size:80%;'>Recurring Event</p>"
+        						: 
+								""
+							) +
+						"</div>" +
       				"</div>" +
       				// TODO - multiple items with same id - wrong
        				"<div id='futureEventDetail' class='td-div' style='position:absolute;left:140px;top:5px;height:180px;'>" + 
 		          	"<div class='meeting'>" +
          					"<span class='purpose'>" + jsonObj[i].purpose + "</span><br/>" +
-         					"<span class='descr'>" + jsonObj[i].descr + 
-          					"<p>" + 
+							 (jsonObj[i].recur 
+								? "<p style='background-color:#dddddd;padding:4px;border-radius:5px;margin-top:3px;margin-bottom:5px;font-size:80%;'>Occurs " + jsonObj[i].recur_pattern + " through " + jsonObj[i].recur_end_phrase + "</p>" 
+								: ""
+								) + 
+         					"<span class='descr' style='margin-top:3px;margin-bottom:5px;'>" + jsonObj[i].descr + 
+          					"<p style='margin-top:3px;margin-bottom:5px;'>" + 
           					jsonObj[i].mtypdisplay + " <?php echo _('reserved_by'); ?> " + 
           					((jsonObj[i].adder == <?php echo(Utilities::getDemoUidpk()); ?>) ? '<?php echo($_SESSION['fname']); ?>' : jsonObj[i].fname) + " " +  
           					((jsonObj[i].adder == <?php echo(Utilities::getDemoUidpk()); ?>) ? '<?php echo($_SESSION['lname']); ?>' : jsonObj[i].lname) + 
           					(((IS_ADMIN || jsonObj[i].adder == jsonObj[i].sessionUser) && jsonObj[i].sessionUser != <?php echo(Utilities::getDemoUidpk()); ?>) ? "<a href='modules/schedule/control/eventDeleteProcessor.php?id=" + jsonObj[i].uuid + "' onclick='return confirm(\"" + message2 + "\");'><span class='fa fa-trash-o' style='margin-left:10px;color:#d27b4b;'></span></a>" : " ") +
 										"</p>" +
-         						"<p style='font-size:90%;'><b>" + message1 + "</b> (<?php echo _('share_link'); ?>)</p>" +	
-         						
+         						"<p style='font-size:90%;margin-bottom:5px;'><b>" + message1 + "</b> (<?php echo _('share_link'); ?>)</p>" +	
          						(showClipboardButton
 		          				? "<button class='guest-pass-button' id='guest-pass-button0' data-clipboard-text='" + guestPass + "' onclick='' title='<?php echo _('copy_pass'); ?>' ><?php echo _('copy_pass'); ?></button>" +
 				          			"&nbsp;<button class='show-pass-button' onclick='alert(\"" + guestPass + "\");' title='<?php echo _('show_pass'); ?>'><?php echo _('show_pass'); ?></button></p>"

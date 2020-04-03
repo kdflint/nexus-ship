@@ -12,6 +12,7 @@
 *.docx
 *.ico
 *.mo
+*.zip
 bbb-test.sh
 config_env.php
 sensitive_config.php
