@@ -242,7 +242,7 @@ class Event {
 						select min(start_dttm)
 						from event_children ec1
 						where ec1.event_fk = e.id
-						and ec1.start_dttm > (e.start_dttm + e.duration)
+						and now() <= ec1.start_dttm + e.duration
 					)
 				join public.user u on u.id = e.reserved_user_fk
 				join event_group eg on eg.event_fk = e.id
@@ -366,6 +366,7 @@ class Event {
 						select min(start_dttm)
 						from event_children ec1
 						where ec1.event_fk = e.id
+						and now() <= ec1.start_dttm + e.duration
 					)
 				join public.user u on u.id = e.reserved_user_fk
 				join event_group eg on eg.event_fk = e.id
