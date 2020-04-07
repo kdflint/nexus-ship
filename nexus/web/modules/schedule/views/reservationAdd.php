@@ -7,7 +7,7 @@
 			</div>
 		</td>
     <td>
-			<form id="schedule-form" class="pure-form" action="modules/schedule/control/scheduleProcessor.php" method="post">
+			<form id="schedule-form" class="pure-form" action="modules/schedule/control/scheduleProcessor.php" method="post" style="width:105%;">
 				<fieldset>
       		<div>
 	      		<input type="text" name="meeting-name" style="width:396px;" maxlength="50" placeholder="<?php echo _("Meeting Name"); ?>" >
@@ -41,14 +41,14 @@
 
 				<div style="margin-top:10px;">
 					
-						<input id="repeat-check" name="repeat-check" onchange="toggleRecurNWMFormElements();" type="checkbox"> <b>Repeat</b>
-						<span id="repeat-span" style="visibility:hidden;">				
-							Occurs <select id="repeat-interval" name="repeat-interval" style="width:135px;">
+						<span style="vertical-align:top;font-size:90%;"><input id="repeat-check" name="repeat-check" onchange="toggleRecurNWMFormElements();" type="checkbox"> <b>Repeat</b></span>
+						<span id="repeat-span" style="visibility:hidden;margin-left:10px;font-size: 90%;vertical-align:top;">				
+							<span style="vertical-align:top;padding:5px;">Occurs </span><select id="schedule-form-repeat-interval" name="repeat-interval" style="width:125px;">
 								<option value="0" selected>Daily</option>
 								<option value="1">Weekdays</option>
 								<option value="2">Weekly</option>
 								</select>	
-							For <select id="repeat-freq" name="repeat-freq" style="width:50px;">
+							<span style="vertical-align:top;padding:5px;">for </span><select id="schedule-form-repeat-freq" name="repeat-freq" style="width:56px;">
 									<option value="2" selected>2</option>
 									<option value="3">3</option>
 									<option value="4">4</option>
@@ -58,7 +58,7 @@
 									<option value="8">8</option>
 									<option value="9">9</option>
 									<option value="10">10</option>
-								</select>
+								</select><span id="repeat-freq-descr" style="vertical-align:top;padding:5px;">days</span>
 						</span>
  				</div>
 

@@ -452,6 +452,8 @@ $customProfileData = strlen($_SESSION['profile']) > 0 ? $_SESSION['profile'] : '
         $( "#schedule-form-country" ).selectmenu({ change: function() { displayTimeZones(); } });
         $( "#schedule-form-countryTimeZones" ).selectmenu();
         $( "#schedule-form-countryTimeZones" ).selectmenu({ change: function() { setTimeZoneDisplay(document.getElementById("schedule-form-countryTimeZones").value); } });
+        $( "#schedule-form-repeat-interval" ).selectmenu({ change: function() { updateRepeatDescrNwm(); } });
+        $( "#schedule-form-repeat-freq" ).selectmenu();
         $( "#directory-form-select-specialty").selectmenu().selectmenu( "menuWidget" ).addClass( "overflow-tall" );
        	$( "#directory-form-select-specialty").selectmenu().selectmenu({
 						position: { my : "left+50 top", at: "right top-85" },
@@ -470,6 +472,7 @@ $customProfileData = strlen($_SESSION['profile']) > 0 ? $_SESSION['profile'] : '
        	$( "#organization-form-country" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
         $( "#organization-form-country" ).selectmenu({ change: function() { displayStates(); } });
         $( "#organization-form-countryStates" ).selectmenu().selectmenu( "menuWidget" ).addClass( "overflow" );
+        
       });
     </script> 
        
