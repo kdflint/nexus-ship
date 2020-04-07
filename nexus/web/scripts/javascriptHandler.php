@@ -571,6 +571,11 @@ function toggleRecurFormElements(override) {
  	}
 }
 
+function updateRepeatDescrNwm() {
+	var labels = ["days","weekdays","weeks"];
+    document.getElementById("repeat-freq-descr").innerHTML = labels[document.getElementById("schedule-form-repeat-interval").value];
+}
+
 function updateRepeatDescr(element) {
 	var labels = [];
 	var x = parseInt(element.value);

@@ -68,6 +68,10 @@ if ($joinerPassword === "mp") {
 	$bbbMeeting->setRecordingParams(false);
 }
 
+$logger->log("DEBUG: " . $clean['uuid'], PEAR_LOG_INFO);
+$logger->log("DEBUG: " . $roomName, PEAR_LOG_INFO);
+$logger->log("DEBUG: " . $clean['mtype'], PEAR_LOG_INFO);
+
 // Create the meeting (if it does not exist yet)
 try {
 	$response = $bbbApi->createMeeting($bbbMeeting->getCreationParams());
