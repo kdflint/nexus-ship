@@ -6,9 +6,9 @@ CREATE SEQUENCE public.event_children_id_seq
     CACHE 1;
 
 ALTER SEQUENCE public.event_children_id_seq
-    OWNER TO northbri_devnexus;
+    OWNER TO northbri_nbnexus;
 
-GRANT ALL ON SEQUENCE public.event_children_id_seq TO northbri_devnexus;
+GRANT ALL ON SEQUENCE public.event_children_id_seq TO northbri_nbnexus;
 
 GRANT SELECT, UPDATE ON SEQUENCE public.event_children_id_seq TO northbri_web;
 
@@ -28,11 +28,11 @@ WITH (
 );
 
 ALTER TABLE public.event_children
-    OWNER to northbri_devnexus;
+    OWNER to northbri_nbnexus;
 	
 GRANT INSERT, SELECT, UPDATE ON TABLE public.event TO northbri_web;
 
-GRANT ALL ON TABLE public.event TO northbri_devnexus;
+GRANT ALL ON TABLE public.event TO northbri_nbnexus;
 
 CREATE OR REPLACE FUNCTION create_event_recurrences() RETURNS trigger AS 
 --DO 
