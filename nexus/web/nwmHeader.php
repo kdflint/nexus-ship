@@ -26,7 +26,7 @@
       	<span class="controls" style="float:right;padding-bottom:10px;margin-top:30px;">
 					<!--<a href="javascript:void(0)" onclick="if(typeof Formilla != 'undefined'){Formilla.initFormillaChat();}">Problem?</a> | -->
 					<!--<a href="#openTrainModal" onclick=""><span class="fa fa-graduation-cap fa-2x" style="margin-left:8px;" title="<?php echo _("Training"); ?>"></span></a>-->
-					<a href="<?php echo Utilities::getMemberUrl(); ?>" target="_blank"><span class="fa fa-graduation-cap fa-2x" style="margin-left:8px;" title="<?php echo _("Training"); ?>"></span></a>
+					<a href="<?php echo Utilities::getSupportUrl(); ?>" target="_blank"><span class="fa fa-graduation-cap fa-2x" style="margin-left:8px;" title="<?php echo _("Training"); ?>"></span></a>
 					<a href="javascript:void(0)" onclick="if(typeof Formilla != 'undefined'){Formilla.initFormillaChat();}" title="Ask Us"><span class="fa fa-question-circle fa-2x" style="margin-left:8px;" title="<?php echo _("Support"); ?>"></span></a>
       		<a href="login.php?oid=<?php echo $_SESSION['orgUid']; ?>&logout=true" style="color:#d27b4b;text-decoration:none;" title="<?php echo _("Logout"); ?>"><span class="fa fa-sign-out fa-2x" style="margin-left:8px;"></span></a>
       	</span>
