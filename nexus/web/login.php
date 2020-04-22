@@ -356,17 +356,15 @@ if(Utilities::isSessionValid() && !Utilities::isSessionPublic()) {
      		
 						<form id="public-join-form" class="pure-form pure-form-stacked" action="" method="post" style="width:92%;">
 		    			<fieldset>
-	    					<span id="username-field-label">Your Name</span>
+	    					<span id="username-field-label">Your Meeting Display Name</span>
         				<input class="form-input" name="uid" value="" maxlength="25" style="width:100%;margin-bottom:10px !important;" autofocus>
+						<!--
         				<span id="username-email-label">Email</span>
-     						<input class="form-input" type="email" name="email" maxlength="50" style="width:100%;margin-bottom:20px !important;">
-							 <!--
-							 <p style="min-height:40px;">
-							 <span id='tech_check_summary' class='descr' style='font-style:italic;' ><span class='fa fa-spinner fa-spin fa-lg'></span> <?php echo _('checking'); ?>...</span><a href='javascript:void(0);' onclick='document.getElementById("tech_check_control").click();' style='font-size:90%;margin-left:5px;'> <?php echo _('details'); ?></a>
-							</p>
-							-->
+     					<input class="form-input" type="email" name="email" maxlength="50" style="width:100%;margin-bottom:20px !important;">
+						-->
         				<a id="login-form-submit" class="pure-button pure-button-primary pure-button-disabled" style="width:100%;border-radius:6px;min-height:38px;" href="javascript:void(0);" onclick="guestValidateAndSubmit('<?php echo $cleanNetworkId; ?>', '<?php echo $cleanMeetingId; ?>');" >Fetching...</a>  
-        				<input id="localTz" name="timezone" type="hidden" value="">     		
+        				<input id="localTz" name="timezone" type="hidden" value="">  
+						<input name="email" type="hidden" value="dummy@test.com">   		
              		<?php include(Utilities::getModulesRoot() . "/event/views/eventDetailSummary.php"); ?>	
      					</fieldset>
      				</form> 

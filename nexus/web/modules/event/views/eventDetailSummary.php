@@ -25,8 +25,9 @@
 					var d = new Date();
 					var now = Math.ceil(d.getTime()/1000);
 		 			tableEvent = 
-       						//"<p><span class='date'>" + jsonObj[i].purpose + "</span><a href='#'><span class='fa fa-refresh fa-lg' style='margin-left:10px;float:right;'></span></a></p>" +
-       						"<span class='date'>" + jsonObj[i].purpose + "</span>" +  					  		
+					 		"<span>Dial-in Phone Number: " + (jsonObj[i].dial && jsonObj[i].bridge ? jsonObj[i].dial : "(Not yet available)") + "</span><br/>" +
+							 (jsonObj[i].dial && jsonObj[i].bridge ? "<span>Dial-in PIN: " + jsonObj[i].bridge + "</span><br/>" : "") + 
+       						"<p><span class='date'>" + jsonObj[i].purpose + "</span></p>" +  					  		
   					  		"<p><span>" + jsonObj[i].day + ", " + jsonObj[i].month + " " + jsonObj[i].date + "</span><br/>" +
        						"<span class='tod'>" + jsonObj[i].hour + ":" + jsonObj[i].minute + "</span><span class='period'> " + jsonObj[i].period + " </span> -" +
 									"<span class='tod'>" + jsonObj[i].hour_end + ":" + jsonObj[i].minute_end + "</span><span class='period'> " + jsonObj[i].period_end + " </span>" +
@@ -34,8 +35,9 @@
 									(jsonObj[i].descr ? "<p><span>" + jsonObj[i].descr + "</span></p>" : "") + 
 									(jsonObj[i].url ? "<p><span><a href='" + jsonObj[i].url + "' target='_blank'>More Information</a></span></p>" : "");
         	document.getElementById("join_control_mode").innerHTML = "<a id='public-meeting-join' href='modules/meeting/control/joinMeetingProcessor.php?id=" + jsonObj[i].uuid + "&type=" + jsonObj[i].mtype + "' target='_blank'></a>";
-    			if (jsonObj[i].running == "true") {
-	        	buttonLabel = "Join This Meeting";
+    			//if (jsonObj[i].running == "true") {
+				if (jsonObj[i].running) {
+	        	buttonLabel = "Join This Meeting Online";
         		document.getElementById("login-form-submit").className = "pure-button pure-button-primary";
         		MEETING_INFO_NEXT_REFRESH = "60000";
         		if (!IS_NOW) {

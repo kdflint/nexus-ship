@@ -25,7 +25,8 @@
   	
       	<span class="controls" style="float:right;padding-bottom:10px;margin-top:30px;">
 					<!--<a href="javascript:void(0)" onclick="if(typeof Formilla != 'undefined'){Formilla.initFormillaChat();}">Problem?</a> | -->
-					<a href="#openTrainModal" onclick=""><span class="fa fa-graduation-cap fa-2x" style="margin-left:8px;" title="<?php echo _("Training"); ?>"></span></a>
+					<!--<a href="#openTrainModal" onclick=""><span class="fa fa-graduation-cap fa-2x" style="margin-left:8px;" title="<?php echo _("Training"); ?>"></span></a>-->
+					<a href="<?php echo Utilities::getSupportUrl(); ?>" target="_blank"><span class="fa fa-graduation-cap fa-2x" style="margin-left:8px;" title="<?php echo _("Training"); ?>"></span></a>
 					<a href="javascript:void(0)" onclick="if(typeof Formilla != 'undefined'){Formilla.initFormillaChat();}" title="Ask Us"><span class="fa fa-question-circle fa-2x" style="margin-left:8px;" title="<?php echo _("Support"); ?>"></span></a>
       		<a href="login.php?oid=<?php echo $_SESSION['orgUid']; ?>&logout=true" style="color:#d27b4b;text-decoration:none;" title="<?php echo _("Logout"); ?>"><span class="fa fa-sign-out fa-2x" style="margin-left:8px;"></span></a>
       	</span>
@@ -38,7 +39,7 @@
 				<div id="openTrainModal" class="modalDialog">
 					<div>
 						<a href="#close" title="<?php echo _('close'); ?>" class="close">X</a>
-						<p><?php echo _("Register for Nexus Web Meet training at the") ?> <a href="<?php echo Utilities::getMemberUrl(); ?>" target="_blank"><?php echo _("Northbridge Member Portal"); ?></a>.</p>
+						<p><?php echo _("For training and support, visit the Nexus support library at ") ?> <a href="<?php echo Utilities::getMemberUrl(); ?>" target="_blank"><?php echo _("Northbridge Member Portal"); ?></a>.</p>
 						<!--
 						<p style="margin-top:10px;margin-bottom:30px;font-size:90%;margin-left:10px;">Virtual Collaboration for Social Nonprofits<a id="training-register1" class="pure-button button-menu" href="http://northbridge-training-01.eventbrite.com" target="_blank" style="float:right;background-color:#d27b4b;width:70px;font-size:90%;color:#e6e6e6;margin-bottom:0px;" <?php echo($disabled); ?>>Register</a></p>
 						<p style="margin-top:10px;margin-bottom:30px;font-size:90%;margin-left:10px;">Leading Meetings with Nexus Web Meet<a id="training-register2" class="pure-button button-menu" href="http://northbridge-training-02.eventbrite.com" target="_blank" style="float:right;background-color:#d27b4b;width:70px;font-size:90%;color:#e6e6e6;margin-bottom:0px;" <?php echo($disabled); ?>>Register</a></p>
