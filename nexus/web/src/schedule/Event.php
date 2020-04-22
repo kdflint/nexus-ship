@@ -6,6 +6,8 @@ require_once Utilities::getComposerRoot() . '/autoload.php';
 
 use BigBlueButton\BigBlueButton; 
 use BigBlueButton\Parameters\IsMeetingRunningParameters;
+use BigBlueButton\Parameters\GetMeetingInfoParameters;
+use BigBlueButton\Responses\GetMeetingInfoResponse;
 
 class Event {
 
@@ -91,15 +93,28 @@ class Event {
 	}
 	
 	private static function isBbbEventRunning($in) {
-		$bbbApi = new BigBlueButton();
-		$parameters = new IsMeetingRunningParameters($in);
-		//$response = $bbbApi->isMeetingRunningWithXmlResponseArray($in);
-		$response = $bbbApi->isMeetingRunning($parameters);
-		//if ($response && strcasecmp($response['returncode'], 'SUCCESS') == 0 && strcasecmp($response['running'], 'true') == 0) {
-		if ($response->getReturnCode() == 'SUCCESS' && $response->isRunning()) {
-			return TRUE;
+		$info = array();
+		$info['running'] = FALSE;
+		$info['bridge'] = "";
+		$info['dial'] = "";
+		$conf = array('append' => true, 'mode' => 0644, 'timeFormat' => '%X %x');
+		$logger = Log::singleton("file", Utilities::getLogRoot() . "/event.log", "", $conf, PEAR_LOG_INFO);	
+		$logger->log(print_r("From BBB event state.", true), PEAR_LOG_INFO);
+		try {
+			$bbbApi = new BigBlueButton();
+			$parameters2 = new GetMeetingInfoParameters($in, '', 'mp');
+			$response2 = $bbbApi->getMeetingInfo($parameters2);
+			$xml = $response2->getRawXml();	
+			$logger->log(print_r($response2, true), PEAR_LOG_INFO);
+			if ((string) $xml->returncode == 'SUCCESS' && (string) $xml->running === "true") {
+				$info['running'] = TRUE;			
+				$info['bridge'] = (string) $xml->voiceBridge;
+				$info['dial'] = (string) $xml->dialNumber;
+			}
+		} catch (Exception $e) {
+			$logger->log("We caught an exception calling for the BBB meeting state: " . $e->getMessage(), PEAR_LOG_INFO);
 		}
-		return FALSE;
+		return $info;
 	}
 
 	public static function isValidTimeZone($in) {
@@ -132,22 +147,37 @@ class Event {
 	}
 
 	public static function isValidFutureEvent($uuid, $orgId) {
-		if (!self::isValidEventUuid($uuid)) { return FALSE; }
-	
+		$conf = array('append' => true, 'mode' => 0644, 'timeFormat' => '%X %x');
+		$logger = Log::singleton("file", Utilities::getLogRoot() . "/event.log", "", $conf, PEAR_LOG_INFO);	
+		if (!self::isValidEventUuid($uuid)) { return FALSE; }	
 		// TODO -what if two meetings are running simultaneously?
-		$query = "select exists (select e.id from event e, public.group g, organization o, event_group eg, user_organization uo
+		/*
+		$query = "select exists (
+			select coalesce(er.id,e.id) 
+			from event e
+			left outer join event_recur er on e.recur_fk = er.id
 			where e.uuid = $1
-			and e.reserved_user_fk = uo.user_fk
-			and o.id = uo.organization_fk
-			and o.uid = $2
-			and (e.start_dttm + e.duration) > now()
-			and e.active = true)";
+			and (
+				((e.start_dttm + e.duration) > now())
+				or
+				((coalesce(er.end_dttm,now()) > now()))
+			)
+			and e.active = true
+			)";
+		*/
+		$query = "select exists (select e.id from event e, public.group g, organization o, event_group eg, user_organization uo
+		where e.uuid = $1
+		and e.reserved_user_fk = uo.user_fk
+		and o.id = uo.organization_fk
+		and o.uid = $2
+		and (e.start_dttm + e.duration) > now()
+		and e.active = true)";
 		$row = pg_fetch_row(PgDatabase::psExecute($query, array($uuid, $orgId)));
+		$logger->log(print_r($row, true), PEAR_LOG_INFO);
 		if (!strcmp($row[0], "t")) {
 			return TRUE;
 		}		
 		return FALSE;
-
 	}
 	
 	public static function isValidMeetingType($in) {
@@ -188,8 +218,6 @@ class Event {
 	public static function getFutureEventsByGroupIdList($groupIdList, $ssnUser, $localTz = "Greenwich", $status = "1") {
 		$conf = array('append' => true, 'mode' => 0644, 'timeFormat' => '%X %x');
 		$logger = Log::singleton("file", Utilities::getLogRoot() . "/event.log", "", $conf, PEAR_LOG_INFO);	
-		//$logger->log("hello group => " . $groupIdList, PEAR_LOG_INFO);
-		//$logger->log("hello now => " . time(), PEAR_LOG_INFO);
 		$events = array();
 		if (self::isValidTimeZone($localTz)) {
 			$query = 
@@ -318,6 +346,7 @@ class Event {
 	
 	public static function getEventDetail($uuid, $localTz = "Greenwich", $ssnUser = "0") {
 		$event = array();
+		$info = array();
 		if (self::isValidEventUuid($uuid)) {
 			$query = "select 
 				extract(day from (select coalesce(ec.start_dttm,e.start_dttm) at time zone $2)) as date, 
@@ -376,6 +405,7 @@ class Event {
 				and e.uuid = $1";
 						
 			$cursor = PgDatabase::psExecute($query, array($uuid, $localTz));
+			$info = self::isBbbEventRunning($uuid);
 			$counter = 0;
 			while ($row = pg_fetch_array($cursor)) {
 				$event[$counter]['date'] = $row['date'];
@@ -406,7 +436,9 @@ class Event {
 				$event[$counter]['lname'] = $row['lname'];
 				$event[$counter]['sessionUser'] = $ssnUser;
 				$event[$counter]['adder'] = $row['adder'];
-				$event[$counter]['running'] = var_export(self::isBbbEventRunning($uuid), true);
+				$event[$counter]['running'] = $info['running'];
+				$event[$counter]['dial'] = $info['dial'];
+				$event[$counter]['bridge'] = $info['bridge'];
 				$event[$counter]['recur'] = strlen($row['recur']) > 0 ? true : false;
 				$event[$counter]['recur_pattern'] = $row['pattern'];
 				$event[$counter]['recur_num'] = $row['num'];
