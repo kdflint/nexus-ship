@@ -150,8 +150,9 @@ class Event {
 		$conf = array('append' => true, 'mode' => 0644, 'timeFormat' => '%X %x');
 		$logger = Log::singleton("file", Utilities::getLogRoot() . "/event.log", "", $conf, PEAR_LOG_INFO);	
 		if (!self::isValidEventUuid($uuid)) { return FALSE; }	
+		$logger->log($uuid, PEAR_LOG_INFO);
+
 		// TODO -what if two meetings are running simultaneously?
-		/*
 		$query = "select exists (
 			select coalesce(er.id,e.id) 
 			from event e
@@ -164,15 +165,8 @@ class Event {
 			)
 			and e.active = true
 			)";
-		*/
-		$query = "select exists (select e.id from event e, public.group g, organization o, event_group eg, user_organization uo
-		where e.uuid = $1
-		and e.reserved_user_fk = uo.user_fk
-		and o.id = uo.organization_fk
-		and o.uid = $2
-		and (e.start_dttm + e.duration) > now()
-		and e.active = true)";
-		$row = pg_fetch_row(PgDatabase::psExecute($query, array($uuid, $orgId)));
+		$logger->log($query, PEAR_LOG_INFO);
+		$row = pg_fetch_row(PgDatabase::psExecute($query, array($uuid)));
 		$logger->log(print_r($row, true), PEAR_LOG_INFO);
 		if (!strcmp($row[0], "t")) {
 			return TRUE;
