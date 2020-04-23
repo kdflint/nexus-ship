@@ -1104,7 +1104,12 @@ function guestValidateAndSubmit(oid, mid) {
   	emailField.value = "";
   	pass = false;
   }
-	
+    
+    var checkField = joinForm["mid"];
+  if (checkField.value == "invalid") {
+  	pass = false;
+  }
+
  	if (Boolean(pass)) {	
  		if (setPublicSession(oid, username, mid, '')) {
  			document.getElementById('public-meeting-join').click();
