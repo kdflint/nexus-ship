@@ -39,6 +39,7 @@
 				if (jsonObj[i].running) {
 	        	buttonLabel = "Join This Meeting Online";
         		document.getElementById("login-form-submit").className = "pure-button pure-button-primary";
+                document.forms["public-join-form"]["mid"].value = jsonObj[i].uuid;
         		MEETING_INFO_NEXT_REFRESH = "60000";
         		if (!IS_NOW) {
 	        		playSound('demonstrative');
@@ -54,6 +55,7 @@
 	     			}
 	     			buttonLabel = "<span id='not-started-message' style='position:absolute;left:20px;font-size:110%;'>" + waitMessage + "</span><span id='countdown' style='margin-left:240px;margin-top:2px;float:left;'></span>";
 	     			document.getElementById("login-form-submit").className = "pure-button pure-button-primary pure-button-disabled";
+					document.forms["public-join-form"]["mid"].value = "invalid";
 	     			if (!IS_TIMER_INIT) {
 	     				window.setInterval(countdownTimer, 1000);
  							IS_TIMER_INIT = true;

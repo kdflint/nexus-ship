@@ -170,9 +170,9 @@ if(Utilities::isSessionValid() && !Utilities::isSessionPublic()) {
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
 <html>
 	
-  <head>
+  <head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<!-- TODO - localize all scripts and stylesheets -->
-  	<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+  	
 		<meta http-equiv="Cache-control" content="no-cache">
 		<meta http-equiv="Pragma" content="no-cache">
 		<meta http-equiv="Expires" content="0">
@@ -364,7 +364,8 @@ if(Utilities::isSessionValid() && !Utilities::isSessionPublic()) {
 						-->
         				<a id="login-form-submit" class="pure-button pure-button-primary pure-button-disabled" style="width:100%;border-radius:6px;min-height:38px;" href="javascript:void(0);" onclick="guestValidateAndSubmit('<?php echo $cleanNetworkId; ?>', '<?php echo $cleanMeetingId; ?>');" >Fetching...</a>  
         				<input id="localTz" name="timezone" type="hidden" value="">  
-						<input name="email" type="hidden" value="dummy@test.com">   		
+						<input name="email" type="hidden" value="dummy@test.com">   	
+                        <input name="mid" type="hidden" value="invalid">
              		<?php include(Utilities::getModulesRoot() . "/event/views/eventDetailSummary.php"); ?>	
      					</fieldset>
      				</form> 
