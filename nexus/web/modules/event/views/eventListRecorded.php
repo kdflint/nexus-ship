@@ -67,7 +67,7 @@
 			}
 		}
 				
-		xmlhttp.open("GET", "<?php echo(Utilities::getHttpPath()); ?>" + "/src/framework/recordingManager.php");
+		xmlhttp.open("GET", "<?php echo(Utilities::getHttpPath()); ?>" + "/src/framework/recordingManagerNew.php");
 		xmlhttp.send();  		
 	}
 </script>
