@@ -14,9 +14,10 @@
 			 	document.getElementById("recordingsTable").innerHTML = tableRows;
 				if (nextRecording === undefined) {
 					message1 = '<?php echo _("Recordings"); ?>';
-					message2 = '<?php echo _("There are no recordings available."); ?>';
+					//message2 = '<?php echo _("There are no recordings available."); ?>';
+					message2 = 'Your dynamic recording list is offline until May 5 while we upgrade this feature. To retrieve a link for a recorded meeting, please contact us at support@northbridgetech.org';
 					tableRow = "<div id='reservationRow0' class='div-tr' style='position:relative;'>" + 
-       			"<div class='td-div'>" +
+       			"<div class='td-div' style='height:70px;'>" +
 		      		"<div class='event'>" +		
 	       				"<span class='date' style='font-size:140%;'>" + message1 + "</span><br/>" + 				
           		"</div>" +
@@ -57,7 +58,7 @@
 			}
 		}
 				
-		xmlhttp.open("GET", "<?php echo(Utilities::getHttpPath()); ?>" + "/src/framework/recordingManager.php");
+		xmlhttp.open("GET", "<?php echo(Utilities::getHttpPath()); ?>" + "/src/framework/recordingManagerNew.php");
 		xmlhttp.send();  		
 	}
 </script>
