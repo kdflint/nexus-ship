@@ -74,6 +74,8 @@ $logger->log("DEBUG: " . $clean['mtype'], PEAR_LOG_INFO);
 
 // Create the meeting (if it does not exist yet)
 try {
+    $logger->log("DEBUG: Trying to create a meeting with these params:", PEAR_LOG_INFO);
+    $logger->log($bbbMeeting->getCreationParams(), PEAR_LOG_INFO);
 	$response = $bbbApi->createMeeting($bbbMeeting->getCreationParams());
 	if ($response->getReturnCode() == 'FAILED') {
 		$itsAllGood = FALSE;
