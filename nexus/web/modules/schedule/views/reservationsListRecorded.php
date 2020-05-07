@@ -3,7 +3,6 @@
 		var xmlhttp = getXmlHttpRequest();
 		xmlhttp.onreadystatechange=function() {	
 			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-				console.log(xmlhttp.responseText);
 				var jsonObj = JSON.parse(xmlhttp.responseText);
 			 	var nextRecording = undefined;
 			 	var tableRows = "";
@@ -16,7 +15,7 @@
 					message1 = '<?php echo _("Recordings"); ?>';
 					message2 = '<?php echo _("There are no recordings available."); ?>';
 					tableRow = "<div id='reservationRow0' class='div-tr' style='position:relative;'>" + 
-       			"<div class='td-div'>" +
+       			"<div class='td-div' style='height:70px;'>" +
 		      		"<div class='event'>" +		
 	       				"<span class='date' style='font-size:140%;'>" + message1 + "</span><br/>" + 				
           		"</div>" +
@@ -34,7 +33,7 @@
 			 			var d = new Date(parseInt(jsonObj[i].start[0]));
 			 			var d_parts = d.toLocaleString().split(',');
 			 			var playHtmlString = 
-			 				(jsonObj[i].published[0] == 'true' ?
+			 				(jsonObj[i].published[0] ?
 			 					"<a href='" + jsonObj[i].url[0] + "' target='_blank'><span class='fa fa-play-circle fa-2x'></span></a> " : 
 			 					"<span class='fa fa-play-circle fa-2x' style='color:#cccccc;'></span> "
 			 				);
@@ -57,7 +56,7 @@
 			}
 		}
 				
-		xmlhttp.open("GET", "<?php echo(Utilities::getHttpPath()); ?>" + "/src/framework/recordingManager.php");
+		xmlhttp.open("GET", "<?php echo(Utilities::getHttpPath()); ?>" + "/src/framework/recordingManagerNew.php");
 		xmlhttp.send();  		
 	}
 </script>

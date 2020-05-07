@@ -473,6 +473,28 @@ class Event {
 			return false;
 		}
 	}
+
+	public static function getRecordingsByGroup($groupId) {
+		$recording = array();
+		$counter = 0;
+		$query = "select e.id, e.uuid, e.name, eb.recording_url, eb.recording_start_time
+			from event_bbb eb, event e, user_group ug, public.group g
+			where eb.event_fk = e.id
+			and e.reserved_user_fk = ug.user_fk
+			and ug.group_fk = g.id
+			and g.id = $1
+			and e.active = true
+			and eb.record_delete_dttm is NULL";
+		$cursor = PgDatabase::psExecute($query, array($groupId));
+		while ($row = pg_fetch_array($cursor)) {
+			$recording[$counter]['url'] = $row['recording_url'];
+			$recording[$counter]['start'] = $row['recording_start_time'];
+			$recording[$counter]['name'] = $row['name'];
+			$recording[$counter]['published'] = true;
+			$counter++;
+		}
+		return $recording;
+	}
 	
 	public static function deleteEvent($uuid) {
 		$query = "update event set active = false where uuid = $1";
