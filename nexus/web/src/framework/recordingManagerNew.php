@@ -15,14 +15,12 @@ $logger = Log::singleton("file", Utilities::getLogRoot() . "/fetch_recording.log
 
 if (Utilities::isSessionValid()) {
     $logger->log("======================", PEAR_LOG_INFO);
-    $logger->log($_SESSION['groups'][0]['name'], PEAR_LOG_INFO);
+    $logger->log($_SESSION['groups'][0]['id'] . ':' . $_SESSION['groups'][0]['name'], PEAR_LOG_INFO);
     $response = array();
     $counter = 0;
     // TODO - breaks if > 1 group in a session
-    
     $recordingList = Event::getRecordingsByGroup($_SESSION['groups'][0]['id']);
-    $logger->log(print_r($recordingList, true), PEAR_LOG_INFO);
-
+    //$logger->log(print_r($recordingList, true), PEAR_LOG_INFO);
     foreach ($recordingList as $thisRecording) {
         $response[$counter]['published'] = array("0" => $thisRecording['published']);
         $response[$counter]['url'] = array("0" => $thisRecording['url']);
@@ -30,7 +28,6 @@ if (Utilities::isSessionValid()) {
         $response[$counter]['name'] = $thisRecording['name'];
         $counter++;                
     }
-
     $logger->log(json_encode($response), PEAR_LOG_INFO);
     header('Content-Type: application/json');			
     echo json_encode($response);

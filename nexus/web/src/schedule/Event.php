@@ -485,7 +485,7 @@ class Event {
 			and g.id = $1
 			and e.active = true
 			and eb.record_delete_dttm is NULL";
-		$row = pg_fetch_row(PgDatabase::psExecute($query, array($groupId)));
+		$cursor = PgDatabase::psExecute($query, array($groupId));
 		while ($row = pg_fetch_array($cursor)) {
 			$recording[$counter]['url'] = $row['recording_url'];
 			$recording[$counter]['start'] = $row['recording_start_time'];
