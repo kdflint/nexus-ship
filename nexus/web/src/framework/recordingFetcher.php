@@ -200,8 +200,9 @@ foreach($uuid as $key=>$value) {
     if ($recordings->getReturnCode() == 'SUCCESS') {
         foreach ($recordings->getRawXml()->recordings->recording as $thisRecording) {
             if ($thisRecording->published == "true") {
-                $logger->log("SELECT id from public.event where uuid = '" . $thisRecording->meetingID . "' and active = true");
-                $logger->log("INSERT INTO public.event_bbb (event_fk, recording_id, recording_url) values (, '', '" . $thisRecording->playback->format->url . "');");
+                //$logger->log("SELECT id from public.event where uuid = '" . $thisRecording->meetingID . "' and active = true");
+                //$logger->log("INSERT INTO public.event_bbb (event_fk, recording_id, recording_url) values (, '', '" . $thisRecording->playback->format->url . "');");
+                $logger->log($thisRecording->startTime . ':' . $thisRecording->playback->format->url);
             }
         }
     }
