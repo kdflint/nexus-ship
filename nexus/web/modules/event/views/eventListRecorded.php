@@ -44,7 +44,7 @@
 			 			var d = new Date(parseInt(jsonObj[i].start[0]));
 			 			var d_parts = d.toLocaleString().split(',');
 			 			var playHtmlString = 
-			 				(jsonObj[i].published[0] == 'true' ?
+			 				(jsonObj[i].published[0] ?
 			 					"<a href='" + jsonObj[i].url[0] + "' target='_blank'><span class='fa fa-play-circle fa-2x'></span></a> " : 
 			 					"<span class='fa fa-play-circle fa-2x' style='color:#cccccc;'></span> "
 			 				);
