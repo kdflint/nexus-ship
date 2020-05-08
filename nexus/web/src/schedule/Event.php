@@ -482,9 +482,9 @@ class Event {
 			where eb.event_fk = e.id
 			and e.reserved_user_fk = ug.user_fk
 			and ug.group_fk = g.id
-			and g.id = $1
-			and e.active = true
-			and eb.record_delete_dttm is NULL";
+			and g.id = $1";
+			//and e.active = true
+			//and eb.record_delete_dttm is NULL";
 		$cursor = PgDatabase::psExecute($query, array($groupId));
 		while ($row = pg_fetch_array($cursor)) {
 			$recording[$counter]['url'] = $row['recording_url'];
