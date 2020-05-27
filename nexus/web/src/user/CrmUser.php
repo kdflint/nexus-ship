@@ -58,6 +58,22 @@ class CrmUser {
 		}
 		$con->close();
 	}
+
+	public static function getGroupOrTeamNamebyContribId($_contribId) {
+		$conf = array('append' => true, 'mode' => 0644, 'timeFormat' => '%X %x');
+		$logger = Log::singleton("file", Utilities::getLogRoot() . "/crm_activity.log", "", $conf, PEAR_LOG_INFO);
+		$con = MysqlDatabase::connect();
+		$query = "select group_or_team_name_4 from civicrm_value_service_area_1 where entity_id = ?";	
+		$logger->log($query, PEAR_LOG_INFO);
+		$stmt = $con->prepare($query);
+		$stmt->bind_param("s", $contribId);
+		$contribId = $_contribId;
+		$stmt->execute();
+		if ($stmt->bind_result($col1)) {
+			return $col1;
+		}
+		return 'Look Me Up';
+	}
 	
 }
 
