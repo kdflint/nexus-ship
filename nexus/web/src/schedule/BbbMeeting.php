@@ -29,6 +29,7 @@ class BbbMeeting {
 		//$this->creationParams->setAllowStartStopRecording(true);
 		$this->creationParams->setAutoStartRecording(false);
 		$this->creationParams->addPresentation('https://northbridgetech.org/downloads/BBB_default_slide.pdf');
+		//$this->creationParams->setRecordingReadyCallbackUrl('https://northbridgetech.org/dev/nexus/web/api/postBbbRecordingComplete.php');
 		$this->meetingType = $type;
 	}
 	
@@ -48,7 +49,7 @@ class BbbMeeting {
 		$this->creationParams->addMeta("group", $group);
 		$this->creationParams->addMeta("initiator", $initiator);	
 		$this->creationParams->addMeta("uuid", $uuid);
-		$this->creationParams->addMeta("bbb-recording-ready-url", 'https://northbridgetech.org/dev/nexus/web/api/postBbbRecordingComplete.php');
+		$this->creationParams->addMeta("bbb-recording-ready-url", 'https%3A%2F%2Fnorthbridgetech.org%2Fdev%2Fnexus%2Fweb%2Fapi%2FpostBbbRecordingComplete.php');
 		return true;		
 	}
 	
