@@ -812,16 +812,16 @@ function loadAdvPage(resource) {
 	
 		switch(resource) {
 		case "adv-menu-inbox":
-			var iframeSrc = HTTP_FORUM_PATH  + INBOX_FOCUS; //"/ucp.php?i=pm&folder=inbox";
-			//var iframeSrc = HTTP_WEB_PATH + "/offline_placeholder.html";	
+			//var iframeSrc = HTTP_FORUM_PATH  + INBOX_FOCUS; //"/ucp.php?i=pm&folder=inbox";
+			var iframeSrc = HTTP_WEB_PATH + "/offline_placeholder.html";	
     		var iframe = document.getElementById(frameId);
     		iframe.src = iframeSrc;
     		frameDisplay.style.display ="block";
     		INBOX_FOCUS = DEFAULT_INBOX_FOCUS;
     		break;    		
     	case "adv-menu-forum":
-    		var iframeSrc = HTTP_FORUM_PATH  + "/viewforum.php?f=" + DEFAULT_FORUM;
-    		//var iframeSrc = HTTP_WEB_PATH + "/offline_placeholder.html";
+    		//var iframeSrc = HTTP_FORUM_PATH  + "/viewforum.php?f=" + DEFAULT_FORUM;
+    		var iframeSrc = HTTP_WEB_PATH + "/offline_placeholder.html";
     		var iframe = document.getElementById(frameId);
     		iframe.src = iframeSrc;
     		frameDisplay.style.display ="block";
