@@ -33,6 +33,11 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 	$confirmEmail = $_GET['confirm'];
 }
 
+$showReload = "false";
+if (!Utilities::isSessionValid() || $_SESSION['nexusContext'] != "PUB") { 
+    $showReload = "true";
+}
+
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
@@ -80,6 +85,8 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 			.pure-menu-link { padding: .5em .8em; };			
 		</style>
 
+	<script> setPublicSession2("<?php echo $cleanNetworkId; ?>", "", "../"); </script>
+
    	<script type="text/javascript">
 			$(document).ready(function() {
         $( "[id^=datepicker]" ).datepicker({ changeMonth: true, changeYear: true });
@@ -107,8 +114,6 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 				});
 			});
 		</script>
-		
-		<script> setPublicSession2("<?php echo $cleanNetworkId; ?>", "", "../");</script>
 
 		<script>
 
@@ -197,7 +202,15 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 		
   </head>
   <body>
- 	
+
+		<script>
+    		if(<?php echo $showReload; ?>) {	
+    		    alert("Please click OK to load this content.");
+    		    console.log("Session not detected. Reloading...");
+    		    location.reload();
+    		}
+		</script>
+      
 		<script>if(<?php echo $showConfirm; ?>) {	alert("Thank you! Your meeting has been submitted for approval.\n\nAn administrator will follow up with you at <?php echo($confirmEmail); ?>"); }</script>
   	 	
 		<div style="position:relative;margin:8px;height:460px;">
@@ -221,13 +234,6 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 				</div>
 			</div>
 
-			<?php 
-			// On first page load the session may not be ready as it's being accomplished by async ajax call from head
-			// If session is not valid or the context is not PUB
-			if (!Utilities::isSessionValid() || $_SESSION['nexusContext'] != "PUB") { ?>
-				<script> location.reload(); </script>
-			<?php } ?>
-			
 			<div id="mod_event"><?php include(Utilities::getModulesRoot() . "/event/mod_controller.php"); ?></div>
 			<div id="mod_directory"><?php include(Utilities::getModulesRoot() . "/directory/mod_controller.php"); ?></div>
 			<div id="mod_forum"><?php include(Utilities::getModulesRoot() . "/forum/mod_controller.php"); ?></div>
