@@ -44,9 +44,9 @@ if ($_SESSION['nexusContext'] == "PUB") {
 if ($_SESSION['nexusContext'] == "ADV") {
 	$pageTitle = "Advantage";
 	$sessionContextAdv = "true";
-	require_once(Utilities::getModulesRoot() . "/forum/forum_integration.php");
-	$user->session_begin();
-	Utilities::loginForum($user, $auth);
+	//require_once(Utilities::getModulesRoot() . "/forum/forum_integration.php");
+	//$user->session_begin();
+	//Utilities::loginForum($user, $auth);
 }	
 
 Utilities::setSessionLastActivity();
