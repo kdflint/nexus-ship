@@ -55,8 +55,9 @@ $testEmail = $_SESSION['email'];
 	</div>
 	<div class="profileBlock2" style="margin-top:40px;">
 		<span class="profileCol1">Your Avatar</span>
-		<div style="margin-top:20px;">
+		<div style="margin-top:20px;visibility:hidden;">
 			<iframe id="avatar-frame" src="<?php echo(Utilities::getForumHttpPath()); ?>/ucp.php?i=ucp_profile&mode=avatar" style="width:400px;border:0;margin:0;padding:0;position:absolute;top:20;height:400px;overflow:hidden;" scrolling="no"></iframe>
+			<iframe src="https://northbridgetech.org/apps/nexus/web/offline_placeholder.html" style="width:400px;border:0;margin:0;padding:0;position:absolute;top:20;height:400px;overflow:hidden;" scrolling="no"></iframe>
 		</div>
 	
 	<div style="display:none;">

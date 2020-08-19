@@ -4,6 +4,7 @@
 
 // If we don't have a nexusContext by now, we'll render and empty panel
 if (isset($_SESSION['nexusContext'])) {
+//if (true) {
  switch($_SESSION['nexusContext']) {
  		case "NWM":
  			// unused right now
@@ -14,7 +15,8 @@ if (isset($_SESSION['nexusContext'])) {
  		case "PUB":
  			include(dirname(__FILE__) . "/mod_publicEvents.php");
  			break;
- 		default: 		
+ 		default: 	
+ 		    include(dirname(__FILE__) . "/mod_publicEvents.php");
  	}
 }
 
