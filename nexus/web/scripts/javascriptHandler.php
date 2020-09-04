@@ -1361,9 +1361,9 @@ function resetEventForm() {
 	setFieldPassStyles(scheduleForm['meeting-date-end'], "End Date");
 	hideEventGroupFormElements();
 	clearFileInput(document.getElementById('fileToUpload'));
-	document.getElementById('vizDisplay').innerHTML = "All Network";
+	document.getElementById('vizDisplay').innerHTML = "Public";
 	document.getElementById('schedule-form-submit').innerHTML = "Add";
-	scheduleForm['meeting-visibility'].value = SESSION_NGPK;
+	scheduleForm['meeting-visibility'].value = SESSION_PGPK;
 	scheduleForm['meeting-descr'].innerHTML = "";
 	scheduleForm['meeting-registr'].innerHTML = "";
 	scheduleForm['meeting-uuid'].value = "";

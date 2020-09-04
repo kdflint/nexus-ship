@@ -19,8 +19,8 @@
 				</fieldset>
 				<fieldset style="position:absolute;left:430px;width:390px;top:-4px;">
 					<div style="margin-top:16px;font-size:90%;">
-						<b>Event Visibility: </b><span id="vizDisplay">All Network</span><a href='javascript:void(0);' id="event-group-change" onclick="showEventGroupFormElements();" style="margin-left:10px;">Change</a>
-						<input type="hidden" name="meeting-visibility" value="<?php echo($_SESSION['ngpk']); ?>" />
+						<b>Event Visibility: </b><span id="vizDisplay">Public</span><a href='javascript:void(0);' id="event-group-change" onclick="showEventGroupFormElements();" style="margin-left:10px;">Change</a>
+						<input type="hidden" name="meeting-visibility" value="<?php echo($_SESSION['pgpk']); ?>" />
 					</div>
 					<fieldset id="event-group-block" style="display:none;font-size:90%;height:340px;overflow-y:auto;">
 						<a id="event-group-done" class="pure-button button-menu" href="javascript:void(0)" onclick="hideEventGroupFormElements();" style="position:fixed;margin-left:300px;background-color:transparent;width:70px;font-size:90%;margin-top:10px;color:#d27b4b;border:2px solid #999999;">OK</a>
