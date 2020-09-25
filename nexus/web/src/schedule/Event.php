@@ -130,6 +130,9 @@ class Event {
 		if (isset($in) && preg_match("/^([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/", $in)) {
 			return TRUE;
 		}
+		if (isset($in) && preg_match("/^24:00:00$/", $in)) {
+			return TRUE;
+		}
 		return FALSE;
 	}
 	

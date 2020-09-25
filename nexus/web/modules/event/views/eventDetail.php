@@ -12,10 +12,11 @@
        					"<span class='date'>" + jsonObj[i].purpose + "</span><br/>" +
        					"<span class='tod'>" + jsonObj[i].location + "</span><br/>" + 
        					"<span class='tod'>" + jsonObj[i].day + ", " + jsonObj[i].month + " " + jsonObj[i].date + " " + jsonObj[i].year + " </span></br>" +
+       					(jsonObj[i].epoch_end - jsonObj[i].epoch < 86400 ?
      						"<span class='tod'>" + jsonObj[i].hour + ":" + jsonObj[i].minute + "</span><span class='period'> " + jsonObj[i].period + " </span> - " +
 								"<span class='tod'>" + jsonObj[i].hour_end + ":" + jsonObj[i].minute_end + "</span><span class='period'> " + jsonObj[i].period_end + " </span>" +
-								"<span class='period'> " + jsonObj[i].abbrev + "</span>" +
-								(jsonObj[i].recur ? "<p style='background-color:#dddddd;padding:4px;border-radius:5px;margin-top:3px;'>Occurs " + jsonObj[i].recur_pattern + " through " + jsonObj[i].recur_end_phrase + "</p>" : "") + 
+								"<span class='period'> " + jsonObj[i].abbrev + "</span>" : "All Day Event") +
+						        (jsonObj[i].recur ? "<p style='background-color:#dddddd;padding:4px;border-radius:5px;margin-top:3px;'>Occurs " + jsonObj[i].recur_pattern + " through " + jsonObj[i].recur_end_phrase + "</p>" : "") + 
 								(jsonObj[i].bbb ? "<p><span><a href='<?php echo Utilities::getHttpPath(); ?>/login.php?oid=<?php echo $_SESSION['orgUid']; ?>&mid=" + jsonObj[i].uuid + "' target='_blank'>Online Meeting Link</a></span></p>" : "") +
 								(jsonObj[i].descr ? "<span class=''><p>" + htmlFormatParagraphs(jsonObj[i].descr) + "</p><span>" : "") + 
 								(jsonObj[i].url ? "<p><span><a href='" + jsonObj[i].url + "' target='_blank'>Web Information Link</a></span></p>" : "") + 

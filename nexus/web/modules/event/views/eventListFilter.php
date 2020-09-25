@@ -60,7 +60,10 @@
   					  		"<span class='day'>" + jsonObj[i].day + "</span><br/>" +
  									"<span class='date'>" + jsonObj[i].date + "</span><br/>" +
  									"<span class='month'>" + jsonObj[i].month + "</span><br/>" +
- 									"<span>" + jsonObj[i].hour + ":" + jsonObj[i].minute + "</span><span class='period'> " + jsonObj[i].period + " " + jsonObj[i].abbrev + "</span>" +
+ 									(jsonObj[i].epoch_end - jsonObj[i].epoch < 86400 ?
+ 									    "<span>" + jsonObj[i].hour + ":" + jsonObj[i].minute + "</span><span class='period'> " + jsonObj[i].period + " " + jsonObj[i].abbrev + "</span>"
+ 									 :
+ 									    "All Day Event") +
 								"</div>" +
       				"</div>" +
        				"<div class='td-div' id='nowEventDetail' style='position:absolute;left:140px;top:5px;width:420px;'>" + 

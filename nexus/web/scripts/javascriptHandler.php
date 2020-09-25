@@ -2410,6 +2410,11 @@ function validateEndTimeGreater(dateField1, time1, dateField2, time2) {
   	setFieldErrorStyles(dateField2, "mm/dd/yyyy");
   	return false;
 	}
+  if (firstEpoch == secondEpoch) {
+  	alert("Your meeting starts and ends at the same time.");
+  	setFieldErrorStyles(dateField2, "mm/dd/yyyy");
+  	return false;
+	}
 	return true;
 }
 
