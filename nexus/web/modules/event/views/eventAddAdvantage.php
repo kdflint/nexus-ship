@@ -2,7 +2,7 @@
 			<form id="schedule-form" class="pure-form" action="<?php echo(Utilities::getHttpPath()); ?>/modules/schedule/control/scheduleProcessor.php" method="post" enctype="multipart/form-data">
 				<fieldset style="position:relative;width:390px;">
       		<div>
-	      		<input type="text" name="meeting-name" style="width:100%;" maxlength="50" placeholder="Meeting Name" >
+	      		<input type="text" name="meeting-name" style="width:100%;" maxlength="100" placeholder="Meeting Name" >
 					</div>
        		<div style="margin-top:10px;">
 	      		<input type="text" name="meeting-url" style="width:100%" maxlength="500" placeholder="Web Link (http://)" >
@@ -86,6 +86,7 @@
       							<option value="8">8</option>
       							<option value="9">9</option>
       							<option value="10">10</option>
+      							
       							<option value="11">11</option>
       							<option value="12">12</option>
       							<option value="13">13</option>
@@ -96,6 +97,7 @@
       							<option value="18">18</option>
       							<option value="19">19</option>
       							<option value="20">20</option>
+      							
       						</select>
 	      				</span>
 	      				<span class="repeat-unit" style="position:absolute;left:130px;">days</span>
