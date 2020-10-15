@@ -121,6 +121,7 @@ $logger->log("Recording parameters: " . var_export(print_r($bbbMeeting)). PEAR_L
 $joinMeetingParams = new JoinMeetingParameters($bbbMeeting->getMeetingId(), $_SESSION['fname'] . " " . $_SESSION['lname'], $joinerPassword);
 $joinMeetingParams->setConfigToken($configToken);
 $joinMeetingParams->setRedirect(true);
+$joinMeetingParams->setJoinViaHtml5(true);
 
 if ($itsAllGood) {
 	try {
