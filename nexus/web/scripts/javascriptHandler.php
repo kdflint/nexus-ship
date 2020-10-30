@@ -2563,5 +2563,13 @@ function formatConfDialNumber(confNumber) {
 }
 
 function formatConfPinNumber(pinNumber) {
+  if (pinNumber) {
+    //Regex that accepts only 9 digit pin
+    let pinPattern = /^(\d{3})(\d{3})(\d{3})$/;
+    let pinTemp = pinNumber.match(pinPattern);
+    if (pinTemp) {
+      return pinTemp[1] + ' ' + pinTemp[2] + ' ' + pinTemp[3];
+    }
+  }
   return pinNumber;
 }
