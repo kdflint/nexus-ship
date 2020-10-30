@@ -812,16 +812,16 @@ function loadAdvPage(resource) {
 	
 		switch(resource) {
 		case "adv-menu-inbox":
-			var iframeSrc = HTTP_FORUM_PATH  + INBOX_FOCUS; //"/ucp.php?i=pm&folder=inbox";
-			//var iframeSrc = HTTP_WEB_PATH + "/offline_placeholder.html";	
+			//var iframeSrc = HTTP_FORUM_PATH  + INBOX_FOCUS; //"/ucp.php?i=pm&folder=inbox";
+			var iframeSrc = HTTP_WEB_PATH + "/offline_placeholder.html";	
     		var iframe = document.getElementById(frameId);
     		iframe.src = iframeSrc;
     		frameDisplay.style.display ="block";
     		INBOX_FOCUS = DEFAULT_INBOX_FOCUS;
     		break;    		
     	case "adv-menu-forum":
-    		var iframeSrc = HTTP_FORUM_PATH  + "/viewforum.php?f=" + DEFAULT_FORUM;
-    		//var iframeSrc = HTTP_WEB_PATH + "/offline_placeholder.html";
+    		//var iframeSrc = HTTP_FORUM_PATH  + "/viewforum.php?f=" + DEFAULT_FORUM;
+    		var iframeSrc = HTTP_WEB_PATH + "/offline_placeholder.html";
     		var iframe = document.getElementById(frameId);
     		iframe.src = iframeSrc;
     		frameDisplay.style.display ="block";
@@ -1361,9 +1361,9 @@ function resetEventForm() {
 	setFieldPassStyles(scheduleForm['meeting-date-end'], "End Date");
 	hideEventGroupFormElements();
 	clearFileInput(document.getElementById('fileToUpload'));
-	document.getElementById('vizDisplay').innerHTML = "All Network";
+	document.getElementById('vizDisplay').innerHTML = "Public";
 	document.getElementById('schedule-form-submit').innerHTML = "Add";
-	scheduleForm['meeting-visibility'].value = SESSION_NGPK;
+	scheduleForm['meeting-visibility'].value = SESSION_PGPK;
 	scheduleForm['meeting-descr'].innerHTML = "";
 	scheduleForm['meeting-registr'].innerHTML = "";
 	scheduleForm['meeting-uuid'].value = "";
@@ -2410,6 +2410,11 @@ function validateEndTimeGreater(dateField1, time1, dateField2, time2) {
   	setFieldErrorStyles(dateField2, "mm/dd/yyyy");
   	return false;
 	}
+  if (firstEpoch == secondEpoch) {
+  	alert("Your meeting starts and ends at the same time.");
+  	setFieldErrorStyles(dateField2, "mm/dd/yyyy");
+  	return false;
+	}
 	return true;
 }
 
@@ -2545,4 +2550,26 @@ function protocolize(url) {
 	} else {
 		return url;
 	}
+}
+
+function formatConfDialNumber(confNumber) {
+  var cleaned = ('' + confNumber).replace(/\D/g, '');
+  var match = cleaned.match(/^(1|)?(\d{3})(\d{3})(\d{4})$/);
+  if (match) {
+    var intlCode = (match[1] ? '+1 ' : '');
+    return [intlCode, '(', match[2], ') ', match[3], '-', match[4]].join('');
+  }
+  return confNumber;
+}
+
+function formatConfPinNumber(pinNumber) {
+  if (pinNumber) {
+    //Regex that accepts only 9 digit pin
+    let pinPattern = /^(\d{3})(\d{3})(\d{3})$/;
+    let pinTemp = pinNumber.match(pinPattern);
+    if (pinTemp) {
+      return pinTemp[1] + ' ' + pinTemp[2] + ' ' + pinTemp[3];
+    }
+  }
+  return pinNumber;
 }

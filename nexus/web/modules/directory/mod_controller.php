@@ -7,6 +7,7 @@ they are only visible one at a time. So at any given time only unique ids are ac
 rendered. Is there a way to enforce this? */
 
 if (isset($_SESSION['nexusContext'])) {
+//if (true) {
  switch($_SESSION['nexusContext']) {
  		case "NWM":
  			break;
@@ -15,7 +16,8 @@ if (isset($_SESSION['nexusContext'])) {
  		case "PUB":
  			include(dirname(__FILE__) . "/mod_publicDirectory.php");
  			break;
- 		default: 			
+ 		default: 
+ 		    include(dirname(__FILE__) . "/mod_publicDirectory.php");
  	}
 }
 

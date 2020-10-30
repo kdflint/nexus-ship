@@ -2,7 +2,7 @@
 			<form id="schedule-form" class="pure-form" action="<?php echo(Utilities::getHttpPath()); ?>/modules/schedule/control/scheduleProcessor.php" method="post" enctype="multipart/form-data">
 				<fieldset style="position:relative;width:390px;">
       		<div>
-	      		<input type="text" name="meeting-name" style="width:100%;" maxlength="50" placeholder="Meeting Name" >
+	      		<input type="text" name="meeting-name" style="width:100%;" maxlength="100" placeholder="Meeting Name" >
 					</div>
        		<div style="margin-top:10px;">
 	      		<input type="text" name="meeting-url" style="width:100%" maxlength="500" placeholder="Web Link (http://)" >
@@ -19,8 +19,8 @@
 				</fieldset>
 				<fieldset style="position:absolute;left:430px;width:390px;top:-4px;">
 					<div style="margin-top:16px;font-size:90%;">
-						<b>Event Visibility: </b><span id="vizDisplay">All Network</span><a href='javascript:void(0);' id="event-group-change" onclick="showEventGroupFormElements();" style="margin-left:10px;">Change</a>
-						<input type="hidden" name="meeting-visibility" value="<?php echo($_SESSION['ngpk']); ?>" />
+						<b>Event Visibility: </b><span id="vizDisplay">Public</span><a href='javascript:void(0);' id="event-group-change" onclick="showEventGroupFormElements();" style="margin-left:10px;">Change</a>
+						<input type="hidden" name="meeting-visibility" value="<?php echo($_SESSION['pgpk']); ?>" />
 					</div>
 					<fieldset id="event-group-block" style="display:none;font-size:90%;height:340px;overflow-y:auto;">
 						<a id="event-group-done" class="pure-button button-menu" href="javascript:void(0)" onclick="hideEventGroupFormElements();" style="position:fixed;margin-left:300px;background-color:transparent;width:70px;font-size:90%;margin-top:10px;color:#d27b4b;border:2px solid #999999;">OK</a>
@@ -86,6 +86,18 @@
       							<option value="8">8</option>
       							<option value="9">9</option>
       							<option value="10">10</option>
+      							
+      							<option value="11">11</option>
+      							<option value="12">12</option>
+      							<option value="13">13</option>
+      							<option value="14">14</option>
+      							<option value="15">15</option>
+      							<option value="16">16</option>
+      							<option value="17">17</option>
+      							<option value="18">18</option>
+      							<option value="19">19</option>
+      							<option value="20">20</option>
+      							
       						</select>
 	      				</span>
 	      				<span class="repeat-unit" style="position:absolute;left:130px;">days</span>

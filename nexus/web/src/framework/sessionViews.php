@@ -1,10 +1,10 @@
 <?php
 
 require_once("Util.php");
-require_once(Utilities::getModulesRoot() . "/forum/forum_integration.php");
+//require_once(Utilities::getModulesRoot() . "/forum/forum_integration.php");
 
 session_start();
-$user->session_begin();
+//$user->session_begin();
 
 ?>
 
@@ -34,9 +34,9 @@ $user->session_begin();
   		<p><b>Current phpBB Session View</b><p>
 			<table border="1" cellpadding="5">
   		<?php
-		    foreach ($user->data as $key=>$val) {
-    			echo "<tr><td>" . $key . "</td><td>" . $val ."</td></tr>";
-    		}
+		    //foreach ($user->data as $key=>$val) {
+    		//	echo "<tr><td>" . $key . "</td><td>" . $val ."</td></tr>";
+    		//}
     	?>
   		</table>	
   	</div>   		 	

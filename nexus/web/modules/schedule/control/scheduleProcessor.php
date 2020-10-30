@@ -311,7 +311,7 @@ function validateEvent($input) {
 		if (isset($input['meeting-num-occur']) && Validate::number(
 																									$input['meeting-num-occur'], array(
 																									'min' => 2,
-																									'max' => 10))) {
+																									'max' => 20))) {
 			$result['clean']['meeting-num-occur'] = $input['meeting-num-occur'];
 		} else {
 			$result['error']['meeting-num-occur'] = "error";

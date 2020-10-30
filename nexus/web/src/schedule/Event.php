@@ -130,6 +130,9 @@ class Event {
 		if (isset($in) && preg_match("/^([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/", $in)) {
 			return TRUE;
 		}
+		if (isset($in) && preg_match("/^24:00:00$/", $in)) {
+			return TRUE;
+		}
 		return FALSE;
 	}
 	
@@ -482,9 +485,9 @@ class Event {
 			where eb.event_fk = e.id
 			and e.reserved_user_fk = ug.user_fk
 			and ug.group_fk = g.id
-			and g.id = $1
-			and e.active = true
-			and eb.record_delete_dttm is NULL";
+			and g.id = $1";
+			//and e.active = true
+			//and eb.record_delete_dttm is NULL";
 		$cursor = PgDatabase::psExecute($query, array($groupId));
 		while ($row = pg_fetch_array($cursor)) {
 			$recording[$counter]['url'] = $row['recording_url'];

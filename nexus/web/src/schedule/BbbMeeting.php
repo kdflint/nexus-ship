@@ -28,7 +28,7 @@ class BbbMeeting {
 		//$this->creationParams->setRecord(true);
 		//$this->creationParams->setAllowStartStopRecording(true);
 		$this->creationParams->setAutoStartRecording(false);
-		//$this->creationParams->addPresentation('default', null, dirname(__FILE__) . "/default_slide.pdf");
+		$this->creationParams->addPresentation('https://northbridgetech.org/downloads/BBB_default_slide.pdf');
 		//$this->creationParams->setRecordingReadyCallbackUrl('https://northbridgetech.org/dev/nexus/web/api/postBbbRecordingComplete.php');
 		$this->meetingType = $type;
 	}

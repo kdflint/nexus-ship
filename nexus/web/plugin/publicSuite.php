@@ -1,5 +1,7 @@
 <?php
 
+session_set_cookie_params(["SameSite" => "None"]); //none, lax, strict
+session_set_cookie_params(["Secure" => "true"]); //false, true
 session_start();
 
 require_once("../src/framework/Util.php");
@@ -31,6 +33,13 @@ $confirmEmail = "";
 if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 	$showConfirm = "true";
 	$confirmEmail = $_GET['confirm'];
+}
+
+Utilities::setPublicSession($cleanNetworkId, "America/Chicago", "", false);
+
+$showReload = "false";
+if (!Utilities::isSessionValid() || $_SESSION['nexusContext'] != "PUB") { 
+    $showReload = "false";
 }
 
 ?>
@@ -79,7 +88,7 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 			.searchQualifier { vertical-align: 15px; font-style: italic; margin-right: 3px; }
 			.pure-menu-link { padding: .5em .8em; };			
 		</style>
-
+		
    	<script type="text/javascript">
 			$(document).ready(function() {
         $( "[id^=datepicker]" ).datepicker({ changeMonth: true, changeYear: true });
@@ -108,7 +117,7 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 			});
 		</script>
 		
-		<script> setPublicSession2("<?php echo $cleanNetworkId; ?>", "", "../");</script>
+		<script> //setPublicSession2("<?php echo $cleanNetworkId; ?>", "", "../"); </script>
 
 		<script>
 
@@ -197,7 +206,16 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
 		
   </head>
   <body>
- 	
+
+		<script>
+		    console.log("==> <?php echo $_SESSION['nexusContext']; ?>");
+    		if(<?php echo $showReload; ?>) {	
+    		    alert("Please click OK to load this content.");
+    		    console.log("Session not detected. Reloading...");
+    		    location.reload();
+    		}
+		</script>
+      
 		<script>if(<?php echo $showConfirm; ?>) {	alert("Thank you! Your meeting has been submitted for approval.\n\nAn administrator will follow up with you at <?php echo($confirmEmail); ?>"); }</script>
   	 	
 		<div style="position:relative;margin:8px;height:460px;">
@@ -220,21 +238,23 @@ if(isset($_GET['confirm']) && Utilities::validateEmail($_GET['confirm'])) {
     			</ul>
 				</div>
 			</div>
-
+			
 			<?php 
 			// On first page load the session may not be ready as it's being accomplished by async ajax call from head
 			// If session is not valid or the context is not PUB
-			if (!Utilities::isSessionValid() || $_SESSION['nexusContext'] != "PUB") { ?>
+			//if (!Utilities::isSessionValid() || $_SESSION['nexusContext'] != "PUB") { 
+			if (false) {
+			?>
 				<script> location.reload(); </script>
 			<?php } ?>
-			
+
 			<div id="mod_event"><?php include(Utilities::getModulesRoot() . "/event/mod_controller.php"); ?></div>
 			<div id="mod_directory"><?php include(Utilities::getModulesRoot() . "/directory/mod_controller.php"); ?></div>
 			<div id="mod_forum"><?php include(Utilities::getModulesRoot() . "/forum/mod_controller.php"); ?></div>
 		</div>
 
 		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-tLX5TYQhwxQQNx5-UF0VajixUwGGkJQ" async defer></script>
-		<script>console.log("Chrome problem debug marker.");toggleDisplay(<?php echo $viewId; ?>);</script>
+		<script>toggleDisplay(<?php echo $viewId; ?>);</script>
 		
 	</body>
 </html>

@@ -31,8 +31,8 @@ if ($storagePath) {
 
 if(isset($_GET['logout'])) {
     if ($_SESSION['nexusContext'] == "ADV") {
-	    require_once(Utilities::getModulesRoot() . "/forum/forum_integration.php");
-	    $user->session_kill();
+	    //require_once(Utilities::getModulesRoot() . "/forum/forum_integration.php");
+	    //$user->session_kill();
     }
 	$rememberMe->clearCookie(isset($_SESSION['username']) ? $_SESSION['username'] : '');
 	unset($_COOKIE['member_transfer_oid']);
@@ -350,6 +350,7 @@ if(Utilities::isSessionValid() && !Utilities::isSessionPublic()) {
 						We set the public session two times. This one is first, because eventDetailSummary.php depends on certain values from $_SESSION.
 						We do it again after the user joins (inside guestValidateAndSubmit()) so we can add the name from the form. 
 						-->
+						<!-- TODO - tie Enter key to join button click. Right now Enter takes to standard login screen.-->
      				<script> 
      					setPublicSession('<?php echo $cleanNetworkId; ?>', '', '<?php echo $cleanMeetingId; ?>', '');
      				</script>

@@ -25,8 +25,8 @@
 					var d = new Date();
 					var now = Math.ceil(d.getTime()/1000);
 		 			tableEvent = 
-					 		"<span>Dial-in Phone Number: " + (jsonObj[i].dial && jsonObj[i].bridge ? jsonObj[i].dial : "(Not yet available)") + "</span><br/>" +
-							 (jsonObj[i].dial && jsonObj[i].bridge ? "<span>Dial-in PIN: " + jsonObj[i].bridge + "</span><br/>" : "") + 
+					 		"<span>Dial-in Number (US): " + (jsonObj[i].dial && jsonObj[i].bridge ? formatConfDialNumber(jsonObj[i].dial) : "(Not yet available)") + "</span><br/>" +
+							 (jsonObj[i].dial && jsonObj[i].bridge ? "<span>Dial-in PIN: " + formatConfPinNumber(jsonObj[i].bridge) + "</span><br/>" : "") + 
        						"<p><span class='date'>" + jsonObj[i].purpose + "</span></p>" +  					  		
   					  		"<p><span>" + jsonObj[i].day + ", " + jsonObj[i].month + " " + jsonObj[i].date + "</span><br/>" +
        						"<span class='tod'>" + jsonObj[i].hour + ":" + jsonObj[i].minute + "</span><span class='period'> " + jsonObj[i].period + " </span> -" +
