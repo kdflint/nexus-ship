@@ -42,7 +42,7 @@
 						</select>
 					</div>
 					<div style="margin-top:10px;">
-	      		<input type="text" id="datepicker" name="meeting-date" placeholder="Start Date" style="width:137px;vertical-align:top;">	
+	      		<input type="text" id="datepicker" name="meeting-date" placeholder="Start Date" style="width:137px;vertical-align:top;" onchange="setEndDate('schedule-form')">
       			<select id="schedule-form-time" name="meeting-time" style="width:150px;vertical-align:middle;text-align:left">
       				<option selected>Start Time</option>
 	      			<?php include(Utilities::getModulesRoot() . "/schedule/views/meetingTimeOptions.html"); ?>

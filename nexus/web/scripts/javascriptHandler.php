@@ -2130,6 +2130,21 @@ function eventTypeAddValidateAndSubmit(thisForm) {
  	}
   
 }
+
+function setEndDate(thisForm) {
+
+    var eventForm = document.forms[thisForm];
+    var dateFieldEndValue = eventForm['meeting-date-end'].value;
+
+    setFieldPassStyles(eventForm['meeting-date'], "Start Date")
+
+    if (validateDateFormat(eventForm['meeting-date'])) {
+        if (dateFieldEndValue == null || dateFieldEndValue == "") {
+            eventForm['meeting-date-end'].value = eventForm['meeting-date'].value;
+        }
+    }
+
+}
 	
 function eventValidateAndSubmit(thisForm) {
 
