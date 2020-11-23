@@ -76,6 +76,7 @@ $logger->log("DEBUG: " . $clean['mtype'], PEAR_LOG_INFO);
 try {
     $logger->log("DEBUG: Trying to create a meeting with these params:", PEAR_LOG_INFO);
     $logger->log($bbbMeeting->getCreationParams(), PEAR_LOG_INFO);
+    $logger->log("Creation query string: " . $bbbMeeting->getMeetingCreationQuery());
 	$response = $bbbApi->createMeeting($bbbMeeting->getCreationParams());
 	if ($response->getReturnCode() == 'FAILED') {
 		$itsAllGood = FALSE;
